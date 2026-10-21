@@ -64,7 +64,8 @@ npm run dev
 
 | 變數 | 必須 | 說明 |
 | --- | --- | --- |
-| `DATABASE_URL` | 是 | Postgres 連線。請用 **direct / 非 pooled** 網址，Prisma migrate 先會成功。不要加尾隨說明文字。 |
+| `DATABASE_URL` | 是 | 執行時連線。Neon Marketplace 注入的是 pooled URL。本地可與下面同一條 direct URL。 |
+| `DATABASE_URL_UNPOOLED` | 是 | Prisma `directUrl`，給 migrate 用的 direct／非 pooled 網址。Neon Marketplace 會注入。本地設成同 `DATABASE_URL`。 |
 | `ADMIN_EMAIL` | 是 | 首次管理員電郵。登入這個電郵會被升為管理員。可用逗號分隔多於一個。 |
 | `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
@@ -74,10 +75,10 @@ npm run dev
 
 ## 部署到 Vercel + Postgres
 
-1. 在 [Neon](https://neon.tech) 或 Vercel Postgres 建立資料庫。複製 **direct** connection string（主機名不要用 `-pooler`）。
+1. 用 Vercel 上的 Neon Marketplace。它會注入 `DATABASE_URL`（pooled）同 `DATABASE_URL_UNPOOLED`（direct，主機名不要用 `-pooler`）。
 2. 把這個 repo 的 `main` 匯入 Vercel。Framework 選 Next.js。
-3. 在 Vercel 專案的 Environment Variables 設定上面四個必須變數，再加上 `SESSION_SECRET`。`DATABASE_URL` 要在 **Production、Preview、Build** 都有，因為建置時會執行 `prisma generate`，頁面亦會連資料庫。
-4. Deploy。第一次部署後在本機對同一個 `DATABASE_URL` 執行：
+3. 在 Vercel 專案的 Environment Variables 設定上表的變數，再加上 `SESSION_SECRET`。`DATABASE_URL` 同 `DATABASE_URL_UNPOOLED` 要在 **Production、Preview、Build** 都有。
+4. Deploy。第一次部署後在本機對同一個資料庫執行：
 
 ```bash
 npx prisma migrate deploy
@@ -86,11 +87,10 @@ npm run db:seed
 
 Vercel 建置不會自動跑 migration。正式環境要自己執行 `migrate deploy`。Seed 可以只跑一次。
 
-5. 可選：Vercel Cron 會每小時打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管。頁面開啟時亦會做同樣的掃瞄，所以沒有 Cron 示範環境仍然會走完狀態。
+5. Vercel Cron 每日 00:00（香港時間，`0 16 * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管。頁面開啟時亦會做同樣的掃瞄。
 
 ## 之後要接上的東西
 
 - 真正收款（FPS / PayMe / 卡）時，換成付款 provider，但訂單狀態機可以留住。
-- 流量上來之後，把 `DATABASE_URL` 換成 Neon pooled，並加 Prisma driver adapter 或 `DIRECT_URL` 做 migration。
 - 相片而家接受 `https` 網址同站內 `/demo` 圖。正式上傳要接 Vercel Blob 之類的儲存，Vercel 檔案系統不能當上傳目錄。
 - 電郵同 push 而家只寫入 `OutboundStub`，未有真正發送。
