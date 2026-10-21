@@ -116,6 +116,13 @@ async function main() {
       publishedAt: published, photos: [["/demo/pikachu.svg", "FRONT"], ["/demo/back.svg", "BACK"]],
     },
     {
+      id: "seed_psyduck", sellerId: "user_ming", categoryId: "cat_pokemon", status: "ACTIVE", saleType: "BUY_NOW",
+      title: "Psyduck", description: "English-title demo for bilingual search.", quantity: 1, quantityAvailable: 1,
+      shippingFee: 1200, shippingDays: 3, price: 18000, cardKind: "TCG", game: "Pokémon", setName: "Base", cardName: "Psyduck",
+      language: "英文", conditionTrack: "RAW", rawGrade: "A" as RawGrade, publishedAt: published,
+      photos: [["/demo/pikachu.svg", "FRONT"], ["/demo/back.svg", "BACK"]],
+    },
+    {
       id: "seed_luffy", sellerId: "user_ming", categoryId: "cat_onepiece", status: "ACTIVE", saleType: "AUCTION",
       title: "路飛 漫畫背景 BGS 9.5", description: "海賊王領袖卡，代理出價示範。", quantity: 1, quantityAvailable: 1,
       shippingFee: 2500, shippingDays: 3, startPrice: 50000, cardKind: "TCG", game: "One Piece", setName: "Romance Dawn", cardName: "路飛",

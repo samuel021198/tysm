@@ -10,7 +10,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "tsx lib/rules.test.ts",
+    "test": "tsx lib/rules.test.ts && tsx lib/search.test.ts",
     "smoke": "tsx scripts/smoke.ts",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
