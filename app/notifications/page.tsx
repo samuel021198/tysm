@@ -13,10 +13,10 @@ export default async function NotificationsPage() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{tx(prefs.locale, "通知", "Notifications")}</h1>
+        <h1 className="page-title mb-0">{tx(prefs.locale, "通知", "Notifications")}</h1>
         <form action={markNotifications}><button className="text-sm underline">{tx(prefs.locale, "全部已讀", "Mark all read")}</button></form>
       </div>
-      {rows.length === 0 ? <p>{tx(prefs.locale, "未有通知。", "No notifications.")}</p> : null}
+      {rows.length === 0 ? <p className="empty">{tx(prefs.locale, "未有通知。", "No notifications.")}</p> : null}
       <ul className="grid gap-2">
         {rows.map((row) => (
           <li key={row.id} className="surface p-4 text-sm">

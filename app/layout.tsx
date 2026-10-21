@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_HK, Outfit } from "next/font/google";
+import { Noto_Sans_HK, Sora } from "next/font/google";
 import { connection } from "next/server";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
@@ -14,7 +14,7 @@ const sans = Noto_Sans_HK({
   display: "swap",
 });
 
-const display = Outfit({
+const display = Sora({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-display",
@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           Skip
         </a>
         <Header locale={prefs.locale} theme={prefs.theme} user={viewer} cartCount={cartCount} unread={unread} />
-        <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-3 md:px-5 md:py-8">
+        <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-4 md:px-5 md:py-8">
           {children}
         </main>
         <Footer locale={prefs.locale} />

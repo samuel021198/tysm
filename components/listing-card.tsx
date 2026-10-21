@@ -46,14 +46,14 @@ export function ListingCard({
       <Link href={`/listing/${listing.id}`} className="block">
         <div className="relative">
           <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="aspect-[4/5] w-full object-cover" />
-          <span className="absolute left-2 top-2 max-w-[70%] truncate rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-[#221820] shadow-sm">
+          <span className="absolute left-2.5 top-2.5 max-w-[68%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
             {conditionLabel(listing)}
           </span>
         </div>
-        <div className="grid gap-1 px-2.5 pb-3 pt-2.5">
-          <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-medium leading-snug">{listing.title}</h2>
-          <p className="price text-[1.15rem] leading-none">{formatHkd(amount, locale)}</p>
-          <p className="truncate text-xs text-muted">
+        <div className="grid gap-1.5 px-3 pb-3.5 pt-3">
+          <h2 className="line-clamp-2 min-h-[2.5em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
+          <p className="price text-xl leading-none">{formatHkd(amount, locale)}</p>
+          <p className="truncate text-xs leading-4 text-muted">
             {sale}
             {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
             {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}

@@ -15,8 +15,8 @@ export default async function FavoritesPage() {
   });
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-semibold">{tx(prefs.locale, "收藏", "Favorites")}</h1>
-      {rows.length === 0 ? <p>{tx(prefs.locale, "未有收藏。", "No favorites yet.")}</p> : null}
+      <h1 className="page-title">{tx(prefs.locale, "收藏", "Favorites")}</h1>
+      {rows.length === 0 ? <p className="empty">{tx(prefs.locale, "未有收藏。", "No favorites yet.")}</p> : null}
       <div className="feed">
         {rows.map((row) => (
           <ListingCard key={row.id} listing={row.listing} locale={prefs.locale} favorited next="/me/favorites" followed={false} />

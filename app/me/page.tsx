@@ -37,7 +37,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           ["/cart", tx(locale, "購物車", "Cart")],
           ...(viewer.role === "ADMIN" ? [["/admin", tx(locale, "管理", "Admin")] as const] : []),
         ].map(([href, label]) => (
-          <Link key={href} href={href} className="surface flex h-14 items-center justify-between px-4 font-medium">
+          <Link key={href} href={href} className="surface menu-row flex h-14 items-center justify-between px-4 font-medium">
             {label}
             <span className="text-muted" aria-hidden>›</span>
           </Link>

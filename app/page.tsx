@@ -64,15 +64,15 @@ export default async function HomePage({
       <div className="mb-3 md:hidden">
         <SearchBox locale={prefs.locale} />
       </div>
-      <h1 className="mb-3 text-[1.35rem] font-bold md:text-2xl">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
+      <h1 className="page-title">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
       <div className="-mx-3 mb-4 flex gap-2 overflow-x-auto px-3 pb-1 md:mx-0 md:px-0">
         {categories.map((cat) => (
-          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 items-center rounded-full bg-card px-4 text-sm font-medium shadow-card">
+          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ring-rose/25">
             {prefs.locale === "en" ? cat.nameEn : cat.nameZh}
           </Link>
         ))}
       </div>
-      {listings.length === 0 ? <p>{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}
+      {listings.length === 0 ? <p className="empty">{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}
       <div className="feed">
         {listings.map((listing) => (
           <ListingCard

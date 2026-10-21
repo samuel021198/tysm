@@ -61,7 +61,7 @@ export default async function ShopPage({
         </div>
       </div>
       <h2 className="mb-3 font-semibold">{tx(locale, "在售", "Active listings")}</h2>
-      {listings.length === 0 ? <p>{tx(locale, "未有在售貨品。", "No active listings.")}</p> : null}
+      {listings.length === 0 ? <p className="empty">{tx(locale, "未有在售貨品。", "No active listings.")}</p> : null}
       <div className="feed">
         {listings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} locale={locale} favorited={favIds.has(listing.id)} followed={false} next={`/shop/${id}`} />

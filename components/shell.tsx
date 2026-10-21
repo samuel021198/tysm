@@ -24,7 +24,7 @@ export function Header({
       <div className="bg-bg">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 overflow-x-auto px-3 md:h-16 md:gap-3 md:px-5">
           <Link href="/" className="shrink-0 pr-1">
-            <img src="/brand/tysm-wordmark.png" alt="TYSM" className="h-8 w-auto sm:h-9 md:h-10" />
+            <img src="/brand/tysm-wordmark.png" alt="TYSM" className="h-8 w-auto bg-transparent sm:h-9 md:h-10" />
           </Link>
           <div className="mx-auto hidden min-w-0 max-w-xl flex-1 md:block">
             <SearchBox locale={locale} />
@@ -39,7 +39,7 @@ export function Header({
               {unread ? <Count n={unread} /> : null}
             </Link>
           </div>
-          <nav className="ml-auto hidden items-center gap-x-4 text-sm text-muted md:flex">
+          <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
             <Link className="hover:text-ink" href="/sell">{nav.sell}</Link>
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>

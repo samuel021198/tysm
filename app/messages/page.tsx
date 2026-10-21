@@ -23,8 +23,8 @@ export default async function MessagesPage() {
   const visible = threads.filter((thread) => !hidden.has(thread.buyerId === viewer.id ? thread.sellerId : thread.buyerId));
   return (
     <div>
-      <h1 className="mb-4 text-[1.65rem] font-bold">{tx(prefs.locale, "訊息", "Messages")}</h1>
-      {visible.length === 0 ? <p>{tx(prefs.locale, "未有對話。", "No conversations.")}</p> : null}
+      <h1 className="page-title">{tx(prefs.locale, "訊息", "Messages")}</h1>
+      {visible.length === 0 ? <p className="empty">{tx(prefs.locale, "未有對話。", "No conversations.")}</p> : null}
       <ul className="grid gap-2.5">
         {visible.map((thread) => {
           const other = thread.buyerId === viewer.id ? thread.seller : thread.buyer;

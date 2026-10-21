@@ -20,12 +20,12 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   });
   return (
     <div>
-      <h1 className="mb-3 text-[1.65rem] font-bold">{tx(prefs.locale, "訂單", "Orders")}</h1>
+      <h1 className="page-title">{tx(prefs.locale, "訂單", "Orders")}</h1>
       <div className="mb-4 grid grid-cols-2 gap-1 rounded-full bg-soft p-1 text-sm">
         <Link href="/orders" className={`grid h-11 place-items-center rounded-full ${!selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我買的", "Purchases")}</Link>
         <Link href="/orders?role=sell" className={`grid h-11 place-items-center rounded-full ${selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我賣的", "Sales")}</Link>
       </div>
-      {orders.length === 0 ? <p>{tx(prefs.locale, "未有訂單。", "No orders yet.")}</p> : null}
+      {orders.length === 0 ? <p className="empty">{tx(prefs.locale, "未有訂單。", "No orders yet.")}</p> : null}
       <ul className="grid gap-3">
         {orders.map((order) => (
           <li key={order.id}>

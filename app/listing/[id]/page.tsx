@@ -224,7 +224,7 @@ export default async function ListingPage({
           </section>
         ) : null}
       </div>
-      <aside id="purchase" className="surface order-2 grid h-fit min-w-0 gap-4 p-4 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start lg:p-5">
+      <aside id="purchase" className="surface panel order-2 grid h-fit min-w-0 gap-4 p-4 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start lg:p-5">
         {listing.price != null && listing.saleType !== "AUCTION" ? <p className="price text-3xl">{formatHkd(listing.price, locale)}</p> : null}
         {live ? (
           <>

@@ -68,7 +68,7 @@ export default async function SearchPage({
   return (
     <div>
       <Flash locale={prefs.locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <h1 className="mb-3 text-[1.65rem] font-bold">{tx(prefs.locale, "搜尋", "Search")}</h1>
+      <h1 className="page-title">{tx(prefs.locale, "搜尋", "Search")}</h1>
       <SearchBox locale={prefs.locale} initial={q} autoFocus>
         <div className="mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-5">
         <select className="field col-span-2 md:col-span-1" name="cat" defaultValue={cat}>
@@ -116,7 +116,7 @@ export default async function SearchPage({
         </div>
       ) : null}
       {q ? <p className="mb-3 text-sm text-muted">{shown.length} {tx(prefs.locale, "件", "results")}</p> : null}
-      {shown.length === 0 ? <p>{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
+      {shown.length === 0 ? <p className="empty">{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
       <div className="feed">
         {shown.map((listing) => (
           <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={false} next="/search" />

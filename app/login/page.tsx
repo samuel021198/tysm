@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <div className="mx-auto max-w-md pt-2">
       <div className="surface px-5 py-6 md:px-7 md:py-8">
         <p className="font-display text-xs font-semibold tracking-[0.22em] text-[#9a5d78]">TYSM</p>
-        <h1 className="mt-2 text-3xl font-bold">{tx(prefs.locale, "登入 TYSM", "Log in to TYSM")}</h1>
+        <h1 className="accent mt-2 text-3xl font-bold">{tx(prefs.locale, "登入 TYSM", "Log in to TYSM")}</h1>
         <div className="mt-6">
           <LoginForm locale={prefs.locale} next={next} />
         </div>
