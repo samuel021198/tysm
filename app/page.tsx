@@ -6,6 +6,7 @@ import { hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { ListingCard } from "@/components/listing-card";
+import { SearchBox } from "@/components/search-box";
 import { tx } from "@/lib/i18n";
 
 export default async function HomePage({
@@ -60,16 +61,19 @@ export default async function HomePage({
   return (
     <div>
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <h1 className="mb-3 text-2xl font-semibold">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
-      <div className="mb-4 flex gap-2 overflow-x-auto text-sm">
+      <div className="mb-3 md:hidden">
+        <SearchBox locale={prefs.locale} />
+      </div>
+      <h1 className="page-title">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
+      <div className="chips -mx-3 mb-4 md:mx-0">
         {categories.map((cat) => (
-          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="shrink-0 rounded-full border border-line px-3 py-1">
+          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 snap-start items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ring-rose/25">
             {prefs.locale === "en" ? cat.nameEn : cat.nameZh}
           </Link>
         ))}
       </div>
-      {listings.length === 0 ? <p>{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}
-      <div className="masonry">
+      {listings.length === 0 ? <p className="empty">{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}
+      <div className="feed">
         {listings.map((listing) => (
           <ListingCard
             key={listing.id}
@@ -82,8 +86,8 @@ export default async function HomePage({
       </div>
       {recent.length ? (
         <section className="mt-10">
-          <h2 className="mb-3 text-lg font-semibold">{tx(prefs.locale, "最近睇過", "Recently viewed")}</h2>
-          <div className="masonry">
+          <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "最近睇過", "Recently viewed")}</h2>
+          <div className="feed">
             {recent.map((row) => (
               <ListingCard key={row.listing.id} listing={row.listing} locale={prefs.locale} favorited={favIds.has(row.listing.id)} followed={followed.has(row.listing.sellerId)} />
             ))}
@@ -92,8 +96,8 @@ export default async function HomePage({
       ) : null}
       {forYou.length ? (
         <section className="mt-10">
-          <h2 className="mb-3 text-lg font-semibold">{tx(prefs.locale, "為你推薦", "For you")}</h2>
-          <div className="masonry">
+          <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "為你推薦", "For you")}</h2>
+          <div className="feed">
             {forYou.map((listing) => (
               <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={followed.has(listing.sellerId)} />
             ))}

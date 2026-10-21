@@ -14,6 +14,7 @@ import { Gallery } from "@/components/gallery";
 import { Countdown } from "@/components/countdown";
 import { RichText } from "@/components/rich-text";
 import { ListingCard } from "@/components/listing-card";
+import { BuyDock } from "@/components/buy-dock";
 import { ViewPing } from "@/components/pings";
 import { Submit } from "@/components/submit";
 import { bidAction, cartAdd, offerAction, offerRespondAction, deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
@@ -113,27 +114,32 @@ export default async function ListingPage({
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
   const quote = listing.price != null ? Math.round((listing.price * bps) / 10000) : 0;
   const locale = prefs.locale;
+  const showCart = listing.status === "ACTIVE" && listing.saleType !== "AUCTION" && listing.price != null && listing.quantityAvailable > 0 && !listing.binLockOrderId && !owner;
+  const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
+  const dockPrice = showCart || listing.saleType !== "AUCTION" ? formatHkd(listing.price ?? 0, locale) : formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8">
       <ViewPing id={id} />
-      <div>
+      <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
         <Flash locale={locale} ok={sp.ok} err={sp.err} />
         <Gallery urls={listing.photos.map((photo) => photo.url)} alt={listing.title} />
-        <div className="mt-4 flex flex-wrap gap-2 text-xs">
-          <span className="rounded-full bg-soft px-2 py-1">{conditionLabel(listing)}</span>
-          <span className="rounded-full bg-soft px-2 py-1">{listingStatusLabel(locale, listing.status)}</span>
-          {listing.certNumber ? <span className="rounded-full bg-soft px-2 py-1">#{listing.certNumber}</span> : null}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
+          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listingStatusLabel(locale, listing.status)}</span>
+          {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
-        <h1 className="mt-3 text-2xl font-semibold">{listing.title}</h1>
+        <h1 className="mt-3 text-[1.65rem] font-bold leading-tight">{listing.title}</h1>
         <p className="mt-1 text-sm text-muted">
           {locale === "en" ? listing.category.nameEn : listing.category.nameZh}
           {listing.language ? ` · ${listing.language}` : ""} · {tx(locale, "瀏覽", "Views")} {listing.viewCount} · {tx(locale, "收藏", "Favorites")} {listing.favoriteCount}
         </p>
-        <div className="mt-4">
+      </div>
+      <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2">
+        <div>
           <RichText text={listing.description} />
         </div>
-        <dl className="mt-4 grid grid-cols-2 gap-2 text-sm">
+        <dl className="surface mt-4 grid grid-cols-2 gap-x-3 gap-y-3 p-4 text-sm">
           {listing.game ? <div><dt className="text-muted">{tx(locale, "遊戲", "Game")}</dt><dd>{listing.game}</dd></div> : null}
           {listing.setName ? <div><dt className="text-muted">{tx(locale, "系列", "Set")}</dt><dd>{listing.setName}</dd></div> : null}
           {listing.cardName ? <div><dt className="text-muted">{tx(locale, "卡名", "Card")}</dt><dd>{listing.cardName}</dd></div> : null}
@@ -183,7 +189,7 @@ export default async function ListingPage({
           <section className="mt-6 grid gap-3">
             <h2 className="font-semibold">{tx(locale, "議價", "Offers")}</h2>
             {offers.map((offer) => (
-              <div key={offer.id} className="rounded-xl border border-line p-3 text-sm">
+              <div key={offer.id} className="surface p-4 text-sm">
                 <p>
                   {owner ? offer.buyer.nickname : tx(locale, "你的議價", "Your offer")} · {tx(locale, "第", "Round")} {offer.round}/3 · {offer.status}
                 </p>
@@ -195,7 +201,7 @@ export default async function ListingPage({
                     <input type="hidden" name="listingId" value={id} />
                     <button className="btn btn-primary" name="act" value="accept">{tx(locale, "接受", "Accept")}</button>
                     <button className="btn-ghost btn" name="act" value="decline">{tx(locale, "拒絕", "Decline")}</button>
-                    <input className="field max-w-32" name="counter" placeholder="HKD" />
+                    <input className="field w-full sm:max-w-40" name="counter" placeholder="HKD" />
                     <button className="btn-ghost btn" name="act" value="counter">{tx(locale, "還價", "Counter")}</button>
                   </form>
                 ) : null}
@@ -207,7 +213,7 @@ export default async function ListingPage({
                     <button className="btn-ghost btn" name="act" value="decline">{tx(locale, "拒絕", "Decline")}</button>
                     {offer.round < 3 ? (
                       <>
-                        <input className="field max-w-32" name="counter" placeholder="HKD" />
+                        <input className="field w-full sm:max-w-40" name="counter" placeholder="HKD" />
                         <button className="btn-ghost btn" name="act" value="counter">{tx(locale, "再議價", "Offer again")}</button>
                       </>
                     ) : null}
@@ -218,16 +224,16 @@ export default async function ListingPage({
           </section>
         ) : null}
       </div>
-      <aside className="grid h-fit gap-4 rounded-2xl border border-line bg-card p-4">
-        {listing.price != null && listing.saleType !== "AUCTION" ? <p className="text-2xl font-semibold">{formatHkd(listing.price, locale)}</p> : null}
+      <aside id="purchase" className="surface panel order-2 grid h-fit min-w-0 gap-4 p-4 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start lg:p-5">
+        {listing.price != null && listing.saleType !== "AUCTION" ? <p className="price text-3xl">{formatHkd(listing.price, locale)}</p> : null}
         {live ? (
           <>
-            <p className="text-xl font-semibold">{tx(locale, "目前", "Current")} {formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}</p>
+            <p className="price text-2xl">{tx(locale, "目前", "Current")} {formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}</p>
             <p><Countdown endsAt={listing.auctionEndsAt!.toISOString()} locale={locale} /> · {formatHKT(listing.auctionEndsAt!, locale)}</p>
             <p className="text-sm text-muted">{tx(locale, "最低出價", "Minimum bid")} {formatHkd(mine && viewer?.id === listing.leaderId ? (mine.maxAmount + 1) : minBid, locale)}</p>
             {mine ? <p className="text-sm">{tx(locale, "你的最高出價（只有你可見）", "Your maximum (only you can see this)")} {formatHkd(mine.maxAmount, locale)}</p> : null}
             {viewer && !owner && !viewer.bidBanned ? (
-              <form action={bidAction} className="grid gap-2">
+              <form id="bid-form" action={bidAction} className="grid gap-2">
                 <input type="hidden" name="listingId" value={id} />
                 <input className="field" name="max" inputMode="decimal" placeholder={centsToInput(minBid)} required />
                 <Submit label={tx(locale, "出價", "Place bid")} pendingLabel="…" />
@@ -237,15 +243,15 @@ export default async function ListingPage({
           </>
         ) : null}
         {listing.bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
-        {listing.status === "ACTIVE" && listing.saleType !== "AUCTION" && listing.price != null && listing.quantityAvailable > 0 && !listing.binLockOrderId && !owner ? (
-          <form action={cartAdd} className="grid gap-2">
+        {showCart ? (
+          <form id="cart-form" action={cartAdd} className="grid gap-2">
             <input type="hidden" name="listingId" value={id} />
             <label className="text-sm">
               {tx(locale, "數量", "Quantity")}
               <input className="field" type="number" name="quantity" min={1} max={listing.quantityAvailable} defaultValue={1} />
             </label>
             <Submit label={tx(locale, "加入購物車", "Add to cart")} pendingLabel="…" />
-            <Link className="btn-ghost btn" href={`/checkout?buy=${id}&qty=1`}>{tx(locale, "立即購買", "Buy now")}</Link>
+            <Link className="btn btn-ghost w-full" href={`/checkout?buy=${id}&qty=1`}>{tx(locale, "立即購買", "Buy now")}</Link>
           </form>
         ) : null}
         {listing.binLockOrderId ? <p className="text-sm">{tx(locale, "有買家正在結帳。", "A buyer is checking out.")}</p> : null}
@@ -263,25 +269,33 @@ export default async function ListingPage({
             {listing.price != null ? ` · ${formatHkd(quote, locale)}` : ""}
           </p>
         ) : null}
-        <div className="flex flex-wrap gap-2 text-sm">
+        <div className="grid grid-cols-2 gap-2 text-sm">
           <form action={toggleFavorite}>
             <input type="hidden" name="listingId" value={id} />
             <input type="hidden" name="next" value={`/listing/${id}`} />
-            <button className="btn-ghost btn">{favored ? "♥" : "♡"} {tx(locale, "收藏", "Favorite")}</button>
+            <button className="btn btn-ghost w-full">{favored ? "♥" : "♡"} {tx(locale, "收藏", "Favorite")}</button>
           </form>
           {!owner ? (
             <form action={openThread}>
               <input type="hidden" name="listingId" value={id} />
-              <button className="btn-ghost btn">{tx(locale, "聯絡賣家", "Contact seller")}</button>
+              <button className="btn btn-ghost w-full">{tx(locale, "聯絡賣家", "Contact seller")}</button>
             </form>
           ) : null}
         </div>
         <div className="text-sm">
-          <Link href={`/shop/${listing.sellerId}`} className="font-medium text-link">{listing.seller.nickname}</Link>
+          <Link href={`/shop/${listing.sellerId}`} className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-sm font-bold text-[#1b1418]">
+              {listing.seller.nickname.slice(0, 1)}
+            </span>
+            <span>
+              <span className="block font-medium">{listing.seller.nickname}</span>
+              <span className="text-xs text-muted">{tx(locale, "賣家", "Seller")}</span>
+            </span>
+          </Link>
           {!owner && viewer ? (
-            <form action={toggleFollow} className="mt-2">
+            <form action={toggleFollow} className="mt-3">
               <input type="hidden" name="sellerId" value={listing.sellerId} />
-              <button className="underline">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注賣家", "Follow seller")}</button>
+              <button className="btn btn-ghost">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注賣家", "Follow seller")}</button>
             </form>
           ) : null}
         </div>
@@ -303,10 +317,19 @@ export default async function ListingPage({
         ) : null}
         {!viewer ? <p className="text-sm"><Link className="text-link" href={`/login?next=/listing/${id}`}>{tx(locale, "登入後先可以購買、出價、收藏或傳訊息。", "Log in to buy, bid, favorite, or message.")}</Link></p> : null}
       </aside>
+      {showCart ? (
+        <BuyDock watchId="purchase" label={tx(locale, "直購價", "Buy now")} price={dockPrice}>
+          <button form="cart-form" className="btn btn-primary shrink-0">{tx(locale, "加入購物車", "Add to cart")}</button>
+        </BuyDock>
+      ) : showBid ? (
+        <BuyDock watchId="purchase" label={tx(locale, "目前出價", "Current bid")} price={formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}>
+          <button form="bid-form" className="btn btn-primary shrink-0">{tx(locale, "出價", "Place bid")}</button>
+        </BuyDock>
+      ) : null}
       {similar.length ? (
-        <section className="lg:col-span-2">
-          <h2 className="mb-3 font-semibold">{tx(locale, "相似貨品", "Similar items")}</h2>
-          <div className="masonry">
+        <section className="order-4 lg:col-span-2 lg:col-start-1 lg:row-start-3">
+          <h2 className="mb-3 text-lg font-bold">{tx(locale, "相似貨品", "Similar items")}</h2>
+          <div className="feed">
             {similar.map((item) => (
               <ListingCard key={item.id} listing={item} locale={locale} favorited={false} followed={false} next={`/listing/${id}`} />
             ))}

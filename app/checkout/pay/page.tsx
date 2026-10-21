@@ -20,7 +20,7 @@ export default async function PayPage({ searchParams }: { searchParams: Promise<
       <h1 className="text-2xl font-semibold">{tx(prefs.locale, "模擬付款", "Mock payment")}</h1>
       <p className="text-sm text-muted">{tx(prefs.locale, "成功會進入已託管。失敗會留在待付款。爭議會交給管理員。", "Success moves the order into escrow. Failure leaves it awaiting payment. Dispute sends it to an admin.")}</p>
       {orders.map((order) => (
-        <section key={order.id} className="rounded-2xl border border-line p-4">
+        <section key={order.id} className="surface p-4">
           <p className="font-medium">{formatHkd(order.total, prefs.locale)} · {orderStatusLabel(prefs.locale, order.status)}</p>
           <ul className="my-2 text-sm">
             {order.items.map((item) => (

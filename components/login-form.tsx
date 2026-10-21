@@ -36,7 +36,7 @@ export function LoginForm({ locale, next }: { locale: Locale; next: string }) {
           <input className="field" name="nickname" maxLength={24} />
         </label>
         <label className="flex items-start gap-2 text-sm">
-          <input type="checkbox" name="accept" className="mt-1" />
+          <input type="checkbox" name="accept" className="mt-1 h-5 w-5 accent-[#7CB9C8]" />
           <span>
             {tx(locale, "我已閱讀並同意", "I agree to the")} <Link href="/terms">{tx(locale, "條款", "Terms")}</Link> {tx(locale, "同", "and")}{" "}
             <Link href="/privacy">{tx(locale, "私隱政策", "Privacy Policy")}</Link>

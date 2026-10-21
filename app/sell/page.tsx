@@ -17,7 +17,7 @@ export default async function SellPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{tx(prefs.locale, "上架卡牌", "List a card")}</h1>
+        <h1 className="page-title mb-0">{tx(prefs.locale, "上架卡牌", "List a card")}</h1>
         <a className="text-sm text-link" href="/sell/bulk">{tx(prefs.locale, "CSV 批量", "CSV upload")}</a>
       </div>
       <SellForm
