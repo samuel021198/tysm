@@ -23,19 +23,26 @@ export default async function MessagesPage() {
   const visible = threads.filter((thread) => !hidden.has(thread.buyerId === viewer.id ? thread.sellerId : thread.buyerId));
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-semibold">{tx(prefs.locale, "訊息", "Messages")}</h1>
+      <h1 className="mb-4 text-[1.65rem] font-bold">{tx(prefs.locale, "訊息", "Messages")}</h1>
       {visible.length === 0 ? <p>{tx(prefs.locale, "未有對話。", "No conversations.")}</p> : null}
-      <ul className="grid gap-2">
+      <ul className="grid gap-2.5">
         {visible.map((thread) => {
           const other = thread.buyerId === viewer.id ? thread.seller : thread.buyer;
           const last = thread.messages[0];
           return (
             <li key={thread.id}>
-              <Link href={`/messages/${thread.id}`} className="block rounded-2xl border border-line p-3">
-                <span className="font-medium">{other.nickname}</span>
-                {thread.listing ? <span className="ml-2 text-sm text-muted">{thread.listing.title}</span> : null}
-                <p className="text-sm">{last ? last.body : tx(prefs.locale, "未有訊息", "No messages yet")}</p>
-                {last ? <p className="text-xs text-muted">{formatHKT(last.createdAt, prefs.locale)}</p> : null}
+              <Link href={`/messages/${thread.id}`} className="surface flex min-h-[4.5rem] items-center gap-3 px-3 py-3">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-base font-bold text-[#1b1418]">
+                  {other.nickname.slice(0, 1)}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="truncate font-medium">{other.nickname}</span>
+                    {last ? <span className="shrink-0 text-[11px] text-muted">{formatHKT(last.createdAt, prefs.locale, false)}</span> : null}
+                  </span>
+                  {thread.listing ? <span className="block truncate text-xs text-muted">{thread.listing.title}</span> : null}
+                  <span className="block truncate text-sm">{last ? last.body : tx(prefs.locale, "未有訊息", "No messages yet")}</span>
+                </span>
               </Link>
             </li>
           );

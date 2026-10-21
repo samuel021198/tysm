@@ -121,7 +121,7 @@ export default async function OrderPage({
         </form>
       ) : null}
       {order.dispute ? (
-        <section className="rounded-2xl border border-line p-4 text-sm">
+        <section className="surface p-4 text-sm">
           <h2 className="font-semibold">{tx(locale, "爭議", "Dispute")} · {order.dispute.status}</h2>
           <p className="mt-1">{order.dispute.reason}</p>
           {order.dispute.decisionNote ? <p className="mt-1">{order.dispute.decisionNote}</p> : null}

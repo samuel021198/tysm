@@ -39,40 +39,38 @@ export function ListingCard({
   const live =
     listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
   const amount = live ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
-  const tall = listing.id.charCodeAt(0) % 2 === 0;
+  const sale =
+    listing.saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : listing.saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "BIN + auction") : tx(locale, "直購", "Buy Now");
   return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-card">
+    <article className="surface relative overflow-hidden">
       <Link href={`/listing/${listing.id}`} className="block">
-        <img
-          src={listing.photos[0]?.url || "/demo/back.svg"}
-          alt=""
-          className={`${tall ? "aspect-[3/4]" : "aspect-square"} w-full object-cover`}
-        />
-      </Link>
-      <div className="grid gap-2 p-3">
-        <div className="flex flex-wrap gap-1 text-xs">
-          <span className="rounded-full bg-soft px-2 py-0.5">{conditionLabel(listing)}</span>
-          {followed ? <span className="rounded-full bg-soft px-2 py-0.5">{tx(locale, "關注中", "Following")}</span> : null}
-          <span className="rounded-full bg-soft px-2 py-0.5">
-            {listing.saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : listing.saleType === "BOTH" ? tx(locale, "直購+拍賣", "BIN + auction") : tx(locale, "直購", "Buy Now")}
+        <div className="relative">
+          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="aspect-[4/5] w-full object-cover" />
+          <span className="absolute left-2 top-2 max-w-[70%] truncate rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-[#221820] shadow-sm">
+            {conditionLabel(listing)}
           </span>
         </div>
-        <Link href={`/listing/${listing.id}`} className="font-medium leading-snug">
-          {listing.title}
-        </Link>
-        <p className="text-sm">{formatHkd(amount, locale)}</p>
-        {live && listing.auctionEndsAt ? (
-          <p className="text-xs text-muted">{tx(locale, "結束", "Ends")} {formatHKT(listing.auctionEndsAt, locale)}</p>
-        ) : null}
-        <div className="flex items-center justify-between text-xs text-muted">
-          <span>{listing.seller.nickname}</span>
-          <form action={toggleFavorite}>
-            <input type="hidden" name="listingId" value={listing.id} />
-            <input type="hidden" name="next" value={next} />
-            <button aria-label={tx(locale, "收藏", "Favorite")}>{favorited ? "♥" : "♡"} {listing.favoriteCount}</button>
-          </form>
+        <div className="grid gap-1 px-2.5 pb-3 pt-2.5">
+          <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-medium leading-snug">{listing.title}</h2>
+          <p className="price text-[1.15rem] leading-none">{formatHkd(amount, locale)}</p>
+          <p className="truncate text-xs text-muted">
+            {sale}
+            {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
+            {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
+          </p>
         </div>
-      </div>
+      </Link>
+      <form action={toggleFavorite} className="absolute right-1.5 top-1.5">
+        <input type="hidden" name="listingId" value={listing.id} />
+        <input type="hidden" name="next" value={next} />
+        <button
+          aria-label={tx(locale, "收藏", "Favorite")}
+          className={`grid h-11 w-11 place-items-center rounded-full text-lg shadow-sm backdrop-blur ${favorited ? "bg-[#1b1418] text-rose" : "bg-white/90 text-[#9a5d78]"}`}
+        >
+          {favorited ? "♥" : "♡"}
+          <span className="sr-only">{listing.favoriteCount}</span>
+        </button>
+      </form>
     </article>
   );
 }

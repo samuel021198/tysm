@@ -5,6 +5,13 @@ const config: Config = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-sans)", "sans-serif"],
+      },
+      boxShadow: {
+        card: "var(--shadow)",
+      },
       colors: {
         bg: "var(--bg)",
         card: "var(--card)",

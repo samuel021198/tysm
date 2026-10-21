@@ -50,7 +50,7 @@ export default async function CheckoutPage({
           {buy ? <input type="hidden" name="listingId" value={buy.id} /> : null}
           {buy ? <input type="hidden" name="quantity" value={String(Math.max(1, Number(sp.qty || 1)))} /> : null}
           {addresses.map((address) => (
-            <label key={address.id} className="flex gap-2 rounded-xl border border-line p-3 text-sm">
+            <label key={address.id} className="flex min-h-14 items-start gap-3 rounded-2xl bg-soft p-4 text-sm">
               <input type="radio" name="addressId" value={address.id} defaultChecked={address.isDefault} required />
               <span>{address.recipient} · {address.phone}<br />{address.district} {address.line1}</span>
             </label>

@@ -19,7 +19,7 @@ export default async function NotificationsPage() {
       {rows.length === 0 ? <p>{tx(prefs.locale, "未有通知。", "No notifications.")}</p> : null}
       <ul className="grid gap-2">
         {rows.map((row) => (
-          <li key={row.id} className="rounded-2xl border border-line p-3 text-sm">
+          <li key={row.id} className="surface p-4 text-sm">
             <p className="font-medium">{row.title}</p>
             <p>{row.body}</p>
             <p className="text-xs text-muted">{formatHKT(row.createdAt, prefs.locale)} {row.readAt ? "" : "· new"}</p>

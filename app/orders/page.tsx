@@ -20,16 +20,16 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   });
   return (
     <div>
-      <h1 className="mb-3 text-2xl font-semibold">{tx(prefs.locale, "訂單", "Orders")}</h1>
-      <div className="mb-4 flex gap-3 text-sm">
-        <Link href="/orders" className={!selling ? "font-semibold" : ""}>{tx(prefs.locale, "我買的", "Purchases")}</Link>
-        <Link href="/orders?role=sell" className={selling ? "font-semibold" : ""}>{tx(prefs.locale, "我賣的", "Sales")}</Link>
+      <h1 className="mb-3 text-[1.65rem] font-bold">{tx(prefs.locale, "訂單", "Orders")}</h1>
+      <div className="mb-4 grid grid-cols-2 gap-1 rounded-full bg-soft p-1 text-sm">
+        <Link href="/orders" className={`grid h-11 place-items-center rounded-full ${!selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我買的", "Purchases")}</Link>
+        <Link href="/orders?role=sell" className={`grid h-11 place-items-center rounded-full ${selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我賣的", "Sales")}</Link>
       </div>
       {orders.length === 0 ? <p>{tx(prefs.locale, "未有訂單。", "No orders yet.")}</p> : null}
       <ul className="grid gap-3">
         {orders.map((order) => (
           <li key={order.id}>
-            <Link href={`/orders/${order.id}`} className="block rounded-2xl border border-line p-4">
+            <Link href={`/orders/${order.id}`} className="surface block p-4">
               <span className="font-medium">{orderStatusLabel(prefs.locale, order.status)}</span>
               <span className="ml-2">{formatHkd(order.total, prefs.locale)}</span>
               <span className="ml-2 text-sm text-muted">{formatHKT(order.createdAt, prefs.locale)}</span>

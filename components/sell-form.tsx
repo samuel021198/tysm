@@ -71,7 +71,7 @@ export function SellForm({
   }, [price, percent]);
 
   return (
-    <form action={action} className="grid gap-4">
+    <form action={action} className="grid min-w-0 gap-4">
       {initial?.listingId ? <input type="hidden" name="listingId" value={initial.listingId} /> : null}
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
       {locked && initial ? (
@@ -244,7 +244,7 @@ export function SellForm({
           ))}
         </div>
         {photos.map((photo, index) => (
-          <div key={index} className="grid grid-cols-[1fr_8rem_auto] gap-2">
+          <div key={index} className="grid min-w-0 gap-2 sm:grid-cols-[minmax(0,1fr)_8rem_auto] sm:items-center">
             <input
               className="field"
               value={photo.url}
@@ -264,7 +264,7 @@ export function SellForm({
               <option value="BACK">Back</option>
               <option value="GALLERY">Gallery</option>
             </select>
-            <button type="button" className="text-sm text-danger" onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}>
+            <button type="button" className="btn btn-ghost text-danger" onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}>
               {tx(locale, "移除", "Remove")}
             </button>
           </div>
@@ -291,8 +291,8 @@ export function SellForm({
 function IntentButtons({ locale, locked }: { locale: Locale; locked: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <div className="flex flex-wrap gap-2">
-      <button className="btn btn-primary" name="intent" value="publish" disabled={pending}>
+    <div className="grid gap-2 sm:flex sm:flex-wrap">
+      <button className="btn btn-primary w-full sm:w-auto" name="intent" value="publish" disabled={pending}>
         {pending ? tx(locale, "處理中", "Working") : tx(locale, "刊登", "Publish")}
       </button>
       <button className="btn-ghost btn" name="intent" value="draft" disabled={locked || pending}>

@@ -30,7 +30,7 @@ export function SearchBox({ locale, initial = "" }: { locale: Locale; initial?: 
   return (
     <form action="/search" className="relative">
       <input
-        className="field"
+        className="h-12 w-full rounded-full bg-card px-4 text-base text-ink shadow-card outline-none ring-0 placeholder:text-muted focus-visible:ring-2 focus-visible:ring-teal"
         name="q"
         value={q}
         onChange={(event) => setQ(event.target.value)}
@@ -38,10 +38,10 @@ export function SearchBox({ locale, initial = "" }: { locale: Locale; initial?: 
         aria-label={tx(locale, "搜尋", "Search")}
       />
       {items.length > 0 ? (
-        <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-line bg-card text-sm shadow">
+        <ul className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl bg-card py-1 text-[15px] shadow-card">
           {items.map((item) => (
             <li key={item.id}>
-              <a className="block px-3 py-2 hover:bg-soft" href={`/listing/${item.id}`}>
+              <a className="block px-4 py-3 active:bg-soft" href={`/listing/${item.id}`}>
                 {item.title}
               </a>
             </li>

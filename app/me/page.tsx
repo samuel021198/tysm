@@ -6,7 +6,7 @@ import { DISTRICTS } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
 import { PhoneForm } from "@/components/phone-form";
-import { clearHistory, deleteAddress, saveAddress, updateProfile } from "@/actions/auth";
+import { clearHistory, deleteAddress, logout, saveAddress, updateProfile } from "@/actions/auth";
 
 export default async function MePage({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string }> }) {
   const sp = await searchParams;
@@ -18,16 +18,31 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
   return (
     <div className="grid max-w-3xl gap-8">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <div>
-        <h1 className="text-2xl font-semibold">{viewer.nickname}</h1>
-        <p className="text-sm text-muted">{viewer.email || tx(locale, "未有電郵", "No email")} · {viewer.phone || tx(locale, "未有電話", "No phone")} {viewer.phoneVerified ? "✓" : ""}</p>
-        <div className="mt-3 flex flex-wrap gap-3 text-sm">
-          <Link href="/me/favorites">{tx(locale, "收藏", "Favorites")}</Link>
-          <Link href="/me/bids">{tx(locale, "出價", "Bids")}</Link>
-          <Link href="/orders">{tx(locale, "訂單", "Orders")}</Link>
-          <span>{tx(locale, "關注", "Following")} {following}</span>
+      <div className="surface flex items-center gap-4 p-4">
+        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-2xl font-bold text-[#1b1418]">
+          {viewer.nickname.slice(0, 1)}
+        </span>
+        <div className="min-w-0">
+          <h1 className="truncate text-2xl font-bold">{viewer.nickname}</h1>
+          <p className="truncate text-sm text-muted">{viewer.email || tx(locale, "未有電郵", "No email")} · {viewer.phone || tx(locale, "未有電話", "No phone")} {viewer.phoneVerified ? "✓" : ""}</p>
+          <p className="mt-1 text-sm text-muted">{tx(locale, "關注", "Following")} {following}</p>
         </div>
       </div>
+      <nav className="grid gap-2">
+        {[
+          ["/me/favorites", tx(locale, "收藏", "Favorites")],
+          ["/me/bids", tx(locale, "出價", "Bids")],
+          ["/orders", tx(locale, "訂單", "Orders")],
+          ["/notifications", tx(locale, "通知", "Notifications")],
+          ["/cart", tx(locale, "購物車", "Cart")],
+          ...(viewer.role === "ADMIN" ? [["/admin", tx(locale, "管理", "Admin")] as const] : []),
+        ].map(([href, label]) => (
+          <Link key={href} href={href} className="surface flex h-14 items-center justify-between px-4 font-medium">
+            {label}
+            <span className="text-muted" aria-hidden>›</span>
+          </Link>
+        ))}
+      </nav>
       {!viewer.phoneVerified ? <PhoneForm locale={locale} /> : null}
       <form action={updateProfile} className="grid gap-3">
         <h2 className="font-semibold">{tx(locale, "個人資料同收款", "Profile and payout")}</h2>
@@ -49,9 +64,9 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         <h2 className="mb-2 font-semibold">{tx(locale, "香港地址", "Hong Kong addresses")}</h2>
         <ul className="mb-3 grid gap-2 text-sm">
           {addresses.map((address) => (
-            <li key={address.id} className="flex items-center justify-between gap-3">
-              <span>{address.isDefault ? "★ " : ""}{address.recipient} · {address.district} {address.line1}</span>
-              <form action={deleteAddress}><input type="hidden" name="id" value={address.id} /><button>{tx(locale, "刪除", "Delete")}</button></form>
+            <li key={address.id} className="flex items-center justify-between gap-3 rounded-2xl bg-soft px-3 py-2">
+              <span className="min-w-0 break-words">{address.isDefault ? "★ " : ""}{address.recipient} · {address.district} {address.line1}</span>
+              <form action={deleteAddress}><input type="hidden" name="id" value={address.id} /><button className="btn btn-ghost shrink-0">{tx(locale, "刪除", "Delete")}</button></form>
             </li>
           ))}
         </ul>
@@ -70,7 +85,10 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         </form>
       </section>
       <form action={clearHistory}>
-        <button className="underline">{tx(locale, "清除瀏覽紀錄", "Clear browse history")}</button>
+        <button className="text-sm text-muted underline">{tx(locale, "清除瀏覽紀錄", "Clear browse history")}</button>
+      </form>
+      <form action={logout}>
+        <button className="btn btn-ghost w-full">{tx(locale, "登出", "Log out")}</button>
       </form>
       <p className="text-sm text-muted">
         {tx(locale, "刪除帳戶或匯出資料請聯絡管理員：", "To delete your account or export data, contact the admin: ")}

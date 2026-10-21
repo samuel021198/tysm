@@ -32,9 +32,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     <div>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <h1 className="mb-3 text-2xl font-semibold">{tx(locale, "管理", "Admin")}</h1>
-      <nav className="mb-4 flex flex-wrap gap-3 text-sm">
+      <nav className="-mx-3 mb-4 flex gap-2 overflow-x-auto px-3 pb-1 text-sm md:mx-0 md:flex-wrap md:px-0">
         {tabs.map((item) => (
-          <Link key={item} href={`/admin?tab=${item}`} className={item === tab ? "font-semibold" : ""}>
+          <Link key={item} href={`/admin?tab=${item}`} className={`inline-flex h-11 shrink-0 items-center rounded-full px-4 ${item === tab ? "bg-card font-semibold shadow-card" : "bg-soft text-muted"}`}>
             {item}
           </Link>
         ))}
@@ -47,7 +47,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       {tab === "users" ? (
         <ul className="grid gap-2 text-sm">
           {users.map((user) => (
-            <li key={user.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line p-3">
+            <li key={user.id} className="flex flex-wrap items-center justify-between gap-2 surface p-3">
               <span>{user.nickname} · {user.email || user.phone} · {user.role} {user.bidBanned ? "· banned" : ""} · strikes {user.consecutiveUnpaid}</span>
               {user.bidBanned ? (
                 <form action={liftBan}><input type="hidden" name="userId" value={user.id} /><button className="btn-ghost btn">{tx(locale, "解除禁拍", "Lift bid ban")}</button></form>
@@ -81,7 +81,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       {tab === "disputes" ? (
         <ul className="grid gap-4">
           {disputes.map((dispute) => (
-            <li key={dispute.id} className="rounded-xl border border-line p-3 text-sm">
+            <li key={dispute.id} className="surface p-3 text-sm">
               <p>{dispute.status} · <Link href={`/orders/${dispute.orderId}`}>{dispute.orderId}</Link></p>
               <p>{dispute.reason}</p>
               {dispute.appealReason ? <p>{tx(locale, "上訴", "Appeal")}: {dispute.appealReason}</p> : null}
@@ -103,7 +103,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <ul className="grid gap-2 text-sm">
           {reports.length === 0 ? <li>{tx(locale, "沒有未處理檢舉。", "No open reports.")}</li> : null}
           {reports.map((report) => (
-            <li key={report.id} className="rounded-xl border border-line p-3">
+            <li key={report.id} className="surface p-3">
               <p>{report.targetType} {report.targetId}</p>
               <p>{report.reason}</p>
               <form action={resolveReport}><input type="hidden" name="id" value={report.id} /><button className="underline">{tx(locale, "標記已處理", "Resolve")}</button></form>

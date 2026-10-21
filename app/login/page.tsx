@@ -9,9 +9,14 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const next = sp.next && sp.next.startsWith("/") ? sp.next : "/";
   if (viewer) redirect(next);
   return (
-    <div className="mx-auto max-w-md">
-      <h1 className="mb-4 text-2xl font-semibold">{tx(prefs.locale, "登入 TYSM", "Log in to TYSM")}</h1>
-      <LoginForm locale={prefs.locale} next={next} />
+    <div className="mx-auto max-w-md pt-2">
+      <div className="surface px-5 py-6 md:px-7 md:py-8">
+        <p className="font-display text-xs font-semibold tracking-[0.22em] text-[#9a5d78]">TYSM</p>
+        <h1 className="mt-2 text-3xl font-bold">{tx(prefs.locale, "登入 TYSM", "Log in to TYSM")}</h1>
+        <div className="mt-6">
+          <LoginForm locale={prefs.locale} next={next} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -89,9 +89,9 @@ export default async function SearchPage({
   return (
     <div>
       <Flash locale={prefs.locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <h1 className="mb-4 text-2xl font-semibold">{tx(prefs.locale, "搜尋", "Search")}</h1>
-      <form className="mb-4 grid gap-2 md:grid-cols-5">
-        <input className="field md:col-span-2" name="q" defaultValue={q} placeholder={tx(prefs.locale, "關鍵字", "Keyword")} />
+      <h1 className="mb-4 text-[1.65rem] font-bold">{tx(prefs.locale, "搜尋", "Search")}</h1>
+      <form className="surface mb-4 grid grid-cols-2 gap-2.5 p-3 md:grid-cols-5 md:p-4">
+        <input className="field col-span-2" name="q" defaultValue={q} placeholder={tx(prefs.locale, "關鍵字", "Keyword")} />
         <select className="field" name="cat" defaultValue={cat}>
           <option value="">{tx(prefs.locale, "全部分類", "All categories")}</option>
           {categories.map((category) => (
@@ -108,24 +108,24 @@ export default async function SearchPage({
           ))}
         </select>
         <input className="field" name="min" type="number" min={1} max={10.5} step={0.5} defaultValue={min} placeholder={tx(prefs.locale, "最低分數", "Min grade")} />
-        <select className="field" name="sort" defaultValue={sort}>
+        <select className="field col-span-2 md:col-span-1" name="sort" defaultValue={sort}>
           <option value="relevance">{tx(prefs.locale, "相關", "Relevance")}</option>
           <option value="new">{tx(prefs.locale, "最新", "Newest")}</option>
           <option value="price_asc">{tx(prefs.locale, "價格由低至高", "Price ascending")}</option>
           <option value="price_desc">{tx(prefs.locale, "價格由高至低", "Price descending")}</option>
           <option value="ending">{tx(prefs.locale, "即將結束", "Ending soon")}</option>
         </select>
-        <button className="btn btn-primary">{tx(prefs.locale, "搜尋", "Search")}</button>
+        <button className="btn btn-primary col-span-2 md:col-span-1">{tx(prefs.locale, "搜尋", "Search")}</button>
       </form>
       {history.length ? (
         <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-muted">{tx(prefs.locale, "最近搜尋", "Recent searches")}</span>
           {history.map((row) => (
-            <span key={row.id} className="inline-flex items-center gap-1 rounded-full bg-soft px-2 py-1">
+            <span key={row.id} className="inline-flex h-11 items-center gap-1 rounded-full bg-soft pl-3 pr-1 text-sm">
               <a href={`/search?q=${encodeURIComponent(row.query)}`}>{row.query}</a>
               <form action={clearSearch}>
                 <input type="hidden" name="id" value={row.id} />
-                <button aria-label={tx(prefs.locale, "清除", "Clear")}>×</button>
+                <button className="grid h-9 w-9 place-items-center rounded-full" aria-label={tx(prefs.locale, "清除", "Clear")}>×</button>
               </form>
             </span>
           ))}
@@ -136,7 +136,7 @@ export default async function SearchPage({
         </div>
       ) : null}
       {shown.length === 0 ? <p>{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
-      <div className="masonry">
+      <div className="feed">
         {shown.map((listing) => (
           <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={false} next="/search" />
         ))}
