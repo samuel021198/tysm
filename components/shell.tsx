@@ -20,11 +20,15 @@ export function Header({
 }) {
   const nav = navLabels(locale);
   return (
-    <header className="sticky top-0 z-30 pt-[env(safe-area-inset-top)]">
-      <div className="bg-bg">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 overflow-x-auto px-3 md:h-16 md:gap-3 md:px-5">
+    <header className="sticky top-0 z-40 bg-bg pt-[env(safe-area-inset-top)]">
+      <div>
+        <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 px-3 md:h-16 md:gap-3 md:px-5">
           <Link href="/" className="shrink-0 pr-1">
-            <img src="/brand/tysm-wordmark.png" alt="TYSM" className="h-8 w-auto bg-transparent sm:h-9 md:h-10" />
+            <img
+              src={theme === "dark" ? "/brand/tysm-wordmark-on-dark.png" : "/brand/tysm-wordmark.png"}
+              alt="TYSM"
+              className="h-9 w-auto bg-transparent md:h-10"
+            />
           </Link>
           <div className="mx-auto hidden min-w-0 max-w-xl flex-1 md:block">
             <SearchBox locale={locale} />
@@ -53,23 +57,31 @@ export function Header({
               </form>
             ) : null}
           </nav>
-          <form action={setPrefs} className="flex items-center">
-            <button className="grid h-11 min-w-11 place-items-center rounded-full px-2 text-xs font-semibold text-muted" name="locale" value={locale === "en" ? "zh-HK" : "en"}>
-              {locale === "en" ? "中" : "EN"}
-            </button>
-            <button
-              className="grid h-11 w-11 place-items-center rounded-full text-muted"
-              name="theme"
-              value={theme === "dark" ? "light" : "dark"}
-              aria-label={theme === "dark" ? tx(locale, "淺色", "Light") : tx(locale, "深色", "Dark")}
-            >
-              <Icon name={theme === "dark" ? "sun" : "moon"} className="h-5 w-5" />
-            </button>
-          </form>
+          <div className="hidden md:block">
+            <PrefToggles locale={locale} theme={theme} />
+          </div>
         </div>
         <div className="h-px bg-gradient-to-r from-transparent via-rose/70 to-teal/80" />
       </div>
     </header>
+  );
+}
+
+export function PrefToggles({ locale, theme }: { locale: Locale; theme: "light" | "dark" }) {
+  return (
+    <form action={setPrefs} className="flex items-center">
+      <button className="grid h-11 min-w-11 place-items-center rounded-full px-2 text-xs font-semibold text-muted" name="locale" value={locale === "en" ? "zh-HK" : "en"}>
+        {locale === "en" ? "中" : "EN"}
+      </button>
+      <button
+        className="grid h-11 w-11 place-items-center rounded-full text-muted"
+        name="theme"
+        value={theme === "dark" ? "light" : "dark"}
+        aria-label={theme === "dark" ? tx(locale, "淺色", "Light") : tx(locale, "深色", "Dark")}
+      >
+        <Icon name={theme === "dark" ? "sun" : "moon"} className="h-5 w-5" />
+      </button>
+    </form>
   );
 }
 
@@ -83,12 +95,14 @@ function Count({ n }: { n: number }) {
 
 export function Footer({ locale }: { locale: Locale }) {
   return (
-    <footer className="mt-14 text-xs text-muted md:mt-20">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-4 py-8 md:justify-start">
-        <span className="font-display tracking-wide">TYSM · HKD</span>
-        <Link className="inline-flex h-11 items-center" href="/faq">FAQ</Link>
-        <Link className="inline-flex h-11 items-center" href="/terms">{tx(locale, "條款", "Terms")}</Link>
-        <Link className="inline-flex h-11 items-center" href="/privacy">{tx(locale, "私隱", "Privacy")}</Link>
+    <footer className="mt-10 text-muted md:mt-20">
+      <div className="mx-auto max-w-6xl px-4 py-6 text-center md:flex md:items-center md:justify-start md:gap-4 md:py-8 md:text-left">
+        <p className="font-display text-sm tracking-wide">TYSM</p>
+        <p className="mt-2 flex justify-center gap-4 text-xs md:mt-0">
+          <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/faq">FAQ</Link>
+          <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/terms">{tx(locale, "條款", "Terms")}</Link>
+          <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/privacy">{tx(locale, "私隱", "Privacy")}</Link>
+        </p>
       </div>
     </footer>
   );

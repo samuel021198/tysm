@@ -65,9 +65,9 @@ export default async function HomePage({
         <SearchBox locale={prefs.locale} />
       </div>
       <h1 className="page-title">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
-      <div className="-mx-3 mb-4 flex gap-2 overflow-x-auto px-3 pb-1 md:mx-0 md:px-0">
+      <div className="chips -mx-3 mb-4 md:mx-0">
         {categories.map((cat) => (
-          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ring-rose/25">
+          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 snap-start items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ring-rose/25">
             {prefs.locale === "en" ? cat.nameEn : cat.nameZh}
           </Link>
         ))}

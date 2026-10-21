@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { DISTRICTS } from "@/lib/format";
 import { tx } from "@/lib/i18n";
-import { Flash } from "@/components/shell";
+import { Flash, PrefToggles } from "@/components/shell";
 import { PhoneForm } from "@/components/phone-form";
 import { clearHistory, deleteAddress, logout, saveAddress, updateProfile } from "@/actions/auth";
 
@@ -28,6 +28,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           <p className="mt-1 text-sm text-muted">{tx(locale, "關注", "Following")} {following}</p>
         </div>
       </div>
+      <PrefToggles locale={locale} theme={prefs.theme} />
       <nav className="grid gap-2">
         {[
           ["/me/favorites", tx(locale, "收藏", "Favorites")],

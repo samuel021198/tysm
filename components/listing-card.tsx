@@ -42,35 +42,35 @@ export function ListingCard({
   const sale =
     listing.saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : listing.saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "BIN + auction") : tx(locale, "直購", "Buy Now");
   return (
-    <article className="surface relative overflow-hidden">
-      <Link href={`/listing/${listing.id}`} className="block">
-        <div className="relative">
-          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="aspect-[4/5] w-full object-cover" />
-          <span className="absolute left-2.5 top-2.5 max-w-[68%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
-            {conditionLabel(listing)}
-          </span>
-        </div>
-        <div className="grid gap-1.5 px-3 pb-3.5 pt-3">
-          <h2 className="line-clamp-2 min-h-[2.5em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
-          <p className="price text-xl leading-none">{formatHkd(amount, locale)}</p>
-          <p className="truncate text-xs leading-4 text-muted">
-            {sale}
-            {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
-            {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
-          </p>
-        </div>
+    <article className="surface flex h-full flex-col overflow-hidden">
+      <div className="relative">
+        <Link href={`/listing/${listing.id}`} className="block">
+          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full object-cover" />
+        </Link>
+        <span className="pointer-events-none absolute left-2.5 top-2.5 max-w-[62%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
+          {conditionLabel(listing)}
+        </span>
+        <form action={toggleFavorite} className="absolute bottom-2 right-2">
+          <input type="hidden" name="listingId" value={listing.id} />
+          <input type="hidden" name="next" value={next} />
+          <button
+            aria-label={tx(locale, "收藏", "Favorite")}
+            className={`grid h-11 w-11 place-items-center rounded-full text-2xl leading-none shadow-sm ${favorited ? "bg-[#1b1418] text-rose" : "bg-card text-[#9a5d78]"}`}
+          >
+            {favorited ? "♥" : "♡"}
+            <span className="sr-only">{listing.favoriteCount}</span>
+          </button>
+        </form>
+      </div>
+      <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1.5 px-3 pb-3.5 pt-3">
+        <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
+        <p className="price text-[1.45rem] leading-none">{formatHkd(amount, locale)}</p>
+        <p className="mt-auto truncate text-xs leading-4 text-muted">
+          {sale}
+          {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
+          {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
+        </p>
       </Link>
-      <form action={toggleFavorite} className="absolute right-1.5 top-1.5">
-        <input type="hidden" name="listingId" value={listing.id} />
-        <input type="hidden" name="next" value={next} />
-        <button
-          aria-label={tx(locale, "收藏", "Favorite")}
-          className={`grid h-11 w-11 place-items-center rounded-full text-lg shadow-sm backdrop-blur ${favorited ? "bg-[#1b1418] text-rose" : "bg-white/90 text-[#9a5d78]"}`}
-        >
-          {favorited ? "♥" : "♡"}
-          <span className="sr-only">{listing.favoriteCount}</span>
-        </button>
-      </form>
     </article>
   );
 }

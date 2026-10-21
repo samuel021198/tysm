@@ -9,7 +9,7 @@ export function Gallery({ urls, alt }: { urls: string[]; alt: string }) {
     <div className="-mx-3 md:mx-0">
       <img src={urls[index]} alt={alt} className="aspect-[4/3] w-full bg-soft object-cover md:aspect-[4/5] md:rounded-[1.35rem]" />
       {urls.length > 1 ? (
-        <div className="mt-3 flex gap-2 overflow-x-auto px-3 pb-1 md:px-0">
+        <div className="chips mt-3 md:mx-0">
           {urls.map((url, i) => (
             <button key={`${url}-${i}`} type="button" onClick={() => setIndex(i)} className={`h-16 w-14 shrink-0 overflow-hidden rounded-xl ${i === index ? "ring-2 ring-teal" : ""}`}>
               <img src={url} alt="" className="h-full w-full object-cover" />
