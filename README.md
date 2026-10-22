@@ -27,10 +27,16 @@ npm run dev
 
 | 帳戶 | 登入 | 可以做 |
 | --- | --- | --- |
-| 買家 | `mei@tysm.hk` | 購物車已有皮卡丘；已關注卡牌阿明 |
-| 買家 | `alex@tysm.hk` | 路飛拍賣的較低出價；一張示範爭議單 |
-| 賣家 | `91111111` 或 `ming@tysm.hk` | 已驗證電話，可以上架 |
-| 賣家 | `92222222` | 已驗證電話 |
+| 買家 | `mei@tysm.hk` | 購物車有皮卡丘同美斯；已關注卡牌阿明 |
+| 買家 | `alex@tysm.hk` | 多場拍賣的出價；一張示範爭議單 |
+| 買家 | `yuki@tysm.hk` | 購物車有 IU 同索隆；有訊息 |
+| 買家 | `ho@tysm.hk` 或 `98888888` | 購物車有沙拿同林俊傑；未驗證電話，不能上架 |
+| 買家 | `oscar@tysm.hk` | 收藏同出價，購物車有卓奧特 |
+| 賣家 | `91111111` 或 `ming@tysm.hk` | 卡牌阿明，已驗證電話 |
+| 賣家 | `92222222` 或 `star@tysm.hk` | 星光收藏 |
+| 賣家 | `94444444` 或 `ken@tysm.hk` | 旺角卡舖 |
+| 賣家 | `95555555` 或 `wai@tysm.hk` | 維港球星 |
+| 賣家 | `96666666` 或 `lam@tysm.hk` | 林小姐 |
 | 管理員 | `admin@tysm.hk` | 佣金、分類、用戶、爭議、檢舉 |
 
 新用戶必須勾選條款。賣家未驗證電話不能上架。
@@ -70,6 +76,7 @@ npm run dev
 | `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料時必須 | 保護 `POST /api/internal/reseed`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 
 不要提交 `.env`。
 
@@ -88,6 +95,19 @@ npm run db:seed
 Vercel 建置不會自動跑 migration。正式環境要自己執行 `migrate deploy`。Seed 可以只跑一次。
 
 5. Vercel Cron 每日 00:00（香港時間，`0 16 * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管。頁面開啟時亦會做同樣的掃瞄。
+
+## 重新灌示範資料
+
+`POST /api/internal/reseed` 用正式環境的 `DATABASE_URL` 再跑一次 seed。所有示範列都以固定 id upsert，重複呼叫是安全的。它會把示範刊登的庫存、拍賣結束時間同出價回復到目錄；示範 id 以外的用戶同刊登不會刪除。已截標、仍待付款、而且貨品全部來自示範拍賣的訂單會清走，避免拍賣被重新打開之後仲掛住一張過期得標單。
+
+請求要帶 `Authorization: Bearer <BOOTSTRAP_SECRET>`。沒有設定 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。成功回 `200` 同各表筆數。
+
+```bash
+curl -sS -X POST "https://tysm-livid.vercel.app/api/internal/reseed" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+```
+
+本地如果資料庫已經指住 `.env` 的 `DATABASE_URL`，用 `npm run db:seed` 就得，不必打呢條路由。
 
 ## 之後要接上的東西
 

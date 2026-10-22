@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="周杰倫 Jay Chou">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="28" y="28" width="744" height="944" rx="36" fill="#a21caf"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="#fae8ff"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
+  <ellipse cx="400" cy="430" rx="120" ry="150" fill="#fff" opacity="0.16"/>
+      <circle cx="400" cy="340" r="78" fill="#fff" opacity="0.28"/>
+      <path d="M300 520 Q400 430 500 520" fill="#fff" opacity="0.22"/>
+      <circle cx="250" cy="250" r="18" fill="#fff" opacity="0.7"/>
+      <circle cx="560" cy="280" r="10" fill="#fff" opacity="0.7"/>
+      <circle cx="530" cy="210" r="6" fill="#fff" opacity="0.8"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">周</text>
+  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">周杰倫</text>
+  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Jay Chou</text>
+  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">魔天倫 · 2023 · Raw B</text>
+  <defs>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+</svg>

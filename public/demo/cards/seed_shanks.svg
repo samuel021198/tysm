@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="香克斯 Shanks">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="28" y="28" width="744" height="944" rx="36" fill="#355070"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="#d9e2ec"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
+  <circle cx="400" cy="390" r="160" fill="#fff" opacity="0.14"/>
+    <circle cx="400" cy="390" r="92" fill="#fff" opacity="0.16"/>
+    <path d="M400 300 L424 360 H488 L436 398 L456 460 L400 422 L344 460 L364 398 L312 360 H376 Z" fill="#fff" opacity="0.9"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">香</text>
+  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">香克斯</text>
+  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Shanks</text>
+  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">OP-09 · TAG 9</text>
+  <defs>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+</svg>
