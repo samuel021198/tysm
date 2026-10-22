@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="蘇圖 Juan Soto">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="28" y="28" width="744" height="944" rx="36" fill="#1d4ed8"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="#dbeafe"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
+  <circle cx="400" cy="390" r="150" fill="#fff" opacity="0.92"/>
+      <path d="M310 300 Q360 390 310 480" fill="none" stroke="#1d4ed8" stroke-width="10"/>
+      <path d="M490 300 Q440 390 490 480" fill="none" stroke="#1d4ed8" stroke-width="10"/>
+      <path d="M328 330 H292 M332 360 H288 M332 420 H288 M328 450 H292 M472 330 H508 M468 360 H512 M468 420 H512 M472 450 H508" stroke="#1d4ed8" stroke-width="6"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">蘇</text>
+  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">蘇圖</text>
+  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Juan Soto</text>
+  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Bowman · BGS 8.5</text>
+  <defs>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+</svg>

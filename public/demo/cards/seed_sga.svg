@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="基爾吉斯 SGA">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="28" y="28" width="744" height="944" rx="36" fill="#f97316"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="#ffedd5"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
+  <circle cx="400" cy="390" r="150" fill="none" stroke="#fff" stroke-width="14" opacity="0.9"/>
+      <path d="M250 390 H550 M400 240 V540" stroke="#fff" stroke-width="12" opacity="0.9"/>
+      <path d="M280 300 Q400 390 280 480 M520 300 Q400 390 520 480" fill="none" stroke="#fff" stroke-width="12" opacity="0.9"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">基</text>
+  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">基爾吉斯</text>
+  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">SGA</text>
+  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Select · 2023 · Raw C</text>
+  <defs>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+</svg>

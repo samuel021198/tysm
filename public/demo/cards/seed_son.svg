@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="孫興慜 Son">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="28" y="28" width="744" height="944" rx="36" fill="#40916c"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="#d8f3dc"/>
+  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
+  <circle cx="400" cy="390" r="150" fill="#fff" opacity="0.18"/>
+      <circle cx="400" cy="390" r="92" fill="none" stroke="#fff" stroke-width="10" opacity="0.85"/>
+      <path d="M400 298 L448 334 L430 392 L370 392 L352 334 Z" fill="#40916c" stroke="#fff" stroke-width="8"/>
+  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">孫</text>
+  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">孫興慜</text>
+  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Son</text>
+  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Topps · 2021 · Raw B</text>
+  <defs>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+</svg>
