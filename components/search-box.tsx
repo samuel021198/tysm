@@ -40,7 +40,7 @@ export function SearchBox({
   return (
     <form action="/search" className="relative">
       <input
-        className="h-12 w-full rounded-full bg-card px-4 text-base text-ink shadow-card outline-none ring-0 placeholder:text-muted focus-visible:ring-2 focus-visible:ring-teal"
+        className="h-12 w-full rounded-full bg-card px-4 text-base text-ink shadow-card outline-none ring-0 placeholder:text-muted focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
         name="q"
         value={q}
         onChange={(event) => setQ(event.target.value)}
