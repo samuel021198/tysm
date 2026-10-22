@@ -202,12 +202,3 @@ export async function clearHistory() {
   await prisma.viewHistory.deleteMany({ where: { userId: viewer.id } });
   redirect("/me?ok=saved");
 }
-
-export async function clearSearch(formData: FormData) {
-  const viewer = await getViewer();
-  if (!viewer) redirect("/login");
-  const id = String(formData.get("id") || "");
-  if (id === "all") await prisma.searchHistory.deleteMany({ where: { userId: viewer.id } });
-  else await prisma.searchHistory.deleteMany({ where: { id, userId: viewer.id } });
-  redirect("/search?ok=saved");
-}

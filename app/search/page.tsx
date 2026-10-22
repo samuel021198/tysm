@@ -6,8 +6,7 @@ import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { ListingCard } from "@/components/listing-card";
 import { tx } from "@/lib/i18n";
-import { clearSearch } from "@/actions/auth";
-import { SearchBox } from "@/components/search-box";
+import { SaveSearchButton, SearchBox } from "@/components/search-box";
 import { listingQueryWhere, searchScore } from "@/lib/search";
 
 function one(value: string | string[] | undefined) {
@@ -54,11 +53,23 @@ export default async function SearchPage({
   }
   const shown = listings.slice(0, 48);
   if (viewer && q) {
-    await prisma.searchHistory.create({ data: { userId: viewer.id, query: q.slice(0, 80) } });
+    const query = q.slice(0, 80);
+    await prisma.$transaction([
+      prisma.searchHistory.deleteMany({ where: { userId: viewer.id, query } }),
+      prisma.searchHistory.create({ data: { userId: viewer.id, query } }),
+    ]);
   }
   const history = viewer
-    ? await prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 12 })
+    ? await prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 24 })
     : [];
+  const accountRecent: string[] = [];
+  const seenRecent = new Set<string>();
+  for (const row of history) {
+    if (seenRecent.has(row.query)) continue;
+    seenRecent.add(row.query);
+    accountRecent.push(row.query);
+    if (accountRecent.length >= 12) break;
+  }
   const favIds = new Set(
     viewer
       ? (await prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } })).map((row) => row.listingId)
@@ -69,8 +80,17 @@ export default async function SearchPage({
     <div>
       <Flash locale={prefs.locale} ok={one(sp.ok)} err={one(sp.err)} />
       <h1 className="page-title">{tx(prefs.locale, "搜尋", "Search")}</h1>
-      <SearchBox locale={prefs.locale} initial={q} autoFocus>
-        <div className="mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-5">
+      <SearchBox
+        locale={prefs.locale}
+        initial={q}
+        autoFocus={!q}
+        rememberVisit
+        pullAccount={false}
+        accountRecent={accountRecent}
+        scope={chosen ? { slug: chosen.slug, nameZh: chosen.nameZh, nameEn: chosen.nameEn } : null}
+      />
+      <form action="/search" className="mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-5">
+        {q ? <input type="hidden" name="q" value={q} /> : null}
         <select className="field col-span-2 md:col-span-1" name="cat" defaultValue={cat}>
           <option value="">{tx(prefs.locale, "全部分類", "All categories")}</option>
           {categories.map((category) => (
@@ -95,27 +115,15 @@ export default async function SearchPage({
           <option value="ending">{tx(prefs.locale, "即將結束", "Ending soon")}</option>
         </select>
         <button className="btn btn-primary col-span-2 md:col-span-1">{tx(prefs.locale, "篩選", "Filter")}</button>
-        </div>
-      </SearchBox>
-      {history.length ? (
-        <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-muted">{tx(prefs.locale, "最近搜尋", "Recent searches")}</span>
-          {history.map((row) => (
-            <span key={row.id} className="inline-flex h-11 items-center gap-1 rounded-full bg-soft pl-3 pr-1 text-sm">
-              <a href={`/search?q=${encodeURIComponent(row.query)}`}>{row.query}</a>
-              <form action={clearSearch}>
-                <input type="hidden" name="id" value={row.id} />
-                <button className="grid h-9 w-9 place-items-center rounded-full" aria-label={tx(prefs.locale, "清除", "Clear")}>×</button>
-              </form>
-            </span>
-          ))}
-          <form action={clearSearch}>
-            <input type="hidden" name="id" value="all" />
-            <button className="underline">{tx(prefs.locale, "全部清除", "Clear all")}</button>
-          </form>
+      </form>
+      {q ? (
+        <div className="mb-3 mt-4 flex items-center justify-between gap-3 text-sm">
+          <p className="text-muted">
+            {shown.length} {tx(prefs.locale, "件", "results")}
+          </p>
+          <SaveSearchButton locale={prefs.locale} query={q} cat={chosen?.slug} catZh={chosen?.nameZh} catEn={chosen?.nameEn} />
         </div>
       ) : null}
-      {q ? <p className="mb-3 text-sm text-muted">{shown.length} {tx(prefs.locale, "件", "results")}</p> : null}
       {shown.length === 0 ? <p className="empty">{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
       <div className="feed">
         {shown.map((listing) => (

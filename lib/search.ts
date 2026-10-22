@@ -88,6 +88,202 @@ export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
   return { OR: needles.map(clause) };
 }
 
+export type MemoryItem = {
+  query: string;
+  cat?: string;
+  catZh?: string;
+  catEn?: string;
+};
+
+export type SuggestListing = {
+  id: string;
+  title: string;
+  categorySlug?: string | null;
+  categoryZh?: string | null;
+  categoryEn?: string | null;
+};
+
+export type SuggestCategory = {
+  slug: string;
+  nameZh: string;
+  nameEn: string;
+};
+
+export type SuggestRow = {
+  key: string;
+  href: string;
+  label: string;
+  hintZh?: string;
+  hintEn?: string;
+  query?: string;
+  cat?: string;
+  catZh?: string;
+  catEn?: string;
+  kind: "query" | "memory" | "category" | "listing";
+};
+
+export function memoryKey(item: { query: string; cat?: string | null }): string {
+  return `${item.query.trim().slice(0, 80)}|${item.cat?.trim() || ""}`;
+}
+
+export function searchHref(query: string, extra?: { cat?: string }): string {
+  const params = new URLSearchParams();
+  const q = query.trim().slice(0, 80);
+  if (q) params.set("q", q);
+  if (extra?.cat) params.set("cat", extra.cat);
+  const search = params.toString();
+  return search ? `/search?${search}` : "/search";
+}
+
+export function textHits(query: string, text: string): boolean {
+  const raw = query.trim();
+  const folded = foldSearch(raw);
+  const target = foldSearch(text);
+  if (!folded || !target) return false;
+  const min = /[a-z]/i.test(raw) ? 2 : 1;
+  if (folded.length < min) return false;
+  if (target.includes(folded)) return true;
+  return searchNeedles(raw).some((needle) => {
+    const n = foldSearch(needle);
+    return n.length >= min && n !== folded && target.includes(n);
+  });
+}
+
+export function categoryMatches(query: string, nameZh: string, nameEn: string): boolean {
+  return textHits(query, nameZh) || textHits(query, nameEn);
+}
+
+function cleanMemory(item: MemoryItem): MemoryItem | null {
+  const query = item.query?.trim().slice(0, 80) ?? "";
+  if (!query) return null;
+  const cat = item.cat?.trim() || undefined;
+  return { query, cat, catZh: cat ? item.catZh : undefined, catEn: cat ? item.catEn : undefined };
+}
+
+export function rememberMemory(list: MemoryItem[], item: MemoryItem, limit = 12): MemoryItem[] {
+  const next = cleanMemory(item);
+  if (!next) return list;
+  const key = memoryKey(next);
+  return [next, ...list.filter((row) => memoryKey(row) !== key)].slice(0, limit);
+}
+
+export function forgetMemory(list: MemoryItem[], item: { query: string; cat?: string }): MemoryItem[] {
+  const key = memoryKey(item);
+  return list.filter((row) => memoryKey(row) !== key);
+}
+
+export function mergeMemory(primary: MemoryItem[], incoming: MemoryItem[], limit = 12): MemoryItem[] {
+  const out: MemoryItem[] = [];
+  const seen = new Set<string>();
+  for (const item of [...primary, ...incoming]) {
+    const next = cleanMemory(item);
+    if (!next) continue;
+    const key = memoryKey(next);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(next);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+function memoryRow(item: MemoryItem): SuggestRow {
+  return {
+    key: `m:${memoryKey(item)}`,
+    kind: "memory",
+    href: searchHref(item.query, { cat: item.cat }),
+    label: item.query,
+    hintZh: item.catZh ? `在${item.catZh}` : undefined,
+    hintEn: item.catEn ? `in ${item.catEn}` : undefined,
+    query: item.query,
+    cat: item.cat,
+    catZh: item.catZh,
+    catEn: item.catEn,
+  };
+}
+
+export function buildSuggestRows(input: {
+  query: string;
+  recent: MemoryItem[];
+  saved: MemoryItem[];
+  tab: "recent" | "saved";
+  listings: SuggestListing[];
+  categories: SuggestCategory[];
+}): SuggestRow[] {
+  const q = input.query.trim().slice(0, 80);
+  if (!q) {
+    const source = input.tab === "saved" ? input.saved : input.recent;
+    return source.map((item) => memoryRow(item));
+  }
+
+  const rows: SuggestRow[] = [];
+  const seen = new Set<string>();
+  const push = (row: SuggestRow) => {
+    if (rows.length >= 8 || seen.has(row.href)) return false;
+    seen.add(row.href);
+    rows.push(row);
+    return true;
+  };
+
+  push({ key: `q:${q}`, kind: "query", href: searchHref(q), label: q, query: q });
+
+  let recentShown = 0;
+  for (const item of input.recent) {
+    if (recentShown >= 3) break;
+    if (!textHits(q, item.query)) continue;
+    if (push(memoryRow(item))) recentShown += 1;
+  }
+
+  let cats = 0;
+  const addCat = (slug: string, nameZh: string, nameEn: string) => {
+    if (cats >= 3) return;
+    const ok = push({
+      key: `c:${q}|${slug}`,
+      kind: "category",
+      href: searchHref(q, { cat: slug }),
+      label: q,
+      hintZh: `在${nameZh}`,
+      hintEn: `in ${nameEn}`,
+      query: q,
+      cat: slug,
+      catZh: nameZh,
+      catEn: nameEn,
+    });
+    if (ok) cats += 1;
+  };
+  for (const cat of input.categories) addCat(cat.slug, cat.nameZh, cat.nameEn);
+  for (const listing of input.listings) {
+    if (!listing.categorySlug || !listing.categoryZh || !listing.categoryEn) continue;
+    addCat(listing.categorySlug, listing.categoryZh, listing.categoryEn);
+  }
+
+  let listingsShown = 0;
+  for (const listing of input.listings) {
+    if (listingsShown >= 6) break;
+    const ok = push({
+      key: `l:${listing.id}`,
+      kind: "listing",
+      href: `/listing/${listing.id}`,
+      label: listing.title,
+      hintZh: listing.categoryZh ? `在${listing.categoryZh}` : undefined,
+      hintEn: listing.categoryEn ? `in ${listing.categoryEn}` : undefined,
+    });
+    if (ok) listingsShown += 1;
+  }
+  return rows;
+}
+
+// Desktop dropdown must dismiss on outside scroll/blur. The mobile sheet scrolls
+// its own list and keeps focus, so those events must not close it.
+export function suggestPanelDismiss(
+  reason: "blur" | "scroll" | "escape" | "submit",
+  opts: { mobileSheet: boolean; insidePanel: boolean; focusInside: boolean },
+): boolean {
+  if (reason === "escape" || reason === "submit") return true;
+  if (reason === "blur") return !opts.mobileSheet && !opts.focusInside;
+  return !opts.mobileSheet && !opts.insidePanel;
+}
+
 export function searchScore(
   listing: {
     title: string;
