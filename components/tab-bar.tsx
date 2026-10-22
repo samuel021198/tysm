@@ -37,13 +37,13 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
                 className={`flex h-full flex-col items-center justify-center gap-1 text-[11px] font-medium ${tab.on ? "text-ink" : "text-muted"}`}
               >
                 {sell ? (
-                  <span className="-mt-5 grid h-[3.25rem] w-[3.25rem] place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-[#1b1418] shadow-[0_10px_22px_rgba(124,185,200,0.38)]">
-                    <Icon name="plus" strokeWidth={2} />
+                  <span className="sell-cta -mt-5 grid h-[3.25rem] w-[3.25rem] place-items-center rounded-full">
+                    <Icon name="plus" className="h-7 w-7" strokeWidth={2.6} />
                   </span>
                 ) : (
                   <Icon name={tab.icon} strokeWidth={tab.on ? 2.15 : 1.7} />
                 )}
-                <span>{tab.label}</span>
+                <span className={sell ? "font-semibold text-ink" : undefined}>{tab.label}</span>
               </Link>
             </li>
           );

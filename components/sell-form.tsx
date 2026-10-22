@@ -292,7 +292,7 @@ function IntentButtons({ locale, locked }: { locale: Locale; locked: boolean }) 
   const { pending } = useFormStatus();
   return (
     <div className="grid gap-2 sm:flex sm:flex-wrap">
-      <button className="btn btn-primary w-full sm:w-auto" name="intent" value="publish" disabled={pending}>
+      <button className="sell-cta btn w-full sm:w-auto" name="intent" value="publish" disabled={pending}>
         {pending ? tx(locale, "處理中", "Working") : tx(locale, "刊登", "Publish")}
       </button>
       <button className="btn-ghost btn" name="intent" value="draft" disabled={locked || pending}>

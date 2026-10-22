@@ -163,6 +163,25 @@ svg {
   box-shadow: 0 10px 22px rgba(124, 185, 200, 0.34);
 }
 
+.sell-cta {
+  /* Same hues as #C498B2 → #7CB9C8, pushed so the button stays readable on white. */
+  background-image: linear-gradient(135deg, #b76d96 0%, #3a8fa4 100%);
+  color: #1b1418;
+  box-shadow:
+    0 0 0 3px var(--card),
+    0 0 0 5px #c498b2,
+    0 12px 22px rgba(58, 143, 164, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.dark .sell-cta {
+  box-shadow:
+    0 0 0 3px var(--card),
+    0 0 0 5px #7cb9c8,
+    0 12px 22px rgba(124, 185, 200, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
 .btn-ghost {
   background: var(--soft);
   color: var(--ink);
