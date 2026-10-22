@@ -1,65 +1,495 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { tx, type Locale } from "@/lib/i18n";
+import {
+  buildSuggestRows,
+  memoryKey,
+  suggestPanelDismiss,
+  type MemoryItem,
+  type SuggestCategory,
+  type SuggestListing,
+  type SuggestRow,
+} from "@/lib/search";
+import {
+  MEMORY_EVENT,
+  clearRecent,
+  mergeAccount,
+  pullAccountRecent,
+  pushRecent,
+  pushSaved,
+  readRecent,
+  readSaved,
+  removeRecent,
+  removeSaved,
+  writeSaved,
+} from "@/lib/search-memory";
+import { Icon } from "./icons";
+
+const NO_RECENT: string[] = [];
+
+function mobileSheet() {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
 
 export function SearchBox({
   locale,
   initial = "",
   autoFocus = false,
-  children,
+  rememberVisit = false,
+  pullAccount = true,
+  accountRecent = NO_RECENT,
+  scope = null,
 }: {
   locale: Locale;
   initial?: string;
   autoFocus?: boolean;
-  children?: ReactNode;
+  rememberVisit?: boolean;
+  pullAccount?: boolean;
+  accountRecent?: string[];
+  scope?: { slug: string; nameZh: string; nameEn: string } | null;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const listId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const alive = useRef(true);
+  const [narrow, setNarrow] = useState(false);
   const [q, setQ] = useState(initial);
-  const [items, setItems] = useState<{ id: string; title: string }[]>([]);
+  const [open, setOpen] = useState(autoFocus);
+  const [active, setActive] = useState(0);
+  const [tab, setTab] = useState<"recent" | "saved">("recent");
+  const [recent, setRecent] = useState<MemoryItem[]>(() => accountRecent.map((query) => ({ query })));
+  const [saved, setSaved] = useState<MemoryItem[]>([]);
+  const [pack, setPack] = useState<{ q: string; listings: SuggestListing[]; categories: SuggestCategory[] }>({
+    q: "",
+    listings: [],
+    categories: [],
+  });
+  const query = q.trim();
+  const suggestions = pack.q === query ? pack : { q: query, listings: [], categories: [] };
+  const rows = buildSuggestRows({
+    query,
+    recent,
+    saved,
+    tab,
+    listings: suggestions.listings,
+    categories: suggestions.categories,
+  });
+  const index = rows.length ? Math.min(active, rows.length - 1) : -1;
 
   useEffect(() => {
-    if (q.trim().length < 1) {
-      setItems([]);
-      return;
-    }
+    alive.current = true;
+    const sync = () => {
+      setRecent(readRecent());
+      setSaved(readSaved());
+    };
+    const mq = window.matchMedia("(max-width: 767px)");
+    const apply = () => setNarrow(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    window.addEventListener(MEMORY_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      alive.current = false;
+      mq.removeEventListener("change", apply);
+      window.removeEventListener(MEMORY_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    mergeAccount(accountRecent.map((entry) => ({ query: entry })));
+    setSaved(readSaved());
+    if (pullAccount) void pullAccountRecent();
+  }, [accountRecent, pullAccount]);
+
+  useEffect(() => {
+    if (!rememberVisit || !initial.trim()) return;
+    pushRecent({
+      query: initial,
+      cat: scope?.slug,
+      catZh: scope?.nameZh,
+      catEn: scope?.nameEn,
+    });
+  }, [rememberVisit, initial, scope?.slug, scope?.nameZh, scope?.nameEn]);
+
+  useEffect(() => {
+    setQ(initial);
+    if (initial.trim()) setOpen(false);
+    else if (autoFocus) setOpen(true);
+  }, [initial, autoFocus]);
+
+  useEffect(() => {
+    if (!open || !narrow) return;
+    const id = window.requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
+    return () => window.cancelAnimationFrame(id);
+  }, [open, narrow]);
+
+  useEffect(() => {
+    if (!open || query.length < 1) return;
     const ctrl = new AbortController();
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/suggest?q=${encodeURIComponent(q)}`, { signal: ctrl.signal });
-        setItems((await res.json()) as { id: string; title: string }[]);
-      } catch {
-        /* aborted */
+        const res = await fetch(`/api/suggest?q=${encodeURIComponent(query)}`, { signal: ctrl.signal });
+        if (!res.ok) return;
+        const data = (await res.json()) as { listings?: SuggestListing[]; categories?: SuggestCategory[] };
+        setPack({ q: query, listings: data.listings ?? [], categories: data.categories ?? [] });
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
       }
     }, 200);
     return () => {
       clearTimeout(timer);
       ctrl.abort();
     };
-  }, [q]);
+  }, [open, query]);
+
+  useEffect(() => {
+    if (!open) return;
+    const opened = Date.now();
+    const onScroll = (event: Event) => {
+      if (Date.now() - opened < 400) return;
+      const target = event.target;
+      const insidePanel = target instanceof Node && !!panelRef.current?.contains(target);
+      if (suggestPanelDismiss("scroll", { mobileSheet: mobileSheet(), insidePanel, focusInside: true })) {
+        setOpen(false);
+        inputRef.current?.blur();
+      }
+    };
+    document.addEventListener("scroll", onScroll, true);
+    return () => document.removeEventListener("scroll", onScroll, true);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !mobileSheet()) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        inputRef.current?.blur();
+        return;
+      }
+      if (event.key !== "Tab" || !mobileSheet()) return;
+      const root = rootRef.current;
+      if (!root) return;
+      const nodes = [...root.querySelectorAll<HTMLElement>("a[href], button, input")].filter((el) => !el.hasAttribute("disabled"));
+      if (nodes.length < 2) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, rows.length, tab]);
+
+  useEffect(() => {
+    const panel = panelRef.current;
+    const el = index >= 0 ? document.getElementById(`${listId}-${index}`) : null;
+    if (!open || !panel || !el) return;
+    const panelRect = panel.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    if (elRect.top < panelRect.top) panel.scrollTop -= panelRect.top - elRect.top;
+    else if (elRect.bottom > panelRect.bottom) panel.scrollTop += elRect.bottom - panelRect.bottom;
+  }, [index, open, listId, rows.length]);
+
+  const pathRef = useRef(pathname);
+  useEffect(() => {
+    if (pathRef.current !== pathname) {
+      pathRef.current = pathname;
+      setOpen(false);
+    }
+  }, [pathname]);
+
+  function close() {
+    setOpen(false);
+    inputRef.current?.blur();
+  }
+
+  function activate(row: SuggestRow) {
+    if (row.query) {
+      pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
+    }
+    setOpen(false);
+    router.push(row.href);
+  }
+
+  function hint(row: SuggestRow) {
+    return locale === "en" ? row.hintEn : row.hintZh;
+  }
+
+  const emptyCopy =
+    tab === "saved"
+      ? tx(locale, "未有已儲存搜尋。搜尋後可以按「儲存搜尋」。", "No saved searches yet. Save one from your results.")
+      : tx(locale, "未有最近搜尋", "No recent searches");
 
   return (
-    <form action="/search" className="relative">
-      <input
-        className="h-12 w-full rounded-full bg-card px-4 text-base text-ink shadow-card outline-none ring-0 placeholder:text-muted focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
-        name="q"
-        value={q}
-        onChange={(event) => setQ(event.target.value)}
-        placeholder={tx(locale, "中英文都可以，例如寶可夢 / Psyduck", "Chinese or English, e.g. 寶可夢 / Psyduck")}
-        aria-label={tx(locale, "搜尋", "Search")}
-        autoFocus={autoFocus}
-      />
-      {items.length > 0 ? (
-        <ul className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl bg-card py-1 text-[15px] shadow-card">
-          {items.map((item) => (
-            <li key={item.id}>
-              <a className="block min-h-12 px-4 py-3 active:bg-soft" href={`/listing/${item.id}`}>
-                {item.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {children}
-    </form>
+    <div className={open ? "max-md:h-12" : undefined}>
+      <div
+        ref={rootRef}
+        role={open && narrow ? "dialog" : undefined}
+        aria-modal={open && narrow ? true : undefined}
+        aria-label={open ? tx(locale, "搜尋", "Search") : undefined}
+        className={
+          open
+            ? "max-md:fixed max-md:inset-0 max-md:z-[60] max-md:flex max-md:flex-col max-md:bg-bg max-md:px-3 max-md:pb-[env(safe-area-inset-bottom)] max-md:pt-[max(0.75rem,env(safe-area-inset-top))] md:relative"
+            : "relative"
+        }
+      >
+        <form
+          role="search"
+          action="/search"
+          className="max-md:flex max-md:min-h-0 max-md:flex-1 max-md:flex-col"
+          onSubmit={(event) => {
+            if (!query) {
+              event.preventDefault();
+              return;
+            }
+            pushRecent({ query });
+            if (suggestPanelDismiss("submit", { mobileSheet: mobileSheet(), insidePanel: false, focusInside: false })) setOpen(false);
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <div className="relative min-w-0 flex-1">
+              <Icon name="search" className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
+              <input
+                ref={inputRef}
+                className="h-12 w-full rounded-full bg-card pl-11 pr-11 text-base text-ink shadow-card outline-none ring-0 placeholder:text-[var(--field-placeholder)] focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
+                name="q"
+                value={q}
+                role="combobox"
+                aria-expanded={open}
+                aria-controls={listId}
+                aria-autocomplete="list"
+                aria-activedescendant={open && index >= 0 ? `${listId}-${index}` : undefined}
+                autoComplete="off"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="search"
+                autoFocus={autoFocus}
+                placeholder={tx(locale, "搜尋任何物品", "Search for anything")}
+                aria-label={tx(locale, "搜尋", "Search")}
+                onFocus={() => {
+                  setRecent(readRecent());
+                  setSaved(readSaved());
+                  setOpen(true);
+                }}
+                onClick={() => setOpen(true)}
+                onBlur={(event) => {
+                  const next = event.relatedTarget;
+                  const immediate = next instanceof Node && !!rootRef.current?.contains(next);
+                  window.setTimeout(() => {
+                    if (!alive.current) return;
+                    const activeEl = document.activeElement;
+                    const focusInside = immediate || (activeEl instanceof Node && !!rootRef.current?.contains(activeEl));
+                    if (suggestPanelDismiss("blur", { mobileSheet: mobileSheet(), insidePanel: false, focusInside })) setOpen(false);
+                  }, 0);
+                }}
+                onChange={(event) => {
+                  setQ(event.target.value);
+                  setActive(0);
+                  setOpen(true);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setOpen(true);
+                    if (!rows.length) return;
+                    setActive((current) => {
+                      const at = Math.min(current, rows.length - 1);
+                      return event.key === "ArrowDown" ? Math.min(at + 1, rows.length - 1) : Math.max(at - 1, 0);
+                    });
+                    return;
+                  }
+                  if (event.key === "Enter" && open && index >= 0 && rows[index].kind !== "query") {
+                    event.preventDefault();
+                    activate(rows[index]);
+                  }
+                }}
+              />
+              {q ? (
+                <button
+                  type="button"
+                  className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-lg text-muted"
+                  aria-label={tx(locale, "清除文字", "Clear text")}
+                  onClick={() => {
+                    setQ("");
+                    setActive(0);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  ×
+                </button>
+              ) : null}
+            </div>
+            {open ? (
+              <button type="button" className="min-h-12 min-w-11 shrink-0 px-2 text-[15px] font-medium text-link md:hidden" onClick={close}>
+                {tx(locale, "取消", "Cancel")}
+              </button>
+            ) : null}
+          </div>
+          {open ? (
+            <div
+              ref={panelRef}
+              className="mt-1 min-h-0 flex-1 overflow-y-auto overscroll-contain md:absolute md:left-0 md:right-0 md:z-30 md:mt-2 md:max-h-[min(70vh,28rem)] md:rounded-2xl md:bg-card md:py-1 md:shadow-card"
+            >
+              {query ? null : (
+                <div className="flex items-end justify-between border-b border-line px-1 md:px-4">
+                  <div role="tablist" aria-label={tx(locale, "搜尋紀錄", "Search history")} className="flex gap-6">
+                    {(
+                      [
+                        ["recent", tx(locale, "最近", "Recent")],
+                        ["saved", tx(locale, "已儲存", "Saved")],
+                      ] as const
+                    ).map(([id, label]) => (
+                      <button
+                        key={id}
+                        type="button"
+                        role="tab"
+                        aria-selected={tab === id}
+                        className={`relative min-h-12 text-[15px] font-semibold ${tab === id ? "text-ink" : "text-muted"}`}
+                        onClick={() => {
+                          setTab(id);
+                          setActive(0);
+                        }}
+                      >
+                        {label}
+                        {tab === id ? <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-rose to-teal" /> : null}
+                      </button>
+                    ))}
+                  </div>
+                  {(tab === "saved" ? saved : recent).length ? (
+                    <button
+                      type="button"
+                      className="min-h-12 px-1 text-sm text-muted"
+                      onClick={() => {
+                        if (tab === "saved") writeSaved([]);
+                        else clearRecent();
+                        setActive(0);
+                      }}
+                    >
+                      {tx(locale, "清除", "Clear")}
+                    </button>
+                  ) : null}
+                </div>
+              )}
+              {rows.length ? (
+                <div id={listId} role="listbox" aria-label={tx(locale, "搜尋建議", "Search suggestions")}>
+                  {rows.map((row, rowIndex) => {
+                    const subtitle = hint(row);
+                    const selected = rowIndex === index;
+                    const body = (
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[16px] leading-snug">{row.label}</span>
+                        {subtitle ? <span className="block truncate text-[13px] leading-snug text-muted">{subtitle}</span> : null}
+                      </span>
+                    );
+                    return (
+                      <div
+                        key={row.key}
+                        id={`${listId}-${rowIndex}`}
+                        role="option"
+                        aria-selected={selected}
+                        className={`flex items-stretch border-b border-line last:border-b-0 ${selected ? "bg-soft" : ""}`}
+                      >
+                        {row.kind === "query" ? (
+                          <button type="submit" className="flex min-h-14 min-w-0 flex-1 items-center px-1 py-2.5 text-left hover:bg-soft md:px-4">
+                            {body}
+                          </button>
+                        ) : (
+                          <Link
+                            href={row.href}
+                            className="flex min-h-14 min-w-0 flex-1 items-center px-1 py-2.5 hover:bg-soft md:px-4"
+                            onClick={() => {
+                              if (row.query) pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
+                              setOpen(false);
+                            }}
+                          >
+                            {body}
+                          </Link>
+                        )}
+                        {row.kind === "memory" ? (
+                          <button
+                            type="button"
+                            className="grid w-12 shrink-0 place-items-center text-xl text-muted hover:text-ink"
+                            aria-label={tx(locale, `移除「${row.label}」`, `Remove “${row.label}”`)}
+                            onClick={() => {
+                              const item = { query: row.query || row.label, cat: row.cat, catZh: row.catZh, catEn: row.catEn };
+                              if (!query && tab === "saved") removeSaved(item);
+                              else removeRecent(item);
+                            }}
+                          >
+                            ×
+                          </button>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="px-4 py-10 text-center text-sm text-muted">{emptyCopy}</p>
+              )}
+            </div>
+          ) : null}
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export function SaveSearchButton({
+  locale,
+  query,
+  cat,
+  catZh,
+  catEn,
+}: {
+  locale: Locale;
+  query: string;
+  cat?: string;
+  catZh?: string;
+  catEn?: string;
+}) {
+  const item = { query, cat: cat || undefined, catZh, catEn };
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const sync = () => setOn(readSaved().some((row) => memoryKey(row) === memoryKey(item)));
+    sync();
+    window.addEventListener(MEMORY_EVENT, sync);
+    return () => window.removeEventListener(MEMORY_EVENT, sync);
+  }, [item.query, item.cat, item.catZh, item.catEn]);
+  if (!query.trim()) return null;
+  return (
+    <button
+      type="button"
+      className="min-h-11 shrink-0 text-sm font-semibold text-link"
+      aria-pressed={on}
+      onClick={() => {
+        if (on) removeSaved(item);
+        else pushSaved(item);
+      }}
+    >
+      {on ? tx(locale, "已儲存", "Saved") : tx(locale, "儲存搜尋", "Save search")}
+    </button>
   );
 }
