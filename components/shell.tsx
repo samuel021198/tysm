@@ -111,6 +111,9 @@ export function Footer({ locale }: { locale: Locale }) {
 export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: string }) {
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
+    published: ["已刊登，而家公開", "Published. It is live now"],
+    draft: ["已存草稿，未有公開", "Draft saved. Not live yet"],
+    scheduled: ["已預約刊登，未有即時公開", "Scheduled. Not live yet"],
     bid: ["出價已記錄", "Bid placed"],
     offer: ["議價已更新", "Offer updated"],
     paid: ["付款狀態已更新", "Payment updated"],
