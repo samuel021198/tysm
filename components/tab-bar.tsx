@@ -11,7 +11,12 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   const meHref = loggedIn ? "/me" : "/login";
   const tabs = [
     { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
-    { href: "/search", label: tx(locale, "賣場", "Market"), icon: "search" as const, on: pathname.startsWith("/search") || pathname.startsWith("/listing") },
+    {
+      href: "/market",
+      label: tx(locale, "賣場", "Market"),
+      icon: "search" as const,
+      on: pathname.startsWith("/market") || pathname.startsWith("/search") || pathname.startsWith("/listing"),
+    },
     { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
     {
       href: meHref,
