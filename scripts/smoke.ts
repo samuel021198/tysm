@@ -25,8 +25,13 @@ async function main() {
     auctionEndsAt: null,
     offersEnabled: false,
     minOfferCents: null,
-    shippingFeeCents: 0,
     shippingDays: 2,
+    shipSfCod: true,
+    shipMeetup: false,
+    shipPickup: false,
+    meetupDistrict: null,
+    meetupWindow: null,
+    meetupNotes: null,
     quantity: 1,
     game: "Pokémon",
     setName: "Test",
@@ -60,8 +65,13 @@ async function main() {
     auctionEndsAt: null,
     offersEnabled: false,
     minOfferCents: null,
-    shippingFeeCents: 500,
     shippingDays: 2,
+    shipSfCod: true,
+    shipMeetup: true,
+    shipPickup: false,
+    meetupDistrict: "油尖旺",
+    meetupWindow: null,
+    meetupNotes: null,
     quantity: 1,
     game: "Pokémon",
     setName: "Smoke",
@@ -84,7 +94,9 @@ async function main() {
     intent: "publish",
   });
   assert(created.ok, "create buy-now listing");
-  const bought = await checkoutLines(buyer.id, [{ listingId: created.id, quantity: 1 }], address.id, false);
+  const bought = await checkoutLines(buyer.id, [{ listingId: created.id, quantity: 1 }], null, false, {
+    methods: { [seller.id]: "MEET" },
+  });
   assert(bought.ok, "checkout");
   const paid = await payOrder(buyer.id, bought.ids[0], "success");
   assert(paid.ok && paid.kind === "success", "mock pay");
@@ -94,7 +106,8 @@ async function main() {
   assert(packed.ok && shipped.ok && done.ok, "escrow ship confirm");
   const order = await prisma.order.findUnique({ where: { id: bought.ids[0] } });
   assert(order?.status === "COMPLETED", "order completed");
-  assert(order.commissionAmount === 1600 && order.sellerProceeds === 18900, "8% commission on item price only");
+  assert(order.commissionAmount === 1600 && order.sellerProceeds === 18400 && order.shippingTotal === 0, "8% commission on item price; platform shipping is HK$0");
+  assert(order.shippingMethod === "MEET", "buyer keeps the meetup method");
 
   const auction = await saveListing(seller.id, {
     categoryId: "cat_pokemon",
@@ -106,8 +119,13 @@ async function main() {
     auctionEndsAt: new Date(Date.now() + 3 * 60 * 60 * 1000),
     offersEnabled: false,
     minOfferCents: null,
-    shippingFeeCents: 0,
     shippingDays: 2,
+    shipSfCod: true,
+    shipMeetup: false,
+    shipPickup: false,
+    meetupDistrict: null,
+    meetupWindow: null,
+    meetupNotes: null,
     quantity: 1,
     game: "Pokémon",
     setName: "Smoke",

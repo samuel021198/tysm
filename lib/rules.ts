@@ -94,6 +94,9 @@ export function bpsToPercentLabel(bps: number): string {
   return dec ? `${whole}.${dec}` : String(whole);
 }
 
+/** Commission is taken from the item subtotal only. `shippingCents` is then added to seller proceeds.
+ *  Seller-chosen shipping (順豐到付 / 面交 / 店舖自取) is HK$0 on the platform, so new orders pass 0.
+ *  Do not sum per-listing prepaid fees into this argument. */
 export function quoteSeller(subtotalCents: number, shippingCents: number, bps: number) {
   const commissionAmount = Math.round((subtotalCents * bps) / 10000);
   const proceeds = subtotalCents - commissionAmount + shippingCents;

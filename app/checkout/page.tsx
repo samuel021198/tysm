@@ -26,39 +26,52 @@ export default async function CheckoutPage({
         where: { userId: viewer.id },
         include: { listing: { include: { seller: true, photos: { orderBy: { position: "asc" }, take: 1 } } } },
       });
+  const lineOf = (
+    listing: {
+      sellerId: string;
+      title: string;
+      price: number | null;
+      shipSfCod: boolean;
+      shipMeetup: boolean;
+      shipPickup: boolean;
+      meetupDistrict: string | null;
+      meetupWindow: string | null;
+      meetupNotes: string | null;
+      seller: { nickname: string; storeName: string | null; storeDistrict: string | null; storeLine1: string | null; storeHours: string | null };
+    },
+    quantity: number,
+    image: string | null,
+  ) => ({
+    sellerId: listing.sellerId,
+    title: listing.title,
+    seller: listing.seller.nickname,
+    quantity,
+    price: listing.price ?? 0,
+    image,
+    shipSfCod: listing.shipSfCod,
+    shipMeetup: listing.shipMeetup,
+    shipPickup: listing.shipPickup,
+    meetupDistrict: listing.meetupDistrict,
+    meetupWindow: listing.meetupWindow,
+    meetupNotes: listing.meetupNotes,
+    storeName: listing.seller.storeName,
+    storeDistrict: listing.seller.storeDistrict,
+    storeLine1: listing.seller.storeLine1,
+    storeHours: listing.seller.storeHours,
+  });
   const lines = buy
-    ? [{
-        title: buy.title,
-        seller: buy.seller.nickname,
-        quantity: Math.max(1, Number(sp.qty || 1)),
-        price: buy.price ?? 0,
-        image: buy.photos[0]?.url ?? null,
-        sf: buy.shippingFee,
-        locker: buy.shipLockerFee,
-        meet: buy.shipMeetFee,
-      }]
-    : cart.map((item) => ({
-        title: item.listing.title,
-        seller: item.listing.seller.nickname,
-        quantity: item.quantity,
-        price: item.listing.price ?? 0,
-        image: item.listing.photos[0]?.url ?? null,
-        sf: item.listing.shippingFee,
-        locker: item.listing.shipLockerFee,
-        meet: item.listing.shipMeetFee,
-      }));
+    ? [lineOf(buy, Math.max(1, Number(sp.qty || 1)), buy.photos[0]?.url ?? null)]
+    : cart.map((item) => lineOf(item.listing, item.quantity, item.listing.photos[0]?.url ?? null));
 
   return (
     <div className="mx-auto grid max-w-xl gap-4">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <div>
         <h1 className="page-title">{tx(prefs.locale, "結帳", "Checkout")}</h1>
-        <p className="text-sm text-muted">{tx(prefs.locale, "核對貨品、運費同付款方式。確認後先至付款。", "Check the item, shipping, and payment method before you pay.")}</p>
+        <p className="text-sm text-muted">{tx(prefs.locale, "核對貨品同運送方式。平台運費 HK$0。確認後先至付款。", "Check the item and shipping method. Platform shipping is HK$0. Then pay.")}</p>
       </div>
       {lines.length === 0 ? <p className="empty">{tx(prefs.locale, "沒有可結帳的貨品。", "Nothing to check out.")}</p> : null}
-      {addresses.length === 0 ? (
-        <p><a className="text-link" href="/me">{tx(prefs.locale, "請先在帳戶新增香港地址。", "Add a Hong Kong address in your account first.")}</a></p>
-      ) : lines.length ? (
+      {lines.length ? (
         <CheckoutForm
           locale={prefs.locale}
           mode={buy ? "buy" : "cart"}

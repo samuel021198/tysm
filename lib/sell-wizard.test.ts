@@ -23,10 +23,13 @@ function card(over: Partial<ListingInput> = {}): ListingInput {
     auctionEndsAt: null,
     offersEnabled: false,
     minOfferCents: null,
-    shippingFeeCents: 2000,
     shippingDays: 2,
-    shipLockerFeeCents: 1200,
-    shipMeetFeeCents: 0,
+    shipSfCod: true,
+    shipMeetup: false,
+    shipPickup: false,
+    meetupDistrict: null,
+    meetupWindow: null,
+    meetupNotes: null,
     quantity: 1,
     game: "Pokémon",
     setName: "151",
@@ -130,7 +133,20 @@ assert(
   "minimum offer must be below buy now",
 );
 
-assert(wizardStepIssues(3, card({ shippingFeeCents: -1 }), "tcg", now).includes("shipping"), "blank shipping fee blocks");
+assert(wizardStepIssues(3, card({ shipSfCod: false }), "tcg", now).includes("shipping"), "at least one shipping method");
+assert(wizardStepIssues(3, card({ shipSfCod: false, shipMeetup: true }), "tcg", now).includes("meetup"), "meetup needs a district");
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipMeetup: true, meetupDistrict: "油尖旺" }), "tcg", now).length === 0,
+  "meetup with a district passes",
+);
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipPickup: true }), "tcg", now, false).includes("store"),
+  "store pickup needs a shop address",
+);
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipPickup: true }), "tcg", now, true).length === 0,
+  "store pickup passes when the profile has an address",
+);
 assert(wizardStepIssues(3, card(), "tcg", now).length === 0, "default shipping passes");
 
 const ready = card();
@@ -143,6 +159,7 @@ assert(wizardPublishIssues(card({ categoryId: " " }), "tcg", now).includes("cate
 
 assert(wizardStepForIssue("photos") === 0 && wizardStepForIssue("front_back") === 0, "photo issues return to photos");
 assert(wizardStepForIssue("title") === 1 && wizardStepForIssue("price") === 2 && wizardStepForIssue("shipping") === 3, "issues map to their step");
+assert(wizardStepForIssue("meetup") === 3 && wizardStepForIssue("store") === 3, "shipping details stay on the shipping step");
 assert(wizardStepForIssue("schedule") === 4 && wizardStepForIssue("phone") === null, "unknown server errors stay on the current step");
 assert(wizardPanels(["video", "qty", "schedule"]).more && wizardPanels(["video", "qty", "schedule"]).priceExtra && wizardPanels(["video", "qty", "schedule"]).schedule, "panels open for the missing field");
 
@@ -154,8 +171,17 @@ assert(wizardFocusField("tcg", card({ game: "Pokémon", setName: "", cardName: "
 assert(wizardFocusField("person", card({ personName: "美斯", seasonYear: " ", brandSeries: "Topps" })) === "seasonYear", "person focuses the blank season");
 assert(wizardFocusField("grade", card()) === "rawGrade", "raw condition focuses the A–D select");
 assert(wizardFocusField("grade", card({ conditionTrack: "GRADED", rawGrade: null, grader: "PSA", gradeValue: null })) === "gradeScore", "graded condition focuses the score");
-assert(wizardFocusField("shipping", card({ shippingFeeCents: -1, shippingDays: 0 })) === "shippingFee", "a bad shipping fee is focused before the days");
-assert(wizardFocusField("shipping", card({ shippingDays: 0 })) === "shippingDays", "bad handling days focus the days field");
+assert(wizardFocusField("shipping", card({ shipSfCod: false, shipMeetup: false, shipPickup: false })) === "shipSfCod", "no method focuses the first shipping choice");
+assert(wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "" })) === "meetupDistrict", "meetup without a district focuses the district");
+assert(
+  wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "油尖旺", meetupWindow: "x".repeat(81) })) === "meetupWindow",
+  "a long meetup window is focused before the note",
+);
+assert(
+  wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "油尖旺", meetupNotes: "x".repeat(201) })) === "meetupNotes",
+  "a long meetup note is focused",
+);
+assert(wizardFocusField("store", card({ shipPickup: true })) === "store", "store pickup focuses the profile-address hint");
 assert(wizardFocusField("both_price", card()) === "price" && wizardFocusField("auction_end", card()) === "auctionEndsAt", "price and auction end focus their controls");
 assert(wizardFocusField("schedule", card()) === "publishAt" && wizardFocusField("phone", card()) === "", "schedule focuses its picker; phone has no sell-form control");
 

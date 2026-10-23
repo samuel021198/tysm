@@ -1,6 +1,6 @@
 import { prisma } from "./db";
 import { conditionLabel, resolveAuction } from "./rules";
-import { courierFor, mockTracking } from "./shipping";
+import { buildFulfillment, courierFor, mockTracking } from "./shipping";
 import {
   LEAF_CATEGORIES,
   demoAddresses,
@@ -12,6 +12,7 @@ import {
   demoNotifications,
   demoOffers,
   demoSearches,
+  demoStores,
   demoThreads,
   demoUsers,
   demoViews,
@@ -44,6 +45,12 @@ function listingData(item: DemoListing, resolved: { leaderId: string | null; pri
     shippingDays: item.shippingDays,
     shipLockerFee: item.shipLockerFee,
     shipMeetFee: item.shipMeetFee,
+    shipSfCod: item.shipSfCod,
+    shipMeetup: item.shipMeetup,
+    shipPickup: item.shipPickup,
+    meetupDistrict: item.meetupDistrict,
+    meetupWindow: item.meetupWindow,
+    meetupNotes: item.meetupNotes,
     cardNumber: item.cardNumber,
     rarity: item.rarity,
     price: item.price,
@@ -107,10 +114,10 @@ async function seedOrders() {
       listingId: "seed_sold_zard",
       status: "COMPLETED" as const,
       subtotal: 300000,
-      shippingTotal: 2000,
-      total: 302000,
+      shippingTotal: 0,
+      total: 300000,
       commissionAmount: 24000,
-      sellerProceeds: 278000,
+      sellerProceeds: 276000,
       shipDays: 3,
       paidAt: daysAgo(10),
       shippedAt: daysAgo(8),
@@ -118,8 +125,8 @@ async function seedOrders() {
       escrowReleasedAt: daysAgo(6),
       shipBy: daysAgo(9),
       autoReleaseAt: null,
-      shippingMethod: "SF",
-      courierName: "順豐速運",
+      shippingMethod: "SF_COD",
+      courierName: "順豐到付",
       trackingNumber: "SF85210023HK",
     },
     {
@@ -130,10 +137,10 @@ async function seedOrders() {
       listingId: "seed_keung",
       status: "SHIPPED" as const,
       subtotal: 52000,
-      shippingTotal: 800,
-      total: 52800,
+      shippingTotal: 0,
+      total: 52000,
       commissionAmount: 4160,
-      sellerProceeds: 48640,
+      sellerProceeds: 47840,
       shipDays: 2,
       paidAt: daysAgo(2),
       shippedAt: daysAgo(1),
@@ -141,9 +148,9 @@ async function seedOrders() {
       escrowReleasedAt: null,
       shipBy: hoursFromNow(24),
       autoReleaseAt: hoursFromNow(24 * 6),
-      shippingMethod: "SF",
-      courierName: "順豐速運",
-      trackingNumber: "SF85218820HK",
+      shippingMethod: "MEET",
+      courierName: "面交",
+      trackingNumber: null,
     },
     {
       id: "seed_order_dispute",
@@ -153,10 +160,10 @@ async function seedOrders() {
       listingId: "seed_jay",
       status: "DISPUTED" as const,
       subtotal: 36000,
-      shippingTotal: 1000,
-      total: 37000,
+      shippingTotal: 0,
+      total: 36000,
       commissionAmount: 2880,
-      sellerProceeds: 34120,
+      sellerProceeds: 33120,
       shipDays: 2,
       paidAt: daysAgo(1),
       shippedAt: null,
@@ -164,7 +171,7 @@ async function seedOrders() {
       escrowReleasedAt: null,
       shipBy: null,
       autoReleaseAt: null,
-      shippingMethod: "SF",
+      shippingMethod: "SF_COD",
       courierName: null as string | null,
       trackingNumber: null as string | null,
     },
@@ -195,9 +202,9 @@ async function seedOrders() {
       escrowReleasedAt: daysAgo(age),
       shipBy: daysAgo(age + 2),
       autoReleaseAt: null,
-      shippingMethod: "SF",
-      courierName: courierFor("SF"),
-      trackingNumber: mockTracking(listing.id, "SF"),
+      shippingMethod: listing.shipPickup ? "PICKUP" : listing.shipMeetup && !listing.shipSfCod ? "MEET" : "SF_COD",
+      courierName: courierFor(listing.shipPickup ? "PICKUP" : listing.shipMeetup && !listing.shipSfCod ? "MEET" : "SF_COD"),
+      trackingNumber: mockTracking(listing.id, listing.shipPickup ? "PICKUP" : listing.shipMeetup && !listing.shipSfCod ? "MEET" : "SF_COD"),
     });
   }
   for (const order of orders) {
@@ -225,6 +232,19 @@ async function seedOrders() {
       shippingMethod: order.shippingMethod,
       courierName: order.courierName,
       trackingNumber: order.trackingNumber,
+      fulfillment: buildFulfillment(
+        order.shippingMethod === "MEET" || order.shippingMethod === "PICKUP" ? order.shippingMethod : "SF_COD",
+        [{
+          id: listing.id,
+          title: listing.title,
+          meetupDistrict: listing.meetupDistrict,
+          meetupWindow: listing.meetupWindow,
+          meetupNotes: listing.meetupNotes,
+        }],
+        listing.sellerId === "user_ken"
+          ? { storeName: "旺角卡舖", storeDistrict: "油尖旺", storeLine1: "西洋菜南街 12 號 2 樓", storeHours: "每日 13:00–21:00" }
+          : null,
+      ) ?? undefined,
       paymentBrand: order.status === "DISPUTED" ? null : "FPS",
       payBy: null,
       addressSnapshot: snap,
@@ -401,6 +421,10 @@ export async function seedDemo() {
       payoutMethod: user.phoneVerified ? "FPS" : null,
       payoutHolder: user.phoneVerified ? user.nickname : null,
       payoutAccount: user.phoneVerified ? phone : null,
+      storeName: null,
+      storeDistrict: null,
+      storeLine1: null,
+      storeHours: null,
       consecutiveUnpaid: 0,
       bidBanned: false,
     };
@@ -408,6 +432,18 @@ export async function seedDemo() {
       where: { id: user.id },
       update: data,
       create: { id: user.id, ...data },
+    });
+  }
+
+  for (const store of demoStores) {
+    await prisma.user.update({
+      where: { id: store.userId },
+      data: {
+        storeName: store.storeName,
+        storeDistrict: store.storeDistrict,
+        storeLine1: store.storeLine1,
+        storeHours: store.storeHours,
+      },
     });
   }
 

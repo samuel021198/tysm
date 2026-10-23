@@ -84,6 +84,11 @@ h2,
   scroll-margin-bottom: calc(var(--tab-h) + 0.75rem);
 }
 
+/* Tailwind's `grid` utility beats the preflight [hidden] rule, which would show every wizard step at once. */
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none !important;
+}
+
 .site-header {
   background-color: var(--bg);
   background-image: none;

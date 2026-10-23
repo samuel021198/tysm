@@ -51,25 +51,26 @@ async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amoun
   const address =
     (await tx.address.findFirst({ where: { userId: offer.buyerId, isDefault: true } })) ??
     (await tx.address.findFirst({ where: { userId: offer.buyerId } }));
-  if (!address) throw new Fail("address");
   const order = await insertOrder(tx, {
     buyerId: offer.buyerId,
     sellerId: listing.sellerId,
     source: "OFFER",
     shipDays: listing.shippingDays,
-    address: {
-      recipient: address.recipient,
-      phone: address.phone,
-      line1: address.line1,
-      district: address.district,
-    },
+    address: address
+      ? {
+          recipient: address.recipient,
+          phone: address.phone,
+          line1: address.line1,
+          district: address.district,
+        }
+      : null,
     lines: [
       {
         listingId: listing.id,
         title: listing.title,
         unitPrice: amount,
         quantity: 1,
-        shippingFee: listing.shippingFee,
+        shippingFee: 0,
         imageUrl: listing.photos[0]?.url ?? null,
         conditionLabel: conditionLabel(listing),
         cardName: listing.cardName,

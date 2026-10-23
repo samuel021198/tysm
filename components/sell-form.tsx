@@ -3,7 +3,7 @@
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type FormEvent, type ReactNode, type RefObject, type SetStateAction } from "react";
 import { useFormStatus } from "react-dom";
 import { saveListingAction } from "@/actions/trade";
-import { hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
+import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { parseListingForm, wizardFocusField, wizardPanels, wizardPublishIssues, wizardStepForIssue, wizardStepIssues, type ListingInput } from "@/lib/sell-wizard";
 import { fileToDataUrl } from "./photo-file";
@@ -23,10 +23,13 @@ export type SellInitial = {
   auctionEndsAt: string;
   offersEnabled: boolean;
   minOffer: string;
-  shippingFee: string;
-  shipLockerFee: string;
-  shipMeetFee: string;
   shippingDays: number;
+  shipSfCod: boolean;
+  shipMeetup: boolean;
+  shipPickup: boolean;
+  meetupDistrict: string;
+  meetupWindow: string;
+  meetupNotes: string;
   quantity: number;
   game: string;
   setName: string;
@@ -103,12 +106,16 @@ export function SellForm({
   percent,
   initial,
   hints = [],
+  storeReady = false,
+  storeLabel = "",
 }: {
   locale: Locale;
   categories: Cat[];
   percent: string;
   initial?: SellInitial;
   hints?: { title: string; price: string }[];
+  storeReady?: boolean;
+  storeLabel?: string;
 }) {
   const [state, action] = useActionState(saveListingAction, null);
   const editing = Boolean(initial?.listingId);
@@ -125,10 +132,12 @@ export function SellForm({
   const [startPrice, setStartPrice] = useState(initial?.startPrice || "");
   const [minOffer, setMinOffer] = useState(initial?.minOffer || "");
   const [quantity, setQuantity] = useState(String(initial?.quantity || 1));
-  const [shipFee, setShipFee] = useState(initial?.shippingFee ?? "20");
-  const [lockerFee, setLockerFee] = useState(initial?.shipLockerFee ?? "12");
-  const [meetFee, setMeetFee] = useState(initial?.shipMeetFee ?? "0");
-  const [shipDays, setShipDays] = useState(String(initial?.shippingDays ?? 2));
+  const [sfCod, setSfCod] = useState(initial?.shipSfCod ?? true);
+  const [meetup, setMeetup] = useState(initial?.shipMeetup ?? false);
+  const [pickup, setPickup] = useState(initial?.shipPickup ?? false);
+  const [meetupDistrict, setMeetupDistrict] = useState(initial?.meetupDistrict ?? "");
+  const [meetupWindow, setMeetupWindow] = useState(initial?.meetupWindow ?? "");
+  const [meetupNotes, setMeetupNotes] = useState(initial?.meetupNotes ?? "");
   const [publishAt, setPublishAt] = useState(initial?.publishAt || "");
   const [photos, setPhotos] = useState<Photo[]>(initial?.photos?.length ? initial.photos : [
     { url: "", role: "FRONT" },
@@ -271,7 +280,7 @@ export function SellForm({
         reveal(["category"], "next");
         return;
       }
-      const issues = [...new Set(Array.from({ length: dest - step }, (_, offset) => wizardStepIssues(step + offset, read.input, read.groupKey)).flat())];
+      const issues = [...new Set(Array.from({ length: dest - step }, (_, offset) => wizardStepIssues(step + offset, read.input, read.groupKey, new Date(), storeReady)).flat())];
       if (issues.length) {
         reveal(issues, "next");
         return;
@@ -295,7 +304,7 @@ export function SellForm({
       reveal(["category"], intent === "draft" ? "draft" : "publish");
       return;
     }
-    const issues = wizardPublishIssues(read.input, read.groupKey);
+    const issues = wizardPublishIssues(read.input, read.groupKey, new Date(), storeReady);
     if (issues.length) {
       event.preventDefault();
       reveal(issues, intent === "draft" ? "draft" : "publish");
@@ -545,34 +554,71 @@ export function SellForm({
       </div> : null}
 
       {!locked ? <div hidden={step !== 3} className="grid gap-3 text-sm">
-        <p className="text-muted">{tx(locale, "運費用預設就得，可以直接下一步。買家結帳先揀方式。", "Shipping defaults are ready. You can continue. Buyers pick a method at checkout.")}</p>
-        <p className="font-medium">
-          {tx(
-            locale,
-            `順豐 HK$${shipFee || "0"} · 智能櫃 HK$${lockerFee || "0"} · 面交 HK$${meetFee || "0"} · ${shipDays || "—"} 日內寄出`,
-            `SF HK$${shipFee || "0"} · Locker HK$${lockerFee || "0"} · Meet-up HK$${meetFee || "0"} · Ships in ${shipDays || "—"} days`,
-          )}
-        </p>
-        <Disclosure signal={openToken.ship} title={tx(locale, "調整運費", "Change shipping")}>
-          <label className="grid gap-1">
-            {tx(locale, "順豐速運 HKD", "SF Express HKD")}
-            <input className="field" name="shippingFee" value={shipFee} inputMode="decimal" aria-invalid={shown.includes("shipping")} onChange={(e) => setShipFee(e.target.value)} />
+        <p className="text-muted">{tx(locale, "至少選一種。平台唔會收運費，買家結帳時只會見到你開咗的方式。", "Pick at least one. The platform does not charge shipping. Buyers only see the methods you turn on.")}</p>
+        <input type="hidden" name="shippingDays" value={String(initial?.shippingDays || 3)} />
+        <fieldset className="grid gap-3" aria-invalid={shown.includes("shipping") || shown.includes("meetup") || shown.includes("store")}>
+          <label className="grid gap-1 rounded-2xl bg-soft p-3">
+            <span className="flex min-h-12 items-center gap-2 font-medium">
+              <input type="checkbox" name="shipSfCod" data-wizard-jump checked={sfCod} aria-invalid={shown.includes("shipping")} onChange={(e) => setSfCod(e.target.checked)} />
+              {tx(locale, "順豐到付", "SF cash on delivery")}
+            </span>
+            <span className="text-muted">{tx(locale, "平台運費 HK$0。買家收貨時先向順豐付款，平台不會代收。", "Platform fee HK$0. The buyer pays SF Express on delivery. TYSM does not collect it.")}</span>
           </label>
-          <label className="grid gap-1">
-            {tx(locale, "順豐智能櫃 HKD", "SF locker HKD")}
-            <input className="field" name="shipLockerFee" value={lockerFee} inputMode="decimal" onChange={(e) => setLockerFee(e.target.value)} />
-          </label>
-          <label className="grid gap-1">
-            {tx(locale, "面交 HKD", "Meet-up HKD")}
-            <input className="field" name="shipMeetFee" value={meetFee} inputMode="decimal" onChange={(e) => setMeetFee(e.target.value)} />
-          </label>
-          <label className="grid gap-1">
-            {tx(locale, "順豐寄出日數", "SF handling days")}
-            <input className="field" name="shippingDays" type="number" min={1} max={30} value={shipDays} onChange={(e) => setShipDays(e.target.value)} />
-          </label>
+          <div className="grid gap-2 rounded-2xl bg-soft p-3">
+            <label className="flex min-h-12 items-center gap-2 font-medium">
+              <input type="checkbox" name="shipMeetup" checked={meetup} aria-invalid={shown.includes("meetup") || shown.includes("shipping")} onChange={(e) => setMeetup(e.target.checked)} />
+              {tx(locale, "面交", "Meet-up")}
+            </label>
+            {meetup ? (
+              <>
+                <label className="grid gap-1">
+                  {tx(locale, "面交地區", "Meet-up district")}
+                  <select className="field" name="meetupDistrict" value={meetupDistrict} aria-invalid={shown.includes("meetup")} onChange={(e) => setMeetupDistrict(e.target.value)}>
+                    <option value="">{tx(locale, "選擇地區", "Choose a district")}</option>
+                    {DISTRICTS.map(([zh, en]) => (
+                      <option key={zh} value={zh}>{locale === "en" ? en : zh}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="grid gap-1">
+                  {tx(locale, "常用時段（可選）", "Usual time (optional)")}
+                  <input className="field" name="meetupWindow" value={meetupWindow} maxLength={80} placeholder={tx(locale, "例如週末下午", "e.g. weekend afternoons")} onChange={(e) => setMeetupWindow(e.target.value)} />
+                </label>
+                <label className="grid gap-1">
+                  {tx(locale, "備註（可選）", "Note (optional)")}
+                  <input className="field" name="meetupNotes" value={meetupNotes} maxLength={200} placeholder={tx(locale, "例如港鐵站附近，請先傳訊息", "e.g. near the MTR, message first")} onChange={(e) => setMeetupNotes(e.target.value)} />
+                </label>
+              </>
+            ) : null}
+          </div>
+          <div className="grid gap-2 rounded-2xl bg-soft p-3">
+            <label className={`flex min-h-12 items-center gap-2 font-medium ${storeReady ? "" : "opacity-60"}`}>
+              <input
+                type="checkbox"
+                name="shipPickup"
+                checked={pickup && storeReady}
+                disabled={!storeReady}
+                aria-invalid={shown.includes("store")}
+                onChange={(e) => setPickup(e.target.checked)}
+              />
+              {tx(locale, "店舖自取", "Store pickup")}
+            </label>
+            {storeReady ? (
+              <p className="text-muted">{tx(locale, "用帳戶入面的固定店舖地址，唔使每張刊登再填。", "Uses the shop address on your profile. You do not re-enter it on each listing.")} {storeLabel}</p>
+            ) : (
+              <p className="text-muted">
+                {tx(locale, "未設定店舖地址，所以未可以揀店舖自取。", "Add a shop address before you can offer store pickup.")}{" "}
+                <a className="text-link" href="/me#store" data-focus="store" data-wizard-jump>{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a>
+              </p>
+            )}
+            {initial?.shipPickup && !storeReady ? (
+              <p className="text-danger">{tx(locale, "這張刊登原本有店舖自取，但帳戶未有店舖地址，所以而家未可以再開。", "This listing had store pickup, but the shop address is missing, so it cannot be turned on.")}</p>
+            ) : null}
+          </div>
           <FieldError locale={locale} codes={shown} code="shipping" />
-          <p className="text-muted">{tx(locale, "同一賣家多件貨會逐件計運費。", "Items from the same seller add their own fees.")}</p>
-        </Disclosure>
+          <FieldError locale={locale} codes={shown} code="meetup" />
+          <FieldError locale={locale} codes={shown} code="store" anchor="store" />
+        </fieldset>
       </div> : null}
 
       {!locked && step === 4 ? (
@@ -587,6 +633,11 @@ export function SellForm({
           <p className="font-medium">{preview.title || initial?.title || tx(locale, "未填標題", "No title yet")}</p>
           <p className="text-muted">{preview.description || initial?.description}</p>
           <p>{saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "Buy now + auction") : tx(locale, "直購", "Buy now")}{price ? ` · HK$${price}` : ""}</p>
+          <p className="text-muted">{[
+            sfCod ? tx(locale, "順豐到付（平台 HK$0，買家到付順豐）", "SF cash on delivery (platform HK$0)") : "",
+            meetup ? tx(locale, `面交 ${meetupDistrict || "未選地區"}`, `Meet-up ${meetupDistrict || "no district"}`) : "",
+            pickup && storeReady ? tx(locale, "店舖自取", "Store pickup") : "",
+          ].filter(Boolean).join(" · ") || tx(locale, "未選運送方式", "No shipping method")}</p>
           <p className="text-muted">{feeCopy}</p>
           <Disclosure signal={openToken.schedule} initiallyOpen={scheduleOpen} title={tx(locale, "預約刊登（可選）", "Schedule publish (optional)")}>
             <div data-wizard-jump data-focus="publishAt" className="grid gap-3 outline-none">
@@ -737,10 +788,13 @@ function LockedFields({ initial }: { initial: SellInitial }) {
       <input type="hidden" name="auctionEndsAt" value={initial.auctionEndsAt} />
       <input type="hidden" name="minOffer" value={initial.minOffer} />
       {initial.offersEnabled ? <input type="hidden" name="offersEnabled" value="on" /> : null}
-      <input type="hidden" name="shippingFee" value={initial.shippingFee} />
-      <input type="hidden" name="shipLockerFee" value={initial.shipLockerFee} />
-      <input type="hidden" name="shipMeetFee" value={initial.shipMeetFee} />
       <input type="hidden" name="shippingDays" value={initial.shippingDays} />
+      {initial.shipSfCod ? <input type="hidden" name="shipSfCod" value="on" /> : null}
+      {initial.shipMeetup ? <input type="hidden" name="shipMeetup" value="on" /> : null}
+      {initial.shipPickup ? <input type="hidden" name="shipPickup" value="on" /> : null}
+      <input type="hidden" name="meetupDistrict" value={initial.meetupDistrict} />
+      <input type="hidden" name="meetupWindow" value={initial.meetupWindow} />
+      <input type="hidden" name="meetupNotes" value={initial.meetupNotes} />
       <input type="hidden" name="quantity" value={initial.quantity} />
       <input type="hidden" name="game" value={initial.game} />
       <input type="hidden" name="setName" value={initial.setName} />

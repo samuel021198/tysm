@@ -32,6 +32,8 @@ export default async function SellPage() {
         percent={bpsToPercentLabel(bps)}
         categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg" }))}
         hints={sold.map((item) => ({ title: item.title, price: formatHkd(item.unitPrice, prefs.locale) }))}
+        storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
+        storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
       />
     </div>
   );

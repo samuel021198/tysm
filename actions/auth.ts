@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
-import { parseTarget, safeNext } from "@/lib/format";
+import { DISTRICTS, parseTarget, safeNext } from "@/lib/format";
 import { headers } from "next/headers";
 
 async function bounce() {
@@ -145,6 +145,15 @@ export async function updateProfile(formData: FormData) {
   if (nickname.length < 2 || nickname.length > 24) redirect("/me?err=nickname");
   if (bio.length > 500) redirect("/me?err=description");
   if (avatarUrl && !avatarUrl.startsWith("https://")) redirect("/me?err=photo_url");
+  const storeName = String(formData.get("storeName") || "").trim();
+  const storeDistrict = String(formData.get("storeDistrict") || "").trim();
+  const storeLine1 = String(formData.get("storeLine1") || "").trim();
+  const storeHours = String(formData.get("storeHours") || "").trim();
+  const storeTouched = Boolean(storeName || storeDistrict || storeLine1 || storeHours);
+  const districtOk = DISTRICTS.some(([name]) => name === storeDistrict);
+  if (storeTouched && (!districtOk || storeLine1.length < 4 || storeLine1.length > 120 || storeName.length > 40 || storeHours.length > 80)) {
+    redirect("/me?err=store");
+  }
   await prisma.user.update({
     where: { id: viewer.id },
     data: {
@@ -154,6 +163,10 @@ export async function updateProfile(formData: FormData) {
       payoutMethod: String(formData.get("payoutMethod") || "").slice(0, 40) || null,
       payoutHolder: String(formData.get("payoutHolder") || "").slice(0, 80) || null,
       payoutAccount: String(formData.get("payoutAccount") || "").slice(0, 80) || null,
+      storeName: storeTouched ? storeName || null : null,
+      storeDistrict: storeTouched ? storeDistrict : null,
+      storeLine1: storeTouched ? storeLine1 : null,
+      storeHours: storeTouched ? storeHours || null : null,
       notifyBids: formData.get("notifyBids") === "on",
       notifyOffers: formData.get("notifyOffers") === "on",
       notifyOrders: formData.get("notifyOrders") === "on",

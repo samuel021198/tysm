@@ -6,6 +6,7 @@ import { formatHkd } from "@/lib/format";
 import { orderStatusLabel, tx } from "@/lib/i18n";
 import { shipMethodLabel } from "@/lib/shipping";
 import { PayActions } from "@/components/pay-actions";
+import { ShipDetails } from "@/components/ship-details";
 
 const BRAND: Record<string, [string, string]> = {
   FPS: ["轉數快 FPS", "FPS"],
@@ -40,17 +41,19 @@ export default async function PayPage({ searchParams }: { searchParams: Promise<
                   <p className="font-medium">{item.title}</p>
                   <p className="text-muted">{order.seller.nickname} · × {item.quantity}</p>
                   <p>{tx(locale, "貨價", "Item")} {formatHkd(item.unitPrice * item.quantity, locale)}</p>
-                  <p className="text-muted">{tx(locale, "運費", "Shipping")} {formatHkd(item.shippingFee, locale)}</p>
                 </div>
               </div>
             ))}
             <div className="grid gap-1 text-sm">
               <div className="flex justify-between"><span>{tx(locale, "貨品", "Items")}</span><span>{formatHkd(order.subtotal, locale)}</span></div>
-              <div className="flex justify-between"><span>{shipMethodLabel(order.shippingMethod || "SF", locale)}</span><span>{formatHkd(order.shippingTotal, locale)}</span></div>
+              <div className="flex justify-between"><span>{shipMethodLabel(order.shippingMethod || "", locale)}</span><span>{formatHkd(order.shippingTotal, locale)}</span></div>
+              <ShipDetails locale={locale} method={order.shippingMethod} fulfillment={order.fulfillment} />
               <div className="flex justify-between font-semibold"><span>{tx(locale, "應付總額", "Total")}</span><span className="price">{formatHkd(order.total, locale)}</span></div>
               <p className="text-muted">{tx(locale, brand[0], brand[1])} · {orderStatusLabel(locale, order.status)}</p>
             </div>
-            {order.status === "PENDING_PAYMENT" ? (
+            {order.status === "PENDING_PAYMENT" && !order.shippingMethod ? (
+              <Link className="btn btn-primary" href={`/orders/${order.id}`}>{tx(locale, "請先選擇運送方式", "Choose a shipping method first")}</Link>
+            ) : order.status === "PENDING_PAYMENT" ? (
               <PayActions locale={locale} orderId={order.id} />
             ) : (
               <Link className="btn btn-primary" href={`/orders/${order.id}`}>{tx(locale, "查看訂單", "View order")}</Link>

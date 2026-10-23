@@ -13,6 +13,7 @@ import {
   attachAddress,
   cancelUnpaidOrder,
   checkoutLines,
+  chooseOrderShip,
   confirmReceipt,
   openDispute,
   payOrder,
@@ -133,6 +134,20 @@ export async function cartUpdate(formData: FormData) {
   redirect("/cart");
 }
 
+function shipMethodsFrom(formData: FormData): Record<string, string> {
+  try {
+    const raw = JSON.parse(String(formData.get("shipMethods") || "{}")) as unknown;
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+    const methods: Record<string, string> = {};
+    for (const [key, value] of Object.entries(raw)) {
+      if (typeof value === "string") methods[key] = value;
+    }
+    return methods;
+  } catch {
+    return {};
+  }
+}
+
 export async function checkoutAction(formData: FormData) {
   const user = await viewer("/checkout");
   const addressId = String(formData.get("addressId") || "");
@@ -144,12 +159,19 @@ export async function checkoutAction(formData: FormData) {
           listingId: item.listingId,
           quantity: item.quantity,
         }));
-  const result = await checkoutLines(user.id, requests, addressId, mode !== "buy", {
-    method: String(formData.get("shipMethod") || "SF"),
+  const result = await checkoutLines(user.id, requests, addressId || null, mode !== "buy", {
+    methods: shipMethodsFrom(formData),
     paymentBrand: String(formData.get("paymentBrand") || "FPS"),
   });
   if (!result.ok) redirect(`/checkout?err=${result.error}${mode === "buy" ? `&buy=${formData.get("listingId")}` : ""}`);
   redirect(`/checkout/pay?orders=${result.ids.join(",")}`);
+}
+
+export async function chooseShipAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(`/orders/${id}`);
+  const result = await chooseOrderShip(user.id, id, String(formData.get("shipMethod") || ""), String(formData.get("addressId") || "") || null);
+  redirect(`/orders/${id}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
 }
 
 export async function payAction(formData: FormData) {

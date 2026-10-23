@@ -59,6 +59,19 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         <label className="text-sm"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "議價通知", "Offer alerts")}</label>
         <label className="text-sm"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "訂單通知", "Order alerts")}</label>
         <label className="text-sm"><input type="checkbox" name="notifyMessages" defaultChecked={viewer.notifyMessages} /> {tx(locale, "訊息通知", "Message alerts")}</label>
+        <div id="store" className="grid gap-2 rounded-2xl bg-soft p-3">
+          <h3 className="font-medium">{tx(locale, "店舖地址", "Shop address")}</h3>
+          <p className="text-sm text-muted">{tx(locale, "店舖自取會用這個固定地址，買家結帳時見到。留空就代表未有店舖自取。", "Store pickup uses this fixed address. Buyers see it at checkout. Leave it blank if you do not offer pickup.")}</p>
+          <input className="field" name="storeName" defaultValue={viewer.storeName || ""} placeholder={tx(locale, "店名（可選）", "Shop name (optional)")} maxLength={40} />
+          <select className="field" name="storeDistrict" defaultValue={viewer.storeDistrict || ""}>
+            <option value="">{tx(locale, "店舖地區", "Shop district")}</option>
+            {DISTRICTS.map(([zh, en]) => (
+              <option key={zh} value={zh}>{locale === "en" ? en : zh}</option>
+            ))}
+          </select>
+          <input className="field" name="storeLine1" defaultValue={viewer.storeLine1 || ""} placeholder={tx(locale, "店舖地址", "Shop address")} maxLength={120} />
+          <input className="field" name="storeHours" defaultValue={viewer.storeHours || ""} placeholder={tx(locale, "營業時間（可選）", "Hours (optional)")} maxLength={80} />
+        </div>
         <button className="btn btn-primary w-fit">{tx(locale, "儲存", "Save")}</button>
       </form>
       <section id="addresses">
