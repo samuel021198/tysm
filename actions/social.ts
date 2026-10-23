@@ -25,8 +25,10 @@ export async function toggleFavorite(formData: FormData) {
     await prisma.favorite.create({ data: { userId: user.id, listingId: id } });
     await prisma.listing.update({ where: { id }, data: { favoriteCount: { increment: 1 } } });
   }
+  // Same as post likes: redirect(next) reloads whatever page the heart was on.
   revalidatePath(`/listing/${id}`);
-  redirect(String(formData.get("next") || `/listing/${id}`));
+  const nextPath = String(formData.get("next") || "").split("?")[0];
+  if (nextPath.startsWith("/") && nextPath !== `/listing/${id}`) revalidatePath(nextPath);
 }
 
 export async function toggleFollow(formData: FormData) {

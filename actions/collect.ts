@@ -169,10 +169,11 @@ export async function togglePostLike(formData: FormData) {
   const existing = await prisma.postLike.findUnique({ where: { postId_userId: { postId, userId: user.id } } });
   if (existing) await prisma.postLike.delete({ where: { id: existing.id } });
   else await prisma.postLike.create({ data: { postId, userId: user.id } });
+  // redirect(next) is a navigation. On the feed, next is the current URL, so the
+  // app router remounts the page (loading.tsx) and jumps scroll. Revalidate instead.
   revalidatePath("/");
   revalidatePath(`/post/${postId}`);
   revalidatePath("/me");
-  redirect(next);
 }
 
 export async function addComment(formData: FormData) {
@@ -183,9 +184,9 @@ export async function addComment(formData: FormData) {
   const body = String(formData.get("body") || "").trim();
   if (body.length < 1 || body.length > 300) redirect(`/post/${postId}?err=comment`);
   await prisma.postComment.create({ data: { postId, authorId: user.id, body } });
+  // redirect(`/post/${id}#comments`) is the same same-page navigation as a like.
   revalidatePath(`/post/${postId}`);
   revalidatePath("/");
-  redirect(`/post/${postId}#comments`);
 }
 
 export async function toggleCollectionVisibility(formData: FormData) {

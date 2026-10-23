@@ -90,7 +90,7 @@ export default async function PostPage({
           ))}
         </ul>
         {viewer ? (
-          <form action={addComment} className="grid gap-2">
+          <form key={post.comments.at(-1)?.id ?? "none"} action={addComment} className="grid gap-2">
             <input type="hidden" name="postId" value={post.id} />
             <textarea className="field" name="body" maxLength={300} required placeholder={tx(locale, "寫一句", "Write a comment")} />
             <button className="btn btn-primary w-fit">{tx(locale, "送出", "Send")}</button>
