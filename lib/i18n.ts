@@ -56,6 +56,7 @@ const ERR: Record<string, [string, string]> = {
   csv: ["CSV 有錯誤，整批都未匯入", "The CSV has errors. Nothing was imported"],
   empty: ["沒有可匯入的資料列", "The CSV has no data rows"],
   post: ["寫幾隻字或者加一張相", "Add a few words or a photo"],
+  story_photo: ["請先影相或由相簿揀一張相", "Take a photo or choose one from your album"],
   comment: ["留言要 1–300 字", "Comment must be 1–300 characters"],
   payfail: ["模擬付款失敗，訂單仍是待付款", "Mock payment failed. The order is still awaiting payment"],
 };

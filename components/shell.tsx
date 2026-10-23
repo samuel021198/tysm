@@ -2,6 +2,7 @@ import Link from "next/link";
 import { logout, setPrefs } from "@/actions/auth";
 import type { User } from "@prisma/client";
 import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
+import { AddSheet } from "./add-sheet";
 import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
 
@@ -45,7 +46,7 @@ export function Header({
           </div>
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
             <Link className="hover:text-ink" href="/search">{nav.search}</Link>
-            <Link className="sell-cta inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold" href="/add">{nav.sell}</Link>
+            <AddSheet locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
             <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
@@ -113,6 +114,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
     published: ["已刊登，而家公開", "Published. It is live now"],
+    story: ["限時動態已發佈，24 小時後消失", "Story posted. It disappears in 24 hours"],
     collected: ["已加入收藏", "Added to your collection"],
     posted: ["已發到動態", "Posted"],
     draft: ["已存草稿，未有公開", "Draft saved. Not live yet"],

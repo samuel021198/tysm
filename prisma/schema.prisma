@@ -171,6 +171,8 @@ model User {
   posts           Post[]
   postLikes       PostLike[]
   postComments    PostComment[]
+  stories         Story[]
+  storyViews      StoryView[]
 }
 
 model OtpChallenge {
@@ -670,4 +672,30 @@ model PostComment {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([postId, createdAt])
+}
+
+/// Photo story. Hidden once `expiresAt` passes (24h from create). No cleanup job.
+model Story {
+  id        String   @id @default(cuid())
+  authorId  String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  views     StoryView[]
+
+  @@index([authorId, expiresAt])
+  @@index([expiresAt])
+}
+
+model StoryView {
+  id       String   @id @default(cuid())
+  storyId  String
+  userId   String
+  viewedAt DateTime @default(now())
+  story    Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, userId])
+  @@index([userId])
 }

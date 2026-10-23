@@ -3,11 +3,13 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
 import { loadHomeFeed } from "@/lib/profile";
+import { loadStoryRings } from "@/lib/story-feed";
 import { hiddenUserIds } from "@/lib/social";
 import { listingSuggestionCard } from "@/lib/posts";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { PostCard } from "@/components/post-card";
+import { StoryRail } from "@/components/story-rail";
 import { tx } from "@/lib/i18n";
 
 export default async function HomePage({
@@ -19,7 +21,7 @@ export default async function HomePage({
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const hidden = await hiddenUserIds(viewer?.id ?? null);
-  const [{ primary, suggested, linkedListings }, extras, favRows] = await Promise.all([
+  const [{ primary, suggested, linkedListings }, extras, favRows, storyFeed] = await Promise.all([
     loadHomeFeed(viewer?.id ?? null, hidden),
     prisma.listing.findMany({
       where: activeWhere(hidden),
@@ -31,6 +33,7 @@ export default async function HomePage({
       take: 16,
     }),
     viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : Promise.resolve([]),
+    loadStoryRings(viewer?.id ?? null, hidden),
   ]);
   const favIds = new Set(favRows.map((row) => row.listingId));
   const listingCards = extras
@@ -41,6 +44,7 @@ export default async function HomePage({
   return (
     <div className="mx-auto grid max-w-lg gap-4">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
+      <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
       <div className="flex items-center justify-between gap-3">
         <h1 className="page-title mb-0">{tx(prefs.locale, "主頁", "Home")}</h1>
         <Link href="/add?kind=post" className="text-sm font-semibold text-link">
