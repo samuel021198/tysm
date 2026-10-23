@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { activeWhere, cardInclude } from "@/lib/feed";
+import { activeWhere } from "@/lib/feed";
+import { loadHomeFeed } from "@/lib/profile";
 import { hiddenUserIds } from "@/lib/social";
+import { listingSuggestionCard } from "@/lib/posts";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
-import { ListingCard } from "@/components/listing-card";
-import { SearchBox } from "@/components/search-box";
+import { PostCard } from "@/components/post-card";
 import { tx } from "@/lib/i18n";
-import { compKey, loadCompSeries } from "@/lib/comps";
 
 export default async function HomePage({
   searchParams,
@@ -18,93 +18,55 @@ export default async function HomePage({
   await sweep();
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
-  const [hidden, follows, categories, compSeries] = await Promise.all([
-    hiddenUserIds(viewer?.id ?? null),
-    viewer ? prisma.follow.findMany({ where: { followerId: viewer.id }, select: { sellerId: true } }) : Promise.resolve([]),
-    prisma.category.findMany({ where: { level: { in: ["GROUP", "LEAF"] } }, orderBy: [{ level: "asc" }, { sort: "asc" }] }),
-    loadCompSeries(),
+  const hidden = await hiddenUserIds(viewer?.id ?? null);
+  const [{ primary, suggested, linkedListings }, extras, favRows] = await Promise.all([
+    loadHomeFeed(viewer?.id ?? null, hidden),
+    prisma.listing.findMany({
+      where: activeWhere(hidden),
+      include: {
+        photos: { orderBy: { position: "asc" }, take: 1 },
+        seller: { select: { id: true, nickname: true, avatarUrl: true } },
+      },
+      orderBy: { publishedAt: "desc" },
+      take: 16,
+    }),
+    viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : Promise.resolve([]),
   ]);
-  const followed = new Set(follows.map((row) => row.sellerId));
-  const listings = await prisma.listing.findMany({
-    where: activeWhere(hidden),
-    include: cardInclude,
-    orderBy: { publishedAt: "desc" },
-    take: 48,
-  });
-  listings.sort((a, b) => {
-    const boost = Number(followed.has(b.sellerId)) - Number(followed.has(a.sellerId));
-    if (boost !== 0) return boost;
-    return (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0);
-  });
-  const favIds = new Set(
-    viewer
-      ? (await prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } })).map((row) => row.listingId)
-      : [],
-  );
-  const recent = viewer
-    ? await prisma.viewHistory.findMany({
-        where: { userId: viewer.id, listing: activeWhere(hidden) },
-        include: { listing: { include: cardInclude } },
-        orderBy: { viewedAt: "desc" },
-        take: 8,
-      })
-    : [];
-  const recentIds = recent.map((row) => row.listingId);
-  const categoryIds = [...new Set(recent.map((row) => row.listing.categoryId))];
-  const forYou =
-    viewer && categoryIds.length
-      ? await prisma.listing.findMany({
-          where: { ...activeWhere(hidden), categoryId: { in: categoryIds }, id: { notIn: recentIds } },
-          include: cardInclude,
-          take: 8,
-        })
-      : [];
+  const favIds = new Set(favRows.map((row) => row.listingId));
+  const listingCards = extras
+    .filter((listing) => !linkedListings.has(listing.id))
+    .slice(0, 4)
+    .map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
 
   return (
-    <div>
+    <div className="mx-auto grid max-w-lg gap-4">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <div className="mb-3 md:hidden">
-        <SearchBox locale={prefs.locale} />
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="page-title mb-0">{tx(prefs.locale, "主頁", "Home")}</h1>
+        <Link href="/add?kind=post" className="text-sm font-semibold text-link">
+          {tx(prefs.locale, "寫貼文", "New post")}
+        </Link>
       </div>
-      <h1 className="page-title">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
-      <div className="chips mb-4">
-        {categories.map((cat) => (
-          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className={`inline-flex h-11 items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ${cat.level === "GROUP" ? "ring-teal" : "ring-rose/25"}`}>
-            {prefs.locale === "en" ? cat.nameEn : cat.nameZh}
-          </Link>
-        ))}
-      </div>
-      {listings.length === 0 ? <p className="empty">{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}
-      <div className="feed">
-        {listings.map((listing) => (
-          <ListingCard
-            key={listing.id}
-            listing={listing}
-            locale={prefs.locale}
-            favorited={favIds.has(listing.id)}
-            followed={followed.has(listing.sellerId)}
-            series={compSeries.get(compKey(listing))}
-          />
-        ))}
-      </div>
-      {recent.length ? (
-        <section className="mt-10">
-          <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "最近睇過", "Recently viewed")}</h2>
-          <div className="feed">
-            {recent.map((row) => (
-              <ListingCard key={row.listing.id} listing={row.listing} locale={prefs.locale} favorited={favIds.has(row.listing.id)} followed={followed.has(row.listing.sellerId)} series={compSeries.get(compKey(row.listing))} />
-            ))}
-          </div>
+      {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
+        <p className="empty">{tx(prefs.locale, "未有動態。加入收藏之後可以發到呢度。", "No posts yet. Add a card to your collection to share it here.")}</p>
+      ) : null}
+      {primary.length ? (
+        <section className="grid gap-4">
+          <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
+          {primary.map((post) => (
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+          ))}
         </section>
       ) : null}
-      {forYou.length ? (
-        <section className="mt-10">
-          <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "為你推薦", "For you")}</h2>
-          <div className="feed">
-            {forYou.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={followed.has(listing.sellerId)} series={compSeries.get(compKey(listing))} />
-            ))}
-          </div>
+      {suggested.length || listingCards.length ? (
+        <section className="grid gap-4">
+          <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "建議", "Suggested")}</h2>
+          {suggested.map((post) => (
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+          ))}
+          {listingCards.map((post) => (
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+          ))}
         </section>
       ) : null}
     </div>

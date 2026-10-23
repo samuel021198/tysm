@@ -167,6 +167,10 @@ model User {
   searches        SearchHistory[]
   views           ViewHistory[]
   outbound        OutboundStub[]
+  collection      CollectionItem[]
+  posts           Post[]
+  postLikes       PostLike[]
+  postComments    PostComment[]
 }
 
 model OtpChallenge {
@@ -274,8 +278,9 @@ model Listing {
   cartItems CartItem[]
   favorites Favorite[]
   orderItems OrderItem[]
-  threads   MessageThread[]
-  views     ViewHistory[]
+  threads        MessageThread[]
+  views          ViewHistory[]
+  collectionItem CollectionItem?
 
   @@index([status, publishedAt])
   @@index([sellerId])
@@ -575,4 +580,94 @@ model OutboundStub {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+enum CollectionVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+/// One physical card. Collect-only until `listingId` is set; that listing is the sale, not a second copy.
+model CollectionItem {
+  id             String               @id @default(cuid())
+  ownerId        String
+  listingId      String?              @unique
+  visibility     CollectionVisibility @default(PUBLIC)
+  title          String
+  note           String               @default("")
+  conditionTrack ConditionTrack
+  rawGrade       RawGrade?
+  grader         Grader?
+  gradeValue     Int?
+  cardName       String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  owner   User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  listing Listing?          @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  photos  CollectionPhoto[]
+  post    Post?
+
+  @@index([ownerId, visibility])
+}
+
+model CollectionPhoto {
+  id       String         @id @default(cuid())
+  itemId   String
+  url      String
+  position Int
+  role     PhotoRole      @default(GALLERY)
+  item     CollectionItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
+}
+
+model Post {
+  id               String   @id @default(cuid())
+  authorId         String
+  collectionItemId String?  @unique
+  body             String   @default("")
+  createdAt        DateTime @default(now())
+
+  author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  collectionItem CollectionItem? @relation(fields: [collectionItemId], references: [id], onDelete: Cascade)
+  photos         PostPhoto[]
+  likes          PostLike[]
+  comments       PostComment[]
+
+  @@index([authorId, createdAt])
+  @@index([createdAt])
+}
+
+model PostPhoto {
+  id       String @id @default(cuid())
+  postId   String
+  url      String
+  position Int
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
 }

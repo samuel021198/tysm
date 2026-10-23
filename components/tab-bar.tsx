@@ -10,12 +10,12 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   const meHref = loggedIn ? "/me" : "/login";
   const tabs = [
     { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
-    { href: "/search", label: tx(locale, "搜尋", "Search"), icon: "search" as const, on: pathname.startsWith("/search") },
-    { href: "/sell", label: tx(locale, "上架", "Sell"), icon: "plus" as const, on: pathname.startsWith("/sell") },
-    { href: "/messages", label: tx(locale, "訊息", "Messages"), icon: "messages" as const, on: pathname.startsWith("/messages") },
+    { href: "/search", label: tx(locale, "賣場", "Market"), icon: "search" as const, on: pathname.startsWith("/search") || pathname.startsWith("/listing") },
+    { href: "/add", label: tx(locale, "新增", "Add"), icon: "plus" as const, on: pathname.startsWith("/add") || pathname.startsWith("/sell") },
+    { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
     {
       href: meHref,
-      label: tx(locale, "我的", "Me"),
+      label: tx(locale, "個人", "Profile"),
       icon: "me" as const,
       on: pathname.startsWith("/me") || pathname.startsWith("/login") || pathname.startsWith("/orders") || pathname.startsWith("/notifications"),
     },

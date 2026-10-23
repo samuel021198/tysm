@@ -101,7 +101,7 @@ export default async function SearchPage({
   return (
     <div>
       <Flash locale={prefs.locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <h1 className="page-title">{tx(prefs.locale, "搜尋", "Search")}</h1>
+      <h1 className="page-title">{tx(prefs.locale, "賣場", "Market")}</h1>
       <SearchBox
         locale={prefs.locale}
         initial={q}

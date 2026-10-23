@@ -44,7 +44,8 @@ export function Header({
             </Link>
           </div>
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
-            <Link className="sell-cta inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold" href="/sell">{nav.sell}</Link>
+            <Link className="hover:text-ink" href="/search">{nav.search}</Link>
+            <Link className="sell-cta inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold" href="/add">{nav.sell}</Link>
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
             <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
@@ -112,6 +113,8 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
     published: ["已刊登，而家公開", "Published. It is live now"],
+    collected: ["已加入收藏", "Added to your collection"],
+    posted: ["已發到動態", "Posted"],
     draft: ["已存草稿，未有公開", "Draft saved. Not live yet"],
     scheduled: ["已預約刊登，未有即時公開", "Scheduled. Not live yet"],
     bid: ["出價已記錄", "Bid placed"],

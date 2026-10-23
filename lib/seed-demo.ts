@@ -371,6 +371,143 @@ async function seedSocial() {
   }
 }
 
+async function seedFeed() {
+  const linked = ["seed_charizard", "seed_pikachu", "seed_iu", "seed_messi", "seed_nami", "seed_mewtwo"];
+  for (const listingId of linked) {
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: { photos: { orderBy: { position: "asc" } } },
+    });
+    if (!listing) continue;
+    const itemId = `col_${listingId}`;
+    const postId = `post_${listingId}`;
+    await prisma.collectionItem.deleteMany({ where: { listingId, NOT: { id: itemId } } });
+    const data = {
+      ownerId: listing.sellerId,
+      listingId,
+      visibility: "PUBLIC" as const,
+      title: listing.title,
+      note: "",
+      conditionTrack: listing.conditionTrack,
+      rawGrade: listing.rawGrade,
+      grader: listing.grader,
+      gradeValue: listing.gradeValue,
+      cardName: listing.cardName || listing.personName || listing.title,
+    };
+    await prisma.collectionItem.upsert({
+      where: { id: itemId },
+      update: data,
+      create: { id: itemId, ...data },
+    });
+    const photoIds = listing.photos.map((photo) => `${itemId}_${photo.position}`);
+    await prisma.collectionPhoto.deleteMany({ where: { itemId, id: { notIn: photoIds } } });
+    for (const photo of listing.photos) {
+      const id = `${itemId}_${photo.position}`;
+      await prisma.collectionPhoto.upsert({
+        where: { id },
+        update: { url: photo.url, role: photo.role, position: photo.position },
+        create: { id, itemId, url: photo.url, role: photo.role, position: photo.position },
+      });
+    }
+    await prisma.post.deleteMany({ where: { collectionItemId: itemId, NOT: { id: postId } } });
+    await prisma.post.upsert({
+      where: { id: postId },
+      update: { authorId: listing.sellerId, collectionItemId: itemId, body: "" },
+      create: { id: postId, authorId: listing.sellerId, collectionItemId: itemId, body: "" },
+    });
+  }
+
+  await prisma.collectionItem.upsert({
+    where: { id: "col_mei_eevee" },
+    update: {
+      ownerId: "user_mei",
+      listingId: null,
+      visibility: "PUBLIC",
+      title: "伊布收藏",
+      cardName: "伊布",
+      note: "先收藏，未放賣。",
+      conditionTrack: "RAW",
+      rawGrade: "A",
+      grader: null,
+      gradeValue: null,
+    },
+    create: {
+      id: "col_mei_eevee",
+      ownerId: "user_mei",
+      visibility: "PUBLIC",
+      title: "伊布收藏",
+      cardName: "伊布",
+      note: "先收藏，未放賣。",
+      conditionTrack: "RAW",
+      rawGrade: "A",
+    },
+  });
+  await prisma.collectionPhoto.upsert({
+    where: { id: "col_mei_eevee_0" },
+    update: { url: "/demo/cards/seed_eevee.svg", position: 0, role: "FRONT" },
+    create: { id: "col_mei_eevee_0", itemId: "col_mei_eevee", url: "/demo/cards/seed_eevee.svg", position: 0, role: "FRONT" },
+  });
+  await prisma.post.deleteMany({ where: { collectionItemId: "col_mei_eevee", NOT: { id: "post_mei_eevee" } } });
+  await prisma.post.upsert({
+    where: { id: "post_mei_eevee" },
+    update: { authorId: "user_mei", collectionItemId: "col_mei_eevee", body: "先收藏，未放賣。" },
+    create: { id: "post_mei_eevee", authorId: "user_mei", collectionItemId: "col_mei_eevee", body: "先收藏，未放賣。" },
+  });
+
+  await prisma.post.deleteMany({ where: { collectionItemId: "col_ming_secret" } });
+  await prisma.collectionItem.upsert({
+    where: { id: "col_ming_secret" },
+    update: {
+      ownerId: "user_ming",
+      listingId: null,
+      visibility: "PRIVATE",
+      title: "未公開噴火龍",
+      cardName: "噴火龍",
+      note: "",
+      conditionTrack: "GRADED",
+      rawGrade: null,
+      grader: "PSA",
+      gradeValue: 100,
+    },
+    create: {
+      id: "col_ming_secret",
+      ownerId: "user_ming",
+      visibility: "PRIVATE",
+      title: "未公開噴火龍",
+      cardName: "噴火龍",
+      conditionTrack: "GRADED",
+      grader: "PSA",
+      gradeValue: 100,
+    },
+  });
+  await prisma.collectionPhoto.upsert({
+    where: { id: "col_ming_secret_0" },
+    update: { url: "/demo/cards/seed_charizard.svg", position: 0, role: "FRONT" },
+    create: { id: "col_ming_secret_0", itemId: "col_ming_secret", url: "/demo/cards/seed_charizard.svg", position: 0, role: "FRONT" },
+  });
+
+  await prisma.post.upsert({
+    where: { id: "post_mei_note" },
+    update: { authorId: "user_mei", collectionItemId: null, body: "今日喺旺角睇卡，未決定收唔收。" },
+    create: { id: "post_mei_note", authorId: "user_mei", body: "今日喺旺角睇卡，未決定收唔收。" },
+  });
+  await prisma.postPhoto.upsert({
+    where: { id: "post_mei_note_0" },
+    update: { url: "/demo/cards/seed_pikachu.svg", position: 0 },
+    create: { id: "post_mei_note_0", postId: "post_mei_note", url: "/demo/cards/seed_pikachu.svg", position: 0 },
+  });
+  await prisma.postLike.upsert({
+    where: { id: "like_mei_zard" },
+    update: { postId: "post_seed_charizard", userId: "user_mei" },
+    create: { id: "like_mei_zard", postId: "post_seed_charizard", userId: "user_mei" },
+  });
+  await prisma.postComment.upsert({
+    where: { id: "cmt_mei_iu" },
+    update: { postId: "post_seed_iu", authorId: "user_mei", body: "好靚，問下可唔可以約旺角？" },
+    create: { id: "cmt_mei_iu", postId: "post_seed_iu", authorId: "user_mei", body: "好靚，問下可唔可以約旺角？" },
+  });
+}
+
 export async function seedDemo() {
   const adminEmail = (process.env.ADMIN_EMAIL || "admin@tysm.hk").split(",")[0].trim().toLowerCase();
   const adminPhone = process.env.ADMIN_PHONE || "+85260000000";
@@ -560,6 +697,7 @@ export async function seedDemo() {
 
   await seedOrders();
   await seedSocial();
+  await seedFeed();
 
   const favCounts = await prisma.favorite.groupBy({
     by: ["listingId"],

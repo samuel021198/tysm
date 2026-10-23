@@ -2,12 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { activeWhere, cardInclude } from "@/lib/feed";
 import { tx } from "@/lib/i18n";
 import { onTimePercent } from "@/lib/shipping";
 import { isBlocked } from "@/lib/social";
-import { ListingCard } from "@/components/listing-card";
+import { ProfileBoard } from "@/components/profile-board";
 import { Flash } from "@/components/shell";
+import { profileContent } from "@/lib/profile";
 import { reportAction, toggleBlock, toggleFollow } from "@/actions/social";
 
 export default async function ShopPage({
@@ -15,7 +15,7 @@ export default async function ShopPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ok?: string; err?: string }>;
+  searchParams: Promise<{ ok?: string; err?: string; tab?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
@@ -26,18 +26,15 @@ export default async function ShopPage({
   ]);
   if (!seller) notFound();
   if (viewer && viewer.id !== seller.id && (await isBlocked(viewer.id, seller.id))) notFound();
-  const [listings, reviews, shipped, sales, following, blocked, favs] = await Promise.all([
-    prisma.listing.findMany({ where: { ...activeWhere([]), sellerId: seller.id }, include: cardInclude, take: 24 }),
-    prisma.review.findMany({ where: { subjectId: seller.id }, include: { author: true }, orderBy: { createdAt: "desc" }, take: 20 }),
+  const [shipped, sales, following, blocked, board] = await Promise.all([
     prisma.order.findMany({ where: { sellerId: seller.id, shippedAt: { not: null } } }),
     prisma.order.count({ where: { sellerId: seller.id, status: "COMPLETED" } }),
     viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: seller.id } } }) : null,
     viewer ? prisma.block.findUnique({ where: { blockerId_blockedId: { blockerId: viewer.id, blockedId: seller.id } } }) : null,
-    viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : [],
+    profileContent(seller.id, viewer?.id ?? null),
   ]);
   const onTime = onTimePercent(shipped);
-  const rating = reviews.length ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length : null;
-  const favIds = new Set(favs.map((row) => row.listingId));
+  const rating = board.reviews.length ? board.reviews.reduce((sum, review) => sum + review.stars, 0) / board.reviews.length : null;
   const locale = prefs.locale;
   return (
     <div>
@@ -48,7 +45,9 @@ export default async function ShopPage({
           <h1 className="text-2xl font-semibold">{seller.nickname}</h1>
           <p className="mt-1 max-w-prose text-sm">{seller.bio}</p>
           <p className="mt-2 text-sm text-muted">
-            {rating != null ? `${tx(locale, "評分", "Rating")} ${rating.toFixed(1)} (${reviews.length})` : tx(locale, "未有評分", "No rating yet")}
+            {rating != null ? `${tx(locale, "評分", "Rating")} ${rating.toFixed(1)} (${board.reviews.length})` : tx(locale, "未有評分", "No rating yet")}
+            {" · "}
+            {tx(locale, "粉絲", "Followers")} {board.followers}
             {" · "}
             {tx(locale, "完成訂單", "Completed")} {sales}
             {onTime != null ? ` · ${tx(locale, "準時寄出", "On-time ship")} ${onTime}%` : ""}
@@ -64,24 +63,18 @@ export default async function ShopPage({
           ) : null}
         </div>
       </div>
-      <h2 className="mb-3 font-semibold">{tx(locale, "在售", "Active listings")}</h2>
-      {listings.length === 0 ? <p className="empty">{tx(locale, "未有在售貨品。", "No active listings.")}</p> : null}
-      <div className="feed">
-        {listings.map((listing) => (
-          <ListingCard key={listing.id} listing={listing} locale={locale} favorited={favIds.has(listing.id)} followed={false} next={`/shop/${id}`} />
-        ))}
-      </div>
-      <h2 className="mb-3 mt-8 font-semibold">{tx(locale, "評價", "Reviews")}</h2>
-      {reviews.length === 0 ? <p>{tx(locale, "未有評價。", "No reviews.")}</p> : null}
-      <ul className="grid gap-3 text-sm">
-        {reviews.map((review) => (
-          <li key={review.id}>
-            <p>{review.author.nickname} · {"★".repeat(review.stars)}</p>
-            <p>{review.comment}</p>
-            {review.reply ? <p className="text-muted">{tx(locale, "回覆", "Reply")}: {review.reply}</p> : null}
-          </li>
-        ))}
-      </ul>
+      <ProfileBoard
+        locale={locale}
+        base={`/shop/${seller.id}`}
+        tab={sp.tab || "posts"}
+        isSelf={viewer?.id === seller.id}
+        posts={board.posts}
+        items={board.items}
+        listings={board.listings}
+        reviews={board.reviews}
+        drafts={board.drafts}
+        favIds={board.favIds}
+      />
       {viewer && viewer.id !== seller.id ? (
         <details className="mt-6 max-w-lg text-sm">
           <summary className="cursor-pointer text-muted">{tx(locale, "檢舉這位會員", "Report this member")}</summary>
@@ -93,7 +86,7 @@ export default async function ShopPage({
           </form>
         </details>
       ) : null}
-      <p className="mt-6 text-sm"><Link href="/">{tx(locale, "返回動態", "Back to feed")}</Link></p>
+      <p className="mt-6 text-sm"><Link href="/">{tx(locale, "返回主頁", "Back home")}</Link></p>
     </div>
   );
 }

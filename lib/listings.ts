@@ -3,6 +3,7 @@ import { prisma } from "./db";
 import { headerIndex, parseCsv, PERSON_HEADERS, TCG_HEADERS } from "./csv";
 import { hkdToCents, isAllowedMediaUrl } from "./format";
 import { parseGrade } from "./rules";
+import { syncListingInventory } from "./inventory";
 import { hasStoreAddress } from "./shipping";
 import { GRADERS, RAW, parseListingForm, validateListing, type ListingInput, type PhotoInput } from "./sell-wizard";
 
@@ -96,7 +97,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
           data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
         }),
       ]);
-      return { ok: true as const, id: listing.id };
+      return done(listing.id);
     }
   }
 
@@ -117,7 +118,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         photos: { create: photos.map((photo, index) => ({ url: photo.url.trim(), role: photo.role, position: index })) },
       },
     });
-    return { ok: true as const, id: created.id };
+    return done(created.id);
   }
 
   const reserved = listing.quantity - listing.quantityAvailable;
@@ -138,7 +139,12 @@ export async function saveListing(userId: string, input: ListingInput, listingId
       data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url.trim(), role: photo.role, position: index })),
     }),
   ]);
-  return { ok: true as const, id: listing.id };
+  return done(listing.id);
+}
+
+async function done(id: string) {
+  await syncListingInventory(id);
+  return { ok: true as const, id };
 }
 
 export async function unlistListing(userId: string, listingId: string, asAdmin = false) {

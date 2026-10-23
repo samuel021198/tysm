@@ -4,36 +4,56 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { DISTRICTS } from "@/lib/format";
 import { tx } from "@/lib/i18n";
+import { profileContent } from "@/lib/profile";
 import { Flash, PrefToggles } from "@/components/shell";
-import { PhoneForm } from "@/components/phone-form";
+import { ProfileBoard } from "@/components/profile-board";
 import { clearHistory, deleteAddress, logout, saveAddress, updateProfile } from "@/actions/auth";
 
-export default async function MePage({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string }> }) {
+export default async function MePage({ searchParams }: { searchParams: Promise<{ ok?: string; err?: string; tab?: string }> }) {
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) redirect("/login?next=/me");
-  const addresses = await prisma.address.findMany({ where: { userId: viewer.id }, orderBy: { isDefault: "desc" } });
-  const following = await prisma.follow.count({ where: { followerId: viewer.id } });
+  const [addresses, board] = await Promise.all([
+    prisma.address.findMany({ where: { userId: viewer.id }, orderBy: { isDefault: "desc" } }),
+    profileContent(viewer.id, viewer.id),
+  ]);
   const locale = prefs.locale;
   return (
-    <div className="grid max-w-3xl gap-8">
+    <div className="mx-auto grid max-w-3xl gap-8">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <div className="surface flex items-center gap-4 p-4">
-        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-2xl font-bold text-[#1b1418]">
-          {viewer.nickname.slice(0, 1)}
-        </span>
+        {viewer.avatarUrl ? (
+          <img src={viewer.avatarUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" />
+        ) : (
+          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-2xl font-bold text-[#1b1418]">
+            {viewer.nickname.slice(0, 1)}
+          </span>
+        )}
         <div className="min-w-0">
           <h1 className="truncate text-2xl font-bold">{viewer.nickname}</h1>
-          <p className="truncate text-sm text-muted">{viewer.email || tx(locale, "未有電郵", "No email")} · {viewer.phone || tx(locale, "未有電話", "No phone")} {viewer.phoneVerified ? "✓" : ""}</p>
-          <p className="mt-1 text-sm text-muted">{tx(locale, "關注", "Following")} {following}</p>
+          {viewer.bio ? <p className="mt-1 text-sm">{viewer.bio}</p> : null}
+          <p className="mt-1 text-sm text-muted">
+            {tx(locale, "關注", "Following")} {board.following} · {tx(locale, "粉絲", "Followers")} {board.followers}
+          </p>
         </div>
       </div>
+      <ProfileBoard
+        locale={locale}
+        base="/me"
+        tab={sp.tab || "posts"}
+        isSelf
+        posts={board.posts}
+        items={board.items}
+        listings={board.listings}
+        reviews={board.reviews}
+        drafts={board.drafts}
+        favIds={board.favIds}
+      />
       <PrefToggles locale={locale} theme={prefs.theme} />
       <nav className="grid gap-2">
         {[
-          ["/me/favorites", tx(locale, "收藏", "Favorites")],
+          ["/me/favorites", tx(locale, "喜愛清單", "Saved")],
           ["/me/bids", tx(locale, "出價", "Bids")],
-          ["/orders", tx(locale, "訂單", "Orders")],
           ["/notifications", tx(locale, "通知", "Notifications")],
           ["/cart", tx(locale, "購物車", "Cart")],
           ...(viewer.role === "ADMIN" ? [["/admin", tx(locale, "管理", "Admin")] as const] : []),
@@ -44,7 +64,6 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           </Link>
         ))}
       </nav>
-      {!viewer.phoneVerified ? <PhoneForm locale={locale} /> : null}
       <form action={updateProfile} className="grid gap-3">
         <h2 className="font-semibold">{tx(locale, "個人資料同收款", "Profile and payout")}</h2>
         <input className="field" name="nickname" defaultValue={viewer.nickname} required />
