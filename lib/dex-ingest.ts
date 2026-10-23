@@ -1,17 +1,8 @@
 import { prisma } from "./db";
-import { chooseDexSets, type DexPrintRegion } from "./dex";
+import { DEX_PLACEHOLDER } from "./dex";
 import { linkCatalogListings } from "./dex-link";
 import { putR2Object, r2Config } from "./r2";
-import {
-  displayImage,
-  fillMissingNames,
-  listExpansionCards,
-  listExpansions,
-  mapScrydexCard,
-  scrydexConfigured,
-  type MappedCard,
-  type MappedSet,
-} from "./scrydex";
+import { fetchDexSubset, type MappedCard, type MappedSet } from "./tcgdex";
 
 const PER_REGION = 250;
 const SETS_PER_REGION = 2;
@@ -25,21 +16,8 @@ export type IngestCounts = {
   r2: boolean;
 };
 
-function physical(sets: MappedSet[]): MappedSet[] {
-  const rows = sets.filter((set) => !set.onlineOnly);
-  return rows.length ? rows : sets;
-}
-
-function pickRegion(sets: MappedSet[], budget: number): MappedSet[] {
-  const pool = physical(sets);
-  const byId = new Map(pool.map((set) => [set.externalId, set]));
-  return chooseDexSets(
-    pool.map((set) => ({ id: set.externalId, total: set.total, releaseDate: set.releaseDate })),
-    SETS_PER_REGION,
-    budget,
-  )
-    .map((set) => byId.get(set.id))
-    .filter((set): set is MappedSet => Boolean(set));
+function displayImage(source: string): string {
+  return source || DEX_PLACEHOLDER;
 }
 
 async function mirrorToR2(externalId: string, source: string): Promise<string | null> {
@@ -101,29 +79,14 @@ async function upsertSets(sets: MappedSet[]) {
   return ids;
 }
 
-async function loadRegion(lang: "en" | "ja", region: DexPrintRegion, budget: number) {
-  const sets = pickRegion(await listExpansions(lang), budget);
-  const cards: MappedCard[] = [];
-  let left = budget;
-  for (const set of sets) {
-    if (left <= 0) break;
-    const room = Math.min(left, set.total && set.total > 0 ? set.total : left);
-    const raw = await listExpansionCards(lang, set.externalId, room);
-    for (const row of raw) {
-      const mapped = mapScrydexCard(row, region, set.externalId);
-      if (mapped) cards.push({ ...mapped, setExternalId: set.externalId });
-    }
-    left -= raw.length;
-  }
-  return { sets, cards };
-}
-
 export async function ingestDex(opts?: { deadlineMs?: number }): Promise<IngestCounts> {
-  if (!scrydexConfigured()) throw new Error("SCRYDEX_API_KEY and SCRYDEX_TEAM_ID are required");
   const deadline = Date.now() + (opts?.deadlineMs ?? 45_000);
-  const [ja, en] = await Promise.all([loadRegion("ja", "JP", PER_REGION), loadRegion("en", "WEST", PER_REGION)]);
+  const [ja, en] = await Promise.all([
+    fetchDexSubset("ja", SETS_PER_REGION, PER_REGION),
+    fetchDexSubset("en", SETS_PER_REGION, PER_REGION),
+  ]);
   const sets = [...ja.sets, ...en.sets];
-  const cards = fillMissingNames([...ja.cards, ...en.cards]);
+  const cards: MappedCard[] = [...ja.cards, ...en.cards];
   const setIds = await upsertSets(sets);
   const existing = await prisma.catalogCard.findMany({
     where: { externalId: { in: cards.map((card) => card.externalId) } },

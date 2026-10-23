@@ -16,9 +16,6 @@ export async function POST(request: Request) {
   if (!authorizedBearer(request.headers.get("authorization"), secret)) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
-  if (!process.env.SCRYDEX_API_KEY?.trim() || !process.env.SCRYDEX_TEAM_ID?.trim()) {
-    return Response.json({ ok: false, error: "unconfigured" }, { status: 503 });
-  }
   try {
     const counts = await ingestDex({ deadlineMs: 45_000 });
     return Response.json({ ok: true, counts });

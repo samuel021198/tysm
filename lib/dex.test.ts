@@ -1,4 +1,5 @@
 import {
+  bilingualName,
   catalogNeedles,
   chooseDexSets,
   namesMatch,
@@ -9,7 +10,7 @@ import {
   type DexLinkCard,
 } from "./dex";
 import { awsSigV4Authorization, sha256Hex } from "./r2";
-import { fillMissingNames, mapScrydexCard, mapScrydexExpansion, parseScrydexPage } from "./scrydex";
+import { cardImageUrl, collectorNumber, logoUrl, mapTcgdexCard, mapTcgdexSet, usableSetResume } from "./tcgdex";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -75,77 +76,61 @@ const one = chooseDexSets(
 );
 assert(one.map((set) => set.id).join(",") === "huge", "newest set fills the budget");
 
-const ja = mapScrydexCard(
-  {
-    id: "sv10_ja-1",
-    name: "クヌギダマ",
-    number: "1",
-    printed_number: "001/098",
-    rarity: "通常",
-    artist: "YASHIRO Nanaco",
-    language_code: "JA",
-    images: [{ type: "front", large: "https://images.scrydex.com/pokemon/sv10_ja-1/large" }],
-    expansion: { id: "sv10_ja", language_code: "JA" },
-    translation: { en: { name: "Pineco" } },
-  },
-  "JP",
-  "sv10_ja",
+const setRef = { externalId: "ja:SV10", code: "SV10", printRegion: "JP" as const, serieId: "SV", official: 98 };
+const ja = mapTcgdexCard(
+  { id: "SV10-001", localId: "001", name: "リザードン", image: "https://assets.tcgdex.net/ja/SV/SV10/001" },
+  setRef,
+  "ja",
 );
-assert(ja?.nameJa === "クヌギダマ" && ja.nameEn === "Pineco", "ja card keeps both names");
+assert(ja?.nameJa === "リザードン" && ja.nameEn === "Charizard", "ja charizard fills english from alias");
 assert(ja?.collectorNumber === "001/098" && ja.numberKey === "1", "printed number and key");
-assert(ja?.sourceImageUrl.startsWith("https://images.scrydex.com/"), "scrydex image");
+assert(ja?.externalId === "ja:SV10-001", "language prefix on card id");
+assert(ja?.sourceImageUrl === "https://assets.tcgdex.net/ja/SV/SV10/001/high.webp", "bare tcgdex image gets high.webp");
+assert(mapTcgdexCard({ id: "M6-001", localId: "001", name: "ヘラクロス" }, setRef, "ja")?.sourceImageUrl === "", "missing image is not guessed");
 
-const en = mapScrydexCard(
-  {
-    id: "me55-3",
-    name: "Volbeat",
-    number: "3",
-    printed_number: "003/086",
-    language_code: "EN",
-    images: [{ type: "front", medium: "https://images.scrydex.com/pokemon/me55-3/medium" }],
-    expansion: { id: "me55", name: "Mega Evolution" },
-  },
-  "WEST",
-  "me55",
+const en = mapTcgdexCard(
+  { id: "sv08-001", localId: "001", name: "Pikachu", image: "https://assets.tcgdex.net/en/sv/sv08/001" },
+  { externalId: "en:sv08", code: "sv08", printRegion: "WEST", serieId: "sv", official: 86 },
+  "en",
 );
-assert(en?.nameEn === "Volbeat" && en.nameJa === "Volbeat", "english card without ja yet");
-const [filledEn] = fillMissingNames([
-  ja!,
-  en!,
-  {
-    ...en!,
-    externalId: "ja-pika",
-    nameEn: "Pikachu",
-    nameJa: "ピカチュウ",
-    printRegion: "JP",
-  },
-  { ...en!, externalId: "en-pika", nameEn: "Pikachu", nameJa: "Pikachu", printRegion: "WEST" },
-]);
-assert(filledEn?.nameEn === "Pineco", "ja card unchanged by fill");
-const pika = fillMissingNames([
-  { ...en!, externalId: "ja-pika", nameEn: "Pikachu", nameJa: "ピカチュウ", printRegion: "JP" },
-  { ...en!, externalId: "en-pika", nameEn: "Pikachu", nameJa: "Pikachu", printRegion: "WEST" },
-]).find((card) => card.externalId === "en-pika");
-assert(pika?.nameJa === "ピカチュウ", "english card borrows the japanese name");
+assert(en?.sourceImageUrl.endsWith("/high.webp"), "bare tcgdex image gets high.webp");
+assert(en?.nameEn === "Pikachu" && en.nameJa === "ピカチュウ", "english pikachu fills japanese from alias");
 
-const expansion = mapScrydexExpansion(
+const chiko = mapTcgdexCard(
+  { id: "sv2a-001", localId: "001", name: "チコリータ" },
+  { externalId: "ja:sv2a", code: "sv2a", printRegion: "JP", serieId: "SV", official: 165 },
+  "ja",
+);
+assert(chiko?.nameEn === "チコリータ" && chiko.nameJa === "チコリータ", "unknown name stays in both fields");
+
+const set = mapTcgdexSet(
   {
-    id: "m1s_ja",
+    id: "M1S",
     name: "メガシンフォニア",
-    code: "M1S",
-    series: "Mega Evolution",
-    total: 92,
-    language_code: "JA",
-    release_date: "2025/08/01",
-    is_online_only: false,
-    logo: "https://images.scrydex.com/pokemon/m1s_ja-logo/logo",
-    translation: { en: { name: "Mega Symphonia" } },
+    releaseDate: "2025-08-01",
+    logo: "https://assets.tcgdex.net/ja/M/M1S/logo",
+    serie: { id: "M", name: "MEGA" },
+    cardCount: { official: 63, total: 92 },
+    cards: [{ id: "M1S-003", localId: "003", name: "リザードン" }],
   },
-  "JP",
+  "ja",
 );
-assert(expansion?.nameJa === "メガシンフォニア" && expansion.nameEn === "Mega Symphonia", "expansion names");
-assert(expansion?.releaseDate === "2025-08-01" && expansion.code === "M1S", "release date and code");
-assert(parseScrydexPage({ data: [{ id: "a" }], pageSize: 100, totalCount: 2 }).totalCount === 2, "page envelope");
+assert(set?.code === "M1S" && set.externalId === "ja:M1S" && set.releaseDate === "2025-08-01", "set code and date");
+assert(set?.nameJa === "メガシンフォニア" && set.nameEn === "メガシンフォニア", "set name has no alias");
+assert(set?.cards.length === 1 && set.logoUrl?.endsWith(".webp"), "set cards and logo");
+
+assert(!usableSetResume({ id: "mep", name: "Promos", total: 30, official: 0 }), "official 0 skipped");
+assert(!usableSetResume({ id: "MC", name: "Mega deck", total: 774, official: 100 }), "huge deck skipped");
+assert(!usableSetResume({ id: "svp", name: "SVP Black Star Promos", total: 50, official: 50 }), "promo name skipped");
+assert(!usableSetResume({ id: "tcgp", name: "Pocket", total: 100, official: 100 }), "pocket skipped");
+assert(usableSetResume({ id: "M1S", name: "メガシンフォニア", total: 92, official: 63 }), "physical set kept");
+
+const ex = bilingualName("Charizard ex", "WEST");
+assert(ex.nameJa === "リザードン" && ex.nameEn === "Charizard ex", "suffix alias keeps printed english");
+assert(cardImageUrl("https://assets.tcgdex.net/en/sv/sv08/001.png").endsWith(".png"), "image with extension stays");
+assert(cardImageUrl("") === "", "empty image stays empty");
+assert(collectorNumber("003", 63) === "003/063", "official padded to local id");
+assert(logoUrl("https://assets.tcgdex.net/en/sv/sv08/logo") === "https://assets.tcgdex.net/en/sv/sv08/logo.webp", "logo webp");
 
 const payload = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 const canonical = [

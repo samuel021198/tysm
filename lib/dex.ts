@@ -11,7 +11,7 @@ const PLACEHOLDER_NUMBER = /\/185$/;
 
 const STOP = new Set(["vmax", "vstar", "ex", "gx", "sr", "sar", "ar", "ur", "hr", "promo", "psa", "bgs", "cgc", "raw", "holo", "japanese", "english"]);
 
-// ponytail: hand-kept zh/ja/en names for the demo listings. Upgrade path: rely on Scrydex translation fields once JA coverage is complete.
+// ponytail: hand-kept zh/ja/en names. TCGdex returns one language per request. Upgrade path: a translation table if a card payload grows a second language.
 const ALIASES: readonly (readonly string[])[] = [
   ["噴火龍", "リザードン", "charizard"],
   ["皮卡丘", "ピカチュウ", "pikachu"],
@@ -237,6 +237,30 @@ export function catalogWhere(query: string, region: DexPrintRegion | null): Pris
   const key = numberKey(q);
   if (key) or.push({ numberKey: key });
   return { AND: [regionFilter, { OR: or }] };
+}
+
+function titleEn(value: string): string {
+  return value.replace(/(^|[^a-z])([a-z])/g, (_match, lead: string, letter: string) => `${lead}${letter.toUpperCase()}`);
+}
+
+/** Fill the missing language from the alias list. Otherwise both fields keep the source name. */
+export function bilingualName(raw: string, region: DexPrintRegion): { nameEn: string; nameJa: string } {
+  const name = raw.trim();
+  if (!name) return { nameEn: "", nameJa: "" };
+  const folded = foldSearch(name);
+  const parts = tokens(name);
+  for (const group of ALIASES) {
+    const terms = group.map((term) => foldSearch(term));
+    const hit = terms.some((term) => folded === term || parts.includes(term) || (term.length >= 3 && (folded.startsWith(term) || folded.endsWith(term))));
+    if (!hit) continue;
+    const ja = group.find((term) => /[\u3040-\u30ff]/.test(term)) || name;
+    const en = group.find((term) => /[a-z]/i.test(term) && !/[\u3040-\u9fff]/.test(term));
+    return {
+      nameEn: region === "WEST" ? name : titleEn(en || name),
+      nameJa: region === "JP" ? name : ja,
+    };
+  }
+  return { nameEn: name, nameJa: name };
 }
 
 export function primaryCardName(
