@@ -74,8 +74,19 @@ h1,
 h2,
 .page-title,
 .surface,
-.field {
+.field,
+[data-wizard-jump] {
   scroll-margin-top: calc(var(--header-h) + 0.75rem);
+}
+
+.field,
+[data-wizard-jump] {
+  scroll-margin-bottom: calc(var(--tab-h) + 0.75rem);
+}
+
+/* Tailwind's `grid` utility beats the preflight [hidden] rule, which would show every wizard step at once. */
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none !important;
 }
 
 .site-header {

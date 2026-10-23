@@ -1,5 +1,6 @@
 import {
   validateListing,
+  wizardFocusField,
   wizardPanels,
   wizardPublishIssues,
   wizardStepForIssue,
@@ -161,5 +162,27 @@ assert(wizardStepForIssue("title") === 1 && wizardStepForIssue("price") === 2 &&
 assert(wizardStepForIssue("meetup") === 3 && wizardStepForIssue("store") === 3, "shipping details stay on the shipping step");
 assert(wizardStepForIssue("schedule") === 4 && wizardStepForIssue("phone") === null, "unknown server errors stay on the current step");
 assert(wizardPanels(["video", "qty", "schedule"]).more && wizardPanels(["video", "qty", "schedule"]).priceExtra && wizardPanels(["video", "qty", "schedule"]).schedule, "panels open for the missing field");
+
+assert(wizardFocusField("photos", card({ photos: [] })) === "photos-add", "too few photos focus the add control");
+assert(wizardFocusField("photos", card({ photos: Array.from({ length: 13 }, () => ({ url: "/demo/cards/seed_charizard.svg", role: "GALLERY" as const })) })) === "photos", "too many photos focus the photo section");
+assert(wizardFocusField("front_back", card()) === "front_back" && wizardFocusField("photo_url", card()) === "photo_url", "photo role and url have their own anchors");
+assert(wizardFocusField("tcg", card({ game: "  ", setName: "151", cardName: "噴火龍", language: "日文" })) === "game", "tcg focuses the first blank field");
+assert(wizardFocusField("tcg", card({ game: "Pokémon", setName: "", cardName: "噴火龍", language: "日文" })) === "setName", "tcg moves to the next blank field");
+assert(wizardFocusField("person", card({ personName: "美斯", seasonYear: " ", brandSeries: "Topps" })) === "seasonYear", "person focuses the blank season");
+assert(wizardFocusField("grade", card()) === "rawGrade", "raw condition focuses the A–D select");
+assert(wizardFocusField("grade", card({ conditionTrack: "GRADED", rawGrade: null, grader: "PSA", gradeValue: null })) === "gradeScore", "graded condition focuses the score");
+assert(wizardFocusField("shipping", card({ shipSfCod: false, shipMeetup: false, shipPickup: false })) === "shipSfCod", "no method focuses the first shipping choice");
+assert(wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "" })) === "meetupDistrict", "meetup without a district focuses the district");
+assert(
+  wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "油尖旺", meetupWindow: "x".repeat(81) })) === "meetupWindow",
+  "a long meetup window is focused before the note",
+);
+assert(
+  wizardFocusField("meetup", card({ shipMeetup: true, meetupDistrict: "油尖旺", meetupNotes: "x".repeat(201) })) === "meetupNotes",
+  "a long meetup note is focused",
+);
+assert(wizardFocusField("store", card({ shipPickup: true })) === "store", "store pickup focuses the profile-address hint");
+assert(wizardFocusField("both_price", card()) === "price" && wizardFocusField("auction_end", card()) === "auctionEndsAt", "price and auction end focus their controls");
+assert(wizardFocusField("schedule", card()) === "publishAt" && wizardFocusField("phone", card()) === "", "schedule focuses its picker; phone has no sell-form control");
 
 console.log("sell wizard ok");

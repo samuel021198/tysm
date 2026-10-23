@@ -184,6 +184,44 @@ export function wizardPanels(codes: string[]) {
   };
 }
 
+/** Form control to focus for an issue. Empty string means the form has no matching control. */
+export function wizardFocusField(code: string, input?: ListingInput | null): string {
+  if (code === "photos") return input && input.photos.length > 12 ? "photos" : "photos-add";
+  if (code === "photo_url") return "photo_url";
+  if (code === "front_back") return "front_back";
+  if (code === "title") return "title";
+  if (code === "description") return "description";
+  if (code === "category") return "categoryId";
+  if (code === "video") return "videoUrl";
+  if (code === "price" || code === "both_price") return "price";
+  if (code === "start") return "startPrice";
+  if (code === "auction_end") return "auctionEndsAt";
+  if (code === "offer") return "minOffer";
+  if (code === "qty") return "quantity";
+  if (code === "schedule") return "publishAt";
+  if (code === "grade") return input?.conditionTrack === "GRADED" ? "gradeScore" : "rawGrade";
+  if (code === "tcg") {
+    if (!input?.game?.trim()) return "game";
+    if (!input.setName?.trim()) return "setName";
+    if (!input.cardName?.trim()) return "cardName";
+    return "language";
+  }
+  if (code === "person") {
+    if (!input?.personName?.trim()) return "personName";
+    if (!input.seasonYear?.trim()) return "seasonYear";
+    return "brandSeries";
+  }
+  if (code === "shipping") return "shipSfCod";
+  if (code === "meetup") {
+    const district = input?.meetupDistrict?.trim() ?? "";
+    if (!DISTRICTS.some(([name]) => name === district)) return "meetupDistrict";
+    if ((input?.meetupWindow?.trim().length ?? 0) > 80) return "meetupWindow";
+    return "meetupNotes";
+  }
+  if (code === "store") return "store";
+  return "";
+}
+
 export function parseListingForm(formData: FormData): ListingInput | null {
   let photos: PhotoInput[] = [];
   try {

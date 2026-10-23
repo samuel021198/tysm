@@ -3,9 +3,9 @@
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type FormEvent, type ReactNode, type RefObject, type SetStateAction } from "react";
 import { useFormStatus } from "react-dom";
 import { saveListingAction } from "@/actions/trade";
-import { DISTRICTS, hkPartsToInput } from "@/lib/format";
+import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
-import { parseListingForm, wizardPanels, wizardPublishIssues, wizardStepForIssue, wizardStepIssues, type ListingInput } from "@/lib/sell-wizard";
+import { parseListingForm, wizardFocusField, wizardPanels, wizardPublishIssues, wizardStepForIssue, wizardStepIssues, type ListingInput } from "@/lib/sell-wizard";
 import { fileToDataUrl } from "./photo-file";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string };
@@ -164,8 +164,25 @@ export function SellForm({
   const shownKind: BlockKind = blockKind;
 
   useEffect(() => {
-    if (!block.length) return;
-    alertRef.current?.focus();
+    const form = formRef.current;
+    if (!block.length || !form) return;
+    const input = parseListingForm(new FormData(form));
+    let target: HTMLElement | null = null;
+    for (const code of block) {
+      const field = wizardFocusField(code, input);
+      target = field ? findWizardField(form, field, code) : null;
+      if (target) break;
+    }
+    const el = target ?? alertRef.current;
+    if (!el) return;
+    openDetails(el);
+    const frame = requestAnimationFrame(() => {
+      if (!el.isConnected) return;
+      const focusEl = focusable(el);
+      focusEl.scrollIntoView({ block: "center" });
+      focusEl.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [block]);
 
   useEffect(() => {
@@ -345,7 +362,7 @@ export function SellForm({
       ) : null}
 
       {shown.length ? (
-        <div ref={alertRef} role="alert" tabIndex={-1} className="rounded-xl bg-soft px-3 py-2 text-sm text-danger outline-none">
+        <div ref={alertRef} role="alert" tabIndex={-1} data-wizard-jump className="rounded-xl bg-soft px-3 py-2 text-sm text-danger outline-none">
           <p className="font-medium">{blockHeading}</p>
           <ul className="mt-1 list-disc pl-5">
             {shown.map((code) => (
@@ -355,7 +372,7 @@ export function SellForm({
         </div>
       ) : null}
 
-      <div hidden={!locked && step !== 0} className="grid gap-3">
+      <div hidden={!locked && step !== 0} data-wizard-jump data-focus="photos" tabIndex={-1} className="grid gap-3 outline-none">
         <p className="text-sm">{tx(locale, "先放相。最少 2 張，最多 12 張。評級卡要標明正面同背面。", "Add photos first. 2–12. Graded cards need a front and a back.")}</p>
         <PhotoFields
           locale={locale}
@@ -494,7 +511,7 @@ export function SellForm({
               <input className="field" name="startPrice" value={startPrice} inputMode="decimal" aria-invalid={shown.includes("start")} onChange={(e) => setStartPrice(e.target.value)} />
               <FieldError locale={locale} codes={shown} code="start" />
             </label>
-            <div>
+            <div data-wizard-jump data-focus="auctionEndsAt" className="grid gap-1 outline-none">
               <p className="mb-1">{tx(locale, "結束時間（香港時間）", "End time (Hong Kong)")}</p>
               <HkDateTime locale={locale} name="auctionEndsAt" defaultValue={initial?.auctionEndsAt} />
               <FieldError locale={locale} codes={shown} code="auction_end" />
@@ -531,7 +548,7 @@ export function SellForm({
                 <OfferFields locale={locale} offers={offers} setOffers={setOffers} minOffer={minOffer} setMinOffer={setMinOffer} issues={shown} />
               </Disclosure>
             ) : null}
-            <FieldError locale={locale} codes={shown} code="qty" />
+            <FieldError locale={locale} codes={shown} code="qty" anchor="quantity" />
           </>
         )}
       </div> : null}
@@ -542,7 +559,7 @@ export function SellForm({
         <fieldset className="grid gap-3" aria-invalid={shown.includes("shipping") || shown.includes("meetup") || shown.includes("store")}>
           <label className="grid gap-1 rounded-2xl bg-soft p-3">
             <span className="flex min-h-12 items-center gap-2 font-medium">
-              <input type="checkbox" name="shipSfCod" checked={sfCod} aria-invalid={shown.includes("shipping")} onChange={(e) => setSfCod(e.target.checked)} />
+              <input type="checkbox" name="shipSfCod" data-wizard-jump checked={sfCod} aria-invalid={shown.includes("shipping")} onChange={(e) => setSfCod(e.target.checked)} />
               {tx(locale, "順豐到付", "SF cash on delivery")}
             </span>
             <span className="text-muted">{tx(locale, "平台運費 HK$0。買家收貨時先向順豐付款，平台不會代收。", "Platform fee HK$0. The buyer pays SF Express on delivery. TYSM does not collect it.")}</span>
@@ -591,7 +608,7 @@ export function SellForm({
             ) : (
               <p className="text-muted">
                 {tx(locale, "未設定店舖地址，所以未可以揀店舖自取。", "Add a shop address before you can offer store pickup.")}{" "}
-                <a className="text-link" href="/me#store">{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a>
+                <a className="text-link" href="/me#store" data-focus="store" data-wizard-jump>{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a>
               </p>
             )}
             {initial?.shipPickup && !storeReady ? (
@@ -600,8 +617,7 @@ export function SellForm({
           </div>
           <FieldError locale={locale} codes={shown} code="shipping" />
           <FieldError locale={locale} codes={shown} code="meetup" />
-          <FieldError locale={locale} codes={shown} code="store" />
-          {shown.includes("store") ? <a className="text-link" href="/me#store">{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a> : null}
+          <FieldError locale={locale} codes={shown} code="store" anchor="store" />
         </fieldset>
       </div> : null}
 
@@ -624,9 +640,11 @@ export function SellForm({
           ].filter(Boolean).join(" · ") || tx(locale, "未選運送方式", "No shipping method")}</p>
           <p className="text-muted">{feeCopy}</p>
           <Disclosure signal={openToken.schedule} initiallyOpen={scheduleOpen} title={tx(locale, "預約刊登（可選）", "Schedule publish (optional)")}>
-            <p className="text-muted">{tx(locale, "留空就即時刊登。有時間就會改為預約，而家未會公開。", "Leave this blank to publish now. A time schedules it instead, and it stays offline until then.")}</p>
-            <HkDateTime locale={locale} name="publishAt" defaultValue={initial?.publishAt} onChange={onPublishAt} emptyLabel={tx(locale, "留空就即時刊登", "Leave blank to publish now")} />
-            <FieldError locale={locale} codes={shown} code="schedule" />
+            <div data-wizard-jump data-focus="publishAt" className="grid gap-3 outline-none">
+              <p className="text-muted">{tx(locale, "留空就即時刊登。有時間就會改為預約，而家未會公開。", "Leave this blank to publish now. A time schedules it instead, and it stays offline until then.")}</p>
+              <HkDateTime locale={locale} name="publishAt" defaultValue={initial?.publishAt} onChange={onPublishAt} emptyLabel={tx(locale, "留空就即時刊登", "Leave blank to publish now")} />
+              <FieldError locale={locale} codes={shown} code="schedule" />
+            </div>
           </Disclosure>
         </section>
       ) : null}
@@ -657,6 +675,34 @@ export function SellForm({
   );
 }
 
+function openDetails(el: HTMLElement) {
+  let node: HTMLElement | null = el.parentElement;
+  while (node) {
+    if (node instanceof HTMLDetailsElement) node.open = true;
+    node = node.parentElement;
+  }
+}
+
+function shownField(el: HTMLElement) {
+  if (el.closest("[hidden]")) return false;
+  return !(el instanceof HTMLInputElement && (el.type === "hidden" || el.type === "file"));
+}
+
+function findWizardField(form: HTMLFormElement, field: string, code: string) {
+  const selector = `[data-focus="${CSS.escape(field)}"], [name="${CSS.escape(field)}"]`;
+  const visible = [...form.querySelectorAll<HTMLElement>(selector)].filter(shownField);
+  if (code === "front_back") {
+    const selects = visible.filter((el): el is HTMLSelectElement => el instanceof HTMLSelectElement);
+    return selects.find((el) => el.value === "GALLERY") ?? selects[0] ?? null;
+  }
+  return visible.find((el) => el.matches("input, textarea, select")) ?? visible[0] ?? null;
+}
+
+function focusable(el: HTMLElement) {
+  if (el.matches("input:not([type=hidden]):not([type=file]), textarea, select, button, a[href], summary, [tabindex]")) return el;
+  return el.querySelector<HTMLElement>("input:not([type=hidden]):not([type=file]), textarea, select, button, summary") ?? el;
+}
+
 function earliestStep(issues: string[]) {
   return issues.reduce<number | null>((earliest, code) => {
     const at = wizardStepForIssue(code);
@@ -674,9 +720,13 @@ function snapshot(form: HTMLFormElement) {
   return snap;
 }
 
-function FieldError({ locale, codes, code }: { locale: Locale; codes: string[]; code: string }) {
+function FieldError({ locale, codes, code, anchor }: { locale: Locale; codes: string[]; code: string; anchor?: string }) {
   if (!codes.includes(code)) return null;
-  return <p className="text-sm text-danger">{errText(locale, code)}</p>;
+  return (
+    <p data-focus={anchor} data-wizard-jump={anchor ? "" : undefined} tabIndex={anchor ? -1 : undefined} className="text-sm text-danger outline-none">
+      {errText(locale, code)}
+    </p>
+  );
 }
 
 function Disclosure({ signal, initiallyOpen, title, children }: { signal: number; initiallyOpen?: boolean; title: string; children: ReactNode }) {
@@ -798,36 +848,44 @@ function PhotoFields({
   }
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2">
-        <label className="btn btn-primary w-fit cursor-pointer">
-          {tx(locale, "從相簿加入", "Add from camera roll")}
-          <input ref={fileRef} className="sr-only" type="file" accept="image/*" multiple disabled={filled >= 12} onChange={(e) => void onFiles(e.target.files)} />
-        </label>
-        <p className="text-sm text-muted">{tx(locale, `已有 ${filled} 張`, `${filled} added`)}</p>
+      <div data-wizard-jump data-focus="photos-add" tabIndex={-1} className="grid gap-2 outline-none">
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="btn btn-primary w-fit cursor-pointer">
+            {tx(locale, "從相簿加入", "Add from camera roll")}
+            <input ref={fileRef} className="sr-only" type="file" accept="image/*" multiple disabled={filled >= 12} onChange={(e) => void onFiles(e.target.files)} />
+          </label>
+          <p className="text-sm text-muted">{tx(locale, `已有 ${filled} 張`, `${filled} added`)}</p>
+        </div>
+        {note ? <p className="text-sm text-danger">{note}</p> : null}
+        <FieldError locale={locale} codes={issues} code="photos" />
+        <FieldError locale={locale} codes={issues} code="photo_url" />
+        <FieldError locale={locale} codes={issues} code="front_back" />
       </div>
-      {note ? <p className="text-sm text-danger">{note}</p> : null}
-      <FieldError locale={locale} codes={issues} code="photos" />
-      <FieldError locale={locale} codes={issues} code="photo_url" />
-      {photos.map((photo, index) => photo.url ? (
-        <div key={index} className="grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] gap-2">
-          <img src={photo.url} alt="" className="h-20 w-16 rounded-xl bg-[#f4efe6] object-contain ring-1 ring-[#5c3a4a]/30" />
-          <div className="grid min-w-0 gap-2">
-            {photo.url.startsWith("data:") ? (
-              <p className="field flex items-center text-sm">{tx(locale, "已從相簿上傳", "Uploaded from camera roll")}</p>
-            ) : (
-              <input className="field" value={photo.url} aria-label={tx(locale, "相片網址", "Photo URL")} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)))} placeholder="https:// 或 /demo/..." disabled={locked && index < initialCount} />
-            )}
-            <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
-              <select className="field" value={photo.role} aria-label={tx(locale, "相片位置", "Photo role")} disabled={locked} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, role: e.target.value as Photo["role"] } : item)))}>
-                {ROLES.map(([role, zh, en]) => (
-                  <option key={role} value={role}>{tx(locale, zh, en)}</option>
-                ))}
-              </select>
-              <button type="button" className="btn btn-ghost text-danger" onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}>{tx(locale, "移除", "Remove")}</button>
+      {photos.map((photo, index) => {
+        if (!photo.url) return null;
+        const badUrl = issues.includes("photo_url") && !isAllowedMediaUrl(photo.url);
+        const badUpload = badUrl && photo.url.startsWith("data:");
+        return (
+          <div key={index} data-wizard-jump={badUpload ? "" : undefined} data-focus={badUpload ? "photo_url" : undefined} tabIndex={badUpload ? -1 : undefined} className="grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] gap-2 outline-none">
+            <img src={photo.url} alt="" className="h-20 w-16 rounded-xl bg-[#f4efe6] object-contain ring-1 ring-[#5c3a4a]/30" />
+            <div className="grid min-w-0 gap-2">
+              {photo.url.startsWith("data:") ? (
+                <p className="field flex items-center text-sm">{tx(locale, "已從相簿上傳", "Uploaded from camera roll")}</p>
+              ) : (
+                <input className="field" value={photo.url} aria-label={tx(locale, "相片網址", "Photo URL")} aria-invalid={badUrl} data-focus={badUrl ? "photo_url" : undefined} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)))} placeholder="https:// 或 /demo/..." disabled={locked && index < initialCount} />
+              )}
+              <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <select className="field" value={photo.role} aria-label={tx(locale, "相片位置", "Photo role")} data-focus="front_back" disabled={locked} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, role: e.target.value as Photo["role"] } : item)))}>
+                  {ROLES.map(([role, zh, en]) => (
+                    <option key={role} value={role}>{tx(locale, zh, en)}</option>
+                  ))}
+                </select>
+                <button type="button" className="btn btn-ghost text-danger" onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}>{tx(locale, "移除", "Remove")}</button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null)}
+        );
+      })}
       {filled < 2 ? (
         <p className="text-sm text-muted">
           {photos.some((photo) => !photo.url && (photo.role === "FRONT" || photo.role === "BACK"))
