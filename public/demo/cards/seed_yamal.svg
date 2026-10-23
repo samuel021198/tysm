@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="耶馬爾 Yamal">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="#1b4332"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="#95d5b2"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
-  <circle cx="400" cy="390" r="150" fill="#fff" opacity="0.18"/>
-      <circle cx="400" cy="390" r="92" fill="none" stroke="#fff" stroke-width="10" opacity="0.85"/>
-      <path d="M400 298 L448 334 L430 392 L370 392 L352 334 Z" fill="#1b4332" stroke="#fff" stroke-width="8"/>
-  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耶</text>
-  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="#1b4332"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
+  <text x="400" y="470" text-anchor="middle" fill="#fffaf6" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耶</text>
+  <circle cx="400" cy="330" r="132" fill="none" stroke="#fffaf6" stroke-width="14"/>
+      <path d="M400 236 L446 272 L428 332 L372 332 L354 272 Z" fill="#fffaf6"/>
+      <path d="M354 272 L304 286 L326 348 L372 332 Z M446 272 L496 286 L474 348 L428 332 Z M372 332 L360 392 L400 414 L440 392 L428 332 Z" fill="#fffaf6" opacity="0.72"/>
+  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
   <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耶馬爾</text>
   <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Yamal</text>
   <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Topps Now · Raw D</text>
   <defs>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#95d5b2" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#1b4332" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>

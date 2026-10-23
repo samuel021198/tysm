@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="耿鬼 Gengar">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="#2a9d8f"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="#d5f5ef"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
-  <circle cx="400" cy="390" r="160" fill="#fff" opacity="0.14"/>
-    <circle cx="400" cy="390" r="92" fill="#fff" opacity="0.16"/>
-    <path d="M400 300 L424 360 H488 L436 398 L456 460 L400 422 L344 460 L364 398 L312 360 H376 Z" fill="#fff" opacity="0.9"/>
-  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耿</text>
-  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="#2a9d8f"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
+  <text x="400" y="470" text-anchor="middle" fill="#1b1418" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耿</text>
+  <path d="M400 196 L436 292 H538 L456 352 L488 450 L400 392 L312 450 L344 352 L262 292 H364 Z" fill="#1b1418"/>
+  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
   <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">耿鬼</text>
   <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Gengar</text>
   <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">無印 · Raw B</text>
   <defs>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d5f5ef" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#2a9d8f" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>

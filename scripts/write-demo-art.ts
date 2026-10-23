@@ -88,57 +88,73 @@ function xml(value: string) {
   return value.replace(/[&<>]/g, (char) => (char === "&" ? "&amp;" : char === "<" ? "&lt;" : "&gt;"));
 }
 
-function motif(categoryId: string, accent: string) {
+function channel(c: number) {
+  const v = c / 255;
+  return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+}
+
+function lum(hex: string) {
+  const n = Number.parseInt(hex.slice(1), 16);
+  return 0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255);
+}
+
+function inkOn(hex: string) {
+  const dark = "#1b1418";
+  const light = "#fffaf6";
+  const L = lum(hex);
+  const cDark = (L + 0.05) / (lum(dark) + 0.05);
+  const cLight = (lum(light) + 0.05) / (L + 0.05);
+  return cDark >= cLight ? dark : light;
+}
+
+function motif(categoryId: string, accent: string, ink: string) {
   if (categoryId === "cat_football") {
-    return `<circle cx="400" cy="390" r="150" fill="#fff" opacity="0.18"/>
-      <circle cx="400" cy="390" r="92" fill="none" stroke="#fff" stroke-width="10" opacity="0.85"/>
-      <path d="M400 298 L448 334 L430 392 L370 392 L352 334 Z" fill="${accent}" stroke="#fff" stroke-width="8"/>`;
+    return `<circle cx="400" cy="330" r="132" fill="none" stroke="${ink}" stroke-width="14"/>
+      <path d="M400 236 L446 272 L428 332 L372 332 L354 272 Z" fill="${ink}"/>
+      <path d="M354 272 L304 286 L326 348 L372 332 Z M446 272 L496 286 L474 348 L428 332 Z M372 332 L360 392 L400 414 L440 392 L428 332 Z" fill="${ink}" opacity="0.72"/>`;
   }
   if (categoryId === "cat_basketball") {
-    return `<circle cx="400" cy="390" r="150" fill="none" stroke="#fff" stroke-width="14" opacity="0.9"/>
-      <path d="M250 390 H550 M400 240 V540" stroke="#fff" stroke-width="12" opacity="0.9"/>
-      <path d="M280 300 Q400 390 280 480 M520 300 Q400 390 520 480" fill="none" stroke="#fff" stroke-width="12" opacity="0.9"/>`;
+    return `<circle cx="400" cy="330" r="140" fill="none" stroke="${ink}" stroke-width="16"/>
+      <path d="M260 330 H540 M400 190 V470" stroke="${ink}" stroke-width="14"/>
+      <path d="M286 236 Q400 330 286 424 M514 236 Q400 330 514 424" fill="none" stroke="${ink}" stroke-width="14"/>`;
   }
   if (categoryId === "cat_baseball") {
-    return `<circle cx="400" cy="390" r="150" fill="#fff" opacity="0.92"/>
-      <path d="M310 300 Q360 390 310 480" fill="none" stroke="${accent}" stroke-width="10"/>
-      <path d="M490 300 Q440 390 490 480" fill="none" stroke="${accent}" stroke-width="10"/>
-      <path d="M328 330 H292 M332 360 H288 M332 420 H288 M328 450 H292 M472 330 H508 M468 360 H512 M468 420 H512 M472 450 H508" stroke="${accent}" stroke-width="6"/>`;
+    return `<circle cx="400" cy="330" r="140" fill="#fffaf6"/>
+      <path d="M322 236 Q372 330 322 424" fill="none" stroke="${accent}" stroke-width="12"/>
+      <path d="M478 236 Q428 330 478 424" fill="none" stroke="${accent}" stroke-width="12"/>
+      <path d="M338 268 H304 M342 300 H298 M342 360 H298 M338 392 H304 M462 268 H496 M458 300 H502 M458 360 H502 M462 392 H496" stroke="${accent}" stroke-width="8" stroke-linecap="round"/>`;
   }
   if (categoryId === "cat_singers" || categoryId === "cat_actors" || categoryId === "cat_idols") {
-    return `<ellipse cx="400" cy="430" rx="120" ry="150" fill="#fff" opacity="0.16"/>
-      <circle cx="400" cy="340" r="78" fill="#fff" opacity="0.28"/>
-      <path d="M300 520 Q400 430 500 520" fill="#fff" opacity="0.22"/>
-      <circle cx="250" cy="250" r="18" fill="#fff" opacity="0.7"/>
-      <circle cx="560" cy="280" r="10" fill="#fff" opacity="0.7"/>
-      <circle cx="530" cy="210" r="6" fill="#fff" opacity="0.8"/>`;
+    return `<circle cx="400" cy="250" r="70" fill="${ink}"/>
+      <path d="M300 455 Q400 330 500 455 V510 H300 Z" fill="${ink}"/>
+      <circle cx="250" cy="168" r="14" fill="${ink}" opacity="0.75"/>
+      <circle cx="548" cy="196" r="9" fill="${ink}" opacity="0.75"/>`;
   }
-  return `<circle cx="400" cy="390" r="160" fill="#fff" opacity="0.14"/>
-    <circle cx="400" cy="390" r="92" fill="#fff" opacity="0.16"/>
-    <path d="M400 300 L424 360 H488 L436 398 L456 460 L400 422 L344 460 L364 398 L312 360 H376 Z" fill="#fff" opacity="0.9"/>`;
+  return `<path d="M400 196 L436 292 H538 L456 352 L488 450 L400 392 L312 450 L344 352 L262 292 H364 Z" fill="${ink}"/>`;
 }
 
 function cardSvg(input: { zh: string; en: string; line: string; categoryId: string; accent: string; alt: string }) {
   const zh = xml(input.zh);
   const en = xml(input.en);
   const line = xml(input.line);
+  const ink = inkOn(input.accent);
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="${zh} ${en}">
   <rect width="800" height="1000" fill="${PAPER}"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="${input.accent}"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="${input.alt}"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
-  ${motif(input.categoryId, input.accent)}
-  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">${zh.slice(0, 1)}</text>
-  <rect x="48" y="692" width="704" height="248" rx="24" fill="${PAPER}"/>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="${input.accent}"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
+  <text x="400" y="470" text-anchor="middle" fill="${ink}" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">${zh.slice(0, 1)}</text>
+  ${motif(input.categoryId, input.accent, ink)}
+  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
   <text x="72" y="790" fill="${INK}" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">${zh}</text>
   <text x="72" y="848" fill="${INK}" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">${en}</text>
   <text x="72" y="900" fill="${MUTED}" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">${line}</text>
   <defs>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${input.alt}" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="${input.accent}" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>
@@ -148,16 +164,13 @@ function cardSvg(input: { zh: string; en: string; line: string; categoryId: stri
 const back = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="卡背">
   <rect width="800" height="1000" fill="${PAPER}"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="#7a3148"/>
-  <rect x="56" y="56" width="688" height="888" rx="28" fill="none" stroke="#f7f1e8" stroke-width="8"/>
-  <g fill="#f7f1e8" fill-opacity="0.16">
-    ${Array.from({ length: 8 }, (_, row) =>
-      Array.from({ length: 6 }, (_, col) => `<circle cx="${120 + col * 110}" cy="${150 + row * 110}" r="16"/>`).join(""),
-    ).join("")}
-  </g>
-  <circle cx="400" cy="460" r="120" fill="none" stroke="#f7f1e8" stroke-width="10"/>
-  <text x="400" y="450" text-anchor="middle" fill="#f7f1e8" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">TYSM</text>
-  <text x="400" y="530" text-anchor="middle" fill="#f7f1e8" font-size="36" font-family="ui-sans-serif, system-ui, sans-serif">卡背</text>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="56" y="56" width="688" height="888" rx="28" fill="#5c3044"/>
+  <rect x="88" y="88" width="624" height="824" rx="22" fill="#fffaf6"/>
+  <rect x="116" y="116" width="568" height="560" rx="16" fill="none" stroke="#5c3044" stroke-width="10"/>
+  <path d="M400 220 L520 390 L400 560 L280 390 Z" fill="none" stroke="#5c3044" stroke-width="16"/>
+  <text x="400" y="760" text-anchor="middle" fill="#1b1418" font-size="120" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">卡背</text>
+  <text x="400" y="840" text-anchor="middle" fill="#5c3044" font-size="48" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">TYSM</text>
 </svg>
 `;
 

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { confirmPhone, requestPhoneOtp } from "@/actions/auth";
+import { OtpChip } from "./otp-chip";
 import { Submit } from "./submit";
 import { errText, tx, type Locale } from "@/lib/i18n";
 
@@ -16,11 +17,11 @@ export function PhoneForm({ locale }: { locale: Locale }) {
         <input className="field" name="target" placeholder="91234567" required />
         <Submit label={tx(locale, "索取驗證碼", "Send code")} pendingLabel="…" />
         {sent?.error ? <p className="text-sm text-danger">{errText(locale, sent.error)}</p> : null}
-        {sent?.code ? <p className="rounded-xl bg-soft px-3 py-2 text-sm">{tx(locale, "開發用驗證碼", "Dev code")}: <strong>{sent.code}</strong></p> : null}
+        {sent?.code ? <OtpChip locale={locale} code={sent.code} inputId="phone-otp" /> : null}
       </form>
       <form action={confirm} className="grid gap-2">
         <input type="hidden" name="target" value={sent?.target || ""} />
-        <input className="field" name="code" required />
+        <input id="phone-otp" className="field" name="code" inputMode="numeric" autoComplete="one-time-code" required />
         <Submit label={tx(locale, "驗證", "Verify")} pendingLabel="…" />
         {done?.error ? <p className="text-sm text-danger">{errText(locale, done.error)}</p> : null}
       </form>

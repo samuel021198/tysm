@@ -102,7 +102,9 @@ for (const thread of demoThreads) {
 assert(demoThreads.length >= 4 && demoNotifications.length >= 8 && demoFavorites.length >= 8 && demoFollows.length >= 8, "social");
 
 const back = readFileSync(new URL("../public/demo/back.svg", import.meta.url), "utf8");
-assert(back.includes("卡背") && back.includes("#f7f1e8"), "card back should render");
+assert(back.includes("卡背") && back.includes("#f7f1e8") && back.includes("#fffaf6") && back.includes("#1b1418"), "card back should stay readable");
+const face = readFileSync(new URL("../public/demo/cards/seed_pikachu.svg", import.meta.url), "utf8");
+assert(face.includes("<path") && face.includes("#1b1418"), "card face has a drawn motif");
 
 assert(authorizedBearer("Bearer demo-secret", "demo-secret"), "bearer matches");
 assert(!authorizedBearer("Bearer demo-secret", "other-secret"), "bearer rejects a mismatch");

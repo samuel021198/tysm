@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="山本由伸 Yamamoto">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="#0f172a"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="#e2e8f0"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
-  <circle cx="400" cy="390" r="150" fill="#fff" opacity="0.92"/>
-      <path d="M310 300 Q360 390 310 480" fill="none" stroke="#0f172a" stroke-width="10"/>
-      <path d="M490 300 Q440 390 490 480" fill="none" stroke="#0f172a" stroke-width="10"/>
-      <path d="M328 330 H292 M332 360 H288 M332 420 H288 M328 450 H292 M472 330 H508 M468 360 H512 M468 420 H512 M472 450 H508" stroke="#0f172a" stroke-width="6"/>
-  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">山</text>
-  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="#0f172a"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
+  <text x="400" y="470" text-anchor="middle" fill="#fffaf6" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">山</text>
+  <circle cx="400" cy="330" r="140" fill="#fffaf6"/>
+      <path d="M322 236 Q372 330 322 424" fill="none" stroke="#0f172a" stroke-width="12"/>
+      <path d="M478 236 Q428 330 478 424" fill="none" stroke="#0f172a" stroke-width="12"/>
+      <path d="M338 268 H304 M342 300 H298 M342 360 H298 M338 392 H304 M462 268 H496 M458 300 H502 M458 360 H502 M462 392 H496" stroke="#0f172a" stroke-width="8" stroke-linecap="round"/>
+  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
   <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">山本由伸</text>
   <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Yamamoto</text>
   <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Topps · 2024 · Raw A</text>
   <defs>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e2e8f0" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#0f172a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>

@@ -58,7 +58,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
       {items.length ? (
         <div
           className="fixed inset-x-0 z-30 flex items-center gap-3 bg-card/95 px-4 py-3 shadow-[0_-8px_24px_rgba(34,24,32,0.06)] backdrop-blur-xl md:static md:bg-transparent md:px-0 md:py-0 md:shadow-none"
-          style={{ bottom: "calc(4.25rem + env(safe-area-inset-bottom))" }}
+          style={{ bottom: "var(--tab-h)" }}
         >
           <p className="min-w-0 flex-1 text-sm leading-snug">
             <span className="block text-muted">{tx(prefs.locale, "貨品", "Items")} + {tx(prefs.locale, "運費", "shipping")}</span>

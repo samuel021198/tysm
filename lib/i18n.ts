@@ -10,7 +10,7 @@ const ERR: Record<string, [string, string]> = {
   category: ["請選擇分類", "Choose a category"],
   photos: ["最少 2 張、最多 12 張相片", "Add 2 to 12 photos"],
   front_back: ["評級卡必須有正面同背面相片", "Graded cards need a front and a back photo"],
-  photo_url: ["相片網址須為 https 或站內示範圖", "Photo URLs must be https or a bundled demo image"],
+  photo_url: ["相片須為已上傳圖片、https，或站內示範圖", "Photos must be an upload, https, or a bundled demo image"],
   price: ["請填寫有效直購價", "Enter a valid Buy It Now price"],
   start: ["請填寫有效拍賣起標價", "Enter a valid auction start price"],
   auction_end: ["拍賣結束時間須為香港時間，並於刊登後 30 分鐘至 14 日內", "Auction end must be 30 minutes to 14 days after publish (Hong Kong time)"],

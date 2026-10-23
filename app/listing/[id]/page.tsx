@@ -63,8 +63,8 @@ export default async function ListingPage({
   if (!visible) notFound();
   if (viewer && !owner && (await isBlocked(viewer.id, listing.sellerId))) notFound();
 
-  const live =
-    listing.saleType !== "BUY_NOW" && !listing.auctionSettled && !listing.bidsVoided && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
+  const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
+  const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
   const [mine, bidCount, offers, similar, sales, comps, favored, following, bps] = await Promise.all([
     viewer ? prisma.proxyBid.findUnique({ where: { listingId_bidderId: { listingId: id, bidderId: viewer.id } } }) : null,
     prisma.proxyBid.count({ where: { listingId: id } }),
@@ -119,7 +119,7 @@ export default async function ListingPage({
   const dockPrice = showCart || listing.saleType !== "AUCTION" ? formatHkd(listing.price ?? 0, locale) : formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale);
 
   return (
-    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8">
+    <div className={`grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 ${!owner && (live || showCart) ? "max-md:pb-36" : ""}`}>
       <ViewPing id={id} />
       <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
         <Flash locale={locale} ok={sp.ok} err={sp.err} />
@@ -173,7 +173,7 @@ export default async function ListingPage({
             </ul>
           </section>
         ) : null}
-        {live ? (
+        {hasAuction ? (
           <section className="mt-6">
             <h2 className="font-semibold">{tx(locale, "出價紀錄", "Bid history")}</h2>
             <p className="text-sm text-muted">{tx(locale, "最高出價只有出價者自己可見。最後 2 分鐘出價會延長 2 分鐘。", "Maximum bids stay private. A bid in the final 2 minutes extends the auction by 2 minutes.")}</p>
@@ -226,20 +226,28 @@ export default async function ListingPage({
       </div>
       <aside id="purchase" className="surface panel order-2 grid h-fit min-w-0 gap-4 p-4 lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start lg:p-5">
         {listing.price != null && listing.saleType !== "AUCTION" ? <p className="price text-3xl">{formatHkd(listing.price, locale)}</p> : null}
-        {live ? (
+        {hasAuction ? (
           <>
             <p className="price text-2xl">{tx(locale, "目前", "Current")} {formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}</p>
-            <p><Countdown endsAt={listing.auctionEndsAt!.toISOString()} locale={locale} /> · {formatHKT(listing.auctionEndsAt!, locale)}</p>
-            <p className="text-sm text-muted">{tx(locale, "最低出價", "Minimum bid")} {formatHkd(mine && viewer?.id === listing.leaderId ? (mine.maxAmount + 1) : minBid, locale)}</p>
-            {mine ? <p className="text-sm">{tx(locale, "你的最高出價（只有你可見）", "Your maximum (only you can see this)")} {formatHkd(mine.maxAmount, locale)}</p> : null}
-            {viewer && !owner && !viewer.bidBanned ? (
-              <form id="bid-form" action={bidAction} className="grid gap-2">
-                <input type="hidden" name="listingId" value={id} />
-                <input className="field" name="max" inputMode="decimal" placeholder={centsToInput(minBid)} required />
-                <Submit label={tx(locale, "出價", "Place bid")} pendingLabel="…" />
-              </form>
+            {live ? (
+              <p><Countdown endsAt={listing.auctionEndsAt!.toISOString()} locale={locale} /> · {formatHKT(listing.auctionEndsAt!, locale)}</p>
+            ) : (
+              <p>{tx(locale, "拍賣已結束", "Auction ended")} · {formatHKT(listing.auctionEndsAt!, locale)}</p>
+            )}
+            {live ? (
+              <>
+                <p className="text-sm text-muted">{tx(locale, "最低出價", "Minimum bid")} {formatHkd(mine && viewer?.id === listing.leaderId ? (mine.maxAmount + 1) : minBid, locale)}</p>
+                {mine ? <p className="text-sm">{tx(locale, "你的最高出價（只有你可見）", "Your maximum (only you can see this)")} {formatHkd(mine.maxAmount, locale)}</p> : null}
+                {viewer && !owner && !viewer.bidBanned ? (
+                  <form id="bid-form" action={bidAction} className="grid gap-2">
+                    <input type="hidden" name="listingId" value={id} />
+                    <input className="field" name="max" inputMode="decimal" placeholder={centsToInput(minBid)} required />
+                    <Submit label={tx(locale, "出價", "Place bid")} pendingLabel="…" />
+                  </form>
+                ) : null}
+                {viewer?.bidBanned ? <p className="text-sm text-danger">{tx(locale, "你已被禁止出價。", "Bidding is disabled on your account.")}</p> : null}
+              </>
             ) : null}
-            {viewer?.bidBanned ? <p className="text-sm text-danger">{tx(locale, "你已被禁止出價。", "Bidding is disabled on your account.")}</p> : null}
           </>
         ) : null}
         {listing.bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
@@ -317,13 +325,30 @@ export default async function ListingPage({
         ) : null}
         {!viewer ? <p className="text-sm"><Link className="text-link" href={`/login?next=/listing/${id}`}>{tx(locale, "登入後先可以購買、出價、收藏或傳訊息。", "Log in to buy, bid, favorite, or message.")}</Link></p> : null}
       </aside>
-      {showCart ? (
+      {!owner && live ? (
+        <BuyDock
+          watchId="purchase"
+          label={showCart ? tx(locale, "直購價", "Buy now") : tx(locale, "目前出價", "Current bid")}
+          price={showCart ? formatHkd(listing.price ?? 0, locale) : formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}
+          note={
+            <>
+              {showCart ? <span>{tx(locale, "目前", "Bid")} {formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)} · </span> : null}
+              <Countdown endsAt={listing.auctionEndsAt!.toISOString()} locale={locale} />
+            </>
+          }
+        >
+          {showBid ? (
+            <button form="bid-form" className="btn btn-primary shrink-0 px-4">{tx(locale, "出價", "Place bid")}</button>
+          ) : !viewer ? (
+            <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-4">{tx(locale, "登入出價", "Log in to bid")}</Link>
+          ) : null}
+          {showCart ? (
+            <button form="cart-form" className={`btn shrink-0 px-4 ${showBid || !viewer ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "加入購物車", "Add to cart")}</button>
+          ) : null}
+        </BuyDock>
+      ) : showCart ? (
         <BuyDock watchId="purchase" label={tx(locale, "直購價", "Buy now")} price={dockPrice}>
           <button form="cart-form" className="btn btn-primary shrink-0">{tx(locale, "加入購物車", "Add to cart")}</button>
-        </BuyDock>
-      ) : showBid ? (
-        <BuyDock watchId="purchase" label={tx(locale, "目前出價", "Current bid")} price={formatHkd(listing.currentBid ?? listing.startPrice ?? 0, locale)}>
-          <button form="bid-form" className="btn btn-primary shrink-0">{tx(locale, "出價", "Place bid")}</button>
         </BuyDock>
       ) : null}
       {similar.length ? (

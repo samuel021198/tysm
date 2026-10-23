@@ -21,6 +21,8 @@
   --field-border-hover: #6e5564;
   --field-placeholder: #6a5a64;
   --field-focus: #1a6474;
+  --tab-h: calc(4.25rem + env(safe-area-inset-bottom));
+  --header-h: calc(3.5rem + env(safe-area-inset-top));
 }
 
 .dark {
@@ -44,8 +46,16 @@
   --field-focus: #8ed0de;
 }
 
+@media (min-width: 768px) {
+  :root {
+    --tab-h: 0px;
+    --header-h: calc(4rem + env(safe-area-inset-top));
+  }
+}
+
 html {
   touch-action: manipulation;
+  scroll-padding-top: calc(var(--header-h) + 2px);
 }
 
 body {
@@ -57,13 +67,20 @@ body {
   color: var(--ink);
   font-family: var(--font-sans), "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   line-height: 1.55;
-  padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+  padding-bottom: var(--tab-h);
 }
 
-@media (min-width: 768px) {
-  body {
-    padding-bottom: 0;
-  }
+h1,
+h2,
+.page-title,
+.surface,
+.field {
+  scroll-margin-top: calc(var(--header-h) + 0.75rem);
+}
+
+.site-header {
+  background-color: var(--bg);
+  background-image: none;
 }
 
 ::selection {
@@ -193,9 +210,9 @@ svg {
 }
 
 .btn-primary {
-  background-image: linear-gradient(105deg, #c498b2 0%, #d9b4c6 42%, #7cb9c8 100%);
+  background-image: linear-gradient(105deg, #c498b2 0%, #a87590 46%, #3a8fa4 100%);
   color: #1b1418;
-  box-shadow: 0 10px 22px rgba(124, 185, 200, 0.34);
+  box-shadow: 0 10px 22px rgba(58, 143, 164, 0.34);
 }
 
 .sell-cta {
@@ -218,8 +235,19 @@ svg {
 }
 
 .btn-ghost {
-  background: var(--soft);
-  color: var(--ink);
+  background: #fffdfb;
+  color: #1b1418;
+  box-shadow: inset 0 0 0 2px #5c3a4a;
+}
+
+.dark .btn-ghost {
+  background: #2a2226;
+  color: #fff8f4;
+  box-shadow: inset 0 0 0 2px #f0d0dc;
+}
+
+.btn-ghost.text-danger {
+  color: var(--danger);
 }
 
 .price {

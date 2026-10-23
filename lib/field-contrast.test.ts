@@ -46,4 +46,31 @@ for (const [name, selector] of [["light", ":root"], ["dark", ".dark"]] as const)
   assert(fill !== token["--soft"], `${name} fill is not --soft`);
 }
 
+function block(start: string, end: string) {
+  const at = css.indexOf(start);
+  assert(at >= 0, start);
+  return css.slice(at, css.indexOf(end, at));
+}
+
+const primary = block(".btn-primary {", ".sell-cta");
+const primaryText = primary.match(/color:\s*(#[0-9a-fA-F]{6})/)?.[1].toLowerCase();
+assert(primaryText, "primary text color");
+for (const stop of new Set([...primary.matchAll(/#[0-9a-fA-F]{6}/g)].map((match) => match[0].toLowerCase()))) {
+  if (stop === primaryText) continue;
+  assert(contrast(primaryText, stop) >= 4.5, `primary text on ${stop} is ${contrast(primaryText, stop).toFixed(2)}`);
+}
+
+for (const [name, start, end] of [
+  ["ghost", ".btn-ghost {", ".dark .btn-ghost"],
+  ["dark ghost", ".dark .btn-ghost {", ".btn-ghost.text-danger"],
+] as const) {
+  const rule = block(start, end);
+  const text = rule.match(/color:\s*(#[0-9a-fA-F]{6})/)?.[1].toLowerCase();
+  const fill = rule.match(/background:\s*(#[0-9a-fA-F]{6})/)?.[1].toLowerCase();
+  const edge = rule.match(/2px (#[0-9a-fA-F]{6})/)?.[1].toLowerCase();
+  assert(text && fill && edge, name);
+  assert(contrast(text, fill) >= 4.5, `${name} text`);
+  assert(contrast(edge, fill) >= 3, `${name} edge`);
+}
+
 console.log("field contrast ok");
