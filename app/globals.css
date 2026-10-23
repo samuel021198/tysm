@@ -282,15 +282,14 @@ svg {
   display: flex;
   gap: 0.5rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 1.25rem;
-  padding: 0.15rem 2.25rem 0.35rem 0.75rem;
+  scroll-snap-type: x proximity;
+  padding: 0.15rem 0.15rem 0.35rem;
   scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 0.7rem, #000 calc(100% - 2rem), transparent);
-  mask-image: linear-gradient(to right, transparent, #000 0.7rem, #000 calc(100% - 2rem), transparent);
 }
 
 .chips > * {
+  flex: none;
+  white-space: nowrap;
   scroll-snap-align: start;
 }
 

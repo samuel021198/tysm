@@ -6,7 +6,7 @@ import { tx } from "@/lib/i18n";
 import { isBlocked } from "@/lib/social";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
-import { sendMessage } from "@/actions/social";
+import { MessageComposer } from "@/components/message-composer";
 
 export default async function ThreadPage({
   params,
@@ -47,16 +47,7 @@ export default async function ThreadPage({
           );
         })}
       </ol>
-      <form
-        action={sendMessage}
-        className="sticky z-20 grid gap-2 rounded-[1.25rem] bg-card/95 p-3 shadow-card backdrop-blur md:static"
-        style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom))" }}
-      >
-        <input type="hidden" name="threadId" value={id} />
-        <textarea className="field min-h-12" name="body" required placeholder={tx(prefs.locale, "訊息", "Message")} rows={2} />
-        <input className="field" name="imageUrl" placeholder={tx(prefs.locale, "圖片網址（可選）", "Image URL (optional)")} />
-        <button className="btn btn-primary w-full">{tx(prefs.locale, "送出", "Send")}</button>
-      </form>
+      <MessageComposer locale={prefs.locale} threadId={id} />
     </div>
   );
 }

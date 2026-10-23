@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="月亮伊布 Umbreon">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
-  <rect x="48" y="48" width="704" height="620" rx="22" fill="#e07a3d"/>
-  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
-  <text x="400" y="470" text-anchor="middle" fill="#1b1418" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">月</text>
-  <path d="M400 196 L436 292 H538 L456 352 L488 450 L400 392 L312 450 L344 352 L262 292 H364 Z" fill="#1b1418"/>
-  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
-  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">月亮伊布</text>
-  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Umbreon</text>
-  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">漆黑高斯 · Raw C</text>
-  <defs>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffe0c2" stop-opacity="0.42"/>
-      <stop offset="0.55" stop-color="#e07a3d" stop-opacity="0"/>
-      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
-    </linearGradient>
-  </defs>
+  <g>
+    <rect x="36" y="28" width="728" height="944" rx="36" fill="#7a3412"/>
+    <rect x="54" y="46" width="692" height="908" rx="28" fill="#e07a3d"/>
+    <rect x="74" y="66" width="652" height="78" rx="16" fill="#fffaf6"/>
+    <text x="96" y="118" fill="#1b1418" font-size="40" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">月亮伊布</text>
+    <text x="690" y="116" text-anchor="end" fill="#7a3412" font-size="28" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">HP</text>
+    <rect x="74" y="160" width="652" height="470" rx="18" fill="#f7f1e8"/>
+    <g transform="translate(90,176)">
+      <ellipse cx="250" cy="230" rx="77" ry="64" fill="#7a3412" opacity="0.9"/>
+    <ellipse cx="430" cy="210" rx="102" ry="62" fill="#ffe0c2"/>
+    <path d="M197 120 C148 40, 328 80, 477 150 C228 240, 157 280, 197 120 Z" fill="#7a3412" opacity="0.78"/>
+    <path d="M180 300 Q340 267 520 290" fill="none" stroke="#fffaf6" stroke-width="14"/>
+    <circle cx="300" cy="210" r="16" fill="#fffaf6"/>
+    <circle cx="430" cy="188" r="12" fill="#1b1418"/>
+    <path d="M220 340 L280 390 L210 400 Z M430 330 L500 390 L410 410 Z" fill="#7a3412"/>
+    </g>
+    <rect x="74" y="648" width="652" height="168" rx="16" fill="#fffaf6"/>
+    <text x="96" y="704" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">Umbreon</text>
+    <text x="96" y="748" fill="#7a3412" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">漆黑高斯 · Raw C</text>
+    <text x="96" y="790" fill="#1b1418" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif">RR</text>
+    <text x="96" y="868" fill="#1b1418" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif">049/185</text>
+    <text x="690" y="868" text-anchor="end" fill="#7a3412" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">TYSM</text>
+  </g>
 </svg>

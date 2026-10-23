@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="艾斯 背面">
+  <rect width="800" height="1000" fill="#f7f1e8"/>
+  <rect x="36" y="28" width="728" height="944" rx="36" fill="#4c1012"/>
+  <rect x="68" y="60" width="664" height="880" rx="24" fill="#fffaf6"/>
+  <rect x="120" y="180" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="212" y="180" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="304" y="180" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="396" y="180" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="488" y="180" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="580" y="180" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="120" y="258" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="212" y="258" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="304" y="258" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="396" y="258" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="488" y="258" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="580" y="258" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="120" y="336" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="212" y="336" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="304" y="336" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="396" y="336" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="488" y="336" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="580" y="336" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="120" y="414" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="212" y="414" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="304" y="414" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="396" y="414" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="488" y="414" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="580" y="414" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="120" y="492" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="212" y="492" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="304" y="492" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="396" y="492" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="488" y="492" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="580" y="492" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="120" y="570" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="212" y="570" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="304" y="570" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="396" y="570" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="488" y="570" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="580" y="570" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="120" y="648" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="212" y="648" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="304" y="648" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="396" y="648" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="488" y="648" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="580" y="648" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="120" y="726" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="212" y="726" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="304" y="726" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="396" y="726" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <rect x="488" y="726" width="70" height="56" rx="8" fill="#9b2226" opacity="0.85"/>
+  <rect x="580" y="726" width="70" height="56" rx="8" fill="#fffaf6" opacity="0.9"/>
+  <circle cx="400" cy="490" r="92" fill="#4c1012"/>
+  <text x="400" y="506" text-anchor="middle" fill="#fffaf6" font-size="42" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">艾</text>
+  <text x="400" y="860" text-anchor="middle" fill="#1b1418" font-size="28" font-family="ui-sans-serif, system-ui, sans-serif">背面 · 頂上決戰 · Raw A</text>
+</svg>

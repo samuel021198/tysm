@@ -3,6 +3,7 @@ import { toggleFavorite } from "@/actions/social";
 import { conditionLabel } from "@/lib/rules";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { Sparkline } from "./sparkline";
 
 type CardListing = {
   id: string;
@@ -29,12 +30,14 @@ export function ListingCard({
   favorited,
   followed,
   next = "/",
+  series,
 }: {
   listing: CardListing;
   locale: Locale;
   favorited: boolean;
   followed: boolean;
   next?: string;
+  series?: number[];
 }) {
   const live =
     listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
@@ -45,7 +48,7 @@ export function ListingCard({
     <article className="surface flex h-full flex-col overflow-hidden">
       <div className="relative">
         <Link href={`/listing/${listing.id}`} className="block">
-          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full object-cover" />
+          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
         </Link>
         <span className="pointer-events-none absolute left-2.5 top-2.5 max-w-[62%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
           {conditionLabel(listing)}
@@ -65,6 +68,12 @@ export function ListingCard({
       <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1.5 px-3 pb-3.5 pt-3">
         <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
         <p className="price text-[1.45rem] leading-none">{formatHkd(amount, locale)}</p>
+        {series && series.length ? (
+          <p className="flex items-center gap-1 text-[11px] text-muted">
+            {series.length >= 2 ? <Sparkline values={series} /> : null}
+            {amount >= series[series.length - 1] ? "↑" : "↓"} {tx(locale, "較上次成交", "vs last sale")} {formatHkd(Math.abs(amount - series[series.length - 1]), locale)}
+          </p>
+        ) : null}
         <p className="mt-auto truncate text-xs leading-4 text-muted">
           {sale}
           {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}

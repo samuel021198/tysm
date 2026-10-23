@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { tx } from "@/lib/i18n";
+import { onTimePercent } from "@/lib/shipping";
 import { isBlocked } from "@/lib/social";
 import { ListingCard } from "@/components/listing-card";
 import { Flash } from "@/components/shell";
@@ -34,7 +35,7 @@ export default async function ShopPage({
     viewer ? prisma.block.findUnique({ where: { blockerId_blockedId: { blockerId: viewer.id, blockedId: seller.id } } }) : null,
     viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : [],
   ]);
-  const onTime = shipped.filter((order) => order.shipBy && order.shippedAt && order.shippedAt <= order.shipBy).length;
+  const onTime = onTimePercent(shipped);
   const rating = reviews.length ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length : null;
   const favIds = new Set(favs.map((row) => row.listingId));
   const locale = prefs.locale;
@@ -50,12 +51,15 @@ export default async function ShopPage({
             {rating != null ? `${tx(locale, "評分", "Rating")} ${rating.toFixed(1)} (${reviews.length})` : tx(locale, "未有評分", "No rating yet")}
             {" · "}
             {tx(locale, "完成訂單", "Completed")} {sales}
-            {shipped.length ? ` · ${tx(locale, "準時寄出", "On-time ship")} ${Math.round((onTime / shipped.length) * 100)}%` : ""}
+            {onTime != null ? ` · ${tx(locale, "準時寄出", "On-time ship")} ${onTime}%` : ""}
           </p>
           {viewer && viewer.id !== seller.id ? (
-            <div className="mt-3 flex flex-wrap gap-3 text-sm">
-              <form action={toggleFollow}><input type="hidden" name="sellerId" value={seller.id} /><button className="underline">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注", "Follow")}</button></form>
-              <form action={toggleBlock}><input type="hidden" name="userId" value={seller.id} /><button className="underline">{blocked ? tx(locale, "解除隱藏", "Unblock") : tx(locale, "互相隱藏", "Block")}</button></form>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
+              <form action={toggleFollow}><input type="hidden" name="sellerId" value={seller.id} /><button className="btn btn-ghost">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注", "Follow")}</button></form>
+              <details>
+                <summary className="cursor-pointer text-muted">{tx(locale, "更多", "More")}</summary>
+                <form action={toggleBlock} className="mt-2"><input type="hidden" name="userId" value={seller.id} /><button className="underline">{blocked ? tx(locale, "解除隱藏", "Unblock") : tx(locale, "隱藏這位賣家", "Hide this seller")}</button></form>
+              </details>
             </div>
           ) : null}
         </div>
@@ -79,12 +83,15 @@ export default async function ShopPage({
         ))}
       </ul>
       {viewer && viewer.id !== seller.id ? (
-        <form action={reportAction} className="mt-6 grid max-w-lg gap-2">
-          <input type="hidden" name="targetType" value="USER" />
-          <input type="hidden" name="targetId" value={seller.id} />
-          <textarea className="field" name="reason" placeholder={tx(locale, "檢舉這位會員", "Report this member")} />
-          <button className="w-fit text-sm underline">{tx(locale, "送出檢舉", "Send report")}</button>
-        </form>
+        <details className="mt-6 max-w-lg text-sm">
+          <summary className="cursor-pointer text-muted">{tx(locale, "檢舉這位會員", "Report this member")}</summary>
+          <form action={reportAction} className="mt-2 grid gap-2">
+            <input type="hidden" name="targetType" value="USER" />
+            <input type="hidden" name="targetId" value={seller.id} />
+            <textarea className="field" name="reason" placeholder={tx(locale, "原因", "Reason")} />
+            <button className="w-fit underline">{tx(locale, "送出檢舉", "Send report")}</button>
+          </form>
+        </details>
       ) : null}
       <p className="mt-6 text-sm"><Link href="/">{tx(locale, "返回動態", "Back to feed")}</Link></p>
     </div>

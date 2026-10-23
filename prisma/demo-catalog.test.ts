@@ -63,11 +63,17 @@ for (const item of active) {
   assert(/\p{Script=Han}/u.test(item.title), `${item.id} title needs Chinese`);
   assert(/[A-Za-z]/.test(item.title) && /[A-Za-z]/.test(item.description), `${item.id} needs English`);
   assert(item.photos[0]?.url === `/demo/cards/${item.id}.svg`, `${item.id} front art`);
+  assert(item.photos[1]?.url === `/demo/cards/${item.id}-back.svg`, `${item.id} back art`);
+  assert(item.photos[0].url !== item.photos[1].url, `${item.id} front and back differ`);
   const svgPath = new URL(`../public/demo/cards/${item.id}.svg`, import.meta.url);
-  assert(existsSync(svgPath), `${item.id} svg missing`);
+  const backPath = new URL(`../public/demo/cards/${item.id}-back.svg`, import.meta.url);
+  assert(existsSync(svgPath) && existsSync(backPath), `${item.id} svg missing`);
   const svg = readFileSync(svgPath, "utf8");
+  const backSvg = readFileSync(backPath, "utf8");
   assert(svg.includes(item.zh) && svg.includes("#f7f1e8"), `${item.id} svg should render a card, not a black box`);
-  assert(!svg.includes('fill="#000000"'), `${item.id} svg uses black fill`);
+  assert(!svg.includes('fill="#000000"') && !backSvg.includes('fill="#000000"'), `${item.id} svg uses black fill`);
+  assert(svg !== backSvg && backSvg.includes("背面"), `${item.id} back should not copy the front`);
+  if (item.conditionTrack === "GRADED") assert(svg.includes("TYSM SLAB"), `${item.id} graded card should sit in a slab`);
   if (item.saleType !== "BUY_NOW") {
     assert(item.auctionHours != null && item.auctionHours > 0 && item.bids.length >= 2, `${item.id} live bids`);
     const resolved = resolveAuction(

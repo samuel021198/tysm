@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd } from "@/lib/format";
-import { tx } from "@/lib/i18n";
+import { offerStatusLabel, orderStatusLabel, tx } from "@/lib/i18n";
 import { resolveAuction } from "@/lib/rules";
 
 export default async function BidsPage() {
@@ -53,14 +53,14 @@ export default async function BidsPage() {
         <h2 className="mb-3 text-xl font-semibold">{tx(locale, "贏得", "Won")}</h2>
         {won.length === 0 ? <p>{tx(locale, "未有得標訂單。", "No auction wins.")}</p> : null}
         {won.map((order) => (
-          <p key={order.id}><Link href={`/orders/${order.id}`}>{order.items[0]?.title}</Link> · {formatHkd(order.total, locale)} · {order.status}</p>
+          <p key={order.id}><Link href={`/orders/${order.id}`}>{order.items[0]?.title}</Link> · {formatHkd(order.total, locale)} · {orderStatusLabel(locale, order.status)}</p>
         ))}
       </section>
       <section>
         <h2 className="mb-3 text-xl font-semibold">{tx(locale, "我的議價", "My offers")}</h2>
         {offers.length === 0 ? <p>{tx(locale, "未有議價。", "No offers.")}</p> : null}
         {offers.map((offer) => (
-          <p key={offer.id}><Link href={`/listing/${offer.listingId}`}>{offer.listing.title}</Link> · {formatHkd(offer.amount, locale)} · {offer.status} · {offer.round}/3</p>
+          <p key={offer.id}><Link href={`/listing/${offer.listingId}`}>{offer.listing.title}</Link> · {formatHkd(offer.amount, locale)} · {offerStatusLabel(locale, offer.status)} · {tx(locale, "第", "Round")} {offer.round}/3</p>
         ))}
       </section>
     </div>

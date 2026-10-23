@@ -218,6 +218,8 @@ model Listing {
   quantityAvailable Int            @default(1)
   shippingFee       Int            @default(0)
   shippingDays      Int            @default(3)
+  shipLockerFee     Int            @default(0)
+  shipMeetFee       Int            @default(0)
   price             Int?
   offersEnabled     Boolean        @default(false)
   minOffer          Int?
@@ -230,6 +232,8 @@ model Listing {
   auctionSettled    Boolean        @default(false)
   binLockOrderId    String?        @unique
   cardKind          CardKind
+  cardNumber        String?
+  rarity            String?
   game              String?
   setName           String?
   cardName          String?
@@ -349,6 +353,10 @@ model Order {
   sellerProceeds     Int
   paymentOutcome     PaymentOutcome  @default(NONE)
   shipDays           Int
+  shippingMethod     String?
+  courierName        String?
+  trackingNumber     String?
+  paymentBrand       String?
   payBy              DateTime?
   paidAt             DateTime?
   shipBy             DateTime?

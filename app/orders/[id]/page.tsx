@@ -8,6 +8,8 @@ import { orderStatusLabel, tx } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { appealAction, cancelOrderAction, confirmAction, disputeAction, payAction, shipAction } from "@/actions/trade";
+import { PayActions } from "@/components/pay-actions";
+import { shipMethodLabel } from "@/lib/shipping";
 import { replyReviewAction, reviewAction } from "@/actions/social";
 
 export default async function OrderPage({
@@ -55,7 +57,14 @@ export default async function OrderPage({
           </li>
         ))}
       </ul>
-      <p>{tx(locale, "合計", "Total")} {formatHkd(order.total, locale)}</p>
+      <p>{tx(locale, "貨品", "Items")} {formatHkd(order.subtotal, locale)} · {shipMethodLabel(order.shippingMethod || "SF", locale)} {formatHkd(order.shippingTotal, locale)}</p>
+      <p className="price text-2xl">{tx(locale, "合計", "Total")} {formatHkd(order.total, locale)}</p>
+      {order.trackingNumber || order.courierName ? (
+        <p className="text-sm">
+          {order.courierName || shipMethodLabel(order.shippingMethod || "SF", locale)}
+          {order.trackingNumber ? ` · ${tx(locale, "運單", "Tracking")} ${order.trackingNumber}` : ""}
+        </p>
+      ) : null}
       {seller || viewer.role === "ADMIN" ? (
         <p className="text-sm">
           {tx(locale, "佣金", "Commission")} {bpsToPercentLabel(order.commissionBps)}% · {formatHkd(order.commissionAmount, locale)} · {tx(locale, "賣家實收", "Seller receives")} {formatHkd(order.sellerProceeds, locale)}
@@ -81,13 +90,8 @@ export default async function OrderPage({
           <button className="btn btn-primary w-fit">{tx(locale, "儲存地址", "Save address")}</button>
         </form>
       ) : null}
-      {buyer && order.status === "PENDING_PAYMENT" ? (
-        <form action={payAction} className="flex flex-wrap gap-2">
-          <input type="hidden" name="orderId" value={order.id} />
-          <button className="btn btn-primary" name="outcome" value="success">{tx(locale, "模擬付款成功", "Mock pay success")}</button>
-          <button className="btn-ghost btn" name="outcome" value="fail">{tx(locale, "模擬失敗", "Mock fail")}</button>
-          <button className="btn-ghost btn" name="outcome" value="dispute">{tx(locale, "模擬爭議", "Mock dispute")}</button>
-        </form>
+      {buyer && order.status === "PENDING_PAYMENT" && snap?.line1 ? (
+        <PayActions locale={locale} orderId={order.id} />
       ) : null}
       {buyer && order.status === "PENDING_PAYMENT" ? (
         <form action={cancelOrderAction}>
@@ -102,9 +106,21 @@ export default async function OrderPage({
         </form>
       ) : null}
       {seller && order.status === "AWAITING_SHIP" ? (
-        <form action={shipAction}>
+        <form action={shipAction} className="grid max-w-lg gap-2">
           <input type="hidden" name="orderId" value={order.id} />
-          <button className="btn btn-primary" name="step" value="ship">{tx(locale, "標記已寄出", "Mark shipped")}</button>
+          <label className="grid gap-1 text-sm">
+            {tx(locale, "快遞", "Courier")}
+            <select className="field" name="courier" defaultValue={order.courierName || shipMethodLabel(order.shippingMethod || "SF", "zh-HK")}>
+              <option>順豐速運</option>
+              <option>順豐智能櫃</option>
+              <option>面交</option>
+            </select>
+          </label>
+          <label className="grid gap-1 text-sm">
+            {tx(locale, "運單號碼", "Tracking number")}
+            <input className="field" name="tracking" placeholder={order.shippingMethod === "MEET" ? tx(locale, "面交可留空", "Optional for meet-up") : "SF12345678HK"} />
+          </label>
+          <button className="btn btn-primary w-fit" name="step" value="ship">{tx(locale, "確認寄出", "Confirm shipment")}</button>
         </form>
       ) : null}
       {buyer && order.status === "SHIPPED" ? (
