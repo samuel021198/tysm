@@ -46,6 +46,7 @@ export function Header({
           </div>
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
             <Link className="hover:text-ink" href="/market">{nav.search}</Link>
+            <Link className="hover:text-ink" href="/dex">{nav.dex}</Link>
             <AddSheet locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>

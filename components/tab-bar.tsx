@@ -12,10 +12,10 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   const tabs = [
     { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
     {
-      href: "/market",
-      label: tx(locale, "賣場", "Market"),
-      icon: "search" as const,
-      on: pathname.startsWith("/market") || pathname.startsWith("/search") || pathname.startsWith("/listing"),
+      href: "/dex",
+      label: tx(locale, "圖鑑", "Dex"),
+      icon: "book" as const,
+      on: pathname === "/dex" || pathname.startsWith("/dex/"),
     },
     { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
     {
@@ -47,7 +47,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   );
 }
 
-function Tab({ href, label, icon, on }: { href: string; label: string; icon: "home" | "search" | "messages" | "me"; on: boolean }) {
+function Tab({ href, label, icon, on }: { href: string; label: string; icon: "home" | "book" | "messages" | "me"; on: boolean }) {
   return (
     <li className="h-full">
       <Link

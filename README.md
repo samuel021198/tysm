@@ -76,9 +76,35 @@ npm run dev
 | `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料時必須 | 保護 `POST /api/internal/reseed`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料或同步圖鑑時必須 | 保護 `POST /api/internal/reseed` 同 `POST /api/internal/ingest-dex`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。未設定時圖鑑用 TCGdex 圖片網址，不把圖檔寫入 Postgres。 |
+| `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
+| `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
+| `R2_BUCKET` | 否 | R2 bucket 名稱。 |
+| `R2_PUBLIC_BASE_URL` | 否 | 公開讀取網址，https，不要結尾斜線。例如 `https://cards.example.com`。 |
 
 不要提交 `.env`。
+
+## 圖鑑
+
+底欄第二個分頁係圖鑑（`/dex`），唔再係賣場。賣場仍然係 `/market`，卡牌頁「放售」的「睇全部放售」會去現有搜尋。
+
+圖鑑只收寶可夢，日文同英文名、卡圖、系列同卡號。可以按卡名（中、日、英）或卡號搜。卡牌頁有「資料」同「放售」（連住現有刊登），以及「加入收藏」。v1 沒有價錢走勢或背景故事。
+
+目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會攞每個語言最近、有卡圖、可以放得落預算入面的 1–2 個實體系列（每個語言大約 250 張，合計約 500 張），日文同英文名、卡圖、系列同卡號。未有圖的系列會跳過。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則暫時用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
+
+```bash
+npm run dex:ingest
+```
+
+正式環境可以用同一條 bearer：
+
+```bash
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+```
+
+沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。這條路由有時間上限，未鏡像完的圖會留低 TCGdex 網址；再打一次會補上傳。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
 
 ## 部署到 Vercel + Postgres
 

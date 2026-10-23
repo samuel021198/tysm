@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { linkCatalogListings } from "./dex-link";
 import { conditionLabel, resolveAuction } from "./rules";
 import { buildFulfillment, courierFor, mockTracking } from "./shipping";
 import {
@@ -735,6 +736,7 @@ export async function seedDemo() {
     await prisma.listing.update({ where: { id }, data: { favoriteCount: favMap.get(id) ?? 0 } });
   }
 
+  const catalogLinks = await linkCatalogListings();
   const active = demoListings.filter((item) => item.status === "ACTIVE");
   const byCategory: Record<string, number> = {};
   for (const item of active) byCategory[item.categoryId] = (byCategory[item.categoryId] ?? 0) + 1;
@@ -764,5 +766,7 @@ export async function seedDemo() {
     stories: 5,
     byCategory,
     clearedAuctionOrders: stray.length,
+    catalogLinkedListings: catalogLinks.listings,
+    catalogLinkedCollection: catalogLinks.collectionItems,
   };
 }

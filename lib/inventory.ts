@@ -22,6 +22,7 @@ export async function syncListingInventory(listingId: string, opts?: { visibilit
     rawGrade: listing.rawGrade,
     grader: listing.grader,
     gradeValue: listing.gradeValue,
+    catalogCardId: listing.catalogCardId,
   };
   const item = existing
     ? await prisma.collectionItem.update({
@@ -74,12 +75,15 @@ export async function createCollectionItem(input: {
   gradeValue: number | null;
   photos: { url: string; role: "FRONT" | "BACK" | "GALLERY" }[];
   publishToFeed: boolean;
+  catalogCardId?: string | null;
+  cardName?: string | null;
 }) {
   const item = await prisma.collectionItem.create({
     data: {
       ownerId: input.ownerId,
       title: input.title,
-      cardName: input.title,
+      cardName: input.cardName || input.title,
+      catalogCardId: input.catalogCardId ?? null,
       note: input.note,
       visibility: input.visibility,
       conditionTrack: input.conditionTrack,
