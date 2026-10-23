@@ -55,6 +55,8 @@ const ERR: Record<string, [string, string]> = {
   review: ["而家不能評價", "A review is not available"],
   csv: ["CSV 有錯誤，整批都未匯入", "The CSV has errors. Nothing was imported"],
   empty: ["沒有可匯入的資料列", "The CSV has no data rows"],
+  post: ["寫幾隻字或者加一張相", "Add a few words or a photo"],
+  comment: ["留言要 1–300 字", "Comment must be 1–300 characters"],
   payfail: ["模擬付款失敗，訂單仍是待付款", "Mock payment failed. The order is still awaiting payment"],
 };
 
@@ -67,15 +69,15 @@ export function errText(locale: Locale, code: string): string {
 export function navLabels(locale: Locale) {
   const en = locale === "en";
   return {
-    search: en ? "Search" : "搜尋",
-    sell: en ? "Sell" : "上架",
+    search: en ? "Market" : "賣場",
+    sell: en ? "Add" : "新增",
     cart: en ? "Cart" : "購物車",
     orders: en ? "Orders" : "訂單",
-    messages: en ? "Messages" : "訊息",
+    messages: en ? "Chat" : "聊天",
     login: en ? "Log in" : "登入",
     logout: en ? "Log out" : "登出",
     admin: en ? "Admin" : "管理",
-    profile: en ? "Account" : "帳戶",
+    profile: en ? "Profile" : "個人",
     favorites: en ? "Favorites" : "收藏",
     bids: en ? "Bids" : "出價",
     notifications: en ? "Notifications" : "通知",

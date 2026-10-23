@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
@@ -27,6 +28,11 @@ export default async function SellPage() {
         <h1 className="page-title mb-0">{tx(prefs.locale, "上架卡牌", "List a card")}</h1>
         <a className="text-sm text-link" href="/sell/bulk">{tx(prefs.locale, "CSV 批量", "CSV upload")}</a>
       </div>
+      <p className="mb-4 text-sm text-muted">
+        {tx(prefs.locale, "想快手直購，用", "For a quick Buy It Now, use ")}
+        <Link className="text-link" href="/add">{tx(prefs.locale, "加入收藏", "Add to collection")}</Link>
+        {tx(prefs.locale, "嘅放賣。呢頁係進階上架：拍賣、面交、店舖自取。", ". This page is the advanced form: auctions, meet-up, and store pickup.")}
+      </p>
       <SellForm
         locale={prefs.locale}
         percent={bpsToPercentLabel(bps)}

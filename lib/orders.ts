@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
+import { syncListingInventory } from "./inventory";
 import { notify } from "./social";
 import {
   AUTO_RELEASE_MS,
@@ -689,10 +690,15 @@ export async function settleAuction(listingId: string) {
 
 export async function sweep() {
   const now = new Date();
+  const scheduled = await prisma.listing.findMany({
+    where: { status: "SCHEDULED", publishAt: { lte: now } },
+    select: { id: true },
+  });
   await prisma.listing.updateMany({
     where: { status: "SCHEDULED", publishAt: { lte: now } },
     data: { status: "ACTIVE", publishedAt: now },
   });
+  for (const row of scheduled) await syncListingInventory(row.id);
   await prisma.offer.updateMany({
     where: { status: { in: ["PENDING", "COUNTERED"] }, expiresAt: { lt: now } },
     data: { status: "EXPIRED" },
