@@ -35,7 +35,8 @@ export async function saveListingAction(_prev: { error?: string } | null, formDa
   if (!result.ok) return { error: result.error };
   revalidatePath("/");
   revalidatePath(`/listing/${result.id}`);
-  redirect(`/listing/${result.id}?ok=saved`);
+  const ok = input.intent === "draft" ? "draft" : input.intent === "schedule" ? "scheduled" : "published";
+  redirect(`/listing/${result.id}?ok=${ok}`);
 }
 
 export async function unlistAction(formData: FormData) {

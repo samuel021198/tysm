@@ -1,14 +1,16 @@
 "use client";
 
-import { useActionState, useMemo, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useActionState, useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type FormEvent, type ReactNode, type RefObject, type SetStateAction } from "react";
 import { useFormStatus } from "react-dom";
 import { saveListingAction } from "@/actions/trade";
 import { hkPartsToInput } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
+import { parseListingForm, wizardPanels, wizardPublishIssues, wizardStepForIssue, wizardStepIssues, type ListingInput } from "@/lib/sell-wizard";
 import { fileToDataUrl } from "./photo-file";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
+type BlockKind = "next" | "draft" | "publish";
 
 export type SellInitial = {
   listingId?: string;
@@ -91,6 +93,10 @@ function mergePhotos(current: Photo[], incoming: Photo[]) {
   return next;
 }
 
+function filledCount(photos: Photo[]) {
+  return photos.filter((photo) => photo.url).length;
+}
+
 export function SellForm({
   locale,
   categories,
@@ -105,22 +111,73 @@ export function SellForm({
   hints?: { title: string; price: string }[];
 }) {
   const [state, action] = useActionState(saveListingAction, null);
-  const [step, setStep] = useState(0);
+  const editing = Boolean(initial?.listingId);
+  const [step, setStep] = useState(editing ? 4 : 0);
+  const [maxReached, setMaxReached] = useState(editing ? 4 : 0);
   const [categoryId, setCategoryId] = useState(initial?.categoryId || categories[0]?.id || "");
   const [saleType, setSaleType] = useState(initial?.saleType || "BUY_NOW");
   const [track, setTrack] = useState(initial?.conditionTrack || "RAW");
+  const [rawGrade, setRawGrade] = useState(initial?.rawGrade || "A");
+  const [grader, setGrader] = useState(initial?.grader || "PSA");
+  const [gradeScore, setGradeScore] = useState(initial?.gradeScore || "");
   const [offers, setOffers] = useState(initial?.offersEnabled || false);
   const [price, setPrice] = useState(initial?.price || "");
+  const [startPrice, setStartPrice] = useState(initial?.startPrice || "");
+  const [minOffer, setMinOffer] = useState(initial?.minOffer || "");
+  const [quantity, setQuantity] = useState(String(initial?.quantity || 1));
+  const [shipFee, setShipFee] = useState(initial?.shippingFee ?? "20");
+  const [lockerFee, setLockerFee] = useState(initial?.shipLockerFee ?? "12");
+  const [meetFee, setMeetFee] = useState(initial?.shipMeetFee ?? "0");
+  const [shipDays, setShipDays] = useState(String(initial?.shippingDays ?? 2));
+  const [publishAt, setPublishAt] = useState(initial?.publishAt || "");
   const [photos, setPhotos] = useState<Photo[]>(initial?.photos?.length ? initial.photos : [
     { url: "", role: "FRONT" },
     { url: "", role: "BACK" },
   ]);
   const [photoNote, setPhotoNote] = useState("");
   const [preview, setPreview] = useState<Record<string, string>>({});
+  const [block, setBlock] = useState<string[]>([]);
+  const [blockKind, setBlockKind] = useState<BlockKind>("next");
+  const [note, setNote] = useState("");
+  const [openToken, setOpenToken] = useState({ photo: 0, more: 0, price: 0, ship: 0, schedule: 0 });
+  const moreOpen = Boolean(initial?.cardNumber || initial?.rarity || initial?.videoUrl || initial?.certNumber);
+  const priceOpen = Boolean(initial?.offersEnabled || (initial && initial.quantity > 1));
+  const scheduleOpen = Boolean(initial?.publishAt);
   const fileRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const alertRef = useRef<HTMLDivElement>(null);
   const group = categories.find((cat) => cat.id === categoryId)?.groupKey || "tcg";
   const locked = initial?.locked || false;
+  const scheduling = Boolean(publishAt.trim());
+  const onPublishAt = useCallback((value: string) => setPublishAt(value), []);
+
+  const shown = block;
+  const shownKind: BlockKind = blockKind;
+
+  useEffect(() => {
+    if (!block.length) return;
+    alertRef.current?.focus();
+  }, [block]);
+
+  useEffect(() => {
+    if (!state?.error) return;
+    const code = state.error;
+    bumpOpen(wizardPanels([code]));
+    const at = earliestStep([code]);
+    if (at != null) {
+      setStep(at);
+      setMaxReached((reached) => Math.max(reached, at));
+    }
+    setNote("");
+    setBlockKind("publish");
+    setBlock([code]);
+  }, [state]);
+
+  useEffect(() => {
+    if (step !== 4 || !formRef.current) return;
+    setPreview(snapshot(formRef.current));
+  }, [step]);
+
   async function onFiles(list: FileList | null) {
     if (!list?.length) return;
     const urls: string[] = [];
@@ -153,47 +210,167 @@ export function SellForm({
         ? tx(locale, `直購或拍賣成交後按 ${percent}% 計佣。以直購價估算約 HK$${fee}，運費不計佣。`, `Commission is ${percent}% of the sale price. About HK$${fee} on this Buy It Now price. Shipping is excluded.`)
         : tx(locale, `按目前佣金 ${percent}% 估計，直購價佣金約 HK$${fee}（由賣家貨款扣除，運費不計佣）。`, `At ${percent}% commission, about HK$${fee} would be deducted from the item price. Shipping is not commissioned.`);
 
-  function go(next: number) {
-    if (next === 4 && formRef.current) {
-      const data = new FormData(formRef.current);
-      const snap: Record<string, string> = {};
-      data.forEach((value, key) => {
-        if (typeof value === "string") snap[key] = value;
-      });
-      setPreview(snap);
-    }
-    setStep(Math.max(0, Math.min(4, next)));
+  function readInput(intent: ListingInput["intent"]) {
+    const form = formRef.current;
+    if (!form) return null;
+    const data = new FormData(form);
+    data.set("intent", intent);
+    data.set("photos", JSON.stringify(photos));
+    const input = parseListingForm(data);
+    if (!input) return null;
+    const selected = String(data.get("categoryId") || "");
+    const groupKey = categories.find((cat) => cat.id === selected)?.groupKey || "tcg";
+    return { input, groupKey };
   }
 
+  function bumpOpen(panels: ReturnType<typeof wizardPanels>) {
+    setOpenToken((current) => ({
+      photo: current.photo + Number(panels.photoExtra),
+      more: current.more + Number(panels.more),
+      price: current.price + Number(panels.priceExtra),
+      ship: current.ship + Number(panels.ship),
+      schedule: current.schedule + Number(panels.schedule),
+    }));
+  }
+
+  function reveal(issues: string[], kind: BlockKind) {
+    bumpOpen(wizardPanels(issues));
+    const at = earliestStep(issues);
+    if (at != null) {
+      setStep(at);
+      setMaxReached((reached) => Math.max(reached, at));
+    }
+    setNote("");
+    setBlockKind(kind);
+    setBlock(issues);
+  }
+
+  function go(next: number) {
+    const dest = Math.max(0, Math.min(4, next));
+    if (dest === step) return;
+    if (dest > step) {
+      const read = readInput("publish");
+      if (!read) {
+        reveal(["category"], "next");
+        return;
+      }
+      const issues = [...new Set(Array.from({ length: dest - step }, (_, offset) => wizardStepIssues(step + offset, read.input, read.groupKey)).flat())];
+      if (issues.length) {
+        reveal(issues, "next");
+        return;
+      }
+    }
+    const [zh, en] = STEPS[dest];
+    setNote(tx(locale, `已去到第 ${dest + 1} 步「${zh}」。未刊登。`, `Now on step ${dest + 1}, ${en}. Not published.`));
+    setBlock([]);
+    setStep(dest);
+    setMaxReached((reached) => Math.max(reached, dest));
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    if (locked) return;
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    const value = submitter instanceof HTMLButtonElement ? submitter.value : "publish";
+    const intent: ListingInput["intent"] = value === "draft" || value === "schedule" ? value : "publish";
+    const read = readInput(intent);
+    if (!read) {
+      event.preventDefault();
+      reveal(["category"], intent === "draft" ? "draft" : "publish");
+      return;
+    }
+    const issues = wizardPublishIssues(read.input, read.groupKey);
+    if (issues.length) {
+      event.preventDefault();
+      reveal(issues, intent === "draft" ? "draft" : "publish");
+    }
+  }
+
+  function onSale(value: string) {
+    setSaleType(value);
+    if (value !== "BUY_NOW") setQuantity("1");
+  }
+
+  const stepLabel = tx(locale, STEPS[step][0], STEPS[step][1]);
+  const remaining = STEPS.slice(step + 1).map(([zh, en]) => tx(locale, zh, en));
+  const blockHeading =
+    shownKind === "draft"
+      ? tx(locale, "未可以存草稿，仲未齊：", "Can't save the draft yet. Still missing:")
+      : shownKind === "publish"
+        ? tx(locale, "未可以刊登，仲未齊：", "Can't publish yet. Still missing:")
+        : tx(locale, "未可以去下一步，仲未齊：", "Can't continue yet. Still missing:");
+
   return (
-    <form ref={formRef} action={action} className="grid min-w-0 gap-4">
+    <form ref={formRef} action={action} noValidate onSubmit={onSubmit} className="grid min-w-0 gap-4">
       {initial?.listingId ? <input type="hidden" name="listingId" value={initial.listingId} /> : null}
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
       {locked && initial ? <LockedFields initial={initial} /> : null}
-      {state?.error ? <p className="rounded-xl bg-soft px-3 py-2 text-sm text-danger">{errText(locale, state.error)}</p> : null}
       {locked ? <p className="text-sm text-muted">{tx(locale, "已有出價：只可以改描述同加相片。", "This auction has bids. You can only edit the description and add photos.")}</p> : null}
 
       {!locked ? (
-        <ol className="flex gap-2 overflow-x-auto text-xs">
-          {STEPS.map(([zh, en], index) => (
-            <li key={zh}>
-              <button type="button" className={`whitespace-nowrap rounded-full px-3 py-2 ${index === step ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`} onClick={() => go(index)}>
-                {index + 1}. {tx(locale, zh, en)}
-              </button>
-            </li>
-          ))}
-        </ol>
+        <div className="grid gap-2">
+          <p className="text-sm font-medium">{tx(locale, `第 ${step + 1} 步，共 ${STEPS.length} 步 · ${stepLabel}`, `Step ${step + 1} of ${STEPS.length} · ${stepLabel}`)}</p>
+          <ol className="flex gap-2 overflow-x-auto text-xs" aria-label={tx(locale, "上架步驟", "Listing steps")}>
+            {STEPS.map(([zh, en], index) => (
+              <li key={zh}>
+                <button
+                  type="button"
+                  aria-current={index === step ? "step" : undefined}
+                  disabled={index > maxReached}
+                  className={`whitespace-nowrap rounded-full px-3 py-2 disabled:opacity-40 ${index === step ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}
+                  onClick={() => go(index)}
+                >
+                  {index + 1}. {tx(locale, zh, en)}
+                </button>
+              </li>
+            ))}
+          </ol>
+          <p className="text-sm text-muted">
+            {step < 4
+              ? tx(locale, `尚餘：${remaining.join("、")}。下一步只會去下一步，未會刊登。`, `Still to go: ${remaining.join(", ")}. Next only moves ahead. It does not publish.`)
+              : scheduling
+                ? tx(locale, "最後一步。按「預約刊登」先會排程；而家未會公開。存草稿唔會上架。", "Last step. Schedule sets a time. Nothing is live yet. Save draft does not publish.")
+                : tx(locale, "最後一步。只有「刊登」先會公開。存草稿唔會上架。", "Last step. Only Publish makes this live. Save draft does not publish.")}
+          </p>
+          {note ? <p aria-live="polite" className="text-sm text-ok">{note}</p> : null}
+        </div>
+      ) : null}
+
+      {shown.length ? (
+        <div ref={alertRef} role="alert" tabIndex={-1} className="rounded-xl bg-soft px-3 py-2 text-sm text-danger outline-none">
+          <p className="font-medium">{blockHeading}</p>
+          <ul className="mt-1 list-disc pl-5">
+            {shown.map((code) => (
+              <li key={code}>{errText(locale, code)}</li>
+            ))}
+          </ul>
+        </div>
       ) : null}
 
       <div hidden={!locked && step !== 0} className="grid gap-3">
-        <p className="text-sm">{tx(locale, "相片（最少 2 張，最多 12 張。評級卡要有正面同背面）", "Photos (2–12). Graded cards need front and back.")}</p>
-        <PhotoFields locale={locale} photos={photos} setPhotos={setPhotos} locked={locked} initialCount={initial?.photos.length || 0} fileRef={fileRef} onFiles={onFiles} note={photoNote} />
+        <p className="text-sm">{tx(locale, "先放相。最少 2 張，最多 12 張。評級卡要標明正面同背面。", "Add photos first. 2–12. Graded cards need a front and a back.")}</p>
+        <PhotoFields
+          locale={locale}
+          photos={photos}
+          setPhotos={setPhotos}
+          locked={locked}
+          initialCount={initial?.photos.length || 0}
+          fileRef={fileRef}
+          onFiles={onFiles}
+          note={photoNote}
+          issues={shown}
+          extraSignal={openToken.photo}
+        />
       </div>
 
-      <div hidden={locked || step !== 1} className="grid gap-3">
+      {!locked ? <div hidden={step !== 1} className="grid gap-3">
+        <p className="text-sm text-muted">
+          {group === "tcg"
+            ? tx(locale, "要有標題、描述同品相，再加遊戲、系列、卡名、語言。", "Title, description, condition, plus game, set, card name, and language.")
+            : tx(locale, "要有標題、描述同品相，再加人物、賽季／年份、品牌系列。", "Title, description, condition, plus person, season/year, and brand/series.")}
+        </p>
         <label className="grid gap-1 text-sm">
           {tx(locale, "分類", "Category")}
-          <select className="field" name="categoryId" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+          <select className="field" name="categoryId" value={categoryId} aria-invalid={shown.includes("category")} onChange={(e) => setCategoryId(e.target.value)}>
             {GROUPS.map(([key, zh, en]) => (
               <optgroup key={key} label={tx(locale, zh, en)}>
                 {categories.filter((cat) => cat.groupKey === key).map((cat) => (
@@ -202,109 +379,118 @@ export function SellForm({
               </optgroup>
             ))}
           </select>
+          <FieldError locale={locale} codes={shown} code="category" />
         </label>
         <label className="grid gap-1 text-sm">
           {tx(locale, "標題", "Title")}
-          <input className="field" name="title" minLength={2} maxLength={80} defaultValue={initial?.title} />
+          <input className="field" name="title" minLength={2} maxLength={80} defaultValue={initial?.title} aria-invalid={shown.includes("title")} />
+          <FieldError locale={locale} codes={shown} code="title" />
         </label>
         <label className="grid gap-1 text-sm">
           {tx(locale, "描述（可用 **粗體**、換行、- 清單）", "Description (**bold**, new lines, - lists)")}
-          <textarea className="field min-h-28" name="description" defaultValue={initial?.description} />
+          <textarea className="field min-h-28" name="description" defaultValue={initial?.description} aria-invalid={shown.includes("description")} />
+          <FieldError locale={locale} codes={shown} code="description" />
         </label>
         {group === "tcg" ? (
           <div className="grid gap-3 md:grid-cols-2">
-            <label className="text-sm">{tx(locale, "遊戲", "Game")}<input className="field" name="game" defaultValue={initial?.game} /></label>
-            <label className="text-sm">{tx(locale, "系列", "Set")}<input className="field" name="setName" defaultValue={initial?.setName} /></label>
-            <label className="text-sm">{tx(locale, "卡名", "Card name")}<input className="field" name="cardName" defaultValue={initial?.cardName} /></label>
-            <label className="text-sm">{tx(locale, "卡號", "Card number")}<input className="field" name="cardNumber" defaultValue={initial?.cardNumber} placeholder="020/189" /></label>
-            <label className="text-sm">{tx(locale, "稀有度", "Rarity")}<input className="field" name="rarity" defaultValue={initial?.rarity} placeholder="SR / RR / SEC" /></label>
+            <label className="text-sm">{tx(locale, "遊戲", "Game")}<input className="field" name="game" defaultValue={initial?.game} aria-invalid={shown.includes("tcg")} /></label>
+            <label className="text-sm">{tx(locale, "系列", "Set")}<input className="field" name="setName" defaultValue={initial?.setName} aria-invalid={shown.includes("tcg")} /></label>
+            <label className="text-sm">{tx(locale, "卡名", "Card name")}<input className="field" name="cardName" defaultValue={initial?.cardName} aria-invalid={shown.includes("tcg")} /></label>
             <label className="text-sm">
               {tx(locale, "語言", "Language")}
-              <input className="field" name="language" defaultValue={initial?.language} list="langs" />
+              <input className="field" name="language" defaultValue={initial?.language} list="langs" aria-invalid={shown.includes("tcg")} />
               <datalist id="langs">
                 {["繁體中文", "簡體中文", "英文", "日文", "韓文"].map((lang) => (
                   <option key={lang} value={lang} />
                 ))}
               </datalist>
             </label>
+            <div className="md:col-span-2"><FieldError locale={locale} codes={shown} code="tcg" /></div>
           </div>
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
-            <label className="text-sm">{tx(locale, "人物", "Person")}<input className="field" name="personName" defaultValue={initial?.personName} /></label>
-            <label className="text-sm">{tx(locale, "賽季／年份", "Season / year")}<input className="field" name="seasonYear" defaultValue={initial?.seasonYear} /></label>
-            <label className="text-sm">{tx(locale, "品牌／系列", "Brand / series")}<input className="field" name="brandSeries" defaultValue={initial?.brandSeries} /></label>
-            <label className="text-sm">{tx(locale, "卡號", "Card number")}<input className="field" name="cardNumber" defaultValue={initial?.cardNumber} placeholder="No.23" /></label>
-            <label className="text-sm">{tx(locale, "稀有度", "Rarity")}<input className="field" name="rarity" defaultValue={initial?.rarity} placeholder="BASE / AUTO" /></label>
+            <label className="text-sm">{tx(locale, "人物", "Person")}<input className="field" name="personName" defaultValue={initial?.personName} aria-invalid={shown.includes("person")} /></label>
+            <label className="text-sm">{tx(locale, "賽季／年份", "Season / year")}<input className="field" name="seasonYear" defaultValue={initial?.seasonYear} aria-invalid={shown.includes("person")} /></label>
+            <label className="text-sm">{tx(locale, "品牌／系列", "Brand / series")}<input className="field" name="brandSeries" defaultValue={initial?.brandSeries} aria-invalid={shown.includes("person")} /></label>
+            <div className="md:col-span-2"><FieldError locale={locale} codes={shown} code="person" /></div>
           </div>
         )}
         <fieldset className="grid gap-2 text-sm">
           <legend>{tx(locale, "品相", "Condition")}</legend>
-          <select className="field" name="conditionTrack" value={track} onChange={(e) => setTrack(e.target.value)}>
+          <select className="field" name="conditionTrack" value={track} aria-invalid={shown.includes("grade") || shown.includes("front_back")} onChange={(e) => setTrack(e.target.value)}>
             <option value="RAW">{tx(locale, "未評級", "Raw")}</option>
             <option value="GRADED">{tx(locale, "評級", "Graded")}</option>
           </select>
           {track === "RAW" ? (
-            <select className="field" name="rawGrade" defaultValue={initial?.rawGrade || "A"} aria-label={tx(locale, "未評級品相", "Raw grade")}>
+            <select className="field" name="rawGrade" value={rawGrade} aria-label={tx(locale, "未評級品相", "Raw grade")} onChange={(e) => setRawGrade(e.target.value)}>
               {RAW_OPTIONS.map(([grade, zh, en]) => (
                 <option key={grade} value={grade}>{tx(locale, zh, en)}</option>
               ))}
             </select>
           ) : (
-            <div className="grid gap-2 md:grid-cols-3">
-              <select className="field" name="grader" defaultValue={initial?.grader || "PSA"}>
-                {["PSA", "BGS", "CGC", "TAG"].map((grader) => (
-                  <option key={grader}>{grader}</option>
+            <div className="grid gap-2 md:grid-cols-2">
+              <select className="field" name="grader" value={grader} aria-label={tx(locale, "評級公司", "Grader")} onChange={(e) => setGrader(e.target.value)}>
+                {["PSA", "BGS", "CGC", "TAG"].map((name) => (
+                  <option key={name}>{name}</option>
                 ))}
               </select>
-              <input className="field" name="gradeScore" placeholder={tx(locale, "分數", "Score")} defaultValue={initial?.gradeScore} />
-              <input className="field" name="certNumber" placeholder={tx(locale, "證書編號（可選）", "Cert # (optional)")} defaultValue={initial?.certNumber} />
+              <input className="field" name="gradeScore" inputMode="decimal" placeholder={tx(locale, "分數", "Score")} value={gradeScore} aria-invalid={shown.includes("grade")} onChange={(e) => setGradeScore(e.target.value)} />
             </div>
           )}
+          <p className="text-muted">{track === "GRADED" ? tx(locale, "只接受 PSA、BGS、CGC、TAG。相片要有正面同背面。", "PSA, BGS, CGC, or TAG only. Photos need a front and a back.") : tx(locale, "未評級用 A、B、C、D。", "Raw grades are A, B, C, or D.")}</p>
+          <FieldError locale={locale} codes={shown} code="grade" />
+          <FieldError locale={locale} codes={shown} code="front_back" />
         </fieldset>
-        <label className="grid gap-1 text-sm">
-          {tx(locale, "短片網址（可選）", "Video URL (optional)")}
-          <input className="field" name="videoUrl" defaultValue={initial?.videoUrl} placeholder="https://" />
-        </label>
-      </div>
+        <Disclosure signal={openToken.more} initiallyOpen={moreOpen} title={tx(locale, "更多資料（可選）", "More details (optional)")}>
+          <label className="text-sm">{tx(locale, "卡號", "Card number")}<input className="field" name="cardNumber" defaultValue={initial?.cardNumber} placeholder={group === "tcg" ? "020/189" : "No.23"} /></label>
+          <label className="text-sm">{tx(locale, "稀有度", "Rarity")}<input className="field" name="rarity" defaultValue={initial?.rarity} placeholder={group === "tcg" ? "SR / RR / SEC" : "BASE / AUTO"} /></label>
+          <label className="text-sm">{tx(locale, "證書編號", "Cert #")}<input className="field" name="certNumber" defaultValue={initial?.certNumber} /></label>
+          <label className="grid gap-1 text-sm">
+            {tx(locale, "短片網址", "Video URL")}
+            <input className="field" name="videoUrl" defaultValue={initial?.videoUrl} placeholder="https://" aria-invalid={shown.includes("video")} />
+            <FieldError locale={locale} codes={shown} code="video" />
+          </label>
+        </Disclosure>
+      </div> : null}
 
-      <div hidden={locked || step !== 2} className="grid gap-3 text-sm">
+      {!locked ? <div hidden={step !== 2} className="grid gap-3 text-sm">
+        <p className="text-muted">{tx(locale, "預設係直購。拍賣沒有底價，起標價就係底價。", "Buy Now is the default. Auctions have no reserve; the start price is the floor.")}</p>
         <label className="grid gap-1">
           {tx(locale, "售賣方式", "Sale format")}
-          <select className="field" name="saleType" value={saleType} onChange={(e) => setSaleType(e.target.value)}>
+          <select className="field" name="saleType" value={saleType} onChange={(e) => onSale(e.target.value)}>
             <option value="BUY_NOW">{tx(locale, "直購", "Buy Now")}</option>
             <option value="AUCTION">{tx(locale, "拍賣", "Auction")}</option>
             <option value="BOTH">{tx(locale, "拍賣 + 直購", "Auction + Buy It Now")}</option>
           </select>
         </label>
+        <p className="text-muted">
+          {saleType === "AUCTION"
+            ? tx(locale, "沒有底價。起標價就係底價，只可以賣 1 件。", "No reserve. The start price is the floor. Quantity stays 1.")
+            : saleType === "BOTH"
+              ? tx(locale, "直購價要高於起標價。拍賣沒有底價，只可以賣 1 件。", "Buy It Now must be above the start price. No reserve, quantity 1.")
+              : tx(locale, "買家可以即時用直購價買。", "Buyers can purchase now at this price.")}
+        </p>
         {saleType !== "AUCTION" ? (
           <label className="grid gap-1">
             {tx(locale, "直購價 HKD", "Buy Now HKD")}
-            <input className="field" name="price" value={price} onChange={(e) => setPrice(e.target.value)} inputMode="decimal" />
+            <input className="field" name="price" value={price} onChange={(e) => setPrice(e.target.value)} inputMode="decimal" aria-invalid={shown.includes("price") || shown.includes("both_price")} />
+            <FieldError locale={locale} codes={shown} code="price" />
+            <FieldError locale={locale} codes={shown} code="both_price" />
           </label>
         ) : null}
         {saleType !== "BUY_NOW" ? (
           <>
             <label className="grid gap-1">
               {tx(locale, "起標價 HKD", "Start price HKD")}
-              <input className="field" name="startPrice" defaultValue={initial?.startPrice} inputMode="decimal" />
+              <input className="field" name="startPrice" value={startPrice} inputMode="decimal" aria-invalid={shown.includes("start")} onChange={(e) => setStartPrice(e.target.value)} />
+              <FieldError locale={locale} codes={shown} code="start" />
             </label>
             <div>
               <p className="mb-1">{tx(locale, "結束時間（香港時間）", "End time (Hong Kong)")}</p>
               <HkDateTime locale={locale} name="auctionEndsAt" defaultValue={initial?.auctionEndsAt} />
+              <FieldError locale={locale} codes={shown} code="auction_end" />
             </div>
           </>
-        ) : null}
-        {saleType !== "AUCTION" ? (
-          <label className="flex items-center gap-2">
-            <input type="checkbox" name="offersEnabled" checked={offers} onChange={(e) => setOffers(e.target.checked)} />
-            {tx(locale, "接受議價", "Allow offers")}
-          </label>
-        ) : null}
-        {offers && saleType !== "AUCTION" ? (
-          <label className="grid gap-1">
-            {tx(locale, "最低接受價 HKD", "Minimum offer HKD")}
-            <input className="field" name="minOffer" defaultValue={initial?.minOffer} inputMode="decimal" />
-          </label>
         ) : null}
         <p className="text-muted">{feeCopy}</p>
         {hints.length ? (
@@ -319,35 +505,63 @@ export function SellForm({
         ) : (
           <p className="text-muted">{tx(locale, "刊登後，商品頁會顯示同一品相的站內成交價。", "After publishing, the listing shows sold prices for the same grade.")}</p>
         )}
-        <label className="grid gap-1">
-          {tx(locale, "數量", "Quantity")}
-          <input className="field" name="quantity" type="number" min={1} max={99} defaultValue={initial?.quantity || 1} />
-        </label>
-      </div>
+        {saleType === "BUY_NOW" ? (
+          <Disclosure signal={openToken.price} initiallyOpen={priceOpen} title={tx(locale, "議價同數量（可選）", "Offers and quantity (optional)")}>
+            <OfferFields locale={locale} offers={offers} setOffers={setOffers} minOffer={minOffer} setMinOffer={setMinOffer} issues={shown} />
+            <label className="grid gap-1">
+              {tx(locale, "數量", "Quantity")}
+              <input className="field" name="quantity" type="number" min={1} max={99} value={quantity} aria-invalid={shown.includes("qty")} onChange={(e) => setQuantity(e.target.value)} />
+              <FieldError locale={locale} codes={shown} code="qty" />
+            </label>
+          </Disclosure>
+        ) : (
+          <>
+            <input type="hidden" name="quantity" value="1" />
+            {saleType === "BOTH" ? (
+              <Disclosure signal={openToken.price} initiallyOpen={priceOpen} title={tx(locale, "議價（可選）", "Offers (optional)")}>
+                <OfferFields locale={locale} offers={offers} setOffers={setOffers} minOffer={minOffer} setMinOffer={setMinOffer} issues={shown} />
+              </Disclosure>
+            ) : null}
+            <FieldError locale={locale} codes={shown} code="qty" />
+          </>
+        )}
+      </div> : null}
 
-      <div hidden={locked || step !== 3} className="grid gap-3 text-sm">
-        <label className="grid gap-1">
-          {tx(locale, "順豐速運 HKD", "SF Express HKD")}
-          <input className="field" name="shippingFee" defaultValue={initial?.shippingFee || "20"} />
-        </label>
-        <label className="grid gap-1">
-          {tx(locale, "順豐智能櫃 HKD", "SF locker HKD")}
-          <input className="field" name="shipLockerFee" defaultValue={initial?.shipLockerFee || "12"} />
-        </label>
-        <label className="grid gap-1">
-          {tx(locale, "面交 HKD", "Meet-up HKD")}
-          <input className="field" name="shipMeetFee" defaultValue={initial?.shipMeetFee || "0"} />
-        </label>
-        <label className="grid gap-1">
-          {tx(locale, "順豐寄出日數", "SF handling days")}
-          <input className="field" name="shippingDays" type="number" min={1} max={30} defaultValue={initial?.shippingDays || 2} />
-        </label>
-        <p className="text-muted">{tx(locale, "買家可以喺結帳揀其中一種。同一賣家多件貨會逐件計運費。", "Buyers pick one method at checkout. Items from the same seller add their own fees.")}</p>
-      </div>
+      {!locked ? <div hidden={step !== 3} className="grid gap-3 text-sm">
+        <p className="text-muted">{tx(locale, "運費用預設就得，可以直接下一步。買家結帳先揀方式。", "Shipping defaults are ready. You can continue. Buyers pick a method at checkout.")}</p>
+        <p className="font-medium">
+          {tx(
+            locale,
+            `順豐 HK$${shipFee || "0"} · 智能櫃 HK$${lockerFee || "0"} · 面交 HK$${meetFee || "0"} · ${shipDays || "—"} 日內寄出`,
+            `SF HK$${shipFee || "0"} · Locker HK$${lockerFee || "0"} · Meet-up HK$${meetFee || "0"} · Ships in ${shipDays || "—"} days`,
+          )}
+        </p>
+        <Disclosure signal={openToken.ship} title={tx(locale, "調整運費", "Change shipping")}>
+          <label className="grid gap-1">
+            {tx(locale, "順豐速運 HKD", "SF Express HKD")}
+            <input className="field" name="shippingFee" value={shipFee} inputMode="decimal" aria-invalid={shown.includes("shipping")} onChange={(e) => setShipFee(e.target.value)} />
+          </label>
+          <label className="grid gap-1">
+            {tx(locale, "順豐智能櫃 HKD", "SF locker HKD")}
+            <input className="field" name="shipLockerFee" value={lockerFee} inputMode="decimal" onChange={(e) => setLockerFee(e.target.value)} />
+          </label>
+          <label className="grid gap-1">
+            {tx(locale, "面交 HKD", "Meet-up HKD")}
+            <input className="field" name="shipMeetFee" value={meetFee} inputMode="decimal" onChange={(e) => setMeetFee(e.target.value)} />
+          </label>
+          <label className="grid gap-1">
+            {tx(locale, "順豐寄出日數", "SF handling days")}
+            <input className="field" name="shippingDays" type="number" min={1} max={30} value={shipDays} onChange={(e) => setShipDays(e.target.value)} />
+          </label>
+          <FieldError locale={locale} codes={shown} code="shipping" />
+          <p className="text-muted">{tx(locale, "同一賣家多件貨會逐件計運費。", "Items from the same seller add their own fees.")}</p>
+        </Disclosure>
+      </div> : null}
 
       {!locked && step === 4 ? (
         <section className="surface grid gap-2 p-4 text-sm">
           <h2 className="font-semibold">{tx(locale, "刊登預覽", "Preview")}</h2>
+          <p>{tx(locale, "呢個係預覽。未按下面個掣就未會公開。", "This is a preview. Nothing goes live until you use the button below.")}</p>
           <div className="flex gap-2 overflow-x-auto">
             {photos.filter((photo) => photo.url).map((photo, index) => (
               <img key={index} src={photo.url} alt="" className="h-28 w-20 shrink-0 rounded-xl bg-[#f4efe6] object-contain" />
@@ -357,10 +571,11 @@ export function SellForm({
           <p className="text-muted">{preview.description || initial?.description}</p>
           <p>{saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "Buy now + auction") : tx(locale, "直購", "Buy now")}{price ? ` · HK$${price}` : ""}</p>
           <p className="text-muted">{feeCopy}</p>
-          <div>
-            <p className="mb-1">{tx(locale, "預約刊登（香港時間，可選）", "Schedule publish (Hong Kong time, optional)")}</p>
-            <HkDateTime locale={locale} name="publishAt" defaultValue={initial?.publishAt} />
-          </div>
+          <Disclosure signal={openToken.schedule} initiallyOpen={scheduleOpen} title={tx(locale, "預約刊登（可選）", "Schedule publish (optional)")}>
+            <p className="text-muted">{tx(locale, "留空就即時刊登。有時間就會改為預約，而家未會公開。", "Leave this blank to publish now. A time schedules it instead, and it stays offline until then.")}</p>
+            <HkDateTime locale={locale} name="publishAt" defaultValue={initial?.publishAt} onChange={onPublishAt} emptyLabel={tx(locale, "留空就即時刊登", "Leave blank to publish now")} />
+            <FieldError locale={locale} codes={shown} code="schedule" />
+          </Disclosure>
         </section>
       ) : null}
 
@@ -371,18 +586,92 @@ export function SellForm({
         </label>
       ) : null}
 
-      <div className="flex flex-wrap gap-2">
-        {!locked && step > 0 ? (
-          <button type="button" className="btn btn-ghost" onClick={() => go(step - 1)}>{tx(locale, "上一步", "Back")}</button>
-        ) : null}
+      <div className="grid gap-2">
         {!locked && step < 4 ? (
-          <button type="button" className="btn btn-primary" onClick={() => go(step + 1)}>{tx(locale, "下一步", "Next")}</button>
+          <button type="button" className="btn btn-primary w-full" onClick={() => go(step + 1)}>{tx(locale, "下一步", "Next")}</button>
         ) : null}
-        {locked || step === 4 ? <IntentButtons locale={locale} locked={locked} /> : (
-          <DraftButton locale={locale} />
-        )}
+        {locked || step === 4 ? <IntentButtons locale={locale} locked={locked} scheduling={scheduling} /> : null}
+        {!locked && step < 4 ? (
+          <div className="flex flex-wrap gap-2">
+            {step > 0 ? <button type="button" className="btn btn-ghost" onClick={() => go(step - 1)}>{tx(locale, "上一步", "Back")}</button> : null}
+            <DraftButton locale={locale} />
+          </div>
+        ) : null}
+        {!locked && step === 4 && step > 0 ? (
+          <button type="button" className="btn btn-ghost w-fit" onClick={() => go(step - 1)}>{tx(locale, "上一步", "Back")}</button>
+        ) : null}
       </div>
     </form>
+  );
+}
+
+function earliestStep(issues: string[]) {
+  return issues.reduce<number | null>((earliest, code) => {
+    const at = wizardStepForIssue(code);
+    if (at == null) return earliest;
+    return earliest == null || at < earliest ? at : earliest;
+  }, null);
+}
+
+function snapshot(form: HTMLFormElement) {
+  const data = new FormData(form);
+  const snap: Record<string, string> = {};
+  data.forEach((value, key) => {
+    if (typeof value === "string") snap[key] = value;
+  });
+  return snap;
+}
+
+function FieldError({ locale, codes, code }: { locale: Locale; codes: string[]; code: string }) {
+  if (!codes.includes(code)) return null;
+  return <p className="text-sm text-danger">{errText(locale, code)}</p>;
+}
+
+function Disclosure({ signal, initiallyOpen, title, children }: { signal: number; initiallyOpen?: boolean; title: string; children: ReactNode }) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    if (initiallyOpen && ref.current) ref.current.open = true;
+  }, [initiallyOpen]);
+  useEffect(() => {
+    if (signal && ref.current) ref.current.open = true;
+  }, [signal]);
+  return (
+    <details ref={ref} className="rounded-2xl bg-soft px-3 text-sm">
+      <summary className="min-h-12 cursor-pointer py-3 font-medium">{title}</summary>
+      <div className="grid gap-3 pb-3">{children}</div>
+    </details>
+  );
+}
+
+function OfferFields({
+  locale,
+  offers,
+  setOffers,
+  minOffer,
+  setMinOffer,
+  issues,
+}: {
+  locale: Locale;
+  offers: boolean;
+  setOffers: (value: boolean) => void;
+  minOffer: string;
+  setMinOffer: (value: string) => void;
+  issues: string[];
+}) {
+  return (
+    <>
+      <label className="flex min-h-12 items-center gap-2">
+        <input type="checkbox" name="offersEnabled" checked={offers} onChange={(e) => setOffers(e.target.checked)} />
+        {tx(locale, "接受議價", "Allow offers")}
+      </label>
+      {offers ? (
+        <label className="grid gap-1">
+          {tx(locale, "最低接受價 HKD", "Minimum offer HKD")}
+          <input className="field" name="minOffer" value={minOffer} inputMode="decimal" aria-invalid={issues.includes("offer")} onChange={(e) => setMinOffer(e.target.value)} />
+          <FieldError locale={locale} codes={issues} code="offer" />
+        </label>
+      ) : null}
+    </>
   );
 }
 
@@ -430,6 +719,8 @@ function PhotoFields({
   fileRef,
   onFiles,
   note,
+  issues,
+  extraSignal,
 }: {
   locale: Locale;
   photos: Photo[];
@@ -439,34 +730,37 @@ function PhotoFields({
   fileRef: RefObject<HTMLInputElement | null>;
   onFiles: (list: FileList | null) => void;
   note: string;
+  issues: string[];
+  extraSignal: number;
 }) {
+  const [paste, setPaste] = useState("");
+  const filled = filledCount(photos);
+  function addPasted() {
+    const url = paste.trim();
+    if (!url || filled >= 12) return;
+    setPhotos((current) => mergePhotos(current, [{ url, role: "GALLERY" }]));
+    setPaste("");
+  }
   return (
     <>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <label className="btn btn-primary w-fit cursor-pointer">
           {tx(locale, "從相簿加入", "Add from camera roll")}
-          <input ref={fileRef} className="sr-only" type="file" accept="image/*" multiple disabled={photos.filter((photo) => photo.url).length >= 12} onChange={(e) => void onFiles(e.target.files)} />
+          <input ref={fileRef} className="sr-only" type="file" accept="image/*" multiple disabled={filled >= 12} onChange={(e) => void onFiles(e.target.files)} />
         </label>
-        {DEMOS.map((demo) => (
-          <button key={demo.url} type="button" className="btn-ghost btn gap-2 px-2" onClick={() => setPhotos((current) => mergePhotos(current, [{ url: demo.url, role: demo.url.includes("-back") ? "BACK" : "GALLERY" }]))}>
-            <img src={demo.url} alt="" className="h-10 w-8 rounded-md bg-[#f4efe6] object-contain" />
-            {tx(locale, demo.zh, demo.en)}
-          </button>
-        ))}
+        <p className="text-sm text-muted">{tx(locale, `已有 ${filled} 張`, `${filled} added`)}</p>
       </div>
       {note ? <p className="text-sm text-danger">{note}</p> : null}
-      {photos.map((photo, index) => (
+      <FieldError locale={locale} codes={issues} code="photos" />
+      <FieldError locale={locale} codes={issues} code="photo_url" />
+      {photos.map((photo, index) => photo.url ? (
         <div key={index} className="grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] gap-2">
-          {photo.url ? (
-            <img src={photo.url} alt="" className="h-20 w-16 rounded-xl bg-[#f4efe6] object-contain ring-1 ring-[#5c3a4a]/30" />
-          ) : (
-            <div className="grid h-20 w-16 place-items-center rounded-xl bg-[#f4efe6] text-xs text-muted ring-1 ring-[#5c3a4a]/30">{tx(locale, "未有", "Empty")}</div>
-          )}
+          <img src={photo.url} alt="" className="h-20 w-16 rounded-xl bg-[#f4efe6] object-contain ring-1 ring-[#5c3a4a]/30" />
           <div className="grid min-w-0 gap-2">
             {photo.url.startsWith("data:") ? (
               <p className="field flex items-center text-sm">{tx(locale, "已從相簿上傳", "Uploaded from camera roll")}</p>
             ) : (
-              <input className="field" value={photo.url} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)))} placeholder="https:// 或 /demo/..." disabled={locked && index < initialCount} />
+              <input className="field" value={photo.url} aria-label={tx(locale, "相片網址", "Photo URL")} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, url: e.target.value } : item)))} placeholder="https:// 或 /demo/..." disabled={locked && index < initialCount} />
             )}
             <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
               <select className="field" value={photo.role} aria-label={tx(locale, "相片位置", "Photo role")} disabled={locked} onChange={(e) => setPhotos((current) => current.map((item, i) => (i === index ? { ...item, role: e.target.value as Photo["role"] } : item)))}>
@@ -478,8 +772,28 @@ function PhotoFields({
             </div>
           </div>
         </div>
-      ))}
-      <button type="button" className="btn-ghost btn w-fit" onClick={() => setPhotos((current) => (current.length >= 12 ? current : [...current, { url: "", role: "GALLERY" }]))}>{tx(locale, "加網址", "Add URL")}</button>
+      ) : null)}
+      {filled < 2 ? (
+        <p className="text-sm text-muted">
+          {photos.some((photo) => !photo.url && (photo.role === "FRONT" || photo.role === "BACK"))
+            ? tx(locale, "頭兩張會標成正面同背面，可以改。", "The first two are marked front and back. You can change that.")
+            : tx(locale, "最少 2 張。評級卡要自己標正面同背面。", "At least 2 photos. Mark front and back for a graded card.")}
+        </p>
+      ) : null}
+      <Disclosure signal={extraSignal} title={tx(locale, "示範圖或網址", "Demo image or URL")}>
+        <div className="flex flex-wrap gap-2">
+          {DEMOS.map((demo) => (
+            <button key={demo.url} type="button" className="btn-ghost btn gap-2 px-2" disabled={filled >= 12} onClick={() => setPhotos((current) => mergePhotos(current, [{ url: demo.url, role: "GALLERY" }]))}>
+              <img src={demo.url} alt="" className="h-10 w-8 rounded-md bg-[#f4efe6] object-contain" />
+              {tx(locale, demo.zh, demo.en)}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input className="field" value={paste} onChange={(e) => setPaste(e.target.value)} placeholder="https:// 或 /demo/..." aria-label={tx(locale, "相片網址", "Photo URL")} />
+          <button type="button" className="btn btn-ghost shrink-0" disabled={filled >= 12} onClick={addPasted}>{tx(locale, "加入", "Add")}</button>
+        </div>
+      </Disclosure>
     </>
   );
 }
@@ -493,7 +807,7 @@ function hkStamp(daysAhead: number, hour: number, minute: number) {
   return { year, month: String(Number(month)), day: String(Number(day)), hour: String(hour), minute: String(minute) };
 }
 
-function HkDateTime({ locale, name, defaultValue, disabled }: { locale: Locale; name: string; defaultValue?: string; disabled?: boolean }) {
+function HkDateTime({ locale, name, defaultValue, disabled, onChange, emptyLabel }: { locale: Locale; name: string; defaultValue?: string; disabled?: boolean; onChange?: (value: string) => void; emptyLabel?: string }) {
   const init = splitHk(defaultValue || "");
   const [day, setDay] = useState(init.day);
   const [month, setMonth] = useState(init.month);
@@ -515,6 +829,10 @@ function HkDateTime({ locale, name, defaultValue, disabled }: { locale: Locale; 
     setHour(parts.hour);
     setMinute(parts.minute);
   }
+  useEffect(() => {
+    onChange?.(value);
+  }, [value, onChange]);
+  const blank = emptyLabel ?? tx(locale, "請選擇結束時間", "Choose an end time");
   return (
     <div className="grid gap-2">
       <input type="hidden" name={disabled ? undefined : name} value={value} />
@@ -525,14 +843,24 @@ function HkDateTime({ locale, name, defaultValue, disabled }: { locale: Locale; 
           ))}
         </div>
       ) : null}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-        <SelectBox label={tx(locale, "日", "Day")} value={day} disabled={disabled} onChange={setDay} options={range(1, 31)} />
-        <SelectBox label={tx(locale, "月", "Month")} value={month} disabled={disabled} onChange={setMonth} options={range(1, 12)} />
-        <SelectBox label={tx(locale, "年", "Year")} value={year} disabled={disabled} onChange={setYear} options={[nowYear, nowYear + 1].map(String)} />
-        <SelectBox label={tx(locale, "時", "Hour")} value={hour} disabled={disabled} onChange={setHour} options={range(0, 23)} />
-        <SelectBox label={tx(locale, "分", "Min")} value={minute} disabled={disabled} onChange={setMinute} options={["0", "15", "30", "45"]} />
-      </div>
-      <p className="text-xs text-muted">{value ? `${tx(locale, "香港時間", "Hong Kong time")} ${value.replace("T", " ")}` : tx(locale, "請選擇結束時間", "Choose an end time")}</p>
+      {!disabled ? (
+        <details className="rounded-2xl bg-soft px-3">
+          <summary className="min-h-12 cursor-pointer py-3 font-medium">{tx(locale, "自訂時間", "Custom time")}</summary>
+          <div className="grid grid-cols-2 gap-2 pb-3 sm:grid-cols-5">
+            <SelectBox label={tx(locale, "日", "Day")} value={day} onChange={setDay} options={range(1, 31)} />
+            <SelectBox label={tx(locale, "月", "Month")} value={month} onChange={setMonth} options={range(1, 12)} />
+            <SelectBox label={tx(locale, "年", "Year")} value={year} onChange={setYear} options={[nowYear, nowYear + 1].map(String)} />
+            <SelectBox label={tx(locale, "時", "Hour")} value={hour} onChange={setHour} options={range(0, 23)} />
+            <SelectBox label={tx(locale, "分", "Min")} value={minute} onChange={setMinute} options={["0", "15", "30", "45"]} />
+          </div>
+        </details>
+      ) : null}
+      <p className="text-xs text-muted">{value ? `${tx(locale, "香港時間", "Hong Kong time")} ${value.replace("T", " ")}` : blank}</p>
+      {value && emptyLabel ? (
+        <button type="button" className="btn btn-ghost w-fit" onClick={() => apply({ year: "", month: "", day: "", hour: "", minute: "" })}>
+          {tx(locale, "取消時間，改為即時刊登", "Clear time and publish now")}
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -567,15 +895,22 @@ function splitHk(value: string) {
   };
 }
 
-function IntentButtons({ locale, locked }: { locale: Locale; locked: boolean }) {
+function IntentButtons({ locale, locked, scheduling }: { locale: Locale; locked: boolean; scheduling: boolean }) {
   const { pending } = useFormStatus();
+  const live = scheduling && !locked;
+  const label = pending
+    ? tx(locale, "處理中", "Working")
+    : live
+      ? tx(locale, "預約刊登", "Schedule")
+      : tx(locale, "刊登", "Publish");
   return (
     <>
-      <button className="sell-cta btn w-full sm:w-auto" name="intent" value="publish" disabled={pending}>
-        {pending ? tx(locale, "處理中", "Working") : tx(locale, "刊登", "Publish")}
+      <button className="sell-cta btn w-full sm:w-auto" name="intent" value={live ? "schedule" : "publish"} disabled={pending}>
+        {label}
       </button>
-      <button className="btn-ghost btn" name="intent" value="draft" disabled={locked || pending}>{tx(locale, "存草稿", "Save draft")}</button>
-      <button className="btn-ghost btn" name="intent" value="schedule" disabled={locked || pending}>{tx(locale, "預約", "Schedule")}</button>
+      {locked ? null : (
+        <button className="btn-ghost btn w-fit" name="intent" value="draft" disabled={pending}>{tx(locale, "存草稿", "Save draft")}</button>
+      )}
     </>
   );
 }
