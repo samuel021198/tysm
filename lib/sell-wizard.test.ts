@@ -1,5 +1,6 @@
 import {
   validateListing,
+  wizardFocusField,
   wizardPanels,
   wizardPublishIssues,
   wizardStepForIssue,
@@ -144,5 +145,18 @@ assert(wizardStepForIssue("photos") === 0 && wizardStepForIssue("front_back") ==
 assert(wizardStepForIssue("title") === 1 && wizardStepForIssue("price") === 2 && wizardStepForIssue("shipping") === 3, "issues map to their step");
 assert(wizardStepForIssue("schedule") === 4 && wizardStepForIssue("phone") === null, "unknown server errors stay on the current step");
 assert(wizardPanels(["video", "qty", "schedule"]).more && wizardPanels(["video", "qty", "schedule"]).priceExtra && wizardPanels(["video", "qty", "schedule"]).schedule, "panels open for the missing field");
+
+assert(wizardFocusField("photos", card({ photos: [] })) === "photos-add", "too few photos focus the add control");
+assert(wizardFocusField("photos", card({ photos: Array.from({ length: 13 }, () => ({ url: "/demo/cards/seed_charizard.svg", role: "GALLERY" as const })) })) === "photos", "too many photos focus the photo section");
+assert(wizardFocusField("front_back", card()) === "front_back" && wizardFocusField("photo_url", card()) === "photo_url", "photo role and url have their own anchors");
+assert(wizardFocusField("tcg", card({ game: "  ", setName: "151", cardName: "噴火龍", language: "日文" })) === "game", "tcg focuses the first blank field");
+assert(wizardFocusField("tcg", card({ game: "Pokémon", setName: "", cardName: "噴火龍", language: "日文" })) === "setName", "tcg moves to the next blank field");
+assert(wizardFocusField("person", card({ personName: "美斯", seasonYear: " ", brandSeries: "Topps" })) === "seasonYear", "person focuses the blank season");
+assert(wizardFocusField("grade", card()) === "rawGrade", "raw condition focuses the A–D select");
+assert(wizardFocusField("grade", card({ conditionTrack: "GRADED", rawGrade: null, grader: "PSA", gradeValue: null })) === "gradeScore", "graded condition focuses the score");
+assert(wizardFocusField("shipping", card({ shippingFeeCents: -1, shippingDays: 0 })) === "shippingFee", "a bad shipping fee is focused before the days");
+assert(wizardFocusField("shipping", card({ shippingDays: 0 })) === "shippingDays", "bad handling days focus the days field");
+assert(wizardFocusField("both_price", card()) === "price" && wizardFocusField("auction_end", card()) === "auctionEndsAt", "price and auction end focus their controls");
+assert(wizardFocusField("schedule", card()) === "publishAt" && wizardFocusField("phone", card()) === "", "schedule focuses its picker; phone has no sell-form control");
 
 console.log("sell wizard ok");

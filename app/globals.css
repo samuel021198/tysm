@@ -74,8 +74,14 @@ h1,
 h2,
 .page-title,
 .surface,
-.field {
+.field,
+[data-wizard-jump] {
   scroll-margin-top: calc(var(--header-h) + 0.75rem);
+}
+
+.field,
+[data-wizard-jump] {
+  scroll-margin-bottom: calc(var(--tab-h) + 0.75rem);
 }
 
 .site-header {
