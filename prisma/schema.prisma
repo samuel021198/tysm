@@ -65,6 +65,15 @@ enum CategoryLevel {
   LEAF
 }
 
+enum CatalogGame {
+  POKEMON
+}
+
+enum PrintRegion {
+  JP
+  WEST
+}
+
 enum OrderStatus {
   PENDING_PAYMENT
   IN_ESCROW
@@ -216,6 +225,57 @@ model Category {
   @@index([parentId])
 }
 
+/// Official Pokémon printing. Images live on R2 (or a temporary source URL), never as bytes in Postgres.
+model CatalogSet {
+  id          String       @id @default(cuid())
+  externalId  String       @unique
+  game        CatalogGame  @default(POKEMON)
+  printRegion PrintRegion
+  code        String
+  nameEn      String
+  nameJa      String
+  series      String?
+  releaseDate String?
+  total       Int?
+  logoUrl     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  cards       CatalogCard[]
+
+  @@index([printRegion, releaseDate])
+  @@index([code])
+}
+
+model CatalogCard {
+  id              String       @id @default(cuid())
+  externalId      String       @unique
+  setId           String
+  game            CatalogGame  @default(POKEMON)
+  printRegion     PrintRegion
+  collectorNumber String
+  /// Digits of the collector number without leading zeros, for 020 / 20 search.
+  numberKey       String       @default("")
+  nameEn          String
+  nameJa          String
+  imageUrl        String
+  sourceImageUrl  String?
+  rarity          String?
+  artist          String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  set             CatalogSet       @relation(fields: [setId], references: [id], onDelete: Cascade)
+  listings        Listing[]
+  collectionItems CollectionItem[]
+
+  @@index([nameEn])
+  @@index([nameJa])
+  @@index([collectorNumber])
+  @@index([numberKey])
+  @@index([printRegion, numberKey])
+  @@index([setId])
+}
+
 model Listing {
   id                String         @id @default(cuid())
   sellerId          String
@@ -268,11 +328,13 @@ model Listing {
   publishedAt       DateTime?
   viewCount         Int            @default(0)
   favoriteCount     Int            @default(0)
+  catalogCardId     String?
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 
-  seller    User          @relation(fields: [sellerId], references: [id])
-  category  Category      @relation(fields: [categoryId], references: [id])
+  seller      User          @relation(fields: [sellerId], references: [id])
+  category    Category      @relation(fields: [categoryId], references: [id])
+  catalogCard CatalogCard?  @relation(fields: [catalogCardId], references: [id], onDelete: SetNull)
   photos    ListingPhoto[]
   proxyBids ProxyBid[]
   bidEvents BidEvent[]
@@ -288,6 +350,7 @@ model Listing {
   @@index([sellerId])
   @@index([categoryId])
   @@index([auctionEndsAt])
+  @@index([catalogCardId])
 }
 
 model ListingPhoto {
@@ -602,15 +665,18 @@ model CollectionItem {
   grader         Grader?
   gradeValue     Int?
   cardName       String?
+  catalogCardId  String?
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
 
-  owner   User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  listing Listing?          @relation(fields: [listingId], references: [id], onDelete: SetNull)
-  photos  CollectionPhoto[]
-  post    Post?
+  owner       User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  listing     Listing?          @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  catalogCard CatalogCard?      @relation(fields: [catalogCardId], references: [id], onDelete: SetNull)
+  photos      CollectionPhoto[]
+  post        Post?
 
   @@index([ownerId, visibility])
+  @@index([catalogCardId])
 }
 
 model CollectionPhoto {
