@@ -22,10 +22,13 @@ function card(over: Partial<ListingInput> = {}): ListingInput {
     auctionEndsAt: null,
     offersEnabled: false,
     minOfferCents: null,
-    shippingFeeCents: 2000,
     shippingDays: 2,
-    shipLockerFeeCents: 1200,
-    shipMeetFeeCents: 0,
+    shipSfCod: true,
+    shipMeetup: false,
+    shipPickup: false,
+    meetupDistrict: null,
+    meetupWindow: null,
+    meetupNotes: null,
     quantity: 1,
     game: "Pokémon",
     setName: "151",
@@ -129,7 +132,20 @@ assert(
   "minimum offer must be below buy now",
 );
 
-assert(wizardStepIssues(3, card({ shippingFeeCents: -1 }), "tcg", now).includes("shipping"), "blank shipping fee blocks");
+assert(wizardStepIssues(3, card({ shipSfCod: false }), "tcg", now).includes("shipping"), "at least one shipping method");
+assert(wizardStepIssues(3, card({ shipSfCod: false, shipMeetup: true }), "tcg", now).includes("meetup"), "meetup needs a district");
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipMeetup: true, meetupDistrict: "油尖旺" }), "tcg", now).length === 0,
+  "meetup with a district passes",
+);
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipPickup: true }), "tcg", now, false).includes("store"),
+  "store pickup needs a shop address",
+);
+assert(
+  wizardStepIssues(3, card({ shipSfCod: false, shipPickup: true }), "tcg", now, true).length === 0,
+  "store pickup passes when the profile has an address",
+);
 assert(wizardStepIssues(3, card(), "tcg", now).length === 0, "default shipping passes");
 
 const ready = card();
@@ -142,6 +158,7 @@ assert(wizardPublishIssues(card({ categoryId: " " }), "tcg", now).includes("cate
 
 assert(wizardStepForIssue("photos") === 0 && wizardStepForIssue("front_back") === 0, "photo issues return to photos");
 assert(wizardStepForIssue("title") === 1 && wizardStepForIssue("price") === 2 && wizardStepForIssue("shipping") === 3, "issues map to their step");
+assert(wizardStepForIssue("meetup") === 3 && wizardStepForIssue("store") === 3, "shipping details stay on the shipping step");
 assert(wizardStepForIssue("schedule") === 4 && wizardStepForIssue("phone") === null, "unknown server errors stay on the current step");
 assert(wizardPanels(["video", "qty", "schedule"]).more && wizardPanels(["video", "qty", "schedule"]).priceExtra && wizardPanels(["video", "qty", "schedule"]).schedule, "panels open for the missing field");
 

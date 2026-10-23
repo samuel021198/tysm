@@ -3,6 +3,7 @@ import { prisma } from "./db";
 import { headerIndex, parseCsv, PERSON_HEADERS, TCG_HEADERS } from "./csv";
 import { hkdToCents, isAllowedMediaUrl } from "./format";
 import { parseGrade } from "./rules";
+import { hasStoreAddress } from "./shipping";
 import { GRADERS, RAW, parseListingForm, validateListing, type ListingInput, type PhotoInput } from "./sell-wizard";
 
 export type { ListingInput, PhotoInput };
@@ -25,10 +26,17 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
       input.intent === "draft"
         ? Math.max(1, Number.isFinite(input.quantity) && input.quantity > 0 ? Math.min(99, input.quantity) : 1)
         : input.quantity,
-    shippingFee: input.intent === "draft" ? Math.max(0, input.shippingFeeCents) : input.shippingFeeCents,
-    shippingDays: input.shippingDays >= 1 && input.shippingDays <= 30 ? input.shippingDays : input.intent === "draft" ? 3 : input.shippingDays,
-    shipLockerFee: Math.max(0, input.shipLockerFeeCents ?? Math.max(0, input.shippingFeeCents - 800)),
-    shipMeetFee: Math.max(0, input.shipMeetFeeCents ?? 0),
+    // Platform shipping is HK$0. Prepaid SF / locker / meetup fees are not stored anymore.
+    shippingFee: 0,
+    shippingDays: input.shippingDays >= 1 && input.shippingDays <= 30 ? input.shippingDays : 3,
+    shipLockerFee: 0,
+    shipMeetFee: 0,
+    shipSfCod: input.shipSfCod,
+    shipMeetup: input.shipMeetup,
+    shipPickup: input.shipPickup,
+    meetupDistrict: input.shipMeetup ? input.meetupDistrict?.trim() || null : null,
+    meetupWindow: input.shipMeetup ? input.meetupWindow?.trim() || null : null,
+    meetupNotes: input.shipMeetup ? input.meetupNotes?.trim() || null : null,
     cardNumber: input.cardNumber?.trim() || null,
     rarity: input.rarity?.trim() || null,
     price: input.saleType === "AUCTION" ? null : input.priceCents,
@@ -66,12 +74,39 @@ async function leaf(categoryId: string) {
 export async function saveListing(userId: string, input: ListingInput, listingId?: string) {
   const found = await leaf(input.categoryId);
   if (!found) return { ok: false as const, error: "category" };
-  const errors = validateListing(input, found.groupKey);
+  const listing = listingId
+    ? await prisma.listing.findUnique({ where: { id: listingId }, include: { photos: true } })
+    : null;
+  if (listingId && (!listing || listing.sellerId !== userId)) return { ok: false as const, error: "forbidden" };
+  if (listing && !["DRAFT", "SCHEDULED", "ACTIVE"].includes(listing.status)) return { ok: false as const, error: "state" };
+  if (listing?.binLockOrderId) return { ok: false as const, error: "locked" };
+  if (listing) {
+    const bidCount = await prisma.proxyBid.count({ where: { listingId: listing.id } });
+    if (bidCount > 0) {
+      const description = input.description.trim();
+      if (!description || description.length > 5000) return { ok: false as const, error: "description" };
+      const extras = input.photos.filter((photo) => photo.url.trim() && !listing.photos.some((existing) => existing.url === photo.url.trim()));
+      const photos = [...listing.photos.map((photo) => ({ url: photo.url, role: photo.role })), ...extras].slice(0, 12);
+      if (photos.length > 12) return { ok: false as const, error: "photos" };
+      if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { ok: false as const, error: "photo_url" };
+      await prisma.$transaction([
+        prisma.listing.update({ where: { id: listing.id }, data: { description } }),
+        prisma.listingPhoto.deleteMany({ where: { listingId: listing.id } }),
+        prisma.listingPhoto.createMany({
+          data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
+        }),
+      ]);
+      return { ok: true as const, id: listing.id };
+    }
+  }
+
+  const seller = await prisma.user.findUnique({ where: { id: userId }, select: { storeDistrict: true, storeLine1: true } });
+  const errors = validateListing(input, found.groupKey, new Date(), hasStoreAddress(seller));
   if (errors.length) return { ok: false as const, error: errors[0] };
   const now = new Date();
   const data = dataFor(input, found.groupKey, now);
 
-  if (!listingId) {
+  if (!listing) {
     const { photos, ...rest } = data;
     const created = await prisma.listing.create({
       data: {
@@ -85,33 +120,12 @@ export async function saveListing(userId: string, input: ListingInput, listingId
     return { ok: true as const, id: created.id };
   }
 
-  const listing = await prisma.listing.findUnique({ where: { id: listingId }, include: { photos: true } });
-  if (!listing || listing.sellerId !== userId) return { ok: false as const, error: "forbidden" };
-  if (!["DRAFT", "SCHEDULED", "ACTIVE"].includes(listing.status)) return { ok: false as const, error: "state" };
-  if (listing.binLockOrderId) return { ok: false as const, error: "locked" };
-  const bidCount = await prisma.proxyBid.count({ where: { listingId } });
-  if (bidCount > 0) {
-    if (!data.description || data.description.length > 5000) return { ok: false as const, error: "description" };
-    const extras = data.photos.filter((photo) => !listing.photos.some((existing) => existing.url === photo.url.trim()));
-    const photos = [...listing.photos.map((photo) => ({ url: photo.url, role: photo.role })), ...extras].slice(0, 12);
-    if (photos.length > 12) return { ok: false as const, error: "photos" };
-    if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { ok: false as const, error: "photo_url" };
-    await prisma.$transaction([
-      prisma.listing.update({ where: { id: listingId }, data: { description: data.description } }),
-      prisma.listingPhoto.deleteMany({ where: { listingId } }),
-      prisma.listingPhoto.createMany({
-        data: photos.map((photo, index) => ({ listingId, url: photo.url, role: photo.role, position: index })),
-      }),
-    ]);
-    return { ok: true as const, id: listingId };
-  }
-
   const reserved = listing.quantity - listing.quantityAvailable;
   if (data.quantity < reserved) return { ok: false as const, error: "stock" };
   const { photos, ...rest } = data;
   await prisma.$transaction([
     prisma.listing.update({
-      where: { id: listingId },
+      where: { id: listing.id },
       data: {
         ...rest,
         categoryId: input.categoryId,
@@ -119,12 +133,12 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         currentBid: rest.saleType === "BUY_NOW" ? null : listing.currentBid,
       },
     }),
-    prisma.listingPhoto.deleteMany({ where: { listingId } }),
+    prisma.listingPhoto.deleteMany({ where: { listingId: listing.id } }),
     prisma.listingPhoto.createMany({
-      data: photos.map((photo, index) => ({ listingId, url: photo.url.trim(), role: photo.role, position: index })),
+      data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url.trim(), role: photo.role, position: index })),
     }),
   ]);
-  return { ok: true as const, id: listingId };
+  return { ok: true as const, id: listing.id };
 }
 
 export async function unlistListing(userId: string, listingId: string, asAdmin = false) {
@@ -213,8 +227,15 @@ export async function importCsv(userId: string, categoryId: string, text: string
       auctionEndsAt: saleType === "BUY_NOW" || !Number.isFinite(hours) ? null : new Date(Date.now() + hours * 60 * 60 * 1000),
       offersEnabled: truthy(cell(row, "offers_enabled")),
       minOfferCents: money(cell(row, "min_offer_hkd")),
-      shippingFeeCents: money(cell(row, "shipping_fee_hkd")) ?? -1,
-      shippingDays: Number(cell(row, "shipping_days")),
+      // shipping_fee_hkd is ignored. Bulk rows use 順豐到付 so each row still has one method.
+      // Platform shipping stays HK$0; the old per-row prepaid fee is not charged.
+      shippingDays: Number(cell(row, "shipping_days")) || 3,
+      shipSfCod: true,
+      shipMeetup: false,
+      shipPickup: false,
+      meetupDistrict: null,
+      meetupWindow: null,
+      meetupNotes: null,
       quantity: Number(cell(row, "quantity")),
       game: cell(row, "game") || null,
       setName: cell(row, "set_name") || null,

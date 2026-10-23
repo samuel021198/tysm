@@ -133,6 +133,10 @@ model User {
   payoutMethod       String?
   payoutAccount      String?
   payoutHolder       String?
+  storeName          String?
+  storeDistrict      String?
+  storeLine1         String?
+  storeHours         String?
   notifyBids         Boolean   @default(true)
   notifyOffers       Boolean   @default(true)
   notifyOrders       Boolean   @default(true)
@@ -216,10 +220,17 @@ model Listing {
   description       String         @default("")
   quantity          Int            @default(1)
   quantityAvailable Int            @default(1)
+  /// Retired prepaid amounts. Platform shipping is HK$0; columns stay so old rows still load.
   shippingFee       Int            @default(0)
   shippingDays      Int            @default(3)
   shipLockerFee     Int            @default(0)
   shipMeetFee       Int            @default(0)
+  shipSfCod         Boolean        @default(false)
+  shipMeetup        Boolean        @default(false)
+  shipPickup        Boolean        @default(false)
+  meetupDistrict    String?
+  meetupWindow      String?
+  meetupNotes       String?
   price             Int?
   offersEnabled     Boolean        @default(false)
   minOffer          Int?
@@ -354,6 +365,8 @@ model Order {
   paymentOutcome     PaymentOutcome  @default(NONE)
   shipDays           Int
   shippingMethod     String?
+  /// Snapshot of the method the buyer picked: meetup district/notes, shop address, or COD.
+  fulfillment        Json?
   courierName        String?
   trackingNumber     String?
   paymentBrand       String?

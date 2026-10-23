@@ -47,7 +47,7 @@ export function CsvForm({
         {" · "}
         {tx(locale, "明星", "Celebrities")} <a className="text-link" href="/templates/celebrity.csv">celebrity.csv</a>
       </p>
-      <p className="text-sm text-muted">{tx(locale, "任何一列錯誤，整批都不會匯入。photo_front 同 photo_back 必填，photo_extra 用 | 分隔。", "Any invalid row rejects the whole file. photo_front and photo_back are required. Separate photo_extra with |.")}</p>
+      <p className="text-sm text-muted">{tx(locale, "任何一列錯誤，整批都不會匯入。photo_front 同 photo_back 必填，photo_extra 用 | 分隔。shipping_fee_hkd 會忽略；批量匯入一律順豐到付，平台運費 HK$0。", "Any invalid row rejects the whole file. photo_front and photo_back are required. Separate photo_extra with |. shipping_fee_hkd is ignored; imports use SF cash on delivery at HK$0.")}</p>
     </form>
   );
 }

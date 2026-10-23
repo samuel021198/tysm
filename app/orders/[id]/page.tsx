@@ -7,9 +7,10 @@ import { bpsToPercentLabel } from "@/lib/rules";
 import { orderStatusLabel, tx } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
-import { appealAction, cancelOrderAction, confirmAction, disputeAction, payAction, shipAction } from "@/actions/trade";
+import { appealAction, cancelOrderAction, chooseShipAction, confirmAction, disputeAction, payAction, shipAction } from "@/actions/trade";
 import { PayActions } from "@/components/pay-actions";
-import { shipMethodLabel } from "@/lib/shipping";
+import { ShipDetails } from "@/components/ship-details";
+import { hasStoreAddress, intersectOffered, methodHint, needsBuyerAddress, shipMethodLabel } from "@/lib/shipping";
 import { replyReviewAction, reviewAction } from "@/actions/social";
 
 export default async function OrderPage({
@@ -27,7 +28,7 @@ export default async function OrderPage({
   const order = await prisma.order.findUnique({
     where: { id },
     include: {
-      items: true,
+      items: { include: { listing: true } },
       dispute: true,
       reviews: { include: { author: true, subject: true } },
       buyer: true,
@@ -40,6 +41,8 @@ export default async function OrderPage({
   const seller = viewer.id === order.sellerId;
   const snap = order.addressSnapshot as { recipient?: string; phone?: string; line1?: string; district?: string } | null;
   const addresses = buyer && order.status === "PENDING_PAYMENT" ? await prisma.address.findMany({ where: { userId: viewer.id } }) : [];
+  const allowed = intersectOffered(order.items.map((item) => ({ choice: item.listing, storeReady: hasStoreAddress(order.seller) })));
+  const needsAddress = needsBuyerAddress(order.shippingMethod);
   const chain = ["PENDING_PAYMENT", "IN_ESCROW", "AWAITING_SHIP", "SHIPPED", "COMPLETED"];
 
   return (
@@ -53,11 +56,12 @@ export default async function OrderPage({
       <ul className="text-sm">
         {order.items.map((item) => (
           <li key={item.id}>
-            <Link href={`/listing/${item.listingId}`}>{item.title}</Link> · {item.conditionLabel} · {formatHkd(item.unitPrice, locale)} × {item.quantity} + {tx(locale, "運費", "shipping")} {formatHkd(item.shippingFee, locale)}
+            <Link href={`/listing/${item.listingId}`}>{item.title}</Link> · {item.conditionLabel} · {formatHkd(item.unitPrice, locale)} × {item.quantity}{item.shippingFee > 0 ? ` + ${tx(locale, "運費", "shipping")} ${formatHkd(item.shippingFee, locale)}` : ""}
           </li>
         ))}
       </ul>
-      <p>{tx(locale, "貨品", "Items")} {formatHkd(order.subtotal, locale)} · {shipMethodLabel(order.shippingMethod || "SF", locale)} {formatHkd(order.shippingTotal, locale)}</p>
+      <p>{tx(locale, "貨品", "Items")} {formatHkd(order.subtotal, locale)} · {shipMethodLabel(order.shippingMethod || "", locale)} {formatHkd(order.shippingTotal, locale)}</p>
+      <ShipDetails locale={locale} method={order.shippingMethod} fulfillment={order.fulfillment} />
       <p className="price text-2xl">{tx(locale, "合計", "Total")} {formatHkd(order.total, locale)}</p>
       {order.trackingNumber || order.courierName ? (
         <p className="text-sm">
@@ -76,9 +80,32 @@ export default async function OrderPage({
         {order.shipBy ? ` · ${tx(locale, "建議寄出", "Ship by")} ${formatHKT(order.shipBy, locale)}` : ""}
         {order.autoReleaseAt && order.status === "SHIPPED" ? ` · ${tx(locale, "自動完成", "Auto release")} ${formatHKT(order.autoReleaseAt, locale)}` : ""}
       </p>
-      {snap?.line1 ? <p className="text-sm">{snap.recipient} · {snap.phone} · {snap.district} {snap.line1}</p> : <p className="text-sm">{tx(locale, "未有收貨地址。", "No shipping address yet.")}</p>}
+      {needsAddress && snap?.line1 ? <p className="text-sm">{snap.recipient} · {snap.phone} · {snap.district} {snap.line1}</p> : null}
+      {needsAddress && !snap?.line1 ? <p className="text-sm">{tx(locale, "未有收貨地址。", "No shipping address yet.")}</p> : null}
 
-      {buyer && order.status === "PENDING_PAYMENT" && !snap?.line1 ? (
+      {buyer && order.status === "PENDING_PAYMENT" && !order.shippingMethod ? (
+        <form action={chooseShipAction} className="grid max-w-lg gap-2">
+          <input type="hidden" name="orderId" value={order.id} />
+          <h2 className="font-semibold">{tx(locale, "選擇運送方式", "Choose shipping")}</h2>
+          {allowed.length === 0 ? <p className="text-sm text-danger">{tx(locale, "賣家而家沒有可用的運送方式。", "The seller has no shipping method available.")}</p> : null}
+          {allowed.map((method, index) => (
+            <label key={method} className="flex min-h-12 items-center gap-2 text-sm">
+              <input type="radio" name="shipMethod" value={method} defaultChecked={index === 0} required />
+              <span>{shipMethodLabel(method, locale)} · {formatHkd(0, locale)}<span className="block text-xs text-muted">{methodHint(method, locale)}</span></span>
+            </label>
+          ))}
+          {allowed.includes("SF_COD") ? (
+            addresses.length ? addresses.map((address) => (
+              <label key={address.id} className="flex gap-2 text-sm">
+                <input type="radio" name="addressId" value={address.id} defaultChecked={address.isDefault} />
+                {address.recipient} {address.district} {address.line1}
+              </label>
+            )) : <p className="text-sm"><a className="text-link" href="/me">{tx(locale, "順豐到付要先在帳戶新增香港地址。", "Add a Hong Kong address before choosing SF cash on delivery.")}</a></p>
+          ) : null}
+          <button className="btn btn-primary w-fit" disabled={allowed.length === 0}>{tx(locale, "儲存運送方式", "Save shipping method")}</button>
+        </form>
+      ) : null}
+      {buyer && order.status === "PENDING_PAYMENT" && needsAddress && !snap?.line1 ? (
         <form action={payAction} className="grid max-w-lg gap-2">
           <input type="hidden" name="orderId" value={order.id} />
           {addresses.map((address) => (
@@ -90,7 +117,7 @@ export default async function OrderPage({
           <button className="btn btn-primary w-fit">{tx(locale, "儲存地址", "Save address")}</button>
         </form>
       ) : null}
-      {buyer && order.status === "PENDING_PAYMENT" && snap?.line1 ? (
+      {buyer && order.status === "PENDING_PAYMENT" && order.shippingMethod && (!needsAddress || snap?.line1) ? (
         <PayActions locale={locale} orderId={order.id} />
       ) : null}
       {buyer && order.status === "PENDING_PAYMENT" ? (
@@ -110,15 +137,17 @@ export default async function OrderPage({
           <input type="hidden" name="orderId" value={order.id} />
           <label className="grid gap-1 text-sm">
             {tx(locale, "快遞", "Courier")}
-            <select className="field" name="courier" defaultValue={order.courierName || shipMethodLabel(order.shippingMethod || "SF", "zh-HK")}>
+            <select className="field" name="courier" defaultValue={order.courierName || shipMethodLabel(order.shippingMethod || "SF_COD", "zh-HK")}>
+              <option>順豐到付</option>
+              <option>面交</option>
+              <option>店舖自取</option>
               <option>順豐速運</option>
               <option>順豐智能櫃</option>
-              <option>面交</option>
             </select>
           </label>
           <label className="grid gap-1 text-sm">
             {tx(locale, "運單號碼", "Tracking number")}
-            <input className="field" name="tracking" placeholder={order.shippingMethod === "MEET" ? tx(locale, "面交可留空", "Optional for meet-up") : "SF12345678HK"} />
+            <input className="field" name="tracking" placeholder={order.shippingMethod === "MEET" || order.shippingMethod === "PICKUP" ? tx(locale, "面交或自取可留空", "Optional for meet-up or pickup") : "SF12345678HK"} />
           </label>
           <button className="btn btn-primary w-fit" name="step" value="ship">{tx(locale, "確認寄出", "Confirm shipment")}</button>
         </form>

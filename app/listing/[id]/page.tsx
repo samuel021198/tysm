@@ -10,7 +10,7 @@ import { isBlocked } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
 import { bpsToPercentLabel, conditionLabel, minimumNextBid } from "@/lib/rules";
-import { onTimePercent, shipDays, shipFee, shipMethodLabel, type ShipMethod } from "@/lib/shipping";
+import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
 import { Gallery } from "@/components/gallery";
 import { RichText } from "@/components/rich-text";
@@ -106,7 +106,7 @@ export default async function ListingPage({
   ]);
   const sellerOnTime = onTimePercent(sellerShipped);
   const sellerRating = sellerReviews._count ? sellerReviews._avg.stars : null;
-  const methods: ShipMethod[] = ["SF", "LOCKER", "MEET"];
+  const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
   const showCart = listing.status === "ACTIVE" && listing.saleType !== "AUCTION" && listing.price != null && listing.quantityAvailable > 0 && !listing.binLockOrderId && !owner;
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
 
@@ -140,10 +140,20 @@ export default async function ListingPage({
           {listing.brandSeries ? <div><dt className="text-muted">{tx(locale, "品牌", "Brand")}</dt><dd>{listing.brandSeries}</dd></div> : null}
           {listing.cardNumber ? <div><dt className="text-muted">{tx(locale, "卡號", "Number")}</dt><dd>{listing.cardNumber}</dd></div> : null}
           {listing.rarity ? <div><dt className="text-muted">{tx(locale, "稀有度", "Rarity")}</dt><dd>{listing.rarity}</dd></div> : null}
-          {methods.map((method) => (
+          {methods.length === 0 ? (
+            <div>
+              <dt className="text-muted">{tx(locale, "運送", "Shipping")}</dt>
+              <dd>{tx(locale, "賣家未有可用的運送方式", "No shipping method is available")}</dd>
+            </div>
+          ) : methods.map((method) => (
             <div key={method}>
               <dt className="text-muted">{shipMethodLabel(method, locale)}</dt>
-              <dd>{formatHkd(shipFee(listing, method), locale)} · {method === "MEET" ? tx(locale, "約時間", "Arrange") : `${shipDays(listing, method)} ${tx(locale, "日", "days")}`}</dd>
+              <dd>
+                {formatHkd(0, locale)}
+                {method === "SF_COD" ? ` · ${tx(locale, "到付，買家付順豐", "Buyer pays SF on delivery")}` : null}
+                {method === "MEET" ? ` · ${[listing.meetupDistrict, listing.meetupWindow, listing.meetupNotes].filter(Boolean).join(" · ")}` : null}
+                {method === "PICKUP" ? ` · ${[listing.seller.storeName, listing.seller.storeDistrict, listing.seller.storeLine1, listing.seller.storeHours].filter(Boolean).join(" ")}` : null}
+              </dd>
             </div>
           ))}
           <div><dt className="text-muted">{tx(locale, "存貨", "Stock")}</dt><dd>{listing.quantityAvailable}</dd></div>

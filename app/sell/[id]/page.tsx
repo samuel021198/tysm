@@ -37,10 +37,13 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           auctionEndsAt: listing.auctionEndsAt ? toHkInput(listing.auctionEndsAt) : "",
           offersEnabled: listing.offersEnabled,
           minOffer: centsToInput(listing.minOffer),
-          shippingFee: centsToInput(listing.shippingFee),
-          shipLockerFee: centsToInput(listing.shipLockerFee),
-          shipMeetFee: centsToInput(listing.shipMeetFee),
           shippingDays: listing.shippingDays,
+          shipSfCod: listing.shipSfCod,
+          shipMeetup: listing.shipMeetup,
+          shipPickup: listing.shipPickup,
+          meetupDistrict: listing.meetupDistrict || "",
+          meetupWindow: listing.meetupWindow || "",
+          meetupNotes: listing.meetupNotes || "",
           quantity: listing.quantity,
           game: listing.game || "",
           setName: listing.setName || "",
@@ -61,6 +64,8 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           photos: listing.photos.map((photo) => ({ url: photo.url, role: photo.role })),
           locked: bids > 0,
         }}
+        storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
+        storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
       />
     </div>
   );

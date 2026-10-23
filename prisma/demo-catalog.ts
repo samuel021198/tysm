@@ -2,6 +2,27 @@ import { resolveAuction } from "../lib/rules";
 
 const hk = (dollars: number) => Math.round(dollars * 100);
 
+type SellerShip = {
+  shipSfCod: boolean;
+  shipMeetup: boolean;
+  shipPickup: boolean;
+  meetupDistrict: string | null;
+  meetupWindow: string | null;
+  meetupNotes: string | null;
+};
+
+const SELLER_SHIP: Record<string, SellerShip> = {
+  user_ming: { shipSfCod: true, shipMeetup: true, shipPickup: false, meetupDistrict: "油尖旺", meetupWindow: "週末 14:00–18:00", meetupNotes: "旺角站附近，請先傳訊息。" },
+  user_ken: { shipSfCod: true, shipMeetup: false, shipPickup: true, meetupDistrict: null, meetupWindow: null, meetupNotes: null },
+  user_star: { shipSfCod: false, shipMeetup: true, shipPickup: false, meetupDistrict: "灣仔", meetupWindow: "平日晚上", meetupNotes: "銅鑼灣站，先約時間。" },
+  user_wai: { shipSfCod: true, shipMeetup: true, shipPickup: false, meetupDistrict: "中西區", meetupWindow: null, meetupNotes: "中環站附近。" },
+  user_lam: { shipSfCod: true, shipMeetup: true, shipPickup: false, meetupDistrict: "沙田", meetupWindow: "週日下午", meetupNotes: null },
+};
+
+function sellerShip(sellerId: string): SellerShip {
+  return SELLER_SHIP[sellerId] ?? { shipSfCod: true, shipMeetup: false, shipPickup: false, meetupDistrict: null, meetupWindow: null, meetupNotes: null };
+}
+
 type GradeName = "PSA" | "BGS" | "CGC" | "TAG";
 type RawName = "A" | "B" | "C" | "D";
 
@@ -60,6 +81,12 @@ export type DemoListing = {
   shippingDays: number;
   shipLockerFee: number;
   shipMeetFee: number;
+  shipSfCod: boolean;
+  shipMeetup: boolean;
+  shipPickup: boolean;
+  meetupDistrict: string | null;
+  meetupWindow: string | null;
+  meetupNotes: string | null;
   cardNumber: string;
   rarity: string;
   price: number | null;
@@ -141,7 +168,6 @@ function card(input: CardInput): DemoListing {
   const value = input.grader && input.score != null ? gradeValue(input.grader, input.score) : null;
   const title = input.title ?? `${input.zh} ${input.en}`;
   const description = [`**${input.zh} ${input.en}**`, input.line, ...(input.notes ?? []).map((note) => `- ${note}`)].join("\n");
-  const sf = hk(input.ship ?? 20);
   let serial = 0;
   for (const char of input.id) serial = (serial + char.charCodeAt(0) * 17) % 186;
   const cardNumber = input.number ?? (input.kind === "TCG" ? `${String(serial + 1).padStart(3, "0")}/185` : `No.${serial + 1}`);
@@ -159,10 +185,12 @@ function card(input: CardInput): DemoListing {
     line: input.line,
     quantity,
     quantityAvailable: status === "SOLD" ? 0 : quantity,
-    shippingFee: sf,
+    // Prepaid SF / locker / meetup amounts on the card input are retired. Platform fee is HK$0.
+    shippingFee: 0,
     shippingDays: input.days ?? 3,
-    shipLockerFee: input.locker != null ? hk(input.locker) : Math.max(0, sf - hk(8)),
-    shipMeetFee: input.meet != null ? hk(input.meet) : 0,
+    shipLockerFee: 0,
+    shipMeetFee: 0,
+    ...sellerShip(input.sellerId),
     cardNumber,
     rarity,
     price: input.price != null ? hk(input.price) : null,
@@ -775,6 +803,10 @@ export const demoUsers = [
   { id: "user_yuki", email: "yuki@tysm.hk", phone: "+85297777777", nickname: "Yuki", role: "USER" as const, phoneVerified: true, bio: "買家，追海賊王同 IU。" },
   { id: "user_ho", email: "ho@tysm.hk", phone: "+85298888888", nickname: "何生", role: "USER" as const, phoneVerified: false, bio: "週末收藏家，鍾意足球同拍賣。" },
   { id: "user_oscar", email: "oscar@tysm.hk", phone: null, nickname: "Oscar", role: "USER" as const, phoneVerified: false, bio: "專攻 PSA 同 BGS。" },
+];
+
+export const demoStores = [
+  { userId: "user_ken", storeName: "旺角卡舖", storeDistrict: "油尖旺", storeLine1: "西洋菜南街 12 號 2 樓", storeHours: "每日 13:00–21:00" },
 ];
 
 export const demoAddresses = [

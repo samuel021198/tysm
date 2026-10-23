@@ -36,6 +36,7 @@ export const TCG_HEADERS = [
   "title",
   "description",
   "price_hkd",
+  // Ignored. Imports ship as 順豐到付 with platform fee HK$0.
   "shipping_fee_hkd",
   "shipping_days",
   "quantity",
@@ -62,6 +63,7 @@ export const PERSON_HEADERS = [
   "title",
   "description",
   "price_hkd",
+  // Ignored. Imports ship as 順豐到付 with platform fee HK$0.
   "shipping_fee_hkd",
   "shipping_days",
   "quantity",

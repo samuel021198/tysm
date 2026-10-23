@@ -11,7 +11,18 @@ import {
   quoteSeller,
   resolveAuction,
 } from "./rules";
-import { courierFor, mockTracking, parseShipMethod, shipDays, shipFee, type ShipMethod } from "./shipping";
+import {
+  buildFulfillment,
+  courierFor,
+  hasStoreAddress,
+  intersectOffered,
+  mockTracking,
+  needsBuyerAddress,
+  parseShipMethod,
+  shipDays,
+  type FulfillmentSnap,
+  type ShipMethod,
+} from "./shipping";
 
 type Tx = Prisma.TransactionClient;
 
@@ -60,13 +71,16 @@ export async function insertOrder(
     shipDays: number;
     address: AddressSnap | null;
     lines: OrderLine[];
-    shippingMethod?: ShipMethod;
+    shippingMethod?: ShipMethod | null;
+    fulfillment?: FulfillmentSnap | null;
     paymentBrand?: string | null;
   },
 ) {
   const bps = await bpsOf(tx);
   const subtotal = args.lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
-  const shippingTotal = args.lines.reduce((sum, line) => sum + line.shippingFee, 0);
+  // 順豐到付, 面交, and 店舖自取 are HK$0 on the platform.
+  // The old rule that summed a prepaid fee per listing is retired.
+  const shippingTotal = 0;
   const quote = quoteSeller(subtotal, shippingTotal, bps);
   return tx.order.create({
     data: {
@@ -81,11 +95,12 @@ export async function insertOrder(
       commissionAmount: quote.commissionAmount,
       sellerProceeds: quote.proceeds,
       shipDays: args.shipDays,
-      shippingMethod: args.shippingMethod ?? "SF",
+      shippingMethod: args.shippingMethod ?? null,
+      fulfillment: args.fulfillment ?? undefined,
       paymentBrand: args.paymentBrand ?? null,
       payBy: new Date(Date.now() + PAY_TTL_MS),
       addressSnapshot: args.address ?? undefined,
-      items: { create: args.lines },
+      items: { create: args.lines.map((line) => ({ ...line, shippingFee: 0 })) },
     },
   });
 }
@@ -124,27 +139,30 @@ async function reserve(tx: Tx, listingId: string, orderId: string, qty: number, 
 export async function checkoutLines(
   userId: string,
   requests: { listingId: string; quantity: number }[],
-  addressId: string,
+  addressId: string | null,
   clearCart: boolean,
-  choice?: { method?: string | null; paymentBrand?: string | null },
+  choice?: { methods?: Record<string, string | null | undefined>; paymentBrand?: string | null },
 ) {
   try {
     const ids = await prisma.$transaction(async (tx) => {
-      const address = await tx.address.findFirst({ where: { id: addressId, userId } });
-      if (!address) throw new Fail("address");
       if (!requests.length) throw new Fail("empty");
-      const snap: AddressSnap = {
-        recipient: address.recipient,
-        phone: address.phone,
-        line1: address.line1,
-        district: address.district,
-      };
+      let snap: AddressSnap | null = null;
+      if (addressId) {
+        const address = await tx.address.findFirst({ where: { id: addressId, userId } });
+        if (!address) throw new Fail("address");
+        snap = {
+          recipient: address.recipient,
+          phone: address.phone,
+          line1: address.line1,
+          district: address.district,
+        };
+      }
       const loaded = [];
       for (const request of requests) {
         if (!Number.isInteger(request.quantity) || request.quantity < 1) throw new Fail("qty");
         const listing = await tx.listing.findUnique({
           where: { id: request.listingId },
-          include: { photos: { orderBy: { position: "asc" }, take: 1 } },
+          include: { photos: { orderBy: { position: "asc" }, take: 1 }, seller: true },
         });
         if (!listing || listing.status !== "ACTIVE" || listing.sellerId === userId) throw new Fail("unavailable");
         if (listing.saleType === "AUCTION" || listing.price == null) throw new Fail("unavailable");
@@ -158,23 +176,41 @@ export async function checkoutLines(
         bucket.push(row);
         groups.set(row.listing.sellerId, bucket);
       }
-      const method = parseShipMethod(choice?.method);
       const orderIds: string[] = [];
       for (const [sellerId, rows] of groups) {
+        const storeReady = hasStoreAddress(rows[0].listing.seller);
+        const allowed = intersectOffered(rows.map((row) => ({ choice: row.listing, storeReady })));
+        if (!allowed.length) throw new Fail("ship_mix");
+        const method = parseShipMethod(choice?.methods?.[sellerId]);
+        if (!method || !allowed.includes(method)) throw new Fail("ship_method");
+        const fulfillment = buildFulfillment(
+          method,
+          rows.map((row) => ({
+            id: row.listing.id,
+            title: row.listing.title,
+            meetupDistrict: row.listing.meetupDistrict,
+            meetupWindow: row.listing.meetupWindow,
+            meetupNotes: row.listing.meetupNotes,
+          })),
+          rows[0].listing.seller,
+        );
+        if (!fulfillment) throw new Fail(method === "PICKUP" ? "store_unavailable" : "shipping");
+        if (needsBuyerAddress(method) && !snap) throw new Fail("address");
         const order = await insertOrder(tx, {
           buyerId: userId,
           sellerId,
           source: "BUY_NOW",
           shipDays: Math.max(...rows.map((row) => shipDays(row.listing, method))),
           shippingMethod: method,
+          fulfillment,
           paymentBrand: choice?.paymentBrand ?? null,
-          address: snap,
+          address: needsBuyerAddress(method) ? snap : null,
           lines: rows.map((row) => ({
             listingId: row.listing.id,
             title: row.listing.title,
             unitPrice: row.listing.price!,
             quantity: row.quantity,
-            shippingFee: shipFee(row.listing, method),
+            shippingFee: 0,
             imageUrl: row.listing.photos[0]?.url ?? null,
             conditionLabel: conditionLabel(row.listing),
             cardName: row.listing.cardName,
@@ -291,6 +327,64 @@ export async function attachAddress(userId: string, orderId: string, addressId: 
   return { ok: true as const };
 }
 
+export async function chooseOrderShip(userId: string, orderId: string, methodRaw: string | null, addressId: string | null) {
+  try {
+    await prisma.$transaction(async (tx) => {
+      const order = await tx.order.findUnique({
+        where: { id: orderId },
+        include: { items: { include: { listing: true } }, seller: true },
+      });
+      if (!order || order.buyerId !== userId || order.status !== "PENDING_PAYMENT") throw new Fail("forbidden");
+      if (order.shippingMethod) throw new Fail("state");
+      const storeReady = hasStoreAddress(order.seller);
+      const allowed = intersectOffered(order.items.map((item) => ({ choice: item.listing, storeReady })));
+      if (!allowed.length) throw new Fail("ship_mix");
+      const method = parseShipMethod(methodRaw);
+      if (!method || !allowed.includes(method)) throw new Fail("ship_method");
+      const fulfillment = buildFulfillment(
+        method,
+        order.items.map((item) => ({
+          id: item.listing.id,
+          title: item.title,
+          meetupDistrict: item.listing.meetupDistrict,
+          meetupWindow: item.listing.meetupWindow,
+          meetupNotes: item.listing.meetupNotes,
+        })),
+        order.seller,
+      );
+      if (!fulfillment) throw new Fail(method === "PICKUP" ? "store_unavailable" : "shipping");
+      let address = (order.addressSnapshot as AddressSnap | null) ?? null;
+      if (needsBuyerAddress(method)) {
+        if (addressId) {
+          const row = await tx.address.findFirst({ where: { id: addressId, userId } });
+          if (!row) throw new Fail("address");
+          address = { recipient: row.recipient, phone: row.phone, line1: row.line1, district: row.district };
+        }
+        if (!address?.line1) throw new Fail("address");
+      }
+      const quote = quoteSeller(order.subtotal, 0, order.commissionBps);
+      await tx.order.update({
+        where: { id: orderId },
+        data: {
+          shippingMethod: method,
+          shippingTotal: 0,
+          total: order.subtotal,
+          sellerProceeds: quote.proceeds,
+          fulfillment,
+          addressSnapshot: needsBuyerAddress(method) ? address ?? undefined : undefined,
+          shipDays: Math.max(...order.items.map((item) => shipDays(item.listing, method))),
+        },
+      });
+      await tx.orderItem.updateMany({ where: { orderId }, data: { shippingFee: 0 } });
+    });
+    return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
 export async function payOrder(userId: string, orderId: string, outcome: string) {
   if (outcome !== "success" && outcome !== "fail" && outcome !== "dispute") {
     return { ok: false as const, error: "state" };
@@ -304,8 +398,10 @@ export async function payOrder(userId: string, orderId: string, outcome: string)
         await tx.order.update({ where: { id: orderId }, data: { paymentOutcome: "FAIL" } });
         return { kind: "fail" as const, sellerId: order.sellerId };
       }
+      const method = order.shippingMethod || "";
+      if (!method) throw new Fail("shipping");
       const snap = order.addressSnapshot as AddressSnap | null;
-      if (!snap?.line1) throw new Fail("address");
+      if (needsBuyerAddress(method) && !snap?.line1) throw new Fail("address");
       if (outcome === "dispute") {
         await tx.order.update({
           where: { id: orderId },
@@ -554,7 +650,6 @@ export async function settleAuction(listingId: string) {
       sellerId: listing.sellerId,
       source: "AUCTION",
       shipDays: listing.shippingDays,
-      shippingMethod: "SF",
       address: address
         ? {
             recipient: address.recipient,
@@ -569,7 +664,7 @@ export async function settleAuction(listingId: string) {
           title: listing.title,
           unitPrice: resolved.price,
           quantity: 1,
-          shippingFee: listing.shippingFee,
+          shippingFee: 0,
           imageUrl: photo?.url ?? null,
           conditionLabel: conditionLabel(listing),
           cardName: listing.cardName,

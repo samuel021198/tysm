@@ -1,5 +1,5 @@
 import type { ConditionTrack, Grader, PhotoRole, RawGrade, SaleType } from "@prisma/client";
-import { fromHkInput, hkdToCents, isAllowedMediaUrl } from "./format";
+import { DISTRICTS, fromHkInput, hkdToCents, isAllowedMediaUrl } from "./format";
 import { gradedPhotosOk, parseGrade } from "./rules";
 
 export type PhotoInput = { url: string; role: PhotoRole };
@@ -14,10 +14,13 @@ export type ListingInput = {
   auctionEndsAt: Date | null;
   offersEnabled: boolean;
   minOfferCents: number | null;
-  shippingFeeCents: number;
   shippingDays: number;
-  shipLockerFeeCents?: number | null;
-  shipMeetFeeCents?: number | null;
+  shipSfCod: boolean;
+  shipMeetup: boolean;
+  shipPickup: boolean;
+  meetupDistrict: string | null;
+  meetupWindow: string | null;
+  meetupNotes: string | null;
   cardNumber?: string | null;
   rarity?: string | null;
   quantity: number;
@@ -42,7 +45,7 @@ export type ListingInput = {
 export const RAW: RawGrade[] = ["A", "B", "C", "D"];
 export const GRADERS: Grader[] = ["PSA", "BGS", "CGC", "TAG"];
 
-export function validateListing(input: ListingInput, groupKey: string, now = new Date()): string[] {
+export function validateListing(input: ListingInput, groupKey: string, now = new Date(), storeReady = true): string[] {
   const errors: string[] = [];
   const title = input.title.trim();
   if (title.length < 2 || title.length > 80) errors.push("title");
@@ -61,10 +64,15 @@ export function validateListing(input: ListingInput, groupKey: string, now = new
       errors.push("video");
     }
   }
-  if (input.shippingFeeCents < 0 || input.shippingDays < 1 || input.shippingDays > 30) errors.push("shipping");
-  if ((input.shipLockerFeeCents != null && input.shipLockerFeeCents < 0) || (input.shipMeetFeeCents != null && input.shipMeetFeeCents < 0)) {
-    errors.push("shipping");
+  if (!input.shipSfCod && !input.shipMeetup && !input.shipPickup) errors.push("shipping");
+  if (input.shipMeetup) {
+    const district = input.meetupDistrict?.trim() ?? "";
+    const known = DISTRICTS.some(([name]) => name === district);
+    const timeWindow = input.meetupWindow?.trim() ?? "";
+    const notes = input.meetupNotes?.trim() ?? "";
+    if (!known || timeWindow.length > 80 || notes.length > 200) errors.push("meetup");
   }
+  if (input.shipPickup && !storeReady) errors.push("store");
   if (input.quantity < 1 || input.quantity > 99) errors.push("qty");
 
   const auction = input.saleType !== "BUY_NOW";
@@ -117,7 +125,7 @@ const STEP_CODES = [
   ["photos", "photo_url", "front_back"],
   ["title", "description", "category", "tcg", "person", "grade", "video", "front_back"],
   ["price", "start", "auction_end", "both_price", "offer", "qty"],
-  ["shipping"],
+  ["shipping", "meetup", "store"],
 ] as const;
 
 const STEP_OF: Record<string, number> = {
@@ -138,26 +146,28 @@ const STEP_OF: Record<string, number> = {
   offer: 2,
   qty: 2,
   shipping: 3,
+  meetup: 3,
+  store: 3,
   schedule: 4,
 };
 
-function withCategory(input: ListingInput, groupKey: string, now: Date): string[] {
-  const errors = validateListing(input, groupKey, now);
+function withCategory(input: ListingInput, groupKey: string, now: Date, storeReady: boolean): string[] {
+  const errors = validateListing(input, groupKey, now, storeReady);
   if (input.intent !== "draft" && !input.categoryId.trim()) errors.unshift("category");
   return [...new Set(errors)];
 }
 
 /** Issues that block leaving this wizard step. Step 4 is the full publish check. */
-export function wizardStepIssues(step: number, input: ListingInput, groupKey: string, now = new Date()): string[] {
-  const all = withCategory({ ...input, intent: "publish" }, groupKey, now);
+export function wizardStepIssues(step: number, input: ListingInput, groupKey: string, now = new Date(), storeReady = true): string[] {
+  const all = withCategory({ ...input, intent: "publish" }, groupKey, now, storeReady);
   if (step >= 4) return all;
   const allow = new Set<string>(STEP_CODES[step] ?? []);
   return all.filter((code) => allow.has(code));
 }
 
 /** Issues for an explicit save. Drafts only need a title; publish and schedule use the full rules. */
-export function wizardPublishIssues(input: ListingInput, groupKey: string, now = new Date()): string[] {
-  return withCategory(input, groupKey, now);
+export function wizardPublishIssues(input: ListingInput, groupKey: string, now = new Date(), storeReady = true): string[] {
+  return withCategory(input, groupKey, now, storeReady);
 }
 
 export function wizardStepForIssue(code: string): number | null {
@@ -169,7 +179,7 @@ export function wizardPanels(codes: string[]) {
     photoExtra: codes.includes("photo_url"),
     more: codes.includes("video"),
     priceExtra: codes.includes("offer") || codes.includes("qty"),
-    ship: codes.includes("shipping"),
+    ship: codes.includes("shipping") || codes.includes("meetup") || codes.includes("store"),
     schedule: codes.includes("schedule"),
   };
 }
@@ -206,10 +216,13 @@ export function parseListingForm(formData: FormData): ListingInput | null {
     auctionEndsAt: fromHkInput(String(formData.get("auctionEndsAt") || "")),
     offersEnabled: formData.get("offersEnabled") === "on",
     minOfferCents: hkdToCents(String(formData.get("minOffer") || "")),
-    shippingFeeCents: hkdToCents(String(formData.get("shippingFee") || "")) ?? -1,
-    shippingDays: Number(formData.get("shippingDays") || 0),
-    shipLockerFeeCents: hkdToCents(String(formData.get("shipLockerFee") || "0")),
-    shipMeetFeeCents: hkdToCents(String(formData.get("shipMeetFee") || "0")),
+    shippingDays: Number(formData.get("shippingDays") || 3),
+    shipSfCod: formData.get("shipSfCod") === "on",
+    shipMeetup: formData.get("shipMeetup") === "on",
+    shipPickup: formData.get("shipPickup") === "on",
+    meetupDistrict: String(formData.get("meetupDistrict") || "") || null,
+    meetupWindow: String(formData.get("meetupWindow") || "") || null,
+    meetupNotes: String(formData.get("meetupNotes") || "") || null,
     cardNumber: String(formData.get("cardNumber") || "") || null,
     rarity: String(formData.get("rarity") || "") || null,
     quantity: Number(formData.get("quantity") || 0),
