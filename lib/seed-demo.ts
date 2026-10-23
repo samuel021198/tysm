@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { conditionLabel, resolveAuction } from "./rules";
+import { courierFor, mockTracking } from "./shipping";
 import {
   LEAF_CATEGORIES,
   demoAddresses,
@@ -41,6 +42,10 @@ function listingData(item: DemoListing, resolved: { leaderId: string | null; pri
     quantityAvailable: item.quantityAvailable,
     shippingFee: item.shippingFee,
     shippingDays: item.shippingDays,
+    shipLockerFee: item.shipLockerFee,
+    shipMeetFee: item.shipMeetFee,
+    cardNumber: item.cardNumber,
+    rarity: item.rarity,
     price: item.price,
     offersEnabled: item.offersEnabled,
     minOffer: item.minOffer,
@@ -111,8 +116,11 @@ async function seedOrders() {
       shippedAt: daysAgo(8),
       completedAt: daysAgo(6),
       escrowReleasedAt: daysAgo(6),
-      shipBy: null,
+      shipBy: daysAgo(9),
       autoReleaseAt: null,
+      shippingMethod: "SF",
+      courierName: "順豐速運",
+      trackingNumber: "SF85210023HK",
     },
     {
       id: "seed_order_shipped",
@@ -133,6 +141,9 @@ async function seedOrders() {
       escrowReleasedAt: null,
       shipBy: hoursFromNow(24),
       autoReleaseAt: hoursFromNow(24 * 6),
+      shippingMethod: "SF",
+      courierName: "順豐速運",
+      trackingNumber: "SF85218820HK",
     },
     {
       id: "seed_order_dispute",
@@ -153,8 +164,42 @@ async function seedOrders() {
       escrowReleasedAt: null,
       shipBy: null,
       autoReleaseAt: null,
+      shippingMethod: "SF",
+      courierName: null as string | null,
+      trackingNumber: null as string | null,
     },
   ];
+  const buyers = ["user_mei", "user_alex", "user_yuki", "user_ho", "user_oscar", "user_star", "user_ken", "user_wai", "user_lam", "user_ming"];
+  for (const [index, listing] of demoListings.filter((item) => item.status === "SOLD" && item.id !== "seed_sold_zard").entries()) {
+    const buyerId = buyers.filter((id) => id !== listing.sellerId)[index % 8];
+    const subtotal = listing.price ?? 0;
+    const shippingTotal = listing.shippingFee;
+    const commissionAmount = Math.round((subtotal * 800) / 10000);
+    const age = 4 + index * 5;
+    orders.push({
+      id: `seed_order_${listing.id}`,
+      itemId: `seed_oi_${listing.id}`,
+      buyerId,
+      sellerId: listing.sellerId,
+      listingId: listing.id,
+      status: "COMPLETED",
+      subtotal,
+      shippingTotal,
+      total: subtotal + shippingTotal,
+      commissionAmount,
+      sellerProceeds: subtotal - commissionAmount + shippingTotal,
+      shipDays: listing.shippingDays,
+      paidAt: daysAgo(age + 3),
+      shippedAt: daysAgo(age + 1),
+      completedAt: daysAgo(age),
+      escrowReleasedAt: daysAgo(age),
+      shipBy: daysAgo(age + 2),
+      autoReleaseAt: null,
+      shippingMethod: "SF",
+      courierName: courierFor("SF"),
+      trackingNumber: mockTracking(listing.id, "SF"),
+    });
+  }
   for (const order of orders) {
     const listing = byId.get(order.listingId);
     if (!listing) throw new Error(order.listingId);
@@ -177,6 +222,10 @@ async function seedOrders() {
       escrowReleasedAt: order.escrowReleasedAt,
       shipBy: order.shipBy,
       autoReleaseAt: order.autoReleaseAt,
+      shippingMethod: order.shippingMethod,
+      courierName: order.courierName,
+      trackingNumber: order.trackingNumber,
+      paymentBrand: order.status === "DISPUTED" ? null : "FPS",
       payBy: null,
       addressSnapshot: snap,
     };
@@ -505,7 +554,7 @@ export async function seedDemo() {
     proxyBids,
     bidEvents: bidEventCount,
     offers: demoOffers.length,
-    orders: 3,
+    orders: 3 + demoListings.filter((item) => item.status === "SOLD" && item.id !== "seed_sold_zard").length,
     threads: demoThreads.length,
     messages: demoMessages.length,
     notifications: demoNotifications.length,

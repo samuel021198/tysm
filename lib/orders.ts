@@ -11,6 +11,7 @@ import {
   quoteSeller,
   resolveAuction,
 } from "./rules";
+import { courierFor, mockTracking, parseShipMethod, shipDays, shipFee, type ShipMethod } from "./shipping";
 
 type Tx = Prisma.TransactionClient;
 
@@ -59,6 +60,8 @@ export async function insertOrder(
     shipDays: number;
     address: AddressSnap | null;
     lines: OrderLine[];
+    shippingMethod?: ShipMethod;
+    paymentBrand?: string | null;
   },
 ) {
   const bps = await bpsOf(tx);
@@ -78,6 +81,8 @@ export async function insertOrder(
       commissionAmount: quote.commissionAmount,
       sellerProceeds: quote.proceeds,
       shipDays: args.shipDays,
+      shippingMethod: args.shippingMethod ?? "SF",
+      paymentBrand: args.paymentBrand ?? null,
       payBy: new Date(Date.now() + PAY_TTL_MS),
       addressSnapshot: args.address ?? undefined,
       items: { create: args.lines },
@@ -121,6 +126,7 @@ export async function checkoutLines(
   requests: { listingId: string; quantity: number }[],
   addressId: string,
   clearCart: boolean,
+  choice?: { method?: string | null; paymentBrand?: string | null },
 ) {
   try {
     const ids = await prisma.$transaction(async (tx) => {
@@ -152,20 +158,23 @@ export async function checkoutLines(
         bucket.push(row);
         groups.set(row.listing.sellerId, bucket);
       }
+      const method = parseShipMethod(choice?.method);
       const orderIds: string[] = [];
       for (const [sellerId, rows] of groups) {
         const order = await insertOrder(tx, {
           buyerId: userId,
           sellerId,
           source: "BUY_NOW",
-          shipDays: Math.max(...rows.map((row) => row.listing.shippingDays)),
+          shipDays: Math.max(...rows.map((row) => shipDays(row.listing, method))),
+          shippingMethod: method,
+          paymentBrand: choice?.paymentBrand ?? null,
           address: snap,
           lines: rows.map((row) => ({
             listingId: row.listing.id,
             title: row.listing.title,
             unitPrice: row.listing.price!,
             quantity: row.quantity,
-            shippingFee: row.listing.shippingFee,
+            shippingFee: shipFee(row.listing, method),
             imageUrl: row.listing.photos[0]?.url ?? null,
             conditionLabel: conditionLabel(row.listing),
             cardName: row.listing.cardName,
@@ -350,7 +359,12 @@ export async function payOrder(userId: string, orderId: string, outcome: string)
   }
 }
 
-export async function advanceShipment(sellerId: string, orderId: string, step: "pack" | "ship") {
+export async function advanceShipment(
+  sellerId: string,
+  orderId: string,
+  step: "pack" | "ship",
+  extra?: { courier?: string | null; tracking?: string | null },
+) {
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order || order.sellerId !== sellerId) return { ok: false as const, error: "forbidden" };
   if (step === "pack") {
@@ -359,12 +373,17 @@ export async function advanceShipment(sellerId: string, orderId: string, step: "
   } else {
     if (order.status !== "AWAITING_SHIP") return { ok: false as const, error: "state" };
     const now = new Date();
+    const method = order.shippingMethod || "SF";
+    const courier = extra?.courier?.trim() || order.courierName || courierFor(method);
+    const tracking = extra?.tracking?.trim() || order.trackingNumber || mockTracking(orderId, method);
     await prisma.order.update({
       where: { id: orderId },
       data: {
         status: "SHIPPED",
         shippedAt: now,
         autoReleaseAt: new Date(now.getTime() + AUTO_RELEASE_MS),
+        courierName: courier,
+        trackingNumber: tracking,
       },
     });
   }
@@ -535,6 +554,7 @@ export async function settleAuction(listingId: string) {
       sellerId: listing.sellerId,
       source: "AUCTION",
       shipDays: listing.shippingDays,
+      shippingMethod: "SF",
       address: address
         ? {
             recipient: address.recipient,

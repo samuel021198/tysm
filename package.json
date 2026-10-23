@@ -7,10 +7,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma migrate deploy && prisma generate && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "tsx lib/rules.test.ts && tsx lib/search.test.ts && tsx lib/field-contrast.test.ts && tsx lib/format.test.ts && tsx prisma/demo-catalog.test.ts",
+    "test": "tsx lib/rules.test.ts && tsx lib/search.test.ts && tsx lib/field-contrast.test.ts && tsx lib/format.test.ts && tsx lib/market.test.ts && tsx prisma/demo-catalog.test.ts",
     "smoke": "tsx scripts/smoke.ts",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",

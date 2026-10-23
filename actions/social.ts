@@ -89,8 +89,8 @@ export async function sendMessage(formData: FormData) {
   if (!thread || (thread.buyerId !== user.id && thread.sellerId !== user.id)) redirect("/messages?err=forbidden");
   const other = thread.buyerId === user.id ? thread.sellerId : thread.buyerId;
   if (await isBlocked(user.id, other)) redirect(`/messages/${threadId}?err=blocked`);
-  const body = String(formData.get("body") || "").trim();
   const imageUrl = String(formData.get("imageUrl") || "").trim();
+  const body = String(formData.get("body") || "").trim() || (imageUrl ? "（相片）" : "");
   if (body.length < 1 || body.length > 2000) redirect(`/messages/${threadId}?err=description`);
   if (imageUrl && !isAllowedMediaUrl(imageUrl)) redirect(`/messages/${threadId}?err=photo_url`);
   await prisma.message.create({

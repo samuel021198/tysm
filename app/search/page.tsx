@@ -7,6 +7,9 @@ import { Flash } from "@/components/shell";
 import { ListingCard } from "@/components/listing-card";
 import { tx } from "@/lib/i18n";
 import { SaveSearchButton, SearchBox } from "@/components/search-box";
+import { SearchFilters } from "@/components/search-filters";
+import { compKey, loadCompSeries } from "@/lib/comps";
+import { hkdToCents } from "@/lib/format";
 import { listingQueryWhere, searchScore } from "@/lib/search";
 
 function one(value: string | string[] | undefined) {
@@ -25,6 +28,13 @@ export default async function SearchPage({
   const cond = one(sp.cond);
   const min = one(sp.min);
   const sort = one(sp.sort) || "relevance";
+  const pmin = one(sp.pmin);
+  const pmax = one(sp.pmax);
+  const sale = one(sp.sale);
+  const setName = one(sp.set).trim();
+  const number = one(sp.num).trim();
+  const priceMin = pmin ? hkdToCents(pmin) : null;
+  const priceMax = pmax ? hkdToCents(pmax) : null;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const hidden = await hiddenUserIds(viewer?.id ?? null);
   const categories = await prisma.category.findMany({ where: { level: { in: ["GROUP", "LEAF"] } }, orderBy: { sort: "asc" } });
@@ -37,6 +47,9 @@ export default async function SearchPage({
     ...(cond === "raw" ? { conditionTrack: "RAW" as const } : {}),
     ...(cond && cond !== "raw" ? { conditionTrack: "GRADED" as const, grader: cond as "PSA" | "BGS" | "CGC" | "TAG" } : {}),
     ...(min ? { gradeValue: { gte: Math.round(Number(min) * 10) } } : {}),
+    ...(sale === "BUY_NOW" || sale === "AUCTION" || sale === "BOTH" ? { saleType: sale as "BUY_NOW" | "AUCTION" | "BOTH" } : {}),
+    ...(setName ? { setName: { contains: setName, mode: "insensitive" as const } } : {}),
+    ...(number ? { cardNumber: { contains: number, mode: "insensitive" as const } } : {}),
   };
   // ponytail: relevance and price sorts rank at most 200 rows in memory. Upgrade path: Postgres tsvector and a stored sort price.
   const listings = await prisma.listing.findMany({
@@ -51,7 +64,16 @@ export default async function SearchPage({
   } else if (sort === "relevance" && q) {
     listings.sort((a, b) => searchScore(b, q) - searchScore(a, q));
   }
-  const shown = listings.slice(0, 48);
+  const askOf = (listing: (typeof listings)[number]) =>
+    listing.saleType === "AUCTION" ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
+  const priced = listings.filter((listing) => {
+    const ask = askOf(listing);
+    if (priceMin != null && ask < priceMin) return false;
+    if (priceMax != null && ask > priceMax) return false;
+    return true;
+  });
+  const shown = priced.slice(0, 48);
+  const compSeries = await loadCompSeries();
   if (viewer && q) {
     const query = q.slice(0, 80);
     await prisma.$transaction([
@@ -89,33 +111,20 @@ export default async function SearchPage({
         accountRecent={accountRecent}
         scope={chosen ? { slug: chosen.slug, nameZh: chosen.nameZh, nameEn: chosen.nameEn } : null}
       />
-      <form action="/search" className="mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-5">
-        {q ? <input type="hidden" name="q" value={q} /> : null}
-        <select className="field col-span-2 md:col-span-1" name="cat" defaultValue={cat}>
-          <option value="">{tx(prefs.locale, "全部分類", "All categories")}</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.slug}>
-              {prefs.locale === "en" ? category.nameEn : category.nameZh}
-            </option>
-          ))}
-        </select>
-        <select className="field" name="cond" defaultValue={cond}>
-          <option value="">{tx(prefs.locale, "全部品相", "Any condition")}</option>
-          <option value="raw">{tx(prefs.locale, "全部 Raw", "All raw")}</option>
-          {["PSA", "BGS", "CGC", "TAG"].map((grader) => (
-            <option key={grader}>{grader}</option>
-          ))}
-        </select>
-        <input className="field" name="min" type="number" min={1} max={10.5} step={0.5} defaultValue={min} placeholder={tx(prefs.locale, "最低分數", "Min grade")} />
-        <select className="field col-span-2 md:col-span-1" name="sort" defaultValue={sort}>
-          <option value="relevance">{tx(prefs.locale, "相關", "Relevance")}</option>
-          <option value="new">{tx(prefs.locale, "最新", "Newest")}</option>
-          <option value="price_asc">{tx(prefs.locale, "價格由低至高", "Price ascending")}</option>
-          <option value="price_desc">{tx(prefs.locale, "價格由高至低", "Price descending")}</option>
-          <option value="ending">{tx(prefs.locale, "即將結束", "Ending soon")}</option>
-        </select>
-        <button className="btn btn-primary col-span-2 md:col-span-1">{tx(prefs.locale, "篩選", "Filter")}</button>
-      </form>
+      <SearchFilters
+        locale={prefs.locale}
+        q={q}
+        cat={cat}
+        cond={cond}
+        min={min}
+        sort={sort}
+        pmin={pmin}
+        pmax={pmax}
+        sale={sale}
+        setName={setName}
+        number={number}
+        categories={categories.map((category) => ({ slug: category.slug, nameZh: category.nameZh, nameEn: category.nameEn }))}
+      />
       {q ? (
         <div className="mb-3 mt-4 flex items-center justify-between gap-3 text-sm">
           <p className="text-muted">
@@ -127,7 +136,7 @@ export default async function SearchPage({
       {shown.length === 0 ? <p className="empty">{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
       <div className="feed">
         {shown.map((listing) => (
-          <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={false} next="/search" />
+          <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={false} next="/search" series={compSeries.get(compKey(listing))} />
         ))}
       </div>
     </div>

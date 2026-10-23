@@ -143,7 +143,10 @@ export async function checkoutAction(formData: FormData) {
           listingId: item.listingId,
           quantity: item.quantity,
         }));
-  const result = await checkoutLines(user.id, requests, addressId, mode !== "buy");
+  const result = await checkoutLines(user.id, requests, addressId, mode !== "buy", {
+    method: String(formData.get("shipMethod") || "SF"),
+    paymentBrand: String(formData.get("paymentBrand") || "FPS"),
+  });
   if (!result.ok) redirect(`/checkout?err=${result.error}${mode === "buy" ? `&buy=${formData.get("listingId")}` : ""}`);
   redirect(`/checkout/pay?orders=${result.ids.join(",")}`);
 }
@@ -171,7 +174,10 @@ export async function shipAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(`/orders/${id}`);
   const step = formData.get("step") === "ship" ? "ship" : "pack";
-  const result = await advanceShipment(user.id, id, step);
+  const result = await advanceShipment(user.id, id, step, {
+    courier: String(formData.get("courier") || ""),
+    tracking: String(formData.get("tracking") || ""),
+  });
   redirect(`/orders/${id}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
 }
 

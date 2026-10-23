@@ -18,6 +18,10 @@ export type ListingInput = {
   minOfferCents: number | null;
   shippingFeeCents: number;
   shippingDays: number;
+  shipLockerFeeCents?: number | null;
+  shipMeetFeeCents?: number | null;
+  cardNumber?: string | null;
+  rarity?: string | null;
   quantity: number;
   game: string | null;
   setName: string | null;
@@ -60,6 +64,9 @@ export function validateListing(input: ListingInput, groupKey: string, now = new
     }
   }
   if (input.shippingFeeCents < 0 || input.shippingDays < 1 || input.shippingDays > 30) errors.push("shipping");
+  if ((input.shipLockerFeeCents != null && input.shipLockerFeeCents < 0) || (input.shipMeetFeeCents != null && input.shipMeetFeeCents < 0)) {
+    errors.push("shipping");
+  }
   if (input.quantity < 1 || input.quantity > 99) errors.push("qty");
 
   const auction = input.saleType !== "BUY_NOW";
@@ -127,6 +134,10 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
         : input.quantity,
     shippingFee: input.intent === "draft" ? Math.max(0, input.shippingFeeCents) : input.shippingFeeCents,
     shippingDays: input.shippingDays >= 1 && input.shippingDays <= 30 ? input.shippingDays : input.intent === "draft" ? 3 : input.shippingDays,
+    shipLockerFee: Math.max(0, input.shipLockerFeeCents ?? Math.max(0, input.shippingFeeCents - 800)),
+    shipMeetFee: Math.max(0, input.shipMeetFeeCents ?? 0),
+    cardNumber: input.cardNumber?.trim() || null,
+    rarity: input.rarity?.trim() || null,
     price: input.saleType === "AUCTION" ? null : input.priceCents,
     offersEnabled: input.offersEnabled && input.saleType !== "AUCTION",
     minOffer: input.offersEnabled ? input.minOfferCents : null,
@@ -386,6 +397,10 @@ export function parseListingForm(formData: FormData): ListingInput | null {
     minOfferCents: hkdToCents(String(formData.get("minOffer") || "")),
     shippingFeeCents: hkdToCents(String(formData.get("shippingFee") || "")) ?? -1,
     shippingDays: Number(formData.get("shippingDays") || 0),
+    shipLockerFeeCents: hkdToCents(String(formData.get("shipLockerFee") || "0")),
+    shipMeetFeeCents: hkdToCents(String(formData.get("shipMeetFee") || "0")),
+    cardNumber: String(formData.get("cardNumber") || "") || null,
+    rarity: String(formData.get("rarity") || "") || null,
     quantity: Number(formData.get("quantity") || 0),
     game: String(formData.get("game") || "") || null,
     setName: String(formData.get("setName") || "") || null,

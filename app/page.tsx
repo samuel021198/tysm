@@ -8,6 +8,7 @@ import { Flash } from "@/components/shell";
 import { ListingCard } from "@/components/listing-card";
 import { SearchBox } from "@/components/search-box";
 import { tx } from "@/lib/i18n";
+import { compKey, loadCompSeries } from "@/lib/comps";
 
 export default async function HomePage({
   searchParams,
@@ -17,10 +18,11 @@ export default async function HomePage({
   await sweep();
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
-  const [hidden, follows, categories] = await Promise.all([
+  const [hidden, follows, categories, compSeries] = await Promise.all([
     hiddenUserIds(viewer?.id ?? null),
     viewer ? prisma.follow.findMany({ where: { followerId: viewer.id }, select: { sellerId: true } }) : Promise.resolve([]),
-    prisma.category.findMany({ where: { level: "LEAF" }, orderBy: { sort: "asc" } }),
+    prisma.category.findMany({ where: { level: { in: ["GROUP", "LEAF"] } }, orderBy: [{ level: "asc" }, { sort: "asc" }] }),
+    loadCompSeries(),
   ]);
   const followed = new Set(follows.map((row) => row.sellerId));
   const listings = await prisma.listing.findMany({
@@ -65,9 +67,9 @@ export default async function HomePage({
         <SearchBox locale={prefs.locale} />
       </div>
       <h1 className="page-title">{tx(prefs.locale, "卡牌動態", "Card feed")}</h1>
-      <div className="chips -mx-3 mb-4 md:mx-0">
+      <div className="chips mb-4">
         {categories.map((cat) => (
-          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className="inline-flex h-11 shrink-0 snap-start items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ring-rose/25">
+          <Link key={cat.id} href={`/search?cat=${cat.slug}`} className={`inline-flex h-11 items-center rounded-full bg-card px-4 text-sm font-semibold shadow-card ring-1 ring-inset ${cat.level === "GROUP" ? "ring-teal" : "ring-rose/25"}`}>
             {prefs.locale === "en" ? cat.nameEn : cat.nameZh}
           </Link>
         ))}
@@ -81,6 +83,7 @@ export default async function HomePage({
             locale={prefs.locale}
             favorited={favIds.has(listing.id)}
             followed={followed.has(listing.sellerId)}
+            series={compSeries.get(compKey(listing))}
           />
         ))}
       </div>
@@ -89,7 +92,7 @@ export default async function HomePage({
           <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "最近睇過", "Recently viewed")}</h2>
           <div className="feed">
             {recent.map((row) => (
-              <ListingCard key={row.listing.id} listing={row.listing} locale={prefs.locale} favorited={favIds.has(row.listing.id)} followed={followed.has(row.listing.sellerId)} />
+              <ListingCard key={row.listing.id} listing={row.listing} locale={prefs.locale} favorited={favIds.has(row.listing.id)} followed={followed.has(row.listing.sellerId)} series={compSeries.get(compKey(row.listing))} />
             ))}
           </div>
         </section>
@@ -99,7 +102,7 @@ export default async function HomePage({
           <h2 className="mb-3 text-lg font-bold">{tx(prefs.locale, "為你推薦", "For you")}</h2>
           <div className="feed">
             {forYou.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={followed.has(listing.sellerId)} />
+              <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={followed.has(listing.sellerId)} series={compSeries.get(compKey(listing))} />
             ))}
           </div>
         </section>

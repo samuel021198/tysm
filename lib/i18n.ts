@@ -78,6 +78,26 @@ export function navLabels(locale: Locale) {
   };
 }
 
+export function offerStatusLabel(locale: Locale, status: string): string {
+  const zh: Record<string, string> = {
+    PENDING: "待賣家回覆",
+    COUNTERED: "賣家已還價",
+    ACCEPTED: "已接受",
+    DECLINED: "已拒絕",
+    EXPIRED: "已過期",
+    CANCELLED: "已取消",
+  };
+  const en: Record<string, string> = {
+    PENDING: "Waiting on seller",
+    COUNTERED: "Seller countered",
+    ACCEPTED: "Accepted",
+    DECLINED: "Declined",
+    EXPIRED: "Expired",
+    CANCELLED: "Cancelled",
+  };
+  return (locale === "en" ? en : zh)[status] ?? status;
+}
+
 export function orderStatusLabel(locale: Locale, status: string): string {
   const zh: Record<string, string> = {
     PENDING_PAYMENT: "待付款",

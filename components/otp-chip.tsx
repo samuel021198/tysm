@@ -6,7 +6,7 @@ export function OtpChip({ locale, code, inputId }: { locale: Locale; code: strin
   return (
     <button
       type="button"
-      className="flex w-full items-center justify-between gap-3 rounded-2xl bg-[#1b1418] px-4 py-3 text-left text-[#fff8f4] ring-2 ring-[#7cb9c8]"
+      className="flex w-full items-center justify-between gap-3 rounded-xl bg-soft px-3 py-2 text-left text-sm"
       onClick={() => {
         const input = document.getElementById(inputId);
         if (!(input instanceof HTMLInputElement)) return;
@@ -15,10 +15,10 @@ export function OtpChip({ locale, code, inputId }: { locale: Locale; code: strin
       }}
     >
       <span>
-        <span className="block text-xs font-medium text-[#d7eef3]">{tx(locale, "驗證碼", "Code")}</span>
-        <span className="font-mono text-2xl font-bold tracking-[0.22em]">{code}</span>
+        <span className="block text-xs text-muted">{tx(locale, "示範驗證碼", "Demo code")}</span>
+        <span className="font-mono text-base font-semibold tracking-[0.18em]">{code}</span>
       </span>
-      <span className="shrink-0 whitespace-nowrap text-sm font-semibold text-[#9fd4e0]">{tx(locale, "點一下填入", "Tap to fill")}</span>
+      <span className="shrink-0 whitespace-nowrap text-xs text-link">{tx(locale, "填入", "Fill")}</span>
     </button>
   );
 }

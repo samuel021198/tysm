@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="沙拿 Salah">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
-  <rect x="48" y="48" width="704" height="620" rx="22" fill="#52b788"/>
-  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
-  <text x="400" y="470" text-anchor="middle" fill="#1b1418" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">沙</text>
-  <circle cx="400" cy="330" r="132" fill="none" stroke="#1b1418" stroke-width="14"/>
-      <path d="M400 236 L446 272 L428 332 L372 332 L354 272 Z" fill="#1b1418"/>
-      <path d="M354 272 L304 286 L326 348 L372 332 Z M446 272 L496 286 L474 348 L428 332 Z M372 332 L360 392 L400 414 L440 392 L428 332 Z" fill="#1b1418" opacity="0.72"/>
-  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
-  <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">沙拿</text>
-  <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Salah</text>
-  <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Panini Select · CGC 10</text>
-  <defs>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e8f6ef" stop-opacity="0.42"/>
-      <stop offset="0.55" stop-color="#52b788" stop-opacity="0"/>
-      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
-    </linearGradient>
-  </defs>
+  <rect x="28" y="16" width="744" height="968" rx="28" fill="#d5e3ea"/>
+    <rect x="48" y="36" width="704" height="118" rx="16" fill="#fffaf6"/>
+    <text x="72" y="86" fill="#1b1418" font-size="28" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">CGC 10</text>
+    <text x="72" y="126" fill="#5c6b73" font-size="20" font-family="ui-sans-serif, system-ui, sans-serif">TYSM SLAB</text>
+    <g transform="translate(86,168) scale(0.78)"><g>
+    <rect x="36" y="28" width="728" height="944" rx="36" fill="#122b00"/>
+    <rect x="54" y="46" width="692" height="908" rx="28" fill="#245501"/>
+    <rect x="74" y="66" width="652" height="78" rx="16" fill="#fffaf6"/>
+    <text x="96" y="118" fill="#1b1418" font-size="40" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">沙拿</text>
+    <text x="690" y="116" text-anchor="end" fill="#122b00" font-size="28" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">★</text>
+    <rect x="74" y="160" width="652" height="470" rx="18" fill="#f7f1e8"/>
+    <g transform="translate(90,176)">
+      <path d="M70 430 H610" stroke="#122b00" stroke-width="8" opacity="0.35"/>
+      <path d="M70 250 H610 M70 340 H610" stroke="#fffaf6" stroke-width="6" opacity="0.45"/>
+      <path d="M160 120 Q340 50 560 150" fill="none" stroke="#e9f5db" stroke-width="18"/>
+      <rect x="250" y="150" width="180" height="230" rx="16" fill="#122b00"/>
+      <path d="M268 188 H412 M268 230 H390 M268 272 H412" stroke="#fffaf6" stroke-width="10" stroke-linecap="round"/>
+      <text x="340" y="340" text-anchor="middle" fill="#e9f5db" font-size="72" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">53</text>
+      <path d="M120 400 Q340 330 560 400" fill="none" stroke="#122b00" stroke-width="14"/>
+    </g>
+    <rect x="74" y="648" width="652" height="168" rx="16" fill="#fffaf6"/>
+    <text x="96" y="704" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">Salah</text>
+    <text x="96" y="748" fill="#122b00" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Panini Select · CGC 10</text>
+    <text x="96" y="790" fill="#1b1418" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif">GEM</text>
+    <text x="96" y="868" fill="#1b1418" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif">No.78</text>
+    <text x="690" y="868" text-anchor="end" fill="#122b00" font-size="22" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">TYSM</text>
+  </g></g>
 </svg>

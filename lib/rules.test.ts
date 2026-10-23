@@ -35,6 +35,7 @@ const war = resolveAuction(start, [
   { bidderId: "B", maxAmount: 120000, updatedAt: t1 },
 ]);
 assert(war.leaderId === "B" && war.price === 82000, "proxy raises one increment over the second max");
+assert(minimumNextBid(start, war.price, true) === 84000, "public next bid is one increment, not the hidden max");
 
 const tie = resolveAuction(start, [
   { bidderId: "A", maxAmount: 90000, updatedAt: t0 },

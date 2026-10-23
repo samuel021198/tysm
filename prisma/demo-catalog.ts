@@ -36,6 +36,10 @@ type CardInput = {
   score?: number;
   cert?: string;
   views?: number;
+  number?: string;
+  rarity?: string;
+  locker?: number;
+  meet?: number;
   bids?: BidInput[];
 };
 
@@ -54,6 +58,10 @@ export type DemoListing = {
   quantityAvailable: number;
   shippingFee: number;
   shippingDays: number;
+  shipLockerFee: number;
+  shipMeetFee: number;
+  cardNumber: string;
+  rarity: string;
   price: number | null;
   offersEnabled: boolean;
   minOffer: number | null;
@@ -133,6 +141,11 @@ function card(input: CardInput): DemoListing {
   const value = input.grader && input.score != null ? gradeValue(input.grader, input.score) : null;
   const title = input.title ?? `${input.zh} ${input.en}`;
   const description = [`**${input.zh} ${input.en}**`, input.line, ...(input.notes ?? []).map((note) => `- ${note}`)].join("\n");
+  const sf = hk(input.ship ?? 20);
+  let serial = 0;
+  for (const char of input.id) serial = (serial + char.charCodeAt(0) * 17) % 186;
+  const cardNumber = input.number ?? (input.kind === "TCG" ? `${String(serial + 1).padStart(3, "0")}/185` : `No.${serial + 1}`);
+  const rarity = input.rarity ?? (input.grader ? "GEM" : input.kind === "TCG" ? "RR" : "BASE");
   return {
     id: input.id,
     sellerId: input.sellerId,
@@ -146,8 +159,12 @@ function card(input: CardInput): DemoListing {
     line: input.line,
     quantity,
     quantityAvailable: status === "SOLD" ? 0 : quantity,
-    shippingFee: hk(input.ship ?? 20),
+    shippingFee: sf,
     shippingDays: input.days ?? 3,
+    shipLockerFee: input.locker != null ? hk(input.locker) : Math.max(0, sf - hk(8)),
+    shipMeetFee: input.meet != null ? hk(input.meet) : 0,
+    cardNumber,
+    rarity,
     price: input.price != null ? hk(input.price) : null,
     offersEnabled: input.offerMin != null,
     minOffer: input.offerMin != null ? hk(input.offerMin) : null,
@@ -169,7 +186,7 @@ function card(input: CardInput): DemoListing {
     viewCount: input.views ?? 24,
     photos: [
       { id: `${input.id}_front`, url: `/demo/cards/${input.id}.svg`, role: "FRONT", position: 0 },
-      { id: `${input.id}_back`, url: "/demo/back.svg", role: "BACK", position: 1 },
+      { id: `${input.id}_back`, url: `/demo/cards/${input.id}-back.svg`, role: "BACK", position: 1 },
     ],
     bids: pricedBids,
   };
@@ -196,6 +213,7 @@ export const demoListings: DemoListing[] = [
     id: "seed_charizard", sellerId: "user_ming", categoryId: "cat_pokemon",
     zh: "噴火龍", en: "Charizard", line: "VMAX · 仰天峰 · 日文",
     title: "噴火龍 VMAX Charizard", price: 1280, offerMin: 1000, qty: 2, ship: 20,
+    number: "020/189", rarity: "SR",
     kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A", views: 128,
     notes: ["卡面乾淨，四角尖", "兩張庫存，接受議價"],
   }),
@@ -265,6 +283,7 @@ export const demoListings: DemoListing[] = [
     id: "seed_sold_zard", sellerId: "user_ming", categoryId: "cat_pokemon",
     zh: "噴火龍", en: "Charizard", line: "仰天峰 · 已售",
     title: "噴火龍 已售示範 Charizard", status: "SOLD", price: 3000, ship: 20,
+    number: "020/189", rarity: "SR",
     kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A", views: 240,
     notes: ["用來展示站內成交價"],
   }),
@@ -290,7 +309,7 @@ export const demoListings: DemoListing[] = [
   card({
     id: "seed_zoro", sellerId: "user_ken", categoryId: "cat_onepiece",
     zh: "索隆", en: "Zoro", line: "OP-06 · PSA 10",
-    price: 1880, offerMin: 1400, ship: 25,
+    price: 1880, offerMin: 1400, ship: 25, number: "118/106", rarity: "SEC",
     kind: tcg, game: "One Piece", setName: "OP-06", language: "日文",
     grader: "PSA", score: 10, cert: "91220018", views: 77,
     notes: ["三刀流 SEC", "接受議價"],
@@ -655,6 +674,92 @@ export const demoListings: DemoListing[] = [
     price: 180, ship: 8,
     kind: celeb, season: "2024", brand: "MIRROR", raw: "C", views: 23,
     notes: ["白邊明顯"],
+  }),
+
+  card({
+    id: "seed_sold_zard_b", sellerId: "user_ken", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · Raw A", title: "噴火龍 已售 Raw A Charizard",
+    price: 2680, ship: 20, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A",
+    notes: ["站內成交，同一品相"],
+  }),
+  card({
+    id: "seed_sold_zard_c", sellerId: "user_star", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · Raw A", title: "噴火龍 已售 Charizard Raw A",
+    price: 2450, ship: 18, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A",
+    notes: ["站內成交"],
+  }),
+  card({
+    id: "seed_sold_zard_d", sellerId: "user_wai", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · Raw A", title: "噴火龍 VMAX 已售 Charizard",
+    price: 3120, ship: 22, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A",
+    notes: ["站內成交"],
+  }),
+  card({
+    id: "seed_sold_zard_e", sellerId: "user_lam", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · Raw A", title: "噴火龍 成交 Charizard",
+    price: 2890, ship: 20, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A",
+    notes: ["站內成交"],
+  }),
+  card({
+    id: "seed_sold_zard_psa10", sellerId: "user_ken", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · PSA 10", title: "噴火龍 PSA 10 已售 Charizard",
+    price: 8800, ship: 30, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", grader: "PSA", score: 10, cert: "80112001",
+    notes: ["其他品相成交"],
+  }),
+  card({
+    id: "seed_sold_zard_psa9", sellerId: "user_ming", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · PSA 9", title: "噴火龍 PSA 9 已售 Charizard",
+    price: 4200, ship: 25, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", grader: "PSA", score: 9, cert: "80112009",
+    notes: ["其他品相成交"],
+  }),
+  card({
+    id: "seed_sold_zard_bgs", sellerId: "user_star", categoryId: "cat_pokemon", status: "SOLD",
+    zh: "噴火龍", en: "Charizard", line: "仰天峰 · BGS 9.5", title: "噴火龍 BGS 9.5 已售 Charizard",
+    price: 6100, ship: 28, number: "020/189", rarity: "SR",
+    kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", grader: "BGS", score: 9.5, cert: "00199821",
+    notes: ["其他品相成交"],
+  }),
+  card({
+    id: "seed_sold_zoro_a", sellerId: "user_ming", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "索隆", en: "Zoro", line: "OP-06 · PSA 10", title: "索隆 PSA 10 已售 Zoro",
+    price: 2100, ship: 20, number: "118/106", rarity: "SEC",
+    kind: tcg, game: "One Piece", setName: "OP-06", language: "日文", grader: "PSA", score: 10, cert: "91220091",
+  }),
+  card({
+    id: "seed_sold_zoro_b", sellerId: "user_lam", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "索隆", en: "Zoro", line: "OP-06 · PSA 10", title: "索隆 SEC 已售 Zoro",
+    price: 1960, ship: 18, number: "118/106", rarity: "SEC",
+    kind: tcg, game: "One Piece", setName: "OP-06", language: "日文", grader: "PSA", score: 10, cert: "91220092",
+  }),
+  card({
+    id: "seed_sold_zoro_c", sellerId: "user_wai", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "索隆", en: "Zoro", line: "OP-06 · PSA 10", title: "索隆 三刀流已售 Zoro",
+    price: 1760, ship: 20, number: "118/106", rarity: "SEC",
+    kind: tcg, game: "One Piece", setName: "OP-06", language: "日文", grader: "PSA", score: 10, cert: "91220093",
+  }),
+  card({
+    id: "seed_sold_luffy_a", sellerId: "user_ken", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "路飛", en: "Luffy", line: "Romance Dawn · BGS 9.5", title: "路飛 BGS 9.5 已售 Luffy",
+    price: 1500, ship: 25,
+    kind: tcg, game: "One Piece", setName: "Romance Dawn", language: "日文", grader: "BGS", score: 9.5, cert: "001602201",
+  }),
+  card({
+    id: "seed_sold_luffy_b", sellerId: "user_star", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "路飛", en: "Luffy", line: "Romance Dawn · BGS 9.5", title: "路飛 漫畫背景已售 Luffy",
+    price: 1680, ship: 22,
+    kind: tcg, game: "One Piece", setName: "Romance Dawn", language: "日文", grader: "BGS", score: 9.5, cert: "001602202",
+  }),
+  card({
+    id: "seed_sold_luffy_c", sellerId: "user_wai", categoryId: "cat_onepiece", status: "SOLD",
+    zh: "路飛", en: "Luffy", line: "Romance Dawn · BGS 9.5", title: "路飛 領袖卡已售 Luffy",
+    price: 1420, ship: 20,
+    kind: tcg, game: "One Piece", setName: "Romance Dawn", language: "日文", grader: "BGS", score: 9.5, cert: "001602203",
   }),
 ];
 

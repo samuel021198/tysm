@@ -43,11 +43,11 @@ npm run dev
 
 ## 模擬付款同託管
 
-結帳後到模擬付款，三個結果：
+結帳後到付款頁。畫面上是轉數快、PayMe 或信用卡，但仍然是模擬，不會真正扣款：
 
-- **成功**：訂單進入「已託管」。賣家再標記「待寄出」→「已寄出」。買家確認收貨即完成；寄出後 7 日未確認會自動完成。
-- **失敗**：維持「待付款」。
-- **爭議**：直接進入爭議，等管理員裁定。
+- **確認付款**：訂單進入「已託管」。賣家再標記「待寄出」→「確認寄出」（可填快遞同運單）。買家確認收貨即完成；寄出後 7 日未確認會自動完成。
+- **付款未完成**：維持「待付款」。
+- **這筆交易有問題**：直接進入爭議，等管理員裁定。
 
 買家只可以在「待付款」取消。超過 24 小時未付會自動取消。拍賣得標未付款會計一次；連續 3 次會禁止出價，直至管理員在 `/admin?tab=users` 解除。
 
@@ -85,14 +85,13 @@ npm run dev
 1. 用 Vercel 上的 Neon Marketplace。它會注入 `DATABASE_URL`（pooled）同 `DATABASE_URL_UNPOOLED`（direct，主機名不要用 `-pooler`）。
 2. 把這個 repo 的 `main` 匯入 Vercel。Framework 選 Next.js。
 3. 在 Vercel 專案的 Environment Variables 設定上表的變數，再加上 `SESSION_SECRET`。`DATABASE_URL` 同 `DATABASE_URL_UNPOOLED` 要在 **Production、Preview、Build** 都有。
-4. Deploy。第一次部署後在本機對同一個資料庫執行：
+4. Deploy。Vercel 建置會跑 `prisma migrate deploy`（需要 Build 環境有 `DATABASE_URL` 同 `DATABASE_URL_UNPOOLED`）。第一次部署後灌示範資料：
 
 ```bash
-npx prisma migrate deploy
 npm run db:seed
 ```
 
-Vercel 建置不會自動跑 migration。正式環境要自己執行 `migrate deploy`。Seed 可以只跑一次。
+Seed 可以只跑一次。之後的示範目錄更新用下面的 reseed。
 
 5. Vercel Cron 每日 00:00（香港時間，`0 16 * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管。頁面開啟時亦會做同樣的掃瞄。
 

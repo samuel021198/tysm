@@ -46,16 +46,16 @@ export function LoginForm({ locale, next }: { locale: Locale; next: string }) {
         <Submit label={tx(locale, "登入", "Log in")} pendingLabel="…" />
         {verified?.error ? <p className="text-sm text-danger">{errText(locale, verified.error)}</p> : null}
       </form>
-      <div className="grid gap-1 text-sm leading-6 text-muted">
-        <p className="font-medium text-ink">{tx(locale, "示範帳戶", "Demo accounts")}</p>
-        <p>{tx(locale, "先索取驗證碼。", "Request a code first.")}</p>
-        <p>{tx(locale, "6 位數字會顯示喺上面。", "The 6 digits appear above.")}</p>
-        <p className="mt-1">mei@tysm.hk</p>
-        <p>alex@tysm.hk</p>
-        <p>ming@tysm.hk</p>
-        <p>91111111</p>
-        <p>admin@tysm.hk</p>
-      </div>
+      <details className="text-sm text-muted">
+        <summary className="cursor-pointer">{tx(locale, "示範帳戶", "Demo accounts")}</summary>
+        <div className="mt-2 grid gap-1 leading-6">
+          <p>mei@tysm.hk</p>
+          <p>alex@tysm.hk</p>
+          <p>ming@tysm.hk</p>
+          <p>91111111</p>
+          <p>admin@tysm.hk</p>
+        </div>
+      </details>
     </div>
   );
 }

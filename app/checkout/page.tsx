@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
-import { Submit } from "@/components/submit";
-import { checkoutAction } from "@/actions/trade";
+import { CheckoutForm } from "@/components/checkout-form";
 
 export default async function CheckoutPage({
   searchParams,
@@ -17,46 +15,58 @@ export default async function CheckoutPage({
   if (!viewer) redirect(`/login?next=/checkout${sp.buy ? `?buy=${sp.buy}` : ""}`);
   const addresses = await prisma.address.findMany({ where: { userId: viewer.id }, orderBy: { isDefault: "desc" } });
   const buy = sp.buy
-    ? await prisma.listing.findUnique({ where: { id: sp.buy }, include: { seller: true } })
+    ? await prisma.listing.findUnique({
+        where: { id: sp.buy },
+        include: { seller: true, photos: { orderBy: { position: "asc" }, take: 1 } },
+      })
     : null;
   const cart = buy
     ? []
-    : await prisma.cartItem.findMany({ where: { userId: viewer.id }, include: { listing: { include: { seller: true } } } });
+    : await prisma.cartItem.findMany({
+        where: { userId: viewer.id },
+        include: { listing: { include: { seller: true, photos: { orderBy: { position: "asc" }, take: 1 } } } },
+      });
   const lines = buy
-    ? [{ title: buy.title, seller: buy.seller.nickname, quantity: Number(sp.qty || 1), price: buy.price ?? 0, shipping: buy.shippingFee }]
+    ? [{
+        title: buy.title,
+        seller: buy.seller.nickname,
+        quantity: Math.max(1, Number(sp.qty || 1)),
+        price: buy.price ?? 0,
+        image: buy.photos[0]?.url ?? null,
+        sf: buy.shippingFee,
+        locker: buy.shipLockerFee,
+        meet: buy.shipMeetFee,
+      }]
     : cart.map((item) => ({
         title: item.listing.title,
         seller: item.listing.seller.nickname,
         quantity: item.quantity,
         price: item.listing.price ?? 0,
-        shipping: item.listing.shippingFee,
+        image: item.listing.photos[0]?.url ?? null,
+        sf: item.listing.shippingFee,
+        locker: item.listing.shipLockerFee,
+        meet: item.listing.shipMeetFee,
       }));
 
   return (
-    <div className="grid gap-4">
+    <div className="mx-auto grid max-w-xl gap-4">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <h1 className="text-2xl font-semibold">{tx(prefs.locale, "結帳", "Checkout")}</h1>
-      {lines.length === 0 ? <p>{tx(prefs.locale, "沒有可結帳的貨品。", "Nothing to check out.")}</p> : null}
-      {lines.map((line, index) => (
-        <p key={index} className="text-sm">
-          {line.seller} · {line.title} × {line.quantity} · {formatHkd(line.price * line.quantity + line.shipping, prefs.locale)}
-        </p>
-      ))}
+      <div>
+        <h1 className="page-title">{tx(prefs.locale, "結帳", "Checkout")}</h1>
+        <p className="text-sm text-muted">{tx(prefs.locale, "核對貨品、運費同付款方式。確認後先至付款。", "Check the item, shipping, and payment method before you pay.")}</p>
+      </div>
+      {lines.length === 0 ? <p className="empty">{tx(prefs.locale, "沒有可結帳的貨品。", "Nothing to check out.")}</p> : null}
       {addresses.length === 0 ? (
         <p><a className="text-link" href="/me">{tx(prefs.locale, "請先在帳戶新增香港地址。", "Add a Hong Kong address in your account first.")}</a></p>
       ) : lines.length ? (
-        <form action={checkoutAction} className="grid max-w-lg gap-3">
-          <input type="hidden" name="mode" value={buy ? "buy" : "cart"} />
-          {buy ? <input type="hidden" name="listingId" value={buy.id} /> : null}
-          {buy ? <input type="hidden" name="quantity" value={String(Math.max(1, Number(sp.qty || 1)))} /> : null}
-          {addresses.map((address) => (
-            <label key={address.id} className="flex min-h-14 items-start gap-3 rounded-2xl bg-soft p-4 text-sm">
-              <input type="radio" name="addressId" value={address.id} defaultChecked={address.isDefault} required />
-              <span>{address.recipient} · {address.phone}<br />{address.district} {address.line1}</span>
-            </label>
-          ))}
-          <Submit label={tx(prefs.locale, "建立訂單", "Place orders")} pendingLabel="…" />
-        </form>
+        <CheckoutForm
+          locale={prefs.locale}
+          mode={buy ? "buy" : "cart"}
+          listingId={buy?.id}
+          quantity={buy ? Math.max(1, Number(sp.qty || 1)) : undefined}
+          lines={lines}
+          addresses={addresses}
+        />
       ) : null}
     </div>
   );
