@@ -371,6 +371,31 @@ async function seedSocial() {
   }
 }
 
+async function seedStories() {
+  const rows = [
+    { id: "story_ming_zard", authorId: "user_ming", imageUrl: "/demo/cards/seed_charizard.svg", ageHours: 2 },
+    { id: "story_ming_mew", authorId: "user_ming", imageUrl: "/demo/cards/seed_mewtwo.svg", ageHours: 1 },
+    { id: "story_star_messi", authorId: "user_star", imageUrl: "/demo/cards/seed_messi.svg", ageHours: 5 },
+    { id: "story_mei_pika", authorId: "user_mei", imageUrl: "/demo/cards/seed_pikachu.svg", ageHours: 3 },
+    { id: "story_lam_old", authorId: "user_lam", imageUrl: "/demo/cards/seed_jay.svg", ageHours: 30 },
+  ];
+  await prisma.storyView.deleteMany({ where: { storyId: { in: rows.map((row) => row.id) } } });
+  for (const row of rows) {
+    const createdAt = hoursFromNow(-row.ageHours);
+    const data = {
+      authorId: row.authorId,
+      imageUrl: row.imageUrl,
+      createdAt,
+      expiresAt: new Date(createdAt.getTime() + 24 * 60 * 60 * 1000),
+    };
+    await prisma.story.upsert({
+      where: { id: row.id },
+      update: data,
+      create: { id: row.id, ...data },
+    });
+  }
+}
+
 async function seedFeed() {
   const linked = ["seed_charizard", "seed_pikachu", "seed_iu", "seed_messi", "seed_nami", "seed_mewtwo"];
   for (const listingId of linked) {
@@ -496,6 +521,7 @@ async function seedFeed() {
     update: { url: "/demo/cards/seed_pikachu.svg", position: 0 },
     create: { id: "post_mei_note_0", postId: "post_mei_note", url: "/demo/cards/seed_pikachu.svg", position: 0 },
   });
+  await seedStories();
   await prisma.postLike.upsert({
     where: { id: "like_mei_zard" },
     update: { postId: "post_seed_charizard", userId: "user_mei" },
@@ -735,6 +761,7 @@ export async function seedDemo() {
     favorites: demoFavorites.length,
     cartItems: demoCart.length,
     follows: demoFollows.length,
+    stories: 5,
     byCategory,
     clearedAuctionOrders: stray.length,
   };

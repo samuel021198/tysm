@@ -3,7 +3,7 @@ export function Icon({
   className = "h-6 w-6",
   strokeWidth = 1.75,
 }: {
-  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon";
+  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "tag" | "bookmark" | "note" | "camera";
   className?: string;
   strokeWidth?: number;
 }) {
@@ -75,6 +75,37 @@ export function Icon({
       <svg {...props}>
         <circle cx="12" cy="12" r="3.2" />
         <path d="M12 3.5v1.8M12 18.7v1.8M3.5 12h1.8M18.7 12h1.8M5.8 5.8l1.3 1.3M16.9 16.9l1.3 1.3M18.2 5.8l-1.3 1.3M7.1 16.9l-1.3 1.3" />
+      </svg>
+    );
+  }
+  if (name === "tag") {
+    return (
+      <svg {...props}>
+        <path d="M11.2 4.6h5.6a1.4 1.4 0 0 1 1.4 1.4v5.6c0 .37-.15.73-.41 1l-7.15 7.15a1.4 1.4 0 0 1-1.98 0l-5.6-5.6a1.4 1.4 0 0 1 0-1.98l7.15-7.15c.26-.26.62-.42.99-.42z" />
+        <circle cx="15.6" cy="8.2" r=".9" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+  if (name === "bookmark") {
+    return (
+      <svg {...props}>
+        <path d="M7.2 5h9.6a1 1 0 0 1 1 1V20l-5.8-3.3L6.2 20V6a1 1 0 0 1 1-1z" />
+      </svg>
+    );
+  }
+  if (name === "note") {
+    return (
+      <svg {...props}>
+        <path d="M7.2 4.8h6.6L18.8 9.8V19a1.4 1.4 0 0 1-1.4 1.4H7.2A1.4 1.4 0 0 1 5.8 19V6.2a1.4 1.4 0 0 1 1.4-1.4z" />
+        <path d="M13.6 4.9V9.6h4.7M8.6 13h6.6M8.6 16.2h4.4" />
+      </svg>
+    );
+  }
+  if (name === "camera") {
+    return (
+      <svg {...props}>
+        <path d="M8.4 7.4 9.5 5.6h5l1.1 1.8H19a1.4 1.4 0 0 1 1.4 1.4v8.2A1.4 1.4 0 0 1 19 18.4H5A1.4 1.4 0 0 1 3.6 17V8.8A1.4 1.4 0 0 1 5 7.4z" />
+        <circle cx="12" cy="12.6" r="2.6" />
       </svg>
     );
   }
