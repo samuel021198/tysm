@@ -20,7 +20,7 @@ export function Header({
 }) {
   const nav = navLabels(locale);
   return (
-    <header className="sticky top-0 z-40 bg-bg pt-[env(safe-area-inset-top)]">
+    <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
       <div>
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 px-3 md:h-16 md:gap-3 md:px-5">
           <Link href="/" className="shrink-0 pr-1">

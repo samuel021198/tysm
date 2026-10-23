@@ -62,8 +62,22 @@ export function anonBidder(id: string, locale: Locale): string {
   return locale === "en" ? `Bidder ${tag}` : `買家 ${tag}`;
 }
 
+export function hkPartsToInput(day: string, month: string, year: string, hour: string, minute: string): string {
+  const parts = [day, month, year, hour, minute].map((part) => part.trim());
+  if (parts.some((part) => !/^\d+$/.test(part))) return "";
+  const [d, m, y, h, min] = parts.map(Number);
+  if (y < 2024 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31 || h > 23 || min > 59) return "";
+  const value = `${String(y).padStart(4, "0")}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}T${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
+  const date = fromHkInput(value);
+  if (!date || toHkInput(date) !== value) return "";
+  return value;
+}
+
 export function isAllowedMediaUrl(url: string): boolean {
   if (url.startsWith("/demo/") || url.startsWith("/brand/")) return true;
+  if (url.startsWith("data:image/")) {
+    return url.length <= 180_000 && /^data:image\/(?:jpeg|png|webp);base64,[a-z0-9+/]+={0,2}$/i.test(url);
+  }
   try {
     const u = new URL(url);
     return u.protocol === "https:";

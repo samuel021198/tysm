@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="米高佐敦 Michael Jordan">
   <rect width="800" height="1000" fill="#f7f1e8"/>
-  <rect x="28" y="28" width="744" height="944" rx="36" fill="#b45309"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="#fef3c7"/>
-  <rect x="48" y="48" width="704" height="620" rx="24" fill="url(#shine)"/>
-  <circle cx="400" cy="390" r="150" fill="none" stroke="#fff" stroke-width="14" opacity="0.9"/>
-      <path d="M250 390 H550 M400 240 V540" stroke="#fff" stroke-width="12" opacity="0.9"/>
-      <path d="M280 300 Q400 390 280 480 M520 300 Q400 390 520 480" fill="none" stroke="#fff" stroke-width="12" opacity="0.9"/>
-  <text x="400" y="470" text-anchor="middle" fill="#ffffff" fill-opacity="0.22" font-size="220" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">米</text>
-  <rect x="48" y="692" width="704" height="248" rx="24" fill="#f7f1e8"/>
+  <rect x="24" y="24" width="752" height="952" rx="40" fill="#1b1418"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="#b45309"/>
+  <rect x="48" y="48" width="704" height="620" rx="22" fill="url(#sheen)"/>
+  <text x="400" y="470" text-anchor="middle" fill="#fffaf6" fill-opacity="0.16" font-size="200" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">米</text>
+  <circle cx="400" cy="330" r="140" fill="none" stroke="#fffaf6" stroke-width="16"/>
+      <path d="M260 330 H540 M400 190 V470" stroke="#fffaf6" stroke-width="14"/>
+      <path d="M286 236 Q400 330 286 424 M514 236 Q400 330 514 424" fill="none" stroke="#fffaf6" stroke-width="14"/>
+  <rect x="48" y="692" width="704" height="252" rx="22" fill="#fffaf6"/>
   <text x="72" y="790" fill="#1b1418" font-size="64" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">米高佐敦</text>
   <text x="72" y="848" fill="#1b1418" font-size="32" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="600">Michael Jordan</text>
   <text x="72" y="900" fill="#6d5c66" font-size="24" font-family="ui-sans-serif, system-ui, sans-serif">Fleer · TAG 10</text>
   <defs>
-    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fef3c7" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#b45309" stop-opacity="0"/>
+      <stop offset="1" stop-color="#1b1418" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
 </svg>
