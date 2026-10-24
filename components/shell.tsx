@@ -2,7 +2,7 @@ import Link from "next/link";
 import { logout, setPrefs } from "@/actions/auth";
 import type { User } from "@prisma/client";
 import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
-import { AddSheet } from "./add-sheet";
+import { CreatePicker } from "./create-picker";
 import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
 
@@ -23,12 +23,13 @@ export function Header({
   return (
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
       <div>
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 px-3 md:h-16 md:gap-3 md:px-5">
-          <Link href="/" className="shrink-0 pr-1">
+        <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="corner" />
+        <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 pl-[4.75rem] pr-3 md:h-16 md:gap-3 md:px-5">
+          <Link href="/" className="min-w-0 shrink pr-1">
             <img
               src={theme === "dark" ? "/brand/tysm-wordmark-on-dark.png" : "/brand/tysm-wordmark.png"}
               alt="TYSM"
-              className="h-9 w-auto bg-transparent md:h-10"
+              className="h-9 w-auto max-w-full bg-transparent md:h-10"
             />
           </Link>
           <div className="mx-auto hidden min-w-0 max-w-xl flex-1 md:block">
@@ -47,7 +48,7 @@ export function Header({
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
             <Link className="hover:text-ink" href="/market">{nav.search}</Link>
             <Link className="hover:text-ink" href="/dex">{nav.dex}</Link>
-            <AddSheet locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
+            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
             <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
