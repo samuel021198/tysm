@@ -91,20 +91,39 @@ npm run dev
 
 圖鑑只收寶可夢，日文同英文名、卡圖、系列同卡號。可以按卡名（中、日、英）或卡號搜。卡牌頁有「資料」同「放售」（連住現有刊登），以及「加入收藏」。v1 沒有價錢走勢或背景故事。
 
-目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會攞每個語言最近、有卡圖、可以放得落預算入面的 1–2 個實體系列（每個語言大約 250 張，合計約 500 張），日文同英文名、卡圖、系列同卡號。未有圖的系列會跳過。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則暫時用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
+目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
+
+Vercel 這條路由 `maxDuration` 係 60 秒，單次只開幾個系列（預設 4 個，`sets` 可設 1–25），時間不夠會停喺系列中間並回 `cursor`。重複 POST 到 `done` 係 `true` 就係可用系列走完。Upsert 用 `externalId`，重複呼叫安全。已經入齊卡的系列會跳過；唔帶 cursor 再打一次，會由資料庫裡面未完成的系列繼續。
+
+唔好並行打幾次。每次請求自己會以大約 4 路並行讀 TCGdex，遇到 429／503 會退避重試幾次。每張卡要另打一次先有英文名同 finish，所以成個目錄大概要幾十次呼叫。
 
 ```bash
 npm run dex:ingest
 ```
 
-正式環境可以用同一條 bearer：
+本地腳本會自己循環，直到 `done`。可以加 `--sets=6`、`--cursor=ja:SV10#80`、`--lang=en` 或 `--lang=ja`。
+
+正式環境用同一條 bearer。Body 同 query 都可以，body 優先。`#` 放 query 要寫成 `%23`。
 
 ```bash
+# 一直打到 done 係 true。sets 係今次最多開幾個系列。
 curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"sets":4}'
+
+# 用上次回傳的 cursor 續跑。系列中途會係 "ja:SV10#80"。
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"cursor":"ja:SV10#80","sets":4}'
+
+# 只補英文，或者只補日文。Cursor 要同呢次的 lang 一齊用。
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex?lang=en&sets=4" \
   -H "Authorization: Bearer $BOOTSTRAP_SECRET"
 ```
 
-沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。這條路由有時間上限，未鏡像完的圖會留低 TCGdex 網址；再打一次會補上傳。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
+成功回 `200`：`done`、`cursor`（走完係 `null`）、`remainingSets`、`processedSetIds`、`counts`。`done: true` 表示今次語言範圍裡面的可用系列已經走完。R2 開住而且 `counts.imagesPending > 0` 時，可以再打同一條（即使 `done` 已經係 true）補鏡像；未鏡像的圖會留低 TCGdex 網址。沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。`sets`、`cursor` 或 `lang` 唔合法會回 `400`。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
 
 ## 部署到 Vercel + Postgres
 
