@@ -10,6 +10,7 @@ import {
   type DexLinkCard,
 } from "./dex";
 import { awsSigV4Authorization, sha256Hex } from "./r2";
+import { catalogDisplayTitle, finishLabel, listingTitleFromCatalog, resolveEnglishCardName } from "./card-title";
 import { cardImageUrl, collectorNumber, logoUrl, mapTcgdexCard, mapTcgdexSet, usableSetResume } from "./tcgdex";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -83,6 +84,12 @@ const ja = mapTcgdexCard(
   "ja",
 );
 assert(ja?.nameJa === "リザードン" && ja.nameEn === "Charizard", "ja charizard fills english from alias");
+const zardZh = mapTcgdexCard(
+  { id: "x-1", localId: "1", name: "噴火龍" },
+  { externalId: "ja:x", code: "x", printRegion: "JP", serieId: "x", official: 10 },
+  "ja",
+);
+assert(zardZh?.nameEn === "Charizard", "chinese alias still fills when the lexicon misses");
 assert(ja?.collectorNumber === "001/098" && ja.numberKey === "1", "printed number and key");
 assert(ja?.externalId === "ja:SV10-001", "language prefix on card id");
 assert(ja?.sourceImageUrl === "https://assets.tcgdex.net/ja/SV/SV10/001/high.webp", "bare tcgdex image gets high.webp");
@@ -101,7 +108,14 @@ const chiko = mapTcgdexCard(
   { externalId: "ja:sv2a", code: "sv2a", printRegion: "JP", serieId: "SV", official: 165 },
   "ja",
 );
-assert(chiko?.nameEn === "チコリータ" && chiko.nameJa === "チコリータ", "unknown name stays in both fields");
+assert(chiko?.nameEn === "Chikorita" && chiko.nameJa === "チコリータ", "ja chikorita resolves to english");
+const unknown = mapTcgdexCard(
+  { id: "sv2a-999", localId: "999", name: "未翻訳カード" },
+  { externalId: "ja:sv2a", code: "sv2a", printRegion: "JP", serieId: "SV", official: 165 },
+  "ja",
+);
+assert(unknown?.nameEn === "未翻訳カード" && unknown.nameJa === "未翻訳カード", "unknown name stays in both fields");
+assert(unknown?.finish === null, "missing variants omit finish");
 
 const set = mapTcgdexSet(
   {
@@ -116,7 +130,7 @@ const set = mapTcgdexSet(
   "ja",
 );
 assert(set?.code === "M1S" && set.externalId === "ja:M1S" && set.releaseDate === "2025-08-01", "set code and date");
-assert(set?.nameJa === "メガシンフォニア" && set.nameEn === "メガシンフォニア", "set name has no alias");
+assert(set?.nameJa === "メガシンフォニア" && set.nameEn === "Mega Symphonia", "jp set uses the english name");
 assert(set?.cards.length === 1 && set.logoUrl?.endsWith(".webp"), "set cards and logo");
 
 assert(!usableSetResume({ id: "mep", name: "Promos", total: 30, official: 0 }), "official 0 skipped");
@@ -130,6 +144,93 @@ assert(ex.nameJa === "リザードン" && ex.nameEn === "Charizard ex", "suffix 
 assert(cardImageUrl("https://assets.tcgdex.net/en/sv/sv08/001.png").endsWith(".png"), "image with extension stays");
 assert(cardImageUrl("") === "", "empty image stays empty");
 assert(collectorNumber("003", 63) === "003/063", "official padded to local id");
+
+const psy = mapTcgdexCard(
+  {
+    id: "lc-88",
+    localId: "88",
+    name: "Psyduck",
+    variants: { firstEdition: false, holo: false, normal: true, reverse: true, wPromo: false },
+  },
+  { externalId: "en:lc", code: "lc", printRegion: "WEST", serieId: "lc", official: 110 },
+  "en",
+);
+assert(psy?.finish === "Reverse Foil" && psy.collectorNumber === "88/110", "reverse foil is called out");
+assert(
+  catalogDisplayTitle({
+    releaseDate: "2002-05-24",
+    setName: "Legendary Collection",
+    collectorNumber: psy?.collectorNumber,
+    cardName: psy?.nameEn,
+    finish: psy?.finish,
+  }) === "2002 Pokemon Legendary Collection #88 Psyduck - Reverse Foil",
+  "psyduck marketplace title",
+);
+assert(
+  catalogDisplayTitle({
+    releaseDate: "2002-05-24",
+    setName: "LEGENDARY COLLECTION",
+    collectorNumber: "088/110",
+    cardName: "PSYDUCK",
+    finish: "REVERSE FOIL",
+  }) === "2002 Pokemon Legendary Collection #88 Psyduck - Reverse Foil",
+  "shouting names become title case",
+);
+assert(
+  catalogDisplayTitle({
+    releaseDate: "2023-06-16",
+    setName: "Pokémon Card 151",
+    collectorNumber: "001/165",
+    cardName: "Bulbasaur",
+  }) === "2023 Pokemon Pokemon Card 151 #1 Bulbasaur",
+  "accented pokemon in the set name is plain english",
+);
+
+const mega = mapTcgdexCard(
+  {
+    id: "M6-009",
+    localId: "009",
+    name: "メガグソクムシャex",
+    dexId: [768],
+    variants: { firstEdition: false, holo: true, normal: false, reverse: false, wPromo: false },
+  },
+  { externalId: "ja:M6", code: "M6", printRegion: "JP", serieId: "M", official: 76 },
+  "ja",
+);
+assert(mega?.nameEn === "Mega Golisopod ex" && mega.nameJa === "メガグソクムシャex" && mega.finish === "Holo", "mega ex keeps suffix and holo");
+assert(
+  catalogDisplayTitle({
+    releaseDate: "2026-07-31",
+    setName: "Storm Emeralda",
+    collectorNumber: mega?.collectorNumber,
+    cardName: mega?.nameEn,
+    finish: mega?.finish,
+  }) === "2026 Pokemon Storm Emeralda #9 Mega Golisopod ex - Holo",
+  "japanese mega title",
+);
+assert(resolveEnglishCardName("ヒートロトム", [479]) === "Heat Rotom", "rotom form prefix");
+assert(resolveEnglishCardName("リザードンex", [6]) === "Charizard ex", "suffix reattaches after the species");
+assert(resolveEnglishCardName("ぼうけんのランタン") === "Adventure Lantern", "trainer lexicon");
+assert(finishLabel({ normal: true, holo: false, reverse: false, firstEdition: false }) === null, "normal omits finish");
+assert(finishLabel({ normal: false, holo: true, reverse: true, firstEdition: true }) === "First Edition Holo", "first edition holo stacks");
+assert(
+  catalogDisplayTitle({
+    releaseDate: "1999-01-09",
+    setName: "Base Set",
+    collectorNumber: "4/102",
+    cardName: "Charizard",
+    finish: null,
+  }) === "1999 Pokemon Base Set #4 Charizard",
+  "normal charizard omits finish",
+);
+const longTitle = listingTitleFromCatalog({
+  releaseDate: "2024-01-01",
+  setName: "Ancient Koraidon ex Starter Deck & Build Set Extra Words",
+  collectorNumber: "12",
+  cardName: "Koraidon ex",
+  finish: "Reverse Foil",
+});
+assert(longTitle.length <= 80 && longTitle.includes("Koraidon ex") && longTitle.endsWith("- Reverse Foil"), "listing title stays within 80");
 assert(logoUrl("https://assets.tcgdex.net/en/sv/sv08/logo") === "https://assets.tcgdex.net/en/sv/sv08/logo.webp", "logo webp");
 
 const payload = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";

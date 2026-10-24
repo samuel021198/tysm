@@ -11,7 +11,7 @@ const PLACEHOLDER_NUMBER = /\/185$/;
 
 const STOP = new Set(["vmax", "vstar", "ex", "gx", "sr", "sar", "ar", "ur", "hr", "promo", "psa", "bgs", "cgc", "raw", "holo", "japanese", "english"]);
 
-// ponytail: hand-kept zh/ja/en names. TCGdex returns one language per request. Upgrade path: a translation table if a card payload grows a second language.
+// ponytail: hand-kept zh/ja/en aliases for search. English dex titles use lib/card-title.ts.
 const ALIASES: readonly (readonly string[])[] = [
   ["噴火龍", "リザードン", "charizard"],
   ["皮卡丘", "ピカチュウ", "pikachu"],
@@ -261,24 +261,6 @@ export function bilingualName(raw: string, region: DexPrintRegion): { nameEn: st
     };
   }
   return { nameEn: name, nameJa: name };
-}
-
-export function primaryCardName(
-  card: { nameEn: string; nameJa: string; printRegion: DexPrintRegion },
-  locale: Locale,
-): string {
-  if (locale === "en") return card.nameEn || card.nameJa;
-  return card.printRegion === "JP" ? card.nameJa || card.nameEn : card.nameEn || card.nameJa;
-}
-
-export function secondaryCardName(
-  card: { nameEn: string; nameJa: string; printRegion: DexPrintRegion },
-  locale: Locale,
-): string {
-  const primary = primaryCardName(card, locale);
-  const other = foldSearch(primary) === foldSearch(card.nameJa) ? card.nameEn : card.nameJa;
-  if (!other || foldSearch(other) === foldSearch(primary)) return "";
-  return other;
 }
 
 export function setDisplayName(
