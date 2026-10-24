@@ -40,6 +40,7 @@ export type ListingInput = {
   photos: PhotoInput[];
   publishAt: Date | null;
   intent: "draft" | "schedule" | "publish";
+  catalogCardId?: string | null;
 };
 
 export const RAW: RawGrade[] = ["A", "B", "C", "D"];
@@ -278,6 +279,7 @@ export function parseListingForm(formData: FormData): ListingInput | null {
     certNumber: String(formData.get("certNumber") || "") || null,
     videoUrl: String(formData.get("videoUrl") || "") || null,
     photos,
+    catalogCardId: String(formData.get("catalogCardId") || "").trim() || null,
     publishAt: fromHkInput(String(formData.get("publishAt") || "")),
     intent,
   };

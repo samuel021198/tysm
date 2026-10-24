@@ -7,8 +7,9 @@ import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { parseListingForm, wizardFocusField, wizardPanels, wizardPublishIssues, wizardStepForIssue, wizardStepIssues, type ListingInput } from "@/lib/sell-wizard";
 import { fileToDataUrl } from "./photo-file";
+import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
 
-type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string };
+type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
 type BlockKind = "next" | "draft" | "publish";
 
@@ -49,6 +50,7 @@ export type SellInitial = {
   publishAt: string;
   photos: Photo[];
   locked: boolean;
+  catalogCardId?: string;
 };
 
 const DEMOS = [
@@ -148,6 +150,14 @@ export function SellForm({
   const [block, setBlock] = useState<string[]>([]);
   const [blockKind, setBlockKind] = useState<BlockKind>("next");
   const [note, setNote] = useState("");
+  const [title, setTitle] = useState(initial?.title || "");
+  const [catalogId, setCatalogId] = useState(initial?.catalogCardId || "");
+  const [game, setGame] = useState(initial?.game || "");
+  const [setName, setSetName] = useState(initial?.setName || "");
+  const [cardName, setCardName] = useState(initial?.cardName || "");
+  const [language, setLanguage] = useState(initial?.language || "");
+  const [cardNumber, setCardNumber] = useState(initial?.cardNumber || "");
+  const [rarity, setRarity] = useState(initial?.rarity || "");
   const [openToken, setOpenToken] = useState({ photo: 0, more: 0, price: 0, ship: 0, schedule: 0 });
   const moreOpen = Boolean(initial?.cardNumber || initial?.rarity || initial?.videoUrl || initial?.certNumber);
   const priceOpen = Boolean(initial?.offersEnabled || (initial && initial.quantity > 1));
@@ -316,6 +326,24 @@ export function SellForm({
     if (value !== "BUY_NOW") setQuantity("1");
   }
 
+  function applyCatalog(hit: CatalogHit) {
+    setCatalogId(hit.id);
+    setTitle(hit.title);
+    setGame(hit.game);
+    setSetName(hit.setName);
+    setCardName(hit.cardName);
+    setLanguage(hit.language);
+    if (hit.collectorNumber) setCardNumber(hit.collectorNumber);
+    if (hit.rarity) setRarity(hit.rarity);
+    const pokemon = categories.find((cat) => cat.slug === "pokemon");
+    if (pokemon) setCategoryId(pokemon.id);
+  }
+
+  function onTitle(next: string) {
+    setTitle(next);
+    setCatalogId("");
+  }
+
   const stepLabel = tx(locale, STEPS[step][0], STEPS[step][1]);
   const remaining = STEPS.slice(step + 1).map(([zh, en]) => tx(locale, zh, en));
   const blockHeading =
@@ -329,6 +357,7 @@ export function SellForm({
     <form ref={formRef} action={action} noValidate onSubmit={onSubmit} className="grid min-w-0 gap-4">
       {initial?.listingId ? <input type="hidden" name="listingId" value={initial.listingId} /> : null}
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
+      {!locked ? <input type="hidden" name="catalogCardId" value={catalogId} /> : null}
       {locked && initial ? <LockedFields initial={initial} /> : null}
       {locked ? <p className="text-sm text-muted">{tx(locale, "已有出價：只可以改描述同加相片。", "This auction has bids. You can only edit the description and add photos.")}</p> : null}
 
@@ -391,9 +420,11 @@ export function SellForm({
       {!locked ? <div hidden={step !== 1} className="grid gap-3">
         <p className="text-sm text-muted">
           {group === "tcg"
-            ? tx(locale, "要有標題、描述同品相，再加遊戲、系列、卡名、語言。", "Title, description, condition, plus game, set, card name, and language.")
+            ? tx(locale, "標題打卡名，下面會出圖鑑建議。揀中就會填遊戲、系列同語言。", "Type a card name. Dex suggestions appear underneath. Picking one fills game, set, and language.")
             : tx(locale, "要有標題、描述同品相，再加人物、賽季／年份、品牌系列。", "Title, description, condition, plus person, season/year, and brand/series.")}
         </p>
+        <CatalogTitleField locale={locale} value={title} onValue={onTitle} onPick={applyCatalog} invalid={shown.includes("title")} />
+        <FieldError locale={locale} codes={shown} code="title" />
         <label className="grid gap-1 text-sm">
           {tx(locale, "分類", "Category")}
           <select className="field" name="categoryId" value={categoryId} aria-invalid={shown.includes("category")} onChange={(e) => setCategoryId(e.target.value)}>
@@ -408,31 +439,44 @@ export function SellForm({
           <FieldError locale={locale} codes={shown} code="category" />
         </label>
         <label className="grid gap-1 text-sm">
-          {tx(locale, "標題", "Title")}
-          <input className="field" name="title" minLength={2} maxLength={80} defaultValue={initial?.title} aria-invalid={shown.includes("title")} />
-          <FieldError locale={locale} codes={shown} code="title" />
-        </label>
-        <label className="grid gap-1 text-sm">
           {tx(locale, "描述（可用 **粗體**、換行、- 清單）", "Description (**bold**, new lines, - lists)")}
           <textarea className="field min-h-28" name="description" defaultValue={initial?.description} aria-invalid={shown.includes("description")} />
           <FieldError locale={locale} codes={shown} code="description" />
         </label>
         {group === "tcg" ? (
-          <div className="grid gap-3 md:grid-cols-2">
-            <label className="text-sm">{tx(locale, "遊戲", "Game")}<input className="field" name="game" defaultValue={initial?.game} aria-invalid={shown.includes("tcg")} /></label>
-            <label className="text-sm">{tx(locale, "系列", "Set")}<input className="field" name="setName" defaultValue={initial?.setName} aria-invalid={shown.includes("tcg")} /></label>
-            <label className="text-sm">{tx(locale, "卡名", "Card name")}<input className="field" name="cardName" defaultValue={initial?.cardName} aria-invalid={shown.includes("tcg")} /></label>
-            <label className="text-sm">
-              {tx(locale, "語言", "Language")}
-              <input className="field" name="language" defaultValue={initial?.language} list="langs" aria-invalid={shown.includes("tcg")} />
-              <datalist id="langs">
-                {["繁體中文", "簡體中文", "英文", "日文", "韓文"].map((lang) => (
-                  <option key={lang} value={lang} />
-                ))}
-              </datalist>
-            </label>
-            <div className="md:col-span-2"><FieldError locale={locale} codes={shown} code="tcg" /></div>
-          </div>
+          catalogId ? (
+            <div className="grid gap-2 rounded-2xl bg-soft px-3 py-3 text-sm">
+              <p>
+                {tx(locale, "已對上圖鑑", "Linked to the dex")}
+                {" · "}
+                {game} · {setName} · {language === "日文" ? tx(locale, "日文", "Japanese") : language === "英文" ? tx(locale, "英文", "English") : language}
+              </p>
+              <button type="button" className="min-h-11 text-left font-semibold text-link" onClick={() => setCatalogId("")}>
+                {tx(locale, "改為自己填遊戲、系列、語言", "Edit game, set, and language")}
+              </button>
+              <input type="hidden" name="game" value={game} />
+              <input type="hidden" name="setName" value={setName} />
+              <input type="hidden" name="cardName" value={cardName} />
+              <input type="hidden" name="language" value={language} />
+              <FieldError locale={locale} codes={shown} code="tcg" />
+            </div>
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2">
+              <label className="text-sm">{tx(locale, "遊戲", "Game")}<input className="field" name="game" value={game} aria-invalid={shown.includes("tcg")} onChange={(e) => setGame(e.target.value)} /></label>
+              <label className="text-sm">{tx(locale, "系列", "Set")}<input className="field" name="setName" value={setName} aria-invalid={shown.includes("tcg")} onChange={(e) => setSetName(e.target.value)} /></label>
+              <label className="text-sm">{tx(locale, "卡名", "Card name")}<input className="field" name="cardName" value={cardName} aria-invalid={shown.includes("tcg")} onChange={(e) => setCardName(e.target.value)} /></label>
+              <label className="text-sm">
+                {tx(locale, "語言", "Language")}
+                <input className="field" name="language" value={language} list="langs" aria-invalid={shown.includes("tcg")} onChange={(e) => setLanguage(e.target.value)} />
+                <datalist id="langs">
+                  {["繁體中文", "簡體中文", "英文", "日文", "韓文"].map((lang) => (
+                    <option key={lang} value={lang} />
+                  ))}
+                </datalist>
+              </label>
+              <div className="md:col-span-2"><FieldError locale={locale} codes={shown} code="tcg" /></div>
+            </div>
+          )
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
             <label className="text-sm">{tx(locale, "人物", "Person")}<input className="field" name="personName" defaultValue={initial?.personName} aria-invalid={shown.includes("person")} /></label>
@@ -468,8 +512,8 @@ export function SellForm({
           <FieldError locale={locale} codes={shown} code="front_back" />
         </fieldset>
         <Disclosure signal={openToken.more} initiallyOpen={moreOpen} title={tx(locale, "更多資料（可選）", "More details (optional)")}>
-          <label className="text-sm">{tx(locale, "卡號", "Card number")}<input className="field" name="cardNumber" defaultValue={initial?.cardNumber} placeholder={group === "tcg" ? "020/189" : "No.23"} /></label>
-          <label className="text-sm">{tx(locale, "稀有度", "Rarity")}<input className="field" name="rarity" defaultValue={initial?.rarity} placeholder={group === "tcg" ? "SR / RR / SEC" : "BASE / AUTO"} /></label>
+          <label className="text-sm">{tx(locale, "卡號", "Card number")}<input className="field" name="cardNumber" value={cardNumber} placeholder={group === "tcg" ? "020/189" : "No.23"} onChange={(e) => setCardNumber(e.target.value)} /></label>
+          <label className="text-sm">{tx(locale, "稀有度", "Rarity")}<input className="field" name="rarity" value={rarity} placeholder={group === "tcg" ? "SR / RR / SEC" : "BASE / AUTO"} onChange={(e) => setRarity(e.target.value)} /></label>
           <label className="text-sm">{tx(locale, "證書編號", "Cert #")}<input className="field" name="certNumber" defaultValue={initial?.certNumber} /></label>
           <label className="grid gap-1 text-sm">
             {tx(locale, "短片網址", "Video URL")}
@@ -783,6 +827,7 @@ function LockedFields({ initial }: { initial: SellInitial }) {
       <input type="hidden" name="categoryId" value={initial.categoryId} />
       <input type="hidden" name="saleType" value={initial.saleType} />
       <input type="hidden" name="title" value={initial.title} />
+      <input type="hidden" name="catalogCardId" value={initial.catalogCardId || ""} />
       <input type="hidden" name="price" value={initial.price} />
       <input type="hidden" name="startPrice" value={initial.startPrice} />
       <input type="hidden" name="auctionEndsAt" value={initial.auctionEndsAt} />

@@ -14,7 +14,7 @@ export default async function AddPage({ searchParams }: { searchParams: Promise<
   return (
     <div className="mx-auto grid max-w-lg gap-4">
       <div className="flex items-end justify-between gap-3">
-        <h1 className="page-title mb-0">{mode === "post" ? tx(prefs.locale, "寫貼文", "New post") : tx(prefs.locale, "加入收藏", "Add to collection")}</h1>
+        <h1 className="page-title mb-0">{mode === "post" ? tx(prefs.locale, "貼子", "New post") : tx(prefs.locale, "加入收藏", "Add to collection")}</h1>
         {mode === "collection" ? (
           <Link href="/sell" className="text-sm text-link">{tx(prefs.locale, "進階上架", "Advanced")}</Link>
         ) : null}
@@ -23,7 +23,7 @@ export default async function AddPage({ searchParams }: { searchParams: Promise<
         locale={prefs.locale}
         mode={mode}
         phoneVerified={viewer.phoneVerified}
-        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg" }))}
+        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
       />
     </div>
   );

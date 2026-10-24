@@ -5,9 +5,10 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { saveCollection, savePost } from "@/actions/collect";
 import { errText, tx, type Locale } from "@/lib/i18n";
+import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
 import { fileToDataUrl } from "./photo-file";
 
-type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string };
+type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
 
 const DEMOS = [
@@ -52,10 +53,33 @@ export function CollectForm({
   const [state, action] = useActionState(mode === "post" ? savePost : saveCollection, null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [forSale, setForSale] = useState(false);
+  const [alsoList, setAlsoList] = useState(false);
+  const [title, setTitle] = useState("");
+  const [catalogId, setCatalogId] = useState("");
+  const [game, setGame] = useState("");
+  const [setName, setSetName] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [language, setLanguage] = useState("");
   const [track, setTrack] = useState<"RAW" | "GRADED">("RAW");
   const [categoryId, setCategoryId] = useState(categories[0]?.id || "");
   const [photoNote, setPhotoNote] = useState("");
   const group = categories.find((cat) => cat.id === categoryId)?.groupKey || "tcg";
+
+  function applyCatalog(hit: CatalogHit) {
+    setCatalogId(hit.id);
+    setTitle(hit.title);
+    setGame(hit.game);
+    setSetName(hit.setName);
+    setCardName(hit.cardName);
+    setLanguage(hit.language);
+    const pokemon = categories.find((cat) => cat.slug === "pokemon");
+    if (pokemon) setCategoryId(pokemon.id);
+  }
+
+  function onTitle(next: string) {
+    setTitle(next);
+    setCatalogId("");
+  }
 
   function addPhoto(url: string) {
     setPhotos((prev) => {
@@ -78,14 +102,6 @@ export function CollectForm({
   return (
     <form action={action} className="grid gap-4">
       {state?.error ? <p className="rounded-2xl bg-soft px-4 py-3 text-sm text-danger">{errText(locale, state.error)}</p> : null}
-      <div className="flex gap-2 text-sm font-semibold">
-        <Link href="/add" className={`inline-flex h-11 items-center rounded-full px-4 ${mode === "collection" ? "bg-[#221820]" : "bg-card"}`} aria-current={mode === "collection" ? "page" : undefined}>
-          <span className={mode === "collection" ? "text-[#fffcfd]" : "text-muted"}>{tx(locale, "加入收藏", "Add to collection")}</span>
-        </Link>
-        <Link href="/add?kind=post" className={`inline-flex h-11 items-center rounded-full px-4 ${mode === "post" ? "bg-[#221820]" : "bg-card"}`} aria-current={mode === "post" ? "page" : undefined}>
-          <span className={mode === "post" ? "text-[#fffcfd]" : "text-muted"}>{tx(locale, "只發貼文", "Post only")}</span>
-        </Link>
-      </div>
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
       <div className="grid gap-2">
         <div className="flex gap-2 overflow-x-auto">
@@ -121,7 +137,90 @@ export function CollectForm({
       {mode === "post" ? (
         <>
           <textarea className="field min-h-28" name="body" maxLength={500} placeholder={tx(locale, "寫幾隻字…", "Write something…")} />
-          <Submit label={tx(locale, "發佈", "Post")} />
+          <label className="surface flex items-center justify-between gap-3 px-4 py-3">
+            <span>
+              <span className="block font-semibold">{tx(locale, "同時上架", "List it too")}</span>
+              <span className="block text-sm text-muted">{tx(locale, "直購，運費順豐到付。動態會顯示價錢，撳價錢去商品頁。", "Buy It Now with SF cash on delivery. The feed shows the price, and the price opens the listing.")}</span>
+            </span>
+            <input type="checkbox" name="alsoList" checked={alsoList} onChange={(event) => setAlsoList(event.target.checked)} className="h-6 w-6" />
+          </label>
+          {alsoList ? (
+            <div className="grid gap-3">
+              {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
+              <input type="hidden" name="catalogCardId" value={catalogId} />
+              <CatalogTitleField locale={locale} value={title} onValue={onTitle} onPick={applyCatalog} />
+              <label className="grid gap-1 text-sm font-medium">
+                {tx(locale, "分類", "Category")}
+                <select className="field" name="categoryId" value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{locale === "en" ? cat.nameEn : cat.nameZh}</option>
+                  ))}
+                </select>
+              </label>
+              {group === "tcg" ? (
+                catalogId ? (
+                  <div className="grid gap-2 rounded-2xl bg-soft px-3 py-3 text-sm">
+                    <p>{tx(locale, "已對上圖鑑", "Linked to the dex")} · {game} · {setName} · {language}</p>
+                    <button type="button" className="min-h-11 text-left font-semibold text-link" onClick={() => setCatalogId("")}>
+                      {tx(locale, "改為自己填遊戲、系列、語言", "Edit game, set, and language")}
+                    </button>
+                    <input type="hidden" name="game" value={game} />
+                    <input type="hidden" name="setName" value={setName} />
+                    <input type="hidden" name="cardName" value={cardName} />
+                    <input type="hidden" name="language" value={language} />
+                  </div>
+                ) : (
+                  <div className="grid gap-2">
+                    <input className="field" name="game" required value={game} placeholder={tx(locale, "遊戲，例如 Pokémon", "Game, e.g. Pokémon")} onChange={(event) => setGame(event.target.value)} />
+                    <input className="field" name="setName" required value={setName} placeholder={tx(locale, "系列", "Set")} onChange={(event) => setSetName(event.target.value)} />
+                    <input className="field" name="cardName" required value={cardName} placeholder={tx(locale, "卡名", "Card name")} onChange={(event) => setCardName(event.target.value)} />
+                    <input className="field" name="language" required value={language} placeholder={tx(locale, "語言", "Language")} onChange={(event) => setLanguage(event.target.value)} />
+                  </div>
+                )
+              ) : (
+                <div className="grid gap-2">
+                  <input type="hidden" name="personName" value={title} />
+                  <input className="field" name="seasonYear" required placeholder={tx(locale, "賽季／年份", "Season / year")} />
+                  <input className="field" name="brandSeries" required placeholder={tx(locale, "品牌系列", "Brand / series")} />
+                </div>
+              )}
+              <label className="grid gap-1 text-sm font-medium">
+                {tx(locale, "價錢 HKD", "Price HKD")}
+                <input className="field" name="price" inputMode="decimal" placeholder="280" required />
+              </label>
+              <fieldset className="grid gap-2">
+                <legend className="text-sm font-medium">{tx(locale, "品相", "Condition")}</legend>
+                <div className="flex gap-2">
+                  <label className="inline-flex h-11 items-center gap-2 rounded-full bg-soft px-3 text-sm">
+                    <input type="radio" name="conditionTrack" value="RAW" checked={track === "RAW"} onChange={() => setTrack("RAW")} />
+                    Raw
+                  </label>
+                  <label className="inline-flex h-11 items-center gap-2 rounded-full bg-soft px-3 text-sm">
+                    <input type="radio" name="conditionTrack" value="GRADED" checked={track === "GRADED"} onChange={() => setTrack("GRADED")} />
+                    {tx(locale, "評級", "Graded")}
+                  </label>
+                </div>
+                {track === "RAW" ? (
+                  <select className="field" name="rawGrade" defaultValue="A">
+                    {RAW.map(([value, zh, en]) => (
+                      <option key={value} value={value}>{locale === "en" ? en : zh}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    <select className="field" name="grader" defaultValue="PSA">
+                      {["PSA", "BGS", "CGC", "TAG"].map((grader) => (
+                        <option key={grader}>{grader}</option>
+                      ))}
+                    </select>
+                    <input className="field" name="gradeScore" inputMode="decimal" placeholder={tx(locale, "分數", "Score")} />
+                  </div>
+                )}
+              </fieldset>
+              <p className="text-sm text-muted">{tx(locale, "放賣至少兩張相。評級卡要有正面同背面。平台運費 HK$0，順豐到付。", "Two photos to sell. Graded cards need a front and a back. Platform shipping is HK$0, SF cash on delivery.")}</p>
+            </div>
+          ) : null}
+          <Submit label={alsoList ? tx(locale, "發佈並上架", "Post and list") : tx(locale, "發佈", "Post")} />
         </>
       ) : (
         <>

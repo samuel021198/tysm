@@ -7,7 +7,7 @@ const listingForSync = {
 } as const;
 
 /** Keep the collection row attached to this listing and post once the sale is live. */
-export async function syncListingInventory(listingId: string, opts?: { visibility?: CollectionVisibility }) {
+export async function syncListingInventory(listingId: string, opts?: { visibility?: CollectionVisibility; postBody?: string }) {
   const listing = await prisma.listing.findUnique({ where: { id: listingId }, include: listingForSync });
   if (!listing) return { itemId: null as string | null, postId: null as string | null };
   const existing = await prisma.collectionItem.findUnique({ where: { listingId } });
@@ -52,15 +52,19 @@ export async function syncListingInventory(listingId: string, opts?: { visibilit
       })),
     });
   }
-  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE");
+  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE", opts?.postBody);
   return { itemId: item.id, postId };
 }
 
-async function ensurePost(itemId: string, authorId: string, listingPublished: boolean) {
+async function ensurePost(itemId: string, authorId: string, listingPublished: boolean, postBody?: string) {
+  const body = postBody?.slice(0, 500);
   const existing = await prisma.post.findUnique({ where: { collectionItemId: itemId } });
-  if (existing) return existing.id;
+  if (existing) {
+    if (body != null) await prisma.post.update({ where: { id: existing.id }, data: { body } });
+    return existing.id;
+  }
   if (!shouldPublishPost({ forSale: true, listingPublished, publishToFeed: false })) return null;
-  const post = await prisma.post.create({ data: { authorId, collectionItemId: itemId, body: "" } });
+  const post = await prisma.post.create({ data: { authorId, collectionItemId: itemId, body: body ?? "" } });
   return post.id;
 }
 

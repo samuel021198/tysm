@@ -29,14 +29,14 @@ export default async function SellPage() {
         <a className="text-sm text-link" href="/sell/bulk">{tx(prefs.locale, "CSV 批量", "CSV upload")}</a>
       </div>
       <p className="mb-4 text-sm text-muted">
-        {tx(prefs.locale, "想快手直購，用", "For a quick Buy It Now, use ")}
-        <Link className="text-link" href="/add">{tx(prefs.locale, "加入收藏", "Add to collection")}</Link>
-        {tx(prefs.locale, "嘅放賣。呢頁係進階上架：拍賣、面交、店舖自取。", ". This page is the advanced form: auctions, meet-up, and store pickup.")}
+        {tx(prefs.locale, "想快手直購，寫", "For a quick Buy It Now, write a ")}
+        <Link className="text-link" href="/add?kind=post">{tx(prefs.locale, "貼子", "post")}</Link>
+        {tx(prefs.locale, "然後剔「同時上架」。呢頁係進階上架：拍賣、面交、店舖自取。", " and tick “list it too”. This page is the advanced form: auctions, meet-up, and store pickup.")}
       </p>
       <SellForm
         locale={prefs.locale}
         percent={bpsToPercentLabel(bps)}
-        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg" }))}
+        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
         hints={sold.map((item) => ({ title: item.title, price: formatHkd(item.unitPrice, prefs.locale) }))}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}

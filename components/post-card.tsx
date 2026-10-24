@@ -65,13 +65,23 @@ export function PostCard({
         )}
         <ShareButton path={post.sharePath} label={tx(locale, "分享", "Share")} copiedLabel={tx(locale, "已複製", "Copied")} />
       </div>
-      <Link href={post.href} className="block px-3 pb-4 pt-1">
-        <h2 className="text-[15px] font-semibold leading-snug">
-          {post.cardName}
-          {post.condition ? <span className="font-medium text-muted"> · {post.condition}</span> : null}
-        </h2>
-        {post.priceCents != null ? <p className="price mt-1 text-xl leading-none">{formatHkd(post.priceCents, locale)}</p> : null}
-      </Link>
+      <div className="px-3 pb-4 pt-1">
+        <Link href={post.href} className="block">
+          <h2 className="text-[15px] font-semibold leading-snug">
+            {post.cardName}
+            {post.condition ? <span className="font-medium text-muted"> · {post.condition}</span> : null}
+          </h2>
+        </Link>
+        {post.priceCents != null ? (
+          post.priceHref ? (
+            <Link href={post.priceHref} className="price mt-1 inline-flex min-h-11 items-center text-xl leading-none">
+              {formatHkd(post.priceCents, locale)}
+            </Link>
+          ) : (
+            <p className="price mt-1 text-xl leading-none">{formatHkd(post.priceCents, locale)}</p>
+          )
+        ) : null}
+      </div>
     </article>
   );
 }

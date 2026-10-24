@@ -1,4 +1,5 @@
 import { buildStoryRings, isStoryActive, storyExpiresAt, STORY_TTL_MS, type StoryPerson, type StoryRow } from "./stories";
+import { clampPct, clampScale, containRect } from "./story-edit";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -77,5 +78,9 @@ const guest = buildStoryRings({ viewer: null, followedIds: [], stories: rows, vi
 assert(guest.audience === "suggested", "guests see the suggestion pool");
 assert(guest.rings.length === 3, "guest rings are the three live authors");
 assert(!guest.rings.some((ring) => ring.mine), "guests have no self ring");
+assert(clampPct(120) === 96 && clampPct(-4) === 4, "overlay position stays on the photo");
+assert(clampScale(4) === 2.6 && clampScale(0.2) === 0.6, "sticker scale stays in range");
+assert(containRect(90, 160, 90, 160).w === 90, "a story-shaped photo fills the stage");
+assert(containRect(100, 100, 200, 100).w === 100 && containRect(100, 100, 200, 100).h === 50, "a landscape photo is contained");
 
 console.log("stories ok");

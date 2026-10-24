@@ -73,6 +73,7 @@ const card = toPostCard({
   liked: false,
 });
 assert(card.priceCents === 128000, "selling post keeps the price");
+assert(card.priceHref === "/listing/seed_charizard", "the price opens the listing");
 assert(card.condition === "Raw A", "condition is on the card");
 assert(card.commentHref === "/post/p1#comments", "comments go to the post");
 assert(!card.href.includes("checkout"), "the card does not link to checkout");
@@ -97,6 +98,7 @@ const held = toPostCard({
   },
 });
 assert(held.priceCents === null, "collect-only card has no price");
+assert(held.priceHref === null, "a post without a sale has no price link");
 
 const suggestion = listingSuggestionCard({
   liked: true,
@@ -124,5 +126,6 @@ const suggestion = listingSuggestionCard({
 assert(suggestion.commentHref === null, "listing suggestions do not invent a thread");
 assert(suggestion.likeListingId === "seed_luffy", "suggestion likes reuse favorites");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
+assert(suggestion.priceHref === "/listing/seed_luffy", "suggestion price opens the listing");
 
 console.log("posts.test.ts ok");

@@ -25,7 +25,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
       <SellForm
         locale={prefs.locale}
         percent={bpsToPercentLabel(bps)}
-        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg" }))}
+        categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
         initial={{
           listingId: listing.id,
           categoryId: listing.categoryId,
@@ -63,6 +63,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           publishAt: listing.publishAt ? toHkInput(listing.publishAt) : "",
           photos: listing.photos.map((photo) => ({ url: photo.url, role: photo.role })),
           locked: bids > 0,
+          catalogCardId: listing.catalogCardId || "",
         }}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
