@@ -52,7 +52,7 @@ export default async function HomePage({
         </Link>
       </div>
       {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
-        <p className="empty">{tx(prefs.locale, "未有動態。加入收藏之後可以發到呢度。", "No posts yet. Add a card to your collection to share it here.")}</p>
+        <p className="empty">{tx(prefs.locale, "未有動態。發一則貼文，或者上架一張卡。", "No posts yet. Write a post, or list a card.")}</p>
       ) : null}
       {primary.length ? (
         <section className="grid gap-4">

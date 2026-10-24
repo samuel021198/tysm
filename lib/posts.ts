@@ -52,6 +52,7 @@ export type PostCardModel = {
   cardName: string;
   condition: string | null;
   priceCents: number | null;
+  priceHref: string | null;
   likeCount: number;
   commentCount: number;
   liked: boolean;
@@ -105,6 +106,7 @@ export function toPostCard(input: {
     cardName,
     condition: input.item ? conditionLabel(input.item) : null,
     priceCents: sellingAsk(listing),
+    priceHref: sellingAsk(listing) != null && listing ? `/listing/${listing.id}` : null,
     likeCount: input.likeCount,
     commentCount: input.commentCount,
     liked: input.liked,
@@ -145,6 +147,7 @@ export function listingSuggestionCard(input: {
     cardName: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
     condition: conditionLabel(listing),
     priceCents: sellingAsk(listing),
+    priceHref: sellingAsk(listing) != null ? `/listing/${listing.id}` : null,
     likeCount: listing.favoriteCount,
     commentCount: 0,
     liked: input.liked,

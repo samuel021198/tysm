@@ -162,10 +162,10 @@ export function CreatePicker({
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-current={creating ? "page" : undefined}
-        aria-label={tx(locale, "加", "Add")}
+        aria-label={tx(locale, "新增", "Create")}
         onClick={openPicker}
       >
-        {tx(locale, "加", "Add")}
+        <Icon name="plus" className="h-6 w-6" strokeWidth={2.4} />
       </button>
     );
 
@@ -174,7 +174,7 @@ export function CreatePicker({
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label={tx(locale, "加", "Add")}
+      aria-label={tx(locale, "新增", "Create")}
       tabIndex={-1}
       className={`fixed inset-0 z-[80] flex flex-col text-white outline-none transition duration-300 ${present ? "opacity-100" : "opacity-0"}`}
       style={{
@@ -192,7 +192,7 @@ export function CreatePicker({
         >
           <span aria-hidden>×</span>
         </button>
-        <p className="text-center text-sm font-semibold">{tx(locale, "加", "Add")}</p>
+        <p className="text-center text-sm font-semibold">{tx(locale, "新增", "Create")}</p>
         <p className="pr-3 text-right text-sm tabular-nums text-white/70">
           {index + 1} / {CREATE_MODES.length}
         </p>
@@ -264,8 +264,9 @@ export function CreatePicker({
       </div>
       <div
         role="tablist"
-        aria-label={tx(locale, "加", "Add")}
-        className="grid grid-cols-4 px-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1"
+        aria-label={tx(locale, "新增", "Create")}
+        className="grid px-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1"
+        style={{ gridTemplateColumns: `repeat(${CREATE_MODES.length}, minmax(0, 1fr))` }}
       >
         {CREATE_MODES.map((item, i) => (
           <button

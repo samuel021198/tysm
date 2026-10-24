@@ -3,6 +3,7 @@ import { prisma } from "./db";
 import { headerIndex, parseCsv, PERSON_HEADERS, TCG_HEADERS } from "./csv";
 import { hkdToCents, isAllowedMediaUrl } from "./format";
 import { parseGrade } from "./rules";
+import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
 import { hasStoreAddress } from "./shipping";
 import { GRADERS, RAW, parseListingForm, validateListing, type ListingInput, type PhotoInput } from "./sell-wizard";
@@ -62,7 +63,56 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
     publishAt: input.intent === "schedule" ? input.publishAt : null,
     status: status as "DRAFT" | "SCHEDULED" | "ACTIVE",
     publishedAt: status === "ACTIVE" ? now : null,
+    catalogCardId: input.catalogCardId?.trim() || null,
     photos,
+  };
+}
+
+async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
+  const id = input.catalogCardId?.trim();
+  if (!id) return { ...input, catalogCardId: null };
+  const card = await prisma.catalogCard.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      nameEn: true,
+      nameJa: true,
+      collectorNumber: true,
+      numberKey: true,
+      printRegion: true,
+      rarity: true,
+      finish: true,
+      game: true,
+      set: { select: { nameEn: true, nameJa: true, series: true, releaseDate: true } },
+    },
+  });
+  if (!card) return { ...input, catalogCardId: null };
+  const row: CatalogSuggestCard = {
+    id: card.id,
+    nameEn: card.nameEn,
+    nameJa: card.nameJa,
+    collectorNumber: card.collectorNumber,
+    numberKey: card.numberKey,
+    printRegion: card.printRegion,
+    rarity: card.rarity,
+    finish: card.finish,
+    listingCount: 0,
+    setNameEn: card.set.nameEn,
+    setNameJa: card.set.nameJa,
+    series: card.set.series,
+    releaseDate: card.set.releaseDate,
+  };
+  const pick = catalogSuggestion(row, card.game);
+  return {
+    ...input,
+    catalogCardId: card.id,
+    title: input.title.trim() || pick.title,
+    game: input.game?.trim() || pick.game,
+    setName: input.setName?.trim() || pick.setName,
+    cardName: input.cardName?.trim() || pick.cardName,
+    language: input.language?.trim() || pick.language,
+    cardNumber: input.cardNumber?.trim() || pick.collectorNumber,
+    rarity: input.rarity?.trim() || pick.rarity,
   };
 }
 
@@ -102,10 +152,11 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   }
 
   const seller = await prisma.user.findUnique({ where: { id: userId }, select: { storeDistrict: true, storeLine1: true } });
-  const errors = validateListing(input, found.groupKey, new Date(), hasStoreAddress(seller));
+  const filled = await hydrateCatalog(input);
+  const errors = validateListing(filled, found.groupKey, new Date(), hasStoreAddress(seller));
   if (errors.length) return { ok: false as const, error: errors[0] };
   const now = new Date();
-  const data = dataFor(input, found.groupKey, now);
+  const data = dataFor(filled, found.groupKey, now);
 
   if (!listing) {
     const { photos, ...rest } = data;
