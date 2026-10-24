@@ -3,7 +3,10 @@ import { ingestDex } from "@/lib/dex-ingest";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 60;
+/** Vercel Pro. Soft deadline below stays under this so the handler can return JSON. */
+export const maxDuration = 300;
+
+const INGEST_DEADLINE_MS = 240_000;
 
 function safeMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "error";
@@ -69,7 +72,7 @@ export async function POST(request: Request) {
   const options = await readOptions(request);
   if (options instanceof Response) return options;
   try {
-    const result = await ingestDex({ deadlineMs: 45_000, ...options });
+    const result = await ingestDex({ deadlineMs: INGEST_DEADLINE_MS, ...options });
     return Response.json({ ok: true, ...result });
   } catch (error) {
     console.error("dex ingest failed", safeMessage(error));

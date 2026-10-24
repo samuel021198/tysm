@@ -276,3 +276,41 @@ export function regionLabel(region: DexPrintRegion, locale: Locale): string {
   if (region === "JP") return locale === "en" ? "Japanese" : "日文";
   return locale === "en" ? "English" : "英文";
 }
+
+/** Leave this much soft-deadline budget so ingest can return JSON after post-steps. */
+export const INGEST_POST_RESERVE_MS = 15_000;
+
+/** Clock only. The first set of a call pauses too; written cards are not required. */
+export function ingestPastSoftDeadline(now: number, deadline: number, reserveMs: number): boolean {
+  return now > deadline - reserveMs;
+}
+
+/** Absolute time post-steps must stop. Null means do not start them (mid-walk, or reserve already gone). */
+export function ingestPostDeadline(done: boolean, now: number, deadline: number, reserveMs = INGEST_POST_RESERVE_MS): number | null {
+  if (!done) return null;
+  const until = deadline - reserveMs;
+  return now < until ? until : null;
+}
+
+/**
+ * English-name backfill and catalog linking run only after the set walk finishes,
+ * and only when `reserveMs` is still left before the soft deadline.
+ * Linking is not started if backfill uses up that reserve.
+ */
+export async function runIngestPostSteps(args: {
+  done: boolean;
+  deadline: number;
+  reserveMs?: number;
+  now?: () => number;
+  link: (deadlineMs: number) => Promise<{ listings: number; collectionItems: number }>;
+  backfill: (deadlineMs: number) => Promise<void>;
+}): Promise<{ listings: number; collectionItems: number }> {
+  const now = args.now ?? Date.now;
+  const until = ingestPostDeadline(args.done, now(), args.deadline, args.reserveMs);
+  if (until == null) return { listings: 0, collectionItems: 0 };
+  await args.backfill(until);
+  if (ingestPostDeadline(args.done, now(), args.deadline, args.reserveMs) == null) {
+    return { listings: 0, collectionItems: 0 };
+  }
+  return args.link(until);
+}

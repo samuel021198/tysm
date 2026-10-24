@@ -1,6 +1,6 @@
 import { resolveEnglishCardName, resolveEnglishSetName } from "./card-title";
 import { prisma } from "./db";
-import { DEX_PLACEHOLDER } from "./dex";
+import { DEX_PLACEHOLDER, INGEST_POST_RESERVE_MS, ingestPastSoftDeadline, runIngestPostSteps } from "./dex";
 import { linkCatalogListings } from "./dex-link";
 import { putR2Object, r2Config } from "./r2";
 import {
@@ -55,22 +55,26 @@ function hasJapanese(value: string): boolean {
   return /[\u3040-\u30ff\u3400-\u9fff]/.test(value);
 }
 
-/** Lexicon pass for rows this run did not refetch. Finish still comes from the card payload. */
-async function backfillEnglishNames() {
+/** Lexicon pass for rows this run did not refetch. Finish still comes from the card payload. Stops at `deadlineMs`. */
+async function backfillEnglishNames(deadlineMs: number) {
+  if (Date.now() >= deadlineMs) return;
   const sets = await prisma.catalogSet.findMany({
     where: { printRegion: "JP" },
     select: { id: true, code: true, nameEn: true, nameJa: true },
   });
   for (const set of sets) {
+    if (Date.now() >= deadlineMs) return;
     const nameEn = resolveEnglishSetName(set.nameJa || set.nameEn, set.code);
     if (!nameEn || hasJapanese(nameEn) || nameEn === set.nameEn) continue;
     await prisma.catalogSet.update({ where: { id: set.id }, data: { nameEn } });
   }
+  if (Date.now() >= deadlineMs) return;
   const cards = await prisma.catalogCard.findMany({
     where: { printRegion: "JP" },
     select: { id: true, nameEn: true, nameJa: true },
   });
   for (const card of cards) {
+    if (Date.now() >= deadlineMs) return;
     const source = card.nameJa || card.nameEn;
     if (!hasJapanese(source) && !hasJapanese(card.nameEn)) continue;
     const nameEn = resolveEnglishCardName(source);
@@ -267,8 +271,8 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
 
   for (const step of plan.steps) {
     if (pause) break;
-    if (processedSetIds.length > 0 && Date.now() > deadline - SET_START_RESERVE_MS) {
-      pause = { externalId: step.item.externalId, cardOffset: 0 };
+    if (ingestPastSoftDeadline(Date.now(), deadline, SET_START_RESERVE_MS)) {
+      pause = { externalId: step.item.externalId, cardOffset: step.cardOffset };
       break;
     }
 
@@ -315,8 +319,7 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
     }
 
     while (index < cards.length) {
-      const overtime = Date.now() > deadline - CHUNK_RESERVE_MS;
-      if (overtime && (cardsWritten > 0 || processedSetIds.length > 0)) {
+      if (ingestPastSoftDeadline(Date.now(), deadline, CHUNK_RESERVE_MS)) {
         pause = { externalId: step.item.externalId, cardOffset: index };
         break;
       }
@@ -350,6 +353,14 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
     remainingSets = 0;
   }
 
+  const linked = await runIngestPostSteps({
+    done,
+    deadline,
+    reserveMs: INGEST_POST_RESERVE_MS,
+    backfill: (until) => backfillEnglishNames(until),
+    link: (until) => linkCatalogListings({ deadlineMs: until }),
+  });
+
   let imagesUploaded = 0;
   if (r2Config() && Date.now() < deadline) {
     imagesUploaded += await mirrorImages(pending, deadline);
@@ -362,9 +373,6 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
       );
     }
   }
-
-  if (done && Date.now() < deadline + 15_000) await backfillEnglishNames();
-  const linked = await linkCatalogListings();
   const imagesPending = await countUnmirrored();
 
   return {
