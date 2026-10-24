@@ -1,3 +1,4 @@
+import { dexIdsOf, finishLabel, resolveEnglishCardName, resolveEnglishSetName, variantFlagsOf } from "./card-title";
 import { bilingualName, chooseDexSets, numberKey, type DexPrintRegion } from "./dex";
 
 const ORIGIN = "https://api.tcgdex.net/v2";
@@ -28,6 +29,7 @@ export type MappedCard = {
   sourceImageUrl: string;
   rarity: string | null;
   artist: string | null;
+  finish: string | null;
 };
 
 type SetResume = {
@@ -102,17 +104,23 @@ export function mapTcgdexCard(
   if (!id || !name) return null;
   const names = bilingualName(name, set.printRegion);
   const printed = collectorNumber(localId || id.split("-").pop() || "", set.official);
+  const variants = variantFlagsOf(obj.variants);
+  const rarity = str(obj, "rarity") || null;
+  const resolved = set.printRegion === "JP" ? resolveEnglishCardName(name, dexIdsOf(obj.dexId)) : names.nameEn;
+  const han = /[\u3040-\u30ff\u3400-\u9fff]/;
+  const nameEn = han.test(resolved) && names.nameEn && !han.test(names.nameEn) ? names.nameEn : resolved || names.nameEn;
   return {
     externalId: `${lang}:${id}`,
     setExternalId: set.externalId,
     printRegion: set.printRegion,
     collectorNumber: printed,
     numberKey: numberKey(localId || printed),
-    nameEn: names.nameEn,
+    nameEn,
     nameJa: names.nameJa,
     sourceImageUrl: cardImageUrl(str(obj, "image")),
-    rarity: str(obj, "rarity") || null,
+    rarity,
     artist: str(obj, "illustrator") || null,
+    finish: finishLabel(variants, rarity),
   };
 }
 
@@ -124,6 +132,7 @@ export function mapTcgdexSet(raw: unknown, lang: "en" | "ja"): (MappedSet & { ca
   if (!id || !name) return null;
   const region: DexPrintRegion = lang === "ja" ? "JP" : "WEST";
   const names = bilingualName(name, region);
+  const nameEn = region === "JP" ? resolveEnglishSetName(name, id) : name;
   const counts = countOf(obj.cardCount);
   const serie = asRecord(obj.serie);
   const serieId = serie ? str(serie, "id") : "";
@@ -132,8 +141,8 @@ export function mapTcgdexSet(raw: unknown, lang: "en" | "ja"): (MappedSet & { ca
     externalId: `${lang}:${id}`,
     printRegion: region,
     code: id,
-    nameEn: names.nameEn,
-    nameJa: names.nameJa,
+    nameEn: nameEn || names.nameEn,
+    nameJa: region === "JP" ? name : names.nameJa,
     series: seriesName || null,
     serieId,
     releaseDate: str(obj, "releaseDate"),
@@ -216,6 +225,42 @@ async function loadSeries(lang: "en" | "ja"): Promise<SerieBrief[]> {
     .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate) || a.id.localeCompare(b.id));
 }
 
+async function mapPool<T>(items: T[], limit: number, fn: (item: T, index: number) => Promise<void>) {
+  let cursor = 0;
+  async function worker() {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      await fn(items[index]!, index);
+    }
+  }
+  const width = Math.min(limit, items.length);
+  if (width > 0) await Promise.all(Array.from({ length: width }, () => worker()));
+}
+
+/** Set lists omit variants and dex ids. One card request fills English names and finish. */
+export async function hydrateDexCards(lang: "en" | "ja", cards: MappedCard[]): Promise<MappedCard[]> {
+  const out = cards.slice();
+  await mapPool(cards, 6, async (card, index) => {
+    const id = card.externalId.startsWith(`${lang}:`) ? card.externalId.slice(lang.length + 1) : "";
+    if (!id) return;
+    try {
+      const raw = await tcgdexGet(`/${lang}/cards/${encodeURIComponent(id)}`);
+      const official = countOf(asRecord(asRecord(raw)?.set)?.cardCount).official;
+      const mapped = mapTcgdexCard(
+        raw,
+        { externalId: card.setExternalId, code: id.split("-")[0] || "", printRegion: card.printRegion, serieId: "", official },
+        lang,
+      );
+      if (!mapped) return;
+      out[index] = { ...mapped, sourceImageUrl: mapped.sourceImageUrl || card.sourceImageUrl };
+    } catch (error) {
+      console.error("tcgdex card skipped", id, error instanceof Error ? error.message.slice(0, 120) : "error");
+    }
+  });
+  return out;
+}
+
 /** Newest 1–2 physical sets per language that actually have card art, capped by card budget. No API key. */
 export async function fetchDexSubset(lang: "en" | "ja", want = 2, budget = 250): Promise<{ sets: MappedSet[]; cards: MappedCard[] }> {
   const series = await loadSeries(lang);
@@ -254,5 +299,5 @@ export async function fetchDexSubset(lang: "en" | "ja", want = 2, budget = 250):
       left -= slice.length;
     }
   }
-  return { sets, cards };
+  return { sets, cards: await hydrateDexCards(lang, cards) };
 }

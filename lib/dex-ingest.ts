@@ -1,3 +1,4 @@
+import { resolveEnglishCardName, resolveEnglishSetName } from "./card-title";
 import { prisma } from "./db";
 import { DEX_PLACEHOLDER } from "./dex";
 import { linkCatalogListings } from "./dex-link";
@@ -15,6 +16,34 @@ export type IngestCounts = {
   collectionLinked: number;
   r2: boolean;
 };
+
+function hasJapanese(value: string): boolean {
+  return /[\u3040-\u30ff\u3400-\u9fff]/.test(value);
+}
+
+/** Lexicon pass for rows this run did not refetch. Finish still comes from the card payload. */
+async function backfillEnglishNames() {
+  const sets = await prisma.catalogSet.findMany({
+    where: { printRegion: "JP" },
+    select: { id: true, code: true, nameEn: true, nameJa: true },
+  });
+  for (const set of sets) {
+    const nameEn = resolveEnglishSetName(set.nameJa || set.nameEn, set.code);
+    if (!nameEn || hasJapanese(nameEn) || nameEn === set.nameEn) continue;
+    await prisma.catalogSet.update({ where: { id: set.id }, data: { nameEn } });
+  }
+  const cards = await prisma.catalogCard.findMany({
+    where: { printRegion: "JP" },
+    select: { id: true, nameEn: true, nameJa: true },
+  });
+  for (const card of cards) {
+    const source = card.nameJa || card.nameEn;
+    if (!hasJapanese(source) && !hasJapanese(card.nameEn)) continue;
+    const nameEn = resolveEnglishCardName(source);
+    if (!nameEn || hasJapanese(nameEn) || nameEn === card.nameEn) continue;
+    await prisma.catalogCard.update({ where: { id: card.id }, data: { nameEn } });
+  }
+}
 
 function displayImage(source: string): string {
   return source || DEX_PLACEHOLDER;
@@ -114,6 +143,7 @@ export async function ingestDex(opts?: { deadlineMs?: number }): Promise<IngestC
       sourceImageUrl: card.sourceImageUrl || null,
       rarity: card.rarity,
       artist: card.artist,
+      finish: card.finish,
     };
     await prisma.catalogCard.upsert({
       where: { externalId: card.externalId },
@@ -138,6 +168,7 @@ export async function ingestDex(opts?: { deadlineMs?: number }): Promise<IngestC
     });
   }
 
+  await backfillEnglishNames();
   const linked = await linkCatalogListings();
   return {
     sets: sets.length,
