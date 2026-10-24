@@ -1,5 +1,5 @@
 import { dexIdsOf, finishLabel, resolveEnglishCardName, resolveEnglishSetName, variantFlagsOf } from "./card-title";
-import { bilingualName, chooseDexSets, numberKey, type DexPrintRegion } from "./dex";
+import { bilingualName, numberKey, type DexPrintRegion } from "./dex";
 
 const ORIGIN = "https://api.tcgdex.net/v2";
 
@@ -157,18 +157,29 @@ export function mapTcgdexSet(raw: unknown, lang: "en" | "ja"): (MappedSet & { ca
   return { ...set, cards };
 }
 
+class TcgdexStatusError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "TcgdexStatusError";
+    this.status = status;
+  }
+}
+
 async function tcgdexGet(path: string, attempt = 0): Promise<unknown> {
   const res = await fetch(`${ORIGIN}${path}`, {
     headers: { accept: "application/json" },
     signal: AbortSignal.timeout(25_000),
   });
-  if ((res.status === 429 || res.status === 503) && attempt < 2) {
-    await new Promise((resolve) => setTimeout(resolve, 400 * (attempt + 1)));
+  // ponytail: 4 tries with linear backoff. A full EN+JA pass is tens of thousands of card GETs; overlapping ingest POSTs will trip this.
+  if ((res.status === 429 || res.status === 503) && attempt < 4) {
+    await new Promise((resolve) => setTimeout(resolve, 700 * (attempt + 1)));
     return tcgdexGet(path, attempt + 1);
   }
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`tcgdex ${res.status} ${text.slice(0, 160).replace(/\s+/g, " ")}`);
+    throw new TcgdexStatusError(res.status, `tcgdex ${res.status} ${text.slice(0, 160).replace(/\s+/g, " ")}`);
   }
   return res.json();
 }
@@ -209,16 +220,14 @@ function resumesFrom(body: unknown): SetResume[] {
 
 async function loadSeries(lang: "en" | "ja"): Promise<SerieBrief[]> {
   const listed = seriesList(await tcgdexGet(`/${lang}/series`)).filter((row) => !pocket(row.id, row.name));
-  const details = await Promise.all(
-    listed.map(async (row) => {
-      try {
-        return serieBrief(await tcgdexGet(`/${lang}/series/${encodeURIComponent(row.id)}`));
-      } catch (error) {
-        console.error("tcgdex series skipped", row.id, error instanceof Error ? error.message.slice(0, 120) : "error");
-        return null;
-      }
-    }),
-  );
+  const details: (SerieBrief | null)[] = new Array(listed.length).fill(null);
+  await mapPool(listed, 4, async (row, index) => {
+    try {
+      details[index] = serieBrief(await tcgdexGet(`/${lang}/series/${encodeURIComponent(row.id)}`));
+    } catch (error) {
+      console.error("tcgdex series skipped", row.id, error instanceof Error ? error.message.slice(0, 120) : "error");
+    }
+  });
   return details
     .filter((row): row is SerieBrief => Boolean(row))
     .filter((row) => !pocket(row.id, row.name))
@@ -239,9 +248,9 @@ async function mapPool<T>(items: T[], limit: number, fn: (item: T, index: number
 }
 
 /** Set lists omit variants and dex ids. One card request fills English names and finish. */
-export async function hydrateDexCards(lang: "en" | "ja", cards: MappedCard[]): Promise<MappedCard[]> {
+export async function hydrateDexCards(lang: "en" | "ja", cards: MappedCard[], limit = 4): Promise<MappedCard[]> {
   const out = cards.slice();
-  await mapPool(cards, 6, async (card, index) => {
+  await mapPool(cards, limit, async (card, index) => {
     const id = card.externalId.startsWith(`${lang}:`) ? card.externalId.slice(lang.length + 1) : "";
     if (!id) return;
     try {
@@ -261,43 +270,176 @@ export async function hydrateDexCards(lang: "en" | "ja", cards: MappedCard[]): P
   return out;
 }
 
-/** Newest 1–2 physical sets per language that actually have card art, capped by card budget. No API key. */
-export async function fetchDexSubset(lang: "en" | "ja", want = 2, budget = 250): Promise<{ sets: MappedSet[]; cards: MappedCard[] }> {
-  const series = await loadSeries(lang);
-  const sets: MappedSet[] = [];
-  const cards: MappedCard[] = [];
-  let left = budget;
-  for (const serie of series) {
-    if (sets.length >= want || left <= 0) break;
-    const resumes = serie.resumes.filter(usableSetResume);
-    const full = (
-      await Promise.all(
-        resumes.map(async (resume) => {
-          try {
-            return mapTcgdexSet(await tcgdexGet(`/${lang}/sets/${encodeURIComponent(resume.id)}`), lang);
-          } catch (error) {
-            console.error("tcgdex set skipped", resume.id, error instanceof Error ? error.message.slice(0, 120) : "error");
-            return null;
-          }
-        }),
-      )
-    )
-      .filter((row): row is MappedSet & { cards: MappedCard[] } => Boolean(row))
-      .filter((row) => row.cards.some((card) => card.sourceImageUrl));
-    const picked = chooseDexSets(
-      full.map((set) => ({ id: set.externalId, total: set.total, releaseDate: set.releaseDate })),
-      want - sets.length,
-      left,
-    );
-    for (const choice of picked) {
-      const set = full.find((row) => row.externalId === choice.id);
-      if (!set || left <= 0) continue;
-      const slice = set.cards.slice(0, Math.min(left, set.cards.length));
-      const { cards: _cards, ...meta } = set;
-      sets.push(meta);
-      cards.push(...slice);
-      left -= slice.length;
+export type DexQueueItem = {
+  lang: "en" | "ja";
+  id: string;
+  externalId: string;
+  name: string;
+  total: number;
+  official: number;
+  /** Series release date. Every set in the series shares it. */
+  releaseDate: string;
+  serieId: string;
+  /** Position among usable sets in the series payload. */
+  order: number;
+};
+
+export type DexSetProgress = { count: number; total: number | null };
+
+/**
+ * A set is done when the saved cards cover TCGdex `cardCount.total`, or when a finished pass
+ * stored a shorter payload (including 0) by writing that shorter number onto `CatalogSet.total`.
+ * ponytail: lowering `total` is the skip marker. A later TCGdex fill of an empty set is ignored until that row is deleted. Upgrade path: an `ingestSettledAt` column.
+ */
+export function dexSetSettled(item: { total: number }, db: DexSetProgress | undefined): boolean {
+  if (!db) return false;
+  if (item.total > 0 && db.count >= item.total) return true;
+  if (db.total != null && db.total < item.total && db.count >= db.total) return true;
+  return false;
+}
+
+/** `ja:SV10` means that set is finished. `ja:SV10#40` means resume at card index 40. */
+export function parseDexCursor(value: string | null | undefined): { externalId: string; cardOffset: number | null } | null {
+  const raw = (value ?? "").trim();
+  if (!raw) return null;
+  const hash = raw.lastIndexOf("#");
+  if (hash <= 0) return { externalId: raw, cardOffset: null };
+  const offset = Number(raw.slice(hash + 1));
+  if (!Number.isInteger(offset) || offset < 0) return { externalId: raw, cardOffset: null };
+  return { externalId: raw.slice(0, hash), cardOffset: offset };
+}
+
+export function formatDexCursor(externalId: string, cardOffset: number | null): string {
+  if (cardOffset == null) return externalId;
+  return `${externalId}#${cardOffset}`;
+}
+
+export type DexBatchStep = { item: DexQueueItem; cardOffset: number };
+
+export type DexBatchPlan = {
+  steps: DexBatchStep[];
+  skippedSettled: number;
+  done: boolean;
+};
+
+/** Next sets to fetch. Settled rows do not consume `maxSets`. A `#offset` cursor stays on that set. */
+export function planDexBatch(
+  queue: readonly DexQueueItem[],
+  args: { cursor: string | null | undefined; settled: ReadonlySet<string>; maxSets: number },
+): DexBatchPlan {
+  const maxSets = Math.max(0, args.maxSets);
+  const parsed = parseDexCursor(args.cursor);
+  let index = 0;
+  let forcedOffset: number | null = null;
+  if (parsed) {
+    const at = queue.findIndex((row) => row.externalId === parsed.externalId);
+    if (at >= 0) {
+      if (parsed.cardOffset == null) index = at + 1;
+      else {
+        index = at;
+        forcedOffset = parsed.cardOffset;
+      }
     }
   }
-  return { sets, cards: await hydrateDexCards(lang, cards) };
+  const steps: DexBatchStep[] = [];
+  let skippedSettled = 0;
+  while (index < queue.length && steps.length < maxSets) {
+    const item = queue[index]!;
+    const resumeOffset = forcedOffset != null && steps.length === 0 && item.externalId === parsed?.externalId ? forcedOffset : 0;
+    if (resumeOffset <= 0 && args.settled.has(item.externalId)) {
+      skippedSettled += 1;
+      index += 1;
+      forcedOffset = null;
+      continue;
+    }
+    steps.push({ item, cardOffset: resumeOffset });
+    index += 1;
+    forcedOffset = null;
+  }
+  let cursorIndex = index;
+  if (parsed && steps.length === 0) {
+    const at = queue.findIndex((row) => row.externalId === parsed.externalId);
+    if (at >= 0) cursorIndex = parsed.cardOffset == null ? at + 1 : at;
+  }
+  const done = steps.length === 0 && cursorIndex >= queue.length;
+  return { steps, skippedSettled, done };
+}
+
+/** How many sets are still ahead of `cursor`, counting a mid-set cursor as unfinished. */
+export function dexUnsettledRemaining(queue: readonly DexQueueItem[], settled: ReadonlySet<string>, cursor: string | null): number {
+  const parsed = parseDexCursor(cursor);
+  let start = 0;
+  let mid = false;
+  if (parsed) {
+    const at = queue.findIndex((row) => row.externalId === parsed.externalId);
+    if (at >= 0) {
+      if (parsed.cardOffset == null) start = at + 1;
+      else {
+        start = at;
+        mid = true;
+      }
+    }
+  }
+  let count = 0;
+  for (let i = start; i < queue.length; i += 1) {
+    if (mid && i === start) {
+      count += 1;
+      continue;
+    }
+    if (!settled.has(queue[i]!.externalId)) count += 1;
+  }
+  return count;
+}
+
+/** Usable EN/JA sets, newest series first. Pocket, promo, and unusable resumes are already dropped. */
+export async function listDexSetQueue(langs: readonly ("en" | "ja")[]): Promise<DexQueueItem[]> {
+  const items: DexQueueItem[] = [];
+  const seen = new Set<string>();
+  for (const lang of langs) {
+    const series = await loadSeries(lang);
+    for (const serie of series) {
+      let order = 0;
+      for (const resume of serie.resumes) {
+        if (!usableSetResume(resume)) continue;
+        const externalId = `${lang}:${resume.id}`;
+        if (seen.has(externalId)) continue;
+        seen.add(externalId);
+        items.push({
+          lang,
+          id: resume.id,
+          externalId,
+          name: resume.name,
+          total: resume.total ?? 0,
+          official: resume.official ?? 0,
+          releaseDate: serie.releaseDate,
+          serieId: serie.id,
+          order,
+        });
+        order += 1;
+      }
+    }
+  }
+  items.sort(
+    (a, b) => b.releaseDate.localeCompare(a.releaseDate) || a.serieId.localeCompare(b.serieId) || a.order - b.order || a.id.localeCompare(b.id),
+  );
+  return items;
+}
+
+/** One set payload. 404 becomes null so ingest can mark it empty and move on. Other errors propagate. */
+export async function fetchMappedSet(lang: "en" | "ja", id: string): Promise<(MappedSet & { cards: MappedCard[] }) | null> {
+  try {
+    const mapped = mapTcgdexSet(await tcgdexGet(`/${lang}/sets/${encodeURIComponent(id)}`), lang);
+    if (!mapped) return null;
+    const seen = new Set<string>();
+    mapped.cards = mapped.cards.filter((card) => {
+      if (seen.has(card.externalId)) return false;
+      seen.add(card.externalId);
+      return true;
+    });
+    mapped.cards.sort((a, b) => a.externalId.localeCompare(b.externalId) || a.collectorNumber.localeCompare(b.collectorNumber));
+    return mapped;
+  } catch (error) {
+    if (error instanceof TcgdexStatusError && error.status === 404) return null;
+    throw error;
+  }
 }

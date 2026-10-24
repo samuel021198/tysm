@@ -11,7 +11,20 @@ import {
 } from "./dex";
 import { awsSigV4Authorization, sha256Hex } from "./r2";
 import { catalogDisplayTitle, finishLabel, listingTitleFromCatalog, resolveEnglishCardName } from "./card-title";
-import { cardImageUrl, collectorNumber, logoUrl, mapTcgdexCard, mapTcgdexSet, usableSetResume } from "./tcgdex";
+import {
+  cardImageUrl,
+  collectorNumber,
+  dexSetSettled,
+  dexUnsettledRemaining,
+  formatDexCursor,
+  logoUrl,
+  mapTcgdexCard,
+  mapTcgdexSet,
+  parseDexCursor,
+  planDexBatch,
+  usableSetResume,
+  type DexQueueItem,
+} from "./tcgdex";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -76,6 +89,47 @@ const one = chooseDexSets(
   250,
 );
 assert(one.map((set) => set.id).join(",") === "huge", "newest set fills the budget");
+
+function queueItem(externalId: string, total = 80): DexQueueItem {
+  const lang = externalId.startsWith("en:") ? "en" : "ja";
+  return {
+    lang,
+    id: externalId.slice(lang.length + 1),
+    externalId,
+    name: externalId,
+    total,
+    official: total,
+    releaseDate: "2024-01-01",
+    serieId: "SV",
+    order: 0,
+  };
+}
+
+const dexQueue = ["ja:s1", "ja:s2", "ja:s3", "ja:s4", "en:s5", "en:s6"].map((id) => queueItem(id));
+const opened: string[] = [];
+let resumeCursor: string | null = null;
+for (let batch = 0; batch < 3; batch += 1) {
+  const plan = planDexBatch(dexQueue, { cursor: resumeCursor, settled: new Set(opened), maxSets: 2 });
+  assert(plan.steps.length === 2, "each batch opens two sets");
+  for (const step of plan.steps) opened.push(step.item.externalId);
+  resumeCursor = formatDexCursor(plan.steps[1]!.item.externalId, null);
+}
+assert(opened.join(",") === "ja:s1,ja:s2,ja:s3,ja:s4,en:s5,en:s6", "resume advances past the first 2 sets");
+assert(opened[2] === "ja:s3" && opened[3] === "ja:s4", "second batch is the third and fourth sets");
+
+const skipped = planDexBatch(dexQueue, { cursor: null, settled: new Set(["ja:s1", "ja:s2"]), maxSets: 2 });
+assert(skipped.skippedSettled === 2 && skipped.steps.map((step) => step.item.externalId).join(",") === "ja:s3,ja:s4", "stored sets do not consume the batch");
+const mid = planDexBatch(dexQueue, { cursor: "ja:s3#40", settled: new Set(["ja:s1", "ja:s2"]), maxSets: 2 });
+assert(mid.steps[0]?.item.externalId === "ja:s3" && mid.steps[0].cardOffset === 40, "mid-set cursor stays on that set");
+assert(mid.steps[1]?.item.externalId === "ja:s4" && mid.steps[1].cardOffset === 0, "the following set starts at the first card");
+assert(parseDexCursor("ja:SV10")?.cardOffset === null && parseDexCursor("ja:SV10#80")?.cardOffset === 80, "cursor keeps a finished set distinct from an offset");
+assert(formatDexCursor("en:sv03.5", null) === "en:sv03.5" && formatDexCursor("en:sv03.5", 0) === "en:sv03.5#0", "offset 0 is still on the set");
+assert(dexSetSettled({ total: 100 }, undefined) === false, "missing set is not settled");
+assert(dexSetSettled({ total: 100 }, { count: 100, total: 100 }), "full card count is settled");
+assert(dexSetSettled({ total: 100 }, { count: 40, total: 100 }) === false, "partial set stays open");
+assert(dexSetSettled({ total: 100 }, { count: 0, total: 0 }), "empty payload marker is settled");
+assert(dexUnsettledRemaining(dexQueue, new Set(["ja:s1", "ja:s2"]), "ja:s2") === 4, "remaining starts after a finished cursor");
+assert(planDexBatch(dexQueue, { cursor: "en:s6", settled: new Set(dexQueue.map((row) => row.externalId)), maxSets: 2 }).done, "cursor past the end is done");
 
 const setRef = { externalId: "ja:SV10", code: "SV10", printRegion: "JP" as const, serieId: "SV", official: 98 };
 const ja = mapTcgdexCard(
