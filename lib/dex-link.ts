@@ -54,8 +54,15 @@ function listingShape(row: {
   };
 }
 
-/** Match Pokémon listings (and their collection rows) onto catalog cards. O(listings × cards); fine for the demo subset. */
-export async function linkCatalogListings(): Promise<{ listings: number; collectionItems: number }> {
+/**
+ * Match Pokémon listings (and their collection rows) onto catalog cards. O(listings × cards).
+ * ponytail: a full pass restarts at the first listing. ~2s per listing at 37k cards, so ingest
+ * must not call this on mid-walk batches. Upgrade path: index cards by name token, or persist a listing cursor.
+ */
+export async function linkCatalogListings(opts?: { deadlineMs?: number }): Promise<{ listings: number; collectionItems: number }> {
+  const deadlineMs = opts?.deadlineMs;
+  if (deadlineMs != null && Date.now() >= deadlineMs) return { listings: 0, collectionItems: 0 };
+
   const cards = await loadTitledCards();
   if (!cards.length) return { listings: 0, collectionItems: 0 };
 
@@ -66,7 +73,12 @@ export async function linkCatalogListings(): Promise<{ listings: number; collect
   const byId = new Map(cards.map((card) => [card.id, card]));
   const listingLinks = new Map<string, string | null>();
   let listingWrites = 0;
+  let listingsFinished = true;
   for (const listing of listings) {
+    if (deadlineMs != null && Date.now() >= deadlineMs) {
+      listingsFinished = false;
+      break;
+    }
     const next = pickCatalogCard(listingShape(listing), cards)?.id ?? null;
     listingLinks.set(listing.id, next);
     const linked = next ? byId.get(next) : undefined;
@@ -88,11 +100,14 @@ export async function linkCatalogListings(): Promise<{ listings: number; collect
     listingWrites += 1;
   }
 
+  if (!listingsFinished) return { listings: listingWrites, collectionItems: 0 };
+
   const items = await prisma.collectionItem.findMany({
     select: { id: true, title: true, cardName: true, listingId: true, catalogCardId: true },
   });
   let collectionWrites = 0;
   for (const item of items) {
+    if (deadlineMs != null && Date.now() >= deadlineMs) break;
     let next: string | null | undefined;
     if (item.listingId && listingLinks.has(item.listingId)) next = listingLinks.get(item.listingId) ?? null;
     else if (!item.catalogCardId) {

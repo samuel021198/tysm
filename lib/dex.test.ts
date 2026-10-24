@@ -1,11 +1,16 @@
+import { readFileSync } from "node:fs";
 import {
   bilingualName,
   catalogNeedles,
   chooseDexSets,
+  INGEST_POST_RESERVE_MS,
+  ingestPastSoftDeadline,
+  ingestPostDeadline,
   namesMatch,
   nameKeys,
   numberKey,
   pickCatalogCard,
+  runIngestPostSteps,
   usableCollectorNumber,
   type DexLinkCard,
 } from "./dex";
@@ -318,4 +323,99 @@ const auth = awsSigV4Authorization({
 });
 assert(auth.endsWith("Signature=33f5dad2191de0cb4b7ab912f876876c2c4f72e2991a458f9499233c7b992438"), "sigv4 signature");
 
-console.log("dex tests ok");
+assert(ingestPastSoftDeadline(20_000, 24_000, 6_000), "first set pauses inside the chunk reserve before any card is written");
+assert(!ingestPastSoftDeadline(1_000, 24_000, 6_000), "chunk still starts while the reserve is intact");
+assert(ingestPostDeadline(false, 0, 240_000, INGEST_POST_RESERVE_MS) === null, "mid-ingest batch does not get a link budget");
+assert(ingestPostDeadline(true, 230_000, 240_000, INGEST_POST_RESERVE_MS) === null, "done batch skips linking inside the post reserve");
+assert(ingestPostDeadline(true, 10_000, 240_000, INGEST_POST_RESERVE_MS) === 225_000, "linking stops 15s before the soft deadline");
+
+const ingestRoute = readFileSync("app/api/internal/ingest-dex/route.ts", "utf8");
+const ingestSource = readFileSync("lib/dex-ingest.ts", "utf8");
+assert(/export const maxDuration = 300;/.test(ingestRoute), "ingest route maxDuration is 300");
+assert(/const INGEST_DEADLINE_MS = 240_000;/.test(ingestRoute) && /deadlineMs: INGEST_DEADLINE_MS/.test(ingestRoute), "soft deadline is 240s, under maxDuration");
+assert(ingestSource.includes("link: (until) => linkCatalogListings({ deadlineMs: until })"), "linking is the post-step callback");
+assert(!ingestSource.includes("await linkCatalogListings("), "ingest does not await linking directly");
+
+async function assertIngestPostSteps() {
+  {
+    let links = 0;
+    let fills = 0;
+    const skipped = await runIngestPostSteps({
+      done: false,
+      deadline: 240_000,
+      now: () => 0,
+      link: async () => {
+        links += 1;
+        return { listings: 9, collectionItems: 9 };
+      },
+      backfill: async () => {
+        fills += 1;
+      },
+    });
+    assert(links === 0 && fills === 0 && skipped.listings === 0 && skipped.collectionItems === 0, "mid-ingest batch does not link");
+  }
+
+  {
+    let calls = 0;
+    const tight = await runIngestPostSteps({
+      done: true,
+      deadline: 240_000,
+      now: () => 230_000,
+      link: async () => {
+        calls += 1;
+        return { listings: 1, collectionItems: 1 };
+      },
+      backfill: async () => {
+        calls += 1;
+      },
+    });
+    assert(calls === 0 && tight.listings === 0 && tight.collectionItems === 0, "done batch does not link when the reserve is gone");
+  }
+
+  {
+    let fills = 0;
+    let linkDeadline = 0;
+    const ran = await runIngestPostSteps({
+      done: true,
+      deadline: 240_000,
+      now: () => 1_000,
+      backfill: async (until) => {
+        fills += 1;
+        assert(until === 240_000 - INGEST_POST_RESERVE_MS, "backfill receives the post-step deadline");
+      },
+      link: async (until) => {
+        linkDeadline = until;
+        return { listings: 4, collectionItems: 2 };
+      },
+    });
+    assert(fills === 1 && linkDeadline === 225_000 && ran.listings === 4 && ran.collectionItems === 2, "done batch with time links once");
+  }
+
+  {
+    let links = 0;
+    let tick = 0;
+    const after = await runIngestPostSteps({
+      done: true,
+      deadline: 100_000,
+      reserveMs: 15_000,
+      now: () => (tick === 0 ? 0 : 90_000),
+      backfill: async () => {
+        tick += 1;
+      },
+      link: async () => {
+        links += 1;
+        return { listings: 1, collectionItems: 0 };
+      },
+    });
+    assert(tick === 1 && links === 0 && after.listings === 0 && after.collectionItems === 0, "linking does not start after backfill uses the reserve");
+  }
+}
+
+assertIngestPostSteps()
+  .then(() => {
+    console.log("dex tests ok");
+  })
+  .catch((error) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exit(1);
+  });

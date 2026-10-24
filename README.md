@@ -93,7 +93,7 @@ npm run dev
 
 目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
 
-Vercel 這條路由 `maxDuration` 係 60 秒，單次只開幾個系列（預設 4 個，`sets` 可設 1–25），時間不夠會停喺系列中間並回 `cursor`。重複 POST 到 `done` 係 `true` 就係可用系列走完。Upsert 用 `externalId`，重複呼叫安全。已經入齊卡的系列會跳過；唔帶 cursor 再打一次，會由資料庫裡面未完成的系列繼續。
+Vercel 這條路由 `maxDuration` 係 300 秒（Pro）。軟性 deadline 係 240 秒，會停手先回 JSON。單次只開幾個系列（預設 4 個，`sets` 可設 1–25），時間不夠會停喺系列中間並回 `cursor`，包括今次第一個系列。重複 POST 到 `done` 係 `true` 就係可用系列走完。目錄未走完的批次唔會掃全部卡去連結刊登；走完而且仲有時間，先至 backfill 英文名同連結刊登。如果完成嗰次已經貼近 deadline、`listingsLinked` 係 0，再 POST 一次就會補連結（系列已經入齊，呢次好快入到 post-step）。Upsert 用 `externalId`，重複呼叫安全。已經入齊卡的系列會跳過；唔帶 cursor 再打一次，會由資料庫裡面未完成的系列繼續。
 
 唔好並行打幾次。每次請求自己會以大約 4 路並行讀 TCGdex，遇到 429／503 會退避重試幾次。每張卡要另打一次先有英文名同 finish，所以成個目錄大概要幾十次呼叫。
 
