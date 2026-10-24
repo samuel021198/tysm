@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { tx, type Locale } from "@/lib/i18n";
-import { AddSheet } from "./add-sheet";
 import { Icon } from "./icons";
 
 export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean }) {
@@ -17,6 +16,17 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       icon: "book" as const,
       on: pathname === "/dex" || pathname.startsWith("/dex/"),
     },
+    {
+      href: "/market",
+      label: tx(locale, "賣場", "Market"),
+      icon: "bag" as const,
+      on:
+        pathname === "/market" ||
+        pathname.startsWith("/market/") ||
+        pathname.startsWith("/listing/") ||
+        pathname.startsWith("/search") ||
+        pathname.startsWith("/shop"),
+    },
     { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
     {
       href: meHref,
@@ -25,7 +35,6 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       on: pathname.startsWith("/me") || pathname.startsWith("/login") || pathname.startsWith("/orders") || pathname.startsWith("/notifications"),
     },
   ];
-  const adding = pathname.startsWith("/add") || pathname.startsWith("/sell") || pathname.startsWith("/story");
 
   return (
     <nav
@@ -33,21 +42,25 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       className="fixed inset-x-0 bottom-0 z-40 bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_0_var(--line),0_-12px_32px_rgba(34,24,32,0.06)] md:hidden"
     >
       <ul className="mx-auto grid h-[4.25rem] max-w-lg grid-cols-5">
-        {tabs.slice(0, 2).map((tab) => (
-          <Tab key={tab.label} {...tab} />
-        ))}
-        <li className="h-full">
-          <AddSheet locale={locale} loggedIn={loggedIn} variant="tab" active={adding} />
-        </li>
-        {tabs.slice(2).map((tab) => (
-          <Tab key={tab.label} {...tab} />
+        {tabs.map((tab) => (
+          <Tab key={tab.href} {...tab} />
         ))}
       </ul>
     </nav>
   );
 }
 
-function Tab({ href, label, icon, on }: { href: string; label: string; icon: "home" | "book" | "messages" | "me"; on: boolean }) {
+function Tab({
+  href,
+  label,
+  icon,
+  on,
+}: {
+  href: string;
+  label: string;
+  icon: "home" | "book" | "bag" | "messages" | "me";
+  on: boolean;
+}) {
   return (
     <li className="h-full">
       <Link
