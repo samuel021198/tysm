@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { collectCatalogCard } from "@/actions/dex";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { catalogDisplayTitle } from "@/lib/card-title";
 import { prisma } from "@/lib/db";
-import { primaryCardName, regionLabel, secondaryCardName, setDisplayName } from "@/lib/dex";
+import { regionLabel, setDisplayName } from "@/lib/dex";
 import { getDexCard, salesForCard } from "@/lib/dex-query";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -16,7 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const card = await getDexCard(id);
   if (!card) return { title: "圖鑑" };
-  return { title: `${card.nameJa} ${card.nameEn}`, description: `${card.set.nameEn} ${card.collectorNumber}` };
+  const title = catalogDisplayTitle({
+    releaseDate: card.set.releaseDate,
+    setName: card.set.nameEn,
+    collectorNumber: card.collectorNumber,
+    cardName: card.nameEn,
+    finish: card.finish,
+  });
+  return { title, description: title };
 }
 
 function ask(listing: { saleType: string; auctionSettled: boolean; auctionEndsAt: Date | null; currentBid: number | null; startPrice: number | null; price: number | null }) {
@@ -44,8 +52,13 @@ export default async function DexCardPage({
       : Promise.resolve(false),
   ]);
   const sales = sp.tab === "sales";
-  const primary = primaryCardName(card, prefs.locale);
-  const secondary = secondaryCardName(card, prefs.locale);
+  const title = catalogDisplayTitle({
+    releaseDate: card.set.releaseDate,
+    setName: card.set.nameEn,
+    collectorNumber: card.collectorNumber,
+    cardName: card.nameEn,
+    finish: card.finish,
+  });
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const rows: [string, string][] = [
     [tx(prefs.locale, "日文名", "Japanese name"), card.nameJa],
@@ -53,6 +66,7 @@ export default async function DexCardPage({
     [tx(prefs.locale, "系列", "Set"), setName],
     [tx(prefs.locale, "系列代碼", "Set code"), card.set.code],
     [tx(prefs.locale, "卡號", "Number"), card.collectorNumber],
+    [tx(prefs.locale, "版本", "Finish"), card.finish || tx(prefs.locale, "普通", "Normal")],
     [tx(prefs.locale, "罕貴", "Rarity"), card.rarity || tx(prefs.locale, "未有", "Unknown")],
     [tx(prefs.locale, "繪師", "Artist"), card.artist || tx(prefs.locale, "未有", "Unknown")],
     [tx(prefs.locale, "語言", "Language"), regionLabel(card.printRegion, prefs.locale)],
@@ -65,14 +79,13 @@ export default async function DexCardPage({
         {tx(prefs.locale, "返回圖鑑", "Back to the dex")}
       </Link>
       <div className="grid items-start gap-4 md:grid-cols-[minmax(0,18rem)_1fr]">
-        <img src={card.imageUrl} alt={`${card.nameJa} ${card.nameEn}`} className="surface aspect-[63/88] w-full bg-[#f4efe6] object-contain" />
+        <img src={card.imageUrl} alt={title} className="surface aspect-[63/88] w-full bg-[#f4efe6] object-contain" />
         <div>
           <p className="text-sm text-muted">
             {regionLabel(card.printRegion, prefs.locale)} · {setName}
           </p>
-          <h1 className="mt-1 text-2xl font-bold leading-tight">{primary}</h1>
-          {secondary ? <p className="mt-1 text-lg text-muted">{secondary}</p> : null}
-          <p className="mt-2 font-semibold">{card.collectorNumber}</p>
+          <h1 className="mt-1 text-2xl font-bold leading-tight">{title}</h1>
+          {card.nameJa !== card.nameEn ? <p className="mt-1 text-lg text-muted">{card.nameJa}</p> : null}
           {owned ? (
             <Link href="/me?tab=box" className="btn btn-ghost mt-4 w-full md:w-auto">
               {tx(prefs.locale, "已加入收藏", "In your collection")}

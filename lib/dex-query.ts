@@ -14,6 +14,7 @@ const cardSelect = {
   printRegion: true,
   rarity: true,
   artist: true,
+  finish: true,
   set: { select: { code: true, nameEn: true, nameJa: true, releaseDate: true, series: true } },
 } satisfies Prisma.CatalogCardSelect;
 
