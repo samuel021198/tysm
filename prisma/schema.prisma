@@ -59,6 +59,11 @@ enum PhotoRole {
   GALLERY
 }
 
+enum StockType {
+  IN_STOCK
+  PREORDER
+}
+
 enum CategoryLevel {
   ROOT
   GROUP
@@ -268,6 +273,7 @@ model CatalogCard {
 
   set             CatalogSet       @relation(fields: [setId], references: [id], onDelete: Cascade)
   listings        Listing[]
+  listingItems    ListingItem[]
   collectionItems CollectionItem[]
 
   @@index([nameEn])
@@ -326,8 +332,15 @@ model Listing {
   gradeValue        Int?
   certNumber        String?
   videoUrl          String?
+  /// Off-market until this instant when status is SCHEDULED. Asia/Hong_Kong wall time is stored as UTC.
+  /// Browse and feed only read ACTIVE. sweep() on page load and /api/cron/sweep flips due rows to ACTIVE.
   publishAt         DateTime?
   publishedAt       DateTime?
+  stockType         StockType      @default(IN_STOCK)
+  /// 3, 7, or 30 when stockType is IN_STOCK. Null on older rows and on preorders; shippingDays stays the order clock.
+  shipWithinDays    Int?
+  /// HK midnight of the seller's ship date when stockType is PREORDER.
+  preorderShipDate  DateTime?
   viewCount         Int            @default(0)
   favoriteCount     Int            @default(0)
   catalogCardId     String?
@@ -338,6 +351,7 @@ model Listing {
   category    Category      @relation(fields: [categoryId], references: [id])
   catalogCard CatalogCard?  @relation(fields: [catalogCardId], references: [id], onDelete: SetNull)
   photos    ListingPhoto[]
+  items     ListingItem[]
   proxyBids ProxyBid[]
   bidEvents BidEvent[]
   offers    Offer[]
@@ -352,6 +366,36 @@ model Listing {
   @@index([sellerId])
   @@index([categoryId])
   @@index([auctionEndsAt])
+  @@index([catalogCardId])
+}
+
+/// One card inside a listing. The buyer-facing title stays on Listing.title.
+/// The first row is mirrored onto Listing card fields so older search and comps keep working.
+model ListingItem {
+  id              String         @id @default(cuid())
+  listingId       String
+  position        Int
+  price           Int?
+  cardName        String?
+  catalogCardId   String?
+  /// Catalog display line, e.g. 2023 Pokemon SV2a JP #193 Mew ex Super Rare. Empty when the seller typed the fields.
+  catalogTitle    String?
+  year            String?
+  setName         String?
+  setCode         String?
+  collectorNumber String?
+  rarity          String?
+  language        String?
+  game            String?
+  conditionTrack  ConditionTrack @default(RAW)
+  rawGrade        RawGrade?
+  grader          Grader?
+  gradeValue      Int?
+  certNumber      String?
+  listing         Listing        @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  catalogCard     CatalogCard?   @relation(fields: [catalogCardId], references: [id], onDelete: SetNull)
+
+  @@index([listingId, position])
   @@index([catalogCardId])
 }
 

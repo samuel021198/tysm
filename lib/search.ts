@@ -72,6 +72,7 @@ export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
         { setName: contains },
         { game: contains },
         { description: contains },
+        { items: { some: { OR: [{ cardName: contains }, { catalogTitle: contains }, { setName: contains }] } } },
         {
           category: {
             OR: [

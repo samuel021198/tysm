@@ -53,7 +53,7 @@ async function main() {
     publishAt: null,
     intent: "publish",
   });
-  assert(!rejected.ok && rejected.error === "front_back", "graded listing without a back photo must fail");
+  assert(rejected.ok, "a graded card no longer needs a separate back photo");
 
   const created = await saveListing(seller.id, {
     categoryId: "cat_pokemon",
@@ -158,7 +158,7 @@ async function main() {
   await prisma.order.delete({ where: { id: bought.ids[0] } });
   await prisma.bidEvent.deleteMany({ where: { listingId: { in: [created.id, auction.id] } } });
   await prisma.proxyBid.deleteMany({ where: { listingId: auction.id } });
-  await prisma.listing.deleteMany({ where: { id: { in: [created.id, auction.id] } } });
+  await prisma.listing.deleteMany({ where: { id: { in: [rejected.id, created.id, auction.id] } } });
   console.log("smoke ok");
 }
 

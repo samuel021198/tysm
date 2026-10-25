@@ -934,3 +934,11 @@ export const LEAF_CATEGORIES = [
   ["cat_actors", "actors", "演員", "Actors", "celebrity", "cat_celebrities", 2],
   ["cat_idols", "idols", "偶像", "Idols", "celebrity", "cat_celebrities", 3],
 ] as const;
+
+/// Sell-step lines. Not part of LEAF_CATEGORIES, so demo seed does not need seven listings each.
+export const EXTRA_CARD_CATEGORIES = [
+  ["cat_topps_soccer", "topps-soccer", "Topps 足球", "Topps Soccer", "athlete", "cat_athletes", 4],
+  ["cat_topps_basketball", "topps-basketball", "Topps 籃球", "Topps Basketball", "athlete", "cat_athletes", 5],
+  ["cat_topps_baseball", "topps-baseball", "Topps 棒球", "Topps Baseball", "athlete", "cat_athletes", 6],
+  ["cat_panini_soccer", "panini-soccer", "Panini 足球", "Panini Soccer", "athlete", "cat_athletes", 7],
+] as const;

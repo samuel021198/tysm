@@ -14,6 +14,8 @@ export type CatalogHit = {
   collectorNumber: string;
   rarity: string | null;
   imageUrl: string;
+  setCode?: string;
+  year?: string;
 };
 
 export function CatalogTitleField({
@@ -22,12 +24,21 @@ export function CatalogTitleField({
   onValue,
   onPick,
   invalid,
+  label,
+  placeholder,
+  named = true,
+  pinOnPick,
 }: {
   locale: Locale;
   value: string;
   onValue: (value: string) => void;
   onPick: (hit: CatalogHit) => void;
   invalid?: boolean;
+  label?: string;
+  placeholder?: string;
+  /** False when this is a card-name lookup and the listing title is a different field. */
+  named?: boolean;
+  pinOnPick?: (hit: CatalogHit) => string;
 }) {
   const listId = useId();
   const [hits, setHits] = useState<CatalogHit[]>([]);
@@ -69,11 +80,11 @@ export function CatalogTitleField({
   return (
     <div className="grid gap-1 text-sm">
       <label className="grid gap-1">
-        {tx(locale, "標題", "Title")}
+        {label ?? tx(locale, "標題", "Title")}
         <input
           className="field"
-          name="title"
-          minLength={2}
+          name={named ? "title" : undefined}
+          minLength={named ? 2 : undefined}
           maxLength={80}
           value={value}
           autoComplete="off"
@@ -83,7 +94,7 @@ export function CatalogTitleField({
           aria-controls={listId}
           aria-invalid={invalid || undefined}
           ref={inputRef}
-          placeholder={tx(locale, "打卡名，例如 2022 Charizard", "Card name, e.g. 2022 Charizard")}
+          placeholder={placeholder ?? tx(locale, "打卡名，例如 2022 Charizard", "Card name, e.g. 2022 Charizard")}
           onChange={(event) => onValue(event.target.value)}
           onFocus={() => {
             if (hits.length) setOpen(true);
@@ -103,7 +114,7 @@ export function CatalogTitleField({
                 className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left active:bg-soft"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
-                  pinned.current = hit.title;
+                  pinned.current = (pinOnPick ?? ((row) => row.title))(hit);
                   onPick(hit);
                   setOpen(false);
                 }}

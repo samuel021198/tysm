@@ -29,9 +29,9 @@ export default async function SellPage() {
         <a className="text-sm text-link" href="/sell/bulk">{tx(prefs.locale, "CSV 批量", "CSV upload")}</a>
       </div>
       <p className="mb-4 text-sm text-muted">
-        {tx(prefs.locale, "想快手直購，寫", "For a quick Buy It Now, write a ")}
+        {tx(prefs.locale, "四步就可以發布。寫", "Four steps, then publish. A ")}
         <Link className="text-link" href="/add?kind=post">{tx(prefs.locale, "貼子", "post")}</Link>
-        {tx(prefs.locale, "然後剔「同時上架」。呢頁係進階上架：拍賣、面交、店舖自取。", " and tick “list it too”. This page is the advanced form: auctions, meet-up, and store pickup.")}
+        {tx(prefs.locale, "時剔「同時上架」，會用同一張表，並帶入標題同相片。", " can tick “list it too” and opens this same form with the title and photos filled in.")}
       </p>
       <SellForm
         locale={prefs.locale}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
-import { formatHkd, formatHKT, anonBidder } from "@/lib/format";
+import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { isBlocked } from "@/lib/social";
@@ -52,6 +52,7 @@ export default async function ListingPage({
       where: { id },
       include: {
         photos: { orderBy: { position: "asc" } },
+        items: { orderBy: { position: "asc" } },
         seller: true,
         category: { include: { parent: true } },
         bidEvents: { orderBy: { createdAt: "desc" }, take: 20 },
@@ -122,6 +123,19 @@ export default async function ListingPage({
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
         <h1 className="mt-3 text-[1.65rem] font-bold leading-tight">{listing.title}</h1>
+        {listing.items.length ? (
+          <ul className="mt-2 grid gap-1 text-sm text-muted">
+            {listing.items.map((item) => (
+              <li key={item.id}>
+                {item.catalogTitle || item.cardName || tx(locale, "未填卡名", "No card name")}
+                {listing.items.length > 1 && item.price != null ? ` · ${formatHkd(item.price, locale)}` : ""}
+                {` · ${conditionLabel(item)}`}
+              </li>
+            ))}
+          </ul>
+        ) : listing.cardName ? (
+          <p className="mt-1 text-sm text-muted">{listing.cardName}</p>
+        ) : null}
         <p className="mt-1 text-sm text-muted">
           {locale === "en" ? listing.category.nameEn : listing.category.nameZh}
           {listing.language ? ` · ${listing.language}` : ""} · {tx(locale, "瀏覽", "Views")} {listing.viewCount} · {tx(locale, "收藏", "Favorites")} {listing.favoriteCount}
@@ -156,7 +170,15 @@ export default async function ListingPage({
               </dd>
             </div>
           ))}
-          <div><dt className="text-muted">{tx(locale, "存貨", "Stock")}</dt><dd>{listing.quantityAvailable}</dd></div>
+          <div>
+            <dt className="text-muted">{tx(locale, "貨況", "Stock")}</dt>
+            <dd>
+              {listing.stockType === "PREORDER"
+                ? tx(locale, `預訂${listing.preorderShipDate ? ` · ${toHkDate(listing.preorderShipDate)} 出貨` : ""}`, `Preorder${listing.preorderShipDate ? ` · ships ${toHkDate(listing.preorderShipDate)}` : ""}`)
+                : tx(locale, `現貨 · ${listing.shipWithinDays || listing.shippingDays} 日內出貨`, `In stock · ships within ${listing.shipWithinDays || listing.shippingDays} days`)}
+            </dd>
+          </div>
+          <div><dt className="text-muted">{tx(locale, "存貨", "Quantity")}</dt><dd>{listing.quantityAvailable}</dd></div>
         </dl>
         {listing.videoUrl ? (
           <video className="mt-4 w-full rounded-xl" controls preload="metadata" src={listing.videoUrl} />

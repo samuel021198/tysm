@@ -6,9 +6,12 @@ export function tx(locale: Locale, zh: string, en: string): string {
 
 const ERR: Record<string, [string, string]> = {
   title: ["標題需要 2–80 字", "Title must be 2–80 characters"],
-  description: ["請填寫描述（最多 5000 字）", "Add a description (max 5000 characters)"],
+  description: ["描述最多 5000 字", "Description can be at most 5000 characters"],
   category: ["請選擇分類", "Choose a category"],
-  photos: ["最少 2 張、最多 12 張相片", "Add 2 to 12 photos"],
+  photos: ["最少 1 張、最多 10 張相片", "Add 1 to 10 photos"],
+  card_price: ["每張卡都要有價錢", "Each card needs a price"],
+  preorder: ["預訂要揀今日或之後的出貨日期", "Preorder needs a ship date that is today or later"],
+  ship_within: ["現貨請揀 3、7 或 30 日內出貨", "In-stock listings ship within 3, 7, or 30 days"],
   front_back: ["評級卡必須有正面同背面相片", "Graded cards need a front and a back photo"],
   photo_url: ["相片須為已上傳圖片、https，或站內示範圖", "Photos must be an upload, https, or a bundled demo image"],
   price: ["請填寫有效直購價", "Enter a valid Buy It Now price"],

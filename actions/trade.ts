@@ -37,6 +37,7 @@ export async function saveListingAction(_prev: { error?: string } | null, formDa
   revalidatePath("/");
   revalidatePath(`/listing/${result.id}`);
   const ok = input.intent === "draft" ? "draft" : input.intent === "schedule" ? "scheduled" : "published";
+  if (formData.get("alsoPost") === "on" && result.postId) redirect(`/post/${result.postId}?ok=posted`);
   redirect(`/listing/${result.id}?ok=${ok}`);
 }
 

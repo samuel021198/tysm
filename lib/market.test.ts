@@ -9,6 +9,12 @@ const quote = { shippingDays: 2 };
 assert(shipFee(quote, "SF_COD") === 0 && shipFee(quote, "MEET") === 0 && shipFee(quote, "PICKUP") === 0, "platform shipping is HK$0");
 assert(shipDays(quote, "LOCKER") === 3, "legacy locker adds a day");
 assert(shipDays(quote, "MEET") === 1 && shipDays(quote, "PICKUP") === 1, "handover is arranged quickly");
+const preorderDay = new Date("2026-11-01T00:00:00+08:00");
+assert(
+  shipDays({ shippingDays: 3, stockType: "PREORDER", preorderShipDate: preorderDay }, "SF_COD", new Date("2026-10-25T00:00:00+08:00")) === 7,
+  "preorder SF uses the ship date",
+);
+assert(shipDays({ shippingDays: 3, stockType: "PREORDER", preorderShipDate: preorderDay }, "MEET", new Date("2026-10-25T00:00:00+08:00")) === 1, "meetup stays a handover");
 assert(parseShipMethod("SF_COD") === "SF_COD" && parseShipMethod("SF") === null && parseShipMethod("nope") === null, "only seller-chosen methods are selectable");
 assert(courierFor("LOCKER") === "順豐智能櫃" && courierFor("SF_COD") === "順豐到付" && courierFor("PICKUP") === "店舖自取", "courier names");
 assert(mockTracking("seed_order_shipped", "SF_COD").startsWith("SF"), "sf tracking");

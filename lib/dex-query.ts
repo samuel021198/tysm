@@ -52,7 +52,7 @@ export async function getDexCard(id: string) {
 
 export async function salesForCard(cardId: string, hidden: string[]) {
   const linked = await prisma.listing.findMany({
-    where: { AND: [activeWhere(hidden), { catalogCardId: cardId }] },
+    where: { AND: [activeWhere(hidden), { OR: [{ catalogCardId: cardId }, { items: { some: { catalogCardId: cardId } } }] }] },
     include: cardInclude,
     orderBy: { publishedAt: "desc" },
     take: 24,

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
-import { centsToInput, toHkInput } from "@/lib/format";
+import { centsToInput, toHkDate, toHkInput } from "@/lib/format";
 import { bpsToPercentLabel, formatGradeValue } from "@/lib/rules";
 import { SellForm } from "@/components/sell-form";
 
@@ -11,7 +11,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
   if (!viewer) redirect(`/login?next=/sell/${id}`);
   const listing = await prisma.listing.findUnique({
     where: { id },
-    include: { photos: { orderBy: { position: "asc" } }, category: true },
+    include: { photos: { orderBy: { position: "asc" } }, items: { orderBy: { position: "asc" } }, category: true },
   });
   if (!listing || listing.sellerId !== viewer.id) notFound();
   const [categories, bps, bids] = await Promise.all([
@@ -64,6 +64,27 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           photos: listing.photos.map((photo) => ({ url: photo.url, role: photo.role })),
           locked: bids > 0,
           catalogCardId: listing.catalogCardId || "",
+          stockType: listing.stockType,
+          shipWithinDays: listing.shipWithinDays,
+          preorderShipDate: listing.preorderShipDate ? toHkDate(listing.preorderShipDate) : "",
+          cards: listing.items.map((item) => ({
+            name: item.cardName || "",
+            catalogId: item.catalogCardId || "",
+            catalogTitle: item.catalogTitle || "",
+            year: item.year || "",
+            setName: item.setName || "",
+            setCode: item.setCode || "",
+            number: item.collectorNumber || "",
+            rarity: item.rarity || "",
+            language: item.language || "",
+            game: item.game || "",
+            price: centsToInput(item.price),
+            track: item.conditionTrack,
+            rawGrade: item.rawGrade || "A",
+            grader: item.grader || "PSA",
+            gradeScore: item.gradeValue != null ? formatGradeValue(item.gradeValue) : "",
+            certNumber: item.certNumber || "",
+          })),
         }}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
