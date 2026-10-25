@@ -1,5 +1,10 @@
 import type { Locale } from "./i18n";
 
+export function formatJpy(yen: number): string {
+  const amount = new Intl.NumberFormat("ja-JP", { maximumFractionDigits: 0 }).format(Math.round(yen));
+  return `¥${amount}`;
+}
+
 export function formatHkd(cents: number, locale: Locale): string {
   const amount = new Intl.NumberFormat(locale === "en" ? "en-HK" : "zh-HK", {
     minimumFractionDigits: 2,

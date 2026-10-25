@@ -89,9 +89,15 @@ npm run dev
 
 底欄第二個分頁係圖鑑（`/dex`），唔再係賣場。賣場仍然係 `/market`，卡牌頁「放售」的「睇全部放售」會去現有搜尋。
 
-圖鑑收三款遊戲：**寶可夢**（日文同英文）、**海賊王 / One Piece**（日文同英文）、**Riftbound**（而家只有英文）。可以按卡名或卡號搜，打字時會出圖鑑建議，而且只限而家選的遊戲同語言。畫面頂部可以切換遊戲；寶可夢同海賊王仲可以篩日文／英文。卡牌頁有「資料」同「放售」（連住現有刊登），以及「加入收藏」。v1 沒有價錢走勢或背景故事。圖片用來源的 HTTPS 網址，未有 R2 鏡像（R2 仍然只會鏡像寶可夢，而且要齊環境變數先會做）。
+圖鑑收三款遊戲：**寶可夢**（日文同英文）、**海賊王 / One Piece**（日文同英文）、**Riftbound**（而家只有英文）。可以按卡名或卡號搜，打字時會出圖鑑建議，而且只限而家選的遊戲同語言。左邊一欄先揀遊戲，再開該遊戲的系列；寶可夢同海賊王仲可以篩日文／英文。卡牌頁有「價格」「資料」「背景故事」「放售」（放售連住現有刊登），以及「加入收藏」。寶可夢如果對到 SNKRDUNK，價格用日圓成交；對唔到、或者唔係寶可夢，價格頁顯示「暫未有市場數據」。背景故事用 TCGdex 的 flavor text，冇就留空。圖片用來源的 HTTPS 網址，未有 R2 鏡像（R2 仍然只會鏡像寶可夢，而且要齊環境變數先會做）。
 
-目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
+目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。市場價唔寫入資料庫，卡牌頁即場向 SNKRDUNK 讀。
+
+### 市場價（SNKRDUNK）
+
+只查寶可夢。伺服器打 SNKRDUNK 自己賣場頁用緊的公開 JSON（冇 API key）：`/en/v1/search` 搵卡，`/v1/apparels/{id}/sales-chart/used` 攞走勢，`/v1/apparels/{id}/sales-history` 攞最近成交。價錢係日圓，唔會換成英鎊。每次請求之間會停一停；對到的結果喺呢個 instance 記 30 分鐘，SNKRDUNK 暫時讀唔到就記 2 分鐘，頁面仍然開到。
+
+配對用系列代碼加卡號，再對卡名同語言。日文代碼（例如 `M6a`、`SV2a`）同 SNKRDUNK 標題入面的 `[M6a 137/103]` 對得上。英文代碼對唔上時，會再用卡名加系列名加卡號搜一次（例如 `Charizard Base Set 4` 對到 `[4/102][EN]`）。對唔到就顯示「暫未有市場數據」，資料、背景故事同放售照用。已知對唔到的情況：英文 TCGdex 代碼 `sv03.5` 唔等於 SNKRDUNK 的 `MEW`，而且系列名「151」太短，唔會靠系列名硬碰；同一卡號的 Mirror／Master Ball 如果打和就唔會硬揀一張；海賊王同 Riftbound 唔查。走勢點係 SNKRDUNK 的序列（成交密的日子會係當日一個點），唔係每一單。成交日期多數係「1 小時前」這類相對字，唔係精確時間。鑑定溢價係 PSA 10 同 A 級成交價的中位數之比，兩邊都要有成交先顯示。
 
 Vercel 這條路由 `maxDuration` 係 300 秒（Pro）。軟性 deadline 係 240 秒，會停手先回 JSON。單次只開幾個系列（預設 4 個，`sets` 可設 1–25），時間不夠會停喺系列中間並回 `cursor`，包括今次第一個系列。重複 POST 到 `done` 係 `true` 就係可用系列走完。目錄未走完的批次唔會掃全部卡去連結刊登；走完而且仲有時間，先至 backfill 英文名同連結刊登。如果完成嗰次已經貼近 deadline、`listingsLinked` 係 0，再 POST 一次就會補連結（系列已經入齊，呢次好快入到 post-step）。Upsert 用 `externalId`，重複呼叫安全。已經入齊卡的系列會跳過；唔帶 cursor 再打一次，會由資料庫裡面未完成的系列繼續。
 

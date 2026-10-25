@@ -8,12 +8,6 @@ import { tx, type Locale } from "@/lib/i18n";
 import type { CatalogHit } from "./catalog-title-field";
 import { Icon } from "./icons";
 
-const GAMES = [
-  ["POKEMON", "寶可夢", "Pokémon"],
-  ["ONE_PIECE", "海賊王", "One Piece"],
-  ["RIFTBOUND", "Riftbound", "Riftbound"],
-] as const;
-
 const REGIONS = [
   ["", "全部", "All"],
   ["JP", "日文", "Japanese"],
@@ -31,6 +25,7 @@ export function DexToolbar({
   q,
   region,
   game,
+  setId,
   action,
   chips,
 }: {
@@ -38,6 +33,7 @@ export function DexToolbar({
   q: string;
   region: string;
   game: DexGame;
+  setId?: string;
   action: string;
   chips: string;
 }) {
@@ -126,6 +122,7 @@ export function DexToolbar({
     if (q) params.set("q", q);
     const nextRegion = next.game && next.game !== game ? "" : (next.region ?? current);
     if (nextRegion && gameHasRegion(nextGame)) params.set("region", nextRegion);
+    if (setId && next.region == null) params.set("set", setId);
     return `${chips}?${params.toString()}`;
   }
 
@@ -201,6 +198,7 @@ export function DexToolbar({
         />
         <input type="hidden" name="game" value={gameParam(game)} />
         {current && regions ? <input type="hidden" name="region" value={current} /> : null}
+        {setId ? <input type="hidden" name="set" value={setId} /> : null}
         <button className="inline-flex h-11 shrink-0 items-center rounded-full bg-gradient-to-r from-rose to-teal px-4 text-sm font-semibold text-[#1b1418]" type="submit">
           {tx(locale, "搜尋", "Search")}
         </button>
@@ -235,13 +233,6 @@ export function DexToolbar({
           </ul>
         </div>
       ) : null}
-      <div className="chips" aria-label={tx(locale, "遊戲", "Game")}>
-        {GAMES.map(([value, zh, en]) => (
-          <Link key={value} href={href({ game: value })} className={chipClass(game === value)} aria-current={game === value ? "page" : undefined}>
-            {tx(locale, zh, en)}
-          </Link>
-        ))}
-      </div>
       {regions ? (
         <div className="chips" aria-label={tx(locale, "語言", "Language")}>
           {REGIONS.map(([value, zh, en]) => (
