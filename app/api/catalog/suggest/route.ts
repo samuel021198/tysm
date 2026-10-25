@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { catalogImageSrc } from "@/lib/catalog-image";
 import { catalogSuggestion, rankCatalogSuggestions, type CatalogSuggestCard } from "@/lib/catalog-suggest";
 import { prisma } from "@/lib/db";
-import { catalogSuggestWhere, parseGame } from "@/lib/dex";
+import { catalogSuggestWhere, gameHasRegion, parseGame, parseRegion } from "@/lib/dex";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q")?.trim().slice(0, 80) ?? "";
   const game = parseGame(url.searchParams.get("game"));
   if (q.length < 2) return NextResponse.json({ cards: [] });
-  const where = game ? { AND: [catalogSuggestWhere(q), { game }] } : catalogSuggestWhere(q);
+  const region = game && !gameHasRegion(game) ? null : parseRegion(url.searchParams.get("region"));
+  const matched = catalogSuggestWhere(q, region);
+  const where = game ? { AND: [matched, { game }] } : matched;
   const select = {
     id: true,
     nameEn: true,

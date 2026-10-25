@@ -460,6 +460,14 @@ assert(JSON.stringify(catalogWhere("Pokemon Card", null)).includes("Pokémon"), 
 assert(JSON.stringify(catalogWhere("#151", null)).includes("numberKey"), "a hash number stays a collector number");
 const loose = JSON.stringify(catalogSuggestWhere("Mew ex SV2a Super Rare"));
 assert(loose.includes("SV2a") && !loose.includes("Super"), "suggest keeps the set code and does not require a stale rarity");
+const jpSuggest = JSON.stringify(catalogSuggestWhere("Mew ex", "JP"));
+assert(jpSuggest.includes('"printRegion":"JP"'), "suggest where honors the dex region chip");
+assert(!JSON.stringify(catalogSuggestWhere("Mew ex")).includes("printRegion"), "suggest where stays open when no region is set");
+const dexToolbar = readFileSync("components/dex-toolbar.tsx", "utf8");
+assert(dexToolbar.includes("/api/catalog/suggest?"), "dex search reuses catalog suggest");
+assert(dexToolbar.includes('params.set("region", current)'), "dex suggestions pass the region chip");
+assert(dexToolbar.includes("/dex/${hit.id}"), "a suggestion opens the dex card");
+assert(dexToolbar.includes('method="get"'), "enter still submits the dex search form");
 assert(JSON.stringify(catalogWhere("Mew ex SV2a Super Rare", null)).includes("Super"), "dex search still requires each rarity word");
 assert(logoUrl("https://assets.tcgdex.net/en/sv/sv08/logo") === "https://assets.tcgdex.net/en/sv/sv08/logo.webp", "logo webp");
 
