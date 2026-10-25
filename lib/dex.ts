@@ -4,7 +4,7 @@ import { foldSearch } from "./search";
 
 export type DexPrintRegion = "JP" | "WEST";
 
-export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND" | "DEMO";
+export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND" | "DEMO" | "TOPPS_BASKETBALL" | "TOPPS_SOCCER";
 
 export function parseGame(value: string | null | undefined): DexGame | null {
   const text = (value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
@@ -12,6 +12,8 @@ export function parseGame(value: string | null | undefined): DexGame | null {
   if (text === "one-piece" || text === "onepiece" || text === "op") return "ONE_PIECE";
   if (text === "riftbound" || text === "rift") return "RIFTBOUND";
   if (text === "demo") return "DEMO";
+  if (text === "topps-basketball" || text === "topps-basket") return "TOPPS_BASKETBALL";
+  if (text === "topps-soccer" || text === "topps-football") return "TOPPS_SOCCER";
   return null;
 }
 
@@ -19,6 +21,8 @@ export function gameParam(game: DexGame): string {
   if (game === "ONE_PIECE") return "one-piece";
   if (game === "RIFTBOUND") return "riftbound";
   if (game === "DEMO") return "demo";
+  if (game === "TOPPS_BASKETBALL") return "topps-basketball";
+  if (game === "TOPPS_SOCCER") return "topps-soccer";
   return "pokemon";
 }
 
@@ -253,7 +257,7 @@ export function catalogNeedles(query: string): string[] {
 }
 
 /** Words that appear in every generated title and should not be required on their own. */
-const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg", "one", "piece", "riftbound"]);
+const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg", "one", "piece", "riftbound", "topps", "basketball", "soccer"]);
 
 /** Rarity / finish words. On a pasted title they must not wipe a name or set hit. */
 const SOFT_TOKEN = new Set([

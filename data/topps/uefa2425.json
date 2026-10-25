@@ -1,0 +1,5645 @@
+{
+  "code": "UEFA2425",
+  "game": "TOPPS_SOCCER",
+  "nameEn": "2024-25 Topps Chrome UEFA Club Competitions",
+  "series": "Chrome",
+  "releaseDate": "2025-05-15",
+  "source": "https://www.checklistinsider.com/2024-25-topps-chrome-uefa-club-competitions",
+  "cards": [
+    {
+      "n": "1",
+      "name": "Kylian Mbappé",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "2",
+      "name": "Alessandro Bastoni",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "3",
+      "name": "Alejandro Grimaldo",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "4",
+      "name": "Kang-in Lee",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "5",
+      "name": "Gabriel Martinelli",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "6",
+      "name": "Gavi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "7",
+      "name": "Vini Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "8",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "9",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "10",
+      "name": "Harry Kane",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "11",
+      "name": "Rafael Leão",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "12",
+      "name": "Samuel Mbangula",
+      "team": "Juventus",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "13",
+      "name": "Jack Butland",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "14",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "15",
+      "name": "Ibrahim Mbaye",
+      "team": "Paris Saint-Germain",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "16",
+      "name": "Pau Víctor",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "17",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "18",
+      "name": "Toby Collyer",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "19",
+      "name": "Iker Losada",
+      "team": "Real Betis Balompié",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "20",
+      "name": "Loïs Openda",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "21",
+      "name": "Folarin Balogun",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "22",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "23",
+      "name": "Nicolò Barella",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "24",
+      "name": "Ronald Araújo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "25",
+      "name": "Douglas Luiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "26",
+      "name": "James Tavernier",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "27",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "28",
+      "name": "Nico Williams",
+      "team": "Athletic Club",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "29",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "30",
+      "name": "Marlon Gomes",
+      "team": "FC Shakhtar Donetsk",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "31",
+      "name": "Gonçalo Ramos",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "32",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "33",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "34",
+      "name": "Kevin Zeroli",
+      "team": "AC Milan",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "35",
+      "name": "Conor Gallagher",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "36",
+      "name": "Gianluca Prestianni",
+      "team": "SL Benfica",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "37",
+      "name": "Xavi Simons",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "38",
+      "name": "Morgan Rogers",
+      "team": "Aston Villa FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "39",
+      "name": "Marc Bernal",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "40",
+      "name": "Viggo Gebel",
+      "team": "RB Leipzig",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "41",
+      "name": "Nicolas Jackson",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "42",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "43",
+      "name": "Quinten Timber",
+      "team": "Feyenoord",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "44",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "45",
+      "name": "James Maddison",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "46",
+      "name": "Nicolò Savona",
+      "team": "Juventus",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "47",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "48",
+      "name": "Rodrygo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "49",
+      "name": "Ross McCausland",
+      "team": "Rangers F.C. FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "50",
+      "name": "Lautaro Martínez",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "51",
+      "name": "Serhou Guirassy",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "52",
+      "name": "Unai Hernández",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "53",
+      "name": "Declan Rice",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "54",
+      "name": "Victor Boniface",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "55",
+      "name": "Minjae Kim",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "56",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "57",
+      "name": "Takumi Minamino",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "58",
+      "name": "Jamie Bynoe-Gittens",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "59",
+      "name": "Kenan Yildiz",
+      "team": "Juventus FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "60",
+      "name": "Ángel Di María",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "61",
+      "name": "Aleksandar Pavlović",
+      "team": "FC Bayern München FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "62",
+      "name": "Martin Ødegaard",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "63",
+      "name": "Ricardo Pepi",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "64",
+      "name": "Maghnes Akliouche",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "65",
+      "name": "Theo Hernández",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "66",
+      "name": "Daniel Yañez",
+      "team": "Real Madrid C.F.",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "67",
+      "name": "Patrik Schick",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "68",
+      "name": "Heung-min Son",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "69",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "70",
+      "name": "Fikayo Tomori",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "71",
+      "name": "Destiny Udogie",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "72",
+      "name": "Oihan Sancet",
+      "team": "Athletic Club",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "73",
+      "name": "Álex Jiménez",
+      "team": "AC Milan",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "74",
+      "name": "Ayase Ueda",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "75",
+      "name": "Ken Izekor",
+      "team": "Bayer 04 Leverkusen",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "76",
+      "name": "Christian Pulisic",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "77",
+      "name": "Bukayo Saka",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "78",
+      "name": "Jeremie Frimpong",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "79",
+      "name": "Yunus Musah",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "80",
+      "name": "Cyriel Dessers",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "81",
+      "name": "Michael Olise",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "82",
+      "name": "Mattia Liberali",
+      "team": "AC Milan",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "83",
+      "name": "Assan Ouédraogo",
+      "team": "RB Leipzig",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "84",
+      "name": "Johnny Cardoso",
+      "team": "Real Betis Balompié",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "85",
+      "name": "Toni Fernández",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "86",
+      "name": "Nicolás Otamendi",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "87",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "88",
+      "name": "Timothy Weah",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "89",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "90",
+      "name": "Julian Brandt",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "91",
+      "name": "Oscar Bobb",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "92",
+      "name": "Matty Warhurst",
+      "team": "Manchester City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "93",
+      "name": "Eduardo Camavinga",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "94",
+      "name": "Dani Olmo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "95",
+      "name": "Benjamin Šeško",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "96",
+      "name": "Alphonso Davies",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "97",
+      "name": "Jesper Uneken",
+      "team": "PSV Eindhoven",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "98",
+      "name": "João Palhinha",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "99",
+      "name": "Thomas Müller",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "100",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "101",
+      "name": "Manuel Neuer",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "102",
+      "name": "Tosin Adarabioyo",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "103",
+      "name": "Kassoum Ouattara",
+      "team": "AS Monaco",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "104",
+      "name": "Trent Alexander-Arnold",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "105",
+      "name": "Karim Adeyemi",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "106",
+      "name": "Omari Kellyman",
+      "team": "Chelsea FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "107",
+      "name": "Gleison Bremer",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "108",
+      "name": "Geovany Quenda",
+      "team": "Sporting Clube de Portugal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "109",
+      "name": "Ousmane Dembélé",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "110",
+      "name": "Samu Aghehowa",
+      "team": "FC Porto",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "111",
+      "name": "Marcus Thuram",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "112",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "113",
+      "name": "Noni Madueke",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "114",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "115",
+      "name": "Marc Guiu",
+      "team": "Chelsea FC FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "116",
+      "name": "Bradley Barcola",
+      "team": "Paris Saint-Germain FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "117",
+      "name": "Deniz Gül",
+      "team": "FC Porto",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "118",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "119",
+      "name": "Georgiy Sudakov",
+      "team": "FC Shakhtar Donetsk",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "120",
+      "name": "Tygo Land",
+      "team": "PSV Eindhoven",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "121",
+      "name": "Joshua Zirkzee",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "122",
+      "name": "Ousmane Diomande",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "123",
+      "name": "Pablo Barrios",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "124",
+      "name": "Federico Chiesa",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "125",
+      "name": "Kai Havertz",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "126",
+      "name": "Antoni Milambo",
+      "team": "Feyenoord FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "127",
+      "name": "Alistair Johnston",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "128",
+      "name": "Andrea Natali",
+      "team": "Bayer 04 Leverkusen",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "129",
+      "name": "Federico Dimarco",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "130",
+      "name": "Daizen Maeda",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "131",
+      "name": "Viktor Gyökeres",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "132",
+      "name": "Rafael Nel",
+      "team": "Sporting Clube de Portugal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "133",
+      "name": "Leon Bailey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "134",
+      "name": "Pedro Gonçalves",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "135",
+      "name": "Arthur Vermeeren",
+      "team": "RB Leipzig FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "136",
+      "name": "Cesare Casadei",
+      "team": "Chelsea FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "137",
+      "name": "Rodrigo Mora",
+      "team": "FC Porto",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "138",
+      "name": "Givairo Read",
+      "team": "Feyenoord",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "139",
+      "name": "Tijjani Reijnders",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "140",
+      "name": "Kyogo Furuhashi",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "141",
+      "name": "Leroy Sané",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "142",
+      "name": "Ian Maatsen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "143",
+      "name": "Isco",
+      "team": "Real Betis Balompié",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "144",
+      "name": "Justin Oboavwoduo",
+      "team": "Manchester City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "145",
+      "name": "Unai Gómez",
+      "team": "Athletic Club",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "146",
+      "name": "Aingeru Olabarrieta",
+      "team": "Athletic Club",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "147",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "148",
+      "name": "Noah Darvich",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "149",
+      "name": "Luka Modrić",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "150",
+      "name": "Florian Wirtz",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "151",
+      "name": "Arne Engels",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "152",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "153",
+      "name": "Marc-André ter Stegen",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "154",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "155",
+      "name": "Nicolas Raskin",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "156",
+      "name": "João Simões",
+      "team": "Sporting Clube de Portugal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "157",
+      "name": "Kevin",
+      "team": "FC Shakhtar Donetsk",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "158",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "159",
+      "name": "Maximilian Beier",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "160",
+      "name": "Weston McKennie",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "161",
+      "name": "Héctor Bellerín",
+      "team": "Real Betis Balompié",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "162",
+      "name": "Fermín López",
+      "team": "FC Barcelona FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "163",
+      "name": "Gianluigi Donnarumma",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "164",
+      "name": "Federico Valverde",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "165",
+      "name": "Hakan Çalhanoğlu",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "166",
+      "name": "Julien Duranville",
+      "team": "Borussia Dortmund FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "167",
+      "name": "Vinícius Tobias",
+      "team": "FC Shakhtar Donetsk",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "168",
+      "name": "Gregor Kobel",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "169",
+      "name": "Luis Díaz",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "170",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "171",
+      "name": "Julián Alvarez",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "172",
+      "name": "Frenkie de Jong",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "173",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "174",
+      "name": "Pedri",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "175",
+      "name": "Antonio Nusa",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "176",
+      "name": "Dušan Vlahović",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "177",
+      "name": "Conrad Harder",
+      "team": "Sporting Clube de Portugal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "178",
+      "name": "Johan Bakayoko",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "179",
+      "name": "Harry Amass",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "180",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "181",
+      "name": "Álvaro Carreras",
+      "team": "SL Benfica",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "182",
+      "name": "Alexis Mac Allister",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "183",
+      "name": "Francesco Camarda",
+      "team": "AC Milan FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "184",
+      "name": "Rasmus Højlund",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "185",
+      "name": "George Ilenikhena",
+      "team": "AS Monaco",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "186",
+      "name": "Raúl Asencio",
+      "team": "Real Madrid C.F.",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "187",
+      "name": "Martim Fernandes",
+      "team": "FC Porto",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "188",
+      "name": "Assane Diao",
+      "team": "Real Betis Balompié FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "189",
+      "name": "Santiago Giménez",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "190",
+      "name": "Trey Nyoni",
+      "team": "Liverpool FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "191",
+      "name": "Cole Campbell",
+      "team": "Borussia Dortmund",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "192",
+      "name": "Rodrigo de Paul",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "193",
+      "name": "Jayden Danns",
+      "team": "Liverpool FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "194",
+      "name": "Isaac Babadi",
+      "team": "PSV Eindhoven FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "195",
+      "name": "Davide Frattesi",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "196",
+      "name": "Pau Cubarsí",
+      "team": "FC Barcelona FS",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "197",
+      "name": "Warren Zaïre-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "198",
+      "name": "Mike Maignan",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "199",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "200",
+      "name": "Robert Lewandowski",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "1",
+      "name": "Kylian Mbappé",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "9",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "14",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "15",
+      "name": "Ibrahim Mbaye",
+      "team": "Paris Saint-Germain",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "22",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "23",
+      "name": "Nicolò Barella",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "27",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "29",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "32",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "37",
+      "name": "Xavi Simons",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "42",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "56",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "59",
+      "name": "Kenan Yildiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "76",
+      "name": "Christian Pulisic",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "77",
+      "name": "Bukayo Saka",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "85",
+      "name": "Toni Fernández",
+      "team": "FC Barcelona",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "87",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "100",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "131",
+      "name": "Viktor Gyökeres",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "150",
+      "name": "Florian Wirtz",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "158",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "170",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "171",
+      "name": "Julián Alvarez",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "173",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "190",
+      "name": "Trey Nyoni",
+      "team": "Liverpool FC",
+      "rc": true,
+      "subset": "Base Hero Variations"
+    },
+    {
+      "n": "BLA-AG",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-BE",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-BF",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-BJ",
+      "name": "Brennan Johnson",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-CP",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-DB",
+      "name": "Dimitar Berbatov",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-DD",
+      "name": "Didier Drogba",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-E",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-EH",
+      "name": "Emile Heskey",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-EN",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-EW",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-GB",
+      "name": "Gianluigi Buffon",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-GP",
+      "name": "Gianluca Prestianni",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-GR",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-GX",
+      "name": "Granit Xhaka",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JA",
+      "name": "Julián Alvarez",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JB",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JD",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JF",
+      "name": "Jeremie Frimpong",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JM",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-JR",
+      "name": "Jacob Ramsey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-KA",
+      "name": "Karim Adeyemi",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-KK",
+      "name": "Kaká",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-KW",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-LM",
+      "name": "Lautaro Martínez",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-ME",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-MM",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-MW",
+      "name": "Matty Warhurst",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-OD",
+      "name": "Ousmane Dembélé",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-PE",
+      "name": "Pedri",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-RG",
+      "name": "Ryan Giggs",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-RI",
+      "name": "Ronaldinho",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-RL",
+      "name": "Robert Lewandowski",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-RO",
+      "name": "Ronaldo",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-SA",
+      "name": "Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-SM",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-SV",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-TN",
+      "name": "Trey Nyoni",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-UH",
+      "name": "Unai Hernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-VV",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-ZI",
+      "name": "Zlatan Ibrahimović",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "BLA-ZZ",
+      "name": "Zinédine Zidane",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Black Lazer Autographs"
+    },
+    {
+      "n": "CPA-BARC",
+      "name": "Xavi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Sergio",
+      "name": "Busquets",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Lionel",
+      "name": "Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "CPA-MANC",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Bernardo",
+      "name": "Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Phil",
+      "name": "Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Erling",
+      "name": "Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "CPA-MILAN",
+      "name": "Clarence Seedorf",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Andrea",
+      "name": "Pirlo",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Rui",
+      "name": "Costa",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Andriy",
+      "name": "Shevchenko",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "CPA-VVBC",
+      "name": "Eduardo Camavinga",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Federico",
+      "name": "Valverde",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Vini",
+      "name": "Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "Jude",
+      "name": "Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Campeone Autograph Book"
+    },
+    {
+      "n": "CA-AB",
+      "name": "Alessandro Bastoni",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AC",
+      "name": "Álvaro Carreras",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AG",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AH",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AI",
+      "name": "Andrés Iniesta",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AM",
+      "name": "Álvaro Morata",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AN",
+      "name": "Andrea Natali",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AP",
+      "name": "Andrea Pirlo",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AS",
+      "name": "Andriy Shevchenko",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AU",
+      "name": "Ronald Araújo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BE",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BF",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BG",
+      "name": "Jamie Bynoe-Gittens",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BJ",
+      "name": "Brennan Johnson",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BP",
+      "name": "Benjamin Pavard",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BR",
+      "name": "Dimitar Berbatov",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BS",
+      "name": "Bukayo Saka",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BU",
+      "name": "Gianluigi Buffon",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CH",
+      "name": "Federico Chiesa",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CM",
+      "name": "Callum McGregor",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CN",
+      "name": "Cristian Romero",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CO",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CP",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CU",
+      "name": "Cafu",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CV",
+      "name": "Eduardo Camavinga",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DB",
+      "name": "Dennis Bergkamp",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DC",
+      "name": "Deco",
+      "team": "FC Porto",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DD",
+      "name": "Didier Drogba",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DF",
+      "name": "Davide Frattesi",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DM",
+      "name": "Donyell Malen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DN",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DO",
+      "name": "Dani Olmo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DS",
+      "name": "David Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DT",
+      "name": "Diogo Dalot",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DU",
+      "name": "Destiny Udogie",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DV",
+      "name": "David Villa",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DY",
+      "name": "Daniel Yañez",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DZ",
+      "name": "Denzel Dumfries",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-E",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EH",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EL",
+      "name": "Harvey Elliott",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EM",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EN",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EW",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FC",
+      "name": "Francisco Conceição",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FL",
+      "name": "Frank Lampard",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FR",
+      "name": "Jeremie Frimpong",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FT",
+      "name": "Fernando Torres",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FW",
+      "name": "Florian Wirtz",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GB",
+      "name": "Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GI",
+      "name": "George Ilenikhena",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GL",
+      "name": "Arda Güler",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GQ",
+      "name": "Geovany Quenda",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GR",
+      "name": "Alejandro Grimaldo",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GU",
+      "name": "Ruud Gullit",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GV",
+      "name": "Gavi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GW",
+      "name": "George Weah",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GX",
+      "name": "Granit Xhaka",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GY",
+      "name": "Serhou Guirassy",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GZ",
+      "name": "Santiago Giménez",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HA",
+      "name": "Harry Amass",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HB",
+      "name": "Héctor Bellerín",
+      "team": "Real Betis Balompié",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HE",
+      "name": "Theo Hernández",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HK",
+      "name": "Harry Kane",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HL",
+      "name": "Henrik Larsson",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HS",
+      "name": "Heung-min Son",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HT",
+      "name": "Reo Hatate",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HZ",
+      "name": "Eden Hazard",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-IG",
+      "name": "Ilkay Gündoğan",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-IM",
+      "name": "Ian Maatsen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-IW",
+      "name": "Ian Wright",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JA",
+      "name": "Julián Alvarez",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JB",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JD",
+      "name": "Jayden Danns",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JE",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JF",
+      "name": "João Félix",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JK",
+      "name": "Joshua Kimmich",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JM",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JN",
+      "name": "João Neves",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JO",
+      "name": "Jay-Jay Okocha",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JR",
+      "name": "Jacob Ramsey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JT",
+      "name": "John Terry",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KA",
+      "name": "Karim Adeyemi",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KB",
+      "name": "Karim Benzema",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KC",
+      "name": "Kingsley Coman",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KD",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KE",
+      "name": "Roy Keane",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KF",
+      "name": "Kyogo Furuhashi",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KI",
+      "name": "Ken Izekor",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KK",
+      "name": "Kaká",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KM",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KO",
+      "name": "Koke",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KW",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LA",
+      "name": "Lautaro Martínez",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LB",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LE",
+      "name": "Rafael Leão",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LI",
+      "name": "Konrad Laimer",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LM",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LO",
+      "name": "Lothar Matthäus",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LS",
+      "name": "Leroy Sané",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LU",
+      "name": "Luka Modrić",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LY",
+      "name": "Leny Yoro",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MA",
+      "name": "Manuel Akanji",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MB",
+      "name": "Michael Ballack",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MI",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ML",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MQ",
+      "name": "Marquinhos",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MR",
+      "name": "Rodrigo Mora",
+      "team": "FC Porto",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MT",
+      "name": "Mason Mount",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MW",
+      "name": "Matty Warhurst",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ND",
+      "name": "Noah Darvich",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NE",
+      "name": "Neymar Jr",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NI",
+      "name": "Nicolò Savona",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NM",
+      "name": "Noni Madueke",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NO",
+      "name": "Nico O'Reilly",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NS",
+      "name": "Nico Schlotterbeck",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NU",
+      "name": "Nuno Mendes",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NW",
+      "name": "Nico Williams",
+      "team": "Athletic Club",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OB",
+      "name": "Oscar Bobb",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OF",
+      "name": "Noah Okafor",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OK",
+      "name": "Orkun Kökcü",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OV",
+      "name": "Justin Oboavwoduo",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OW",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OZ",
+      "name": "Mesut Özil",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PC",
+      "name": "Petr Cech",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PE",
+      "name": "Ricardo Pepi",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PF",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PG",
+      "name": "Paul Gascoigne",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PI",
+      "name": "Pedri",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PL",
+      "name": "Philipp Lahm",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PM",
+      "name": "Paolo Maldini",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PN",
+      "name": "Pavel Nedvěd",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PS",
+      "name": "Paul Scholes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PV",
+      "name": "Pau Víctor",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RD",
+      "name": "Rúben Dias",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RG",
+      "name": "Ryan Giggs",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RH",
+      "name": "Rasmus Højlund",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RI",
+      "name": "Ronaldinho",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RJ",
+      "name": "Reece James",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RK",
+      "name": "Randal Kolo Muani",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RL",
+      "name": "Robert Lewandowski",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RO",
+      "name": "Ronaldo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RP",
+      "name": "Raphinha",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RU",
+      "name": "Rui Costa",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RV",
+      "name": "Rivaldo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RY",
+      "name": "Rodrygo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SA",
+      "name": "Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SAF",
+      "name": "Sir Alex Ferguson",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SG",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SM",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SS",
+      "name": "Benjamin Šeško",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SV",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SW",
+      "name": "Bastian Schweinsteiger",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SZ",
+      "name": "Dominik Szoboszlai",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TC",
+      "name": "Toby Collyer",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TF",
+      "name": "Toni Fernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TH",
+      "name": "Thierry Henry",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TM",
+      "name": "Thomas Müller",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TN",
+      "name": "Trey Nyoni",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TO",
+      "name": "Fikayo Tomori",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TR",
+      "name": "Marcus Thuram",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TW",
+      "name": "Timothy Weah",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-UH",
+      "name": "Unai Hernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-VB",
+      "name": "Victor Boniface",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-VG",
+      "name": "Viktor Gyökeres",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-VJ",
+      "name": "Vini Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-VP",
+      "name": "Robin van Persie",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-VV",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-WK",
+      "name": "Kyle Walker",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-WM",
+      "name": "Weston McKennie",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-WZ",
+      "name": "Warren Zaïre-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-XS",
+      "name": "Xavi Simons",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-YZ",
+      "name": "Yoram Zague",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ZI",
+      "name": "Zlatan Ibrahimović",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ZZ",
+      "name": "Zinédine Zidane",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "DA-CT",
+      "name": "Aurélien Tchouaméni",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Eduardo",
+      "name": "Camavinga",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-GB",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Lucas",
+      "name": "Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-GP",
+      "name": "Gavi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-GT",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Fernando",
+      "name": "Torres",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-GV",
+      "name": "Marco van Basten",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Ruud",
+      "name": "Gullit",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-HB",
+      "name": "Dennis Bergkamp",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Thierry",
+      "name": "Henry",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-KM",
+      "name": "Thomas Müller",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Joshua",
+      "name": "Kimmich",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-LD",
+      "name": "Didier Drogba",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Frank",
+      "name": "Lampard",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-MK",
+      "name": "Harry Kane",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Jamal",
+      "name": "Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-MZ",
+      "name": "Maicon",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Javier",
+      "name": "Zanetti",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-NC",
+      "name": "Pavel Nedvěd",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Fabio",
+      "name": "Cannavaro",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-OG",
+      "name": "Mesut Özil",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Arda",
+      "name": "Güler",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-RM",
+      "name": "Ronaldinho",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Lionel",
+      "name": "Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-RO",
+      "name": "Jay-Jay Okocha",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-RZ",
+      "name": "Ronaldo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-SI",
+      "name": "Zlatan Ibrahimović",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Thiago",
+      "name": "Silva",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-US",
+      "name": "Weston McKennie",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Timothy",
+      "name": "Weah",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-VC",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Jamie",
+      "name": "Carragher",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "TA-ACM",
+      "name": "Kaká",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Clarence",
+      "name": "Seedorf",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Andrea",
+      "name": "Pirlo",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-BAR",
+      "name": "Ronaldinho",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Samuel",
+      "name": "Eto'o",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-BMB",
+      "name": "Yaya Touré",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "David",
+      "name": "Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Sergio",
+      "name": "Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-BRA",
+      "name": "Rodrygo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Vini",
+      "name": "Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-CIT",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Erling",
+      "name": "Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Phil",
+      "name": "Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-FCB",
+      "name": "Thierry Henry",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Lionel",
+      "name": "Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-MIL",
+      "name": "Frank Rijkaard",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Ruud",
+      "name": "Gullit",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Marco",
+      "name": "van Basten",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-PSG",
+      "name": "Warren Zaïre-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Bradley",
+      "name": "Barcola",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-TOT",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Lucas",
+      "name": "Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Archie",
+      "name": "Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-WAL",
+      "name": "Ian Rush",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Gareth",
+      "name": "Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Ryan",
+      "name": "Giggs",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "TA-YNWA",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Xabi",
+      "name": "Alonso",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "Jamie",
+      "name": "Carragher",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome Triple Autographs"
+    },
+    {
+      "n": "QA-BBO",
+      "name": "Rivaldo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Hristo",
+      "name": "Stoichkov",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Lionel",
+      "name": "Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "QA-MBO",
+      "name": "Kaká",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Andriy",
+      "name": "Shevchenko",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Ruud",
+      "name": "Gullit",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Marco",
+      "name": "van Basten",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "QA-XCII",
+      "name": "Paul Scholes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Gary",
+      "name": "Neville",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Phil",
+      "name": "Neville",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "Ryan",
+      "name": "Giggs",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome Quad Autographs"
+    },
+    {
+      "n": "FSA-AM",
+      "name": "Antoni Milambo",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-AP",
+      "name": "Aleksandar Pavlović",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-BB",
+      "name": "Bradley Barcola",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-FC",
+      "name": "Francesco Camarda",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-FL",
+      "name": "Fermín López",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-IB",
+      "name": "Isaac Babadi",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-JD",
+      "name": "Julien Duranville",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-KY",
+      "name": "Kenan Yildiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-LY",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "FSA-MR",
+      "name": "Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Future Stars Autographs"
+    },
+    {
+      "n": "GLA-AG",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-DN",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-E",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-EC",
+      "name": "Eric Cantona",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-EH",
+      "name": "Eden Hazard",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-HS",
+      "name": "Heung-min Son",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-JB",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-JM",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-JZ",
+      "name": "Joshua Zirkzee",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-LM",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-LY",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-OB",
+      "name": "Oscar Bobb",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-OW",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-RL",
+      "name": "Rafael Leão",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-RM",
+      "name": "Rafael Márquez",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-SV",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "GLA-YM",
+      "name": "Yunus Musah",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Global Attraction Autographs"
+    },
+    {
+      "n": "EX-AF1",
+      "name": "Sir Alex Ferguson",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-HC2",
+      "name": "Hernán Crespo",
+      "team": "SS Lazio",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-JM1",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-LM1",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-LY4",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-SG1",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "EX-ZZ7",
+      "name": "Zinédine Zidane",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Marks of Excellence"
+    },
+    {
+      "n": "WKA-E",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-EN",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-EW",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-FC",
+      "name": "Francesco Camarda",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-KW",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-KY",
+      "name": "Kenan Yildiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-LB",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-LY",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-SM",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "WKA-SV",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Wonderkids Autographs"
+    },
+    {
+      "n": "BU-BB",
+      "name": "Ben Broggio",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-GF",
+      "name": "Guille Fernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-JH",
+      "name": "Jaden Heskey",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-LK",
+      "name": "Lennart Karl",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-QJ",
+      "name": "Quim Junyent",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-RH",
+      "name": "Reigan Heskey",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "BU-SL",
+      "name": "Shea Lacey",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Bowman Chrome UEFA Youth League"
+    },
+    {
+      "n": "CP-1",
+      "name": "Theo Hernández",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-2",
+      "name": "Rodrigo de Paul",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-3",
+      "name": "Jamie Bynoe-Gittens",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-4",
+      "name": "Pedri",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-5",
+      "name": "Marc Bernal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-6",
+      "name": "Alphonso Davies",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-7",
+      "name": "Michael Olise",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-8",
+      "name": "Davide Frattesi",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-9",
+      "name": "Weston McKennie",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-10",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-11",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-12",
+      "name": "Nico O'Reilly",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-13",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-14",
+      "name": "Warren Zaïre-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-15",
+      "name": "Kang-in Lee",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-16",
+      "name": "Ricardo Pepi",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-17",
+      "name": "Eduardo Camavinga",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-18",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-19",
+      "name": "William Saliba",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-20",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-21",
+      "name": "James Tavernier",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-22",
+      "name": "Cameron Carter-Vickers",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-23",
+      "name": "Quinten Timber",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-24",
+      "name": "Ousmane Diomande",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-25",
+      "name": "Micky van de Ven",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-26",
+      "name": "Abde Ezzalzouli",
+      "team": "Real Betis Balompié",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-27",
+      "name": "George Ilenikhena",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-28",
+      "name": "Vini Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-29",
+      "name": "Assan Ouédraogo",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "CP-30",
+      "name": "Nico Williams",
+      "team": "Athletic Club",
+      "rc": false,
+      "subset": "Circle of Power"
+    },
+    {
+      "n": "FD-1",
+      "name": "Alistair Johnston",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-2",
+      "name": "Morten Hjulmand",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-3",
+      "name": "Minjae Kim",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-4",
+      "name": "Alessandro Bastoni",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-5",
+      "name": "Takumi Minamino",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-6",
+      "name": "Rodri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-7",
+      "name": "Arda Güler",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-8",
+      "name": "Ben White",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-9",
+      "name": "Ronald Araújo",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-10",
+      "name": "Julian Brandt",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-11",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-12",
+      "name": "Conrad Harder",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-13",
+      "name": "Rodrygo",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-14",
+      "name": "Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-15",
+      "name": "Nico Schlotterbeck",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-16",
+      "name": "Alexis Mac Allister",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-17",
+      "name": "Gleison Bremer",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-18",
+      "name": "Patrik Schick",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-19",
+      "name": "Koke",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-20",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-21",
+      "name": "Nicolás Otamendi",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-22",
+      "name": "Georgiy Sudakov",
+      "team": "FC Shakhtar Donetsk",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-23",
+      "name": "Ayase Ueda",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-24",
+      "name": "Douglas Luiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-25",
+      "name": "João Neves",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-26",
+      "name": "Mike Maignan",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-27",
+      "name": "Benjamin Šeško",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-28",
+      "name": "Henrikh Mkhitaryan",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-29",
+      "name": "Tygo Land",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-30",
+      "name": "Fermín López",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-31",
+      "name": "Lucas Beraldo",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-32",
+      "name": "Alisson Becker",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-33",
+      "name": "Serge Gnabry",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-34",
+      "name": "Álvaro Carreras",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-35",
+      "name": "Alejandro Grimaldo",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "FD-36",
+      "name": "Fikayo Tomori",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Final Destination"
+    },
+    {
+      "n": "GZ-1",
+      "name": "Heung-min Son",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-2",
+      "name": "Johan Bakayoko",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-3",
+      "name": "Kyogo Furuhashi",
+      "team": "Celtic FC",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-4",
+      "name": "Donyell Malen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-5",
+      "name": "Gianluca Prestianni",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-6",
+      "name": "Jayden Danns",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-7",
+      "name": "Santiago Giménez",
+      "team": "Feyenoord",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-8",
+      "name": "Cyriel Dessers",
+      "team": "Rangers F.C.",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-9",
+      "name": "Nicolò Barella",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-10",
+      "name": "Rafael Leão",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-11",
+      "name": "Matty Warhurst",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-12",
+      "name": "Ousmane Dembélé",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-13",
+      "name": "Samuel Eto'o",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-14",
+      "name": "Xavi Simons",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-15",
+      "name": "Fernando Morientes",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-16",
+      "name": "Leroy Sané",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-17",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-18",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-19",
+      "name": "Viktor Gyökeres",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-20",
+      "name": "Samuel Mbangula",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-21",
+      "name": "Kylian Mbappé",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-22",
+      "name": "Luis Suárez",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-23",
+      "name": "Luis Díaz",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-24",
+      "name": "Pau Víctor",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-25",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-26",
+      "name": "Folarin Balogun",
+      "team": "AS Monaco",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-27",
+      "name": "Victor Boniface",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-28",
+      "name": "Dušan Vlahović",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-29",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "GZ-30",
+      "name": "Sergio Agüero",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Golazo"
+    },
+    {
+      "n": "H-1",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-2",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-3",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-4",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-5",
+      "name": "Jude Bellingham",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-6",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-7",
+      "name": "Zinédine Zidane",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-8",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-9",
+      "name": "Ronaldo",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-10",
+      "name": "Johan Cruyff",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "H-11",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Helix"
+    },
+    {
+      "n": "HG-1",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Hidden Gems"
+    },
+    {
+      "n": "HG-2",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Hidden Gems"
+    },
+    {
+      "n": "HG-3",
+      "name": "Warren Zaire-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Hidden Gems"
+    },
+    {
+      "n": "HG-4",
+      "name": "Johan Cruyff",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Hidden Gems"
+    },
+    {
+      "n": "HG-5",
+      "name": "Samuel Mbangula",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Hidden Gems"
+    },
+    {
+      "n": "MN-1",
+      "name": "Manuel Neuer",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-2",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-3",
+      "name": "Christian Pulisic",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-4",
+      "name": "Bukayo Saka",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-5",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-6",
+      "name": "Gavi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-7",
+      "name": "Vini Jr.",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-8",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-9",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "MN-10",
+      "name": "Didier Drogba",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Munich at Night"
+    },
+    {
+      "n": "RR-1",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-2",
+      "name": "Cole Campbell",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-3",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-4",
+      "name": "Toni Fernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-5",
+      "name": "Rodrigo Mora",
+      "team": "FC Porto",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-6",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-7",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-8",
+      "name": "Assan Ouédraogo",
+      "team": "RB Leipzig",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-9",
+      "name": "Samuel Mbangula",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "RR-10",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Radiating Rookies"
+    },
+    {
+      "n": "SE-1",
+      "name": "Kevin De Bruyne",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-2",
+      "name": "Martin Ødegaard",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-3",
+      "name": "Kaká",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-4",
+      "name": "Harry Kane",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-5",
+      "name": "Antoine Griezmann",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-6",
+      "name": "Serhou Guirassy",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-7",
+      "name": "Kang-in Lee",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-8",
+      "name": "Christian Pulisic",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-9",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-10",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-11",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-12",
+      "name": "Florian Wirtz",
+      "team": "Bayer 04 Leverkusen",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-13",
+      "name": "Geovany Quenda",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-14",
+      "name": "Kylian Mbappé",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SE-15",
+      "name": "Robert Lewandowski",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Shadow Etch"
+    },
+    {
+      "n": "SB-1",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-2",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-3",
+      "name": "Paolo Maldini",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-4",
+      "name": "Jamal Musiala",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-5",
+      "name": "Giorgio Chiellini",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-6",
+      "name": "Bukayo Saka",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-7",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-8",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-9",
+      "name": "Heung-min Son",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "SB-10",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Soccer Brush"
+    },
+    {
+      "n": "G-6",
+      "name": "Lionel Messi",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "The Grail"
+    },
+    {
+      "n": "G-7",
+      "name": "Lionel Messi",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "The Grail"
+    },
+    {
+      "n": "TF-1",
+      "name": "Zlatan Ibrahimović",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-2",
+      "name": "Andrea Pirlo",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-3",
+      "name": "Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-4",
+      "name": "Thierry Henry",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-5",
+      "name": "Zinédine Zidane",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-6",
+      "name": "Philipp Lahm",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-7",
+      "name": "Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-8",
+      "name": "Frank Lampard",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-9",
+      "name": "Ronaldo",
+      "team": "FC Internazionale Milano",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "TF-10",
+      "name": "Ronaldinho",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Tifo"
+    },
+    {
+      "n": "WN-1",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-2",
+      "name": "Cole Palmer",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-3",
+      "name": "Geovany Quenda",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-4",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-5",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-6",
+      "name": "Warren Zaïre-Emery",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-7",
+      "name": "Julián Alvarez",
+      "team": "Atlético de Madrid",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-8",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-9",
+      "name": "Kylian Mbappé",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WN-10",
+      "name": "Harry Kane",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "White Noise"
+    },
+    {
+      "n": "WK-1",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-2",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-3",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-4",
+      "name": "Ibrahim Mbaye",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-5",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-6",
+      "name": "Pau Víctor",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-7",
+      "name": "Aleksandar Pavlović",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-8",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-9",
+      "name": "Bradley Barcola",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-10",
+      "name": "Unai Hernández",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-11",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-12",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-13",
+      "name": "Pau Cubarsí",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-14",
+      "name": "Francesco Camarda",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-15",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-16",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-17",
+      "name": "Savinho",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-18",
+      "name": "Trey Nyoni",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-19",
+      "name": "Kenan Yildiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "WK-20",
+      "name": "Kevin",
+      "team": "FC Shakhtar Donetsk",
+      "rc": false,
+      "subset": "Wonderkids"
+    },
+    {
+      "n": "YQ-1",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-2",
+      "name": "Endrick",
+      "team": "Real Madrid C.F.",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-3",
+      "name": "Aleksandar Pavlović",
+      "team": "FC Bayern München",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-4",
+      "name": "Kjell Wätjen",
+      "team": "Borussia Dortmund",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-5",
+      "name": "João Simões",
+      "team": "Sporting Clube de Portugal",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-6",
+      "name": "Matty Warhurst",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-7",
+      "name": "Tygo Land",
+      "team": "PSV Eindhoven",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-8",
+      "name": "Ethan Wheatley",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-9",
+      "name": "Chido Obi",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-10",
+      "name": "Gianluca Prestianni",
+      "team": "SL Benfica",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-11",
+      "name": "Senny Mayulu",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-12",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal FC",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-13",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-14",
+      "name": "Bradley Barcola",
+      "team": "Paris Saint-Germain",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-15",
+      "name": "Jayden Danns",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-16",
+      "name": "Francesco Camarda",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-17",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-18",
+      "name": "Cesare Casadei",
+      "team": "Chelsea FC",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-19",
+      "name": "Kenan Yildiz",
+      "team": "Juventus",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-20",
+      "name": "Lamine Yamal",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-21",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-22",
+      "name": "Kevin Zeroli",
+      "team": "AC Milan",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-23",
+      "name": "Kevin",
+      "team": "FC Shakhtar Donetsk",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-24",
+      "name": "Noah Darvich",
+      "team": "FC Barcelona",
+      "rc": false,
+      "subset": "YouthQuake"
+    },
+    {
+      "n": "YQ-25",
+      "name": "Rodrigo Mora",
+      "team": "FC Porto",
+      "rc": false,
+      "subset": "YouthQuake"
+    }
+  ]
+}

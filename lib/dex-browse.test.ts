@@ -39,6 +39,7 @@ assert(catalogTileSrc("/demo/cards/seed_charizard.svg") === "/demo/cards/seed_ch
 
 const rail = readFileSync("components/dex-rail.tsx", "utf8");
 assert(rail.includes('["DEMO", "Demo", "Demo"]') && rail.includes("aria-expanded"), "demo is a peer rail row and sets collapse");
+assert(rail.includes('["TOPPS_BASKETBALL", "Topps 籃球", "Topps Basketball"]') && rail.includes('["TOPPS_SOCCER", "Topps 足球", "Topps Soccer"]'), "topps basketball and soccer are peer rail rows");
 assert(!rail.includes("overflow-y-auto overscroll-contain md:w-52"), "the rail is not a second sticky scroller");
 const browser = readFileSync("components/dex-browser.tsx", "utf8");
 assert(browser.includes("history.replaceState") && browser.includes("railToggle") && !browser.includes("router."), "switching game does not remount the page");

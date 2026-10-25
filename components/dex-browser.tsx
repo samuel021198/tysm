@@ -12,6 +12,8 @@ import { DexToolbar } from "./dex-toolbar";
 function blurb(game: DexGame, locale: "zh" | "en") {
   if (game === "ONE_PIECE") return locale === "en" ? "Official One Piece cards, in Japanese and English." : "海賊王官方卡牌，日文同英文。";
   if (game === "RIFTBOUND") return locale === "en" ? "Official Riftbound cards, in English." : "Riftbound 官方卡牌，英文。";
+  if (game === "TOPPS_BASKETBALL") return locale === "en" ? "Topps Basketball cards. English names first; pictures come later." : "Topps 籃球卡，先收英文名，圖之後再補。";
+  if (game === "TOPPS_SOCCER") return locale === "en" ? "Topps Soccer cards. English names first; pictures come later." : "Topps 足球卡，先收英文名，圖之後再補。";
   if (game === "DEMO") return locale === "en" ? "Sample cards, so the dex and prices have something to show." : "示範卡牌，方便睇版面同行情。";
   return locale === "en" ? "Official Pokémon cards, in Japanese and English." : "寶可夢官方卡牌，日文同英文。";
 }

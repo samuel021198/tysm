@@ -1,6 +1,6 @@
 import { authorizedBearer } from "@/lib/bootstrap";
 import { backfillCatalogTitles, ingestDex } from "@/lib/dex-ingest";
-import { ingestOnePiece, ingestRiftbound } from "@/lib/game-ingest";
+import { ingestOnePiece, ingestRiftbound, ingestTopps } from "@/lib/game-ingest";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -40,10 +40,12 @@ function readLang(value: unknown): "en" | "ja" | "all" | "invalid" {
   return "invalid";
 }
 
-function readGame(value: unknown): "pokemon" | "one-piece" | "riftbound" | "invalid" {
+function readGame(value: unknown): "pokemon" | "one-piece" | "riftbound" | "topps-basketball" | "topps-soccer" | "invalid" {
   if (value == null || value === "" || value === "pokemon") return "pokemon";
   if (value === "one-piece" || value === "op") return "one-piece";
   if (value === "riftbound") return "riftbound";
+  if (value === "topps-basketball") return "topps-basketball";
+  if (value === "topps-soccer") return "topps-soccer";
   return "invalid";
 }
 
@@ -92,7 +94,7 @@ async function readOptions(request: Request) {
   if (lang === "invalid") return invalid("invalid_lang");
   const game = readGame(pick("game"));
   if (game === "invalid") return invalid("invalid_game");
-  if (game === "riftbound" && lang === "ja") return invalid("invalid_lang");
+  if ((game === "riftbound" || game === "topps-basketball" || game === "topps-soccer") && lang === "ja") return invalid("invalid_lang");
   return { backfillTitles: false as const, cursor, maxSets: sets, langs: lang === "all" ? undefined : [lang], game };
 }
 
@@ -115,7 +117,11 @@ export async function POST(request: Request) {
         ? await ingestOnePiece({ ...shared, langs: options.langs })
         : options.game === "riftbound"
           ? await ingestRiftbound(shared)
-          : await ingestDex({ ...shared, langs: options.langs });
+          : options.game === "topps-basketball"
+            ? await ingestTopps("TOPPS_BASKETBALL", shared)
+            : options.game === "topps-soccer"
+              ? await ingestTopps("TOPPS_SOCCER", shared)
+              : await ingestDex({ ...shared, langs: options.langs });
     return Response.json({ ok: true, game: options.game, ...result });
   } catch (error) {
     console.error("dex ingest failed", safeMessage(error));

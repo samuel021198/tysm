@@ -1,0 +1,6737 @@
+{
+  "code": "PL2526",
+  "game": "TOPPS_SOCCER",
+  "nameEn": "2025-26 Topps Premier League",
+  "series": "Premier League",
+  "releaseDate": "2025-09-17",
+  "source": "https://www.checklistinsider.com/2025-26-topps-premier-league",
+  "cards": [
+    {
+      "n": "1",
+      "name": "Team Badge",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "2",
+      "name": "David Raya",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "3",
+      "name": "William Saliba",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "4",
+      "name": "Gabriel Magalhães",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "5",
+      "name": "Jurriën Timber",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "6",
+      "name": "Mikel Merino",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "7",
+      "name": "Thomas Partey",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "8",
+      "name": "Declan Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "9",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "10",
+      "name": "Martin Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "11",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "12",
+      "name": "Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "13",
+      "name": "Gabriel Martinelli",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "14",
+      "name": "Leandro Trossard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "15",
+      "name": "Kai Havertz",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "16",
+      "name": "Gabriel Martinelli",
+      "team": "Arsenal GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "17",
+      "name": "Jurriën Timber",
+      "team": "Arsenal FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "18",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "19",
+      "name": "Team Badge",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "20",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "21",
+      "name": "Pau Torres",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "22",
+      "name": "Ezri Konsa",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "23",
+      "name": "Matty Cash",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "24",
+      "name": "Lucas Digne",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "25",
+      "name": "Boubacar Kamara",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "26",
+      "name": "Amadou Onana",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "27",
+      "name": "John McGinn",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "28",
+      "name": "Youri Tielemans",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "29",
+      "name": "Jacob Ramsey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "30",
+      "name": "Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "31",
+      "name": "Louie Barry",
+      "team": "Aston Villa",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "32",
+      "name": "Donyell Malen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "33",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "34",
+      "name": "Boubacar Kamara",
+      "team": "Aston Villa GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "35",
+      "name": "John McGinn",
+      "team": "Aston Villa FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "36",
+      "name": "Donyell Malen",
+      "team": "Aston Villa TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "37",
+      "name": "Team Badge",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "38",
+      "name": "Kepa Arrizabalaga",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "39",
+      "name": "Illia Zabarnyi",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "40",
+      "name": "Dean Huijsen",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "41",
+      "name": "Julio Soler",
+      "team": "AFC Bournemouth",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "42",
+      "name": "Milos Kerkez",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "43",
+      "name": "Tyler Adams",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "44",
+      "name": "Lewis Cook",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "45",
+      "name": "Ryan Christie",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "46",
+      "name": "Luis Sinisterra",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "47",
+      "name": "Antoine Semenyo",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "48",
+      "name": "Justin Kluivert",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "49",
+      "name": "Eli Junior Kroupi",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "50",
+      "name": "Dango Ouattara",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "51",
+      "name": "Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "52",
+      "name": "Milos Kerkez",
+      "team": "AFC Bournemouth GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "53",
+      "name": "Illia Zabarnyi",
+      "team": "AFC Bournemouth FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "54",
+      "name": "Justin Kluivert",
+      "team": "AFC Bournemouth TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "55",
+      "name": "Team Badge",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "56",
+      "name": "Mark Flekken",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "57",
+      "name": "Nathan Collins",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "58",
+      "name": "Sepp van den Berg",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "59",
+      "name": "Michael Kayode",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "60",
+      "name": "Christian Nørgaard",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "61",
+      "name": "Mathias Jensen",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "62",
+      "name": "Vitaly Janelt",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "63",
+      "name": "Mikkel Damsgaard",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "64",
+      "name": "Fábio Carvalho",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "65",
+      "name": "Kevin Schade",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "66",
+      "name": "Keane Lewis-Potter",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "67",
+      "name": "Gustavo Nunes",
+      "team": "Brentford",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "68",
+      "name": "Bryan Mbeumo",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "69",
+      "name": "Yoane Wissa",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "70",
+      "name": "Fábio Carvalho",
+      "team": "Brentford GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "71",
+      "name": "Gustavo Nunes",
+      "team": "Brentford FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "72",
+      "name": "Kevin Schade",
+      "team": "Brentford TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "73",
+      "name": "Team Badge",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "74",
+      "name": "Bart Verbruggen",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "75",
+      "name": "Jan Paul van Hecke",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "76",
+      "name": "Pervis Estupiñán",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "77",
+      "name": "Lewis Dunk",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "78",
+      "name": "Jack Hinshelwood",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "79",
+      "name": "Yankuba Minteh",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "80",
+      "name": "Carlos Baleba",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "81",
+      "name": "Yoon Do-young",
+      "team": "Brighton & Hove Albion",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "82",
+      "name": "Yasin Ayari",
+      "team": "Brighton & Hove Albion",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "83",
+      "name": "Kaoru Mitoma",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "84",
+      "name": "Stefanos Tzimas",
+      "team": "Brighton & Hove Albion",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "85",
+      "name": "Danny Welbeck",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "86",
+      "name": "Georginio Rutter",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "87",
+      "name": "João Pedro",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "88",
+      "name": "Matt O'Riley",
+      "team": "Brighton & Hove Albion GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "89",
+      "name": "Carlos Baleba",
+      "team": "Brighton & Hove Albion FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "90",
+      "name": "Matt O'Riley",
+      "team": "Brighton & Hove Albion TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "91",
+      "name": "Team Badge",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "92",
+      "name": "Robert Sánchez",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "93",
+      "name": "Levi Colwill",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "94",
+      "name": "Tosin Adarabioyo",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "95",
+      "name": "Reece James",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "96",
+      "name": "Marc Cucurella",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "97",
+      "name": "Harrison Murray-Campbell",
+      "team": "Chelsea",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "98",
+      "name": "Moisés Caicedo",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "99",
+      "name": "Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "100",
+      "name": "Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "101",
+      "name": "Kendry Páez",
+      "team": "Chelsea",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "102",
+      "name": "Pedro Neto",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "103",
+      "name": "Noni Madueke",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "104",
+      "name": "Nicolas Jackson",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "105",
+      "name": "Estêvão",
+      "team": "Chelsea",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "106",
+      "name": "Levi Colwill",
+      "team": "Chelsea GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "107",
+      "name": "Marc Cucurella",
+      "team": "Chelsea FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "108",
+      "name": "Noni Madueke",
+      "team": "Chelsea TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "109",
+      "name": "Team Badge",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "110",
+      "name": "Dean Henderson",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "111",
+      "name": "Tyrick Mitchell",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "112",
+      "name": "Chadi Riad",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "113",
+      "name": "Maxence Lacroix",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "114",
+      "name": "Marc Guéhi",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "115",
+      "name": "Chris Richards",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "116",
+      "name": "Daniel Muñoz",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "117",
+      "name": "Adam Wharton",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "118",
+      "name": "Romain Esse",
+      "team": "Crystal Palace",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "119",
+      "name": "Daichi Kamada",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "120",
+      "name": "Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "121",
+      "name": "Ismaïla Sarr",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "122",
+      "name": "Eddie Nketiah",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "123",
+      "name": "Jean-Philippe Mateta",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "124",
+      "name": "Marc Guéhi",
+      "team": "Crystal Palace GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "125",
+      "name": "Tyrick Mitchell",
+      "team": "Crystal Palace FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "126",
+      "name": "Ismaïla Sarr",
+      "team": "Crystal Palace TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "127",
+      "name": "Team Badge",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "128",
+      "name": "Jordan Pickford",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "129",
+      "name": "James Tarkowski",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "130",
+      "name": "Jarrad Branthwaite",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "131",
+      "name": "Vitalii Mykolenko",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "132",
+      "name": "Jake O’Brien",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "133",
+      "name": "Nathan Patterson",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "134",
+      "name": "Roman Dixon",
+      "team": "Everton",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "135",
+      "name": "Tim Iroegbunam",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "136",
+      "name": "Harrison Armstrong",
+      "team": "Everton",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "137",
+      "name": "James Garner",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "138",
+      "name": "Dwight McNeil",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "139",
+      "name": "Iliman Ndiaye",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "140",
+      "name": "Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "141",
+      "name": "Youssef Chermiti",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "142",
+      "name": "Iliman Ndiaye",
+      "team": "Everton GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "143",
+      "name": "Vitalii Mykolenko",
+      "team": "Everton FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "144",
+      "name": "Iliman Ndiaye",
+      "team": "Everton TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "145",
+      "name": "Team Badge",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "146",
+      "name": "Bernd Leno",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "147",
+      "name": "Calvin Bassey",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "148",
+      "name": "Joachim Andersen",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "149",
+      "name": "Sander Berge",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "150",
+      "name": "Antonee Robinson",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "151",
+      "name": "Saša Lukić",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "152",
+      "name": "Josh King",
+      "team": "Fulham",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "153",
+      "name": "Andreas Pereira",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "154",
+      "name": "Alex Iwobi",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "155",
+      "name": "Emile Smith Rowe",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "156",
+      "name": "Harry Wilson",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "157",
+      "name": "Adama Traoré",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "158",
+      "name": "Rodrigo Muniz",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "159",
+      "name": "Raúl Jiménez",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "160",
+      "name": "Rodrigo Muniz",
+      "team": "Fulham GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "161",
+      "name": "Calvin Bassey",
+      "team": "Fulham FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "162",
+      "name": "Josh King",
+      "team": "Fulham BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "163",
+      "name": "Team Badge PL Champions",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "164",
+      "name": "Alisson Becker",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "165",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "166",
+      "name": "Ibrahima Konaté",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "167",
+      "name": "Andy Robertson",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "168",
+      "name": "Conor Bradley",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "169",
+      "name": "Ryan Gravenberch",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "170",
+      "name": "Alexis Mac Allister",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "171",
+      "name": "Dominik Szoboszlai",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "172",
+      "name": "Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "173",
+      "name": "Luis Díaz",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "174",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "175",
+      "name": "Cody Gakpo",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "176",
+      "name": "Diogo Jota",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "177",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "178",
+      "name": "Dominik Szoboszlai",
+      "team": "Liverpool FC GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "179",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "180",
+      "name": "Luis Díaz",
+      "team": "Liverpool FC TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "181",
+      "name": "Team Badge",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "182",
+      "name": "Ederson",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "183",
+      "name": "Rúben Dias",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "184",
+      "name": "Joško Gvardiol",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "185",
+      "name": "Vitor Reis",
+      "team": "Manchester City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "186",
+      "name": "Divine Mukasa",
+      "team": "Manchester City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "187",
+      "name": "Nico González",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "188",
+      "name": "Rodri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "189",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "190",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "191",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "192",
+      "name": "Sávio",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "193",
+      "name": "Reigan Heskey",
+      "team": "Manchester City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "194",
+      "name": "Omar Marmoush",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "195",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "196",
+      "name": "Jérémy Doku",
+      "team": "Manchester City GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "197",
+      "name": "Joško Gvardiol",
+      "team": "Manchester City FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "198",
+      "name": "Sávio",
+      "team": "Manchester City TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "199",
+      "name": "Team Badge",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "200",
+      "name": "André Onana",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "201",
+      "name": "Matthijs de Ligt",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "202",
+      "name": "Leny Yoro",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "203",
+      "name": "Lisandro Martínez",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "204",
+      "name": "Diogo Dalot",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "205",
+      "name": "Sékou Koné",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "206",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "207",
+      "name": "Manuel Ugarte",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "208",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "209",
+      "name": "Shea Lacey",
+      "team": "Manchester United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "210",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "211",
+      "name": "Amad",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "212",
+      "name": "Joshua Zirkzee",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "213",
+      "name": "Rasmus Højlund",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "214",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "215",
+      "name": "Manuel Ugarte",
+      "team": "Manchester United FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "216",
+      "name": "Patrick Dorgu",
+      "team": "Manchester United BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "217",
+      "name": "Team Badge",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "218",
+      "name": "Nick Pope",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "219",
+      "name": "Dan Burn",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "220",
+      "name": "Sven Botman",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "221",
+      "name": "Fabian Schär",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "222",
+      "name": "Tino Livramento",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "223",
+      "name": "Lewis Hall",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "224",
+      "name": "Lewis Miley",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "225",
+      "name": "Sandro Tonali",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "226",
+      "name": "Joelinton",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "227",
+      "name": "Bruno Guimarães",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "228",
+      "name": "Jacob Murphy",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "229",
+      "name": "Harvey Barnes",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "230",
+      "name": "Anthony Gordon",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "231",
+      "name": "Alexander Isak",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "232",
+      "name": "Tino Livramento",
+      "team": "Newcastle United GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "233",
+      "name": "Joelinton",
+      "team": "Newcastle United FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "234",
+      "name": "Lewis Miley",
+      "team": "Newcastle United BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "235",
+      "name": "Team Badge",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "236",
+      "name": "Matz Sels",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "237",
+      "name": "Nikola Milenković",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "238",
+      "name": "Ola Aina",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "239",
+      "name": "Murillo",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "240",
+      "name": "Neco Williams",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "241",
+      "name": "Zach Abbott",
+      "team": "Nottingham Forest",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "242",
+      "name": "Ryan Yates",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "243",
+      "name": "Ibrahim Sangaré",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "244",
+      "name": "Elliot Anderson",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "245",
+      "name": "Morgan Gibbs-White",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "246",
+      "name": "Callum Hudson-Odoi",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "247",
+      "name": "Anthony Elanga",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "248",
+      "name": "Taiwo Awoniyi",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "249",
+      "name": "Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "250",
+      "name": "Murillo",
+      "team": "Nottingham Forest GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "251",
+      "name": "Ola Aina",
+      "team": "Nottingham Forest FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "252",
+      "name": "Anthony Elanga",
+      "team": "Nottingham Forest TK",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "253",
+      "name": "Team Badge",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "254",
+      "name": "Antonín Kinský",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "255",
+      "name": "Pedro Porro",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "256",
+      "name": "Micky van de Ven",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "257",
+      "name": "Cristian Romero",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "258",
+      "name": "Destiny Udogie",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "259",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "260",
+      "name": "Dejan Kulusevski",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "261",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "262",
+      "name": "James Maddison",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "263",
+      "name": "Will Lankshear",
+      "team": "Tottenham Hotspur",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "264",
+      "name": "Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "265",
+      "name": "Brennan Johnson",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "266",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "267",
+      "name": "Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "268",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "269",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "270",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "271",
+      "name": "Team Badge",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "272",
+      "name": "Alphonse Areola",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "273",
+      "name": "Jean-Clair Todibo",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "274",
+      "name": "Maximilian Kilman",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "275",
+      "name": "Aaron Wan-Bissaka",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "276",
+      "name": "Emerson Palmieri",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "277",
+      "name": "Oliver Scarles",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "278",
+      "name": "Tomáš Souček",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "279",
+      "name": "Edson Álvarez",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "280",
+      "name": "Guido Rodríguez",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "281",
+      "name": "Mohammed Kudus",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "282",
+      "name": "Niclas Füllkrug",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "283",
+      "name": "Crysencio Summerville",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "284",
+      "name": "Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "285",
+      "name": "Luis Guilherme",
+      "team": "West Ham United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "286",
+      "name": "Crysencio Summerville",
+      "team": "West Ham United GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "287",
+      "name": "Aaron Wan-Bissaka",
+      "team": "West Ham United FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "288",
+      "name": "Luis Guilherme",
+      "team": "West Ham United BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "289",
+      "name": "Team Badge",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "290",
+      "name": "José Sá",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "291",
+      "name": "Nélson Semedo",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "292",
+      "name": "Nasser Djiga",
+      "team": "Wolverhampton Wanderers",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "293",
+      "name": "Emmanuel Agbadou",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "294",
+      "name": "Toti Gomes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "295",
+      "name": "Rayan Aït-Nouri",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "296",
+      "name": "Marshall Munetsi",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "297",
+      "name": "André",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "298",
+      "name": "João Gomes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "299",
+      "name": "Rodrigo Gomes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "300",
+      "name": "Gonçalo Guedes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "301",
+      "name": "Hwang Hee-Chan",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "302",
+      "name": "Jørgen Strand Larsen",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "303",
+      "name": "Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "304",
+      "name": "João Gomes",
+      "team": "Wolverhampton Wanderers GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "305",
+      "name": "Nasser Djiga",
+      "team": "Wolverhampton Wanderers FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "306",
+      "name": "André",
+      "team": "Wolverhampton Wanderers BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "307",
+      "name": "Team Badge",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "308",
+      "name": "James Trafford",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "309",
+      "name": "Maxime Estève",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "310",
+      "name": "Bashir Humphreys",
+      "team": "Burnley FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "311",
+      "name": "Connor Roberts",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "312",
+      "name": "Lucas Pires",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "313",
+      "name": "Josh Laurent",
+      "team": "Burnley FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "314",
+      "name": "Josh Cullen",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "315",
+      "name": "Josh Brownhill",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "316",
+      "name": "Hannibal",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "317",
+      "name": "Marcus Edwards",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "318",
+      "name": "Lyle Foster",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "319",
+      "name": "Luca Koleosho",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "320",
+      "name": "Jaidon Anthony",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "321",
+      "name": "Jaydon Banel",
+      "team": "Burnley FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "322",
+      "name": "Lucas Pires",
+      "team": "Burnley FC GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "323",
+      "name": "Josh Cullen",
+      "team": "Burnley FC FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "324",
+      "name": "Luca Koleosho",
+      "team": "Burnley FC BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "325",
+      "name": "Team Badge",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "326",
+      "name": "Illan Meslier",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "327",
+      "name": "Joe Rodon",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "328",
+      "name": "Pascal Struijk",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "329",
+      "name": "Jayden Bogle",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "330",
+      "name": "Ethan Ampadu",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "331",
+      "name": "Ao Tanaka",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "332",
+      "name": "Brenden Aaronson",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "333",
+      "name": "Ilia Gruev",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "334",
+      "name": "Harry Gray",
+      "team": "Leeds United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "335",
+      "name": "Mateo Joseph",
+      "team": "Leeds United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "336",
+      "name": "Wilfried Gnonto",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "337",
+      "name": "Daniel James",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "338",
+      "name": "Patrick Bamford",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "339",
+      "name": "Joël Piroe",
+      "team": "Leeds United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "340",
+      "name": "Mateo Joseph",
+      "team": "Leeds United GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "341",
+      "name": "Pascal Struijk",
+      "team": "Leeds United FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "342",
+      "name": "Harry Gray",
+      "team": "Leeds United BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "343",
+      "name": "Team Badge",
+      "team": "Sunderland",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "344",
+      "name": "Anthony Patterson",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "345",
+      "name": "Trai Hume",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "346",
+      "name": "Dennis Cirkin",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "347",
+      "name": "Luke O’Nien",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "348",
+      "name": "Daniel Ballard",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "349",
+      "name": "Chris Rigg",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "350",
+      "name": "Dan Neil",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "351",
+      "name": "Alan Browne",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "352",
+      "name": "Jobe Bellingham",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "353",
+      "name": "Enzo Le Fée",
+      "team": "Sunderland",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "354",
+      "name": "Romaine Mundle",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "355",
+      "name": "Patrick Roberts",
+      "team": "Sunderland",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "356",
+      "name": "Eliezer Mayenda",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "357",
+      "name": "Wilson Isidor",
+      "team": "Sunderland",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "358",
+      "name": "Jobe Bellingham",
+      "team": "Sunderland GN",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "359",
+      "name": "Wilson Isidor",
+      "team": "Sunderland FF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "360",
+      "name": "Chris Rigg",
+      "team": "Sunderland BB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "361",
+      "name": "William Saliba/Gabriel Magalhães",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "362",
+      "name": "Amadou Onana/Youri Tielemans",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "363",
+      "name": "Antoine Semenyo/Dango Ouattara",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "364",
+      "name": "Nathan Collins/Sepp van den Berg",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "365",
+      "name": "Kaoru Mitoma/Simon Adingra",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "366",
+      "name": "Ricardo Carvalho/John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "367",
+      "name": "Moisés Caicedo/Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "368",
+      "name": "Daichi Kamada/Adam Wharton",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "369",
+      "name": "James Tarkowski/Jarrad Branthwaite",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "370",
+      "name": "Enzo Le Fée/Patrick Roberts",
+      "team": "Sunderland",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "371",
+      "name": "Ryan Gravenberch/Alexis Mac Allister",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "372",
+      "name": "Phil Foden/Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "373",
+      "name": "Bruno Fernandes/Rasmus Højlund",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "374",
+      "name": "Bruno Guimarães/Joelinton",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "375",
+      "name": "Ola Aina/Callum Hudson-Odoi",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "376",
+      "name": "Brennan Johnson/Dejan Kulusevski",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "377",
+      "name": "Darren Anderton/Teddy Sheringham",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "378",
+      "name": "Gonçalo Guedes/Jørgen Strand Larsen",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "379",
+      "name": "Maxime Estève/Lucas Pires",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "380",
+      "name": "Joe Rodon/Ethan Ampadu",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Pro Partnership"
+    },
+    {
+      "n": "381",
+      "name": "Ian Wright",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "382",
+      "name": "Stiliyan Petrov",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "383",
+      "name": "Simon Francis",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "384",
+      "name": "Eric Cantona",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "385",
+      "name": "Christian Nørgaard",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "386",
+      "name": "Glenn Murray",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "387",
+      "name": "Frank Lampard",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "388",
+      "name": "Andrew Johnson",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "389",
+      "name": "Joleon Lescott",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "390",
+      "name": "Louis Saha",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "391",
+      "name": "Jamie Carragher",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "392",
+      "name": "Micah Richards",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "393",
+      "name": "Gary Neville",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "394",
+      "name": "Faustino Asprilla",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "395",
+      "name": "Stan Collymore",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "396",
+      "name": "Robbie Keane",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "397",
+      "name": "Mark Noble",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "398",
+      "name": "Kevin Doyle",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "399",
+      "name": "Aaron Lennon",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "400",
+      "name": "Jimmy Floyd Hasselbaink",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Retro Threads"
+    },
+    {
+      "n": "401",
+      "name": "Kai Havertz",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "402",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "403",
+      "name": "Dango Ouattara",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "404",
+      "name": "Mikkel Damsgaard",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "405",
+      "name": "Danny Welbeck",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "406",
+      "name": "Nicolas Jackson",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "407",
+      "name": "Eddie Nketiah",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "408",
+      "name": "Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "409",
+      "name": "Robbie Fowler",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "410",
+      "name": "Diogo Jota",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "411",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "412",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "413",
+      "name": "Wayne Rooney",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "414",
+      "name": "Anthony Gordon",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "415",
+      "name": "Taiwo Awoniyi",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "416",
+      "name": "Brennan Johnson",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "417",
+      "name": "Mohammed Kudus",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "418",
+      "name": "Jørgen Strand Larsen",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "419",
+      "name": "Josh Brownhill",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "420",
+      "name": "Patrick Bamford",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Pro Precision"
+    },
+    {
+      "n": "421",
+      "name": "Declan Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "422",
+      "name": "Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "423",
+      "name": "Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "424",
+      "name": "Yoane Wissa",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "425",
+      "name": "Georginio Rutter",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "426",
+      "name": "Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "427",
+      "name": "Jean-Philippe Mateta",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "428",
+      "name": "Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "429",
+      "name": "Ibrahima Konaté",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "430",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "431",
+      "name": "Rodri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "432",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "433",
+      "name": "Sandro Tonali",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "434",
+      "name": "Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "435",
+      "name": "Ledley King",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "436",
+      "name": "Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "437",
+      "name": "Emerson Palmieri",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "438",
+      "name": "Hwang Hee-chan",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "439",
+      "name": "Hannibal",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "440",
+      "name": "Daniel James",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Beast Mode"
+    },
+    {
+      "n": "441",
+      "name": "Martin Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "442",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "443",
+      "name": "Kevin Schade",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "444",
+      "name": "Pedro Neto",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "445",
+      "name": "Jordan Pickford",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "446",
+      "name": "Cody Gakpo",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "447",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "448",
+      "name": "Amad",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "449",
+      "name": "Jacob Murphy",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "450",
+      "name": "James Maddison",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Headlines"
+    },
+    {
+      "n": "Declan",
+      "name": "Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "Rio",
+      "name": "Ngumoha",
+      "team": "Liverpool FC",
+      "rc": true,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "AC-AC",
+      "name": "Ashley Cole",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AE",
+      "name": "Anthony Elanga",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AG",
+      "name": "Anthony Gordon",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AGR",
+      "name": "Archie Gray",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AO",
+      "name": "André Onana",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AW",
+      "name": "Adam Wharton",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-AWB",
+      "name": "Aaron Wan-Bissaka",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-BF",
+      "name": "Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-BG",
+      "name": "Bruno Guimarães",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-BS",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-BSA",
+      "name": "Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-BZ",
+      "name": "Bobby Zamora",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CA",
+      "name": "César Azpilicueta",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CBR",
+      "name": "Conor Bradley",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CG",
+      "name": "Cody Gakpo",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CP",
+      "name": "Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CR",
+      "name": "Chris Richards",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CRI",
+      "name": "Chadi Riad",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CRO",
+      "name": "Cristian Romero",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-CW",
+      "name": "Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DC",
+      "name": "Diego Costa",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DD",
+      "name": "Diogo Dalot",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DJ",
+      "name": "Diogo Jota",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DK",
+      "name": "Dejan Kulusevski",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DMA",
+      "name": "Donyell Malen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DMU",
+      "name": "Danny Murphy",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DO",
+      "name": "Dango Ouattara",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DR",
+      "name": "Declan Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DRI",
+      "name": "David Raya",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DS",
+      "name": "David Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DSO",
+      "name": "Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-DU",
+      "name": "Destiny Udogie",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EAD",
+      "name": "Emmanuel Adebayor",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EE",
+      "name": "Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EF",
+      "name": "Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EFE",
+      "name": "Evan Ferguson",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EH",
+      "name": "Emile Heskey",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EHA",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EM",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EMR",
+      "name": "Emerson Palmieri",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EN",
+      "name": "Ethan Nwaneri",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-ES",
+      "name": "Estêvão",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-ESR",
+      "name": "Emile Smith Rowe",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EV",
+      "name": "Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-EVDS",
+      "name": "Edwin van der Sar",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-FC",
+      "name": "Fábio Carvalho",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-GB",
+      "name": "Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-GM",
+      "name": "Gabriel Martinelli",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-GN",
+      "name": "Gary Neville",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-GR",
+      "name": "Georginio Rutter",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-HB",
+      "name": "Harvey Barnes",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-HE",
+      "name": "Harvey Elliott",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-HM",
+      "name": "Harry Maguire",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-IM",
+      "name": "Illan Meslier",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-IN",
+      "name": "Iliman Ndiaye",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JAR",
+      "name": "John Arne Riise",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JBO",
+      "name": "Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JBU",
+      "name": "Jimmy Bullard",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JC",
+      "name": "Joe Cole",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JCT",
+      "name": "Jean-Clair Todibo",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JG",
+      "name": "Joško Gvardiol",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JGA",
+      "name": "James Garner",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JGZ",
+      "name": "Joe Gomez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JH",
+      "name": "Joe Hart",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JK",
+      "name": "Josh King",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JM",
+      "name": "James Maddison",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JMA",
+      "name": "Juan Mata",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JP",
+      "name": "João Pedro",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JPI",
+      "name": "Jordan Pickford",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JR",
+      "name": "Jacob Ramsey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JSL",
+      "name": "Jørgen Strand Larsen",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JSO",
+      "name": "John Stones",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JT",
+      "name": "John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-JZ",
+      "name": "Joshua Zirkzee",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-KA",
+      "name": "Kristoffer Ajer",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-KH",
+      "name": "Kai Havertz",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-KM",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-KS",
+      "name": "Kevin Schade",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LB",
+      "name": "Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LCO",
+      "name": "Levi Colwill",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LD",
+      "name": "Lewis Dunk",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LG",
+      "name": "Luis Guilherme",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LH",
+      "name": "Lewis Hall",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LK",
+      "name": "Ledley King",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LM",
+      "name": "Lewis Miley",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LO",
+      "name": "Lewis Orford",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LSA",
+      "name": "Louis Saha",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LT",
+      "name": "Leandro Trossard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-LY",
+      "name": "Leny Yoro",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MA",
+      "name": "Manuel Akanji",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MB",
+      "name": "Michael Ballack",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MC",
+      "name": "Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MCA",
+      "name": "Matty Cash",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MG",
+      "name": "Marc Guéhi",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MK",
+      "name": "Mohammed Kudus",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MKI",
+      "name": "Maximilian Kilman",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MKO",
+      "name": "Mateo Kovačić",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-ML",
+      "name": "Maxence Lacroix",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MLS",
+      "name": "Myles Lewis-Skelly",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MM",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MME",
+      "name": "Mikel Merino",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MMO",
+      "name": "Mason Mount",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MN",
+      "name": "Matheus Nunes",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MO",
+      "name": "Matt O’Riley",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MOD",
+      "name": "Martin Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MRI",
+      "name": "Micah Richards",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MS",
+      "name": "Matz Sels",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MSA",
+      "name": "William Saliba",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-MU",
+      "name": "Manuel Ugarte",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NA",
+      "name": "Nicolas Anelka",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NC",
+      "name": "Nathan Collins",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NJ",
+      "name": "Nicolas Jackson",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NM",
+      "name": "Noni Madueke",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NP",
+      "name": "Nick Pope",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NV",
+      "name": "Nemanja Vidić",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-NW",
+      "name": "Neco Williams",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-OB",
+      "name": "Oscar Bobb",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-OW",
+      "name": "Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-PE",
+      "name": "Patrice Evra",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-PF",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-PN",
+      "name": "Phil Neville",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-PS",
+      "name": "Paul Scholes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RD",
+      "name": "Rúben Dias",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RG",
+      "name": "Ryan Gravenberch",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RJ",
+      "name": "Reece James",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RL",
+      "name": "Rico Lewis",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RM",
+      "name": "Riyad Mahrez",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-RNG",
+      "name": "Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SA",
+      "name": "Simon Adingra",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SAV",
+      "name": "Sávio",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SB",
+      "name": "Sven Botman",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SG",
+      "name": "Shay Given",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SHM",
+      "name": "Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SL",
+      "name": "Shea Lacey",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-SP",
+      "name": "Stiliyan Petrov",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-ST",
+      "name": "Sandro Tonali",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TA",
+      "name": "Tyler Adams",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TAD",
+      "name": "Tosin Adarabioyo",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TAF",
+      "name": "Tore André Flo",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TC",
+      "name": "Trevoh Chalobah",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TDO",
+      "name": "Tommy Doyle",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TL",
+      "name": "Tino Livramento",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-TS",
+      "name": "Teddy Sheringham",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-VR",
+      "name": "Vitor Reis",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-VVD",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-WL",
+      "name": "Will Lankshear",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YA",
+      "name": "Yasin Ayari",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YAK",
+      "name": "Yakubu",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YB",
+      "name": "Yossi Benayoun",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YBO",
+      "name": "Yannick Bolasie",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YM",
+      "name": "Yankuba Minteh",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YMH",
+      "name": "Yang Min-hyeok",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-YY",
+      "name": "Yehor Yarmoliuk",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "AC-ZA",
+      "name": "Zach Abbott",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Base Autographs"
+    },
+    {
+      "n": "BMA-AG",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-BET",
+      "name": "Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-CW",
+      "name": "Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-DJ",
+      "name": "Daniel James",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-DR",
+      "name": "Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-DS",
+      "name": "Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-EF",
+      "name": "Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-EM",
+      "name": "Emerson Palmieri",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-EV",
+      "name": "Declan Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-GR",
+      "name": "Georginio Rutter",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-HA",
+      "name": "Hannibal",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-JT",
+      "name": "John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-LK",
+      "name": "Ledley King",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-RO",
+      "name": "Rodri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-ST",
+      "name": "Sandro Tonali",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BMA-VVD",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Beast Mode Autographs"
+    },
+    {
+      "n": "BEA-AS",
+      "name": "Alan Shearer",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-CD",
+      "name": "Clint Dempsey",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-CP",
+      "name": "Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-CW",
+      "name": "Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-EE",
+      "name": "Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-EH",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-FT",
+      "name": "Fernando Torres",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-MC",
+      "name": "Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-RN",
+      "name": "Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "BEA-SHM",
+      "name": "Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Edge Edition Autographs"
+    },
+    {
+      "n": "CKA-AC",
+      "name": "Andy Cole",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-BZ",
+      "name": "Bobby Zamora",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-CF",
+      "name": "Cesc Fàbregas",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-DD",
+      "name": "Didier Drogba",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-DM",
+      "name": "Danny Murphy",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-DS",
+      "name": "David Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-DY",
+      "name": "Dwight Yorke",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-GB",
+      "name": "Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-GZ",
+      "name": "Gianfranco Zola",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-JFH",
+      "name": "Jimmy Floyd Hasselbaink",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-JS",
+      "name": "Julián Speroni",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-LB",
+      "name": "Leighton Baines",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-NC",
+      "name": "Nathaniel Clyne",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-NV",
+      "name": "Nemanja Vidić",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-PI",
+      "name": "Paul Ince",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-RK",
+      "name": "Roy Keane",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-SA",
+      "name": "Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-SG",
+      "name": "Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-WR",
+      "name": "Wayne Rooney",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "CKA-XA",
+      "name": "Xabi Alonso",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome King Autographs"
+    },
+    {
+      "n": "RE-AG",
+      "name": "Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-AIS",
+      "name": "Alexander Isak",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-AR",
+      "name": "Antonee Robinson",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-AWB",
+      "name": "Aaron Wan-Bissaka",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-BET",
+      "name": "Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-BS",
+      "name": "Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-CB",
+      "name": "Conor Bradley",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-CG",
+      "name": "Cody Gakpo",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-CR",
+      "name": "Chris Richards",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-CRO",
+      "name": "Cristian Romero",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-CS",
+      "name": "Crysencio Summerville",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-DD",
+      "name": "Didier Drogba",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-DDA",
+      "name": "Diogo Dalot",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-DJ",
+      "name": "Diogo Jota",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-DN",
+      "name": "Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-ED",
+      "name": "Ederson",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EE",
+      "name": "Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EF",
+      "name": "Enzo Fernández",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EH",
+      "name": "Sávio",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EM",
+      "name": "Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EME",
+      "name": "Emerson Palmieri",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-ESR",
+      "name": "Emile Smith Rowe",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-EV",
+      "name": "Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-GRO",
+      "name": "Guido Rodríguez",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-HC",
+      "name": "Hernán Crespo",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-HE",
+      "name": "Harvey Elliott",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-HK",
+      "name": "Harry Kewell",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-HMC",
+      "name": "Harrison Murray-Campbell",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-JD",
+      "name": "Jérémy Doku",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-JGR",
+      "name": "Jack Grealish",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-JST",
+      "name": "John Stones",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-JT",
+      "name": "John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-KA",
+      "name": "Kristoffer Ajer",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-KMA",
+      "name": "Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LC",
+      "name": "Levi Colwill",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LD",
+      "name": "Lewis Dunk",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LH",
+      "name": "Lewis Hall",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LM",
+      "name": "Lewis Miley",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LO",
+      "name": "Lewis Orford",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-LS",
+      "name": "Luis Suárez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MC",
+      "name": "Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MG",
+      "name": "Malo Gusto",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MKI",
+      "name": "Maximilian Kilman",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MM",
+      "name": "Mikey Moore",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MS",
+      "name": "Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-MU",
+      "name": "Manuel Ugarte",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-NA",
+      "name": "Nathan Aké",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-NC",
+      "name": "Nathan Collins",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-NF",
+      "name": "Niclas Füllkrug",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-NJ",
+      "name": "Nicolas Jackson",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-PF",
+      "name": "Phil Foden",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-PI",
+      "name": "Paul Ince",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-RD",
+      "name": "Rúben Dias",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-RH",
+      "name": "Rasmus Højlund",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-SA",
+      "name": "Simon Adingra",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-SAV",
+      "name": "Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-SHM",
+      "name": "Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-TL",
+      "name": "Tino Livramento",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-VVD",
+      "name": "Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "RE-ZI",
+      "name": "Zlatan Ibrahimović",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Relics"
+    },
+    {
+      "n": "BGB",
+      "name": "1 Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Big Game Baller Limited Edition"
+    },
+    {
+      "n": "BGB",
+      "name": "2 Luis Díaz",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Big Game Baller Limited Edition"
+    },
+    {
+      "n": "BGB",
+      "name": "3 Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Big Game Baller Limited Edition"
+    },
+    {
+      "n": "BE",
+      "name": "1 Ethan Nwaneri",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "2 Kai Havertz",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "3 Thierry Henry",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "4 Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "5 Donyell Malen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "6 Dion Dublin",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "7 Justin Kluivert",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "8 Yoane Wissa",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "9 Bryan Mbeumo",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "10 Matt O’Riley",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "11 Danny Welbeck",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "12 Kendry Páez",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "13 Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "14 Eden Hazard",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "15 Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "16 Eddie Nketiah",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "17 Jordan Pickford",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "18 Dwight McNeil",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "19 Antonee Robinson",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "20 Clint Dempsey",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "21 Andreas Pereira",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "22 Fernando Torres",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "23 Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "24 Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "25 Diogo Jota",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "26 Claudio Echeverri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "27 Carlos Tevez",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "28 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "29 Omar Marmoush",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "30 Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "31 Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "32 Ruud van Nistelrooy",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "33 Bruno Guimarães",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "34 Sandro Tonali",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "35 Alan Shearer",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "36 Morgan Gibbs-White",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "37 Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "38 Dejan Kulusevski",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "39 Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "40 Dimitar Berbatov",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "41 Joe Cole",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "42 Luis Guilherme",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "43 André",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "44 Paul Ince",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "45 Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "46 Josh Brownhill",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "47 Marcus Edwards",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "48 Wilfried Gnonto",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "49 Daniel James",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "BE",
+      "name": "50 Jimmy Floyd Hasselbaink",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Black Edge Edition"
+    },
+    {
+      "n": "CK",
+      "name": "1 Cesc Fàbregas",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "2 Dwight Yorke",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "3 Adam Smith",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "4 Christian Nørgaard",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "5 Lewis Dunk",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "6 Gianfranco Zola",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "7 Didier Drogba",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "8 Nathaniel Clyne",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "9 Séamus Coleman",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "10 Clint Dempsey",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "11 Xabi Alonso",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "12 Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "13 David Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "14 Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "15 Nemanja Vidić",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "16 Andy Cole",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "17 Roy Keane",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "18 Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "19 Bobby Zamora",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "CK",
+      "name": "20 Paul Ince",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Chrome King"
+    },
+    {
+      "n": "LE",
+      "name": "1 David Raya",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "2 Youri Tielemans",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "3 Luis Sinisterra",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "4 Fábio Carvalho",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "5 Pervis Estupiñán",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "6 Pedro Neto",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "7 Jean-Philippe Mateta",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "8 James Tarkowski",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "9 Duncan Ferguson",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "10 Paul Scholes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "11 Alisson Becker",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "12 Bernardo Silva",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "13 Leny Yoro",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "14 Lewis Hall",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "15 Elliot Anderson",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "16 Micky van de Ven",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "17 Aaron Wan-Bissaka",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "18 Rayan Aït-Nouri",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "19 Connor Roberts",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "LE",
+      "name": "20 Brenden Aaronson",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Classic Limited Edition"
+    },
+    {
+      "n": "DR",
+      "name": "1 Julio Soler",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "2 Stefanos Tzimas",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "3 Kendry Páez",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "4 Estêvão",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "5 Romain Esse",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "6 Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "7 Claudio Echeverri",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "8 Reigan Heskey",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "9 Sékou Koné",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "DR",
+      "name": "10 Shea Lacey",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Diamond Rookies"
+    },
+    {
+      "n": "FF",
+      "name": "1 Jordan Pickford",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "2 Tariq Lamptey",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "3 Leighton Baines",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "4 Virgil van Dijk",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "5 Maxime Estève",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "6 Marc Guéhi",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "7 Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "8 Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "9 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "10 Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "11 Yoane Wissa",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "12 Tyler Adams",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "13 Michael Ballack",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "14 Alexander Isak",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "15 Nemanja Vidić",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "16 Amad",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "17 Yankuba Minteh",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "18 Emile Heskey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "19 Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "20 Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "21 Anthony Elanga",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "22 Nélson Semedo",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "23 Emiliano Martínez",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "FF",
+      "name": "24 Reece James",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Festive Freeze"
+    },
+    {
+      "n": "Martin",
+      "name": "Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Globaller Limited Edition"
+    },
+    {
+      "n": "Cole",
+      "name": "Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Globaller Limited Edition"
+    },
+    {
+      "n": "Alexis",
+      "name": "Mac Allister",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Globaller Limited Edition"
+    },
+    {
+      "n": "GM",
+      "name": "1 Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Goal Machine Limited Edition"
+    },
+    {
+      "n": "GM",
+      "name": "2 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Goal Machine Limited Edition"
+    },
+    {
+      "n": "GM",
+      "name": "3 Chris Wood",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Goal Machine Limited Edition"
+    },
+    {
+      "n": "GL",
+      "name": "1 Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "2 Ollie Watkins",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "3 Evanilson",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "4 Bryan Mbeumo",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "5 Kaoru Mitoma",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "6 Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "7 Eden Hazard",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "8 Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "9 Iliman Ndiaye",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "10 Amad",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "11 Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "12 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "13 Alejandro Garnacho",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "14 Alexander Isak",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "15 Morgan Gibbs-White",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "16 Son Heung-Min",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "17 Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "18 Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "19 Josh Brownhill",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GL",
+      "name": "20 Ao Tanaka",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Gold Lion"
+    },
+    {
+      "n": "GB",
+      "name": "1 Thierry Henry",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "2 Didier Drogba",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "3 Michael Owen",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "4 Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "5 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "6 Andy Cole",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "GB",
+      "name": "7 Alan Shearer",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Golden Boot Limited Edition"
+    },
+    {
+      "n": "HV",
+      "name": "1 Bukayo Saka",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "2 Donyell Malen",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "3 Antoine Semenyo",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "4 Yoane Wissa",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "5 Kaoru Mitoma",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "6 Cole Palmer",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "7 Romain Esse",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "8 Iliman Ndiaye",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "9 Louis Saha",
+      "team": "Fulham",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "10 Luis Díaz",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "11 Omar Marmoush",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "12 Shea Lacey",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "13 Wayne Rooney",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "14 Anthony Gordon",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "15 Callum Hudson-Odoi",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "16 Brennan Johnson",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "17 Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "18 Matheus Cunha",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "19 Jaidon Anthony",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HV",
+      "name": "20 Ao Tanaka",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Heat Vision"
+    },
+    {
+      "n": "HPA",
+      "name": "1 Martin Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "2 Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "3 Antoine Semenyo",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "4 Bryan Mbeumo",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "5 João Pedro",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "6 Estêvão",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "7 Didier Drogba",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "8 Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "9 Beto",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "10 Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "11 Rio Ngumoha",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "12 Yaya Touré",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "13 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "14 Bruno Fernandes",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "15 Zlatan Ibrahimović",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "16 Anthony Gordon",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "17 Morgan Gibbs-White",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "18 Marcus Edwards",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "19 Gareth Bale",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "HPA",
+      "name": "20 Jarrod Bowen",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Home Pitch Advantage"
+    },
+    {
+      "n": "PS",
+      "name": "1 Martin Ødegaard",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "2 Morgan Rogers",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "3 Tyler Adams",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "4 Bryan Mbeumo",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "5 João Pedro",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "6 Estêvão",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "7 Eberechi Eze",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "8 Dwight McNeil",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "9 Darwin Núñez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "10 Mohamed Salah",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "11 Luis Suárez",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "12 Erling Haaland",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "13 Amad",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "14 Alexander Isak",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "15 Anthony Elanga",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "16 Dominic Solanke",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "17 Mohammed Kudus",
+      "team": "West Ham United",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "18 João Gomes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "19 Luca Koleosho",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "PS",
+      "name": "20 Brenden Aaronson",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Perfect Storm"
+    },
+    {
+      "n": "HOF",
+      "name": "1 Frank Lampard",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "2 Steven Gerrard",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "3 Eric Cantona",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "4 Dennis Bergkamp",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "5 Sergio Agüero",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "6 Rio Ferdinand",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "7 Patrick Vieira",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "8 John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "HOF",
+      "name": "9 Roy Keane",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "PL Hall Of Fame Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "1 Declan Rice",
+      "team": "Arsenal",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "2 Jacob Ramsey",
+      "team": "Aston Villa",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "3 Justin Kluivert",
+      "team": "AFC Bournemouth",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "4 Gustavo Nunes",
+      "team": "Brentford",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "5 Stefanos Tzimas",
+      "team": "Brighton & Hove Albion",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "6 Estêvão",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "7 Marc Guéhi",
+      "team": "Crystal Palace",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "8 Jarrad Branthwaite",
+      "team": "Everton",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "9 John Terry",
+      "team": "Chelsea",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "10 Cody Gakpo",
+      "team": "Liverpool FC",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "11 Abdukodir Khusanov",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "12 Nico González",
+      "team": "Manchester City",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "13 Kobbie Mainoo",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "14 Eric Cantona",
+      "team": "Manchester United",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "15 Bruno Guimarães",
+      "team": "Newcastle United",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "16 Zach Abbott",
+      "team": "Nottingham Forest",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "17 Lucas Bergvall",
+      "team": "Tottenham Hotspur",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "18 Gonçalo Guedes",
+      "team": "Wolverhampton Wanderers",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "19 James Trafford",
+      "team": "Burnley FC",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    },
+    {
+      "n": "PP",
+      "name": "20 Joël Piroe",
+      "team": "Leeds United",
+      "rc": false,
+      "subset": "Premier Pull Ultra Limited Edition"
+    }
+  ]
+}

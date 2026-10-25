@@ -68,6 +68,7 @@ export default async function DexCardPage({
     rarity: card.rarity,
     finish: card.finish,
   };
+  const topps = game === "TOPPS_BASKETBALL" || game === "TOPPS_SOCCER";
   const rows: [string, string][] = [
     ...(card.nameJa !== card.nameEn
       ? ([
@@ -78,7 +79,10 @@ export default async function DexCardPage({
     [tx(prefs.locale, "系列", "Set"), setName],
     [tx(prefs.locale, "系列代碼", "Set code"), card.set.code],
     [tx(prefs.locale, "卡號", "Number"), card.collectorNumber],
-    [tx(prefs.locale, "版本", "Finish"), card.finish || tx(prefs.locale, "普通", "Normal")],
+    [
+      topps ? tx(prefs.locale, "球隊", "Team") : tx(prefs.locale, "版本", "Finish"),
+      card.finish || (topps ? tx(prefs.locale, "未有", "Unknown") : tx(prefs.locale, "普通", "Normal")),
+    ],
     [tx(prefs.locale, "罕貴", "Rarity"), card.rarity || tx(prefs.locale, "未有", "Unknown")],
     [tx(prefs.locale, "繪師", "Artist"), card.artist || tx(prefs.locale, "未有", "Unknown")],
     [tx(prefs.locale, "語言", "Language"), regionLabel(card.printRegion, prefs.locale)],

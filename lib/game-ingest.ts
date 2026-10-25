@@ -6,6 +6,7 @@ import { linkCatalogListings } from "./dex-link";
 import { fetchOfficialSet, listOfficialQueue, type OfficialQueueItem } from "./op-official";
 import { fetchOptcgSet, listOptcgQueue, type OptcgQueueItem } from "./optcg";
 import { loadRiftBulk, riftSet, type RiftQueueItem } from "./riftbound";
+import { toppsPrintingSet, toppsQueue, type ToppsGame } from "./topps";
 
 const CARD_CHUNK = 40;
 const SET_START_RESERVE_MS = 12_000;
@@ -15,7 +16,7 @@ const NAME_PAGE = 80;
 type WalkItem = {
   externalId: string;
   lang: "en" | "ja";
-  kind: OptcgQueueItem["kind"] | OfficialQueueItem["kind"] | RiftQueueItem["kind"];
+  kind: OptcgQueueItem["kind"] | OfficialQueueItem["kind"] | RiftQueueItem["kind"] | "topps";
   id: string;
   name: string;
   code: string;
@@ -42,6 +43,7 @@ export type GameIngestResult = {
 function storedSetId(item: WalkItem): string {
   if (item.kind === "official") return `op-jp:${item.id}`;
   if (item.kind === "rift") return `rb:${item.id}`;
+  if (item.kind === "topps") return `tb:${item.id}`;
   return `op-en:${item.code}`;
 }
 
@@ -111,7 +113,7 @@ async function upsertPrintings(game: DexGame, setId: string, printRegion: Catalo
       sourceImageUrl: card.sourceImageUrl || null,
       rarity: card.rarity,
       artist: card.artist,
-      finish: null as string | null,
+      finish: card.finish ?? null,
     };
     await prisma.catalogCard.upsert({
       where: { externalId: card.externalId },
@@ -122,6 +124,7 @@ async function upsertPrintings(game: DexGame, setId: string, printRegion: Catalo
 }
 
 async function fetchItem(item: WalkItem, riftCards: Map<string, CatalogPrinting[]> | null): Promise<CatalogPrintingSet | null> {
+  if (item.kind === "topps") return toppsPrintingSet(item.id);
   if (item.kind === "rift") {
     const queueItem: RiftQueueItem = { ...item, lang: "en", kind: "rift", releaseDate: item.releaseDate || "" };
     return riftSet(queueItem, riftCards?.get(item.id) || []);
@@ -188,7 +191,7 @@ export async function backfillOnePieceEnglish(deadlineMs: number) {
 }
 
 async function ingestWalk(args: {
-  game: Extract<DexGame, "ONE_PIECE" | "RIFTBOUND">;
+  game: Extract<DexGame, "ONE_PIECE" | "RIFTBOUND" | ToppsGame>;
   queue: WalkItem[];
   deadline: number;
   cursor: string | null;
@@ -339,6 +342,22 @@ export async function ingestRiftbound(opts?: {
     maxSets: opts?.maxSets ?? 4,
     gapMs: 0,
     riftCards: bulk.cardsBySet,
+    backfill: async () => {},
+  });
+}
+
+/** Names from committed `data/topps` JSON. No images and no third-party fetch. */
+export async function ingestTopps(
+  game: ToppsGame,
+  opts?: { deadlineMs?: number; cursor?: string | null; maxSets?: number },
+): Promise<GameIngestResult> {
+  return ingestWalk({
+    game,
+    queue: toppsQueue(game),
+    deadline: Date.now() + (opts?.deadlineMs ?? 45_000),
+    cursor: opts?.cursor ?? null,
+    maxSets: opts?.maxSets ?? 3,
+    gapMs: 0,
     backfill: async () => {},
   });
 }

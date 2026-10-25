@@ -8,6 +8,8 @@ const GAMES = [
   ["POKEMON", "寶可夢", "Pokémon"],
   ["ONE_PIECE", "海賊王", "One Piece"],
   ["RIFTBOUND", "Riftbound", "Riftbound"],
+  ["TOPPS_BASKETBALL", "Topps 籃球", "Topps Basketball"],
+  ["TOPPS_SOCCER", "Topps 足球", "Topps Soccer"],
   ["DEMO", "Demo", "Demo"],
 ] as const;
 
