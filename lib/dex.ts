@@ -395,8 +395,8 @@ export function catalogWhere(query: string, region: DexPrintRegion | null): Pris
 }
 
 /** Suggestion fetch. A pasted title still returns the card when rarity or the year is off. */
-export function catalogSuggestWhere(query: string): Prisma.CatalogCardWhereInput {
-  return whereForTokens(strongTokens(query), setPhraseKeys(query), null);
+export function catalogSuggestWhere(query: string, region: DexPrintRegion | null = null): Prisma.CatalogCardWhereInput {
+  return whereForTokens(strongTokens(query), setPhraseKeys(query), region);
 }
 
 function titleEn(value: string): string {
