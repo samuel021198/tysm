@@ -1,5 +1,5 @@
 import { listingTitleFromCatalog, titleCasePhrase } from "./card-title";
-import { numberKey, type DexPrintRegion } from "./dex";
+import { catalogCardMatches, numberKey, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
 export type CatalogSuggestCard = {
@@ -14,6 +14,7 @@ export type CatalogSuggestCard = {
   listingCount: number;
   setNameEn: string;
   setNameJa: string;
+  setCode: string;
   series: string | null;
   releaseDate: string | null;
 };
@@ -49,11 +50,12 @@ export function catalogSuggestion(card: CatalogSuggestCard, game = "POKEMON"): C
     id: card.id,
     title: listingTitleFromCatalog({
       releaseDate: card.releaseDate,
-      setName,
+      setCode: card.setCode,
+      printRegion: card.printRegion,
       collectorNumber: card.collectorNumber,
       numberKey: card.numberKey,
       cardName,
-      finish: card.finish,
+      rarity: card.rarity,
     }),
     game: catalogGameLabel(game),
     setName,
@@ -62,6 +64,23 @@ export function catalogSuggestion(card: CatalogSuggestCard, game = "POKEMON"): C
     language: catalogLanguage(card.printRegion),
     collectorNumber: card.collectorNumber,
     rarity: card.rarity,
+  };
+}
+
+function searchCard(card: CatalogSuggestCard): CatalogSearchCard {
+  return {
+    nameEn: card.nameEn,
+    nameJa: card.nameJa,
+    collectorNumber: card.collectorNumber,
+    numberKey: card.numberKey,
+    printRegion: card.printRegion,
+    rarity: card.rarity,
+    finish: card.finish,
+    setNameEn: card.setNameEn,
+    setNameJa: card.setNameJa,
+    setCode: card.setCode,
+    series: card.series,
+    releaseDate: card.releaseDate,
   };
 }
 
@@ -78,13 +97,16 @@ function band(card: CatalogSuggestCard, query: string): number {
   if (exact) return 4;
   const prefix = [nameEn, title, setEn].some((value) => value.startsWith(folded));
   if (prefix) return 3;
-  const includes = [title, nameEn, nameJa, setEn, setJa, foldSearch(card.series || "")].some((value) => value.includes(folded));
+  const includes = [title, nameEn, nameJa, setEn, setJa, foldSearch(card.series || ""), foldSearch(card.setCode), foldSearch(card.rarity || ""), foldSearch(card.finish || "")].some(
+    (value) => value.includes(folded),
+  );
   const year = query.match(/(?:19|20)\d{2}/)?.[0];
   const yearHit = Boolean(year && (card.releaseDate || "").startsWith(year));
   const key = numberKey(query);
   const numberHit = Boolean(key && card.numberKey === key);
   if (includes) return 2;
   if (yearHit || numberHit) return 1;
+  if (catalogCardMatches(searchCard(card), query)) return 1;
   return 0;
 }
 

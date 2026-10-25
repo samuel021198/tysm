@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     finish: true,
     imageUrl: true,
     game: true,
-    set: { select: { nameEn: true, nameJa: true, series: true, releaseDate: true } },
+    set: { select: { code: true, nameEn: true, nameJa: true, series: true, releaseDate: true } },
     _count: { select: { listings: true } },
   } as const;
   const orderBy = [{ listings: { _count: "desc" as const } }, { set: { releaseDate: "desc" as const } }];
@@ -42,6 +42,7 @@ export async function GET(request: Request) {
     listingCount: row._count.listings,
     setNameEn: row.set.nameEn,
     setNameJa: row.set.nameJa,
+    setCode: row.set.code,
     series: row.set.series,
     releaseDate: row.set.releaseDate,
     imageUrl: row.imageUrl,

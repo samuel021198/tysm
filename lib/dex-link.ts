@@ -8,12 +8,12 @@ const cardSelect = {
   nameJa: true,
   numberKey: true,
   collectorNumber: true,
-  finish: true,
+  rarity: true,
   printRegion: true,
   set: { select: { code: true, nameEn: true, nameJa: true, releaseDate: true } },
 } as const;
 
-type TitledCard = DexLinkCard & { collectorNumber: string; finish: string | null };
+type TitledCard = DexLinkCard & { collectorNumber: string; rarity: string | null };
 
 async function loadTitledCards(): Promise<TitledCard[]> {
   const cards = await prisma.catalogCard.findMany({ select: cardSelect });
@@ -23,7 +23,7 @@ async function loadTitledCards(): Promise<TitledCard[]> {
     nameJa: card.nameJa,
     numberKey: card.numberKey,
     collectorNumber: card.collectorNumber,
-    finish: card.finish,
+    rarity: card.rarity,
     printRegion: card.printRegion,
     releaseDate: card.set.releaseDate || "",
     setNameEn: card.set.nameEn,
@@ -85,11 +85,12 @@ export async function linkCatalogListings(opts?: { deadlineMs?: number }): Promi
     const title = linked
       ? listingTitleFromCatalog({
           releaseDate: linked.releaseDate,
-          setName: linked.setNameEn,
+          setCode: linked.setCode,
+          printRegion: linked.printRegion,
           collectorNumber: linked.collectorNumber,
           numberKey: linked.numberKey,
           cardName: linked.nameEn,
-          finish: linked.finish,
+          rarity: linked.rarity,
         })
       : "";
     const data: { catalogCardId?: string | null; title?: string } = {};

@@ -1,7 +1,9 @@
 import { readFileSync } from "node:fs";
 import {
   bilingualName,
+  catalogCardMatches,
   catalogNeedles,
+  catalogWhere,
   chooseDexSets,
   INGEST_POST_RESERVE_MS,
   ingestPastSoftDeadline,
@@ -12,10 +14,11 @@ import {
   pickCatalogCard,
   runIngestPostSteps,
   usableCollectorNumber,
+  type CatalogSearchCard,
   type DexLinkCard,
 } from "./dex";
 import { awsSigV4Authorization, sha256Hex } from "./r2";
-import { catalogDisplayTitle, finishLabel, listingTitleFromCatalog, resolveEnglishCardName } from "./card-title";
+import { catalogDisplayTitle, catalogTitleRewrite, finishLabel, legacyCatalogDisplayTitle, listingTitleFromCatalog, resolveEnglishCardName } from "./card-title";
 import {
   cardImageUrl,
   collectorNumber,
@@ -218,31 +221,56 @@ assert(psy?.finish === "Reverse Foil" && psy.collectorNumber === "88/110", "reve
 assert(
   catalogDisplayTitle({
     releaseDate: "2002-05-24",
-    setName: "Legendary Collection",
+    setCode: "lc",
+    printRegion: "WEST",
     collectorNumber: psy?.collectorNumber,
     cardName: psy?.nameEn,
-    finish: psy?.finish,
-  }) === "2002 Pokemon Legendary Collection #88 Psyduck - Reverse Foil",
-  "psyduck marketplace title",
+    rarity: psy?.rarity,
+  }) === "2002 Pokemon lc EN #88 Psyduck",
+  "psyduck title uses the set code and omits finish",
 );
 assert(
   catalogDisplayTitle({
     releaseDate: "2002-05-24",
-    setName: "LEGENDARY COLLECTION",
+    setCode: "lc",
+    printRegion: "WEST",
     collectorNumber: "088/110",
     cardName: "PSYDUCK",
-    finish: "REVERSE FOIL",
-  }) === "2002 Pokemon Legendary Collection #88 Psyduck - Reverse Foil",
-  "shouting names become title case",
+    rarity: "NONE",
+  }) === "2002 Pokemon lc EN #88 Psyduck",
+  "shouting names become title case and None rarity is omitted",
 );
 assert(
   catalogDisplayTitle({
     releaseDate: "2023-06-16",
+    setCode: "SV2a",
+    printRegion: "JP",
+    collectorNumber: "193/165",
+    cardName: "Mew ex",
+    rarity: "Super Rare",
+  }) === "2023 Pokemon SV2a JP #193 Mew ex Super Rare",
+  "japanese mew uses set code, JP, and rarity",
+);
+assert(
+  catalogDisplayTitle({
+    releaseDate: "2023-06-16",
+    setCode: "sv04.5",
+    printRegion: "WEST",
+    collectorNumber: "006/091",
+    cardName: "Charizard ex",
+    rarity: "Double rare",
+  }) === "2023 Pokemon sv04.5 EN #6 Charizard ex Double Rare",
+  "english print keeps the stored set code and title-cases rarity",
+);
+assert(
+  legacyCatalogDisplayTitle({
+    releaseDate: "2023-06-16",
     setName: "Pokémon Card 151",
-    collectorNumber: "001/165",
-    cardName: "Bulbasaur",
-  }) === "2023 Pokemon Pokemon Card 151 #1 Bulbasaur",
-  "accented pokemon in the set name is plain english",
+    collectorNumber: "193/165",
+    cardName: "Mew ex",
+    finish: "Holo",
+  }) === "2023 Pokemon Pokemon Card 151 #193 Mew ex - Holo",
+  "legacy title still matches the old stored string",
 );
 
 const mega = mapTcgdexCard(
@@ -260,12 +288,13 @@ assert(mega?.nameEn === "Mega Golisopod ex" && mega.nameJa === "メガグソク�
 assert(
   catalogDisplayTitle({
     releaseDate: "2026-07-31",
-    setName: "Storm Emeralda",
+    setCode: "M6",
+    printRegion: "JP",
     collectorNumber: mega?.collectorNumber,
     cardName: mega?.nameEn,
-    finish: mega?.finish,
-  }) === "2026 Pokemon Storm Emeralda #9 Mega Golisopod ex - Holo",
-  "japanese mega title",
+    rarity: "Double rare",
+  }) === "2026 Pokemon M6 JP #9 Mega Golisopod ex Double Rare",
+  "japanese mega title uses rarity not holo",
 );
 assert(resolveEnglishCardName("ヒートロトム", [479]) === "Heat Rotom", "rotom form prefix");
 assert(resolveEnglishCardName("リザードンex", [6]) === "Charizard ex", "suffix reattaches after the species");
@@ -275,21 +304,90 @@ assert(finishLabel({ normal: false, holo: true, reverse: true, firstEdition: tru
 assert(
   catalogDisplayTitle({
     releaseDate: "1999-01-09",
-    setName: "Base Set",
+    setCode: "base1",
+    printRegion: "WEST",
     collectorNumber: "4/102",
     cardName: "Charizard",
-    finish: null,
-  }) === "1999 Pokemon Base Set #4 Charizard",
-  "normal charizard omits finish",
+    rarity: null,
+  }) === "1999 Pokemon base1 EN #4 Charizard",
+  "missing rarity omits the rarity token",
+);
+const mewRewrite = catalogTitleRewrite({
+  releaseDate: "2023-06-16",
+  setName: "Pokemon Card 151",
+  setCode: "SV2a",
+  printRegion: "JP",
+  collectorNumber: "193/165",
+  cardName: "Mew ex",
+  finish: "Holo",
+  rarity: "Super Rare",
+});
+assert(mewRewrite.listingTitle === "2023 Pokemon SV2a JP #193 Mew ex Super Rare", "rewrite listing title uses the new format");
+assert(
+  mewRewrite.previousListingTitles.includes("2023 Pokemon Pokemon Card 151 #193 Mew ex - Holo"),
+  "rewrite recognizes the old listing title",
 );
 const longTitle = listingTitleFromCatalog({
   releaseDate: "2024-01-01",
-  setName: "Ancient Koraidon ex Starter Deck & Build Set Extra Words",
+  setCode: "sv04.5",
+  printRegion: "WEST",
   collectorNumber: "12",
-  cardName: "Koraidon ex",
-  finish: "Reverse Foil",
+  cardName: "Koraidon ex With A Very Long Marketplace Name Indeed Extra",
+  rarity: "Special Illustration Rare",
 });
-assert(longTitle.length <= 80 && longTitle.includes("Koraidon ex") && longTitle.endsWith("- Reverse Foil"), "listing title stays within 80");
+assert(longTitle.length <= 80 && longTitle.includes("EN") && longTitle.includes("Koraidon"), "listing title stays within 80 and keeps lang and name");
+assert(!longTitle.includes(" - "), "listing title has no finish dash");
+const trimmedCode = listingTitleFromCatalog(
+  {
+    releaseDate: "2024-01-01",
+    setCode: "sv04.5",
+    printRegion: "WEST",
+    collectorNumber: "12",
+    cardName: "Koraidon ex",
+    rarity: "Special Illustration Rare",
+  },
+  36,
+);
+assert(trimmedCode.length <= 36 && trimmedCode.includes("EN") && trimmedCode.includes("Koraidon ex"), "tight listing keeps the language tag and card name");
+assert(trimmedCode.includes("…") && !trimmedCode.includes("sv04.5"), "tight listing shortens the set code after rarity");
+const mewSearch: CatalogSearchCard = {
+  nameEn: "Mew ex",
+  nameJa: "ミュウex",
+  collectorNumber: "193/165",
+  numberKey: "193",
+  printRegion: "JP",
+  rarity: "Super Rare",
+  finish: "Holo",
+  setNameEn: "Pokemon Card 151",
+  setNameJa: "ポケモンカード151",
+  setCode: "SV2a",
+  series: "Scarlet & Violet",
+  releaseDate: "2023-06-16",
+};
+const fatesSearch: CatalogSearchCard = {
+  nameEn: "Charizard ex",
+  nameJa: "リザードンex",
+  collectorNumber: "006/091",
+  numberKey: "6",
+  printRegion: "WEST",
+  rarity: "Double Rare",
+  finish: "Holo",
+  setNameEn: "Paldean Fates",
+  setNameJa: "パルデアの運命",
+  setCode: "sv4.5",
+  series: "Scarlet & Violet",
+  releaseDate: "2024-01-26",
+};
+assert(catalogCardMatches(fatesSearch, "Paldean Fates"), "old set name still matches");
+assert(catalogCardMatches(fatesSearch, "Holo") && !catalogCardMatches(mewSearch, "Paldean Fates"), "finish matches and set name does not bleed");
+assert(catalogCardMatches(mewSearch, "SV2a") && catalogCardMatches(mewSearch, "Super Rare"), "set code and rarity match");
+assert(catalogCardMatches(mewSearch, "2023 Pokemon Pokemon Card 151 #193 Mew ex - Holo"), "old ebay-style title matches stored fields");
+assert(catalogCardMatches(mewSearch, "2023 Pokemon SV2a JP #193 Mew ex Super Rare"), "new title matches the same card");
+assert(catalogCardMatches(mewSearch, "JP") && !catalogCardMatches(mewSearch, "EN"), "language token follows print region");
+assert(JSON.stringify(catalogWhere("Holo", null)).includes("finish"), "dex search looks at finish");
+assert(JSON.stringify(catalogWhere("Super Rare", null)).includes("rarity"), "dex search looks at rarity");
+assert(JSON.stringify(catalogWhere("SV2a", null)).includes("code"), "dex search looks at set code");
+assert(JSON.stringify(catalogWhere("Paldean Fates", null)).includes("AND"), "multi-word dex search requires each token");
 assert(logoUrl("https://assets.tcgdex.net/en/sv/sv08/logo") === "https://assets.tcgdex.net/en/sv/sv08/logo.webp", "logo webp");
 
 const payload = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
@@ -333,6 +431,12 @@ const ingestRoute = readFileSync("app/api/internal/ingest-dex/route.ts", "utf8")
 const ingestSource = readFileSync("lib/dex-ingest.ts", "utf8");
 assert(/export const maxDuration = 300;/.test(ingestRoute), "ingest route maxDuration is 300");
 assert(/const INGEST_DEADLINE_MS = 240_000;/.test(ingestRoute) && /deadlineMs: INGEST_DEADLINE_MS/.test(ingestRoute), "soft deadline is 240s, under maxDuration");
+assert(
+  ingestRoute.includes("backfillCatalogTitles({ deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor })"),
+  "title backfill uses the soft deadline",
+);
+assert(ingestSource.includes("catalogTitleRewrite") && ingestSource.includes("updateMany"), "title backfill rewrites stored titles in batches");
+assert(ingestSource.includes("TITLE_BACKFILL_RESERVE_MS"), "title backfill stops before the soft deadline");
 assert(ingestSource.includes("link: (until) => linkCatalogListings({ deadlineMs: until })"), "linking is the post-step callback");
 assert(!ingestSource.includes("await linkCatalogListings("), "ingest does not await linking directly");
 

@@ -83,7 +83,7 @@ async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
       rarity: true,
       finish: true,
       game: true,
-      set: { select: { nameEn: true, nameJa: true, series: true, releaseDate: true } },
+      set: { select: { code: true, nameEn: true, nameJa: true, series: true, releaseDate: true } },
     },
   });
   if (!card) return { ...input, catalogCardId: null };
@@ -99,6 +99,7 @@ async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
     listingCount: 0,
     setNameEn: card.set.nameEn,
     setNameJa: card.set.nameJa,
+    setCode: card.set.code,
     series: card.set.series,
     releaseDate: card.set.releaseDate,
   };

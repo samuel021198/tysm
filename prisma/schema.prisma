@@ -261,7 +261,7 @@ model CatalogCard {
   sourceImageUrl  String?
   rarity          String?
   artist          String?
-  /// Marketplace finish for titles: Holo, Reverse Foil, First Edition, Promo. Null when the print is normal or unknown.
+  /// Finish kept for search (Holo, Reverse Foil). Display titles use rarity, not this.
   finish          String?
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt

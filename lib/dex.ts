@@ -220,23 +220,114 @@ export function catalogNeedles(query: string): string[] {
   return [...out].slice(0, 12);
 }
 
-export function catalogWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
+/** Words that appear in every generated title and should not be required on their own. */
+const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg"]);
+
+export type CatalogSearchCard = {
+  nameEn: string;
+  nameJa: string;
+  collectorNumber: string;
+  numberKey: string;
+  printRegion: DexPrintRegion;
+  rarity?: string | null;
+  finish?: string | null;
+  setNameEn: string;
+  setNameJa: string;
+  setCode: string;
+  series?: string | null;
+  releaseDate?: string | null;
+};
+
+/** Tokens of an old-style or new-style title. `Pokemon` / `Card` drop out when anything else is left. */
+export function catalogQueryTokens(query: string): string[] {
   const q = query.trim().slice(0, 80);
-  const regionFilter: Prisma.CatalogCardWhereInput = region ? { printRegion: region } : {};
-  if (!q) return regionFilter;
-  const or: Prisma.CatalogCardWhereInput[] = [];
-  for (const needle of catalogNeedles(q)) {
-    or.push({ nameEn: { contains: needle, mode: "insensitive" } });
-    or.push({ nameJa: { contains: needle, mode: "insensitive" } });
+  if (!q) return [];
+  const raw = q.match(/[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+(?:\.[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+)*/g) || [];
+  const usable = raw.filter((token) => token.length >= 2 || /^\d$/.test(token) || /[\u3040-\u30ff\u3400-\u9fff]/.test(token));
+  const kept = usable.filter((token) => !TITLE_STOP.has(foldSearch(token)));
+  return (kept.length ? kept : usable).slice(0, 12);
+}
+
+function tokenRegion(token: string): DexPrintRegion | null {
+  const folded = foldSearch(token);
+  if (folded === "jp" || folded === "ja" || folded === "japanese" || token === "日文") return "JP";
+  if (folded === "en" || folded === "english" || folded === "west" || token === "英文") return "WEST";
+  return null;
+}
+
+function fieldHas(hay: string | null | undefined, needle: string): boolean {
+  if (!hay || !needle) return false;
+  return foldSearch(hay).includes(foldSearch(needle));
+}
+
+function tokenHitsCard(card: CatalogSearchCard, token: string): boolean {
+  const region = tokenRegion(token);
+  if (region) return card.printRegion === region;
+  if (/^(19|20)\d{2}$/.test(token)) {
+    return (card.releaseDate || "").startsWith(token) || card.numberKey === token || fieldHas(card.collectorNumber, token);
   }
-  or.push({ collectorNumber: { contains: q, mode: "insensitive" } });
-  or.push({ set: { nameEn: { contains: q, mode: "insensitive" } } });
-  or.push({ set: { nameJa: { contains: q, mode: "insensitive" } } });
-  if (/[a-z]/i.test(q)) or.push({ set: { code: { contains: q, mode: "insensitive" } } });
-  if (/[a-z]/i.test(q) && /\d/.test(q)) or.push({ externalId: { contains: q, mode: "insensitive" } });
-  const key = numberKey(q);
-  if (key) or.push({ numberKey: key });
-  return { AND: [regionFilter, { OR: or }] };
+  if (/^\d+$/.test(token)) {
+    const key = String(Number(token));
+    return (
+      card.numberKey === key ||
+      fieldHas(card.collectorNumber, token) ||
+      fieldHas(card.setNameEn, token) ||
+      fieldHas(card.setNameJa, token) ||
+      fieldHas(card.setCode, token)
+    );
+  }
+  const fields = [card.nameEn, card.nameJa, card.setNameEn, card.setNameJa, card.series || "", card.setCode, card.rarity || "", card.finish || ""];
+  return catalogNeedles(token).some((needle) => fields.some((field) => fieldHas(field, needle)));
+}
+
+/** True when every meaningful token hits a stored field. Display title text is not required. */
+export function catalogCardMatches(card: CatalogSearchCard, query: string): boolean {
+  const tokens = catalogQueryTokens(query);
+  if (!tokens.length) return true;
+  return tokens.every((token) => tokenHitsCard(card, token));
+}
+
+function contains(needle: string): Prisma.StringFilter {
+  return { contains: needle, mode: "insensitive" };
+}
+
+function tokenWhere(token: string): Prisma.CatalogCardWhereInput {
+  const region = tokenRegion(token);
+  if (region) return { printRegion: region };
+  if (/^(19|20)\d{2}$/.test(token)) {
+    return {
+      OR: [{ set: { releaseDate: { startsWith: token } } }, { numberKey: token }, { collectorNumber: contains(token) }],
+    };
+  }
+  if (/^\d+$/.test(token)) {
+    const key = String(Number(token));
+    return {
+      OR: [
+        { numberKey: key },
+        { collectorNumber: contains(token) },
+        { set: { nameEn: contains(token) } },
+        { set: { nameJa: contains(token) } },
+        { set: { code: contains(token) } },
+      ],
+    };
+  }
+  const or: Prisma.CatalogCardWhereInput[] = [];
+  for (const needle of catalogNeedles(token)) {
+    const has = contains(needle);
+    or.push({ nameEn: has }, { nameJa: has }, { rarity: has }, { finish: has });
+    or.push({ set: { nameEn: has } }, { set: { nameJa: has } }, { set: { series: has } }, { set: { code: has } });
+    if (/[a-z]/i.test(needle) && /\d/.test(needle)) or.push({ externalId: has });
+  }
+  return { OR: or };
+}
+
+export function catalogWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
+  const tokens = catalogQueryTokens(query);
+  const parts: Prisma.CatalogCardWhereInput[] = [];
+  if (region) parts.push({ printRegion: region });
+  if (!tokens.length) return parts[0] || {};
+  parts.push(...tokens.map((token) => tokenWhere(token)));
+  return parts.length === 1 ? parts[0]! : { AND: parts };
 }
 
 function titleEn(value: string): string {

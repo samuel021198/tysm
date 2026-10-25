@@ -19,10 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!card) return { title: "圖鑑" };
   const title = catalogDisplayTitle({
     releaseDate: card.set.releaseDate,
-    setName: card.set.nameEn,
+    setCode: card.set.code,
+    printRegion: card.printRegion,
     collectorNumber: card.collectorNumber,
     cardName: card.nameEn,
-    finish: card.finish,
+    rarity: card.rarity,
   });
   return { title, description: title };
 }
@@ -54,10 +55,11 @@ export default async function DexCardPage({
   const sales = sp.tab === "sales";
   const title = catalogDisplayTitle({
     releaseDate: card.set.releaseDate,
-    setName: card.set.nameEn,
+    setCode: card.set.code,
+    printRegion: card.printRegion,
     collectorNumber: card.collectorNumber,
     cardName: card.nameEn,
-    finish: card.finish,
+    rarity: card.rarity,
   });
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const rows: [string, string][] = [

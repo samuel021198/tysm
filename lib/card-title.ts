@@ -41,6 +41,18 @@ export type VariantFlags = {
 
 export type CatalogTitleInput = {
   releaseDate?: string | null;
+  /** Stored set code / TCGdex set id, kept as printed (SV2a, sv04.5). */
+  setCode?: string | null;
+  /** JP or WEST (WEST prints as EN). Other values omit the tag. */
+  printRegion?: string | null;
+  collectorNumber?: string | null;
+  numberKey?: string | null;
+  cardName?: string | null;
+  rarity?: string | null;
+};
+
+export type LegacyCatalogTitleInput = {
+  releaseDate?: string | null;
   setName?: string | null;
   collectorNumber?: string | null;
   numberKey?: string | null;
@@ -187,8 +199,81 @@ export function variantFlagsOf(value: unknown): VariantFlags | null {
   };
 }
 
-/** `{year} Pokemon {Set Name} #{number} {Card Name} - {Finish}` */
+function setCodeOf(value: string | null | undefined): string {
+  return (value || "").replace(/\s+/g, " ").trim();
+}
+
+/** JP for Japanese prints, EN for Western. Anything else is omitted. */
+export function titleLanguageTag(region: string | null | undefined): "JP" | "EN" | "" {
+  if (region === "JP") return "JP";
+  if (region === "WEST" || region === "EN") return "EN";
+  return "";
+}
+
+/** Rarity in Title Case. Null, blank, and "None" drop out. */
+export function rarityTitle(value: string | null | undefined): string {
+  const clean = (value || "").replace(/\s+/g, " ").trim();
+  if (!clean || /^none$/i.test(clean)) return "";
+  return titleCasePhrase(clean.toLowerCase());
+}
+
+/** `{year} Pokemon {setCode} {JP|EN} #{number} {Card Name} {Rarity}` */
 export function catalogDisplayTitle(input: CatalogTitleInput): string {
+  const year = releaseYear(input.releaseDate);
+  const code = setCodeOf(input.setCode);
+  const lang = titleLanguageTag(input.printRegion);
+  const number = titleNumber(input.collectorNumber, input.numberKey);
+  const cardName = titleCasePhrase(input.cardName || "");
+  const rarity = rarityTitle(input.rarity);
+  const showPokemon = Boolean(year || code || lang || number || cardName || rarity);
+  const parts = [year, showPokemon ? "Pokemon" : "", code, lang, number ? `#${number}` : "", cardName, rarity].filter(Boolean);
+  return parts.join(" ").replace(/\s+/g, " ").trim();
+}
+
+function joinTitle(parts: string[]): string {
+  return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Listing cap is 80.
+ * Drop rarity first, then shorten the set code, and only then ellipsize the card name.
+ * The language tag stays intact.
+ */
+export function listingTitleFromCatalog(input: CatalogTitleInput, max = 80): string {
+  const full = catalogDisplayTitle(input);
+  if (full.length <= max) return full;
+  const year = releaseYear(input.releaseDate);
+  const code = setCodeOf(input.setCode);
+  const lang = titleLanguageTag(input.printRegion);
+  const number = titleNumber(input.collectorNumber, input.numberKey);
+  const cardName = titleCasePhrase(input.cardName || "");
+  const num = number ? `#${number}` : "";
+  const head = joinTitle([year, "Pokemon"]);
+  const named = joinTitle([lang, num, cardName]);
+  const withoutRarity = joinTitle([head, code, named]);
+  if (withoutRarity.length <= max && withoutRarity.length >= 2) return withoutRarity;
+  if (head && named) {
+    const codeRoom = max - head.length - named.length - 2;
+    if (code && codeRoom >= 1) {
+      const cut = code.length > codeRoom ? `${code.slice(0, Math.max(1, codeRoom - 1)).trimEnd()}…` : code;
+      const built = joinTitle([head, cut, named]);
+      if (built.length <= max && built.length >= 2) return built;
+    }
+    const droppedCode = joinTitle([head, named]);
+    if (droppedCode.length <= max && droppedCode.length >= 2) return droppedCode;
+  }
+  const prefix = joinTitle([head, lang, num]);
+  const nameRoom = max - prefix.length - 1;
+  if (prefix && cardName && nameRoom >= 2) {
+    const cut = cardName.length > nameRoom ? `${cardName.slice(0, Math.max(1, nameRoom - 1)).trimEnd()}…` : cardName;
+    const built = joinTitle([prefix, cut]);
+    if (built.length <= max && built.length >= 2) return built;
+  }
+  return full.slice(0, max).trim();
+}
+
+/** Previous display formula, so a backfill can recognize titles already copied onto listings. */
+export function legacyCatalogDisplayTitle(input: LegacyCatalogTitleInput): string {
   const year = releaseYear(input.releaseDate);
   const setName = titleCasePhrase(input.setName || "");
   const number = titleNumber(input.collectorNumber, input.numberKey);
@@ -200,9 +285,9 @@ export function catalogDisplayTitle(input: CatalogTitleInput): string {
   return title;
 }
 
-/** Listing titles are capped at 80. Shrink the set name before the card name and finish. */
-export function listingTitleFromCatalog(input: CatalogTitleInput, max = 80): string {
-  const full = catalogDisplayTitle(input);
+/** Previous 80-char listing formula. Shrinks the set name, then keeps ` - {Finish}`. */
+export function legacyListingTitleFromCatalog(input: LegacyCatalogTitleInput, max = 80): string {
+  const full = legacyCatalogDisplayTitle(input);
   if (full.length <= max) return full;
   const year = releaseYear(input.releaseDate);
   const setName = titleCasePhrase(input.setName || "");
@@ -218,4 +303,26 @@ export function listingTitleFromCatalog(input: CatalogTitleInput, max = 80): str
     if (built.length <= max && built.length >= 2) return built;
   }
   return full.slice(0, max).trim();
+}
+
+export type CatalogTitleRewrite = {
+  listingTitle: string;
+  collectionTitle: string;
+  previousListingTitles: string[];
+  previousCollectionTitles: string[];
+};
+
+/** New titles, plus the old strings a stored listing or collection row may still have. */
+export function catalogTitleRewrite(input: CatalogTitleInput & LegacyCatalogTitleInput): CatalogTitleRewrite {
+  const listingTitle = listingTitleFromCatalog(input);
+  const collectionTitle = catalogDisplayTitle(input).slice(0, 120);
+  const legacyFull = legacyCatalogDisplayTitle(input);
+  const legacyListing = legacyListingTitleFromCatalog(input);
+  const previous = (titles: string[], next: string) => [...new Set(titles.filter((title) => title.length >= 2 && title !== next))];
+  return {
+    listingTitle,
+    collectionTitle,
+    previousListingTitles: listingTitle.length >= 2 ? previous([legacyFull, legacyListing], listingTitle) : [],
+    previousCollectionTitles: collectionTitle.length >= 2 ? previous([legacyFull, legacyFull.slice(0, 120)], collectionTitle) : [],
+  };
 }

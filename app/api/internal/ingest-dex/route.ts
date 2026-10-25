@@ -1,5 +1,5 @@
 import { authorizedBearer } from "@/lib/bootstrap";
-import { ingestDex } from "@/lib/dex-ingest";
+import { backfillCatalogTitles, ingestDex } from "@/lib/dex-ingest";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -39,6 +39,21 @@ function readLang(value: unknown): "en" | "ja" | "all" | "invalid" {
   return "invalid";
 }
 
+function readBackfill(value: unknown): boolean | "invalid" {
+  if (value == null || value === "" || value === false || value === "false" || value === 0) return false;
+  if (value === true || value === "true" || value === 1) return true;
+  return "invalid";
+}
+
+function readIdCursor(value: unknown): string | null | "invalid" {
+  if (value == null || value === "") return null;
+  if (typeof value !== "string") return "invalid";
+  const cursor = value.trim();
+  if (!cursor) return null;
+  if (!/^[A-Za-z0-9_-]{8,40}$/.test(cursor)) return "invalid";
+  return cursor;
+}
+
 async function readOptions(request: Request) {
   const url = new URL(request.url);
   let body: Record<string, unknown> = {};
@@ -54,13 +69,20 @@ async function readOptions(request: Request) {
     body = parsed as Record<string, unknown>;
   }
   const pick = (key: string) => (Object.prototype.hasOwnProperty.call(body, key) ? body[key] : url.searchParams.get(key));
+  const backfillTitles = readBackfill(pick("backfillTitles"));
+  if (backfillTitles === "invalid") return invalid("invalid_backfill");
+  if (backfillTitles) {
+    const cursor = readIdCursor(pick("cursor"));
+    if (cursor === "invalid") return invalid("invalid_cursor");
+    return { backfillTitles: true as const, cursor };
+  }
   const cursor = readCursor(pick("cursor"));
   if (cursor === "invalid") return invalid("invalid_cursor");
   const sets = readSets(pick("sets"));
   if (sets === "invalid") return invalid("invalid_sets");
   const lang = readLang(pick("lang"));
   if (lang === "invalid") return invalid("invalid_lang");
-  return { cursor, maxSets: sets, langs: lang === "all" ? undefined : [lang] };
+  return { backfillTitles: false as const, cursor, maxSets: sets, langs: lang === "all" ? undefined : [lang] };
 }
 
 export async function POST(request: Request) {
@@ -72,7 +94,11 @@ export async function POST(request: Request) {
   const options = await readOptions(request);
   if (options instanceof Response) return options;
   try {
-    const result = await ingestDex({ deadlineMs: INGEST_DEADLINE_MS, ...options });
+    if (options.backfillTitles) {
+      const result = await backfillCatalogTitles({ deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor });
+      return Response.json({ ok: true, mode: "backfillTitles", ...result });
+    }
+    const result = await ingestDex({ deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor, maxSets: options.maxSets, langs: options.langs });
     return Response.json({ ok: true, ...result });
   } catch (error) {
     console.error("dex ingest failed", safeMessage(error));

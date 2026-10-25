@@ -1,4 +1,4 @@
-import { resolveEnglishCardName, resolveEnglishSetName } from "./card-title";
+import { catalogTitleRewrite, resolveEnglishCardName, resolveEnglishSetName } from "./card-title";
 import { prisma } from "./db";
 import { DEX_PLACEHOLDER, INGEST_POST_RESERVE_MS, ingestPastSoftDeadline, runIngestPostSteps } from "./dex";
 import { linkCatalogListings } from "./dex-link";
@@ -20,6 +20,8 @@ const DEFAULT_MAX_SETS = 4;
 const CARD_CHUNK = 24;
 const SET_START_RESERVE_MS = 12_000;
 const CHUNK_RESERVE_MS = 6_000;
+const TITLE_PAGE = 100;
+const TITLE_BACKFILL_RESERVE_MS = 2_000;
 
 export type IngestCounts = {
   sets: number;
@@ -248,6 +250,80 @@ async function upsertHydratedCards(
     });
     if (!mirrored && card.sourceImageUrl && r2) pending.push({ externalId: card.externalId, source: card.sourceImageUrl });
   }
+}
+
+export type BackfillTitlesResult = {
+  done: boolean;
+  /** Last catalog card id written. Pass it back as `cursor`. Null when the walk is finished. */
+  cursor: string | null;
+  scanned: number;
+  listings: number;
+  collectionItems: number;
+};
+
+/**
+ * Recompute listing and collection titles from stored card + set fields.
+ * Does not call TCGdex. Only replaces a title that still equals the previous generated string.
+ * Stops before `deadlineMs` so the route can return JSON. Call again with `cursor` until `done`.
+ */
+export async function backfillCatalogTitles(opts?: { deadlineMs?: number; cursor?: string | null }): Promise<BackfillTitlesResult> {
+  const deadline = Date.now() + (opts?.deadlineMs ?? 45_000);
+  let cursor = opts?.cursor?.trim() || null;
+  let scanned = 0;
+  let listings = 0;
+  let collectionItems = 0;
+  while (Date.now() < deadline - TITLE_BACKFILL_RESERVE_MS) {
+    const cards = await prisma.catalogCard.findMany({
+      where: cursor ? { id: { gt: cursor } } : {},
+      orderBy: { id: "asc" },
+      take: TITLE_PAGE,
+      select: {
+        id: true,
+        nameEn: true,
+        collectorNumber: true,
+        numberKey: true,
+        printRegion: true,
+        rarity: true,
+        finish: true,
+        set: { select: { code: true, nameEn: true, releaseDate: true } },
+      },
+    });
+    if (!cards.length) return { done: true, cursor: null, scanned, listings, collectionItems };
+    for (const card of cards) {
+      if (Date.now() >= deadline - TITLE_BACKFILL_RESERVE_MS) {
+        return { done: false, cursor, scanned, listings, collectionItems };
+      }
+      const plan = catalogTitleRewrite({
+        releaseDate: card.set.releaseDate,
+        setName: card.set.nameEn,
+        setCode: card.set.code,
+        printRegion: card.printRegion,
+        collectorNumber: card.collectorNumber,
+        numberKey: card.numberKey,
+        cardName: card.nameEn,
+        finish: card.finish,
+        rarity: card.rarity,
+      });
+      if (plan.previousListingTitles.length) {
+        const result = await prisma.listing.updateMany({
+          where: { catalogCardId: card.id, title: { in: plan.previousListingTitles } },
+          data: { title: plan.listingTitle },
+        });
+        listings += result.count;
+      }
+      if (plan.previousCollectionTitles.length) {
+        const result = await prisma.collectionItem.updateMany({
+          where: { catalogCardId: card.id, title: { in: plan.previousCollectionTitles } },
+          data: { title: plan.collectionTitle },
+        });
+        collectionItems += result.count;
+      }
+      cursor = card.id;
+      scanned += 1;
+    }
+    if (cards.length < TITLE_PAGE) return { done: true, cursor: null, scanned, listings, collectionItems };
+  }
+  return { done: false, cursor, scanned, listings, collectionItems };
 }
 
 /**

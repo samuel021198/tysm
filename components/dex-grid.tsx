@@ -10,8 +10,8 @@ export type DexGridCard = {
   collectorNumber: string;
   imageUrl: string;
   printRegion: DexPrintRegion;
-  finish: string | null;
-  set: { nameEn: string; nameJa: string; releaseDate: string | null };
+  rarity: string | null;
+  set: { code: string; releaseDate: string | null };
 };
 
 export function DexGrid({ cards, locale }: { cards: DexGridCard[]; locale: Locale }) {
@@ -20,10 +20,11 @@ export function DexGrid({ cards, locale }: { cards: DexGridCard[]; locale: Local
       {cards.map((card) => {
         const title = catalogDisplayTitle({
           releaseDate: card.set.releaseDate,
-          setName: card.set.nameEn,
+          setCode: card.set.code,
+          printRegion: card.printRegion,
           collectorNumber: card.collectorNumber,
           cardName: card.nameEn,
-          finish: card.finish,
+          rarity: card.rarity,
         });
         const japanese = locale !== "en" && card.nameJa && card.nameJa !== card.nameEn ? card.nameJa : "";
         return (
