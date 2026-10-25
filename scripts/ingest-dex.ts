@@ -1,5 +1,5 @@
 import { backfillCatalogTitles, ingestDex } from "../lib/dex-ingest";
-import { ingestOnePiece, ingestRiftbound } from "../lib/game-ingest";
+import { ingestOnePiece, ingestRiftbound, ingestTopps } from "../lib/game-ingest";
 
 function arg(name: string): string | null {
   const prefix = `--${name}=`;
@@ -28,12 +28,12 @@ async function main() {
   const lang = arg("lang");
   const langs = lang === "en" || lang === "ja" ? ([lang] as const) : undefined;
   const game = arg("game") || "pokemon";
-  if (game !== "pokemon" && game !== "one-piece" && game !== "riftbound") {
-    console.error("game must be pokemon, one-piece, or riftbound");
+  if (game !== "pokemon" && game !== "one-piece" && game !== "riftbound" && game !== "topps-basketball" && game !== "topps-soccer") {
+    console.error("game must be pokemon, one-piece, riftbound, topps-basketball, or topps-soccer");
     process.exit(1);
   }
-  if (game === "riftbound" && lang === "ja") {
-    console.error("riftbound is English only");
+  if ((game === "riftbound" || game === "topps-basketball" || game === "topps-soccer") && lang === "ja") {
+    console.error(`${game} is English only`);
     process.exit(1);
   }
   let cursor: string | null = arg("cursor");
@@ -43,7 +43,11 @@ async function main() {
         ? await ingestOnePiece({ deadlineMs: 90_000, cursor, maxSets, langs })
         : game === "riftbound"
           ? await ingestRiftbound({ deadlineMs: 90_000, cursor, maxSets })
-          : await ingestDex({ deadlineMs: 90_000, cursor, maxSets, langs });
+          : game === "topps-basketball"
+            ? await ingestTopps("TOPPS_BASKETBALL", { deadlineMs: 90_000, cursor, maxSets })
+            : game === "topps-soccer"
+              ? await ingestTopps("TOPPS_SOCCER", { deadlineMs: 90_000, cursor, maxSets })
+              : await ingestDex({ deadlineMs: 90_000, cursor, maxSets, langs });
     console.log(JSON.stringify({ batch, game, ...result }));
     if (result.done) return;
     if (!result.cursor || (result.cursor === cursor && result.counts.cards === 0 && result.processedSetIds.length === 0)) {

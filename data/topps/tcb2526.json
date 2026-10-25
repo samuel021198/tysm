@@ -1,0 +1,8774 @@
+{
+  "code": "TCB2526",
+  "game": "TOPPS_BASKETBALL",
+  "nameEn": "2025-26 Topps Chrome Basketball",
+  "series": "Chrome",
+  "releaseDate": "2025-12-18",
+  "source": "https://basketball.cards/checklists/2025-26-topps-chrome-basketball.csv",
+  "cards": [
+    {
+      "n": "1",
+      "name": "Pascal Siakam",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "2",
+      "name": "Zaccharie Risacher",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "3",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "4",
+      "name": "Ty Jerome",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "5",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "6",
+      "name": "Tobias Harris",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "7",
+      "name": "Tim Hardaway Jr.",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "8",
+      "name": "Tidjane Salaün",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "9",
+      "name": "Terance Mann",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "10",
+      "name": "Talen Horton-Tucker",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "11",
+      "name": "T.J. McConnell",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "12",
+      "name": "Steven Adams",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "13",
+      "name": "Spencer Dinwiddie",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "14",
+      "name": "Sam Hauser",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "15",
+      "name": "Russell Westbrook",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "16",
+      "name": "Ron Holland II",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "17",
+      "name": "Amen Thompson",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "18",
+      "name": "Payton Pritchard",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "19",
+      "name": "P.J. Washington",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "20",
+      "name": "Oshae Brissett",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "21",
+      "name": "Onyeka Okongwu",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "22",
+      "name": "Norman Powell",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "23",
+      "name": "Noah Clowney",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "24",
+      "name": "Nikola Vučević",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "25",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "26",
+      "name": "Nick Smith Jr.",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "27",
+      "name": "Nic Claxton",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "28",
+      "name": "Naji Marshall",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "29",
+      "name": "Myles Turner",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "30",
+      "name": "Miles Bridges",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "31",
+      "name": "Michael Porter Jr.",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "32",
+      "name": "Max Strus",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "33",
+      "name": "Max Christie",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "34",
+      "name": "Mark Williams",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "35",
+      "name": "Marcus Sasser",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "36",
+      "name": "Malik Beasley",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "37",
+      "name": "Luke Kornet",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "38",
+      "name": "Lonzo Ball",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "39",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "40",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "41",
+      "name": "Kristaps Porzingis",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "42",
+      "name": "Klay Thompson",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "43",
+      "name": "Kevin Huerter",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "44",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "45",
+      "name": "K.J. Simpson Jr.",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "46",
+      "name": "Jrue Holiday",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "47",
+      "name": "Josh Green",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "48",
+      "name": "Josh Giddey",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "49",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "50",
+      "name": "Jaylon Tyson",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "51",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "52",
+      "name": "Jarrett Allen",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "53",
+      "name": "Jarace Walker",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "54",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "55",
+      "name": "Jamal Murray",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "56",
+      "name": "Jalen Johnson",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "57",
+      "name": "Jalen Duren",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "58",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "59",
+      "name": "Jae'Sean Tate",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "60",
+      "name": "Jaden Hardy",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "61",
+      "name": "Jaden Ivey",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "62",
+      "name": "Jabari Smith Jr.",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "63",
+      "name": "Ivica Zubac",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "64",
+      "name": "Ausar Thompson",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "65",
+      "name": "Grant Williams",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "66",
+      "name": "Fred VanVleet",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "67",
+      "name": "Evan Mobley",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "68",
+      "name": "Dyson Daniels",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "69",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "70",
+      "name": "Dillon Brooks",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "71",
+      "name": "Derrick White",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "72",
+      "name": "Dereck Lively II",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "73",
+      "name": "De'Andre Hunter",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "74",
+      "name": "Day'Ron Sharpe",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "75",
+      "name": "DaRon Holmes II",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "76",
+      "name": "Darius Garland",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "77",
+      "name": "Dario Šarić",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "78",
+      "name": "Daniel Gafford",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "79",
+      "name": "D'Angelo Russell",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "80",
+      "name": "Coby White",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "81",
+      "name": "Clint Capela",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "82",
+      "name": "Christian Braun",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "83",
+      "name": "Chris Duarte",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "84",
+      "name": "Cameron Johnson",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "85",
+      "name": "Cam Thomas",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "86",
+      "name": "Cam Whitmore",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "87",
+      "name": "Caleb Martin",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "88",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "89",
+      "name": "Brandon Miller",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "90",
+      "name": "Bones Hyland",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "91",
+      "name": "Dariq Whitehead",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "92",
+      "name": "Bogdan Bogdanović",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "93",
+      "name": "Bennedict Mathurin",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "94",
+      "name": "Ben Sheppard",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "95",
+      "name": "Ayo Dosunmu",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "96",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "97",
+      "name": "Andrew Nembhard",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "98",
+      "name": "Alperen Sengun",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "99",
+      "name": "Al Horford",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "100",
+      "name": "Aaron Gordon",
+      "team": "Denver Nuggets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "101",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "102",
+      "name": "Yves Missi",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "103",
+      "name": "Anthony Black",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "104",
+      "name": "Trey Murphy III",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "105",
+      "name": "Jaylin Williams",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "106",
+      "name": "Mason Plumlee",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "107",
+      "name": "Grayson Allen",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "108",
+      "name": "Antonio Reeves",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "109",
+      "name": "Oso Ighodaro",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "110",
+      "name": "Gary Trent Jr.",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "111",
+      "name": "Pacôme Dadiet",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "112",
+      "name": "Terry Rozier III",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "113",
+      "name": "Wendell Carter Jr.",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "114",
+      "name": "Kelly Oubre Jr.",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "115",
+      "name": "Jalen Suggs",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "116",
+      "name": "Franz Wagner",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "117",
+      "name": "Luke Kennard",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "118",
+      "name": "Kyle Kuzma",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "119",
+      "name": "Gabe Vincent",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "120",
+      "name": "Herbert Jones",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "121",
+      "name": "Isaiah Joe",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "122",
+      "name": "Anfernee Simons",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "123",
+      "name": "Julius Randle",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "124",
+      "name": "Bobby Portis",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "125",
+      "name": "Jaxson Hayes",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "126",
+      "name": "Austin Reaves",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "127",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "128",
+      "name": "Zach Edey",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "129",
+      "name": "Kel'el Ware",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "130",
+      "name": "Dalton Knecht",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "131",
+      "name": "OG Anunoby",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "132",
+      "name": "Mike Conley",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "133",
+      "name": "Brandon Clarke",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "134",
+      "name": "Chet Holmgren",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "135",
+      "name": "Thaddeus Young",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "136",
+      "name": "CJ McCollum",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "137",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "138",
+      "name": "Bam Adebayo",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "139",
+      "name": "Tyler Kolek",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "140",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "141",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "142",
+      "name": "Joe Ingles",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "143",
+      "name": "Kentavious Caldwell-Pope",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "144",
+      "name": "Jose Alvarado",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "145",
+      "name": "Donte DiVincenzo",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "146",
+      "name": "Tyus Jones",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "147",
+      "name": "Taurean Prince",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "148",
+      "name": "Rui Hachimura",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "149",
+      "name": "Joel Embiid",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "150",
+      "name": "Shaedon Sharpe",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "151",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "152",
+      "name": "Kyle Lowry",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "153",
+      "name": "Damian Lillard",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "154",
+      "name": "Jarred Vanderbilt",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "155",
+      "name": "Kevin Durant",
+      "team": "Houston Rockets",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "156",
+      "name": "Naz Reid",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "157",
+      "name": "Maxi Kleber",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "158",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "159",
+      "name": "Brook Lopez",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "160",
+      "name": "Josh Hart",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "161",
+      "name": "Jaime Jaquez Jr.",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "162",
+      "name": "Rob Dillingham",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "163",
+      "name": "Jaren Jackson Jr.",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "164",
+      "name": "Bol Bol",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "165",
+      "name": "Rudy Gobert",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "166",
+      "name": "Scoot Henderson",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "167",
+      "name": "Jonathan Isaac",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "168",
+      "name": "Deandre Ayton",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "169",
+      "name": "Matisse Thybulle",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "170",
+      "name": "Alex Caruso",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "171",
+      "name": "Paul George",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "172",
+      "name": "Nikola Jović",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "173",
+      "name": "Tristan da Silva",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "174",
+      "name": "Desmond Bane",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "175",
+      "name": "Cole Anthony",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "176",
+      "name": "Jaden McDaniels",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "177",
+      "name": "Luguentz Dort",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "178",
+      "name": "Ryan Dunn",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "179",
+      "name": "Karl-Anthony Towns",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "180",
+      "name": "Andrew Wiggins",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "181",
+      "name": "Isaiah Hartenstein",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "182",
+      "name": "Bronny James Jr.",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "183",
+      "name": "Adem Bona",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "184",
+      "name": "Eric Gordon",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "185",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "186",
+      "name": "Dejounte Murray",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "187",
+      "name": "Jalen Williams",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "188",
+      "name": "Tyler Herro",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "189",
+      "name": "Pelle Larsson",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "190",
+      "name": "Pat Connaughton",
+      "team": "Milwaukee Bucks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "191",
+      "name": "Cason Wallace",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "192",
+      "name": "Dorian Finney-Smith",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "193",
+      "name": "Nickeil Alexander-Walker",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "194",
+      "name": "Bradley Beal",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "195",
+      "name": "Devin Booker",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "196",
+      "name": "Aaron Wiggins",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "197",
+      "name": "Quentin Grimes",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "198",
+      "name": "Terrence Shannon Jr.",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "199",
+      "name": "GG Jackson II",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "200",
+      "name": "Jaylen Wells",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "201",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "202",
+      "name": "Devin Vassell",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "203",
+      "name": "Scottie Barnes",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "204",
+      "name": "Khris Middleton",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "205",
+      "name": "Walker Kessler",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "206",
+      "name": "Jonas Valančiūnas",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "207",
+      "name": "Jordan Poole",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "208",
+      "name": "Bilal Coulibaly",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "209",
+      "name": "Jimmy Butler III",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "210",
+      "name": "Collin Sexton",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "211",
+      "name": "Jonathan Kuminga",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "212",
+      "name": "Immanuel Quickley",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "213",
+      "name": "Kyle Filipowski",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "214",
+      "name": "Gradey Dick",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "215",
+      "name": "Buddy Hield",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "216",
+      "name": "Harrison Barnes",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "217",
+      "name": "Kris Murray",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "218",
+      "name": "Alex Sarr",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "219",
+      "name": "Chris Paul",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "220",
+      "name": "Keldon Johnson",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "221",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "222",
+      "name": "Harrison Ingram",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "223",
+      "name": "Dwight Powell",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "224",
+      "name": "Marcus Smart",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "225",
+      "name": "RJ Barrett",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "227",
+      "name": "Keegan Murray",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "228",
+      "name": "Stephon Castle",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "229",
+      "name": "Domantas Sabonis",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "230",
+      "name": "Jake LaRavia",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "231",
+      "name": "Matas Buzelis",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "232",
+      "name": "Zach LaVine",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "233",
+      "name": "De'Aaron Fox",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "234",
+      "name": "Draymond Green",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "235",
+      "name": "Keyonte George",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "236",
+      "name": "Richaun Holmes",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "237",
+      "name": "Kyshawn George",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "238",
+      "name": "Lauri Markkanen",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "239",
+      "name": "Jeremy Sochan",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "240",
+      "name": "DeMar DeRozan",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "241",
+      "name": "Dwyane Wade",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "242",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "243",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "244",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "245",
+      "name": "Tracy McGrady",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "246",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "247",
+      "name": "Kevin Garnett",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "248",
+      "name": "Carmelo Anthony",
+      "team": "New York Knicks",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "249",
+      "name": "Rick Barry",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "250",
+      "name": "John Stockton",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": false
+    },
+    {
+      "n": "251",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "252",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "253",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "254",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "255",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "256",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "257",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "258",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "259",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "260",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "261",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "262",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "263",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "264",
+      "name": "Carter Bryant",
+      "team": "San Antonio Spurs",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "265",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "266",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "267",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "268",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "269",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "270",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "271",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "272",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "273",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "274",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "275",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "276",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "277",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "278",
+      "name": "Hugo González",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "279",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "280",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "281",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "282",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "283",
+      "name": "Sion James",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "284",
+      "name": "Ryan Kalkbrenner",
+      "team": "Charlotte Hornets",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "285",
+      "name": "Johni Broome",
+      "team": "Philadelphia 76ers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "286",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "287",
+      "name": "Will Richard",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "288",
+      "name": "Chaz Lanier",
+      "team": "Detroit Pistons",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "289",
+      "name": "Kam Jones",
+      "team": "Indiana Pacers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "290",
+      "name": "Alijah Martin",
+      "team": "Toronto Raptors",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "291",
+      "name": "Micah Peavy",
+      "team": "New Orleans Pelicans",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "292",
+      "name": "Koby Brea",
+      "team": "Phoenix Suns",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "293",
+      "name": "Maxime Raynaud",
+      "team": "Sacramento Kings",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "294",
+      "name": "Jamir Watkins",
+      "team": "Washington Wizards",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "295",
+      "name": "Brooks Barnhizer",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "296",
+      "name": "Rocco Zikarsky",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "297",
+      "name": "Amari Williams",
+      "team": "Boston Celtics",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "298",
+      "name": "Alex Toohey",
+      "team": "Golden State Warriors",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "299",
+      "name": "Javon Small",
+      "team": "Memphis Grizzlies",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "300",
+      "name": "Tyrese Proctor",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base",
+      "rc": true
+    },
+    {
+      "n": "2",
+      "name": "Zaccharie Risacher",
+      "team": "Atlanta Hawks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "3",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "25",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "39",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "44",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "49",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "51",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "54",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "58",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "69",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "88",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "96",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "101",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "127",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "137",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "140",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "141",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "151",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "155",
+      "name": "Kevin Durant",
+      "team": "Houston Rockets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "185",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "195",
+      "name": "Devin Booker",
+      "team": "Phoenix Suns",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "201",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "218",
+      "name": "Alex Sarr",
+      "team": "Washington Wizards",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "221",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "228",
+      "name": "Stephon Castle",
+      "team": "San Antonio Spurs",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "251",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "252",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "253",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "254",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "255",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "256",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "257",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "258",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "259",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "260",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "261",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "262",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "263",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "266",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "268",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "269",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "270",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "271",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "272",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "273",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "274",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "275",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "277",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "278",
+      "name": "Hugo González",
+      "team": "Boston Celtics",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "279",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Base Card Variations",
+      "rc": false
+    },
+    {
+      "n": "AC-1",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-2",
+      "name": "Jimmy Butler III",
+      "team": "Golden State Warriors",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-3",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-5",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-6",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-7",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-8",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-9",
+      "name": "Damian Lillard",
+      "team": "Milwaukee Bucks",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-10",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-14",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AC-15",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Activators",
+      "rc": false
+    },
+    {
+      "n": "AD-1",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-2",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-3",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-4",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-5",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-6",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-7",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-8",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-9",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-10",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-11",
+      "name": "Carter Bryant",
+      "team": "San Antonio Spurs",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-12",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-13",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-14",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-15",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-16",
+      "name": "Hugo González",
+      "team": "Boston Celtics",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-17",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-18",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-19",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "AD-20",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Advisory",
+      "rc": false
+    },
+    {
+      "n": "BD-1",
+      "name": "Austin Reaves",
+      "team": "Los Angeles Lakers",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-2",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-3",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-5",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-6",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-7",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-8",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-9",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-10",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-11",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-12",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-13",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-14",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-15",
+      "name": "Bam Adebayo",
+      "team": "Miami Heat",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-16",
+      "name": "Dwyane Wade",
+      "team": "Miami Heat",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-17",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-18",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-19",
+      "name": "Paul Pierce",
+      "team": "Boston Celtics",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-20",
+      "name": "Vince Carter",
+      "team": "Toronto Raptors",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-21",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-22",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-23",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-24",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "BD-25",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Ball of Duty",
+      "rc": false
+    },
+    {
+      "n": "CG-1",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-2",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-3",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-4",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-5",
+      "name": "Damian Lillard",
+      "team": "Milwaukee Bucks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-6",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-7",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-8",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-9",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-10",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-11",
+      "name": "Devin Booker",
+      "team": "Phoenix Suns",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-12",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-13",
+      "name": "Klay Thompson",
+      "team": "Dallas Mavericks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-14",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-15",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-16",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-17",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-18",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-19",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-20",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-21",
+      "name": "Dwyane Wade",
+      "team": "Miami Heat",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-22",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-23",
+      "name": "Ray Allen",
+      "team": "Miami Heat",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-24",
+      "name": "Tracy McGrady",
+      "team": "Orlando Magic",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-25",
+      "name": "Robert Horry",
+      "team": "San Antonio Spurs",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-26",
+      "name": "John Stockton",
+      "team": "Utah Jazz",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-27",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-28",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-29",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "CG-30",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Clutch Gene",
+      "rc": false
+    },
+    {
+      "n": "D-1",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-2",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-3",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-4",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-5",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-6",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-7",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-8",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-9",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-10",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-11",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-12",
+      "name": "Carter Bryant",
+      "team": "San Antonio Spurs",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-13",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-14",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-15",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-16",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-17",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-18",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-19",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-20",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-21",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-22",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-23",
+      "name": "Hugo González",
+      "team": "Boston Celtics",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-24",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "D-25",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Destiny",
+      "rc": false
+    },
+    {
+      "n": "FAN-1",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-2",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-3",
+      "name": "Brandon Miller",
+      "team": "Charlotte Hornets",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-4",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-5",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-6",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-7",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-8",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-9",
+      "name": "Scoot Henderson",
+      "team": "Portland Trail Blazers",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-10",
+      "name": "Tyler Herro",
+      "team": "Miami Heat",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-11",
+      "name": "Jamal Murray",
+      "team": "Denver Nuggets",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-12",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-13",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-14",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-15",
+      "name": "Jimmy Butler III",
+      "team": "Golden State Warriors",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-16",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-17",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-18",
+      "name": "Ray Allen",
+      "team": "Seattle Supersonics",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-19",
+      "name": "David Robinson",
+      "team": "San Antonio Spurs",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-20",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-21",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-22",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-23",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-24",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FAN-25",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Fanatical",
+      "rc": false
+    },
+    {
+      "n": "FIN-1",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-2",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-3",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-4",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-5",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-6",
+      "name": "Bill Russell",
+      "team": "Boston Celtics",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-7",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-8",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-9",
+      "name": "Hakeem Olajuwon",
+      "team": "Houston Rockets",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "FIN-10",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Finals",
+      "rc": false
+    },
+    {
+      "n": "GR-1",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-2",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-3",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-4",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-5",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-6",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-7",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-8",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-9",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-10",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-11",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-12",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-13",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-14",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-15",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-16",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-17",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-18",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-19",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GR-20",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Generation Rising",
+      "rc": false
+    },
+    {
+      "n": "GC-1",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-2",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-3",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-4",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-5",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-6",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-7",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-8",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-9",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-10",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-11",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-12",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-13",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-14",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-15",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-16",
+      "name": "Pascal Siakam",
+      "team": "Indiana Pacers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-17",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-18",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-19",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GC-20",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Glass Canvas",
+      "rc": false
+    },
+    {
+      "n": "GT-1",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-2",
+      "name": "Jimmy Butler III",
+      "team": "Golden State Warriors",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-3",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-4",
+      "name": "Devin Booker",
+      "team": "Phoenix Suns",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-5",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-6",
+      "name": "Tyler Herro",
+      "team": "Miami Heat",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-7",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-8",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-9",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-10",
+      "name": "Damian Lillard",
+      "team": "Milwaukee Bucks",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-11",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-12",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-13",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-14",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-15",
+      "name": "Paul George",
+      "team": "Philadelphia 76ers",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-16",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-17",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-18",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-19",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-20",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-21",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-22",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-23",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-24",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "GT-25",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Go Time",
+      "rc": false
+    },
+    {
+      "n": "H-1",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-2",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-3",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-5",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-6",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-7",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-8",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-9",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-10",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-14",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-15",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-16",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-17",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-18",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-19",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "H-20",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Helix",
+      "rc": false
+    },
+    {
+      "n": "IP-1",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-2",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-3",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-4",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-5",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-6",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-7",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-8",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-9",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-10",
+      "name": "Joel Embiid",
+      "team": "Philadelphia 76ers",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-11",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-12",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-13",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-14",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-15",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-16",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-17",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-18",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-19",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "IP-20",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Inspirational",
+      "rc": false
+    },
+    {
+      "n": "INS-1",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-2",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-3",
+      "name": "Jimmy Butler III",
+      "team": "Golden State Warriors",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-5",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-6",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-7",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-8",
+      "name": "DeMar DeRozan",
+      "team": "Sacramento Kings",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-9",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-10",
+      "name": "Joel Embiid",
+      "team": "Philadelphia 76ers",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-14",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-15",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-16",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-17",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-18",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-19",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "INS-20",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Instinct",
+      "rc": false
+    },
+    {
+      "n": "LG-1",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-2",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-3",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-4",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-5",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-6",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-7",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-8",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-9",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-10",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-14",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LG-15",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Let's Go",
+      "rc": false
+    },
+    {
+      "n": "LD-1",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-2",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-3",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-4",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-5",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-6",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-7",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-8",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-9",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-10",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-13",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-14",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "LD-15",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Loading",
+      "rc": false
+    },
+    {
+      "n": "PX-1",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-2",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-3",
+      "name": "Austin Reaves",
+      "team": "Los Angeles Lakers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-4",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-5",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-6",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-7",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-8",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-9",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-10",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-11",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-12",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-13",
+      "name": "Chet Holmgren",
+      "team": "Oklahoma City Thunder",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-14",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-15",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-16",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-17",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-18",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-19",
+      "name": "Scoot Henderson",
+      "team": "Portland Trail Blazers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-20",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-21",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-22",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-23",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-24",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-25",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-26",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-27",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-28",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-29",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PX-30",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Paradox",
+      "rc": false
+    },
+    {
+      "n": "PD-1",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-2",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-3",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-5",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-6",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-7",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-8",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-9",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-10",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-11",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-12",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-13",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-14",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-15",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-16",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-17",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-18",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-19",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-20",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-21",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-22",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-23",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-24",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-25",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-26",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-27",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-28",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-29",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "PD-30",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Patented",
+      "rc": false
+    },
+    {
+      "n": "RR-1",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-2",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-3",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-4",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-5",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-6",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-7",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-8",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-9",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RR-10",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Radiating Rookies",
+      "rc": false
+    },
+    {
+      "n": "RS-1",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-2",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-3",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-4",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-5",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-6",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-7",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-8",
+      "name": "Jaylen Brown",
+      "team": "Boston Celtics",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-9",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-10",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-11",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-12",
+      "name": "Dennis Rodman",
+      "team": "Chicago Bulls",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-13",
+      "name": "Tracy McGrady",
+      "team": "Orlando Magic",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-14",
+      "name": "Ben Wallace",
+      "team": "Detroit Pistons",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-15",
+      "name": "Paul Pierce",
+      "team": "Boston Celtics",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-16",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-17",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-18",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-19",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "RS-20",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Rock Stars",
+      "rc": false
+    },
+    {
+      "n": "SY-1",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-2",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-3",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-4",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-5",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-6",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-7",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-8",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-9",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-10",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-14",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SY-15",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Serenity",
+      "rc": false
+    },
+    {
+      "n": "SF-2",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-3",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-4",
+      "name": "Kyrie Irving",
+      "team": "Dallas Mavericks",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-5",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-6",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-7",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-8",
+      "name": "Austin Reaves",
+      "team": "Los Angeles Lakers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-9",
+      "name": "Damian Lillard",
+      "team": "Milwaukee Bucks",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-10",
+      "name": "Vince Carter",
+      "team": "Toronto Raptors",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-11",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-12",
+      "name": "Dwyane Wade",
+      "team": "Miami Heat",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-13",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-14",
+      "name": "Cade Cunningham",
+      "team": "Detroit Pistons",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-15",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-16",
+      "name": "Paul George",
+      "team": "Philadelphia 76ers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-17",
+      "name": "De'Aaron Fox",
+      "team": "San Antonio Spurs",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-18",
+      "name": "Jamal Murray",
+      "team": "Denver Nuggets",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-19",
+      "name": "Devin Booker",
+      "team": "Phoenix Suns",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-20",
+      "name": "Trae Young",
+      "team": "Atlanta Hawks",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-21",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-22",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-23",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-24",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-25",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-26",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-27",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-28",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-29",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "SF-30",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Sleek Finishers",
+      "rc": false
+    },
+    {
+      "n": "TT-1",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-2",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-3",
+      "name": "Joel Embiid",
+      "team": "Philadelphia 76ers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-4",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-5",
+      "name": "Anthony Davis",
+      "team": "Dallas Mavericks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-6",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-7",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-8",
+      "name": "Kawhi Leonard",
+      "team": "Los Angeles Clippers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-9",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-10",
+      "name": "Karl-Anthony Towns",
+      "team": "New York Knicks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-11",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-12",
+      "name": "Hakeem Olajuwon",
+      "team": "Houston Rockets",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-13",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-14",
+      "name": "Kevin Garnett",
+      "team": "Minnesota Timberwolves",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-15",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-16",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-17",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-18",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-19",
+      "name": "Carter Bryant",
+      "team": "San Antonio Spurs",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-20",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-21",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-22",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-23",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-24",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "TT-25",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Tall Tales",
+      "rc": false
+    },
+    {
+      "n": "UV-1",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-2",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-3",
+      "name": "Kevin Durant",
+      "team": "Houston Rockets",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-4",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-5",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-6",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-7",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-8",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-9",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-10",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-11",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-12",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-13",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-14",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "UV-15",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Ultra Violet",
+      "rc": false
+    },
+    {
+      "n": "VS-1",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-2",
+      "name": "Giannis Antetokounmpo",
+      "team": "Milwaukee Bucks",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-3",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-4",
+      "name": "Anthony Edwards",
+      "team": "Minnesota Timberwolves",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-5",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-6",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-7",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-8",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-9",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "VS-10",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Voices",
+      "rc": false
+    },
+    {
+      "n": "XW-1",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-2",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-3",
+      "name": "Nikola Jokić",
+      "team": "Denver Nuggets",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-4",
+      "name": "Ja Morant",
+      "team": "Memphis Grizzlies",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-5",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-6",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-7",
+      "name": "LaMelo Ball",
+      "team": "Charlotte Hornets",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-8",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-9",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "XW-10",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "X's & Whoa's",
+      "rc": false
+    },
+    {
+      "n": "YQ-1",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-2",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-3",
+      "name": "VJ Edgecombe",
+      "team": "Philadelphia 76ers",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-4",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-5",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-6",
+      "name": "Tre Johnson III",
+      "team": "Washington Wizards",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-7",
+      "name": "Jeremiah Fears",
+      "team": "New Orleans Pelicans",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-8",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-9",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-10",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-11",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-12",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-13",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-14",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "YQ-15",
+      "name": "Carter Bryant",
+      "team": "San Antonio Spurs",
+      "subset": "Youthquake",
+      "rc": false
+    },
+    {
+      "n": "TCA-AI",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-AS",
+      "name": "Alex Sarr",
+      "team": "Washington Wizards",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-CH",
+      "name": "Chet Holmgren",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-DM",
+      "name": "Donovan Mitchell",
+      "team": "Cleveland Cavaliers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-DN",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-DW",
+      "name": "Dwyane Wade",
+      "team": "Miami Heat",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-JB",
+      "name": "Jalen Brunson",
+      "team": "New York Knicks",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-JG",
+      "name": "Jalen Green",
+      "team": "Houston Rockets",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-JH",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-JM",
+      "name": "Jamal Murray",
+      "team": "Denver Nuggets",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-JT",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-KD",
+      "name": "Kevin Durant",
+      "team": "Houston Rockets",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-KG",
+      "name": "Kevin Garnett",
+      "team": "Boston Celtics",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-LB",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-LBJ",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-MJ",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-PB",
+      "name": "Paolo Banchero",
+      "team": "Orlando Magic",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-SC",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-SGA",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-SO",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-TH",
+      "name": "Tyrese Haliburton",
+      "team": "Indiana Pacers",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-TM",
+      "name": "Tracy McGrady",
+      "team": "Orlando Magic",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-VC",
+      "name": "Vince Carter",
+      "team": "Toronto Raptors",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCA-VW",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "Topps Chrome Autographs",
+      "rc": false
+    },
+    {
+      "n": "TCAR-AB",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-AM",
+      "name": "Alijah Martin",
+      "team": "Toronto Raptors",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-AT",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-CF",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-CL",
+      "name": "Chaz Lanier",
+      "team": "Detroit Pistons",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-DH",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-JBE",
+      "name": "Johni Broome",
+      "team": "Philadelphia 76ers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KAJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KB",
+      "name": "Koby Brea",
+      "team": "Phoenix Suns",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KJ",
+      "name": "Kam Jones",
+      "team": "Indiana Pacers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-KS",
+      "name": "Kobe Sanders",
+      "team": "Los Angeles Clippers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-LM",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-MP",
+      "name": "Micah Peavy",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-MR",
+      "name": "Maxime Raynaud",
+      "team": "Sacramento Kings",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-NP",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-RF",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-RK",
+      "name": "Ryan Kalkbrenner",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-SJ",
+      "name": "Sion James",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-TP",
+      "name": "Tyrese Proctor",
+      "team": "Cleveland Cavaliers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-WIR",
+      "name": "Will Richard",
+      "team": "Golden State Warriors",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "TCAR-YKN",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Topps Chrome Autographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CH-AH",
+      "name": "Al Horford",
+      "team": "Boston Celtics",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-AI",
+      "name": "Allen Iverson",
+      "team": "Philadelphia 76ers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-AW",
+      "name": "Andrew Wiggins",
+      "team": "Miami Heat",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-CD",
+      "name": "Clyde Drexler",
+      "team": "Portland Trail Blazers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-DF",
+      "name": "De'Aaron Fox",
+      "team": "San Antonio Spurs",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-DN",
+      "name": "Dirk Nowitzki",
+      "team": "Dallas Mavericks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-DW",
+      "name": "Dominique Wilkins",
+      "team": "Atlanta Hawks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-GH",
+      "name": "Gordon Hayward",
+      "team": "Utah Jazz",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-IQ",
+      "name": "Immanuel Quickley",
+      "team": "Toronto Raptors",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JA",
+      "name": "Jarrett Allen",
+      "team": "Cleveland Cavaliers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JHS",
+      "name": "Jalen Hood-Schifino",
+      "team": "Philadelphia 76ers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JJJ",
+      "name": "Jaren Jackson Jr.",
+      "team": "Memphis Grizzlies",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JK",
+      "name": "Jonathan Kuminga",
+      "team": "Golden State Warriors",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JP",
+      "name": "Jordan Poole",
+      "team": "Washington Wizards",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JS",
+      "name": "Julian Strawther",
+      "team": "Denver Nuggets",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-JW",
+      "name": "Jalen Williams",
+      "team": "Oklahoma City Thunder",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-KW",
+      "name": "Kel'el Ware",
+      "team": "Miami Heat",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-MB",
+      "name": "Mikal Bridges",
+      "team": "New York Knicks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-MWP",
+      "name": "Metta World Peace",
+      "team": "Los Angeles Lakers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-PS",
+      "name": "Pascal Siakam",
+      "team": "Indiana Pacers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-RG",
+      "name": "Rudy Gobert",
+      "team": "Minnesota Timberwolves",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-RP",
+      "name": "Robert Parish",
+      "team": "Boston Celtics",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-SC",
+      "name": "Seth Curry",
+      "team": "Charlotte Hornets",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-SD",
+      "name": "Spencer Dinwiddie",
+      "team": "Dallas Mavericks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-TK",
+      "name": "Tyler Kolek",
+      "team": "New York Knicks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-TM",
+      "name": "Tyrese Maxey",
+      "team": "Philadelphia 76ers",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-TMN",
+      "name": "Terance Mann",
+      "team": "Atlanta Hawks",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CH-ZE",
+      "name": "Zach Edey",
+      "team": "Memphis Grizzlies",
+      "subset": "Chromographs",
+      "rc": false
+    },
+    {
+      "n": "CHR-ASA",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-AT",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-BSA",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-KAJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-TB",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "CHR-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Chromographs Rookies",
+      "rc": false
+    },
+    {
+      "n": "FS-AB",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-AT",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-CF",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-DH",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-KAM",
+      "name": "Kam Jones",
+      "team": "Indiana Pacers",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-KJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-LMC",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-MP",
+      "name": "Micah Peavy",
+      "team": "New Orleans Pelicans",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-NP",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-RF",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "FS-YKN",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Future Stars Autographs",
+      "rc": false
+    },
+    {
+      "n": "NS-AB",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-AT",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-CF",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-DH",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-JW",
+      "name": "Jamir Watkins",
+      "team": "Washington Wizards",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-KJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-LMC",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-NP",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-RF",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-TP",
+      "name": "Tyrese Proctor",
+      "team": "Cleveland Cavaliers",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-WIR",
+      "name": "Will Richard",
+      "team": "Golden State Warriors",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "NS-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Next Stop Signatures",
+      "rc": false
+    },
+    {
+      "n": "SS-AM",
+      "name": "Alonzo Mourning",
+      "team": "Miami Heat",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-ANS",
+      "name": "Anfernee Simons",
+      "team": "Portland Trail Blazers",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-AS",
+      "name": "Alperen Sengun",
+      "team": "Houston Rockets",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-BB",
+      "name": "Bradley Beal",
+      "team": "Phoenix Suns",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-BOG",
+      "name": "Bogdan Bogdanović",
+      "team": "Los Angeles Clippers",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-DB",
+      "name": "Desmond Bane",
+      "team": "Memphis Grizzlies",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-DC",
+      "name": "Devin Carter",
+      "team": "Sacramento Kings",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-DV",
+      "name": "Devin Vassell",
+      "team": "San Antonio Spurs",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-FW",
+      "name": "Franz Wagner",
+      "team": "Orlando Magic",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-GG",
+      "name": "George Gervin",
+      "team": "San Antonio Spurs",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-GGJ",
+      "name": "GG Jackson II",
+      "team": "Memphis Grizzlies",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-GH",
+      "name": "Grant Hill",
+      "team": "Detroit Pistons",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-GW",
+      "name": "Grant Williams",
+      "team": "Charlotte Hornets",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-JJ",
+      "name": "Jaime Jaquez Jr.",
+      "team": "Miami Heat",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-JS",
+      "name": "John Stockton",
+      "team": "Utah Jazz",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-JSH",
+      "name": "Jerry Stackhouse",
+      "team": "Dallas Mavericks",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-JW",
+      "name": "Jason Williams",
+      "team": "Sacramento Kings",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-KAT",
+      "name": "Karl-Anthony Towns",
+      "team": "New York Knicks",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-KD",
+      "name": "Kevin Durant",
+      "team": "Phoenix Suns",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-KF",
+      "name": "Kyle Filipowski",
+      "team": "Utah Jazz",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-LM",
+      "name": "Lauri Markkanen",
+      "team": "Utah Jazz",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-MJ",
+      "name": "Magic Johnson",
+      "team": "Los Angeles Lakers",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-MS",
+      "name": "Marcus Smart",
+      "team": "Washington Wizards",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-NSJ",
+      "name": "Nick Smith Jr.",
+      "team": "Charlotte Hornets",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-NT",
+      "name": "Nikola Topić",
+      "team": "Oklahoma City Thunder",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-PP",
+      "name": "Paul Pierce",
+      "team": "Boston Celtics",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-QP",
+      "name": "Quinten Post",
+      "team": "Golden State Warriors",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-RA",
+      "name": "Ray Allen",
+      "team": "Seattle Supersonics",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-RP",
+      "name": "Robert Parish",
+      "team": "Boston Celtics",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-SC",
+      "name": "Stephon Castle",
+      "team": "San Antonio Spurs",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-SD",
+      "name": "Spencer Dinwiddie",
+      "team": "Dallas Mavericks",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-SPJ",
+      "name": "Scotty Pippen Jr.",
+      "team": "Memphis Grizzlies",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-TDS",
+      "name": "Tristan da Silva",
+      "team": "Orlando Magic",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-TM",
+      "name": "Trey Murphy III",
+      "team": "New Orleans Pelicans",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-TS",
+      "name": "Tyler Smith",
+      "team": "Milwaukee Bucks",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-YM",
+      "name": "Yves Missi",
+      "team": "New Orleans Pelicans",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SS-ZR",
+      "name": "Zaccharie Risacher",
+      "team": "Atlanta Hawks",
+      "subset": "Signature Style",
+      "rc": false
+    },
+    {
+      "n": "SWS-AD",
+      "name": "Ayo Dosunmu",
+      "team": "Chicago Bulls",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-AM",
+      "name": "Ajay Mitchell",
+      "team": "Oklahoma City Thunder",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-AN",
+      "name": "Aaron Nesmith",
+      "team": "Indiana Pacers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-BS",
+      "name": "Ben Sheppard",
+      "team": "Indiana Pacers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-BW",
+      "name": "Ben Wallace",
+      "team": "Detroit Pistons",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-CP",
+      "name": "Chris Paul",
+      "team": "San Antonio Spurs",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-DD",
+      "name": "Donte DiVincenzo",
+      "team": "Minnesota Timberwolves",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-DH",
+      "name": "DaRon Holmes II",
+      "team": "Denver Nuggets",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-DJ",
+      "name": "Dillon Jones",
+      "team": "Oklahoma City Thunder",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-DR",
+      "name": "David Robinson",
+      "team": "San Antonio Spurs",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-DRM",
+      "name": "Dennis Rodman",
+      "team": "Chicago Bulls",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-JST",
+      "name": "Jae'Sean Tate",
+      "team": "Houston Rockets",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-JW",
+      "name": "Jarace Walker",
+      "team": "Indiana Pacers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-KB",
+      "name": "Kobe Brown",
+      "team": "Los Angeles Clippers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-KH",
+      "name": "Kevin Huerter",
+      "team": "Chicago Bulls",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-KL",
+      "name": "Kevin Love",
+      "team": "Miami Heat",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-KM",
+      "name": "Kris Murray",
+      "team": "Portland Trail Blazers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-KP",
+      "name": "Kristaps Porzingis",
+      "team": "Boston Celtics",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-LBJ",
+      "name": "LeBron James",
+      "team": "Los Angeles Lakers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-MPJ",
+      "name": "Michael Porter Jr.",
+      "team": "Denver Nuggets",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-MT",
+      "name": "Myles Turner",
+      "team": "Indiana Pacers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-MW",
+      "name": "Mark Williams",
+      "team": "Charlotte Hornets",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-NB",
+      "name": "Nicolas Batum",
+      "team": "Los Angeles Clippers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-OI",
+      "name": "Oso Ighodaro",
+      "team": "Phoenix Suns",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-OO",
+      "name": "Onyeka Okongwu",
+      "team": "Atlanta Hawks",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-RD",
+      "name": "Rob Dillingham",
+      "team": "Minnesota Timberwolves",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-RH",
+      "name": "Ron Holland II",
+      "team": "Detroit Pistons",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-RIP",
+      "name": "Rip Hamilton",
+      "team": "Detroit Pistons",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-RW",
+      "name": "Rasheed Wallace",
+      "team": "Detroit Pistons",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-SO",
+      "name": "Shaquille O'Neal",
+      "team": "Los Angeles Lakers",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-TH",
+      "name": "Taylor Hendricks",
+      "team": "Utah Jazz",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-TS",
+      "name": "Tidjane Salaün",
+      "team": "Charlotte Hornets",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SWS-VW",
+      "name": "Victor Wembanyama",
+      "team": "San Antonio Spurs",
+      "subset": "SkyWrite Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-AH",
+      "name": "Anfernee Hardaway",
+      "team": "Orlando Magic",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-AN",
+      "name": "Andrew Nembhard",
+      "team": "Indiana Pacers",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-BC",
+      "name": "Bilal Coulibaly",
+      "team": "Washington Wizards",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-BJJ",
+      "name": "Bronny James Jr.",
+      "team": "Los Angeles Lakers",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-BS",
+      "name": "Brice Sensabaugh",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-CA",
+      "name": "Carmelo Anthony",
+      "team": "New York Knicks",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-CJ",
+      "name": "Cameron Johnson",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-CS",
+      "name": "Collin Sexton",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-CW",
+      "name": "Cody Williams",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-DH",
+      "name": "De'Andre Hunter",
+      "team": "Cleveland Cavaliers",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-DR",
+      "name": "D'Angelo Russell",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-DS",
+      "name": "Domantas Sabonis",
+      "team": "Sacramento Kings",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-HO",
+      "name": "Hakeem Olajuwon",
+      "team": "Houston Rockets",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-IC",
+      "name": "Isaiah Collier",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-JC",
+      "name": "Jordan Clarkson",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-JH",
+      "name": "James Harden",
+      "team": "Los Angeles Clippers",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-JK",
+      "name": "Jason Kidd",
+      "team": "New Jersey Nets",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-JRH",
+      "name": "Jrue Holiday",
+      "team": "Boston Celtics",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-KM",
+      "name": "Khris Middleton",
+      "team": "Washington Wizards",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-LB",
+      "name": "Larry Bird",
+      "team": "Boston Celtics",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-MG",
+      "name": "Manu Ginobili",
+      "team": "San Antonio Spurs",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-PA",
+      "name": "Precious Achiuwa",
+      "team": "New York Knicks",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SM-TP",
+      "name": "Tony Parker",
+      "team": "San Antonio Spurs",
+      "subset": "Stratospheric Signatures",
+      "rc": false
+    },
+    {
+      "n": "SMR-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-AT",
+      "name": "Adou Thiero",
+      "team": "Los Angeles Lakers",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-KJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-LMC",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-NP",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-RF",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "SMR-YKN",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Stratospheric Signatures Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAU-AB",
+      "name": "Anthony Black",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-AC",
+      "name": "Alex Caruso",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-AG",
+      "name": "Aaron Gordon",
+      "team": "Denver Nuggets",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-AJJ",
+      "name": "AJ Johnson",
+      "team": "Washington Wizards",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-BSC",
+      "name": "Baylor Scheierman",
+      "team": "Boston Celtics",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-CA",
+      "name": "Cole Anthony",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-CC",
+      "name": "Clint Capela",
+      "team": "Atlanta Hawks",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-CJM",
+      "name": "CJ McCollum",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-CL",
+      "name": "Christian Laettner",
+      "team": "Atlanta Hawks",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-CW",
+      "name": "Cam Whitmore",
+      "team": "Houston Rockets",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DH",
+      "name": "Dwight Howard",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DJM",
+      "name": "Dejounte Murray",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DL",
+      "name": "Dereck Lively II",
+      "team": "Dallas Mavericks",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DM",
+      "name": "Davion Mitchell",
+      "team": "Miami Heat",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DT",
+      "name": "David Thompson",
+      "team": "Denver Nuggets",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-DW",
+      "name": "Derrick White",
+      "team": "Boston Celtics",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-FVV",
+      "name": "Fred VanVleet",
+      "team": "Houston Rockets",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-GD",
+      "name": "Gradey Dick",
+      "team": "Toronto Raptors",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JC",
+      "name": "Jaylen Clark",
+      "team": "Minnesota Timberwolves",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JF",
+      "name": "Johnny Furphy",
+      "team": "Indiana Pacers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JH",
+      "name": "Jordan Hawkins",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JS",
+      "name": "Jamal Shead",
+      "team": "Toronto Raptors",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JSO",
+      "name": "Jeremy Sochan",
+      "team": "San Antonio Spurs",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JT",
+      "name": "Jaylon Tyson",
+      "team": "Cleveland Cavaliers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-JTM",
+      "name": "Jayson Tatum",
+      "team": "Boston Celtics",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-KK",
+      "name": "Kyle Kuzma",
+      "team": "Milwaukee Bucks",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-KYG",
+      "name": "Kyshawn George",
+      "team": "Washington Wizards",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-OBI",
+      "name": "Obi Toppin",
+      "team": "Indiana Pacers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-PG",
+      "name": "Pau Gasol",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-PPR",
+      "name": "Payton Pritchard",
+      "team": "Boston Celtics",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-PS",
+      "name": "Peja Stojaković",
+      "team": "Sacramento Kings",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-RD",
+      "name": "Ryan Dunn",
+      "team": "Phoenix Suns",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-RHA",
+      "name": "Rui Hachimura",
+      "team": "Los Angeles Lakers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-SC",
+      "name": "Stephen Curry",
+      "team": "Golden State Warriors",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-SH",
+      "name": "Scoot Henderson",
+      "team": "Portland Trail Blazers",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-TSJ",
+      "name": "Terrence Shannon Jr.",
+      "team": "Minnesota Timberwolves",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-WK",
+      "name": "Walker Kessler",
+      "team": "Utah Jazz",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAU-ZL",
+      "name": "Zach LaVine",
+      "team": "Sacramento Kings",
+      "subset": "Topps Certified Autograph Issue",
+      "rc": false
+    },
+    {
+      "n": "TAIR-AB",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-CF",
+      "name": "Cooper Flagg",
+      "team": "Dallas Mavericks",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-DH",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-KJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-KS",
+      "name": "Kobe Sanders",
+      "team": "Los Angeles Clippers",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-LMC",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-NP",
+      "name": "Noah Penda",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-RF",
+      "name": "Rasheer Fleming",
+      "team": "Phoenix Suns",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-TP",
+      "name": "Tyrese Proctor",
+      "team": "Cleveland Cavaliers",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-WIR",
+      "name": "Will Richard",
+      "team": "Golden State Warriors",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAIR-YKN",
+      "name": "Yanic Konan-Niederhäuser",
+      "team": "Los Angeles Clippers",
+      "subset": "Topps Certified Autograph Issue Rookies",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-AB",
+      "name": "Ace Bailey",
+      "team": "Utah Jazz",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-AN",
+      "name": "Asa Newell",
+      "team": "Atlanta Hawks",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-BS",
+      "name": "Ben Saraf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-CC",
+      "name": "Cedric Coward",
+      "team": "Memphis Grizzlies",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-CMB",
+      "name": "Collin Murray-Boyles",
+      "team": "Toronto Raptors",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-DH",
+      "name": "Dylan Harper",
+      "team": "San Antonio Spurs",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-DP",
+      "name": "Drake Powell",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-DQ",
+      "name": "Derik Queen",
+      "team": "New Orleans Pelicans",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-DW",
+      "name": "Danny Wolf",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-ED",
+      "name": "Egor Dëmin",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-JB",
+      "name": "Joan Beringer",
+      "team": "Minnesota Timberwolves",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-JR",
+      "name": "Jase Richardson",
+      "team": "Orlando Magic",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-KJ",
+      "name": "Kasparas Jakučionis",
+      "team": "Miami Heat",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-KK",
+      "name": "Kon Knueppel",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-KM",
+      "name": "Khaman Maluach",
+      "team": "Phoenix Suns",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-LMC",
+      "name": "Liam McNeeley",
+      "team": "Charlotte Hornets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-NC",
+      "name": "Nique Clifford",
+      "team": "Sacramento Kings",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-NE",
+      "name": "Noa Essengue",
+      "team": "Chicago Bulls",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-NT",
+      "name": "Nolan Traore",
+      "team": "Brooklyn Nets",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-TP",
+      "name": "Tyrese Proctor",
+      "team": "Cleveland Cavaliers",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-TS",
+      "name": "Thomas Sorber",
+      "team": "Oklahoma City Thunder",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-WCJ",
+      "name": "Walter Clayton Jr.",
+      "team": "Utah Jazz",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-WIR",
+      "name": "Will Richard",
+      "team": "Golden State Warriors",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-WR",
+      "name": "Will Riley",
+      "team": "Washington Wizards",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "TAUR2-YH",
+      "name": "Yang Hansen",
+      "team": "Portland Trail Blazers",
+      "subset": "Topps Certified Autograph Issue Rookies 2",
+      "rc": false
+    },
+    {
+      "n": "GLM-1",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Gold Logoman II",
+      "rc": false
+    },
+    {
+      "n": "GLM-2",
+      "name": "Stephon Castle",
+      "team": "San Antonio Spurs",
+      "subset": "Gold Logoman II",
+      "rc": false
+    },
+    {
+      "n": "GLM-3",
+      "name": "Evan Mobley",
+      "team": "Cleveland Cavaliers",
+      "subset": "Gold Logoman II",
+      "rc": false
+    },
+    {
+      "n": "TCGL-1",
+      "name": "Shai Gilgeous-Alexander",
+      "team": "Oklahoma City Thunder",
+      "subset": "Gold Logoman Relics",
+      "rc": false
+    },
+    {
+      "n": "TCGL-2",
+      "name": "Stephon Castle",
+      "team": "San Antonio Spurs",
+      "subset": "Gold Logoman Relics",
+      "rc": false
+    },
+    {
+      "n": "TCGL-3",
+      "name": "Evan Mobley",
+      "team": "Cleveland Cavaliers",
+      "subset": "Gold Logoman Relics",
+      "rc": false
+    }
+  ]
+}

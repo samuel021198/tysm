@@ -131,7 +131,7 @@ curl -sS -X POST "https://你的網域/api/internal/ingest-dex?lang=en&sets=4" \
 
 成功回 `200`：`done`、`cursor`（走完係 `null`）、`remainingSets`、`processedSetIds`、`counts`。`done: true` 表示今次語言範圍裡面的可用系列已經走完。R2 開住而且 `counts.imagesPending > 0` 時，可以再打同一條（即使 `done` 已經係 true）補鏡像；未鏡像的圖會留低 TCGdex 網址。沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。`sets`、`cursor` 或 `lang` 唔合法會回 `400`。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
 
-圖鑑畫面同由圖鑑帶出的刊登標題格式係 `{year} {Game} {setCode} {JP|EN} #{number} {Card Name} {Rarity}`。遊戲字係 `Pokemon`、`One Piece` 或 `Riftbound`。例子：`2023 Pokemon SV2a JP #193 Mew ex Super Rare`、`One Piece OP-01 EN #OP01-001 Roronoa Zoro L`、`2025 Riftbound OGN EN #007a Fury Rune Showcase`。年份、系列代碼、語言、卡號、卡名、罕貴有先至寫。Riftbound 只有英文，語言位會寫 `EN`。系列用資料庫入面的 set `code`，唔用系列全名。`JP` 係日文印刷，`EN` 係西方／英文。罕貴用 Title Case；空值或 `None` 就唔寫；海賊王嘅短代碼（`L`、`SR`、`SEC`）保持原樣。Finish（Holo、Reverse Foil）只留來搜尋，唔再出現喺標題。`CatalogCard` 本身冇 `title` 欄，畫面係用卡同系列欄位現計。搜尋同標題建議會同時對卡名、系列全名、系列代碼、卡號、罕貴、finish、語言同年份，而且會跟住選定的遊戲。上架時，寶可夢、海賊王、Riftbound 先會出圖鑑建議；其他分類仍然自己填。
+圖鑑畫面同由圖鑑帶出的刊登標題格式係 `{year} {Game} {setCode} {JP|EN} #{number} {Card Name} {Rarity}`。遊戲字係 `Pokemon`、`One Piece`、`Riftbound`、`Topps Basketball` 或 `Topps Soccer`。例子：`2023 Pokemon SV2a JP #193 Mew ex Super Rare`、`One Piece OP-01 EN #OP01-001 Roronoa Zoro L`、`2025 Riftbound OGN EN #007a Fury Rune Showcase`、`2025 Topps Basketball TCB2526 EN #1 Pascal Siakam`。年份、系列代碼、語言、卡號、卡名、罕貴有先至寫。Riftbound 同 Topps 只有英文，語言位會寫 `EN`。系列用資料庫入面的 set `code`，唔用系列全名。`JP` 係日文印刷，`EN` 係西方／英文。罕貴用 Title Case；空值或 `None` 就唔寫；海賊王嘅短代碼（`L`、`SR`、`SEC`）保持原樣。Finish（Holo、Reverse Foil）只留來搜尋，唔再出現喺標題。Topps 的球隊寫在 `finish`，卡頁會標做「球隊」，搜尋搵到，但唔會寫入標題。`CatalogCard` 本身冇 `title` 欄，畫面係用卡同系列欄位現計。搜尋同標題建議會同時對卡名、系列全名、系列代碼、卡號、罕貴、finish、語言同年份，而且會跟住選定的遊戲。上架時，寶可夢、海賊王、Riftbound、Topps 籃球、Topps 足球先會出圖鑑建議；其他分類仍然自己填。
 
 ### 海賊王同 Riftbound 點同步
 
@@ -171,7 +171,47 @@ curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
   -d '{"game":"riftbound","sets":4}'
 ```
 
-`game` 唔係 `pokemon`／`one-piece`／`riftbound` 會回 `400` `invalid_game`。Cursor 格式同寶可夢一樣：`en:OP-01`、`en:PROMO#200`、`ja:550117#40`、`en:OGN#80`。`#` 放 query 要寫成 `%23`。
+`game` 唔係 `pokemon`／`one-piece`／`riftbound`／`topps-basketball`／`topps-soccer` 會回 `400` `invalid_game`。Cursor 格式同寶可夢一樣：`en:OP-01`、`en:PROMO#200`、`ja:550117#40`、`en:OGN#80`、`en:TCB2526#80`。`#` 放 query 要寫成 `%23`。
+
+### Topps 籃球同足球點同步
+
+同一條 `POST /api/internal/ingest-dex`，`game` 用 `topps-basketball` 或 `topps-soccer`。左欄係兩個遊戲：`/dex?game=topps-basketball`、`/dex?game=topps-soccer`。Chrome、Premier League、MLS、UEFA 係該運動下面的系列，唔係獨立遊戲。只有英文（`printRegion` WEST）。`lang=ja` 會回 `400`。
+
+v1 只入名同卡號，唔下載掃描圖。`imageUrl` 用現有的 `/demo/back.svg` 佔位。行情仍然只查寶可夢；Topps 卡頁同 Riftbound 一樣顯示暫未有市場數據。
+
+名單係 repo 入面的 `data/topps/*.json`，ingest 唔會打第三方。來源（只取 base 同具名 insert，唔拆 Refractor／Gold 等平行）：
+
+| 系列 | `code` | 來源 |
+| --- | --- | --- |
+| 2025-26 Topps Chrome Basketball | `TCB2526` | [basketball.cards CSV](https://basketball.cards/checklists/2025-26-topps-chrome-basketball.csv) |
+| 2025-26 Topps Basketball | `TB2526` | [basketball.cards CSV](https://basketball.cards/checklists/2025-26-topps-basketball.csv) |
+| 2024-25 Topps Chrome Basketball | `TCB2425` | [Checklist Insider](https://www.checklistinsider.com/2024-25-topps-chrome-basketball) |
+| 2025-26 Topps Premier League | `PL2526` | [Checklist Insider](https://www.checklistinsider.com/2025-26-topps-premier-league) |
+| 2024-25 Topps Chrome UEFA Club Competitions | `UEFA2425` | [Checklist Insider](https://www.checklistinsider.com/2024-25-topps-chrome-uefa-club-competitions) |
+| 2024 Topps Chrome MLS | `MLS24` | [Checklist Insider](https://www.checklistinsider.com/2024-topps-chrome-mls) |
+
+2024-25 Chrome 同三套足球唔係用 TCDB。Checklist Insider 的 Team Set 段同 base 重複，ingest 唔會再入一次。球員名係英文；`nameJa` 同英文一樣。Subset 同 RC 放在罕貴；Base 唔寫上標題。球隊放在 `finish`。
+
+部署 migration 之後先至 ingest。重複 POST，把 `cursor` 傳回去，直到 `done` 係 `true`。Upsert 用 `externalId`（`tb:TCB2526:…`），重複呼叫安全。
+
+```bash
+npm run dex:ingest -- --game=topps-basketball --sets=3
+npm run dex:ingest -- --game=topps-soccer --sets=3
+```
+
+```bash
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"game":"topps-basketball","sets":2}'
+
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"game":"topps-soccer","sets":3}'
+```
+
+要重造 JSON（ingest 唔會自動做），把本地 CSV／HTML 交俾 `npx tsx scripts/build-topps-data.ts --file=TCB2526=/path/file.csv`。代碼表寫在該腳本。
 
 已經抄咗舊標題的刊登同收藏，要在部署之後回填，唔使再下載 TCGdex。只會改寫仍然等於舊公式的 `Listing.title` 同 `CollectionItem.title`，賣家自己改過的標題會留低。路由 `maxDuration` 係 300 秒，軟性 deadline 係 240 秒。重複 POST，直到 `done` 係 `true`。`cursor` 係上一批最後一張 `CatalogCard.id`。
 

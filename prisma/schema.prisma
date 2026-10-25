@@ -75,6 +75,8 @@ enum CatalogGame {
   ONE_PIECE
   RIFTBOUND
   DEMO
+  TOPPS_BASKETBALL
+  TOPPS_SOCCER
 }
 
 enum PrintRegion {

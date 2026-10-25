@@ -1,0 +1,3818 @@
+{
+  "code": "MLS24",
+  "game": "TOPPS_SOCCER",
+  "nameEn": "2024 Topps Chrome MLS",
+  "series": "Chrome",
+  "releaseDate": "2024-12-06",
+  "source": "https://www.checklistinsider.com/2024-topps-chrome-mls",
+  "cards": [
+    {
+      "n": "1",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "2",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "3",
+      "name": "Petar Musa",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "4",
+      "name": "Carles Gil",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "5",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "6",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "7",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "8",
+      "name": "Djordje Mihailovic",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "9",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "11",
+      "name": "Tomás Chancalay",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "12",
+      "name": "Leon Flach",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "13",
+      "name": "Evander",
+      "team": "Portland Timbers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "14",
+      "name": "Thierry Henry",
+      "team": "New York Red Bulls FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "15",
+      "name": "Zavier Gozo",
+      "team": "Real Salt Lake",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "16",
+      "name": "Hugo Cuypers",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "17",
+      "name": "Ibrahim Aliyu",
+      "team": "Houston Dynamo PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "18",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "19",
+      "name": "Paxton Pomykal",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "20",
+      "name": "Alan Velasco",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "21",
+      "name": "Ted Ku-DiPietro",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "22",
+      "name": "Omir Fernandez",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "23",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "24",
+      "name": "Owen Wolff",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "25",
+      "name": "Xherdan Shaqiri",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "26",
+      "name": "Caleb Wiley",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "27",
+      "name": "Noah Allen",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "28",
+      "name": "Tyler Wolff",
+      "team": "Atlanta United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "29",
+      "name": "Julián Aude",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "30",
+      "name": "Patrick Schulte",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "31",
+      "name": "Diego Rossi",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "32",
+      "name": "Paul Arriola",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "33",
+      "name": "Nouhou",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "34",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "35",
+      "name": "Johnny Russell",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "36",
+      "name": "Jonathan Sirois",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "37",
+      "name": "Jack McGlynn",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "38",
+      "name": "Hany Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "39",
+      "name": "Benja Cremaschi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "40",
+      "name": "Jake Davis",
+      "team": "Sporting Kansas City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "41",
+      "name": "Federico Redondo",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "42",
+      "name": "Liel Abada",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "43",
+      "name": "Joseph Paintsil",
+      "team": "LA Galaxy",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "44",
+      "name": "Obed Vargas",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "45",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "46",
+      "name": "Dániel Sallói",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "47",
+      "name": "Mounsef Bakrar",
+      "team": "NYCFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "48",
+      "name": "Elias Manoel",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "49",
+      "name": "Corey Baird",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "50",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "51",
+      "name": "Erik Dueñas",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "52",
+      "name": "Cole Bassett",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "53",
+      "name": "Federico Bernardeschi",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "54",
+      "name": "Agustín Ojeda",
+      "team": "NYCFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "55",
+      "name": "Dennis Gjengaar",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "56",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "57",
+      "name": "Nikola Petković",
+      "team": "Charlotte FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "58",
+      "name": "John Tolkin",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "59",
+      "name": "Kai Wagner",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "60",
+      "name": "Iván Angulo",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "61",
+      "name": "Stiven Jimenez",
+      "team": "FC Cincinnati",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "62",
+      "name": "Diego Rubio",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "63",
+      "name": "Josef Martínez",
+      "team": "CF Montréal",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "64",
+      "name": "Teemu Pukki",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "65",
+      "name": "Kristian Fletcher",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "66",
+      "name": "Cristian Espinoza",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "67",
+      "name": "Facundo Farías",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "68",
+      "name": "Peter Stroud",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "69",
+      "name": "Fidel Barajas",
+      "team": "Real Salt Lake",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "70",
+      "name": "João Klauss",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "71",
+      "name": "Kobe Franklin",
+      "team": "Toronto FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "72",
+      "name": "Amine Bassi",
+      "team": "Houston Dynamo",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "73",
+      "name": "Tyler Wolff",
+      "team": "Atlanta United PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "74",
+      "name": "Erik Dueñas",
+      "team": "LAFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "75",
+      "name": "Facundo Farías",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "76",
+      "name": "Walker Zimmerman",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "77",
+      "name": "Darren Yapi",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "78",
+      "name": "David Ruíz",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "79",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "80",
+      "name": "Darlington Nagbe",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "81",
+      "name": "Diego Gómez",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "82",
+      "name": "Ryan Gauld",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "83",
+      "name": "Jeremy Ebobisse",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "84",
+      "name": "Diego Luna",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "85",
+      "name": "Andre Blake",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "86",
+      "name": "Cristian Olivera",
+      "team": "LAFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "87",
+      "name": "Tyler Boyd",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "88",
+      "name": "Kerwin Vargas",
+      "team": "Charlotte FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "89",
+      "name": "Marino Hinestroza",
+      "team": "Columbus Crew",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "90",
+      "name": "Geovane Jesus",
+      "team": "FC Dallas",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "91",
+      "name": "Lorenzo Dellavalle",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "92",
+      "name": "Gabriele Corbo",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "93",
+      "name": "Nathan Saliba",
+      "team": "CF Montréal PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "94",
+      "name": "Julian Hall",
+      "team": "New York Red Bulls PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "95",
+      "name": "Kaká",
+      "team": "Orlando City SC FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "96",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "97",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "98",
+      "name": "David Ayala",
+      "team": "Portland Timbers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "99",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "100",
+      "name": "David Villa",
+      "team": "NYCFC FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "101",
+      "name": "Emil Forsberg",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "102",
+      "name": "Federico Redondo",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "103",
+      "name": "Ibrahim Aliyu",
+      "team": "Houston Dynamo",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "104",
+      "name": "Carlos Valderrama",
+      "team": "Colorado Rapids FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "105",
+      "name": "Preston Judd",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "106",
+      "name": "Kevin Kelsy",
+      "team": "FC Cincinnati",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "107",
+      "name": "Jahkeele Marshall-Rutty",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "108",
+      "name": "Niko Tsakiris",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "109",
+      "name": "Diego Fagúndez",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "110",
+      "name": "Frank Lampard",
+      "team": "NYCFC FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "111",
+      "name": "Bartosz Slisz",
+      "team": "Atlanta United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "112",
+      "name": "Jules-Anthony Vilsaint",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "113",
+      "name": "Luca Orellano",
+      "team": "FC Cincinnati",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "114",
+      "name": "Caden Glover",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "115",
+      "name": "Cody Baker",
+      "team": "Seattle Sounders FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "116",
+      "name": "Kerwin Vargas",
+      "team": "Charlotte FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "117",
+      "name": "Marino Hinestroza",
+      "team": "Columbus Crew PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "118",
+      "name": "Sam Surridge",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "119",
+      "name": "Erik Thommy",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "120",
+      "name": "Luis Muriel",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "121",
+      "name": "Bongokuhle Hlongwane",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "122",
+      "name": "Tomás Avilés",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "123",
+      "name": "Mikael Uhre",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "124",
+      "name": "Cristian Roldan",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "125",
+      "name": "Santiago Moreno",
+      "team": "Portland Timbers",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "126",
+      "name": "Andrea Pirlo",
+      "team": "NYCFC FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "127",
+      "name": "Robin Lod",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "128",
+      "name": "David Martínez",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "129",
+      "name": "Eduard Löwen",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "130",
+      "name": "Hugo Mbongue",
+      "team": "Toronto FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "131",
+      "name": "Bastian Schweinsteiger",
+      "team": "Chicago Fire FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "132",
+      "name": "Andrés Cubas",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "133",
+      "name": "David Ruíz",
+      "team": "Inter Miami CF PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "134",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "135",
+      "name": "Nathan Saliba",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "136",
+      "name": "Tomáš Ostrák",
+      "team": "St. Louis City SC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "137",
+      "name": "Jovan Mijatović",
+      "team": "NYCFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "138",
+      "name": "Brian Gutiérrez",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "139",
+      "name": "Wikelman Carmona",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "140",
+      "name": "Marinos Tzionis",
+      "team": "Sporting Kansas City",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "141",
+      "name": "Julian Hall",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "142",
+      "name": "Ronald Donkor",
+      "team": "New York Red Bulls",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "143",
+      "name": "Stian Gregersen",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "144",
+      "name": "Tomás Avilés",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "145",
+      "name": "Nimfasha Berchimas",
+      "team": "Charlotte FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "146",
+      "name": "Adilson Malanda",
+      "team": "Charlotte FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "147",
+      "name": "Dániel Gazdag",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "148",
+      "name": "Sunusi Ibrahim",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "149",
+      "name": "Ethan Bartlow",
+      "team": "Houston Dynamo",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "150",
+      "name": "Zlatan Ibrahimović",
+      "team": "LA Galaxy FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "151",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "152",
+      "name": "Noel Buck",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "153",
+      "name": "Héctor Herrera",
+      "team": "Houston Dynamo",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "154",
+      "name": "Noah Allen",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "155",
+      "name": "Cristian Olivera",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "156",
+      "name": "Keaton Parks",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "157",
+      "name": "Facundo Torres",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "158",
+      "name": "Pedro Vite",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "159",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "160",
+      "name": "Cristian Arango",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "161",
+      "name": "Randall Leal",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "162",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "163",
+      "name": "Mathieu Choinière",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "164",
+      "name": "Steven Gerrard",
+      "team": "LA Galaxy FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "165",
+      "name": "Talles Magno",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "166",
+      "name": "Mateusz Klich",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "167",
+      "name": "Diego Gómez",
+      "team": "Inter Miami CF",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "168",
+      "name": "Bartosz Slisz",
+      "team": "Atlanta United PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "169",
+      "name": "Santiago Rodríguez",
+      "team": "NYCFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "170",
+      "name": "Omar Campos",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "171",
+      "name": "Damian Rivera",
+      "team": "New England Revolution",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "172",
+      "name": "Jordan Morris",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "173",
+      "name": "Jacob Shaffelburg",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "174",
+      "name": "Hugo Mbongue",
+      "team": "Toronto FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "175",
+      "name": "Julián Carranza",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "176",
+      "name": "Kobe Franklin",
+      "team": "Toronto FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "177",
+      "name": "Damir Kreilach",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "178",
+      "name": "Christian Ramirez",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "179",
+      "name": "Bode Hidalgo",
+      "team": "Real Salt Lake",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "180",
+      "name": "Cassius Mailula",
+      "team": "Toronto FC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "181",
+      "name": "Ajani Fortune",
+      "team": "Atlanta United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "182",
+      "name": "Aaron Bibout",
+      "team": "LA Galaxy",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "183",
+      "name": "Nathan Ordaz",
+      "team": "LAFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "184",
+      "name": "Gabriel Pirani",
+      "team": "D.C. United",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "185",
+      "name": "Mounsef Bakrar",
+      "team": "NYCFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "186",
+      "name": "Dylan Borrero",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "187",
+      "name": "Rida Zouhir",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "188",
+      "name": "Cody Baker",
+      "team": "Seattle Sounders FC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "189",
+      "name": "Andrés Gómez",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "190",
+      "name": "Aziel Jackson",
+      "team": "St. Louis City SC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "191",
+      "name": "Omar Campos",
+      "team": "LAFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "192",
+      "name": "Matías Cóccaro",
+      "team": "CF Montréal",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "193",
+      "name": "Alan Pulido",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "194",
+      "name": "Sebastián Driussi",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "195",
+      "name": "Sang-bin Jeong",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "196",
+      "name": "Julián Fernández",
+      "team": "NYCFC PP",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "197",
+      "name": "Léo Chú",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "198",
+      "name": "Brian White",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "199",
+      "name": "Nathan Ordaz",
+      "team": "LAFC",
+      "rc": true,
+      "subset": "Base"
+    },
+    {
+      "n": "200",
+      "name": "Gareth Bale",
+      "team": "LAFC FB",
+      "rc": false,
+      "subset": "Base"
+    },
+    {
+      "n": "1",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "2",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "5",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "14",
+      "name": "Thierry Henry",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "34",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": true,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "38",
+      "name": "Hany Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "50",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "99",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "150",
+      "name": "Zlatan Ibrahimović",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Base Image Variations"
+    },
+    {
+      "n": "CA-AB",
+      "name": "Liel Abada",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AC",
+      "name": "Andrés Cubas",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AF",
+      "name": "Ajani Fortune",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AV",
+      "name": "Alan Velasco",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BC",
+      "name": "Benja Cremaschi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BE",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BG",
+      "name": "Brian Gutiérrez",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BH",
+      "name": "Bongokuhle Hlongwane",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-BR",
+      "name": "Dylan Borrero",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CA",
+      "name": "Cristian Arango",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CB",
+      "name": "Cody Baker",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CE",
+      "name": "Cristian Espinoza",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CG",
+      "name": "Carles Gil",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CO",
+      "name": "Cristian Olivera",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CU",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-CW",
+      "name": "Caleb Wiley",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DA",
+      "name": "David Ayala",
+      "team": "Portland Timbers",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DB",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DE",
+      "name": "Daniel Edelman",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DF",
+      "name": "Diego Fagúndez",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DK",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DL",
+      "name": "Diego Luna",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DP",
+      "name": "Dani Pereira",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-DR",
+      "name": "David Ruíz",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EB",
+      "name": "Esmir Bajraktarević",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ED",
+      "name": "Erik Dueñas",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EF",
+      "name": "Emil Forsberg",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ET",
+      "name": "Erik Thommy",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-EV",
+      "name": "Evander",
+      "team": "Portland Timbers",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FB",
+      "name": "Federico Bernardeschi",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FE",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FL",
+      "name": "Kristian Fletcher",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FR",
+      "name": "Federico Redondo",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-FT",
+      "name": "Facundo Torres",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GB",
+      "name": "Gavin Beavers",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GG",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GL",
+      "name": "Caden Glover",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GP",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-GZ",
+      "name": "Dániel Gazdag",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HH",
+      "name": "Héctor Herrera",
+      "team": "Houston Dynamo",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HL",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-HM",
+      "name": "Hany Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-IA",
+      "name": "Ibrahim Aliyu",
+      "team": "Houston Dynamo",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JA",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JC",
+      "name": "Julián Carranza",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JE",
+      "name": "Jeremy Ebobisse",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JM",
+      "name": "Josef Martínez",
+      "team": "CF Montréal",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JN",
+      "name": "Jalen Neal",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-JT",
+      "name": "John Tolkin",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KF",
+      "name": "Kobe Franklin",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KR",
+      "name": "Damir Kreilach",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KV",
+      "name": "Kerwin Vargas",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-KW",
+      "name": "Kai Wagner",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LA",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LE",
+      "name": "Danny Leyva",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LI",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LM",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-LU",
+      "name": "Luis Muriel",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MB",
+      "name": "Mounsef Bakrar",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MK",
+      "name": "Mateusz Klich",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MO",
+      "name": "Martín Ojeda",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MR",
+      "name": "Jordan Morris",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-MU",
+      "name": "Mikael Uhre",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NA",
+      "name": "Noah Allen",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NB",
+      "name": "Noel Buck",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NI",
+      "name": "Nimfasha Berchimas",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NO",
+      "name": "Nathan Ordaz",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-NT",
+      "name": "Niko Tsakiris",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OV",
+      "name": "Obed Vargas",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-OW",
+      "name": "Owen Wolff",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PJ",
+      "name": "Preston Judd",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PS",
+      "name": "Patrick Schulte",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-PV",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-QS",
+      "name": "Quinn Sullivan",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RC",
+      "name": "Roman Celentano",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RO",
+      "name": "Diego Rossi",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RP",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RU",
+      "name": "Jahkeele Marshall-Rutty",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-RZ",
+      "name": "Rida Zouhir",
+      "team": "CF Montréal",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SB",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SD",
+      "name": "Sebastián Driussi",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SJ",
+      "name": "Stiven Jimenez",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-SU",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TA",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TK",
+      "name": "Ted Ku-DiPietro",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TM",
+      "name": "Talles Magno",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TO",
+      "name": "Tomás Avilés",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-TW",
+      "name": "Tyler Wolff",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-WC",
+      "name": "Wikelman Carmona",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-WZ",
+      "name": "Walker Zimmerman",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-ZS",
+      "name": "Zack Steffen",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "Chrome Autographs"
+    },
+    {
+      "n": "CA-AV",
+      "name": "Alan Velasco",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-BC",
+      "name": "Benja Cremaschi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-BE",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-DB",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-DK",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-DR",
+      "name": "David Ruíz",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-FE",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-FT",
+      "name": "Facundo Torres",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-GG",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-HL",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-JA",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-LA",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-LM",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-NA",
+      "name": "Noah Allen",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-PV",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-RP",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-SB",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-SU",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "CA-TA",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Autographs (Mania)"
+    },
+    {
+      "n": "DA-AG",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Giorgos",
+      "name": "Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-AL",
+      "name": "Cristian Arango",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Diego",
+      "name": "Luna",
+      "team": "Real Salt Lake",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-CR",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Diego",
+      "name": "Rossi",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-DH",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Hany",
+      "name": "Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-IK",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Lorenzo",
+      "name": "Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-MB",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Lionel",
+      "name": "Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-MS",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "DA-PF",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "Diego",
+      "name": "Fagúndez",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Chrome Dual Autographs"
+    },
+    {
+      "n": "MN-LM",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Mania Autographs"
+    },
+    {
+      "n": "MMA-AV",
+      "name": "Alan Velasco",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-DV",
+      "name": "David Villa",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-HS",
+      "name": "Hristo Stoichkov",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-JA",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-LA",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-LS",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-MM",
+      "name": "Maxi Moralez",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-SB",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "MMA-TA",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Memory Makers Autographs"
+    },
+    {
+      "n": "FA-AP",
+      "name": "Andrea Pirlo",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-BS",
+      "name": "Bastian Schweinsteiger",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-DV",
+      "name": "David Villa",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-FL",
+      "name": "Frank Lampard",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-GB",
+      "name": "Gareth Bale",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-KA",
+      "name": "Kaká",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-SG",
+      "name": "Steven Gerrard",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-TH",
+      "name": "Thierry Henry",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-WR",
+      "name": "Wayne Rooney",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "FA-ZI",
+      "name": "Zlatan Ibrahimović",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Flashback Autographs"
+    },
+    {
+      "n": "TA-AC",
+      "name": "Ashley Cole",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-AP",
+      "name": "Andrea Pirlo",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-BS",
+      "name": "Bastian Schweinsteiger",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-CD",
+      "name": "Clint Dempsey",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-CV",
+      "name": "Carlos Valderrama",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-DV",
+      "name": "David Villa",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-FL",
+      "name": "Frank Lampard",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-GB",
+      "name": "Gareth Bale",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-HS",
+      "name": "Hristo Stoichkov",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-JD",
+      "name": "Jermain Defoe",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-KA",
+      "name": "Kaká",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-LM",
+      "name": "Lothar Matthäus",
+      "team": "New York Metrostars",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-RK",
+      "name": "Robbie Keane",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-SG",
+      "name": "Steven Gerrard",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-TH",
+      "name": "Thierry Henry",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-WR",
+      "name": "Wayne Rooney",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "TA-ZI",
+      "name": "Zlatan Ibrahimović",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Trailblazers Autographs"
+    },
+    {
+      "n": "DPA-AA",
+      "name": "Allan Arigoni",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-AM",
+      "name": "Shakur Mohammed",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-AO",
+      "name": "Agustín Ojeda",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-AP",
+      "name": "Amahl Pellegrino",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-AV",
+      "name": "Alenis Vargas",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-BS",
+      "name": "Bartosz Slisz",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-BU",
+      "name": "Bjørn Inge Utvik",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-BW",
+      "name": "Bruno Wilson",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-DD",
+      "name": "Djibril Diani",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-DG",
+      "name": "Dennis Gjengaar",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-DM",
+      "name": "David Martínez",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-GP",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-HK",
+      "name": "Hosei Kijima",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-HL",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-IT",
+      "name": "Iuri Tavares",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-JR",
+      "name": "Jamar Ricketts",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-JT",
+      "name": "Jackson Travis",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-LI",
+      "name": "Liel Abada",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-LM",
+      "name": "Loïc Mesanvi",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-LS",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-MA",
+      "name": "Markus Anderson",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-ML",
+      "name": "Matty Longstaff",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-MP",
+      "name": "Matti Peltola",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-MU",
+      "name": "Jacob Murrell",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-NB",
+      "name": "Nimfasha Berchimas",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-NP",
+      "name": "Nikola Petković",
+      "team": "Charlotte FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-OS",
+      "name": "Oliver Semmle",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-PB",
+      "name": "Pavel Bucha",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-PD",
+      "name": "Patrickson Delgado",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-PV",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-RM",
+      "name": "Roald Mitchell",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-SB",
+      "name": "Kimani Stewart-Baynes",
+      "team": "Colorado Rapids",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-SG",
+      "name": "Stian Gregersen",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-TT",
+      "name": "Tomas Totland",
+      "team": "St. Louis City SC",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "DPA-VC",
+      "name": "Vítor Costa",
+      "team": "San Jose Earthquakes",
+      "rc": false,
+      "subset": "MLS Debut Patch Autographs"
+    },
+    {
+      "n": "64T-1",
+      "name": "Clint Dempsey",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-2",
+      "name": "Federico Redondo",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-3",
+      "name": "David Villa",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-4",
+      "name": "Kaká",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-5",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-6",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-7",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-8",
+      "name": "Cristian Olivera",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-9",
+      "name": "Agustín Ojeda",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-10",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-11",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-12",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-13",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-14",
+      "name": "Emil Forsberg",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-15",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-16",
+      "name": "Gareth Bale",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-17",
+      "name": "Didier Drogba",
+      "team": "Montreal Impact",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-18",
+      "name": "Bastian Schweinsteiger",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-19",
+      "name": "Josef Martínez",
+      "team": "CF Montréal",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "64T-20",
+      "name": "Bradley Wright-Phillips",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "1964 Topps Football"
+    },
+    {
+      "n": "AI-1",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-2",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-3",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-4",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-5",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-6",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-7",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-8",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-9",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "AI-10",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "American Ink"
+    },
+    {
+      "n": "CS-1",
+      "name": "Hugo Cuypers",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-2",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-3",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-4",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-5",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-6",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-7",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-8",
+      "name": "Brian White",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-9",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-11",
+      "name": "Agustín Ojeda",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-12",
+      "name": "Julián Carranza",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-13",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-14",
+      "name": "Tyler Wolff",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-15",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-16",
+      "name": "Petar Musa",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-17",
+      "name": "Teemu Pukki",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-18",
+      "name": "Alan Pulido",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-19",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "CS-20",
+      "name": "Bongokuhle Hlongwane",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Big City Strikers"
+    },
+    {
+      "n": "SK-1",
+      "name": "Hugo Cuypers",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-2",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-3",
+      "name": "Gabriel Pec",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-4",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-5",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-6",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-7",
+      "name": "Deandre Kerr",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-8",
+      "name": "Brian White",
+      "team": "Vancouver Whitecaps FC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-9",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-11",
+      "name": "Agustín Ojeda",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-12",
+      "name": "Julián Carranza",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-13",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-14",
+      "name": "Tyler Wolff",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-15",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-16",
+      "name": "Petar Musa",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-17",
+      "name": "Teemu Pukki",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-18",
+      "name": "Alan Pulido",
+      "team": "Sporting Kansas City",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-19",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "SK-20",
+      "name": "Bongokuhle Hlongwane",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Big City Strikers Skylight Variation"
+    },
+    {
+      "n": "BR-1",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-2",
+      "name": "Jalen Neal",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-3",
+      "name": "Miles Robinson",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-4",
+      "name": "DeAndre Yedlin",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-5",
+      "name": "Jordan Morris",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-6",
+      "name": "Matt Miazga",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-7",
+      "name": "Cristian Roldan",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-8",
+      "name": "James Sands",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-9",
+      "name": "John Tolkin",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-10",
+      "name": "DeJuan Jones",
+      "team": "New England Revolution",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-11",
+      "name": "Aaron Long",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-12",
+      "name": "Julian Gressel",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-13",
+      "name": "Shaq Moore",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-14",
+      "name": "Gyasi Zardes",
+      "team": "Austin FC",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "BR-15",
+      "name": "Paul Arriola",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Home of the Brave"
+    },
+    {
+      "n": "LG-1",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-2",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-3",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-4",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-5",
+      "name": "Jesús Ferreira",
+      "team": "FC Dallas",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-6",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-7",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-8",
+      "name": "Denis Bouanga",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-9",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-11",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-12",
+      "name": "Hany Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-13",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-14",
+      "name": "Joseph Paintsil",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "LG-15",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Let's Go"
+    },
+    {
+      "n": "MM-1",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-2",
+      "name": "Jordi Alba",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-3",
+      "name": "Thiago Almada",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-4",
+      "name": "Lucho Acosta",
+      "team": "FC Cincinnati",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-5",
+      "name": "Julián Fernández",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-6",
+      "name": "Thierry Henry",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-7",
+      "name": "David Villa",
+      "team": "NYCFC",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-8",
+      "name": "Hristo Stoichkov",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-9",
+      "name": "Julián Carranza",
+      "team": "Philadelphia Union",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-10",
+      "name": "Tomás Avilés",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-11",
+      "name": "Kaká",
+      "team": "Orlando City SC",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "MM-12",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Memory Makers"
+    },
+    {
+      "n": "SB-1",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-2",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-3",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-4",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-5",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-6",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-7",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-8",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-9",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "SB-10",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "South Beach Superstar"
+    },
+    {
+      "n": "TT-1",
+      "name": "Sergio Busquets",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-2",
+      "name": "Bongokuhle Hlongwane",
+      "team": "Minnesota United",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-3",
+      "name": "Lorenzo Insigne",
+      "team": "Toronto FC",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-4",
+      "name": "Riqui Puig",
+      "team": "LA Galaxy",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-5",
+      "name": "Giorgos Giakoumakis",
+      "team": "Atlanta United",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-6",
+      "name": "Hugo Cuypers",
+      "team": "Chicago Fire",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-7",
+      "name": "Emil Forsberg",
+      "team": "New York Red Bulls",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-8",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-9",
+      "name": "Christian Benteke",
+      "team": "D.C. United",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "TT-10",
+      "name": "Pedro de la Vega",
+      "team": "Seattle Sounders FC",
+      "rc": false,
+      "subset": "Team Tags"
+    },
+    {
+      "n": "CL-1",
+      "name": "Hany Mukhtar",
+      "team": "Nashville SC",
+      "rc": false,
+      "subset": "Topps Chrome Layers"
+    },
+    {
+      "n": "CL-2",
+      "name": "Luis Suárez",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Topps Chrome Layers"
+    },
+    {
+      "n": "CL-3",
+      "name": "Hugo Lloris",
+      "team": "LAFC",
+      "rc": false,
+      "subset": "Topps Chrome Layers"
+    },
+    {
+      "n": "CL-4",
+      "name": "Cucho",
+      "team": "Columbus Crew",
+      "rc": false,
+      "subset": "Topps Chrome Layers"
+    },
+    {
+      "n": "CL-5",
+      "name": "Lionel Messi",
+      "team": "Inter Miami CF",
+      "rc": false,
+      "subset": "Topps Chrome Layers"
+    }
+  ]
+}

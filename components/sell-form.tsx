@@ -96,7 +96,7 @@ const LANGUAGES = ["日文", "英文", "繁體中文", "簡體中文", "韓文"]
 const CARD_ORDER = ["pokemon", "one-piece", "riftbound", "topps-soccer", "topps-basketball", "topps-baseball", "panini-soccer", "football", "basketball", "baseball", "singers", "actors", "idols"];
 
 function catalogSlug(slug: string | undefined): string {
-  if (slug === "pokemon" || slug === "one-piece" || slug === "riftbound") return slug;
+  if (slug === "pokemon" || slug === "one-piece" || slug === "riftbound" || slug === "topps-basketball" || slug === "topps-soccer") return slug;
   return "";
 }
 
@@ -643,7 +643,11 @@ export function SellForm({
                         ? tx(locale, "打卡名，例如 路飛 或 OP01-001", "Card name, e.g. Luffy or OP01-001")
                         : catalogGame === "riftbound"
                           ? tx(locale, "打卡名，例如 Annie", "Card name, e.g. Annie")
-                          : tx(locale, "打卡名，例如 Mew", "Card name, e.g. Mew")
+                          : catalogGame === "topps-basketball"
+                            ? tx(locale, "打球員，例如 LeBron", "Player, e.g. LeBron")
+                            : catalogGame === "topps-soccer"
+                              ? tx(locale, "打球員，例如 Mbappé", "Player, e.g. Mbappé")
+                              : tx(locale, "打卡名，例如 Mew", "Card name, e.g. Mew")
                     }
                     pinOnPick={(hit) => hit.cardName}
                     onValue={(value) => patchCard(index, { name: value, catalogId: "", catalogTitle: "" })}

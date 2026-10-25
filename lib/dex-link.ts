@@ -68,8 +68,9 @@ export async function linkCatalogListings(opts?: { deadlineMs?: number; game?: D
   const cards = await loadTitledCards(game);
   if (!cards.length) return { listings: 0, collectionItems: 0 };
 
+  const cardKind = game === "TOPPS_BASKETBALL" || game === "TOPPS_SOCCER" ? "ATHLETE" : "TCG";
   const listings = await prisma.listing.findMany({
-    where: { cardKind: "TCG", category: { slug: categorySlugForGame(game) } },
+    where: { cardKind, category: { slug: categorySlugForGame(game) } },
     select: { id: true, title: true, cardName: true, setName: true, cardNumber: true, language: true, catalogCardId: true },
   });
   const byId = new Map(cards.map((card) => [card.id, card]));

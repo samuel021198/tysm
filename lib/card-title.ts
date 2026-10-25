@@ -226,6 +226,8 @@ export function titleGameLabel(game: string | null | undefined): string {
   if (text === "one-piece" || text === "onepiece" || text === "op") return "One Piece";
   if (text === "riftbound" || text === "rift") return "Riftbound";
   if (text === "demo") return "Demo";
+  if (text === "topps-basketball" || text === "topps-basket") return "Topps Basketball";
+  if (text === "topps-soccer" || text === "topps-football") return "Topps Soccer";
   return "Pokemon";
 }
 

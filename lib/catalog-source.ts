@@ -9,6 +9,8 @@ export type CatalogPrinting = {
   sourceImageUrl: string;
   rarity: string | null;
   artist: string | null;
+  /** Team for Topps. Other games leave it unset and ingest stores null. */
+  finish?: string | null;
 };
 
 export type CatalogPrintingSet = {

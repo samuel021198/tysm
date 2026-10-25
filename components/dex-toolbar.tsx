@@ -135,9 +135,13 @@ export function DexToolbar({
       ? tx(locale, "卡名或卡號，例如 路飛 或 OP01-001", "Name or number, e.g. Luffy or OP01-001")
       : game === "RIFTBOUND"
         ? tx(locale, "卡名或卡號，例如 Annie 或 017", "Name or number, e.g. Annie or 017")
-        : game === "DEMO"
-          ? tx(locale, "卡名或卡號，例如 噴火龍 或 001", "Name or number, e.g. Charizard or 001")
-          : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
+        : game === "TOPPS_BASKETBALL"
+          ? tx(locale, "球員或卡號，例如 LeBron 或 23", "Player or number, e.g. LeBron or 23")
+          : game === "TOPPS_SOCCER"
+            ? tx(locale, "球員或卡號，例如 Mbappé 或 1", "Player or number, e.g. Mbappé or 1")
+            : game === "DEMO"
+              ? tx(locale, "卡名或卡號，例如 噴火龍 或 001", "Name or number, e.g. Charizard or 001")
+              : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
 
   return (
     <div className="relative grid gap-3">
