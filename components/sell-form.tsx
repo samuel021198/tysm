@@ -93,7 +93,12 @@ const RAW_OPTIONS = [
 
 const LANGUAGES = ["日文", "英文", "繁體中文", "簡體中文", "韓文"] as const;
 
-const CARD_ORDER = ["pokemon", "topps-soccer", "topps-basketball", "topps-baseball", "panini-soccer", "one-piece", "football", "basketball", "baseball", "singers", "actors", "idols"];
+const CARD_ORDER = ["pokemon", "one-piece", "riftbound", "topps-soccer", "topps-basketball", "topps-baseball", "panini-soccer", "football", "basketball", "baseball", "singers", "actors", "idols"];
+
+function catalogSlug(slug: string | undefined): string {
+  if (slug === "pokemon" || slug === "one-piece" || slug === "riftbound") return slug;
+  return "";
+}
 
 const STEPS = [
   ["基本資料", "Basics"],
@@ -207,7 +212,7 @@ export function SellForm({
   const locked = initial?.locked || false;
   const multi = cards.length >= 2;
   const selected = ordered.find((cat) => cat.id === categoryId);
-  const pokemon = selected?.slug === "pokemon";
+  const catalogGame = catalogSlug(selected?.slug);
   const categoryLabel = selected ? (locale === "en" ? selected.nameEn : selected.nameZh) : "";
   const scheduling = publishMode === "later";
   const onPublishAt = useCallback((value: string) => setPublishAt(value), []);
@@ -252,8 +257,8 @@ export function SellForm({
   function payload() {
     return cards.map((card) => ({
       cardName: card.name,
-      catalogCardId: pokemon ? card.catalogId : "",
-      catalogTitle: pokemon ? card.catalogTitle : "",
+      catalogCardId: catalogGame ? card.catalogId : "",
+      catalogTitle: catalogGame ? card.catalogTitle : "",
       year: card.year,
       setName: card.setName,
       setCode: card.setCode,
@@ -602,9 +607,7 @@ export function SellForm({
               onChange={(event) => {
                 const nextId = event.target.value;
                 setCategoryId(nextId);
-                if (ordered.find((cat) => cat.id === nextId)?.slug !== "pokemon") {
-                  setCards((current) => current.map((card) => ({ ...card, catalogId: "", catalogTitle: "" })));
-                }
+                setCards((current) => current.map((card) => ({ ...card, catalogId: "", catalogTitle: "" })));
               }}
             >
               {ordered.map((cat) => (
@@ -628,13 +631,20 @@ export function SellForm({
                     </button>
                   ) : null}
                 </div>
-                {pokemon ? (
+                {catalogGame ? (
                   <CatalogTitleField
                     locale={locale}
+                    game={catalogGame}
                     value={card.name}
                     named={false}
                     label={tx(locale, "卡名（選填）", "Card name (optional)")}
-                    placeholder={tx(locale, "打卡名，例如 Mew", "Card name, e.g. Mew")}
+                    placeholder={
+                      catalogGame === "one-piece"
+                        ? tx(locale, "打卡名，例如 路飛 或 OP01-001", "Card name, e.g. Luffy or OP01-001")
+                        : catalogGame === "riftbound"
+                          ? tx(locale, "打卡名，例如 Annie", "Card name, e.g. Annie")
+                          : tx(locale, "打卡名，例如 Mew", "Card name, e.g. Mew")
+                    }
                     pinOnPick={(hit) => hit.cardName}
                     onValue={(value) => patchCard(index, { name: value, catalogId: "", catalogTitle: "" })}
                     onPick={(hit) => applyCatalog(index, hit)}
@@ -645,7 +655,7 @@ export function SellForm({
                     <input className="field" value={card.name} maxLength={80} placeholder={tx(locale, "自己填卡名", "Type the card name")} onChange={(event) => patchCard(index, { name: event.target.value })} />
                   </label>
                 )}
-                {card.catalogId && pokemon ? (
+                {card.catalogId && catalogGame ? (
                   <div className="grid gap-2 rounded-2xl bg-soft px-3 py-3 text-sm">
                     <p className="font-semibold">{tx(locale, "已對上圖鑑", "Linked to the dex")}</p>
                     <p>{card.catalogTitle}</p>

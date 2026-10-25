@@ -1,6 +1,13 @@
 import Link from "next/link";
-import { Icon } from "./icons";
+import { gameHasRegion, gameParam, type DexGame } from "@/lib/dex";
 import { tx, type Locale } from "@/lib/i18n";
+import { Icon } from "./icons";
+
+const GAMES = [
+  ["POKEMON", "寶可夢", "Pokémon"],
+  ["ONE_PIECE", "海賊王", "One Piece"],
+  ["RIFTBOUND", "Riftbound", "Riftbound"],
+] as const;
 
 const REGIONS = [
   ["", "全部", "All"],
@@ -18,23 +25,34 @@ export function DexToolbar({
   locale,
   q,
   region,
+  game,
   action,
   chips,
 }: {
   locale: Locale;
   q: string;
   region: string;
+  game: DexGame;
   action: string;
   chips: string;
 }) {
   const current = region === "JP" || region === "WEST" ? region : "";
-  function href(nextRegion: string) {
+  const regions = gameHasRegion(game);
+  function href(next: { game?: DexGame; region?: string }) {
     const params = new URLSearchParams();
+    const nextGame = next.game ?? game;
+    params.set("game", gameParam(nextGame));
     if (q) params.set("q", q);
-    if (nextRegion) params.set("region", nextRegion);
-    const search = params.toString();
-    return search ? `${chips}?${search}` : chips;
+    const nextRegion = next.game && next.game !== game ? "" : next.region ?? current;
+    if (nextRegion && gameHasRegion(nextGame)) params.set("region", nextRegion);
+    return `${chips}?${params.toString()}`;
   }
+  const placeholder =
+    game === "ONE_PIECE"
+      ? tx(locale, "卡名或卡號，例如 路飛 或 OP01-001", "Name or number, e.g. Luffy or OP01-001")
+      : game === "RIFTBOUND"
+        ? tx(locale, "卡名或卡號，例如 Annie 或 017", "Name or number, e.g. Annie or 017")
+        : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
 
   return (
     <div className="grid gap-3">
@@ -47,22 +65,33 @@ export function DexToolbar({
           id="dex-q"
           name="q"
           defaultValue={q}
-          placeholder={tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020")}
+          placeholder={placeholder}
           className="h-11 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-[var(--field-placeholder)]"
         />
-        {current ? <input type="hidden" name="region" value={current} /> : null}
+        <input type="hidden" name="game" value={gameParam(game)} />
+        {current && regions ? <input type="hidden" name="region" value={current} /> : null}
         <button className="inline-flex h-11 items-center rounded-full bg-gradient-to-r from-rose to-teal px-4 text-sm font-semibold text-[#1b1418]" type="submit">
           {tx(locale, "搜尋", "Search")}
         </button>
       </form>
-      <div className="chips" aria-label={tx(locale, "篩選", "Filters")}>
-        <span className={chipClass(true)}>{tx(locale, "寶可夢", "Pokémon")}</span>
-        {REGIONS.map(([value, zh, en]) => (
-          <Link key={value || "all"} href={href(value)} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
+      <div className="chips" aria-label={tx(locale, "遊戲", "Game")}>
+        {GAMES.map(([value, zh, en]) => (
+          <Link key={value} href={href({ game: value })} className={chipClass(game === value)} aria-current={game === value ? "page" : undefined}>
             {tx(locale, zh, en)}
           </Link>
         ))}
       </div>
+      {regions ? (
+        <div className="chips" aria-label={tx(locale, "語言", "Language")}>
+          {REGIONS.map(([value, zh, en]) => (
+            <Link key={value || "all"} href={href({ region: value })} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
+              {tx(locale, zh, en)}
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-muted">{tx(locale, "而家只有英文。", "English only for now.")}</p>
+      )}
     </div>
   );
 }

@@ -89,7 +89,7 @@ npm run dev
 
 底欄第二個分頁係圖鑑（`/dex`），唔再係賣場。賣場仍然係 `/market`，卡牌頁「放售」的「睇全部放售」會去現有搜尋。
 
-圖鑑只收寶可夢，日文同英文名、卡圖、系列同卡號。可以按卡名（中、日、英）或卡號搜。卡牌頁有「資料」同「放售」（連住現有刊登），以及「加入收藏」。v1 沒有價錢走勢或背景故事。
+圖鑑收三款遊戲：**寶可夢**（日文同英文）、**海賊王 / One Piece**（日文同英文）、**Riftbound**（而家只有英文）。可以按卡名或卡號搜，畫面頂部可以切換遊戲；寶可夢同海賊王仲可以篩日文／英文。卡牌頁有「資料」同「放售」（連住現有刊登），以及「加入收藏」。v1 沒有價錢走勢或背景故事。圖片用來源的 HTTPS 網址，未有 R2 鏡像（R2 仍然只會鏡像寶可夢，而且要齊環境變數先會做）。
 
 目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。v1 唔用 Scrydex；之後如果要加價錢先至考慮。
 
@@ -125,7 +125,47 @@ curl -sS -X POST "https://你的網域/api/internal/ingest-dex?lang=en&sets=4" \
 
 成功回 `200`：`done`、`cursor`（走完係 `null`）、`remainingSets`、`processedSetIds`、`counts`。`done: true` 表示今次語言範圍裡面的可用系列已經走完。R2 開住而且 `counts.imagesPending > 0` 時，可以再打同一條（即使 `done` 已經係 true）補鏡像；未鏡像的圖會留低 TCGdex 網址。沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。`sets`、`cursor` 或 `lang` 唔合法會回 `400`。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
 
-圖鑑畫面同由圖鑑帶出的刊登標題格式係 `{year} Pokemon {setCode} {JP|EN} #{number} {Card Name} {Rarity}`，例如 `2023 Pokemon SV2a JP #193 Mew ex Super Rare`。系列用資料庫入面的 set `code`（TCGdex set id），唔用系列全名。`JP` 係日文印刷，`EN` 係西方／英文。罕貴用 Title Case；空值或 `None` 就唔寫。Finish（Holo、Reverse Foil）只留來搜尋，唔再出現喺標題。`CatalogCard` 本身冇 `title` 欄，畫面係用卡同系列欄位現計。搜尋同標題建議會同時對卡名、系列全名、系列代碼、卡號、罕貴、finish、語言同年份，所以舊式「系列全名 + Holo」同新式「代碼 + JP/EN + 罕貴」都搵到同一張卡。
+圖鑑畫面同由圖鑑帶出的刊登標題格式係 `{year} {Game} {setCode} {JP|EN} #{number} {Card Name} {Rarity}`。遊戲字係 `Pokemon`、`One Piece` 或 `Riftbound`。例子：`2023 Pokemon SV2a JP #193 Mew ex Super Rare`、`One Piece OP-01 EN #OP01-001 Roronoa Zoro L`、`2025 Riftbound OGN EN #007a Fury Rune Showcase`。年份、系列代碼、語言、卡號、卡名、罕貴有先至寫。Riftbound 只有英文，語言位會寫 `EN`。系列用資料庫入面的 set `code`，唔用系列全名。`JP` 係日文印刷，`EN` 係西方／英文。罕貴用 Title Case；空值或 `None` 就唔寫；海賊王嘅短代碼（`L`、`SR`、`SEC`）保持原樣。Finish（Holo、Reverse Foil）只留來搜尋，唔再出現喺標題。`CatalogCard` 本身冇 `title` 欄，畫面係用卡同系列欄位現計。搜尋同標題建議會同時對卡名、系列全名、系列代碼、卡號、罕貴、finish、語言同年份，而且會跟住選定的遊戲。上架時，寶可夢、海賊王、Riftbound 先會出圖鑑建議；其他分類仍然自己填。
+
+### 海賊王同 Riftbound 點同步
+
+同一條 `POST /api/internal/ingest-dex`，加 `game`。密鑰同寶可夢一樣，`Authorization: Bearer $BOOTSTRAP_SECRET`。`maxDuration` 仍然係 300 秒，軟性 deadline 240 秒。重複 POST，把上一次的 `cursor` 傳回去，直到 `done` 係 `true`。Upsert 用 `externalId`，重複呼叫安全。未完成的系列會再入；已經寫低 `total` 而且卡數夠的系列會跳過。目錄未走完唔會做刊登連結。
+
+| `game` | 來源 | 語言 |
+| --- | --- | --- |
+| `pokemon`（預設） | [TCGdex](https://tcgdex.dev/) | `lang=en`、`ja` 或 `all` |
+| `one-piece` | 英文：[OPTCG API](https://optcgapi.com/)（`/api/allSets/`、`/api/sets/{id}/`、starter、`/api/allPromos/`、`/api/allDonCards/`）。日文：官方卡表 [`onepiece-cardgame.com/cardlist/`](https://www.onepiece-cardgame.com/cardlist/)，每個系列一頁 HTML。 | `lang=en`、`ja` 或 `all`（預設英文先，再日文） |
+| `riftbound` | [RiftHunt](https://rifthunt.com/api/) `GET https://api.rifthunt.com/bulk/cards` | 只有英文。`lang=ja` 會回 `400` |
+
+OPTCG 係免費、唔使 key，但最新系列可能未有。以 2026-10-25 對照：英文約 59 組、5,479 張（PROMO 1,082、DON 187），官方日文卡表 63 個系列、5,058 張。OPTCG 未見日文先出的 EB-04、EB-05、ST-29；英文有合併商品（例如 OP15-EB04），日文則分開列。OPTCG 沒有發行日，標題多數沒有年份。日文沒有對等的 keyless JSON，所以 v1 讀官方卡表：每個系列一次請求，帶識別用的 User-Agent，系列之間會停一停。卡表 HTML 若沒有 `id="series"`，該系列會當失敗重試，唔會寫成空系列。日文卡名配對英文，用同一個卡號（`OP01-001`）；英文未入之前，日文列的英文名會暫時等於日文名，之後再 POST 一次（`done` 之後的 post-step）會補。Riftbound bulk 約 10 個系列、1,702 張印刷，一次下載再按系列分批 upsert。圖片都係來源 URL（Riftbound 多數係 Riot CDN），呢兩款唔會寫入 R2。官方日文圖帶 `Cross-Origin-Resource-Policy: same-site`，瀏覽器唔會喺 TYSM 顯示，所以畫面經 `GET /api/catalog/image` 代取，只允許 `https://www.onepiece-cardgame.com/images/cardlist/` 的圖檔。資料庫仍然存官方網址。
+
+上架的 Riftbound 分類要靠 seed／reseed 先會出現（`cat_riftbound`）。已經上線的資料庫，部署 migration 之後打一次 reseed，或者本地 `npm run db:seed`。
+
+```bash
+npm run dex:ingest -- --game=one-piece --lang=en --sets=3
+npm run dex:ingest -- --game=one-piece --lang=ja --sets=2
+npm run dex:ingest -- --game=riftbound --sets=4
+```
+
+```bash
+# 正式環境。一直打到 done 係 true。
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"game":"one-piece","lang":"en","sets":3}'
+
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"game":"one-piece","lang":"ja","sets":2,"cursor":"ja:550117#40"}'
+
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"game":"riftbound","sets":4}'
+```
+
+`game` 唔係 `pokemon`／`one-piece`／`riftbound` 會回 `400` `invalid_game`。Cursor 格式同寶可夢一樣：`en:OP-01`、`en:PROMO#200`、`ja:550117#40`、`en:OGN#80`。`#` 放 query 要寫成 `%23`。
 
 已經抄咗舊標題的刊登同收藏，要在部署之後回填，唔使再下載 TCGdex。只會改寫仍然等於舊公式的 `Listing.title` 同 `CollectionItem.title`，賣家自己改過的標題會留低。路由 `maxDuration` 係 300 秒，軟性 deadline 係 240 秒。重複 POST，直到 `done` 係 `true`。`cursor` 係上一批最後一張 `CatalogCard.id`。
 

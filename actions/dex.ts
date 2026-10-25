@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { catalogDisplayTitle } from "@/lib/card-title";
+import { catalogTitleFromCard } from "@/lib/card-title";
+import { catalogImageSrc } from "@/lib/catalog-image";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { createCollectionItem } from "@/lib/inventory";
@@ -24,15 +25,7 @@ export async function collectCatalogCard(formData: FormData) {
     select: { id: true },
   });
   if (!existing) {
-    const title = catalogDisplayTitle({
-      releaseDate: card.set.releaseDate,
-      setCode: card.set.code,
-      printRegion: card.printRegion,
-      collectorNumber: card.collectorNumber,
-      numberKey: card.numberKey,
-      cardName: card.nameEn,
-      rarity: card.rarity,
-    }).slice(0, 120);
+    const title = catalogTitleFromCard(card).slice(0, 120);
     await createCollectionItem({
       ownerId: user.id,
       title: title || card.nameEn,
@@ -43,7 +36,7 @@ export async function collectCatalogCard(formData: FormData) {
       rawGrade: "A",
       grader: null,
       gradeValue: null,
-      photos: [{ url: card.imageUrl, role: "FRONT" }],
+      photos: [{ url: catalogImageSrc(card.imageUrl), role: "FRONT" }],
       publishToFeed: false,
       catalogCardId: card.id,
     });

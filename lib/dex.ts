@@ -4,6 +4,31 @@ import { foldSearch } from "./search";
 
 export type DexPrintRegion = "JP" | "WEST";
 
+export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND";
+
+export function parseGame(value: string | null | undefined): DexGame | null {
+  const text = (value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
+  if (text === "pokemon" || text === "pokémon") return "POKEMON";
+  if (text === "one-piece" || text === "onepiece" || text === "op") return "ONE_PIECE";
+  if (text === "riftbound" || text === "rift") return "RIFTBOUND";
+  return null;
+}
+
+export function gameParam(game: DexGame): string {
+  if (game === "ONE_PIECE") return "one-piece";
+  if (game === "RIFTBOUND") return "riftbound";
+  return "pokemon";
+}
+
+/** Sell-form / listing category slug for a dex game. */
+export function categorySlugForGame(game: DexGame): string {
+  return gameParam(game);
+}
+
+export function gameHasRegion(game: DexGame): boolean {
+  return game !== "RIFTBOUND";
+}
+
 export const DEX_PLACEHOLDER = "/demo/back.svg";
 
 /** Demo seed listings without a real collector number use `NNN/185`. */
@@ -226,7 +251,7 @@ export function catalogNeedles(query: string): string[] {
 }
 
 /** Words that appear in every generated title and should not be required on their own. */
-const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg"]);
+const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg", "one", "piece", "riftbound"]);
 
 /** Rarity / finish words. On a pasted title they must not wipe a name or set hit. */
 const SOFT_TOKEN = new Set([
@@ -390,8 +415,11 @@ function whereForTokens(tokens: string[], setKeys: ReadonlySet<string>, region: 
   return parts.length === 1 ? parts[0]! : { AND: parts };
 }
 
-export function catalogWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
-  return whereForTokens(catalogQueryTokens(query), setPhraseKeys(query), region);
+export function catalogWhere(query: string, region: DexPrintRegion | null, game?: DexGame | null): Prisma.CatalogCardWhereInput {
+  const where = whereForTokens(catalogQueryTokens(query), setPhraseKeys(query), region);
+  if (!game) return where;
+  if (!Object.keys(where).length) return { game };
+  return { AND: [where, { game }] };
 }
 
 /** Suggestion fetch. A pasted title still returns the card when rarity or the year is off. */
@@ -423,13 +451,20 @@ export function bilingualName(raw: string, region: DexPrintRegion): { nameEn: st
   return { nameEn: name, nameJa: name };
 }
 
+/** Drop tags left in a set label. Settled ingest rows are not rewritten. */
+export function plainCatalogLabel(value: string): string {
+  return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export function setDisplayName(
   set: { nameEn: string; nameJa: string },
   region: DexPrintRegion,
   locale: Locale,
 ): string {
-  if (locale === "en") return set.nameEn || set.nameJa;
-  return region === "JP" ? set.nameJa || set.nameEn : set.nameEn || set.nameJa;
+  const nameEn = plainCatalogLabel(set.nameEn);
+  const nameJa = plainCatalogLabel(set.nameJa);
+  if (locale === "en") return nameEn || nameJa;
+  return region === "JP" ? nameJa || nameEn : nameEn || nameJa;
 }
 
 export function regionLabel(region: DexPrintRegion, locale: Locale): string {

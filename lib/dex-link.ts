@@ -1,6 +1,6 @@
 import { listingTitleFromCatalog } from "./card-title";
 import { prisma } from "./db";
-import { pickCatalogCard, type DexLinkCard, type DexLinkListing } from "./dex";
+import { categorySlugForGame, pickCatalogCard, type DexGame, type DexLinkCard, type DexLinkListing } from "./dex";
 
 const cardSelect = {
   id: true,
@@ -13,10 +13,10 @@ const cardSelect = {
   set: { select: { code: true, nameEn: true, nameJa: true, releaseDate: true } },
 } as const;
 
-type TitledCard = DexLinkCard & { collectorNumber: string; rarity: string | null };
+type TitledCard = DexLinkCard & { collectorNumber: string; rarity: string | null; game: string };
 
-async function loadTitledCards(): Promise<TitledCard[]> {
-  const cards = await prisma.catalogCard.findMany({ select: cardSelect });
+async function loadTitledCards(game: DexGame): Promise<TitledCard[]> {
+  const cards = await prisma.catalogCard.findMany({ where: { game }, select: { ...cardSelect, game: true } });
   return cards.map((card) => ({
     id: card.id,
     nameEn: card.nameEn,
@@ -29,11 +29,12 @@ async function loadTitledCards(): Promise<TitledCard[]> {
     setNameEn: card.set.nameEn,
     setNameJa: card.set.nameJa,
     setCode: card.set.code,
+    game: card.game,
   }));
 }
 
-export async function loadLinkCards(): Promise<DexLinkCard[]> {
-  return loadTitledCards();
+export async function loadLinkCards(game: DexGame = "POKEMON"): Promise<DexLinkCard[]> {
+  return loadTitledCards(game);
 }
 
 function listingShape(row: {
@@ -59,15 +60,16 @@ function listingShape(row: {
  * ponytail: a full pass restarts at the first listing. ~2s per listing at 37k cards, so ingest
  * must not call this on mid-walk batches. Upgrade path: index cards by name token, or persist a listing cursor.
  */
-export async function linkCatalogListings(opts?: { deadlineMs?: number }): Promise<{ listings: number; collectionItems: number }> {
+export async function linkCatalogListings(opts?: { deadlineMs?: number; game?: DexGame }): Promise<{ listings: number; collectionItems: number }> {
   const deadlineMs = opts?.deadlineMs;
+  const game = opts?.game ?? "POKEMON";
   if (deadlineMs != null && Date.now() >= deadlineMs) return { listings: 0, collectionItems: 0 };
 
-  const cards = await loadTitledCards();
+  const cards = await loadTitledCards(game);
   if (!cards.length) return { listings: 0, collectionItems: 0 };
 
   const listings = await prisma.listing.findMany({
-    where: { cardKind: "TCG", category: { slug: "pokemon" } },
+    where: { cardKind: "TCG", category: { slug: categorySlugForGame(game) } },
     select: { id: true, title: true, cardName: true, setName: true, cardNumber: true, language: true, catalogCardId: true },
   });
   const byId = new Map(cards.map((card) => [card.id, card]));
@@ -91,6 +93,7 @@ export async function linkCatalogListings(opts?: { deadlineMs?: number }): Promi
           numberKey: linked.numberKey,
           cardName: linked.nameEn,
           rarity: linked.rarity,
+          game: linked.game,
         })
       : "";
     const data: { catalogCardId?: string | null; title?: string } = {};

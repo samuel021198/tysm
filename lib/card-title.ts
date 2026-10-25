@@ -45,6 +45,8 @@ export type CatalogTitleInput = {
   setCode?: string | null;
   /** JP or WEST (WEST prints as EN). Other values omit the tag. */
   printRegion?: string | null;
+  /** CatalogGame. Omitted means Pokémon, so older callers keep the Pokemon title. */
+  game?: string | null;
   collectorNumber?: string | null;
   numberKey?: string | null;
   cardName?: string | null;
@@ -210,14 +212,23 @@ export function titleLanguageTag(region: string | null | undefined): "JP" | "EN"
   return "";
 }
 
-/** Rarity in Title Case. Null, blank, and "None" drop out. */
+/** Rarity in Title Case. Null, blank, and "None" drop out. Short all-caps codes (SEC, SR) stay as printed. */
 export function rarityTitle(value: string | null | undefined): string {
   const clean = (value || "").replace(/\s+/g, " ").trim();
   if (!clean || /^none$/i.test(clean)) return "";
+  if (!/\s/.test(clean) && clean === clean.toUpperCase() && /[A-Z]/.test(clean) && clean.length <= 12) return clean;
   return titleCasePhrase(clean.toLowerCase());
 }
 
-/** `{year} Pokemon {setCode} {JP|EN} #{number} {Card Name} {Rarity}` */
+/** English title word. Pokémon stays "Pokemon" so existing listing titles still match. */
+export function titleGameLabel(game: string | null | undefined): string {
+  const text = (game || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
+  if (text === "one-piece" || text === "onepiece" || text === "op") return "One Piece";
+  if (text === "riftbound" || text === "rift") return "Riftbound";
+  return "Pokemon";
+}
+
+/** `{year} {Game} {setCode} {JP|EN} #{number} {Card Name} {Rarity}` */
 export function catalogDisplayTitle(input: CatalogTitleInput): string {
   const year = releaseYear(input.releaseDate);
   const code = setCodeOf(input.setCode);
@@ -225,9 +236,30 @@ export function catalogDisplayTitle(input: CatalogTitleInput): string {
   const number = titleNumber(input.collectorNumber, input.numberKey);
   const cardName = titleCasePhrase(input.cardName || "");
   const rarity = rarityTitle(input.rarity);
-  const showPokemon = Boolean(year || code || lang || number || cardName || rarity);
-  const parts = [year, showPokemon ? "Pokemon" : "", code, lang, number ? `#${number}` : "", cardName, rarity].filter(Boolean);
+  const showGame = Boolean(year || code || lang || number || cardName || rarity);
+  const parts = [year, showGame ? titleGameLabel(input.game) : "", code, lang, number ? `#${number}` : "", cardName, rarity].filter(Boolean);
   return parts.join(" ").replace(/\s+/g, " ").trim();
+}
+
+export function catalogTitleFromCard(card: {
+  game?: string | null;
+  printRegion?: string | null;
+  collectorNumber?: string | null;
+  numberKey?: string | null;
+  nameEn?: string | null;
+  rarity?: string | null;
+  set?: { code?: string | null; releaseDate?: string | null } | null;
+}): string {
+  return catalogDisplayTitle({
+    game: card.game,
+    releaseDate: card.set?.releaseDate,
+    setCode: card.set?.code,
+    printRegion: card.printRegion,
+    collectorNumber: card.collectorNumber,
+    numberKey: card.numberKey,
+    cardName: card.nameEn,
+    rarity: card.rarity,
+  });
 }
 
 function joinTitle(parts: string[]): string {
@@ -248,7 +280,7 @@ export function listingTitleFromCatalog(input: CatalogTitleInput, max = 80): str
   const number = titleNumber(input.collectorNumber, input.numberKey);
   const cardName = titleCasePhrase(input.cardName || "");
   const num = number ? `#${number}` : "";
-  const head = joinTitle([year, "Pokemon"]);
+  const head = joinTitle([year, titleGameLabel(input.game)]);
   const named = joinTitle([lang, num, cardName]);
   const withoutRarity = joinTitle([head, code, named]);
   if (withoutRarity.length <= max && withoutRarity.length >= 2) return withoutRarity;

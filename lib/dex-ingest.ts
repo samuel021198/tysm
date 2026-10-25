@@ -285,6 +285,7 @@ export async function backfillCatalogTitles(opts?: { deadlineMs?: number; cursor
         printRegion: true,
         rarity: true,
         finish: true,
+        game: true,
         set: { select: { code: true, nameEn: true, releaseDate: true } },
       },
     });
@@ -303,6 +304,7 @@ export async function backfillCatalogTitles(opts?: { deadlineMs?: number; cursor
         cardName: card.nameEn,
         finish: card.finish,
         rarity: card.rarity,
+        game: card.game,
       });
       if (plan.previousListingTitles.length) {
         const result = await prisma.listing.updateMany({
