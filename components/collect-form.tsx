@@ -5,8 +5,8 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { saveCollection, savePost } from "@/actions/collect";
 import { errText, tx, type Locale } from "@/lib/i18n";
-import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
 import { fileToDataUrl } from "./photo-file";
+import { SellForm, type SellInitial } from "./sell-form";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
@@ -44,41 +44,32 @@ export function CollectForm({
   mode,
   categories,
   phoneVerified,
+  percent = "8",
+  storeReady = false,
+  storeLabel = "",
 }: {
   locale: Locale;
   mode: "collection" | "post";
   categories: Cat[];
   phoneVerified: boolean;
+  percent?: string;
+  storeReady?: boolean;
+  storeLabel?: string;
 }) {
   const [state, action] = useActionState(mode === "post" ? savePost : saveCollection, null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [forSale, setForSale] = useState(false);
   const [alsoList, setAlsoList] = useState(false);
-  const [title, setTitle] = useState("");
-  const [catalogId, setCatalogId] = useState("");
-  const [game, setGame] = useState("");
-  const [setName, setSetName] = useState("");
-  const [cardName, setCardName] = useState("");
-  const [language, setLanguage] = useState("");
+  const [listToken, setListToken] = useState(0);
+  const [body, setBody] = useState("");
   const [track, setTrack] = useState<"RAW" | "GRADED">("RAW");
   const [categoryId, setCategoryId] = useState(categories[0]?.id || "");
   const [photoNote, setPhotoNote] = useState("");
   const group = categories.find((cat) => cat.id === categoryId)?.groupKey || "tcg";
 
-  function applyCatalog(hit: CatalogHit) {
-    setCatalogId(hit.id);
-    setTitle(hit.title);
-    setGame(hit.game);
-    setSetName(hit.setName);
-    setCardName(hit.cardName);
-    setLanguage(hit.language);
-    const pokemon = categories.find((cat) => cat.slug === "pokemon");
-    if (pokemon) setCategoryId(pokemon.id);
-  }
-
-  function onTitle(next: string) {
-    setTitle(next);
-    setCatalogId("");
+  function toggleList(checked: boolean) {
+    if (checked) setListToken((token) => token + 1);
+    setAlsoList(checked);
   }
 
   function addPhoto(url: string) {
@@ -97,6 +88,60 @@ export function CollectForm({
         setPhotoNote(tx(locale, "這張相片讀不到或太大。", "Could not read that photo."));
       }
     }
+  }
+
+  if (mode === "post" && alsoList) {
+    const line = body.trim().split("\n")[0]?.trim().slice(0, 80) ?? "";
+    const initial: SellInitial = {
+      categoryId: categories.find((cat) => cat.slug === "pokemon")?.id || categories[0]?.id || "",
+      title: line.length >= 2 ? line : "",
+      description: body.trim(),
+      saleType: "BUY_NOW",
+      price: "",
+      startPrice: "",
+      auctionEndsAt: "",
+      offersEnabled: false,
+      minOffer: "",
+      shippingDays: 3,
+      shipSfCod: true,
+      shipMeetup: false,
+      shipPickup: false,
+      meetupDistrict: "",
+      meetupWindow: "",
+      meetupNotes: "",
+      quantity: 1,
+      game: "",
+      setName: "",
+      cardName: "",
+      cardNumber: "",
+      rarity: "",
+      language: "",
+      personName: "",
+      seasonYear: "",
+      brandSeries: "",
+      conditionTrack: "RAW",
+      rawGrade: "A",
+      grader: "PSA",
+      gradeScore: "",
+      certNumber: "",
+      videoUrl: "",
+      publishAt: "",
+      photos,
+      locked: false,
+    };
+    return (
+      <div className="grid gap-4">
+        <label className="surface flex items-center justify-between gap-3 px-4 py-3">
+          <span>
+            <span className="block font-semibold">{tx(locale, "同時上架", "List it too")}</span>
+            <span className="block text-sm text-muted">{tx(locale, "用同一張上架表。標題同相片已帶入。", "Same listing form. Title and photos are filled in.")}</span>
+          </span>
+          <input type="checkbox" checked={alsoList} onChange={(event) => toggleList(event.target.checked)} className="h-6 w-6" />
+        </label>
+        {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
+        <SellForm key={listToken} locale={locale} categories={categories} percent={percent} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} />
+      </div>
+    );
   }
 
   return (
@@ -136,91 +181,15 @@ export function CollectForm({
 
       {mode === "post" ? (
         <>
-          <textarea className="field min-h-28" name="body" maxLength={500} placeholder={tx(locale, "寫幾隻字…", "Write something…")} />
+          <textarea className="field min-h-28" name="body" maxLength={500} value={body} placeholder={tx(locale, "寫幾隻字…", "Write something…")} onChange={(event) => setBody(event.target.value)} />
           <label className="surface flex items-center justify-between gap-3 px-4 py-3">
             <span>
               <span className="block font-semibold">{tx(locale, "同時上架", "List it too")}</span>
-              <span className="block text-sm text-muted">{tx(locale, "直購，運費順豐到付。動態會顯示價錢，撳價錢去商品頁。", "Buy It Now with SF cash on delivery. The feed shows the price, and the price opens the listing.")}</span>
+              <span className="block text-sm text-muted">{tx(locale, "用同一張上架表，並帶入標題同相片。", "Opens the same listing form with the title and photos filled in.")}</span>
             </span>
-            <input type="checkbox" name="alsoList" checked={alsoList} onChange={(event) => setAlsoList(event.target.checked)} className="h-6 w-6" />
+            <input type="checkbox" name="alsoList" checked={alsoList} onChange={(event) => toggleList(event.target.checked)} className="h-6 w-6" />
           </label>
-          {alsoList ? (
-            <div className="grid gap-3">
-              {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
-              <input type="hidden" name="catalogCardId" value={catalogId} />
-              <CatalogTitleField locale={locale} value={title} onValue={onTitle} onPick={applyCatalog} />
-              <label className="grid gap-1 text-sm font-medium">
-                {tx(locale, "分類", "Category")}
-                <select className="field" name="categoryId" value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{locale === "en" ? cat.nameEn : cat.nameZh}</option>
-                  ))}
-                </select>
-              </label>
-              {group === "tcg" ? (
-                catalogId ? (
-                  <div className="grid gap-2 rounded-2xl bg-soft px-3 py-3 text-sm">
-                    <p>{tx(locale, "已對上圖鑑", "Linked to the dex")} · {game} · {setName} · {language}</p>
-                    <button type="button" className="min-h-11 text-left font-semibold text-link" onClick={() => setCatalogId("")}>
-                      {tx(locale, "改為自己填遊戲、系列、語言", "Edit game, set, and language")}
-                    </button>
-                    <input type="hidden" name="game" value={game} />
-                    <input type="hidden" name="setName" value={setName} />
-                    <input type="hidden" name="cardName" value={cardName} />
-                    <input type="hidden" name="language" value={language} />
-                  </div>
-                ) : (
-                  <div className="grid gap-2">
-                    <input className="field" name="game" required value={game} placeholder={tx(locale, "遊戲，例如 Pokémon", "Game, e.g. Pokémon")} onChange={(event) => setGame(event.target.value)} />
-                    <input className="field" name="setName" required value={setName} placeholder={tx(locale, "系列", "Set")} onChange={(event) => setSetName(event.target.value)} />
-                    <input className="field" name="cardName" required value={cardName} placeholder={tx(locale, "卡名", "Card name")} onChange={(event) => setCardName(event.target.value)} />
-                    <input className="field" name="language" required value={language} placeholder={tx(locale, "語言", "Language")} onChange={(event) => setLanguage(event.target.value)} />
-                  </div>
-                )
-              ) : (
-                <div className="grid gap-2">
-                  <input type="hidden" name="personName" value={title} />
-                  <input className="field" name="seasonYear" required placeholder={tx(locale, "賽季／年份", "Season / year")} />
-                  <input className="field" name="brandSeries" required placeholder={tx(locale, "品牌系列", "Brand / series")} />
-                </div>
-              )}
-              <label className="grid gap-1 text-sm font-medium">
-                {tx(locale, "價錢 HKD", "Price HKD")}
-                <input className="field" name="price" inputMode="decimal" placeholder="280" required />
-              </label>
-              <fieldset className="grid gap-2">
-                <legend className="text-sm font-medium">{tx(locale, "品相", "Condition")}</legend>
-                <div className="flex gap-2">
-                  <label className="inline-flex h-11 items-center gap-2 rounded-full bg-soft px-3 text-sm">
-                    <input type="radio" name="conditionTrack" value="RAW" checked={track === "RAW"} onChange={() => setTrack("RAW")} />
-                    Raw
-                  </label>
-                  <label className="inline-flex h-11 items-center gap-2 rounded-full bg-soft px-3 text-sm">
-                    <input type="radio" name="conditionTrack" value="GRADED" checked={track === "GRADED"} onChange={() => setTrack("GRADED")} />
-                    {tx(locale, "評級", "Graded")}
-                  </label>
-                </div>
-                {track === "RAW" ? (
-                  <select className="field" name="rawGrade" defaultValue="A">
-                    {RAW.map(([value, zh, en]) => (
-                      <option key={value} value={value}>{locale === "en" ? en : zh}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2">
-                    <select className="field" name="grader" defaultValue="PSA">
-                      {["PSA", "BGS", "CGC", "TAG"].map((grader) => (
-                        <option key={grader}>{grader}</option>
-                      ))}
-                    </select>
-                    <input className="field" name="gradeScore" inputMode="decimal" placeholder={tx(locale, "分數", "Score")} />
-                  </div>
-                )}
-              </fieldset>
-              <p className="text-sm text-muted">{tx(locale, "放賣至少兩張相。評級卡要有正面同背面。平台運費 HK$0，順豐到付。", "Two photos to sell. Graded cards need a front and a back. Platform shipping is HK$0, SF cash on delivery.")}</p>
-            </div>
-          ) : null}
-          <Submit label={alsoList ? tx(locale, "發佈並上架", "Post and list") : tx(locale, "發佈", "Post")} />
+          <Submit label={tx(locale, "發佈", "Post")} />
         </>
       ) : (
         <>
@@ -308,7 +277,7 @@ export function CollectForm({
               )}
               <p className="text-sm text-muted">
                 <Link className="text-link" href="/sell">{tx(locale, "進階上架", "Advanced listing")}</Link>
-                {tx(locale, "可以改拍賣、面交或店舖自取。", " covers auctions, meet-up, or store pickup.")}
+                {tx(locale, "可以改運送同排程。", " covers shipping and scheduling.")}
               </p>
             </div>
           ) : (

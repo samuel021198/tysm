@@ -45,6 +45,17 @@ export function fromHkInput(value: string): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
+/** Calendar date as Hong Kong midnight. */
+export function fromHkDate(value: string): Date | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const d = new Date(`${value}T00:00:00+08:00`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+export function toHkDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Hong_Kong" }).format(date);
+}
+
 export function safeNext(value: unknown): string {
   const raw = String(value || "");
   if (raw.startsWith("/") && !raw.startsWith("//") && !raw.includes("\\")) return raw;

@@ -73,8 +73,16 @@ export function shipFee(_listing?: unknown, _method?: string): number {
   return 0;
 }
 
-export function shipDays(listing: { shippingDays: number }, method: string): number {
+export function shipDays(
+  listing: { shippingDays: number; stockType?: string | null; preorderShipDate?: Date | null },
+  method: string,
+  now = new Date(),
+): number {
   if (method === "MEET" || method === "PICKUP") return 1;
+  if (listing.stockType === "PREORDER" && listing.preorderShipDate) {
+    const days = Math.ceil((listing.preorderShipDate.getTime() - now.getTime()) / 86400000);
+    return Math.max(1, days);
+  }
   if (method === "LOCKER") return Math.min(30, Math.max(1, listing.shippingDays + 1));
   return Math.max(1, listing.shippingDays || 1);
 }

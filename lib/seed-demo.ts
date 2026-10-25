@@ -3,6 +3,7 @@ import { linkCatalogListings } from "./dex-link";
 import { conditionLabel, resolveAuction } from "./rules";
 import { buildFulfillment, courierFor, mockTracking } from "./shipping";
 import {
+  EXTRA_CARD_CATEGORIES,
   LEAF_CATEGORIES,
   demoAddresses,
   demoCart,
@@ -562,7 +563,7 @@ export async function seedDemo() {
       create: { id, slug, nameZh, nameEn, level: "GROUP", parentId: "cat_cards", groupKey, sort },
     });
   }
-  for (const [id, slug, nameZh, nameEn, groupKey, parentId, sort] of LEAF_CATEGORIES) {
+  for (const [id, slug, nameZh, nameEn, groupKey, parentId, sort] of [...LEAF_CATEGORIES, ...EXTRA_CARD_CATEGORIES]) {
     await prisma.category.upsert({
       where: { slug },
       update: { nameZh, nameEn, groupKey, parentId, sort },
@@ -742,7 +743,7 @@ export async function seedDemo() {
   for (const item of active) byCategory[item.categoryId] = (byCategory[item.categoryId] ?? 0) + 1;
   return {
     users: demoUsers.length,
-    categories: 1 + groups.length + LEAF_CATEGORIES.length,
+    categories: 1 + groups.length + LEAF_CATEGORIES.length + EXTRA_CARD_CATEGORIES.length,
     listings: demoListings.length,
     activeListings: active.length,
     buyNow: active.filter((item) => item.saleType === "BUY_NOW").length,

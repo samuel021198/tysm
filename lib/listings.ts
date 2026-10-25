@@ -6,7 +6,7 @@ import { parseGrade } from "./rules";
 import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
 import { hasStoreAddress } from "./shipping";
-import { GRADERS, RAW, parseListingForm, validateListing, type ListingInput, type PhotoInput } from "./sell-wizard";
+import { GRADERS, PHOTO_MAX, RAW, parseListingForm, validateListing, type CardItemInput, type ListingInput, type PhotoInput } from "./sell-wizard";
 
 export type { ListingInput, PhotoInput };
 export { parseListingForm, validateListing };
@@ -17,9 +17,34 @@ function kindFor(groupKey: string): CardKind {
   return "TCG";
 }
 
+function stockWindow(input: ListingInput, now: Date) {
+  if (input.stockType === "PREORDER" && input.preorderShipDate) {
+    const days = Math.ceil((input.preorderShipDate.getTime() - now.getTime()) / 86400000);
+    return {
+      stockType: "PREORDER" as const,
+      shipWithinDays: null,
+      preorderShipDate: input.preorderShipDate,
+      shippingDays: Math.max(1, Math.min(365, days)),
+    };
+  }
+  const within = input.shipWithinDays === 3 || input.shipWithinDays === 7 || input.shipWithinDays === 30 ? input.shipWithinDays : null;
+  const legacy = input.shippingDays >= 1 && input.shippingDays <= 30 ? input.shippingDays : 3;
+  return {
+    stockType: "IN_STOCK" as const,
+    shipWithinDays: within,
+    preorderShipDate: null,
+    shippingDays: within ?? legacy,
+  };
+}
+
 function dataFor(input: ListingInput, groupKey: string, now: Date) {
-  const photos = input.photos.filter((photo) => photo.url.trim()).slice(0, 12);
+  const photos = input.photos.filter((photo) => photo.url.trim()).slice(0, PHOTO_MAX);
   const status = input.intent === "draft" ? "DRAFT" : input.intent === "schedule" ? "SCHEDULED" : "ACTIVE";
+  const first = input.items?.[0];
+  const multi = (input.items?.length ?? 0) >= 2;
+  const athlete = groupKey !== "tcg";
+  const track = first?.conditionTrack ?? input.conditionTrack;
+  const window = stockWindow(input, now);
   return {
     saleType: input.saleType,
     title: input.title.trim(),
@@ -30,7 +55,10 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
         : input.quantity,
     // Platform shipping is HK$0. Prepaid SF / locker / meetup fees are not stored anymore.
     shippingFee: 0,
-    shippingDays: input.shippingDays >= 1 && input.shippingDays <= 30 ? input.shippingDays : 3,
+    shippingDays: window.shippingDays,
+    stockType: window.stockType,
+    shipWithinDays: window.shipWithinDays,
+    preorderShipDate: window.preorderShipDate,
     shipLockerFee: 0,
     shipMeetFee: 0,
     shipSfCod: input.shipSfCod,
@@ -39,38 +67,59 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
     meetupDistrict: input.shipMeetup ? input.meetupDistrict?.trim() || null : null,
     meetupWindow: input.shipMeetup ? input.meetupWindow?.trim() || null : null,
     meetupNotes: input.shipMeetup ? input.meetupNotes?.trim() || null : null,
-    cardNumber: input.cardNumber?.trim() || null,
-    rarity: input.rarity?.trim() || null,
-    price: input.saleType === "AUCTION" ? null : input.priceCents,
+    cardNumber: first?.collectorNumber || input.cardNumber?.trim() || null,
+    rarity: first?.rarity || input.rarity?.trim() || null,
+    price: input.saleType === "AUCTION" ? null : multi ? input.items!.reduce((sum, row) => sum + (row.priceCents || 0), 0) : input.priceCents,
     offersEnabled: input.offersEnabled && input.saleType !== "AUCTION",
     minOffer: input.offersEnabled ? input.minOfferCents : null,
     startPrice: input.saleType === "BUY_NOW" ? null : input.startPriceCents,
     auctionEndsAt: input.saleType === "BUY_NOW" ? null : input.auctionEndsAt,
     cardKind: kindFor(groupKey),
-    game: groupKey === "tcg" ? input.game?.trim() || null : null,
-    setName: groupKey === "tcg" ? input.setName?.trim() || null : null,
-    cardName: groupKey === "tcg" ? input.cardName?.trim() || null : null,
-    language: groupKey === "tcg" ? input.language?.trim() || null : null,
-    personName: groupKey === "tcg" ? null : input.personName?.trim() || null,
-    seasonYear: groupKey === "tcg" ? null : input.seasonYear?.trim() || null,
-    brandSeries: groupKey === "tcg" ? null : input.brandSeries?.trim() || null,
-    conditionTrack: input.conditionTrack,
-    rawGrade: input.conditionTrack === "RAW" ? input.rawGrade : null,
-    grader: input.conditionTrack === "GRADED" ? input.grader : null,
-    gradeValue: input.conditionTrack === "GRADED" ? input.gradeValue : null,
-    certNumber: input.certNumber?.trim() || null,
+    game: first?.game || (groupKey === "tcg" ? input.game?.trim() || null : null),
+    setName: first?.setName || first?.setCode || (groupKey === "tcg" ? input.setName?.trim() || null : null),
+    cardName: first?.cardName || input.cardName?.trim() || null,
+    language: first?.language || (groupKey === "tcg" ? input.language?.trim() || null : null),
+    personName: athlete ? first?.cardName || input.personName?.trim() || null : null,
+    seasonYear: athlete ? first?.year || input.seasonYear?.trim() || null : null,
+    brandSeries: athlete ? first?.setName || input.brandSeries?.trim() || null : null,
+    conditionTrack: track,
+    rawGrade: track === "RAW" ? first?.rawGrade ?? input.rawGrade : null,
+    grader: track === "GRADED" ? first?.grader ?? input.grader : null,
+    gradeValue: track === "GRADED" ? first?.gradeValue ?? input.gradeValue : null,
+    certNumber: first?.certNumber || input.certNumber?.trim() || null,
     videoUrl: input.videoUrl?.trim() || null,
     publishAt: input.intent === "schedule" ? input.publishAt : null,
     status: status as "DRAFT" | "SCHEDULED" | "ACTIVE",
     publishedAt: status === "ACTIVE" ? now : null,
-    catalogCardId: input.catalogCardId?.trim() || null,
+    catalogCardId: first?.catalogCardId || input.catalogCardId?.trim() || null,
     photos,
+    items: input.items,
   };
 }
 
-async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
-  const id = input.catalogCardId?.trim();
-  if (!id) return { ...input, catalogCardId: null };
+function itemRows(items: CardItemInput[]) {
+  return items.map((item, position) => ({
+    position,
+    price: item.priceCents,
+    cardName: item.cardName,
+    catalogCardId: item.catalogCardId,
+    catalogTitle: item.catalogTitle,
+    year: item.year,
+    setName: item.setName,
+    setCode: item.setCode,
+    collectorNumber: item.collectorNumber,
+    rarity: item.rarity,
+    language: item.language,
+    game: item.game,
+    conditionTrack: item.conditionTrack,
+    rawGrade: item.conditionTrack === "RAW" ? item.rawGrade : null,
+    grader: item.conditionTrack === "GRADED" ? item.grader : null,
+    gradeValue: item.conditionTrack === "GRADED" ? item.gradeValue : null,
+    certNumber: item.certNumber,
+  }));
+}
+
+async function catalogPick(id: string) {
   const card = await prisma.catalogCard.findUnique({
     where: { id },
     select: {
@@ -86,7 +135,7 @@ async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
       set: { select: { code: true, nameEn: true, nameJa: true, series: true, releaseDate: true } },
     },
   });
-  if (!card) return { ...input, catalogCardId: null };
+  if (!card) return null;
   const row: CatalogSuggestCard = {
     id: card.id,
     nameEn: card.nameEn,
@@ -103,11 +152,54 @@ async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
     series: card.set.series,
     releaseDate: card.set.releaseDate,
   };
-  const pick = catalogSuggestion(row, card.game);
+  return catalogSuggestion(row, card.game);
+}
+
+function fillItem(item: CardItemInput, pick: Awaited<ReturnType<typeof catalogPick>>): CardItemInput {
+  if (!pick) return { ...item, catalogCardId: null, catalogTitle: null };
+  return {
+    ...item,
+    catalogCardId: pick.id,
+    catalogTitle: item.catalogTitle || pick.title,
+    cardName: item.cardName || pick.cardName,
+    game: item.game || pick.game,
+    setName: item.setName || pick.setName,
+    setCode: item.setCode || pick.setCode,
+    year: item.year || pick.year || null,
+    collectorNumber: item.collectorNumber || pick.collectorNumber,
+    rarity: item.rarity || pick.rarity,
+    language: item.language || pick.language,
+  };
+}
+
+async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
+  const title = input.title.trim();
+  if (input.items) {
+    const items = await Promise.all(
+      input.items.map(async (item) => fillItem(item, item.catalogCardId ? await catalogPick(item.catalogCardId) : null)),
+    );
+    const first = items[0];
+    return {
+      ...input,
+      title,
+      items,
+      catalogCardId: first?.catalogCardId ?? null,
+      cardName: first?.cardName ?? input.cardName,
+      game: first?.game ?? input.game,
+      setName: first?.setName ?? input.setName,
+      language: first?.language ?? input.language,
+      cardNumber: first?.collectorNumber ?? input.cardNumber,
+      rarity: first?.rarity ?? input.rarity,
+    };
+  }
+  const id = input.catalogCardId?.trim();
+  if (!id) return { ...input, title, catalogCardId: null };
+  const pick = await catalogPick(id);
+  if (!pick) return { ...input, title, catalogCardId: null };
   return {
     ...input,
-    catalogCardId: card.id,
-    title: input.title.trim() || pick.title,
+    title,
+    catalogCardId: pick.id,
     game: input.game?.trim() || pick.game,
     setName: input.setName?.trim() || pick.setName,
     cardName: input.cardName?.trim() || pick.cardName,
@@ -136,10 +228,10 @@ export async function saveListing(userId: string, input: ListingInput, listingId
     const bidCount = await prisma.proxyBid.count({ where: { listingId: listing.id } });
     if (bidCount > 0) {
       const description = input.description.trim();
-      if (!description || description.length > 5000) return { ok: false as const, error: "description" };
+      if (description.length > 5000) return { ok: false as const, error: "description" };
       const extras = input.photos.filter((photo) => photo.url.trim() && !listing.photos.some((existing) => existing.url === photo.url.trim()));
-      const photos = [...listing.photos.map((photo) => ({ url: photo.url, role: photo.role })), ...extras].slice(0, 12);
-      if (photos.length > 12) return { ok: false as const, error: "photos" };
+      const photos = [...listing.photos.map((photo) => ({ url: photo.url, role: photo.role })), ...extras].slice(0, PHOTO_MAX);
+      if (photos.length < 1 || photos.length > PHOTO_MAX) return { ok: false as const, error: "photos" };
       if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { ok: false as const, error: "photo_url" };
       await prisma.$transaction([
         prisma.listing.update({ where: { id: listing.id }, data: { description } }),
@@ -160,7 +252,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   const data = dataFor(filled, found.groupKey, now);
 
   if (!listing) {
-    const { photos, ...rest } = data;
+    const { photos, items, ...rest } = data;
     const created = await prisma.listing.create({
       data: {
         sellerId: userId,
@@ -168,6 +260,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         ...rest,
         quantityAvailable: rest.quantity,
         photos: { create: photos.map((photo, index) => ({ url: photo.url.trim(), role: photo.role, position: index })) },
+        ...(items ? { items: { create: itemRows(items) } } : {}),
       },
     });
     return done(created.id);
@@ -175,7 +268,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
 
   const reserved = listing.quantity - listing.quantityAvailable;
   if (data.quantity < reserved) return { ok: false as const, error: "stock" };
-  const { photos, ...rest } = data;
+  const { photos, items, ...rest } = data;
   await prisma.$transaction([
     prisma.listing.update({
       where: { id: listing.id },
@@ -190,13 +283,19 @@ export async function saveListing(userId: string, input: ListingInput, listingId
     prisma.listingPhoto.createMany({
       data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url.trim(), role: photo.role, position: index })),
     }),
+    ...(items
+      ? [
+          prisma.listingItem.deleteMany({ where: { listingId: listing.id } }),
+          prisma.listingItem.createMany({ data: itemRows(items).map((row) => ({ ...row, listingId: listing.id })) }),
+        ]
+      : []),
   ]);
   return done(listing.id);
 }
 
 async function done(id: string) {
-  await syncListingInventory(id);
-  return { ok: true as const, id };
+  const synced = await syncListingInventory(id);
+  return { ok: true as const, id, postId: synced.postId };
 }
 
 export async function unlistListing(userId: string, listingId: string, asAdmin = false) {
@@ -320,7 +419,7 @@ export async function importCsv(userId: string, categoryId: string, text: string
   const now = new Date();
   const ids = await prisma.$transaction(
     inputs.map((input) => {
-      const { photos, ...rest } = dataFor(input, found.groupKey, now);
+      const { photos, items, ...rest } = dataFor(input, found.groupKey, now);
       return prisma.listing.create({
         data: {
           sellerId: userId,

@@ -52,19 +52,20 @@ export async function syncListingInventory(listingId: string, opts?: { visibilit
       })),
     });
   }
-  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE", opts?.postBody);
+  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE", opts?.postBody, listing.description);
   return { itemId: item.id, postId };
 }
 
-async function ensurePost(itemId: string, authorId: string, listingPublished: boolean, postBody?: string) {
-  const body = postBody?.slice(0, 500);
+async function ensurePost(itemId: string, authorId: string, listingPublished: boolean, postBody?: string, fallback = "") {
   const existing = await prisma.post.findUnique({ where: { collectionItemId: itemId } });
   if (existing) {
-    if (body != null) await prisma.post.update({ where: { id: existing.id }, data: { body } });
+    if (postBody != null) await prisma.post.update({ where: { id: existing.id }, data: { body: postBody.slice(0, 500) } });
     return existing.id;
   }
   if (!shouldPublishPost({ forSale: true, listingPublished, publishToFeed: false })) return null;
-  const post = await prisma.post.create({ data: { authorId, collectionItemId: itemId, body: body ?? "" } });
+  const post = await prisma.post.create({
+    data: { authorId, collectionItemId: itemId, body: (postBody ?? fallback).slice(0, 500) },
+  });
   return post.id;
 }
 

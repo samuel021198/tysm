@@ -1,4 +1,4 @@
-import { listingTitleFromCatalog, titleCasePhrase } from "./card-title";
+import { listingTitleFromCatalog, releaseYear, titleCasePhrase } from "./card-title";
 import { catalogAnchorMatches, catalogCardMatches, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
@@ -29,6 +29,8 @@ export type CatalogSuggestion = {
   language: string;
   collectorNumber: string;
   rarity: string | null;
+  setCode: string;
+  year: string;
 };
 
 const GAME_LABEL: Record<string, string> = { POKEMON: "Pokémon" };
@@ -64,6 +66,8 @@ export function catalogSuggestion(card: CatalogSuggestCard, game = "POKEMON"): C
     language: catalogLanguage(card.printRegion),
     collectorNumber: card.collectorNumber,
     rarity: card.rarity,
+    setCode: card.setCode,
+    year: releaseYear(card.releaseDate),
   };
 }
 
