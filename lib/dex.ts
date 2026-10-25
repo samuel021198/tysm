@@ -4,19 +4,21 @@ import { foldSearch } from "./search";
 
 export type DexPrintRegion = "JP" | "WEST";
 
-export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND";
+export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND" | "DEMO";
 
 export function parseGame(value: string | null | undefined): DexGame | null {
   const text = (value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
   if (text === "pokemon" || text === "pokémon") return "POKEMON";
   if (text === "one-piece" || text === "onepiece" || text === "op") return "ONE_PIECE";
   if (text === "riftbound" || text === "rift") return "RIFTBOUND";
+  if (text === "demo") return "DEMO";
   return null;
 }
 
 export function gameParam(game: DexGame): string {
   if (game === "ONE_PIECE") return "one-piece";
   if (game === "RIFTBOUND") return "riftbound";
+  if (game === "DEMO") return "demo";
   return "pokemon";
 }
 
@@ -26,7 +28,7 @@ export function categorySlugForGame(game: DexGame): string {
 }
 
 export function gameHasRegion(game: DexGame): boolean {
-  return game !== "RIFTBOUND";
+  return game === "POKEMON" || game === "ONE_PIECE";
 }
 
 export const DEX_PLACEHOLDER = "/demo/back.svg";

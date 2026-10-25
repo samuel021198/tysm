@@ -79,7 +79,7 @@ assert(scoreSnkrHit(en151, mewEn) === 0, "tcgdex sv03.5 does not equal SNKRDUNK 
 
 assert(snkrQueries(charizard)[0] === "M6a 137", "first query is set code plus number");
 assert(snkrQueries(base).includes("Charizard Base Set 4"), "english set name is searched when the code differs");
-assert(!snkrEnabled("ONE_PIECE") && !snkrEnabled("RIFTBOUND"), "only pokemon is priced");
+assert(!snkrEnabled("ONE_PIECE") && !snkrEnabled("RIFTBOUND") && !snkrEnabled("DEMO"), "only pokemon is priced");
 assert(parseTrendRange("1w") === "1w" && parseTrendRange("nope") === "all", "trend range");
 
 const search = parseSearch({

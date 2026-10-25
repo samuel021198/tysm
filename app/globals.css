@@ -352,3 +352,44 @@ svg {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Dex browse locks to the viewport: header and tab bar stay put, the grid and the set list scroll. */
+body:has(.dex-fit) {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+body:has(.dex-fit) > footer {
+  display: none;
+}
+
+body:has(.dex-fit) > main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  margin-bottom: var(--tab-h);
+  overflow: hidden;
+  padding-top: 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.dex-fit {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.dex-fit .page-title {
+  margin-bottom: 0.35rem;
+  font-size: 1.35rem;
+}
+
+.dex-fit .page-title::after {
+  margin-top: 0.25rem;
+}

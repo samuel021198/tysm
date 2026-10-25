@@ -34,7 +34,7 @@ export type CatalogSuggestion = {
   year: string;
 };
 
-const GAME_LABEL: Record<string, string> = { POKEMON: "Pokémon", ONE_PIECE: "One Piece", RIFTBOUND: "Riftbound" };
+const GAME_LABEL: Record<string, string> = { POKEMON: "Pokémon", ONE_PIECE: "One Piece", RIFTBOUND: "Riftbound", DEMO: "Demo" };
 
 /** Stored language matches existing listings (日文 / 英文), which dex linking already understands. */
 export function catalogLanguage(region: DexPrintRegion): string {

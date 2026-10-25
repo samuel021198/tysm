@@ -83,6 +83,7 @@ const FALLBACK_IDS = { PSA10: 22, A: 18 };
 let gradeIds = { ...FALLBACK_IDS };
 let lastFetch = 0;
 const cache = new Map<string, { at: number; ttl: number; value: SnkrMarket }>();
+const inflight = new Map<string, Promise<SnkrMarket>>();
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
@@ -385,12 +386,19 @@ function remember(key: string, value: SnkrMarket, ttl: number) {
   return value;
 }
 
-export async function loadSnkrMarket(card: SnkrCardRef): Promise<SnkrMarket> {
-  if (!snkrEnabled(card.game) || !card.numberKey || !card.setCode.trim()) return EMPTY;
+export function loadSnkrMarket(card: SnkrCardRef): Promise<SnkrMarket> {
+  if (!snkrEnabled(card.game) || !card.numberKey || !card.setCode.trim()) return Promise.resolve(EMPTY);
   const key = cacheKey(card);
   const hit = cache.get(key);
-  if (hit && Date.now() - hit.at < hit.ttl) return hit.value;
+  if (hit && Date.now() - hit.at < hit.ttl) return Promise.resolve(hit.value);
+  const pending = inflight.get(key);
+  if (pending) return pending;
+  const promise = querySnkrMarket(card, key).finally(() => inflight.delete(key));
+  inflight.set(key, promise);
+  return promise;
+}
 
+async function querySnkrMarket(card: SnkrCardRef, key: string): Promise<SnkrMarket> {
   let down = false;
   let matched: SnkrSearchHit | null = null;
   for (const query of snkrQueries(card)) {

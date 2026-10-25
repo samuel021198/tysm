@@ -15,3 +15,8 @@ export function catalogImageSrc(url: string): string {
   const official = officialOpImageUrl(url);
   return official ? `/api/catalog/image?src=${encodeURIComponent(official)}` : url;
 }
+
+/** Grid tiles ask TCGdex for the small file. Detail pages keep `/high.webp`. */
+export function catalogTileSrc(url: string): string {
+  return catalogImageSrc(url).replace(/\/high\.webp(?=$|\?)/, "/low.webp");
+}

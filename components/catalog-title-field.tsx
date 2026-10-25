@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { compactSetLine } from "@/lib/card-line";
 import { tx, type Locale } from "@/lib/i18n";
 
 export type CatalogHit = {
@@ -126,11 +127,8 @@ export function CatalogTitleField({
               >
                 <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-12 w-9 shrink-0 rounded-md bg-[#f4efe6] object-contain" />
                 <span className="min-w-0">
-                  <span className="block truncate font-medium">{hit.title}</span>
-                  <span className="block truncate text-xs text-muted">
-                    {hit.game} · {hit.series && hit.series !== hit.setName ? `${hit.series} · ` : ""}
-                    {hit.setName} · {hit.language === "日文" ? tx(locale, "日文", "Japanese") : hit.language === "英文" ? tx(locale, "英文", "English") : hit.language}
-                  </span>
+                  <span className="block truncate text-[15px] font-semibold">{hit.cardName || hit.title}</span>
+                  <span className="block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>
                 </span>
               </button>
             </li>

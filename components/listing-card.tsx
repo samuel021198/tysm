@@ -48,7 +48,7 @@ export function ListingCard({
     <article className="surface flex h-full flex-col overflow-hidden">
       <div className="relative">
         <Link href={`/listing/${listing.id}`} className="block">
-          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
+          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
         </Link>
         <span className="pointer-events-none absolute left-2.5 top-2.5 max-w-[62%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
           {conditionLabel(listing)}

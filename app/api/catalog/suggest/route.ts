@@ -24,10 +24,14 @@ export async function GET(request: Request) {
     imageUrl: true,
     game: true,
     set: { select: { code: true, nameEn: true, nameJa: true, series: true, releaseDate: true } },
-    _count: { select: { listings: true } },
   } as const;
-  const orderBy = [{ listings: { _count: "desc" as const } }, { set: { releaseDate: "desc" as const } }];
-  const named = await prisma.catalogCard.findMany({ where, select, orderBy, take: 40 });
+  // Release date uses the set index. Ordering matches by listing count sorts the whole hit set.
+  const named = await prisma.catalogCard.findMany({
+    where,
+    select,
+    orderBy: [{ set: { releaseDate: "desc" } }, { collectorNumber: "asc" }],
+    take: 40,
+  });
   // ponytail: rank at most 40 anchor hits in memory. Upgrade path: a search index if the dex outgrows this.
   const cards: (CatalogSuggestCard & { imageUrl: string; game: string })[] = named.map((row) => ({
     id: row.id,
@@ -38,7 +42,7 @@ export async function GET(request: Request) {
     printRegion: row.printRegion,
     rarity: row.rarity,
     finish: row.finish,
-    listingCount: row._count.listings,
+    listingCount: 0,
     setNameEn: row.set.nameEn,
     setNameJa: row.set.nameJa,
     setCode: row.set.code,
