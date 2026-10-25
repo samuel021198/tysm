@@ -125,6 +125,24 @@ curl -sS -X POST "https://你的網域/api/internal/ingest-dex?lang=en&sets=4" \
 
 成功回 `200`：`done`、`cursor`（走完係 `null`）、`remainingSets`、`processedSetIds`、`counts`。`done: true` 表示今次語言範圍裡面的可用系列已經走完。R2 開住而且 `counts.imagesPending > 0` 時，可以再打同一條（即使 `done` 已經係 true）補鏡像；未鏡像的圖會留低 TCGdex 網址。沒有 `BOOTSTRAP_SECRET` 會回 `503`。密鑰不對會回 `401`。`sets`、`cursor` 或 `lang` 唔合法會回 `400`。`npm run db:seed` / reseed 如果圖鑑已經有卡，會把示範寶可夢刊登連去最吻合的卡。
 
+圖鑑畫面同由圖鑑帶出的刊登標題格式係 `{year} Pokemon {setCode} {JP|EN} #{number} {Card Name} {Rarity}`，例如 `2023 Pokemon SV2a JP #193 Mew ex Super Rare`。系列用資料庫入面的 set `code`（TCGdex set id），唔用系列全名。`JP` 係日文印刷，`EN` 係西方／英文。罕貴用 Title Case；空值或 `None` 就唔寫。Finish（Holo、Reverse Foil）只留來搜尋，唔再出現喺標題。`CatalogCard` 本身冇 `title` 欄，畫面係用卡同系列欄位現計。搜尋同標題建議會同時對卡名、系列全名、系列代碼、卡號、罕貴、finish、語言同年份，所以舊式「系列全名 + Holo」同新式「代碼 + JP/EN + 罕貴」都搵到同一張卡。
+
+已經抄咗舊標題的刊登同收藏，要在部署之後回填，唔使再下載 TCGdex。只會改寫仍然等於舊公式的 `Listing.title` 同 `CollectionItem.title`，賣家自己改過的標題會留低。路由 `maxDuration` 係 300 秒，軟性 deadline 係 240 秒。重複 POST，直到 `done` 係 `true`。`cursor` 係上一批最後一張 `CatalogCard.id`。
+
+```bash
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"backfillTitles":true}'
+
+curl -sS -X POST "https://你的網域/api/internal/ingest-dex" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"backfillTitles":true,"cursor":"上一批回傳的 cursor"}'
+```
+
+成功回 `200`：`mode` 係 `backfillTitles`、`done`、`cursor`（走完係 `null`）、`scanned`、`listings`、`collectionItems`。本地可以 `npx tsx scripts/ingest-dex.ts --backfill-titles`。`backfillTitles` 唔係 true／false 會回 `400` `invalid_backfill`。回填的 `cursor` 如果唔係卡牌 id 會回 `400` `invalid_cursor`。
+
 ## 部署到 Vercel + Postgres
 
 1. 用 Vercel 上的 Neon Marketplace。它會注入 `DATABASE_URL`（pooled）同 `DATABASE_URL_UNPOOLED`（direct，主機名不要用 `-pooler`）。

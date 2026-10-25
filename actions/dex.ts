@@ -15,7 +15,7 @@ export async function collectCatalogCard(formData: FormData) {
   const card = id
     ? await prisma.catalogCard.findUnique({
         where: { id },
-        include: { set: { select: { nameEn: true, releaseDate: true } } },
+        include: { set: { select: { code: true, releaseDate: true } } },
       })
     : null;
   if (!card) redirect("/dex");
@@ -26,11 +26,12 @@ export async function collectCatalogCard(formData: FormData) {
   if (!existing) {
     const title = catalogDisplayTitle({
       releaseDate: card.set.releaseDate,
-      setName: card.set.nameEn,
+      setCode: card.set.code,
+      printRegion: card.printRegion,
       collectorNumber: card.collectorNumber,
       numberKey: card.numberKey,
       cardName: card.nameEn,
-      finish: card.finish,
+      rarity: card.rarity,
     }).slice(0, 120);
     await createCollectionItem({
       ownerId: user.id,
