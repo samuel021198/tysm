@@ -16,15 +16,41 @@ const cardSelect = {
   artist: true,
   finish: true,
   game: true,
-  set: { select: { code: true, nameEn: true, nameJa: true, releaseDate: true, series: true } },
+  numberKey: true,
+  set: { select: { id: true, code: true, nameEn: true, nameJa: true, releaseDate: true, series: true } },
 } satisfies Prisma.CatalogCardSelect;
 
 export type DexCardRow = Prisma.CatalogCardGetPayload<{ select: typeof cardSelect }>;
 
-export async function searchCatalog(input: { q?: string; region: DexPrintRegion | null; game?: DexGame | null; page?: number; take?: number }) {
+const setSelect = { id: true, code: true, nameEn: true, nameJa: true, printRegion: true, releaseDate: true } satisfies Prisma.CatalogSetSelect;
+
+export type DexSetRow = Prisma.CatalogSetGetPayload<{ select: typeof setSelect }>;
+
+function withSet(where: Prisma.CatalogCardWhereInput, setId?: string | null): Prisma.CatalogCardWhereInput {
+  if (!setId) return where;
+  if (!Object.keys(where).length) return { setId };
+  return { AND: [where, { setId }] };
+}
+
+export async function listDexSets(game: DexGame, region: DexPrintRegion | null) {
+  return prisma.catalogSet.findMany({
+    where: { game, ...(region ? { printRegion: region } : {}) },
+    select: setSelect,
+    orderBy: [{ releaseDate: "desc" }, { code: "asc" }],
+  });
+}
+
+export async function searchCatalog(input: {
+  q?: string;
+  region: DexPrintRegion | null;
+  game?: DexGame | null;
+  setId?: string | null;
+  page?: number;
+  take?: number;
+}) {
   const take = input.take ?? 24;
   const page = Math.max(1, Math.min(40, input.page ?? 1));
-  const where = catalogWhere(input.q || "", input.region, input.game);
+  const where = withSet(catalogWhere(input.q || "", input.region, input.game), input.setId);
   const [total, cards] = await Promise.all([
     prisma.catalogCard.count({ where }),
     prisma.catalogCard.findMany({

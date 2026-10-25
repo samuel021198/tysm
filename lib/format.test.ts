@@ -1,4 +1,4 @@
-import { hkPartsToInput, isAllowedMediaUrl } from "./format";
+import { formatJpy, hkPartsToInput, isAllowedMediaUrl } from "./format";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -10,6 +10,7 @@ assert(hkPartsToInput("29", "2", "2026", "0", "0") === "", "non-leap day");
 assert(hkPartsToInput("31", "4", "2026", "0", "0") === "", "april 31");
 assert(hkPartsToInput("10", "23", "2026", "18", "0") === "", "month 23 is not a date");
 assert(hkPartsToInput("", "10", "2026", "18", "0") === "", "incomplete");
+assert(formatJpy(190000) === "¥190,000" && formatJpy(83) === "¥83", "yen stays whole yen");
 
 assert(isAllowedMediaUrl("/demo/back.svg"), "demo art");
 assert(isAllowedMediaUrl("https://cdn.example.com/a.jpg"), "https");
