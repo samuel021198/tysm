@@ -386,9 +386,9 @@ function remember(key: string, value: SnkrMarket, ttl: number) {
   return value;
 }
 
-/** Live quotes are Pokémon only, and never the showcase set whose code is DEMO. */
+/** Live quotes are Pokémon only. The Demo game never reaches SNKRDUNK. */
 export function snkrLive(card: { game: string; setCode: string; numberKey: string }): boolean {
-  return snkrEnabled(card.game) && card.setCode !== "DEMO" && Boolean(card.numberKey) && Boolean(card.setCode.trim());
+  return snkrEnabled(card.game) && Boolean(card.numberKey) && Boolean(card.setCode.trim());
 }
 
 export function loadSnkrMarket(card: SnkrCardRef): Promise<SnkrMarket> {

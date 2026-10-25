@@ -1,6 +1,7 @@
 import { cache } from "react";
 import type { Prisma } from "@prisma/client";
-import { DEMO_CARDS, DEMO_SETS, POKEMON_DEMO_CARDS, POKEMON_DEMO_SET, pinDemoSet } from "./demo-dex";
+import { DEMO_CARDS, DEMO_SETS } from "./demo-dex";
+import { hidePokemonDemoSeries } from "./dex-rail-state";
 import { prisma } from "./db";
 import { catalogWhere, numberKey, type DexGame, type DexPrintRegion } from "./dex";
 import { activeWhere, cardInclude } from "./feed";
@@ -112,64 +113,37 @@ async function writeDemoCatalog() {
   );
 }
 
-let pokeDemoReady: Promise<void> | null = null;
+let droppedPokemonDemo: Promise<void> | null = null;
 
-/** Idempotent Pokémon DEMO set. Prices stay in demoMarket; this only writes the ten catalog rows. */
-export function ensurePokemonDemo(): Promise<void> {
-  if (!pokeDemoReady) {
-    pokeDemoReady = writePokemonDemo().catch((error: unknown) => {
-      pokeDemoReady = null;
+/** Removes the showcase series that was briefly nested under Pokémon. Idempotent. */
+export function dropPokemonDemoSeries(): Promise<void> {
+  if (!droppedPokemonDemo) {
+    droppedPokemonDemo = deletePokemonDemoSeries().catch((error: unknown) => {
+      droppedPokemonDemo = null;
       throw error;
     });
   }
-  return pokeDemoReady;
+  return droppedPokemonDemo;
 }
 
-async function writePokemonDemo() {
-  const count = await prisma.catalogCard.count({ where: { setId: POKEMON_DEMO_SET.id } });
-  if (count >= POKEMON_DEMO_CARDS.length) return;
-  const set = POKEMON_DEMO_SET;
-  const setData = {
-    game: "POKEMON" as const,
-    printRegion: "JP" as const,
-    code: set.code,
-    nameEn: set.nameEn,
-    nameJa: set.nameJa,
-    series: "Demo",
-    releaseDate: set.releaseDate,
-  };
-  await prisma.catalogSet.upsert({
-    where: { externalId: "pokemon:DEMO" },
-    update: setData,
-    create: { id: set.id, externalId: "pokemon:DEMO", ...setData },
+async function deletePokemonDemoSeries() {
+  await prisma.catalogCard.deleteMany({
+    where: {
+      OR: [{ id: { startsWith: "poke_demo_" } }, { externalId: { startsWith: "pokemon:DEMO:" } }, { set: { game: "POKEMON", code: "DEMO" } }],
+    },
   });
-  for (const card of POKEMON_DEMO_CARDS) {
-    const data = {
-      setId: set.id,
-      game: "POKEMON" as const,
-      printRegion: "JP" as const,
-      collectorNumber: card.number,
-      numberKey: numberKey(card.number),
-      nameEn: card.nameEn,
-      nameJa: card.nameJa,
-      imageUrl: card.imageUrl,
-      rarity: card.rarity,
-    };
-    await prisma.catalogCard.upsert({
-      where: { externalId: `pokemon:DEMO:${card.number}` },
-      update: data,
-      create: { id: card.id, externalId: `pokemon:DEMO:${card.number}`, ...data },
-    });
-  }
+  await prisma.catalogSet.deleteMany({
+    where: { game: "POKEMON", OR: [{ id: "poke_demo_set" }, { externalId: "pokemon:DEMO" }, { code: "DEMO" }] },
+  });
 }
 
 export async function listDexSets(game: DexGame, region: DexPrintRegion | null) {
   const sets = await prisma.catalogSet.findMany({
-    where: { game, ...(region ? { printRegion: region } : {}) },
+    where: { game, ...(region ? { printRegion: region } : {}), ...(game === "POKEMON" ? { code: { not: "DEMO" } } : {}) },
     select: setSelect,
     orderBy: [{ releaseDate: "desc" }, { code: "asc" }],
   });
-  return pinDemoSet(sets);
+  return hidePokemonDemoSeries(game, sets);
 }
 
 export async function searchCatalog(input: {
@@ -263,7 +237,7 @@ export async function loadDexBrowse(input: {
   prompt?: boolean;
 }): Promise<DexBrowsePayload> {
   if (input.game === "DEMO") await ensureDemoCatalog();
-  if (input.game === "POKEMON") await ensurePokemonDemo();
+  if (input.game === "POKEMON") await dropPokemonDemoSeries();
   const q = (input.q || "").trim().slice(0, 80);
   const page = Math.max(1, Math.min(40, input.page ?? 1));
   const sets = await listDexSets(input.game, input.region);
@@ -295,7 +269,7 @@ export async function loadDexBrowse(input: {
 
 export const getDexCard = cache(async (id: string) => {
   if (id.startsWith("demo_card_")) await ensureDemoCatalog();
-  if (id.startsWith("poke_demo_")) await ensurePokemonDemo();
+  if (id.startsWith("poke_demo_")) await dropPokemonDemoSeries();
   return prisma.catalogCard.findUnique({ where: { id }, select: cardSelect });
 });
 

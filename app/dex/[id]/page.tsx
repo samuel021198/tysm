@@ -54,7 +54,7 @@ export default async function DexCardPage({
   const title = cardName(card, prefs.locale);
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const back = dexBack(game, card.printRegion, card.set.id);
-  const sample = usesSampleMarket(card.game, card.set.code) ? demoMarket(card.id) : null;
+  const sample = usesSampleMarket(card.game) ? demoMarket(card.id) : null;
   const ref: SnkrCardRef = {
     game: card.game,
     printRegion: card.printRegion,
@@ -173,12 +173,12 @@ export default async function DexCardPage({
       ) : null}
       {tab === "story" ? (
         <Suspense fallback={<p className="empty">{tx(prefs.locale, "載入背景…", "Loading story…")}</p>}>
-          <DexStory externalId={card.externalId} game={card.game} setCode={card.set.code} locale={prefs.locale} />
+          <DexStory externalId={card.externalId} game={card.game} locale={prefs.locale} />
         </Suspense>
       ) : null}
       {tab === "sales" ? (
         <Suspense fallback={<p className="empty">{tx(prefs.locale, "載入放售…", "Loading listings…")}</p>}>
-          <DexSales cardId={card.id} game={card.game} setCode={card.set.code} locale={prefs.locale} nameEn={card.nameEn} imageUrl={card.imageUrl} />
+          <DexSales cardId={card.id} game={card.game} locale={prefs.locale} nameEn={card.nameEn} imageUrl={card.imageUrl} />
         </Suspense>
       ) : null}
 
