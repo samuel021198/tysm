@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { catalogSuggestion, rankCatalogSuggestions, type CatalogSuggestCard } from "@/lib/catalog-suggest";
 import { prisma } from "@/lib/db";
-import { catalogSuggestWhere } from "@/lib/dex";
+import { catalogSuggestWhere, parseRegion } from "@/lib/dex";
 
 export async function GET(request: Request) {
-  const q = new URL(request.url).searchParams.get("q")?.trim().slice(0, 80) ?? "";
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q")?.trim().slice(0, 80) ?? "";
   if (q.length < 2) return NextResponse.json({ cards: [] });
+  const region = parseRegion(url.searchParams.get("region"));
   const select = {
     id: true,
     nameEn: true,
@@ -21,7 +23,7 @@ export async function GET(request: Request) {
     _count: { select: { listings: true } },
   } as const;
   const orderBy = [{ listings: { _count: "desc" as const } }, { set: { releaseDate: "desc" as const } }];
-  const named = await prisma.catalogCard.findMany({ where: catalogSuggestWhere(q), select, orderBy, take: 40 });
+  const named = await prisma.catalogCard.findMany({ where: catalogSuggestWhere(q, region), select, orderBy, take: 40 });
   // ponytail: rank at most 40 anchor hits in memory. Upgrade path: a search index if the dex outgrows this.
   const cards: (CatalogSuggestCard & { imageUrl: string; game: string })[] = named.map((row) => ({
     id: row.id,
