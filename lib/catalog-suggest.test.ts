@@ -108,6 +108,72 @@ assert(catalogSuggestScore(hot, "Pikachu") > catalogSuggestScore(zard, "Pikachu"
 assert(catalogSuggestScore(hot, "Pikachu") > catalogSuggestScore(quiet, "Pikachu"), "the same name ranks the hotter listing first");
 assert(catalogSuggestScore(hot, "2022") > catalogSuggestScore(zard, "2022"), "a year prefers cards released that year");
 
+const popular = card({
+  id: "popular",
+  nameEn: "Radiant Charizard",
+  nameJa: "かがやくリザードン",
+  collectorNumber: "020/159",
+  numberKey: "20",
+  rarity: "Radiant Rare",
+  finish: "Holo",
+  listingCount: 80,
+  setNameEn: "Crown Zenith",
+  setCode: "swsh12.5",
+  releaseDate: "2023-01-20",
+});
+const realMew = card({
+  id: "real-mew",
+  nameEn: "Mew ex",
+  nameJa: "ミュウex",
+  collectorNumber: "151/165",
+  numberKey: "151",
+  printRegion: "JP",
+  rarity: "Double rare",
+  finish: "Holo",
+  listingCount: 0,
+  setNameEn: "Pokémon Card 151",
+  setNameJa: "ポケモンカード151",
+  setCode: "SV2a",
+  releaseDate: "2023-06-16",
+});
+const realEn = card({
+  id: "real-en",
+  nameEn: "Mew ex",
+  collectorNumber: "193/165",
+  numberKey: "193",
+  printRegion: "WEST",
+  rarity: "Ultra Rare",
+  finish: "Holo",
+  listingCount: 0,
+  setNameEn: "151",
+  setNameJa: "151",
+  setCode: "sv03.5",
+  releaseDate: "2023-09-22",
+});
+const other151 = card({
+  id: "other-151",
+  nameEn: "Mewtwo ex",
+  collectorNumber: "151/128",
+  numberKey: "151",
+  rarity: "Special illustration rare",
+  finish: "Holo",
+  listingCount: 50,
+  setNameEn: "30th Celebration",
+  setCode: "30th",
+  releaseDate: "2026-01-01",
+});
+const setHits = rankCatalogSuggestions([other151, popular, realMew, realEn], "Pokemon Card 151", 12);
+assert(setHits.some((row) => row.id === "real-mew") && setHits.some((row) => row.id === "real-en"), "Pokemon Card 151 suggests both 151 sets");
+assert(!setHits.some((row) => row.id === "other-151" || row.id === "popular"), "Pokemon Card 151 does not suggest unrelated #151 cards");
+const pasted = rankCatalogSuggestions([popular, realMew], "2023 Pokemon SV2a JP #151 Mew ex Double Rare", 12);
+assert(pasted[0]?.id === "real-mew" && pasted.every((row) => row.id !== "popular"), "a pasted new title ranks that card above a popular same-year card");
+const oldPaste = rankCatalogSuggestions([popular, realMew], "2023 Pokemon Pokemon Card 151 #151 Mew ex - Holo", 12);
+assert(oldPaste[0]?.id === "real-mew" && oldPaste.every((row) => row.id !== "popular"), "a pasted old title ranks that card above a popular same-year card");
+const weak = rankCatalogSuggestions([popular, realEn, realMew], "Mew ex SV2a Super Rare", 12);
+assert(weak[0]?.id === "real-mew" && weak.every((row) => row.id !== "popular" && row.id !== "real-en"), "a stale rarity still surfaces the SV2a Mew ex");
+const enPaste = rankCatalogSuggestions([popular, realEn], "2023 Pokemon sv03.5 EN #193 Mew ex Ultra Rare", 12);
+assert(enPaste.map((row) => row.id).join("|") === "real-en", "a pasted english title stays on that card");
+
 const ranked = rankCatalogSuggestions([zard, quiet, hot], "pika", 2);
 assert(ranked.map((row) => row.id).join("|") === "card_hot|card_quiet", "typeahead is hot-first within the name");
 assert(rankCatalogSuggestions([zard, hot], "charizard", 12)[0]?.id === "card_zard", "an exact name stays first");

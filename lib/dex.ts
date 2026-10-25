@@ -210,6 +210,11 @@ export function catalogNeedles(query: string): string[] {
   const q = query.trim().slice(0, 80);
   if (!q) return [];
   const out = new Set<string>([q]);
+  // Stored JP set names keep the accent ("Pokémon Card 151"). ILIKE does not fold it; fieldHas does.
+  if (foldSearch(q) === "pokemon") {
+    out.add("Pokemon");
+    out.add("Pokémon");
+  }
   for (const token of tokens(q)) {
     for (const group of ALIASES) {
       const terms = group.map((term) => foldSearch(term));
@@ -222,6 +227,28 @@ export function catalogNeedles(query: string): string[] {
 
 /** Words that appear in every generated title and should not be required on their own. */
 const TITLE_STOP = new Set(["pokemon", "card", "cards", "tcg"]);
+
+/** Rarity / finish words. On a pasted title they must not wipe a name or set hit. */
+const SOFT_TOKEN = new Set([
+  "holo",
+  "foil",
+  "reverse",
+  "rare",
+  "super",
+  "double",
+  "ultra",
+  "illustration",
+  "special",
+  "hyper",
+  "mega",
+  "common",
+  "uncommon",
+  "shiny",
+  "radiant",
+  "promo",
+  "first",
+  "edition",
+]);
 
 export type CatalogSearchCard = {
   nameEn: string;
@@ -248,6 +275,35 @@ export function catalogQueryTokens(query: string): string[] {
   return (kept.length ? kept : usable).slice(0, 12);
 }
 
+/** Digits in `Pokemon Card 151` name the set. A bare `151` or `#151` stays a collector number. */
+function setPhraseKeys(query: string): Set<string> {
+  const keys = new Set<string>();
+  for (const match of foldSearch(query).matchAll(/pokemon cards?\s+(\d+)/g)) keys.add(String(Number(match[1])));
+  return keys;
+}
+
+function softToken(token: string): boolean {
+  if (tokenRegion(token)) return true;
+  if (/^(19|20)\d{2}$/.test(token)) return true;
+  return SOFT_TOKEN.has(foldSearch(token));
+}
+
+/** Pasted listing titles carry a year, set code, `#number`, or a long token list. */
+function queryHasTitleShape(query: string, tokens: string[]): boolean {
+  if (tokens.length >= 4) return true;
+  if (/#\s*\d/.test(query)) return true;
+  if (tokens.some((token) => /^(19|20)\d{2}$/.test(token))) return true;
+  return tokens.some((token) => /[a-z]/i.test(token) && /\d/.test(token));
+}
+
+/** Tokens a suggestion lookup must hit. Title noise (year, JP/EN, rarity, finish) stays optional. */
+function strongTokens(query: string): string[] {
+  const tokens = catalogQueryTokens(query);
+  if (!queryHasTitleShape(query, tokens)) return tokens;
+  const strong = tokens.filter((token) => !softToken(token));
+  return strong.length ? strong : tokens;
+}
+
 function tokenRegion(token: string): DexPrintRegion | null {
   const folded = foldSearch(token);
   if (folded === "jp" || folded === "ja" || folded === "japanese" || token === "日文") return "JP";
@@ -260,7 +316,7 @@ function fieldHas(hay: string | null | undefined, needle: string): boolean {
   return foldSearch(hay).includes(foldSearch(needle));
 }
 
-function tokenHitsCard(card: CatalogSearchCard, token: string): boolean {
+function tokenHitsCard(card: CatalogSearchCard, token: string, setKeys: ReadonlySet<string>): boolean {
   const region = tokenRegion(token);
   if (region) return card.printRegion === region;
   if (/^(19|20)\d{2}$/.test(token)) {
@@ -268,30 +324,35 @@ function tokenHitsCard(card: CatalogSearchCard, token: string): boolean {
   }
   if (/^\d+$/.test(token)) {
     const key = String(Number(token));
-    return (
-      card.numberKey === key ||
-      fieldHas(card.collectorNumber, token) ||
-      fieldHas(card.setNameEn, token) ||
-      fieldHas(card.setNameJa, token) ||
-      fieldHas(card.setCode, token)
-    );
+    const onSet = fieldHas(card.setNameEn, token) || fieldHas(card.setNameJa, token) || fieldHas(card.setCode, token);
+    if (setKeys.has(key)) return onSet;
+    return card.numberKey === key || fieldHas(card.collectorNumber, token) || onSet;
   }
   const fields = [card.nameEn, card.nameJa, card.setNameEn, card.setNameJa, card.series || "", card.setCode, card.rarity || "", card.finish || ""];
   return catalogNeedles(token).some((needle) => fields.some((field) => fieldHas(field, needle)));
 }
 
+function tokensMatch(card: CatalogSearchCard, query: string, tokens: string[]): boolean {
+  if (!tokens.length) return true;
+  const setKeys = setPhraseKeys(query);
+  return tokens.every((token) => tokenHitsCard(card, token, setKeys));
+}
+
 /** True when every meaningful token hits a stored field. Display title text is not required. */
 export function catalogCardMatches(card: CatalogSearchCard, query: string): boolean {
-  const tokens = catalogQueryTokens(query);
-  if (!tokens.length) return true;
-  return tokens.every((token) => tokenHitsCard(card, token));
+  return tokensMatch(card, query, catalogQueryTokens(query));
+}
+
+/** Name / set / number still match when a pasted title's year, language, or rarity does not. */
+export function catalogAnchorMatches(card: CatalogSearchCard, query: string): boolean {
+  return tokensMatch(card, query, strongTokens(query));
 }
 
 function contains(needle: string): Prisma.StringFilter {
   return { contains: needle, mode: "insensitive" };
 }
 
-function tokenWhere(token: string): Prisma.CatalogCardWhereInput {
+function tokenWhere(token: string, setKeys: ReadonlySet<string>): Prisma.CatalogCardWhereInput {
   const region = tokenRegion(token);
   if (region) return { printRegion: region };
   if (/^(19|20)\d{2}$/.test(token)) {
@@ -301,14 +362,14 @@ function tokenWhere(token: string): Prisma.CatalogCardWhereInput {
   }
   if (/^\d+$/.test(token)) {
     const key = String(Number(token));
+    const onSet: Prisma.CatalogCardWhereInput[] = [
+      { set: { nameEn: contains(token) } },
+      { set: { nameJa: contains(token) } },
+      { set: { code: contains(token) } },
+    ];
+    if (setKeys.has(key)) return { OR: onSet };
     return {
-      OR: [
-        { numberKey: key },
-        { collectorNumber: contains(token) },
-        { set: { nameEn: contains(token) } },
-        { set: { nameJa: contains(token) } },
-        { set: { code: contains(token) } },
-      ],
+      OR: [{ numberKey: key }, { collectorNumber: contains(token) }, ...onSet],
     };
   }
   const or: Prisma.CatalogCardWhereInput[] = [];
@@ -321,13 +382,21 @@ function tokenWhere(token: string): Prisma.CatalogCardWhereInput {
   return { OR: or };
 }
 
-export function catalogWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
-  const tokens = catalogQueryTokens(query);
+function whereForTokens(tokens: string[], setKeys: ReadonlySet<string>, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
   const parts: Prisma.CatalogCardWhereInput[] = [];
   if (region) parts.push({ printRegion: region });
   if (!tokens.length) return parts[0] || {};
-  parts.push(...tokens.map((token) => tokenWhere(token)));
+  parts.push(...tokens.map((token) => tokenWhere(token, setKeys)));
   return parts.length === 1 ? parts[0]! : { AND: parts };
+}
+
+export function catalogWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
+  return whereForTokens(catalogQueryTokens(query), setPhraseKeys(query), region);
+}
+
+/** Suggestion fetch. A pasted title still returns the card when rarity or the year is off. */
+export function catalogSuggestWhere(query: string): Prisma.CatalogCardWhereInput {
+  return whereForTokens(strongTokens(query), setPhraseKeys(query), null);
 }
 
 function titleEn(value: string): string {
