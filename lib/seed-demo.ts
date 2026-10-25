@@ -1,4 +1,6 @@
 import { prisma } from "./db";
+import { POKEMON_DEMO_CARDS } from "./demo-dex";
+import { ensureDemoCatalog, ensurePokemonDemo } from "./dex-query";
 import { linkCatalogListings } from "./dex-link";
 import { conditionLabel, resolveAuction } from "./rules";
 import { buildFulfillment, courierFor, mockTracking } from "./shipping";
@@ -738,6 +740,8 @@ export async function seedDemo() {
   }
 
   const catalogLinks = await linkCatalogListings();
+  await ensureDemoCatalog();
+  await ensurePokemonDemo();
   const active = demoListings.filter((item) => item.status === "ACTIVE");
   const byCategory: Record<string, number> = {};
   for (const item of active) byCategory[item.categoryId] = (byCategory[item.categoryId] ?? 0) + 1;
@@ -769,5 +773,6 @@ export async function seedDemo() {
     clearedAuctionOrders: stray.length,
     catalogLinkedListings: catalogLinks.listings,
     catalogLinkedCollection: catalogLinks.collectionItems,
+    pokemonDemoCards: POKEMON_DEMO_CARDS.length,
   };
 }

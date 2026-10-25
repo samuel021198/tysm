@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getViewer } from "@/lib/auth";
 import { catalogImageSrc } from "@/lib/catalog-image";
-import { demoTrades } from "@/lib/demo-dex";
+import { demoTrades, usesSampleMarket } from "@/lib/demo-dex";
 import { salesForCard } from "@/lib/dex-query";
 import { catalogFlavor } from "@/lib/flavor";
 import { formatHkd, formatJpy } from "@/lib/format";
@@ -192,8 +192,8 @@ export async function LivePricePanel({ card, locale, range, cardId }: { card: Sn
   return <PricePanel locale={locale} market={market} range={range} cardId={cardId} sample={false} />;
 }
 
-export async function DexStory({ externalId, game, locale }: { externalId: string; game: string; locale: Locale }) {
-  const flavor = game === "DEMO" ? null : await catalogFlavor(externalId, game);
+export async function DexStory({ externalId, game, setCode, locale }: { externalId: string; game: string; setCode: string; locale: Locale }) {
+  const flavor = usesSampleMarket(game, setCode) ? null : await catalogFlavor(externalId, game);
   return flavor ? (
     <p className="surface mt-4 whitespace-pre-wrap p-4 leading-relaxed">{flavor}</p>
   ) : (
@@ -204,12 +204,14 @@ export async function DexStory({ externalId, game, locale }: { externalId: strin
 export async function DexSales({
   cardId,
   game,
+  setCode,
   locale,
   nameEn,
   imageUrl,
 }: {
   cardId: string;
   game: string;
+  setCode: string;
   locale: Locale;
   nameEn: string;
   imageUrl: string;
@@ -217,7 +219,7 @@ export async function DexSales({
   const viewer = await getViewer();
   const hidden = await hiddenUserIds(viewer?.id ?? null);
   const listings = await salesForCard(cardId, hidden);
-  const samples = game === "DEMO" && listings.length === 0 ? demoTrades(cardId) : [];
+  const samples = usesSampleMarket(game, setCode) && listings.length === 0 ? demoTrades(cardId) : [];
   return (
     <section className="mt-4" aria-labelledby="dex-sales">
       <h2 id="dex-sales" className="sr-only">

@@ -1,6 +1,6 @@
 import { cache } from "react";
 import type { Prisma } from "@prisma/client";
-import { DEMO_CARDS, DEMO_SETS } from "./demo-dex";
+import { DEMO_CARDS, DEMO_SETS, POKEMON_DEMO_CARDS, POKEMON_DEMO_SET, pinDemoSet } from "./demo-dex";
 import { prisma } from "./db";
 import { catalogWhere, numberKey, type DexGame, type DexPrintRegion } from "./dex";
 import { activeWhere, cardInclude } from "./feed";
@@ -99,21 +99,77 @@ async function writeDemoCatalog() {
   }
   // Attach showcase listings only while they are still unlinked, so a real dex match is left alone.
   await Promise.all(
-    DEMO_CARDS.map((card) =>
-      prisma.listing.updateMany({
-        where: { id: card.listingId, catalogCardId: null },
-        data: { catalogCardId: card.id },
-      }),
+    DEMO_CARDS.flatMap((card) =>
+      card.listingId
+        ? [
+            prisma.listing.updateMany({
+              where: { id: card.listingId, catalogCardId: null },
+              data: { catalogCardId: card.id },
+            }),
+          ]
+        : [],
     ),
   );
 }
 
+let pokeDemoReady: Promise<void> | null = null;
+
+/** Idempotent Pokémon DEMO set. Prices stay in demoMarket; this only writes the ten catalog rows. */
+export function ensurePokemonDemo(): Promise<void> {
+  if (!pokeDemoReady) {
+    pokeDemoReady = writePokemonDemo().catch((error: unknown) => {
+      pokeDemoReady = null;
+      throw error;
+    });
+  }
+  return pokeDemoReady;
+}
+
+async function writePokemonDemo() {
+  const count = await prisma.catalogCard.count({ where: { setId: POKEMON_DEMO_SET.id } });
+  if (count >= POKEMON_DEMO_CARDS.length) return;
+  const set = POKEMON_DEMO_SET;
+  const setData = {
+    game: "POKEMON" as const,
+    printRegion: "JP" as const,
+    code: set.code,
+    nameEn: set.nameEn,
+    nameJa: set.nameJa,
+    series: "Demo",
+    releaseDate: set.releaseDate,
+  };
+  await prisma.catalogSet.upsert({
+    where: { externalId: "pokemon:DEMO" },
+    update: setData,
+    create: { id: set.id, externalId: "pokemon:DEMO", ...setData },
+  });
+  for (const card of POKEMON_DEMO_CARDS) {
+    const data = {
+      setId: set.id,
+      game: "POKEMON" as const,
+      printRegion: "JP" as const,
+      collectorNumber: card.number,
+      numberKey: numberKey(card.number),
+      nameEn: card.nameEn,
+      nameJa: card.nameJa,
+      imageUrl: card.imageUrl,
+      rarity: card.rarity,
+    };
+    await prisma.catalogCard.upsert({
+      where: { externalId: `pokemon:DEMO:${card.number}` },
+      update: data,
+      create: { id: card.id, externalId: `pokemon:DEMO:${card.number}`, ...data },
+    });
+  }
+}
+
 export async function listDexSets(game: DexGame, region: DexPrintRegion | null) {
-  return prisma.catalogSet.findMany({
+  const sets = await prisma.catalogSet.findMany({
     where: { game, ...(region ? { printRegion: region } : {}) },
     select: setSelect,
     orderBy: [{ releaseDate: "desc" }, { code: "asc" }],
   });
+  return pinDemoSet(sets);
 }
 
 export async function searchCatalog(input: {
@@ -207,6 +263,7 @@ export async function loadDexBrowse(input: {
   prompt?: boolean;
 }): Promise<DexBrowsePayload> {
   if (input.game === "DEMO") await ensureDemoCatalog();
+  if (input.game === "POKEMON") await ensurePokemonDemo();
   const q = (input.q || "").trim().slice(0, 80);
   const page = Math.max(1, Math.min(40, input.page ?? 1));
   const sets = await listDexSets(input.game, input.region);
@@ -238,6 +295,7 @@ export async function loadDexBrowse(input: {
 
 export const getDexCard = cache(async (id: string) => {
   if (id.startsWith("demo_card_")) await ensureDemoCatalog();
+  if (id.startsWith("poke_demo_")) await ensurePokemonDemo();
   return prisma.catalogCard.findUnique({ where: { id }, select: cardSelect });
 });
 

@@ -14,7 +14,7 @@ export type DemoCardSeed = {
   /** Sample ask, whole HKD. */
   hkd: number;
   /** Existing seed listing to attach when that row is still unlinked. */
-  listingId: string;
+  listingId?: string;
 };
 
 export type DemoSetSeed = {
@@ -43,6 +43,38 @@ export const DEMO_CARDS: readonly DemoCardSeed[] = [
   { id: "demo_card_zoro", setId: "demo_set_dm02", setCode: "DM02", number: "004", nameEn: "Roronoa Zoro", nameJa: "索隆", rarity: "SR", imageUrl: "/demo/cards/seed_zoro.svg", yen: 12000, hkd: 360, listingId: "seed_zoro" },
 ];
 
+/** Pokémon series pinned above the other 寶可夢 sets. Art is real TCGdex files; prices are sample only. */
+export const POKEMON_DEMO_SET: DemoSetSeed = {
+  id: "poke_demo_set",
+  code: "DEMO",
+  nameEn: "Demo",
+  nameJa: "Demo",
+  releaseDate: "2024-01-01",
+};
+
+export const POKEMON_DEMO_CARDS: readonly DemoCardSeed[] = [
+  { id: "poke_demo_001", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "001", nameEn: "Charizard", nameJa: "噴火龍", rarity: "Rare Holo", imageUrl: "https://assets.tcgdex.net/en/base/base1/4/high.webp", yen: 48000, hkd: 1280 },
+  { id: "poke_demo_002", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "002", nameEn: "Pikachu", nameJa: "皮卡丘", rarity: "Common", imageUrl: "https://assets.tcgdex.net/en/base/base1/58/high.webp", yen: 8000, hkd: 280 },
+  { id: "poke_demo_003", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "003", nameEn: "Mewtwo", nameJa: "超夢", rarity: "Rare", imageUrl: "https://assets.tcgdex.net/en/base/base1/10/high.webp", yen: 22000, hkd: 640 },
+  { id: "poke_demo_004", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "004", nameEn: "Gengar", nameJa: "耿鬼", rarity: "Rare", imageUrl: "https://assets.tcgdex.net/ja/SV/SV2a/094/high.webp", yen: 6000, hkd: 180 },
+  { id: "poke_demo_005", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "005", nameEn: "Eevee", nameJa: "伊布", rarity: "Common", imageUrl: "https://assets.tcgdex.net/ja/SV/SV2a/133/high.webp", yen: 4000, hkd: 80 },
+  { id: "poke_demo_006", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "006", nameEn: "Umbreon ex", nameJa: "月亮伊布ex", rarity: "SAR", imageUrl: "https://assets.tcgdex.net/ja/SV/SV8a/217/high.webp", yen: 35000, hkd: 960 },
+  { id: "poke_demo_007", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "007", nameEn: "Lugia", nameJa: "洛奇亞", rarity: "Rare", imageUrl: "https://assets.tcgdex.net/en/neo/neo1/9/high.webp", yen: 18000, hkd: 520 },
+  { id: "poke_demo_008", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "008", nameEn: "Rayquaza", nameJa: "烈空坐", rarity: "Rare Holo", imageUrl: "https://assets.tcgdex.net/en/ex/ex8/107/high.webp", yen: 27000, hkd: 760 },
+  { id: "poke_demo_009", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "009", nameEn: "Mew ex", nameJa: "夢幻ex", rarity: "Ultra Rare", imageUrl: "https://assets.tcgdex.net/en/sv/sv03.5/193/high.webp", yen: 42000, hkd: 1100 },
+  { id: "poke_demo_010", setId: POKEMON_DEMO_SET.id, setCode: "DEMO", number: "010", nameEn: "Charizard ex", nameJa: "噴火龍ex", rarity: "Special Illustration Rare", imageUrl: "https://assets.tcgdex.net/en/sv/sv03.5/199/high.webp", yen: 56000, hkd: 1480 },
+];
+
+/** Game Demo, or the Pokémon set whose code is DEMO. Those cards never call SNKRDUNK. */
+export function usesSampleMarket(game: string, setCode: string): boolean {
+  return game === "DEMO" || setCode === "DEMO";
+}
+
+/** DEMO stays first in the 寶可夢 series list. Other sets keep their release order. */
+export function pinDemoSet<T extends { code: string }>(sets: readonly T[]): T[] {
+  return [...sets].sort((a, b) => Number(b.code === "DEMO") - Number(a.code === "DEMO"));
+}
+
 export type DemoTrade = { seller: string; grade: string; hkd: number };
 
 function hash(value: string): number {
@@ -52,7 +84,7 @@ function hash(value: string): number {
 }
 
 export function demoCardSeed(id: string): DemoCardSeed | null {
-  return DEMO_CARDS.find((card) => card.id === id) ?? null;
+  return DEMO_CARDS.find((card) => card.id === id) ?? POKEMON_DEMO_CARDS.find((card) => card.id === id) ?? null;
 }
 
 /** Stable sample curve so a demo card detail is never an empty price tab. Not a live quote. */

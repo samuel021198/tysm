@@ -386,8 +386,13 @@ function remember(key: string, value: SnkrMarket, ttl: number) {
   return value;
 }
 
+/** Live quotes are Pokémon only, and never the showcase set whose code is DEMO. */
+export function snkrLive(card: { game: string; setCode: string; numberKey: string }): boolean {
+  return snkrEnabled(card.game) && card.setCode !== "DEMO" && Boolean(card.numberKey) && Boolean(card.setCode.trim());
+}
+
 export function loadSnkrMarket(card: SnkrCardRef): Promise<SnkrMarket> {
-  if (!snkrEnabled(card.game) || !card.numberKey || !card.setCode.trim()) return Promise.resolve(EMPTY);
+  if (!snkrLive(card)) return Promise.resolve(EMPTY);
   const key = cacheKey(card);
   const hit = cache.get(key);
   if (hit && Date.now() - hit.at < hit.ttl) return Promise.resolve(hit.value);
