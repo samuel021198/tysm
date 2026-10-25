@@ -1,5 +1,5 @@
 import { listingTitleFromCatalog, titleCasePhrase } from "./card-title";
-import { catalogCardMatches, numberKey, type CatalogSearchCard, type DexPrintRegion } from "./dex";
+import { catalogAnchorMatches, catalogCardMatches, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
 export type CatalogSuggestCard = {
@@ -100,13 +100,8 @@ function band(card: CatalogSuggestCard, query: string): number {
   const includes = [title, nameEn, nameJa, setEn, setJa, foldSearch(card.series || ""), foldSearch(card.setCode), foldSearch(card.rarity || ""), foldSearch(card.finish || "")].some(
     (value) => value.includes(folded),
   );
-  const year = query.match(/(?:19|20)\d{2}/)?.[0];
-  const yearHit = Boolean(year && (card.releaseDate || "").startsWith(year));
-  const key = numberKey(query);
-  const numberHit = Boolean(key && card.numberKey === key);
-  if (includes) return 2;
-  if (yearHit || numberHit) return 1;
-  if (catalogCardMatches(searchCard(card), query)) return 1;
+  if (includes || catalogCardMatches(searchCard(card), query)) return 2;
+  if (catalogAnchorMatches(searchCard(card), query)) return 1;
   return 0;
 }
 
@@ -117,11 +112,7 @@ export function catalogSuggestScore(card: CatalogSuggestCard, query: string): nu
 
 export function rankCatalogSuggestions<T extends CatalogSuggestCard>(cards: T[], query: string, limit = 12): T[] {
   return [...cards]
+    .filter((card) => band(card, query) > 0)
     .sort((a, b) => catalogSuggestScore(b, query) - catalogSuggestScore(a, query) || (b.releaseDate || "").localeCompare(a.releaseDate || ""))
     .slice(0, limit);
-}
-
-/** Widen a name search so a leading year such as 2022 still hits that year's sets. */
-export function catalogYear(query: string): string | null {
-  return query.match(/(?:19|20)\d{2}/)?.[0] ?? null;
 }

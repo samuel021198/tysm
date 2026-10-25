@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs";
 import {
   bilingualName,
+  catalogAnchorMatches,
   catalogCardMatches,
   catalogNeedles,
+  catalogSuggestWhere,
   catalogWhere,
   chooseDexSets,
   INGEST_POST_RESERVE_MS,
@@ -388,6 +390,77 @@ assert(JSON.stringify(catalogWhere("Holo", null)).includes("finish"), "dex searc
 assert(JSON.stringify(catalogWhere("Super Rare", null)).includes("rarity"), "dex search looks at rarity");
 assert(JSON.stringify(catalogWhere("SV2a", null)).includes("code"), "dex search looks at set code");
 assert(JSON.stringify(catalogWhere("Paldean Fates", null)).includes("AND"), "multi-word dex search requires each token");
+
+const mewJp: CatalogSearchCard = {
+  nameEn: "Mew ex",
+  nameJa: "ミュウex",
+  collectorNumber: "151/165",
+  numberKey: "151",
+  printRegion: "JP",
+  rarity: "Double rare",
+  finish: "Holo",
+  setNameEn: "Pokémon Card 151",
+  setNameJa: "ポケモンカード151",
+  setCode: "SV2a",
+  series: "スカーレット&バイオレット",
+  releaseDate: "2023-06-16",
+};
+const mewEn: CatalogSearchCard = {
+  ...mewJp,
+  collectorNumber: "193/165",
+  numberKey: "193",
+  printRegion: "WEST",
+  rarity: "Ultra Rare",
+  setNameEn: "151",
+  setNameJa: "151",
+  setCode: "sv03.5",
+  series: "Scarlet & Violet",
+  releaseDate: "2023-09-22",
+};
+const other151: CatalogSearchCard = {
+  ...mewJp,
+  nameEn: "Mewtwo ex",
+  nameJa: "ミュウツーex",
+  collectorNumber: "151/128",
+  numberKey: "151",
+  printRegion: "WEST",
+  rarity: "Special illustration rare",
+  setNameEn: "30th Celebration",
+  setNameJa: "30th Celebration",
+  setCode: "30th",
+  releaseDate: "2026-01-01",
+};
+const eevee151: CatalogSearchCard = {
+  ...mewEn,
+  nameEn: "Eevee",
+  nameJa: "イーブイ",
+  collectorNumber: "133/165",
+  numberKey: "133",
+  rarity: "Common",
+  finish: null,
+};
+assert(catalogCardMatches(fatesSearch, "Holo Charizard") && !catalogCardMatches(mewJp, "Holo Charizard"), "Holo Charizard stays on that card");
+assert(catalogCardMatches({ ...fatesSearch, finish: "Reverse Foil" }, "Reverse Foil"), "reverse foil finish matches");
+assert(catalogCardMatches(mewJp, "Pokemon Card 151") && catalogCardMatches(mewEn, "Pokemon Card 151"), "Pokemon Card 151 hits both 151 sets");
+assert(catalogCardMatches(eevee151, "Pokemon Card 151") && !catalogCardMatches(other151, "Pokemon Card 151"), "set phrase matches the set, not every #151");
+assert(catalogCardMatches(mewJp, "Pokemon Card") && catalogCardMatches(mewJp, "Pokémon Card 151"), "stop words still match the accented set name");
+assert(!catalogCardMatches(other151, "Pokemon Card"), "Pokemon Card does not match an unrelated set");
+assert(catalogCardMatches(mewJp, "ポケモンカード151") && catalogCardMatches(mewJp, "Mew ex SV2a"), "ja set name and set code still match");
+assert(catalogCardMatches(mewEn, "sv03.5") && catalogCardMatches(mewEn, "EN") && !catalogCardMatches(mewEn, "JP"), "english set code and language match");
+assert(catalogCardMatches(mewJp, "Double Rare") && catalogCardMatches(mewEn, "Ultra Rare"), "stored rarity still matches");
+assert(catalogCardMatches(mewJp, "2023 Pokemon Pokemon Card 151 #151 Mew ex - Holo"), "old title matches the ingested JP Mew ex");
+assert(catalogCardMatches(mewEn, "2023 Pokemon 151 #193 Mew ex - Holo"), "old title matches the ingested EN Mew ex");
+assert(catalogCardMatches(mewJp, "2023 Pokemon SV2a JP #151 Mew ex Double Rare"), "new title matches the ingested JP Mew ex");
+assert(catalogCardMatches(mewEn, "2023 Pokemon sv03.5 EN #193 Mew ex Ultra Rare"), "new title matches the ingested EN Mew ex");
+assert(!catalogCardMatches(mewJp, "Mew ex SV2a Super Rare") && catalogAnchorMatches(mewJp, "Mew ex SV2a Super Rare"), "wrong rarity does not erase the name and set");
+const phraseWhere = JSON.stringify(catalogWhere("Pokemon Card 151", null));
+assert(!phraseWhere.includes("numberKey") && phraseWhere.includes("nameEn"), "Pokemon Card 151 searches set names, not collector numbers");
+assert(JSON.stringify(catalogWhere("151", null)).includes("numberKey"), "a bare 151 still searches collector numbers");
+assert(JSON.stringify(catalogWhere("Pokemon Card", null)).includes("Pokémon"), "Pokemon Card searches the accented set name");
+assert(JSON.stringify(catalogWhere("#151", null)).includes("numberKey"), "a hash number stays a collector number");
+const loose = JSON.stringify(catalogSuggestWhere("Mew ex SV2a Super Rare"));
+assert(loose.includes("SV2a") && !loose.includes("Super"), "suggest keeps the set code and does not require a stale rarity");
+assert(JSON.stringify(catalogWhere("Mew ex SV2a Super Rare", null)).includes("Super"), "dex search still requires each rarity word");
 assert(logoUrl("https://assets.tcgdex.net/en/sv/sv08/logo") === "https://assets.tcgdex.net/en/sv/sv08/logo.webp", "logo webp");
 
 const payload = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
