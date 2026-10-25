@@ -225,6 +225,7 @@ export function titleGameLabel(game: string | null | undefined): string {
   const text = (game || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
   if (text === "one-piece" || text === "onepiece" || text === "op") return "One Piece";
   if (text === "riftbound" || text === "rift") return "Riftbound";
+  if (text === "demo") return "Demo";
   return "Pokemon";
 }
 

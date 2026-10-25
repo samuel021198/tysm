@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { ensureDemoCatalog, dropPokemonDemoSeries } from "./dex-query";
 import { linkCatalogListings } from "./dex-link";
 import { conditionLabel, resolveAuction } from "./rules";
 import { buildFulfillment, courierFor, mockTracking } from "./shipping";
@@ -738,6 +739,8 @@ export async function seedDemo() {
   }
 
   const catalogLinks = await linkCatalogListings();
+  await ensureDemoCatalog();
+  await dropPokemonDemoSeries();
   const active = demoListings.filter((item) => item.status === "ACTIVE");
   const byCategory: Record<string, number> = {};
   for (const item of active) byCategory[item.categoryId] = (byCategory[item.categoryId] ?? 0) + 1;

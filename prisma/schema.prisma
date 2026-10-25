@@ -74,6 +74,7 @@ enum CatalogGame {
   POKEMON
   ONE_PIECE
   RIFTBOUND
+  DEMO
 }
 
 enum PrintRegion {

@@ -31,7 +31,7 @@ export function PostCard({
       </div>
       <Link href={post.href} className="block">
         {shown.map((url, index) => (
-          <img key={`${url}-${index}`} src={url} alt="" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
+          <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
         ))}
       </Link>
       <div className="flex items-center border-t border-line">

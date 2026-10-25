@@ -1,12 +1,14 @@
+"use client";
+
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { gameHasRegion, gameParam, setDisplayName, type DexGame, type DexPrintRegion } from "@/lib/dex";
+import { setDisplayName, type DexGame, type DexPrintRegion } from "@/lib/dex";
 import { tx, type Locale } from "@/lib/i18n";
 
 const GAMES = [
   ["POKEMON", "寶可夢", "Pokémon"],
   ["ONE_PIECE", "海賊王", "One Piece"],
   ["RIFTBOUND", "Riftbound", "Riftbound"],
+  ["DEMO", "Demo", "Demo"],
 ] as const;
 
 export type DexRailSet = {
@@ -20,91 +22,82 @@ export type DexRailSet = {
 export function DexRail({
   locale,
   game,
-  region,
+  open,
   setId,
   sets,
-  q,
-  base,
+  onGame,
+  onSet,
 }: {
   locale: Locale;
   game: DexGame;
-  region: string;
+  open: boolean;
   setId: string;
   sets: DexRailSet[];
-  q: string;
-  base: string;
+  onGame: (game: DexGame) => void;
+  onSet: (setId: string) => void;
 }) {
-  function href(next: { game?: DexGame; set?: string }) {
-    const params = new URLSearchParams();
-    const nextGame = next.game ?? game;
-    params.set("game", gameParam(nextGame));
-    if (q) params.set("q", q);
-    if (region && gameHasRegion(nextGame) && nextGame === game) params.set("region", region);
-    if (next.set) params.set("set", next.set);
-    return `${base}?${params.toString()}`;
-  }
-
   return (
-    <nav
-      aria-label={tx(locale, "遊戲同系列", "Games and sets")}
-      className="sticky top-[var(--header-h)] max-h-[calc(100dvh-var(--header-h)-var(--tab-h)-0.75rem)] w-[4.75rem] shrink-0 overflow-y-auto overscroll-contain md:w-52"
-    >
-      <ul className="grid gap-1">
+    <nav aria-label={tx(locale, "遊戲同系列", "Games and sets")} className="flex h-full min-h-0 w-[4.25rem] shrink-0 flex-col md:w-52">
+      <ul className="grid shrink-0 gap-1">
         {GAMES.map(([value, zh, en]) => {
           const on = game === value;
           return (
             <li key={value}>
-              <Link
-                href={href({ game: value })}
-                aria-current={on && !setId ? "page" : undefined}
-                className={`flex min-h-11 items-center rounded-xl px-2 text-sm font-semibold md:px-3 ${on ? "bg-card text-ink shadow-card" : "text-muted"}`}
+              <button
+                type="button"
+                aria-current={on ? "page" : undefined}
+                aria-expanded={on ? open : false}
+                onClick={() => onGame(value)}
+                className={`flex min-h-11 w-full items-center rounded-xl px-2 text-left text-sm font-semibold md:px-3 ${on ? "bg-card text-ink shadow-card" : "text-muted"}`}
               >
                 <span className="truncate">{tx(locale, zh, en)}</span>
-              </Link>
-              {on ? (
-                <ul className="mt-1 grid max-h-[50vh] gap-0.5 overflow-y-auto overscroll-contain pb-2" aria-label={tx(locale, "系列", "Sets")}>
-                  <li>
-                    <Link
-                      href={href({ game: value })}
-                      aria-current={!setId ? "page" : undefined}
-                      className={`flex min-h-11 items-center rounded-lg px-2 text-xs md:px-3 ${!setId ? "bg-soft font-semibold text-ink" : "text-muted"}`}
-                    >
-                      {tx(locale, "全部", "All")}
-                    </Link>
-                  </li>
-                  {sets.map((set) => {
-                    const name = setDisplayName(set, set.printRegion, locale);
-                    const selected = set.id === setId;
-                    return (
-                      <li key={set.id}>
-                        <Link
-                          href={href({ game: value, set: set.id })}
-                          title={name}
-                          aria-current={selected ? "page" : undefined}
-                          className={`flex min-h-11 flex-col justify-center rounded-lg px-2 md:px-3 ${selected ? "bg-soft font-semibold text-ink" : "text-muted"}`}
-                        >
-                          <span className="truncate text-[11px] font-semibold leading-tight md:hidden">{set.code}</span>
-                          <span className="hidden truncate text-xs leading-tight md:block">{name}</span>
-                          <span className="hidden truncate text-[10px] text-muted md:block">{set.code}</span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : null}
+              </button>
             </li>
           );
         })}
       </ul>
+      {open ? (
+        <ul className="mt-1 grid min-h-0 flex-1 content-start gap-0.5 overflow-y-auto overscroll-contain pb-2" aria-label={tx(locale, "系列", "Sets")}>
+          <li>
+            <button
+              type="button"
+              aria-current={!setId ? "page" : undefined}
+              onClick={() => onSet("")}
+              className={`flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs md:px-3 ${!setId ? "bg-soft font-semibold text-ink" : "text-muted"}`}
+            >
+              {tx(locale, "全部", "All")}
+            </button>
+          </li>
+          {sets.map((set) => {
+            const name = setDisplayName(set, set.printRegion, locale);
+            const selected = set.id === setId;
+            return (
+              <li key={set.id}>
+                <button
+                  type="button"
+                  title={name}
+                  aria-current={selected ? "page" : undefined}
+                  onClick={() => onSet(set.id)}
+                  className={`flex min-h-11 w-full flex-col justify-center rounded-lg px-2 text-left md:px-3 ${selected ? "bg-soft font-semibold text-ink" : "text-muted"}`}
+                >
+                  <span className="truncate text-[11px] font-semibold leading-tight md:hidden">{set.code}</span>
+                  <span className="hidden truncate text-xs leading-tight md:block">{name}</span>
+                  <span className="hidden truncate text-[10px] text-muted md:block">{set.code}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
     </nav>
   );
 }
 
 export function DexColumns({ rail, children }: { rail: ReactNode; children: ReactNode }) {
   return (
-    <div className="mt-4 flex items-start gap-2 md:gap-5">
+    <div className="mt-3 flex min-h-0 min-w-0 flex-1 items-stretch gap-2 overflow-hidden md:gap-5">
       {rail}
-      <div className="min-w-0 flex-1">{children}</div>
+      <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain">{children}</div>
     </div>
   );
 }

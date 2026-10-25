@@ -11,7 +11,7 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(parseGame("pokemon") === "POKEMON" && parseGame("one-piece") === "ONE_PIECE" && parseGame("riftbound") === "RIFTBOUND", "game query parses");
+assert(parseGame("pokemon") === "POKEMON" && parseGame("one-piece") === "ONE_PIECE" && parseGame("riftbound") === "RIFTBOUND" && parseGame("demo") === "DEMO", "game query parses");
 assert(parseGame("topps") === null, "unknown game is ignored");
 assert(rarityTitle("SEC") === "SEC" && rarityTitle("Super Rare") === "Super Rare", "short rarity codes stay printed");
 

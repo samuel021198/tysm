@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { compactSetLine } from "@/lib/card-line";
 import { gameHasRegion, gameParam, type DexGame } from "@/lib/dex";
 import { tx, type Locale } from "@/lib/i18n";
 import type { CatalogHit } from "./catalog-title-field";
@@ -28,6 +29,7 @@ export function DexToolbar({
   setId,
   action,
   chips,
+  onQuery,
 }: {
   locale: Locale;
   q: string;
@@ -36,6 +38,8 @@ export function DexToolbar({
   setId?: string;
   action: string;
   chips: string;
+  /** Soft update. The dex shell stays mounted; the grid refetches. */
+  onQuery?: (next: { q: string; region: string }) => void;
 }) {
   const router = useRouter();
   const listId = useId();
@@ -131,17 +135,22 @@ export function DexToolbar({
       ? tx(locale, "卡名或卡號，例如 路飛 或 OP01-001", "Name or number, e.g. Luffy or OP01-001")
       : game === "RIFTBOUND"
         ? tx(locale, "卡名或卡號，例如 Annie 或 017", "Name or number, e.g. Annie or 017")
-        : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
-
-  function language(hit: CatalogHit) {
-    if (hit.language === "日文") return tx(locale, "日文", "Japanese");
-    if (hit.language === "英文") return tx(locale, "英文", "English");
-    return hit.language;
-  }
+        : game === "DEMO"
+          ? tx(locale, "卡名或卡號，例如 噴火龍 或 001", "Name or number, e.g. Charizard or 001")
+          : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
 
   return (
-    <div className="grid gap-3">
-      <form action={action} method="get" className="flex h-14 items-center gap-2 rounded-full bg-card pl-3.5 pr-1.5 shadow-card">
+    <div className="relative grid gap-3">
+      <form
+        action={action}
+        method="get"
+        className="flex h-14 items-center gap-2 rounded-full bg-card pl-3.5 pr-1.5 shadow-card"
+        onSubmit={(event) => {
+          if (!onQuery) return;
+          event.preventDefault();
+          onQuery({ q: text.trim(), region: current });
+        }}
+      >
         <Icon name="search" className="h-5 w-5 shrink-0 text-muted" />
         <label className="sr-only" htmlFor="dex-q">
           {tx(locale, "搜尋卡牌", "Search cards")}
@@ -204,7 +213,7 @@ export function DexToolbar({
         </button>
       </form>
       {visible ? (
-        <div className="rounded-2xl bg-gradient-to-r from-rose to-teal p-px shadow-card">
+        <div className="absolute left-0 right-0 top-[3.75rem] z-20 rounded-2xl bg-gradient-to-r from-rose to-teal p-px shadow-card">
           <ul id={listId} ref={panelRef} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="max-h-80 overflow-y-auto overscroll-contain rounded-[15px] bg-card py-1">
             {hits.map((hit, item) => {
               const selected = item === index;
@@ -220,11 +229,8 @@ export function DexToolbar({
                   >
                     <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-10 shrink-0 rounded-md bg-[#f4efe6] object-contain" />
                     <span className="min-w-0">
-                      <span className="line-clamp-2 text-[15px] font-semibold leading-snug">{hit.title}</span>
-                      <span className="mt-0.5 block truncate text-xs text-muted">
-                        {hit.setName ? `${hit.setName} · ` : ""}
-                        {language(hit)}
-                      </span>
+                      <span className="line-clamp-1 text-[15px] font-semibold leading-snug">{hit.cardName || hit.title}</span>
+                      <span className="mt-0.5 block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>
                     </span>
                   </Link>
                 </li>
@@ -235,11 +241,23 @@ export function DexToolbar({
       ) : null}
       {regions ? (
         <div className="chips" aria-label={tx(locale, "語言", "Language")}>
-          {REGIONS.map(([value, zh, en]) => (
-            <Link key={value || "all"} href={href({ region: value })} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
-              {tx(locale, zh, en)}
-            </Link>
-          ))}
+          {REGIONS.map(([value, zh, en]) =>
+            onQuery ? (
+              <button
+                key={value || "all"}
+                type="button"
+                className={chipClass(current === value)}
+                aria-current={current === value ? "page" : undefined}
+                onClick={() => onQuery({ q, region: value })}
+              >
+                {tx(locale, zh, en)}
+              </button>
+            ) : (
+              <Link key={value || "all"} href={href({ region: value })} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
+                {tx(locale, zh, en)}
+              </Link>
+            ),
+          )}
         </div>
       ) : (
         <p className="text-sm text-muted">{tx(locale, "而家只有英文。", "English only for now.")}</p>
