@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { collectCatalogCard } from "@/actions/dex";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { catalogDisplayTitle } from "@/lib/card-title";
+import { catalogTitleFromCard } from "@/lib/card-title";
+import { catalogImageSrc } from "@/lib/catalog-image";
 import { prisma } from "@/lib/db";
 import { regionLabel, setDisplayName } from "@/lib/dex";
 import { getDexCard, salesForCard } from "@/lib/dex-query";
@@ -17,14 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const card = await getDexCard(id);
   if (!card) return { title: "圖鑑" };
-  const title = catalogDisplayTitle({
-    releaseDate: card.set.releaseDate,
-    setCode: card.set.code,
-    printRegion: card.printRegion,
-    collectorNumber: card.collectorNumber,
-    cardName: card.nameEn,
-    rarity: card.rarity,
-  });
+  const title = catalogTitleFromCard(card);
   return { title, description: title };
 }
 
@@ -47,24 +41,21 @@ export default async function DexCardPage({
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const hidden = await hiddenUserIds(viewer?.id ?? null);
   const [listings, owned] = await Promise.all([
-    salesForCard(card.id, hidden),
+    salesForCard(card.id, hidden, card.game),
     viewer
       ? prisma.collectionItem.findFirst({ where: { ownerId: viewer.id, catalogCardId: card.id }, select: { id: true } }).then(Boolean)
       : Promise.resolve(false),
   ]);
   const sales = sp.tab === "sales";
-  const title = catalogDisplayTitle({
-    releaseDate: card.set.releaseDate,
-    setCode: card.set.code,
-    printRegion: card.printRegion,
-    collectorNumber: card.collectorNumber,
-    cardName: card.nameEn,
-    rarity: card.rarity,
-  });
+  const title = catalogTitleFromCard(card);
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const rows: [string, string][] = [
-    [tx(prefs.locale, "日文名", "Japanese name"), card.nameJa],
-    [tx(prefs.locale, "英文名", "English name"), card.nameEn],
+    ...(card.nameJa !== card.nameEn
+      ? ([
+          [tx(prefs.locale, "日文名", "Japanese name"), card.nameJa],
+          [tx(prefs.locale, "英文名", "English name"), card.nameEn],
+        ] as [string, string][])
+      : [[tx(prefs.locale, "卡名", "Name"), card.nameEn] as [string, string]]),
     [tx(prefs.locale, "系列", "Set"), setName],
     [tx(prefs.locale, "系列代碼", "Set code"), card.set.code],
     [tx(prefs.locale, "卡號", "Number"), card.collectorNumber],
@@ -81,7 +72,7 @@ export default async function DexCardPage({
         {tx(prefs.locale, "返回圖鑑", "Back to the dex")}
       </Link>
       <div className="grid items-start gap-4 md:grid-cols-[minmax(0,18rem)_1fr]">
-        <img src={card.imageUrl} alt={title} className="surface aspect-[63/88] w-full bg-[#f4efe6] object-contain" />
+        <img src={catalogImageSrc(card.imageUrl)} alt={title} className="surface aspect-[63/88] w-full bg-[#f4efe6] object-contain" />
         <div>
           <p className="text-sm text-muted">
             {regionLabel(card.printRegion, prefs.locale)} · {setName}

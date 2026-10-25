@@ -3,9 +3,16 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { gameHasRegion, gameParam, type DexGame } from "@/lib/dex";
+import { tx, type Locale } from "@/lib/i18n";
 import type { CatalogHit } from "./catalog-title-field";
 import { Icon } from "./icons";
-import { tx, type Locale } from "@/lib/i18n";
+
+const GAMES = [
+  ["POKEMON", "寶可夢", "Pokémon"],
+  ["ONE_PIECE", "海賊王", "One Piece"],
+  ["RIFTBOUND", "Riftbound", "Riftbound"],
+] as const;
 
 const REGIONS = [
   ["", "全部", "All"],
@@ -23,12 +30,14 @@ export function DexToolbar({
   locale,
   q,
   region,
+  game,
   action,
   chips,
 }: {
   locale: Locale;
   q: string;
   region: string;
+  game: DexGame;
   action: string;
   chips: string;
 }) {
@@ -39,6 +48,7 @@ export function DexToolbar({
   const request = useRef(0);
   const blurTimer = useRef(0);
   const current = region === "JP" || region === "WEST" ? region : "";
+  const regions = gameHasRegion(game);
   const [text, setText] = useState(q);
   const [hits, setHits] = useState<CatalogHit[]>([]);
   const [open, setOpen] = useState(false);
@@ -46,10 +56,12 @@ export function DexToolbar({
   const [focused, setFocused] = useState(false);
   const [prevQ, setPrevQ] = useState(q);
   const [prevRegion, setPrevRegion] = useState(current);
+  const [prevGame, setPrevGame] = useState(game);
 
-  if (prevQ !== q || prevRegion !== current) {
+  if (prevQ !== q || prevRegion !== current || prevGame !== game) {
     setPrevQ(q);
     setPrevRegion(current);
+    setPrevGame(game);
     setText(q);
     setHits([]);
     setOpen(false);
@@ -71,8 +83,8 @@ export function DexToolbar({
     const token = ++request.current;
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
-      const params = new URLSearchParams({ q: query });
-      if (current) params.set("region", current);
+      const params = new URLSearchParams({ q: query, game: gameParam(game) });
+      if (regions && current) params.set("region", current);
       void fetch(`/api/catalog/suggest?${params}`, { signal: controller.signal })
         .then((res) => (res.ok ? res.json() : { cards: [] }))
         .then((body: { cards?: CatalogHit[] }) => {
@@ -93,7 +105,7 @@ export function DexToolbar({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [text, current, focused]);
+  }, [text, current, focused, game, regions]);
 
   useEffect(() => () => window.clearTimeout(blurTimer.current), []);
 
@@ -107,13 +119,22 @@ export function DexToolbar({
     else if (elRect.bottom > panelRect.bottom) panel.scrollTop += elRect.bottom - panelRect.bottom;
   }, [index, visible, listId]);
 
-  function href(nextRegion: string) {
+  function href(next: { game?: DexGame; region?: string }) {
     const params = new URLSearchParams();
+    const nextGame = next.game ?? game;
+    params.set("game", gameParam(nextGame));
     if (q) params.set("q", q);
-    if (nextRegion) params.set("region", nextRegion);
-    const search = params.toString();
-    return search ? `${chips}?${search}` : chips;
+    const nextRegion = next.game && next.game !== game ? "" : (next.region ?? current);
+    if (nextRegion && gameHasRegion(nextGame)) params.set("region", nextRegion);
+    return `${chips}?${params.toString()}`;
   }
+
+  const placeholder =
+    game === "ONE_PIECE"
+      ? tx(locale, "卡名或卡號，例如 路飛 或 OP01-001", "Name or number, e.g. Luffy or OP01-001")
+      : game === "RIFTBOUND"
+        ? tx(locale, "卡名或卡號，例如 Annie 或 017", "Name or number, e.g. Annie or 017")
+        : tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020");
 
   function language(hit: CatalogHit) {
     if (hit.language === "日文") return tx(locale, "日文", "Japanese");
@@ -140,7 +161,7 @@ export function DexToolbar({
           aria-expanded={visible}
           aria-controls={visible ? listId : undefined}
           aria-activedescendant={index >= 0 ? `${listId}-${index}` : undefined}
-          placeholder={tx(locale, "卡名或卡號，例如 噴火龍 或 020", "Name or number, e.g. Charizard or 020")}
+          placeholder={placeholder}
           className="h-11 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-[var(--field-placeholder)]"
           onChange={(event) => {
             setText(event.target.value);
@@ -178,7 +199,8 @@ export function DexToolbar({
             }
           }}
         />
-        {current ? <input type="hidden" name="region" value={current} /> : null}
+        <input type="hidden" name="game" value={gameParam(game)} />
+        {current && regions ? <input type="hidden" name="region" value={current} /> : null}
         <button className="inline-flex h-11 shrink-0 items-center rounded-full bg-gradient-to-r from-rose to-teal px-4 text-sm font-semibold text-[#1b1418]" type="submit">
           {tx(locale, "搜尋", "Search")}
         </button>
@@ -213,14 +235,24 @@ export function DexToolbar({
           </ul>
         </div>
       ) : null}
-      <div className="chips" aria-label={tx(locale, "篩選", "Filters")}>
-        <span className={chipClass(true)}>{tx(locale, "寶可夢", "Pokémon")}</span>
-        {REGIONS.map(([value, zh, en]) => (
-          <Link key={value || "all"} href={href(value)} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
+      <div className="chips" aria-label={tx(locale, "遊戲", "Game")}>
+        {GAMES.map(([value, zh, en]) => (
+          <Link key={value} href={href({ game: value })} className={chipClass(game === value)} aria-current={game === value ? "page" : undefined}>
             {tx(locale, zh, en)}
           </Link>
         ))}
       </div>
+      {regions ? (
+        <div className="chips" aria-label={tx(locale, "語言", "Language")}>
+          {REGIONS.map(([value, zh, en]) => (
+            <Link key={value || "all"} href={href({ region: value })} className={chipClass(current === value)} aria-current={current === value ? "page" : undefined}>
+              {tx(locale, zh, en)}
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-muted">{tx(locale, "而家只有英文。", "English only for now.")}</p>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { authorizedBearer } from "@/lib/bootstrap";
 import { backfillCatalogTitles, ingestDex } from "@/lib/dex-ingest";
+import { ingestOnePiece, ingestRiftbound } from "@/lib/game-ingest";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -36,6 +37,13 @@ function readSets(value: unknown): number | undefined | "invalid" {
 function readLang(value: unknown): "en" | "ja" | "all" | "invalid" {
   if (value == null || value === "" || value === "all") return "all";
   if (value === "en" || value === "ja") return value;
+  return "invalid";
+}
+
+function readGame(value: unknown): "pokemon" | "one-piece" | "riftbound" | "invalid" {
+  if (value == null || value === "" || value === "pokemon") return "pokemon";
+  if (value === "one-piece" || value === "op") return "one-piece";
+  if (value === "riftbound") return "riftbound";
   return "invalid";
 }
 
@@ -82,7 +90,10 @@ async function readOptions(request: Request) {
   if (sets === "invalid") return invalid("invalid_sets");
   const lang = readLang(pick("lang"));
   if (lang === "invalid") return invalid("invalid_lang");
-  return { backfillTitles: false as const, cursor, maxSets: sets, langs: lang === "all" ? undefined : [lang] };
+  const game = readGame(pick("game"));
+  if (game === "invalid") return invalid("invalid_game");
+  if (game === "riftbound" && lang === "ja") return invalid("invalid_lang");
+  return { backfillTitles: false as const, cursor, maxSets: sets, langs: lang === "all" ? undefined : [lang], game };
 }
 
 export async function POST(request: Request) {
@@ -98,8 +109,14 @@ export async function POST(request: Request) {
       const result = await backfillCatalogTitles({ deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor });
       return Response.json({ ok: true, mode: "backfillTitles", ...result });
     }
-    const result = await ingestDex({ deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor, maxSets: options.maxSets, langs: options.langs });
-    return Response.json({ ok: true, ...result });
+    const shared = { deadlineMs: INGEST_DEADLINE_MS, cursor: options.cursor, maxSets: options.maxSets };
+    const result =
+      options.game === "one-piece"
+        ? await ingestOnePiece({ ...shared, langs: options.langs })
+        : options.game === "riftbound"
+          ? await ingestRiftbound(shared)
+          : await ingestDex({ ...shared, langs: options.langs });
+    return Response.json({ ok: true, game: options.game, ...result });
   } catch (error) {
     console.error("dex ingest failed", safeMessage(error));
     return Response.json({ ok: false, error: "ingest_failed" }, { status: 500 });

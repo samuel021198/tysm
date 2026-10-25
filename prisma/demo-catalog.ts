@@ -941,4 +941,5 @@ export const EXTRA_CARD_CATEGORIES = [
   ["cat_topps_basketball", "topps-basketball", "Topps 籃球", "Topps Basketball", "athlete", "cat_athletes", 5],
   ["cat_topps_baseball", "topps-baseball", "Topps 棒球", "Topps Baseball", "athlete", "cat_athletes", 6],
   ["cat_panini_soccer", "panini-soccer", "Panini 足球", "Panini Soccer", "athlete", "cat_athletes", 7],
+  ["cat_riftbound", "riftbound", "Riftbound", "Riftbound", "tcg", "cat_tcg", 8],
 ] as const;

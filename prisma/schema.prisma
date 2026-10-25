@@ -72,6 +72,8 @@ enum CategoryLevel {
 
 enum CatalogGame {
   POKEMON
+  ONE_PIECE
+  RIFTBOUND
 }
 
 enum PrintRegion {
@@ -230,7 +232,7 @@ model Category {
   @@index([parentId])
 }
 
-/// Official Pokémon printing. Images live on R2 (or a temporary source URL), never as bytes in Postgres.
+/// Official printing. Images live on R2 or a remote source URL, never as bytes in Postgres.
 model CatalogSet {
   id          String       @id @default(cuid())
   externalId  String       @unique
@@ -249,6 +251,7 @@ model CatalogSet {
 
   @@index([printRegion, releaseDate])
   @@index([code])
+  @@index([game, printRegion])
 }
 
 model CatalogCard {
@@ -282,6 +285,7 @@ model CatalogCard {
   @@index([numberKey])
   @@index([printRegion, numberKey])
   @@index([setId])
+  @@index([game, printRegion])
 }
 
 model Listing {

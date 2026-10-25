@@ -28,6 +28,7 @@ export function CatalogTitleField({
   placeholder,
   named = true,
   pinOnPick,
+  game,
 }: {
   locale: Locale;
   value: string;
@@ -39,6 +40,8 @@ export function CatalogTitleField({
   /** False when this is a card-name lookup and the listing title is a different field. */
   named?: boolean;
   pinOnPick?: (hit: CatalogHit) => string;
+  /** Catalog game slug. Suggestions stay inside this game. */
+  game?: string;
 }) {
   const listId = useId();
   const [hits, setHits] = useState<CatalogHit[]>([]);
@@ -57,7 +60,9 @@ export function CatalogTitleField({
     const token = ++request.current;
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
-      void fetch(`/api/catalog/suggest?q=${encodeURIComponent(q)}`, { signal: controller.signal })
+      const params = new URLSearchParams({ q });
+      if (game) params.set("game", game);
+      void fetch(`/api/catalog/suggest?${params}`, { signal: controller.signal })
         .then((res) => (res.ok ? res.json() : { cards: [] }))
         .then((body: { cards?: CatalogHit[] }) => {
           if (token !== request.current) return;
@@ -75,7 +80,7 @@ export function CatalogTitleField({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [value]);
+  }, [game, value]);
 
   return (
     <div className="grid gap-1 text-sm">

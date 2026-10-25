@@ -1,5 +1,5 @@
 import { listingTitleFromCatalog, releaseYear, titleCasePhrase } from "./card-title";
-import { catalogAnchorMatches, catalogCardMatches, type CatalogSearchCard, type DexPrintRegion } from "./dex";
+import { catalogAnchorMatches, catalogCardMatches, plainCatalogLabel, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
 export type CatalogSuggestCard = {
@@ -17,6 +17,7 @@ export type CatalogSuggestCard = {
   setCode: string;
   series: string | null;
   releaseDate: string | null;
+  game?: string | null;
 };
 
 export type CatalogSuggestion = {
@@ -33,7 +34,7 @@ export type CatalogSuggestion = {
   year: string;
 };
 
-const GAME_LABEL: Record<string, string> = { POKEMON: "Pokémon" };
+const GAME_LABEL: Record<string, string> = { POKEMON: "Pokémon", ONE_PIECE: "One Piece", RIFTBOUND: "Riftbound" };
 
 /** Stored language matches existing listings (日文 / 英文), which dex linking already understands. */
 export function catalogLanguage(region: DexPrintRegion): string {
@@ -44,10 +45,10 @@ export function catalogGameLabel(game: string | null | undefined): string {
   return GAME_LABEL[game || "POKEMON"] || "Pokémon";
 }
 
-export function catalogSuggestion(card: CatalogSuggestCard, game = "POKEMON"): CatalogSuggestion {
-  const setName = titleCasePhrase(card.setNameEn || card.setNameJa);
+export function catalogSuggestion(card: CatalogSuggestCard, game = card.game || "POKEMON"): CatalogSuggestion {
+  const setName = titleCasePhrase(plainCatalogLabel(card.setNameEn || card.setNameJa));
   const cardName = titleCasePhrase(card.nameEn || card.nameJa);
-  const series = titleCasePhrase(card.series || setName);
+  const series = titleCasePhrase(plainCatalogLabel(card.series || setName));
   return {
     id: card.id,
     title: listingTitleFromCatalog({
@@ -58,6 +59,7 @@ export function catalogSuggestion(card: CatalogSuggestCard, game = "POKEMON"): C
       numberKey: card.numberKey,
       cardName,
       rarity: card.rarity,
+      game,
     }),
     game: catalogGameLabel(game),
     setName,
