@@ -1,4 +1,5 @@
 import {
+  listingCatalogId,
   parseListingForm,
   validateListing,
   wizardFocusField,
@@ -263,12 +264,15 @@ form.set("photos", JSON.stringify(onePhoto));
 form.set(
   "cards",
   JSON.stringify([
-    { cardName: "噴火龍", conditionTrack: "RAW", rawGrade: "A", price: "40" },
-    { cardName: "皮卡丘", conditionTrack: "RAW", rawGrade: "B", price: "40" },
+    { cardName: "噴火龍", catalogCardId: "card_zard", conditionTrack: "RAW", rawGrade: "A", price: "40" },
+    { cardName: "皮卡丘", catalogCardId: "card_pika", conditionTrack: "RAW", rawGrade: "B", price: "40" },
   ]),
 );
 const parsed = parseListingForm(form);
 assert(parsed?.items?.length === 2 && parsed.shipWithinDays === 7 && parsed.title === "減價，Sv2a 全陪8折", "the form keeps the typed title and per-card prices");
+assert(parsed?.catalogCardId === "card_zard" && parsed.items?.[1]?.catalogCardId === "card_pika", "a picked catalog card stays on the listing and on that row");
+assert(listingCatalogId([{ catalogCardId: null }, { catalogCardId: "card_pika" }], null) === "card_pika", "a later card still links the listing");
+assert(listingCatalogId(undefined, "  ") === null && listingCatalogId([], "card_zard") === "card_zard", "blank ids stay unlinked and a listing-level id is kept");
 assert(parsed != null && wizardPublishIssues(parsed, "tcg", now).length === 0, "a minimum multi-card form publishes");
 
 const legacy = new FormData();

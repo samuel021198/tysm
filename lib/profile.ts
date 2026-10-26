@@ -25,6 +25,7 @@ const postInclude = {
           cardName: true,
           personName: true,
           title: true,
+          catalogCardId: true,
         },
       },
     },
@@ -110,6 +111,8 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     photo: item.photos[0]?.url ?? null,
     priceCents: sellingAsk(item.listing),
     href: item.post ? `/post/${item.post.id}` : item.listing && sellingAsk(item.listing) != null ? `/listing/${item.listing.id}` : null,
+    catalogCardId: item.catalogCardId,
+    listingId: item.listingId,
   }));
 
   return {
@@ -130,27 +133,98 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
   };
 }
 
-/** Following first, then everyone else. ponytail: ranks at most 40 posts in memory. Upgrade path: a SQL union on follow. */
+const HOME_BUCKET = 8;
+
+function homePostInclude(viewerId: string | null) {
+  return {
+    author: { select: { id: true, nickname: true, avatarUrl: true } },
+    photos: { orderBy: { position: "asc" as const }, take: 1 },
+    likes: {
+      where: viewerId ? { userId: viewerId } : { userId: { in: [] as string[] } },
+      select: { userId: true },
+      take: 1,
+    },
+    _count: { select: { comments: true, likes: true } },
+    collectionItem: {
+      select: {
+        title: true,
+        cardName: true,
+        catalogCardId: true,
+        conditionTrack: true,
+        rawGrade: true,
+        grader: true,
+        gradeValue: true,
+        photos: { orderBy: { position: "asc" as const }, take: 1, select: { url: true } },
+        listing: {
+          select: {
+            id: true,
+            status: true,
+            quantityAvailable: true,
+            saleType: true,
+            price: true,
+            currentBid: true,
+            startPrice: true,
+            auctionSettled: true,
+            cardName: true,
+            personName: true,
+            title: true,
+            catalogCardId: true,
+          },
+        },
+      },
+    },
+  };
+}
+
+function homeVisible(viewerId: string | null, hidden: string[]) {
+  return {
+    ...(hidden.length ? { authorId: { notIn: hidden } } : {}),
+    OR: [
+      { collectionItemId: null },
+      { collectionItem: { visibility: "PUBLIC" as const } },
+      ...(viewerId ? [{ authorId: viewerId }] : []),
+    ],
+  };
+}
+
+/**
+ * Following first, then a short suggestion bucket.
+ * ponytail: 8 + 8 posts, one photo, the viewer's like row only. Upgrade path: cursor pagination.
+ */
 export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
-  const [rows, follows] = await Promise.all([
+  const follows = viewerId
+    ? await prisma.follow.findMany({ where: { followerId: viewerId }, select: { sellerId: true } })
+    : [];
+  const hiddenSet = new Set(hidden);
+  const followedIds = follows.map((row) => row.sellerId).filter((id) => !hiddenSet.has(id));
+  const include = homePostInclude(viewerId);
+  const exclude = [...new Set([...hidden, ...(viewerId ? [viewerId] : []), ...followedIds])];
+  const [primaryRows, suggestedRows] = await Promise.all([
+    viewerId
+      ? prisma.post.findMany({
+          where: { AND: [homeVisible(viewerId, hidden), { authorId: { in: [viewerId, ...followedIds] } }] },
+          include,
+          orderBy: { createdAt: "desc" },
+          take: HOME_BUCKET,
+        })
+      : Promise.resolve([]),
     prisma.post.findMany({
       where: {
-        ...(hidden.length ? { authorId: { notIn: hidden } } : {}),
-        OR: [
-          { collectionItemId: null },
-          { collectionItem: { visibility: "PUBLIC" } },
-          ...(viewerId ? [{ authorId: viewerId }] : []),
+        AND: [
+          {
+            OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }],
+          },
+          ...(exclude.length ? [{ authorId: { notIn: exclude } }] : []),
         ],
       },
-      include: postInclude,
+      include,
       orderBy: { createdAt: "desc" },
-      take: 40,
+      take: HOME_BUCKET,
     }),
-    viewerId ? prisma.follow.findMany({ where: { followerId: viewerId }, select: { sellerId: true } }) : Promise.resolve([]),
   ]);
-  const followed = new Set(follows.map((row) => row.sellerId));
-  const cards = rows.map((row) =>
-    toPostCard({
+  const rows = [...primaryRows, ...suggestedRows];
+  function toCard(row: (typeof rows)[number]) {
+    return toPostCard({
       postId: row.id,
       body: row.body,
       author: row.author,
@@ -159,10 +233,10 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
       likeCount: row._count.likes,
       commentCount: row._count.comments,
       liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
-    }),
-  );
-  const primary = cards.filter((card) => viewerId != null && (card.author.id === viewerId || followed.has(card.author.id)));
-  const suggested = cards.filter((card) => !primary.includes(card));
+    });
+  }
+  const primary = primaryRows.map(toCard);
+  const suggested = suggestedRows.map(toCard);
   const linkedListings = new Set(rows.map((row) => row.collectionItem?.listing?.id).filter((id): id is string => Boolean(id)));
   return { primary, suggested, linkedListings };
 }

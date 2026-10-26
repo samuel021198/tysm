@@ -72,6 +72,11 @@ export function PostCard({
             {post.condition ? <span className="font-medium text-muted"> · {post.condition}</span> : null}
           </h2>
         </Link>
+        {post.dexHref ? (
+          <Link href={post.dexHref} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
+            {tx(locale, "睇圖鑑", "View in the dex")}
+          </Link>
+        ) : null}
         {post.priceCents != null ? (
           post.priceHref ? (
             <Link href={post.priceHref} className="price mt-1 inline-flex min-h-11 items-center text-xl leading-none">

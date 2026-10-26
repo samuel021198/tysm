@@ -45,6 +45,7 @@ export default async function PostPage({
                 cardName: true,
                 personName: true,
                 title: true,
+                catalogCardId: true,
               },
             },
           },
@@ -77,6 +78,11 @@ export default async function PostPage({
         <p className="text-sm">
           <Link className="text-link" href={`/listing/${listing.id}`}>{tx(locale, "喺賣場查看", "View in the market")}</Link>
         </p>
+      ) : null}
+      {viewer?.id === post.authorId && post.collectionItem?.catalogCardId && !post.collectionItem.listingId ? (
+        <Link href={`/sell?catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}`} className="btn btn-primary w-fit">
+          {tx(locale, "放賣", "List for sale")}
+        </Link>
       ) : null}
       <section id="comments" className="grid gap-3">
         <h2 className="font-semibold">{tx(locale, "留言", "Comments")}</h2>

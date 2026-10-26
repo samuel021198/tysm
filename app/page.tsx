@@ -21,25 +21,46 @@ export default async function HomePage({
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const hidden = await hiddenUserIds(viewer?.id ?? null);
-  const [{ primary, suggested, linkedListings }, extras, favRows, storyFeed] = await Promise.all([
+  const [{ primary, suggested, linkedListings }, storyFeed] = await Promise.all([
     loadHomeFeed(viewer?.id ?? null, hidden),
-    prisma.listing.findMany({
-      where: activeWhere(hidden),
-      include: {
-        photos: { orderBy: { position: "asc" }, take: 1 },
-        seller: { select: { id: true, nickname: true, avatarUrl: true } },
-      },
-      orderBy: { publishedAt: "desc" },
-      take: 16,
-    }),
-    viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : Promise.resolve([]),
     loadStoryRings(viewer?.id ?? null, hidden),
   ]);
+  const linked = [...linkedListings];
+  const extras = await prisma.listing.findMany({
+    where: { ...activeWhere(hidden), ...(linked.length ? { id: { notIn: linked } } : {}) },
+    select: {
+      id: true,
+      title: true,
+      cardName: true,
+      personName: true,
+      conditionTrack: true,
+      rawGrade: true,
+      grader: true,
+      gradeValue: true,
+      favoriteCount: true,
+      status: true,
+      quantityAvailable: true,
+      saleType: true,
+      price: true,
+      currentBid: true,
+      startPrice: true,
+      auctionSettled: true,
+      catalogCardId: true,
+      sellerId: true,
+      photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+      seller: { select: { id: true, nickname: true, avatarUrl: true } },
+    },
+    orderBy: { publishedAt: "desc" },
+    take: 4,
+  });
+  const favRows = viewer && extras.length
+    ? await prisma.favorite.findMany({
+        where: { userId: viewer.id, listingId: { in: extras.map((listing) => listing.id) } },
+        select: { listingId: true },
+      })
+    : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
-  const listingCards = extras
-    .filter((listing) => !linkedListings.has(listing.id))
-    .slice(0, 4)
-    .map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
+  const listingCards = extras.map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
 
   return (
     <div className="mx-auto grid max-w-lg gap-4">

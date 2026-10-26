@@ -6,7 +6,7 @@ import { parseGrade } from "./rules";
 import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
 import { hasStoreAddress } from "./shipping";
-import { GRADERS, PHOTO_MAX, RAW, parseListingForm, validateListing, type CardItemInput, type ListingInput, type PhotoInput } from "./sell-wizard";
+import { GRADERS, PHOTO_MAX, RAW, listingCatalogId, parseListingForm, validateListing, type CardItemInput, type ListingInput, type PhotoInput } from "./sell-wizard";
 
 export type { ListingInput, PhotoInput };
 export { parseListingForm, validateListing };
@@ -91,7 +91,7 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
     publishAt: input.intent === "schedule" ? input.publishAt : null,
     status: status as "DRAFT" | "SCHEDULED" | "ACTIVE",
     publishedAt: status === "ACTIVE" ? now : null,
-    catalogCardId: first?.catalogCardId || input.catalogCardId?.trim() || null,
+    catalogCardId: listingCatalogId(input.items, input.catalogCardId),
     photos,
     items: input.items,
   };
@@ -183,7 +183,7 @@ async function hydrateCatalog(input: ListingInput): Promise<ListingInput> {
       ...input,
       title,
       items,
-      catalogCardId: first?.catalogCardId ?? null,
+      catalogCardId: listingCatalogId(items, input.catalogCardId),
       cardName: first?.cardName ?? input.cardName,
       game: first?.game ?? input.game,
       setName: first?.setName ?? input.setName,

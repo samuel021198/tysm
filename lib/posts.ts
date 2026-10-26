@@ -1,3 +1,4 @@
+import { dexPath } from "./dex";
 import { conditionLabel } from "./rules";
 
 export type CollectionVisibility = "PUBLIC" | "PRIVATE";
@@ -60,6 +61,7 @@ export type PostCardModel = {
   likeListingId: string | null;
   sharePath: string;
   commentHref: string | null;
+  dexHref: string | null;
 };
 
 type ConditionBits = {
@@ -77,12 +79,14 @@ export function toPostCard(input: {
   item: null | (ConditionBits & {
     title: string;
     cardName: string | null;
+    catalogCardId?: string | null;
     photos: { url: string }[];
     listing: null | (AskListing & {
       id: string;
       cardName: string | null;
       personName: string | null;
       title: string;
+      catalogCardId?: string | null;
     });
   });
   likeCount: number;
@@ -114,6 +118,7 @@ export function toPostCard(input: {
     likeListingId: null,
     sharePath: `/post/${input.postId}`,
     commentHref: `/post/${input.postId}#comments`,
+    dexHref: dexPath(input.item?.catalogCardId || input.item?.listing?.catalogCardId),
   };
 }
 
@@ -129,6 +134,7 @@ export function listingSuggestionCard(input: {
     grader: string | null;
     gradeValue: number | null;
     favoriteCount: number;
+    catalogCardId?: string | null;
     photos: { url: string }[];
     seller: { id: string; nickname: string; avatarUrl?: string | null };
   };
@@ -155,5 +161,6 @@ export function listingSuggestionCard(input: {
     likeListingId: listing.id,
     sharePath: `/listing/${listing.id}`,
     commentHref: null,
+    dexHref: dexPath(listing.catalogCardId),
   };
 }

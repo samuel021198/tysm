@@ -284,6 +284,18 @@ function blank(value: string) {
   return text || null;
 }
 
+/** First picked catalog card, else the listing-level id. Blank means the row stays unlinked. */
+export function listingCatalogId(
+  items: { catalogCardId?: string | null }[] | undefined,
+  fallback?: string | null,
+): string | null {
+  for (const item of items ?? []) {
+    const id = item.catalogCardId?.trim();
+    if (id) return id;
+  }
+  return fallback?.trim() || null;
+}
+
 function parseCard(raw: Record<string, unknown>): CardItemInput | null {
   const track = raw.conditionTrack === "GRADED" ? "GRADED" : raw.conditionTrack === "RAW" ? "RAW" : null;
   if (!track) return null;

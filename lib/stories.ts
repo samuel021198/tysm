@@ -9,6 +9,15 @@ export function isStoryActive(expiresAt: Date, now = new Date()): boolean {
   return expiresAt.getTime() > now.getTime();
 }
 
+/** Sweep deletes these. The same instant `isStoryActive` becomes false, so a live ring is never collected. */
+export function storyReadyForGc(expiresAt: Date, now = new Date()): boolean {
+  return expiresAt.getTime() <= now.getTime();
+}
+
+export function expiredStoryWhere(now: Date) {
+  return { expiresAt: { lte: now } };
+}
+
 export type StoryPerson = { id: string; nickname: string; avatarUrl: string | null };
 
 export type StoryRow = {

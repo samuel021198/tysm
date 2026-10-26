@@ -14,6 +14,8 @@ type Item = {
   photo: string | null;
   priceCents: number | null;
   href: string | null;
+  catalogCardId: string | null;
+  listingId: string | null;
 };
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
@@ -121,6 +123,11 @@ export function ProfileBoard({
                   <p className="text-sm font-semibold">{item.cardName}</p>
                   <p className="text-xs text-muted">{item.condition}{item.visibility === "PRIVATE" ? ` · ${tx(locale, "私人", "Private")}` : ""}</p>
                   {item.priceCents != null ? <p className="price text-lg leading-none">{formatHkd(item.priceCents, locale)}</p> : null}
+                  {isSelf && item.catalogCardId && !item.listingId ? (
+                    <Link href={`/sell?catalogCardId=${encodeURIComponent(item.catalogCardId)}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
+                      {tx(locale, "放賣", "List for sale")}
+                    </Link>
+                  ) : null}
                   {isSelf ? (
                     <form action={toggleCollectionVisibility}>
                       <input type="hidden" name="id" value={item.id} />

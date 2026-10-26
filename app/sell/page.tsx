@@ -52,7 +52,7 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
       })
     : null;
   const categoryId = prefill ? categories.find((cat) => cat.slug === prefill.categorySlug)?.id || "" : "";
-  const linkedId = categoryId ? prefill?.catalogCardId || "" : "";
+  const linkedId = prefill?.catalogCardId || "";
   const initial: SellInitial | undefined = prefill
       ? {
           categoryId,
