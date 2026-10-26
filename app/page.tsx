@@ -4,7 +4,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
 import { loadHomeFeed } from "@/lib/profile";
 import { loadStoryRings } from "@/lib/story-feed";
-import { hiddenUserIds } from "@/lib/social";
+import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { listingSuggestionCard } from "@/lib/posts";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
@@ -20,14 +20,17 @@ export default async function HomePage({
   await sweep();
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
-  const hidden = await hiddenUserIds(viewer?.id ?? null);
+  const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
   const [{ primary, suggested, linkedListings }, storyFeed] = await Promise.all([
-    loadHomeFeed(viewer?.id ?? null, hidden),
+    loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds),
     loadStoryRings(viewer?.id ?? null, hidden),
   ]);
   const linked = [...linkedListings];
   const extras = await prisma.listing.findMany({
-    where: { ...activeWhere(hidden), ...(linked.length ? { id: { notIn: linked } } : {}) },
+    where: {
+      ...activeWhere(hidden),
+      ...([...linked, ...hides.listingIds].length ? { id: { notIn: [...linked, ...hides.listingIds] } } : {}),
+    },
     select: {
       id: true,
       title: true,
@@ -66,20 +69,19 @@ export default async function HomePage({
     <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="page-title mb-0">{tx(prefs.locale, "主頁", "Home")}</h1>
+      <div className="flex justify-end">
         <Link href="/add?kind=post" className="text-sm font-semibold text-link">
           {tx(prefs.locale, "寫貼文", "New post")}
         </Link>
       </div>
       {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
-        <p className="empty">{tx(prefs.locale, "未有動態。發一則貼文，或者上架一張卡。", "No posts yet. Write a post, or list a card.")}</p>
+        <p className="empty">{tx(prefs.locale, "未有動態。", "No posts yet.")}</p>
       ) : null}
       {primary.length ? (
         <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
           {primary.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
           ))}
         </section>
       ) : null}
@@ -87,10 +89,10 @@ export default async function HomePage({
         <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "建議", "Suggested")}</h2>
           {suggested.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
           ))}
           {listingCards.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
           ))}
         </section>
       ) : null}

@@ -59,6 +59,42 @@ function fieldContains(needle: string): Prisma.StringFilter {
   return { contains: needle, mode: "insensitive" };
 }
 
+export function userQueryWhere(query: string): Prisma.UserWhereInput {
+  const needles = searchNeedles(query);
+  if (!needles.length) return { id: { in: [] } };
+  return {
+    OR: needles.flatMap((needle) => {
+      const contains = fieldContains(needle);
+      return [{ nickname: contains }, { storeName: contains }];
+    }),
+  };
+}
+
+export function postQueryWhere(query: string): Prisma.PostWhereInput {
+  const needles = searchNeedles(query);
+  if (!needles.length) return { id: { in: [] } };
+  const clause = (needle: string): Prisma.PostWhereInput => {
+    const contains = fieldContains(needle);
+    return {
+      OR: [
+        { body: contains },
+        { author: { nickname: contains } },
+        {
+          collectionItem: {
+            OR: [
+              { title: contains },
+              { cardName: contains },
+              { listing: { OR: [{ title: contains }, { cardName: contains }, { personName: contains }] } },
+            ],
+          },
+        },
+      ],
+    };
+  };
+  if (needles.length === 1) return clause(needles[0]);
+  return { OR: needles.map(clause) };
+}
+
 export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
   const needles = searchNeedles(query);
   if (!needles.length) return {};

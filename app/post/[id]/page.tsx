@@ -73,7 +73,7 @@ export default async function PostPage({
   return (
     <div className="mx-auto grid max-w-lg gap-4">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <PostCard post={card} locale={locale} next={`/post/${post.id}`} gallery />
+      <PostCard post={card} locale={locale} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
       {post.body ? <p className="px-1 text-sm">{post.body}</p> : null}
       {selling ? (
         <p className="text-sm">

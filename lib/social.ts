@@ -40,6 +40,22 @@ export async function isBlocked(a: string, b: string): Promise<boolean> {
   return Boolean(row);
 }
 
+/** Posts and listings this viewer has hidden. Empty for guests. */
+export async function feedHideIds(userId: string | null): Promise<{ postIds: string[]; listingIds: string[] }> {
+  if (!userId) return { postIds: [], listingIds: [] };
+  const rows = await prisma.feedHide.findMany({
+    where: { userId },
+    select: { targetType: true, targetId: true },
+  });
+  const postIds: string[] = [];
+  const listingIds: string[] = [];
+  for (const row of rows) {
+    if (row.targetType === "POST") postIds.push(row.targetId);
+    else if (row.targetType === "LISTING") listingIds.push(row.targetId);
+  }
+  return { postIds, listingIds };
+}
+
 export async function hiddenUserIds(userId: string | null): Promise<string[]> {
   if (!userId) return [];
   const rows = await prisma.block.findMany({

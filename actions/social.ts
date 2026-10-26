@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { isAllowedMediaUrl } from "@/lib/format";
+import { isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { isBlocked, notify } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
@@ -58,12 +58,19 @@ export async function toggleBlock(formData: FormData) {
 
 export async function reportAction(formData: FormData) {
   const targetId = String(formData.get("targetId") || "");
-  const targetType = formData.get("targetType") === "USER" ? "USER" : "LISTING";
-  const next = targetType === "USER" ? `/shop/${targetId}` : `/listing/${targetId}`;
+  const raw = String(formData.get("targetType") || "");
+  const targetType = raw === "USER" ? "USER" : raw === "POST" ? "POST" : "LISTING";
+  const fallback = targetType === "USER" ? `/shop/${targetId}` : targetType === "POST" ? `/post/${targetId}` : `/listing/${targetId}`;
+  const requested = String(formData.get("next") || "");
+  const next = (requested ? safeNext(requested) : fallback).split("?")[0].split("#")[0] || "/";
   const user = await viewer(next);
   const reason = String(formData.get("reason") || "").trim();
   if (reason.length < 4) redirect(`${next}?err=dispute`);
   if (targetType === "USER" && targetId === user.id) redirect(`${next}?err=own`);
+  if (targetType === "POST") {
+    const post = await prisma.post.findUnique({ where: { id: targetId }, select: { authorId: true } });
+    if (!post || post.authorId === user.id) redirect(`${next}?err=forbidden`);
+  }
   await prisma.report.create({ data: { reporterId: user.id, targetType, targetId, reason: reason.slice(0, 1000) } });
   redirect(`${next}?ok=report`);
 }

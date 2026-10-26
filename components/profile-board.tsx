@@ -4,6 +4,7 @@ import { formatHkd } from "@/lib/format";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import { Icon } from "./icons";
+import { PostMenu } from "./post-menu";
 
 type Item = {
   id: string;
@@ -57,6 +58,7 @@ export function ProfileBoard({
   listings,
   reviews,
   drafts,
+  viewerId,
 }: {
   locale: Locale;
   base: string;
@@ -68,6 +70,7 @@ export function ProfileBoard({
   reviews: Review[];
   drafts: Draft[];
   favIds: string[];
+  viewerId: string | null;
 }) {
   const panel = tab === "box" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
   return (
@@ -95,10 +98,21 @@ export function ProfileBoard({
           <ul className="grid grid-cols-3 gap-px">
             {posts.map((post) => (
               <li key={post.id} className="min-w-0">
-                <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
-                  <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                  {post.photos.length > 1 ? <StackMark /> : null}
-                </Link>
+                <PostMenu
+                  locale={locale}
+                  postId={post.postId}
+                  listingId={post.listingId}
+                  own={viewerId != null && viewerId === post.author.id}
+                  loggedIn={viewerId != null}
+                  sharePath={post.sharePath}
+                  next={base}
+                  corner="left"
+                >
+                  <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
+                    <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                    {post.photos.length > 1 ? <StackMark /> : null}
+                  </Link>
+                </PostMenu>
               </li>
             ))}
           </ul>

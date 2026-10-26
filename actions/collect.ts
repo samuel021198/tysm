@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import type { Grader, RawGrade } from "@prisma/client";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { hkdToCents, isAllowedMediaUrl } from "@/lib/format";
+import { hkdToCents, isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { PhotoStoreError, storeUploadedImages } from "@/lib/r2";
 import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
@@ -273,9 +273,63 @@ export async function deletePost(formData: FormData) {
   await prisma.post.deleteMany({ where: { id: postId, authorId: user.id } });
   revalidatePath("/");
   revalidatePath("/me");
+  revalidatePath("/find");
   revalidatePath(`/shop/${user.id}`);
   revalidatePath(`/post/${postId}`);
   redirect("/me?tab=posts&ok=deleted");
+}
+
+export async function updatePost(formData: FormData) {
+  const postId = String(formData.get("postId") || "");
+  const user = await viewer(postId ? `/post/${postId}/edit` : "/me");
+  if (!postId) redirect("/?err=forbidden");
+  const body = String(formData.get("body") || "").trim();
+  if (body.length > 500) redirect(`/post/${postId}/edit?err=post`);
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { id: true, authorId: true },
+  });
+  if (!ownedPostId(post, user.id)) redirect("/?err=forbidden");
+  const photos = await prisma.postPhoto.count({ where: { postId } });
+  if (body.length < 1 && photos < 1) redirect(`/post/${postId}/edit?err=post`);
+  await prisma.post.updateMany({ where: { id: postId, authorId: user.id }, data: { body } });
+  revalidatePath("/");
+  revalidatePath("/me");
+  revalidatePath("/find");
+  revalidatePath(`/shop/${user.id}`);
+  revalidatePath(`/post/${postId}`);
+  redirect(`/post/${postId}?ok=saved`);
+}
+
+export async function hideFromFeed(formData: FormData) {
+  const next = safeNext(formData.get("next")).split("?")[0].split("#")[0] || "/";
+  const user = await viewer(next);
+  const targetType = formData.get("targetType") === "LISTING" ? "LISTING" : "POST";
+  const targetId = String(formData.get("targetId") || "").trim();
+  if (!targetId) redirect(`${next}?err=forbidden`);
+  if (targetType === "POST") {
+    const post = await prisma.post.findUnique({ where: { id: targetId }, select: { id: true, authorId: true } });
+    if (!post) redirect(`${next}?err=forbidden`);
+    await prisma.feedHide.upsert({
+      where: { userId_targetType_targetId: { userId: user.id, targetType: "POST", targetId } },
+      create: { userId: user.id, targetType: "POST", targetId },
+      update: {},
+    });
+    revalidatePath(`/shop/${post.authorId}`);
+    revalidatePath(`/post/${post.id}`);
+  } else {
+    const listing = await prisma.listing.findUnique({ where: { id: targetId }, select: { id: true } });
+    if (!listing) redirect(`${next}?err=forbidden`);
+    await prisma.feedHide.upsert({
+      where: { userId_targetType_targetId: { userId: user.id, targetType: "LISTING", targetId } },
+      create: { userId: user.id, targetType: "LISTING", targetId },
+      update: {},
+    });
+  }
+  revalidatePath("/");
+  revalidatePath("/me");
+  revalidatePath("/find");
+  redirect(next);
 }
 
 export async function toggleCollectionVisibility(formData: FormData) {

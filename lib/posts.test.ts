@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { cardDisplayName, collectionVisibility, listingSuggestionCard, ownedPostId, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
+import { cardDisplayName, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -78,6 +78,7 @@ const card = toPostCard({
   commentCount: 1,
   liked: false,
 });
+assert(card.postId === "p1" && card.listingId === "seed_charizard", "selling post keeps both ids");
 assert(card.priceCents === 128000, "selling post keeps the price");
 assert(card.priceHref === "/listing/seed_charizard", "the price opens the listing");
 assert(card.condition === "Raw A", "condition is on the card");
@@ -104,6 +105,7 @@ const held = toPostCard({
     listing: null,
   },
 });
+assert(held.postId === "p2" && held.listingId === null, "collect post has no listing");
 assert(held.priceCents === null, "collect-only card has no price");
 assert(held.priceHref === null, "a post without a sale has no price link");
 assert(held.dexHref === null, "no catalog id means no dex link");
@@ -132,6 +134,7 @@ const suggestion = listingSuggestionCard({
     seller: { id: "user_ming", nickname: "卡牌阿明", avatarUrl: null },
   },
 });
+assert(suggestion.postId === null && suggestion.listingId === "seed_luffy", "suggestion is a listing, not a post");
 assert(suggestion.commentHref === null, "listing suggestions do not invent a thread");
 assert(suggestion.likeListingId === "seed_luffy", "suggestion likes reuse favorites");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
@@ -145,5 +148,33 @@ const deletePost = collect.slice(deleteStart, deleteEnd);
 assert(deletePost.includes("ownedPostId"), "delete checks the author");
 assert(deletePost.includes("authorId: user.id"), "the delete query is scoped to the viewer");
 assert(!deletePost.includes("collectionItem.delete") && !deletePost.includes("listing.delete"), "delete leaves the collection and listing");
+
+const updateStart = collect.indexOf("export async function updatePost");
+const updatePost = collect.slice(updateStart, collect.indexOf("export async function", updateStart + 1));
+assert(updatePost.includes("ownedPostId"), "edit checks the author");
+assert(updatePost.includes("authorId: user.id"), "edit is scoped to the viewer");
+
+const hideStart = collect.indexOf("export async function hideFromFeed");
+const hidePost = collect.slice(hideStart, collect.indexOf("export async function", hideStart + 1));
+assert(hidePost.includes("feedHide"), "hide stores a viewer-only row");
+assert(!hidePost.includes("post.delete"), "hide does not delete");
+
+assert(POST_MENU_ORDER.join() === "delete,share,hide,report,edit", "menu order");
+const own = postMenuFlags({ own: true, loggedIn: true, postId: "p", listingId: null });
+const other = postMenuFlags({ own: false, loggedIn: true, postId: "p", listingId: "l" });
+const guest = postMenuFlags({ own: false, loggedIn: false, postId: "p", listingId: null });
+assert(own.delete && own.edit && own.hide && !own.report, "author gets delete, edit, hide");
+assert(!other.delete && !other.edit && other.report && other.hide && other.share, "others get report, hide, share");
+assert(!guest.hide && !guest.report && guest.share, "guests can share");
+assert(postEditHref("p", "l") === "/sell/l", "a listed post edits the listing");
+assert(postEditHref("p", null) === "/post/p/edit", "a caption post edits the caption");
+assert(postEditHref(null, null) === null, "nothing to edit");
+assert(reportTarget("p", "l")?.type === "POST", "a post is reported as a post");
+assert(hideTarget(null, "l")?.type === "LISTING", "a listing card hides the listing");
+
+const menu = readFileSync(new URL("../components/post-menu.tsx", import.meta.url), "utf8");
+assert(["剷除", "分享", "隱藏", "舉報", "編輯"].every((label) => menu.includes(label)), "menu labels");
+assert(menu.includes("deletePost") && menu.includes("hideFromFeed") && menu.includes("reportAction"), "menu reuses delete, hide, and report");
+assert(menu.includes("navigator.share") && menu.includes("clipboard"), "share falls back to copying the link");
 
 console.log("posts.test.ts ok");

@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { clearRecent, pullAccountRecent, pushRecent, readRecent, removeRecent } from "./search-memory";
 import {
   buildSuggestRows,
@@ -5,12 +6,14 @@ import {
   foldSearch,
   forgetMemory,
   mergeMemory,
+  postQueryWhere,
   rememberMemory,
   searchHref,
   searchNeedles,
   searchScore,
   suggestPanelDismiss,
   textHits,
+  userQueryWhere,
 } from "./search";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -97,6 +100,15 @@ assert(!suggestPanelDismiss("blur", { ...dismiss, mobileSheet: true }), "blur fr
 assert(!suggestPanelDismiss("blur", { ...dismiss, focusInside: true }), "moving focus inside the box does not close it");
 assert(suggestPanelDismiss("blur", dismiss), "blur outside closes the desktop dropdown");
 assert(suggestPanelDismiss("escape", dismiss) && suggestPanelDismiss("submit", dismiss), "escape and submit always close");
+
+const users = JSON.stringify(userQueryWhere("阿明"));
+assert(users.includes("nickname") && !users.includes("catalog"), "user search is nicknames, not the dex");
+const posts = JSON.stringify(postQueryWhere("皮卡丘"));
+assert(posts.includes("body") && posts.includes("cardName") && !posts.includes("catalog"), "post search skips the dex");
+assert(JSON.stringify(postQueryWhere("")).includes("in"), "a blank post search matches nothing");
+const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
+assert(find.includes("用戶") && find.includes("貼文") && find.includes("放售"), "search shows users, posts, and listings");
+assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
 
 void (async () => {
   const store = new Map<string, string>();

@@ -129,6 +129,7 @@ enum DisputeStatus {
 enum ReportTarget {
   LISTING
   USER
+  POST
 }
 
 enum ReportStatus {
@@ -192,6 +193,7 @@ model User {
   postComments    PostComment[]
   stories         Story[]
   storyViews      StoryView[]
+  feedHides       FeedHide[]
 }
 
 model OtpChallenge {
@@ -791,6 +793,20 @@ model PostComment {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([postId, createdAt])
+}
+
+/// One viewer's hide. The post or listing stays up for everyone else.
+model FeedHide {
+  id         String   @id @default(cuid())
+  userId     String
+  /// POST or LISTING.
+  targetType String
+  targetId   String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([userId, targetType])
 }
 
 /// Photo story. Hidden once `expiresAt` passes (24h from create). `purgeExpiredStories` in sweep deletes those rows.

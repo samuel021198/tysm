@@ -56,6 +56,9 @@ export function cardDisplayName(parts: {
 
 export type PostCardModel = {
   id: string;
+  /** Real post id. Null on a listing suggestion that has no post yet. */
+  postId: string | null;
+  listingId: string | null;
   href: string;
   author: { id: string; nickname: string; avatarUrl: string | null };
   photos: string[];
@@ -72,6 +75,45 @@ export type PostCardModel = {
   commentHref: string | null;
   dexHref: string | null;
 };
+
+export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "edit"] as const;
+export type PostMenuAction = (typeof POST_MENU_ORDER)[number];
+
+/** Which long-press actions are enabled. The menu still shows every action. */
+export function postMenuFlags(input: {
+  own: boolean;
+  loggedIn: boolean;
+  postId: string | null;
+  listingId: string | null;
+}): Record<PostMenuAction, boolean> {
+  const target = Boolean(input.postId || input.listingId);
+  return {
+    delete: input.own && Boolean(input.postId),
+    share: true,
+    hide: input.loggedIn && target,
+    report: input.loggedIn && !input.own && target,
+    edit: input.own && postEditHref(input.postId, input.listingId) != null,
+  };
+}
+
+/** A listed post edits the sale. A caption-only post edits the caption. */
+export function postEditHref(postId: string | null, listingId: string | null): string | null {
+  if (listingId) return `/sell/${listingId}`;
+  if (postId) return `/post/${postId}/edit`;
+  return null;
+}
+
+export function reportTarget(postId: string | null, listingId: string | null): { type: "POST" | "LISTING"; id: string } | null {
+  if (postId) return { type: "POST", id: postId };
+  if (listingId) return { type: "LISTING", id: listingId };
+  return null;
+}
+
+export function hideTarget(postId: string | null, listingId: string | null): { type: "POST" | "LISTING"; id: string } | null {
+  if (postId) return { type: "POST", id: postId };
+  if (listingId) return { type: "LISTING", id: listingId };
+  return null;
+}
 
 type ConditionBits = {
   conditionTrack: "RAW" | "GRADED";
@@ -113,6 +155,8 @@ export function toPostCard(input: {
     : cardDisplayName({ body: input.body });
   return {
     id: input.postId,
+    postId: input.postId,
+    listingId: listing?.id ?? null,
     href: `/post/${input.postId}`,
     author: input.author,
     photos,
@@ -152,6 +196,8 @@ export function listingSuggestionCard(input: {
   const listing = input.listing;
   return {
     id: `listing-${listing.id}`,
+    postId: null,
+    listingId: listing.id,
     href: `/listing/${listing.id}`,
     author: {
       id: listing.seller.id,
