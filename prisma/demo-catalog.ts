@@ -1,4 +1,4 @@
-import { DEMO_SHOWCASE_NICKNAME, DEMO_SHOWCASE_USER_ID } from "../lib/demo-login";
+import { DEMO_ACCOUNTS } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
 
 const hk = (dollars: number) => Math.round(dollars * 100);
@@ -792,45 +792,48 @@ export const demoListings: DemoListing[] = [
   }),
 ];
 
+const portrait = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&h=800&q=80`;
+
 export const demoUsers = [
   { id: "user_admin", emailKey: "admin" as const, phoneKey: "admin" as const, nickname: "TYSM 管理員", role: "ADMIN" as const, phoneVerified: true, bio: "平台管理員。" },
-  { id: "user_ming", email: "ming@tysm.hk", phone: "+85291111111", nickname: "卡牌阿明", role: "USER" as const, phoneVerified: true, bio: "香港卡牌賣家，主攻寶可夢同運動卡。" },
-  { id: "user_star", email: "star@tysm.hk", phone: "+85292222222", nickname: "星光收藏", role: "USER" as const, phoneVerified: true, bio: "明星小卡同評級卡。" },
-  { id: "user_mei", email: "mei@tysm.hk", phone: "+85293333333", nickname: "陳小美", role: "USER" as const, phoneVerified: true, bio: "收藏寶可夢同女團小卡。" },
-  { id: "user_alex", email: "alex@tysm.hk", phone: null, nickname: "Alex", role: "USER" as const, phoneVerified: false, bio: "拍賣玩家，鍾意出價。" },
-  { id: "user_ken", email: "ken@tysm.hk", phone: "+85294444444", nickname: "旺角卡舖", role: "USER" as const, phoneVerified: true, bio: "旺角實體店，主攻 TCG 評級卡。" },
-  { id: "user_wai", email: "wai@tysm.hk", phone: "+85295555555", nickname: "維港球星", role: "USER" as const, phoneVerified: true, bio: "足球、籃球、棒球簽名卡。" },
-  { id: "user_lam", email: "lam@tysm.hk", phone: "+85296666666", nickname: "林小姐", role: "USER" as const, phoneVerified: true, bio: "偶像同歌手小卡，接受議價。" },
-  { id: "user_yuki", email: "yuki@tysm.hk", phone: "+85297777777", nickname: "Yuki", role: "USER" as const, phoneVerified: true, bio: "買家，追海賊王同 IU。" },
-  { id: "user_ho", email: "ho@tysm.hk", phone: "+85298888888", nickname: "何生", role: "USER" as const, phoneVerified: false, bio: "週末收藏家，鍾意足球同拍賣。" },
-  { id: "user_oscar", email: "oscar@tysm.hk", phone: null, nickname: "Oscar", role: "USER" as const, phoneVerified: false, bio: "專攻 PSA 同 BGS。" },
   {
-    id: DEMO_SHOWCASE_USER_ID,
-    email: "showcase@tysm.hk",
-    phone: null,
-    nickname: DEMO_SHOWCASE_NICKNAME,
+    id: DEMO_ACCOUNTS[0].id,
+    email: "mars@tysm.hk",
+    phone: "+85291000001",
+    nickname: DEMO_ACCOUNTS[0].nickname,
     role: "USER" as const,
     phoneVerified: true,
-    bio: "旺角收卡。個人頁有桌面、手持同出街的相片。",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&h=800&q=80",
+    bio: "旺角收卡。手持、平鋪同卡冊都係實拍。",
+    avatarUrl: portrait("photo-1507003211169-0a1dd7228f2d"),
+  },
+  {
+    id: DEMO_ACCOUNTS[1].id,
+    email: "tyu@tysm.hk",
+    phone: "+85291000002",
+    nickname: DEMO_ACCOUNTS[1].nickname,
+    role: "USER" as const,
+    phoneVerified: true,
+    bio: "主攻閃卡同卡冊，每週更新桌面實拍。",
+    avatarUrl: portrait("photo-1494790108377-be9c29b29330"),
+  },
+  {
+    id: DEMO_ACCOUNTS[2].id,
+    email: "muel@tysm.hk",
+    phone: "+85291000003",
+    nickname: DEMO_ACCOUNTS[2].nickname,
+    role: "USER" as const,
+    phoneVerified: true,
+    bio: "收藏運動卡同寶可夢，喜歡堆疊同單卡特寫。",
+    avatarUrl: portrait("photo-1500648767791-00dcc994a43e"),
   },
 ];
 
-export const demoStores = [
-  { userId: "user_ken", storeName: "旺角卡舖", storeDistrict: "油尖旺", storeLine1: "西洋菜南街 12 號 2 樓", storeHours: "每日 13:00–21:00" },
-];
+export const demoStores: { userId: string; storeName: string; storeDistrict: string; storeLine1: string; storeHours: string }[] = [];
 
 export const demoAddresses = [
-  { id: "addr_mei", userId: "user_mei", recipient: "陳小美", phone: "+85293333333", line1: "軒尼詩道 1 號", district: "灣仔" },
-  { id: "addr_ming", userId: "user_ming", recipient: "卡牌阿明", phone: "+85291111111", line1: "彌敦道 88 號", district: "油尖旺" },
-  { id: "addr_alex", userId: "user_alex", recipient: "Alex Chan", phone: "+85293333333", line1: "英皇道 200 號", district: "東區" },
-  { id: "addr_star", userId: "user_star", recipient: "星光收藏", phone: "+85292222222", line1: "廣東道 50 號", district: "油尖旺" },
-  { id: "addr_ken", userId: "user_ken", recipient: "旺角卡舖", phone: "+85294444444", line1: "西洋菜南街 12 號", district: "油尖旺" },
-  { id: "addr_wai", userId: "user_wai", recipient: "維港球星", phone: "+85295555555", line1: "德輔道中 18 號", district: "中西區" },
-  { id: "addr_lam", userId: "user_lam", recipient: "林小姐", phone: "+85296666666", line1: "沙田正街 9 號", district: "沙田" },
-  { id: "addr_yuki", userId: "user_yuki", recipient: "Yuki Lee", phone: "+85297777777", line1: "清水灣道 77 號", district: "西貢" },
-  { id: "addr_ho", userId: "user_ho", recipient: "何生", phone: "+85298888888", line1: "青山公路 300 號", district: "屯門" },
-  { id: "addr_oscar", userId: "user_oscar", recipient: "Oscar Ng", phone: "+85290000000", line1: "銀城路 4 號", district: "離島" },
+  { id: "addr_mars", userId: "user_mars", recipient: "Mars", phone: "+85291000001", line1: "彌敦道 100 號", district: "油尖旺" },
+  { id: "addr_tyu", userId: "user_tyu", recipient: "Tyu", phone: "+85291000002", line1: "軒尼詩道 20 號", district: "灣仔" },
+  { id: "addr_muel", userId: "user_muel", recipient: "MueL", phone: "+85291000003", line1: "廣東道 8 號", district: "油尖旺" },
 ];
 
 export const demoOffers = [
@@ -904,23 +907,16 @@ export const demoCart = [
   { id: "seed_cart_alex_ohtani", userId: "user_alex", listingId: "seed_ohtani", quantity: 1 },
 ];
 
-export const demoFollows = [
-  { id: "seed_follow_mei_ming", followerId: "user_mei", sellerId: "user_ming" },
-  { id: "seed_follow_mei_star", followerId: "user_mei", sellerId: "user_star" },
-  { id: "seed_follow_yuki_star", followerId: "user_yuki", sellerId: "user_star" },
-  { id: "seed_follow_yuki_lam", followerId: "user_yuki", sellerId: "user_lam" },
-  { id: "seed_follow_ho_wai", followerId: "user_ho", sellerId: "user_wai" },
-  { id: "seed_follow_ho_ken", followerId: "user_ho", sellerId: "user_ken" },
-  { id: "seed_follow_oscar_ken", followerId: "user_oscar", sellerId: "user_ken" },
-  { id: "seed_follow_oscar_wai", followerId: "user_oscar", sellerId: "user_wai" },
-  { id: "seed_follow_alex_ming", followerId: "user_alex", sellerId: "user_ming" },
-  { id: "seed_follow_alex_star", followerId: "user_alex", sellerId: "user_star" },
-  { id: "seed_follow_mei_show", followerId: "user_mei", sellerId: DEMO_SHOWCASE_USER_ID },
-  { id: "seed_follow_ming_show", followerId: "user_ming", sellerId: DEMO_SHOWCASE_USER_ID },
-  { id: "seed_follow_yuki_show", followerId: "user_yuki", sellerId: DEMO_SHOWCASE_USER_ID },
-  { id: "seed_follow_show_ming", followerId: DEMO_SHOWCASE_USER_ID, sellerId: "user_ming" },
-  { id: "seed_follow_show_star", followerId: DEMO_SHOWCASE_USER_ID, sellerId: "user_star" },
-];
+const demoPairs = [
+  ["user_mars", "user_tyu"],
+  ["user_mars", "user_muel"],
+  ["user_tyu", "user_muel"],
+] as const;
+
+export const demoFollows = demoPairs.flatMap(([a, b]) => [
+  { id: `follow_${a}_${b}`, followerId: a, sellerId: b },
+  { id: `follow_${b}_${a}`, followerId: b, sellerId: a },
+]);
 
 export const demoViews = [
   { id: "seed_view_mei_zard", userId: "user_mei", listingId: "seed_charizard" },
@@ -940,32 +936,31 @@ export const demoSearches = [
   { id: "seed_search_ho", userId: "user_ho", query: "美斯" },
 ];
 
-const unsplash = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
-const pexels = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
+const shot = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
 
-const hand = unsplash("photo-1613771404784-3a5686aa2be3");
-const holo = unsplash("photo-1613771404721-1f92d799e49f");
-const table = unsplash("photo-1606503153255-59d8b8b82176");
-const pulls = pexels(845242);
-const sorting = pexels(278918);
-const binder = pexels(5623178);
-const playmat = pexels(6347888);
-const desk = unsplash("photo-1620336655055-088d06e36bf0");
-const shelf = unsplash("photo-1608889825103-eb5ed706fc64");
-const funko = unsplash("photo-1608889175123-8ee362201f81");
-const harbour = unsplash("photo-1536599018102-9f803c140fc1");
-const peak = unsplash("photo-1506970845246-18f21d533b20");
-const mongkok = unsplash("photo-1536098561742-ca998e48cbcc");
-const temple = pexels(776654);
-const tram = unsplash("photo-1508804185872-d7badad00f7d");
-const market = unsplash("photo-1470004914212-05527e49370b");
-const sneakers = pexels(5723328);
-const spiderman = unsplash("photo-1635805737707-575885ab0820");
-const ifc = unsplash("photo-1518684079-3c830dcef090");
-const ferry = pexels(9072316);
+const spread = shot("photo-1613771404784-3a5686aa2be3");
+const holo = shot("photo-1613771404721-1f92d799e49f");
+const cloth = shot("photo-1611931960487-4932667079f1");
+const color = shot("photo-1616196334218-caffdc9b2317");
+const pileA = shot("photo-1647892591880-58c55fd726d8");
+const pileB = shot("photo-1647892591717-28c7fd63bb3f");
+const stackA = shot("photo-1647893977173-59619da505d9");
+const single = shot("photo-1636391671086-6b4b776cd031");
+const bunch = shot("photo-1703023689733-6a4281149189");
+const group = shot("photo-1640271215810-ce65ba65ef0b");
+const pileC = shot("photo-1647892591703-4552c35a58e7");
+const logoStack = shot("photo-1647893977168-6316f6c9ae44");
+const closeup = shot("photo-1672759043716-620e810abac8");
+const handHolo = shot("photo-1742743032379-8dbd2c2fe9df");
+const table = shot("photo-1606503153255-59d8b8b82176");
+
+const MARS = "user_mars";
+const TYU = "user_tyu";
+const MUEL = "user_muel";
 
 export type ShowcaseListing = {
   id: string;
+  ownerId: string;
   title: string;
   description: string;
   priceCents: number;
@@ -974,6 +969,7 @@ export type ShowcaseListing = {
 
 export type ShowcaseCollection = {
   id: string;
+  ownerId: string;
   title: string;
   visibility: "PUBLIC" | "PRIVATE";
   photos: string[];
@@ -981,6 +977,7 @@ export type ShowcaseCollection = {
 
 export type ShowcasePost = {
   id: string;
+  ownerId: string;
   collectionId: string;
   body: string;
   ageDays: number;
@@ -999,54 +996,54 @@ export type ShowcaseReview = {
 };
 
 export const demoShowcaseListings: ShowcaseListing[] = [
-  { id: "show_list_01", title: "手持閃卡", description: "手持實拍。A card held up to the light.", priceCents: 12800, photos: [hand] },
-  { id: "show_list_02", title: "開卡桌面", description: "桌面實拍。Pulled cards spread on a table.", priceCents: 8600, photos: [table] },
-  { id: "show_list_03", title: "卡冊內頁", description: "卡冊實拍。A binder page of cards.", priceCents: 6400, photos: [binder] },
-  { id: "show_list_04", title: "對戰卡平鋪", description: "平鋪實拍。Cards laid out on a playmat.", priceCents: 5400, photos: [playmat] },
-  { id: "show_list_05", title: "工作桌一角", description: "桌面實拍。Desk with a keyboard and a small figure.", priceCents: 4200, photos: [desk] },
-  { id: "show_list_06", title: "公仔櫃", description: "櫃上實拍。Figures lined up on a shelf.", priceCents: 9800, photos: [shelf] },
-  { id: "show_list_07", title: "維港夜景", description: "出街實拍。Victoria Harbour at night.", priceCents: 3600, photos: [harbour] },
-  { id: "show_list_08", title: "中環天際", description: "中環實拍。IFC above the harbour.", priceCents: 4800, photos: [ifc] },
-  { id: "show_list_09", title: "天星小輪", description: "渡海實拍。Star Ferry crossing the harbour.", priceCents: 3200, photos: [ferry] },
+  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: "手持實拍。A stack of cards held up to the light.", priceCents: 12800, photos: [spread, holo] },
+  { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: "布面實拍。One card on cloth.", priceCents: 8600, photos: [cloth] },
+  { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪實拍。Cards spread on a table.", priceCents: 6400, photos: [color, table] },
+  { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: "卡堆實拍。A pile of pulled cards.", priceCents: 9800, photos: [pileB, stackA] },
+  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: "單卡實拍。A single card on the table.", priceCents: 5400, photos: [single] },
+  { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: "排列實拍。Cards lined up on a table.", priceCents: 7200, photos: [bunch] },
+  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: "疊卡實拍。A tall stack of cards.", priceCents: 11200, photos: [pileC] },
+  { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒實拍。A box stack and a close-up.", priceCents: 15400, photos: [logoStack, closeup] },
+  { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌面實拍。A group of cards on the table.", priceCents: 6800, photos: [group] },
 ];
 
 export const demoShowcaseCollections: ShowcaseCollection[] = [
-  { id: "show_col_01", title: "手持閃卡", visibility: "PUBLIC", photos: [hand, holo] },
-  { id: "show_col_02", title: "開卡桌面", visibility: "PUBLIC", photos: [table, pulls] },
-  { id: "show_col_03", title: "整理今日收卡", visibility: "PUBLIC", photos: [sorting] },
-  { id: "show_col_04", title: "卡冊內頁", visibility: "PUBLIC", photos: [binder, playmat] },
-  { id: "show_col_05", title: "工作桌", visibility: "PUBLIC", photos: [desk] },
-  { id: "show_col_06", title: "公仔櫃", visibility: "PUBLIC", photos: [shelf, funko] },
-  { id: "show_col_07", title: "維港夜景", visibility: "PUBLIC", photos: [harbour, peak] },
-  { id: "show_col_08", title: "旺角霓虹", visibility: "PUBLIC", photos: [mongkok, temple] },
-  { id: "show_col_09", title: "叮叮電車", visibility: "PUBLIC", photos: [tram] },
-  { id: "show_col_10", title: "女人街", visibility: "PUBLIC", photos: [market] },
-  { id: "show_col_11", title: "波鞋一對", visibility: "PRIVATE", photos: [sneakers] },
-  { id: "show_col_12", title: "蜘蛛俠情景", visibility: "PRIVATE", photos: [spiderman] },
+  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo] },
+  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth] },
+  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table] },
+  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color] },
+  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA] },
+  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single] },
+  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch] },
+  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo] },
+  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC] },
+  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack] },
+  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup] },
+  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo] },
 ];
 
 export const demoShowcasePosts: ShowcasePost[] = [
-  { id: "show_post_01", collectionId: "show_col_01", body: "今日手持，卡面乾淨。", ageDays: 0 },
-  { id: "show_post_02", collectionId: "show_col_02", body: "開完放喺桌面，未入冊。", ageDays: 1 },
-  { id: "show_post_03", collectionId: "show_col_03", body: "收工整理今日的卡。", ageDays: 2 },
-  { id: "show_post_04", collectionId: "show_col_04", body: "卡冊這一頁留俾自己。", ageDays: 3 },
-  { id: "show_post_05", collectionId: "show_col_05", body: "寫稿同睇卡同一張桌。", ageDays: 4 },
-  { id: "show_post_06", collectionId: "show_col_06", body: "公仔櫃終於有位。", ageDays: 5 },
-  { id: "show_post_07", collectionId: "show_col_07", body: "維港那邊吹完風先返去入卡。", ageDays: 6 },
-  { id: "show_post_08", collectionId: "show_col_08", body: "旺角行完順路睇價。", ageDays: 7 },
-  { id: "show_post_09", collectionId: "show_col_09", body: "叮叮上車前影一張。", ageDays: 8 },
-  { id: "show_post_10", collectionId: "show_col_10", body: "女人街出面已經開始擠。", ageDays: 9 },
-  { id: "show_post_11", collectionId: "show_col_11", body: "波鞋先收住，未影詳細。", ageDays: 10 },
-  { id: "show_post_12", collectionId: "show_col_12", body: "蜘蛛俠擺喺櫃角。", ageDays: 11 },
+  { id: "mars_post_01", ownerId: MARS, collectionId: "mars_col_01", body: "今日手持，卡面乾淨。", ageDays: 0 },
+  { id: "mars_post_02", ownerId: MARS, collectionId: "mars_col_02", body: "單卡放喺布上面影。", ageDays: 1 },
+  { id: "mars_post_03", ownerId: MARS, collectionId: "mars_col_03", body: "開完放喺桌面，未入冊。", ageDays: 2 },
+  { id: "mars_post_04", ownerId: MARS, collectionId: "mars_col_04", body: "呢組色卡留喺檯面。", ageDays: 3 },
+  { id: "tyu_post_01", ownerId: TYU, collectionId: "tyu_col_01", body: "收工整理今日的卡堆。", ageDays: 1 },
+  { id: "tyu_post_02", ownerId: TYU, collectionId: "tyu_col_02", body: "這張先單獨影。", ageDays: 2 },
+  { id: "tyu_post_03", ownerId: TYU, collectionId: "tyu_col_03", body: "排開先睇有冇白邊。", ageDays: 4 },
+  { id: "tyu_post_04", ownerId: TYU, collectionId: "tyu_col_04", body: "閃卡先收住，未公開。", ageDays: 5 },
+  { id: "muel_post_01", ownerId: MUEL, collectionId: "muel_col_01", body: "疊高先數張數。", ageDays: 2 },
+  { id: "muel_post_02", ownerId: MUEL, collectionId: "muel_col_02", body: "卡盒封面同實卡一起影。", ageDays: 3 },
+  { id: "muel_post_03", ownerId: MUEL, collectionId: "muel_col_03", body: "桌面同特寫都有。", ageDays: 6 },
+  { id: "muel_post_04", ownerId: MUEL, collectionId: "muel_col_04", body: "特寫先自己睇。", ageDays: 7 },
 ];
 
 export const demoShowcaseReviews: ShowcaseReview[] = [
-  { id: "show_review_01", orderId: "show_order_01", itemId: "show_oi_01", listingId: "show_list_01", authorId: "user_mei", stars: 5, comment: "手持相片同實卡一樣，約旺角交收好方便。", reply: "多謝，下次見。", ageDays: 6 },
-  { id: "show_review_02", orderId: "show_order_02", itemId: "show_oi_02", listingId: "show_list_02", authorId: "user_ming", stars: 5, comment: "桌面相已經好清楚，卡角乾淨。", reply: null, ageDays: 8 },
-  { id: "show_review_03", orderId: "show_order_03", itemId: "show_oi_03", listingId: "show_list_03", authorId: "user_star", stars: 4, comment: "卡冊那張同收到的一樣，包裝穩陣。", reply: "抱歉遲一日，下次會早啲寄。", ageDays: 10 },
-  { id: "show_review_04", orderId: "show_order_04", itemId: "show_oi_04", listingId: "show_list_04", authorId: "user_alex", stars: 5, comment: "平鋪相無落差，回覆亦快。", reply: null, ageDays: 12 },
-  { id: "show_review_05", orderId: "show_order_05", itemId: "show_oi_05", listingId: "show_list_05", authorId: "user_yuki", stars: 5, comment: "工作桌那張係實拍，描述老實。", reply: "多謝支持。", ageDays: 14 },
-  { id: "show_review_06", orderId: "show_order_06", itemId: "show_oi_06", listingId: "show_list_06", authorId: "user_ken", stars: 4, comment: "公仔櫃同相片相符，推薦。", reply: null, ageDays: 16 },
+  { id: "mars_review_tyu", orderId: "mars_order_tyu", itemId: "mars_oi_tyu", listingId: "mars_list_01", authorId: TYU, stars: 5, comment: "手持相片同實卡一樣，約旺角交收好方便。", reply: "多謝，下次見。", ageDays: 6 },
+  { id: "mars_review_muel", orderId: "mars_order_muel", itemId: "mars_oi_muel", listingId: "mars_list_02", authorId: MUEL, stars: 5, comment: "布面相已經好清楚，卡角乾淨。", reply: null, ageDays: 8 },
+  { id: "tyu_review_mars", orderId: "tyu_order_mars", itemId: "tyu_oi_mars", listingId: "tyu_list_01", authorId: MARS, stars: 5, comment: "卡堆相無落差，包裝穩陣。", reply: "多謝 Mars。", ageDays: 9 },
+  { id: "tyu_review_muel", orderId: "tyu_order_muel", itemId: "tyu_oi_muel", listingId: "tyu_list_02", authorId: MUEL, stars: 4, comment: "單卡同相片相符，回覆亦快。", reply: null, ageDays: 11 },
+  { id: "muel_review_mars", orderId: "muel_order_mars", itemId: "muel_oi_mars", listingId: "muel_list_01", authorId: MARS, stars: 5, comment: "疊卡實拍，描述老實。", reply: "多謝支持。", ageDays: 12 },
+  { id: "muel_review_tyu", orderId: "muel_order_tyu", itemId: "muel_oi_tyu", listingId: "muel_list_02", authorId: TYU, stars: 4, comment: "卡盒同特寫都對得上，推薦。", reply: null, ageDays: 14 },
 ];
 
 export function showcasePostPhotos(post: ShowcasePost): string[] {

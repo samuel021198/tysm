@@ -1,4 +1,4 @@
-import { DEMO_SHOWCASE_CODE, DEMO_SHOWCASE_TARGET, DEMO_SHOWCASE_USER_ID, demoShowcaseLogin } from "./demo-login";
+import { DEMO_ACCOUNTS, DEMO_CODE, demoAccountByHandle } from "./demo-login";
 import { formatJpy, hkPartsToInput, isAllowedMediaUrl, parseTarget } from "./format";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -22,12 +22,12 @@ assert(!isAllowedMediaUrl(`data:image/svg+xml;base64,${"a".repeat(40)}`), "svg u
 assert(!isAllowedMediaUrl(`data:image/jpeg;base64,${"a".repeat(200_000)}`), "oversized upload");
 
 assert(parseTarget("123") === null, "123 is not an email or HK phone");
-assert(parseTarget("mei@tysm.hk")?.target === "mei@tysm.hk", "mei email still parses");
-assert(parseTarget("91111111")?.target === "+85291111111", "ming phone still parses");
-const demo = demoShowcaseLogin(" 123 ");
-assert(demo?.target === DEMO_SHOWCASE_TARGET && demo.channel === "demo", "trimmed 123 is the showcase login");
-assert(demoShowcaseLogin("1234") === null && demoShowcaseLogin("0123") === null, "only the exact showcase target");
-assert(demoShowcaseLogin("mei@tysm.hk") === null, "demo login does not swallow emails");
-assert(DEMO_SHOWCASE_CODE === "123" && DEMO_SHOWCASE_USER_ID === "user_showcase", "fixed showcase code and user");
+assert(parseTarget("mars@tysm.hk")?.target === "mars@tysm.hk", "mars email still parses");
+assert(parseTarget("91111111")?.target === "+85291111111", "8-digit phone still parses");
+const mars = demoAccountByHandle(" mars ");
+assert(mars?.handle === "mars" && mars.nickname === "Mars" && mars.id === "user_mars", "trimmed handle is Mars");
+assert(demoAccountByHandle("MueL")?.nickname === "MueL", "display name lowercases onto the handle");
+assert(demoAccountByHandle("123") === null && demoAccountByHandle("mars@tysm.hk") === null, "code and emails are not handles");
+assert(DEMO_CODE === "123" && DEMO_ACCOUNTS.map((row) => row.nickname).join() === "Mars,Tyu,MueL", "three demos share code 123");
 
 console.log("format ok");

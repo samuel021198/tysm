@@ -3,7 +3,6 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { requestOtp, verifyOtp } from "@/actions/auth";
-import { DEMO_SHOWCASE_CODE, DEMO_SHOWCASE_NICKNAME, DEMO_SHOWCASE_TARGET } from "@/lib/demo-login";
 import { OtpChip } from "./otp-chip";
 import { Submit } from "./submit";
 import { errText, tx, type Locale } from "@/lib/i18n";
@@ -47,21 +46,6 @@ export function LoginForm({ locale, next }: { locale: Locale; next: string }) {
         <Submit label={tx(locale, "登入", "Log in")} pendingLabel="…" />
         {verified?.error ? <p className="text-sm text-danger">{errText(locale, verified.error)}</p> : null}
       </form>
-      <details className="text-sm text-muted">
-        <summary className="cursor-pointer">
-          {tx(locale, "示範帳戶", "Demo accounts")}
-          <span className="ml-2 font-mono text-ink">{DEMO_SHOWCASE_TARGET} / {DEMO_SHOWCASE_CODE}</span>
-        </summary>
-        <div className="mt-2 grid gap-1 leading-6">
-          <p className="font-mono text-ink">{DEMO_SHOWCASE_TARGET} / {DEMO_SHOWCASE_CODE}</p>
-          <p>{tx(locale, `帳號 ${DEMO_SHOWCASE_TARGET}，驗證碼 ${DEMO_SHOWCASE_CODE}，登入後係${DEMO_SHOWCASE_NICKNAME}。`, `Account ${DEMO_SHOWCASE_TARGET}, code ${DEMO_SHOWCASE_CODE}. Signs in as ${DEMO_SHOWCASE_NICKNAME}.`)}</p>
-          <p>mei@tysm.hk</p>
-          <p>alex@tysm.hk</p>
-          <p>ming@tysm.hk</p>
-          <p>91111111</p>
-          <p>admin@tysm.hk</p>
-        </div>
-      </details>
     </div>
   );
 }

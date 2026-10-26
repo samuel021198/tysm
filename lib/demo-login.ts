@@ -1,10 +1,20 @@
-/** Public showcase login. `123` is not an email or an HK phone; the code stays fixed so it works in production. */
-export const DEMO_SHOWCASE_TARGET = "123";
-export const DEMO_SHOWCASE_CODE = "123";
-export const DEMO_SHOWCASE_USER_ID = "user_showcase";
-export const DEMO_SHOWCASE_NICKNAME = "卡桌阿傑";
+/** Public demo logins. A handle is not an email or an HK phone. The code stays fixed so it works in production. */
+export const DEMO_CODE = "123";
 
-export function demoShowcaseLogin(input: string): { channel: "demo"; target: typeof DEMO_SHOWCASE_TARGET } | null {
-  if (input.trim() !== DEMO_SHOWCASE_TARGET) return null;
-  return { channel: "demo", target: DEMO_SHOWCASE_TARGET };
+export const DEMO_ACCOUNTS = [
+  { id: "user_mars", handle: "mars", nickname: "Mars" },
+  { id: "user_tyu", handle: "tyu", nickname: "Tyu" },
+  { id: "user_muel", handle: "muel", nickname: "MueL" },
+] as const;
+
+export type DemoAccount = (typeof DEMO_ACCOUNTS)[number];
+
+export function demoAccountByHandle(input: string): DemoAccount | null {
+  const key = input.trim().toLowerCase();
+  if (!key) return null;
+  return DEMO_ACCOUNTS.find((row) => row.handle === key) ?? null;
+}
+
+export function demoAccountById(id: string): DemoAccount | null {
+  return DEMO_ACCOUNTS.find((row) => row.id === id) ?? null;
 }
