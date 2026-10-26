@@ -16,11 +16,16 @@ import {
   demoOffers,
   demoSearches,
   demoStores,
+  demoShowcaseCollections,
+  demoShowcaseListings,
+  demoShowcasePosts,
+  demoShowcaseReviews,
   demoThreads,
   demoUsers,
   demoViews,
   type DemoListing,
 } from "../prisma/demo-catalog";
+import { DEMO_SHOWCASE_USER_ID } from "./demo-login";
 
 const hoursFromNow = (value: number) => new Date(Date.now() + value * 60 * 60 * 1000);
 const daysAgo = (value: number) => new Date(Date.now() - value * 86400000);
@@ -399,6 +404,199 @@ async function seedStories() {
   }
 }
 
+async function seedShowcase() {
+  const collections = new Map(demoShowcaseCollections.map((item) => [item.id, item]));
+  for (const [index, item] of demoShowcaseListings.entries()) {
+    const data = {
+      sellerId: DEMO_SHOWCASE_USER_ID,
+      categoryId: "cat_idols",
+      status: "ACTIVE" as const,
+      saleType: "BUY_NOW" as const,
+      title: item.title,
+      description: item.description,
+      quantity: 1,
+      quantityAvailable: 1,
+      shippingFee: 0,
+      shippingDays: 3,
+      shipLockerFee: 0,
+      shipMeetFee: 0,
+      shipSfCod: true,
+      shipMeetup: true,
+      shipPickup: false,
+      meetupDistrict: "油尖旺",
+      meetupWindow: "週末下午",
+      meetupNotes: "旺角站，請先傳訊息。",
+      price: item.priceCents,
+      offersEnabled: false,
+      minOffer: null,
+      startPrice: null,
+      auctionEndsAt: null,
+      currentBid: null,
+      leaderId: null,
+      auctionSettled: false,
+      bidsVoided: false,
+      binLockOrderId: null,
+      cardKind: "CELEBRITY" as const,
+      game: null,
+      setName: null,
+      cardName: null,
+      language: null,
+      personName: item.title,
+      seasonYear: "2026",
+      brandSeries: "生活",
+      conditionTrack: "RAW" as const,
+      rawGrade: "A" as const,
+      grader: null,
+      gradeValue: null,
+      certNumber: null,
+      videoUrl: null,
+      publishedAt: daysAgo(index),
+      viewCount: 36,
+    };
+    await prisma.listing.upsert({
+      where: { id: item.id },
+      update: data,
+      create: { id: item.id, ...data },
+    });
+    const photoIds = item.photos.map((_, position) => `${item.id}_p${position}`);
+    await prisma.listingPhoto.deleteMany({ where: { listingId: item.id, id: { notIn: photoIds } } });
+    for (const [position, url] of item.photos.entries()) {
+      const id = `${item.id}_p${position}`;
+      await prisma.listingPhoto.upsert({
+        where: { id },
+        update: { url, role: position === 0 ? "FRONT" : "GALLERY", position },
+        create: { id, listingId: item.id, url, role: position === 0 ? "FRONT" : "GALLERY", position },
+      });
+    }
+  }
+
+  const listingById = new Map(demoShowcaseListings.map((item) => [item.id, item]));
+  for (const review of demoShowcaseReviews) {
+    const listing = listingById.get(review.listingId);
+    if (!listing) throw new Error(review.id);
+    const subtotal = listing.priceCents;
+    const commissionAmount = Math.round((subtotal * 800) / 10000);
+    const age = review.ageDays;
+    const order = {
+      buyerId: review.authorId,
+      sellerId: DEMO_SHOWCASE_USER_ID,
+      status: "COMPLETED" as const,
+      source: "BUY_NOW" as const,
+      subtotal,
+      shippingTotal: 0,
+      total: subtotal,
+      commissionBps: 800,
+      commissionAmount,
+      sellerProceeds: subtotal - commissionAmount,
+      paymentOutcome: "SUCCESS" as const,
+      shipDays: 3,
+      paidAt: daysAgo(age + 3),
+      shippedAt: daysAgo(age + 2),
+      completedAt: daysAgo(age),
+      escrowReleasedAt: daysAgo(age),
+      shipBy: daysAgo(age + 1),
+      autoReleaseAt: null,
+      shippingMethod: "SF_COD",
+      courierName: courierFor("SF_COD"),
+      trackingNumber: mockTracking(review.orderId, "SF_COD"),
+      paymentBrand: "FPS",
+      payBy: null,
+      addressSnapshot: { recipient: "示範買家", phone: "+85290000000", line1: "彌敦道 1 號", district: "油尖旺" },
+    };
+    await prisma.order.upsert({
+      where: { id: review.orderId },
+      update: order,
+      create: { id: review.orderId, ...order },
+    });
+    const item = {
+      listingId: listing.id,
+      title: listing.title,
+      unitPrice: subtotal,
+      quantity: 1,
+      shippingFee: 0,
+      imageUrl: listing.photos[0] ?? null,
+      conditionLabel: "Raw A",
+      cardName: null,
+      personName: listing.title,
+    };
+    await prisma.orderItem.deleteMany({ where: { orderId: review.orderId, NOT: { id: review.itemId } } });
+    await prisma.orderItem.upsert({
+      where: { id: review.itemId },
+      update: item,
+      create: { id: review.itemId, orderId: review.orderId, ...item },
+    });
+    const reply = review.reply;
+    await prisma.review.upsert({
+      where: { orderId_authorId: { orderId: review.orderId, authorId: review.authorId } },
+      update: {
+        subjectId: DEMO_SHOWCASE_USER_ID,
+        stars: review.stars,
+        comment: review.comment,
+        reply,
+        repliedAt: reply ? daysAgo(age) : null,
+      },
+      create: {
+        id: review.id,
+        orderId: review.orderId,
+        authorId: review.authorId,
+        subjectId: DEMO_SHOWCASE_USER_ID,
+        stars: review.stars,
+        comment: review.comment,
+        reply,
+        repliedAt: reply ? daysAgo(age) : null,
+      },
+    });
+  }
+
+  for (const item of demoShowcaseCollections) {
+    const data = {
+      ownerId: DEMO_SHOWCASE_USER_ID,
+      listingId: null,
+      visibility: item.visibility,
+      title: item.title,
+      note: "",
+      conditionTrack: "RAW" as const,
+      rawGrade: "A" as const,
+      grader: null,
+      gradeValue: null,
+      cardName: item.title,
+    };
+    await prisma.collectionItem.upsert({
+      where: { id: item.id },
+      update: data,
+      create: { id: item.id, ...data },
+    });
+    const photoIds = item.photos.map((_, position) => `${item.id}_${position}`);
+    await prisma.collectionPhoto.deleteMany({ where: { itemId: item.id, id: { notIn: photoIds } } });
+    for (const [position, url] of item.photos.entries()) {
+      const id = `${item.id}_${position}`;
+      await prisma.collectionPhoto.upsert({
+        where: { id },
+        update: { url, role: position === 0 ? "FRONT" : "GALLERY", position },
+        create: { id, itemId: item.id, url, role: position === 0 ? "FRONT" : "GALLERY", position },
+      });
+    }
+  }
+
+  for (const post of demoShowcasePosts) {
+    const item = collections.get(post.collectionId);
+    if (!item) throw new Error(post.id);
+    await prisma.post.deleteMany({ where: { collectionItemId: item.id, NOT: { id: post.id } } });
+    const data = {
+      authorId: DEMO_SHOWCASE_USER_ID,
+      collectionItemId: item.id,
+      body: post.body,
+      createdAt: daysAgo(post.ageDays),
+    };
+    await prisma.post.upsert({
+      where: { id: post.id },
+      update: data,
+      create: { id: post.id, ...data },
+    });
+    await prisma.postPhoto.deleteMany({ where: { postId: post.id } });
+  }
+}
+
 async function seedFeed() {
   const linked = ["seed_charizard", "seed_pikachu", "seed_iu", "seed_messi", "seed_nami", "seed_mewtwo"];
   for (const listingId of linked) {
@@ -593,6 +791,7 @@ export async function seedDemo() {
       storeHours: null,
       consecutiveUnpaid: 0,
       bidBanned: false,
+      ...("avatarUrl" in user && user.avatarUrl ? { avatarUrl: user.avatarUrl } : {}),
     };
     await prisma.user.upsert({
       where: { id: user.id },
@@ -727,6 +926,7 @@ export async function seedDemo() {
   await seedOrders();
   await seedSocial();
   await seedFeed();
+  await seedShowcase();
 
   const favCounts = await prisma.favorite.groupBy({
     by: ["listingId"],
@@ -768,6 +968,10 @@ export async function seedDemo() {
     cartItems: demoCart.length,
     follows: demoFollows.length,
     stories: 5,
+    showcasePosts: demoShowcasePosts.length,
+    showcaseCollections: demoShowcaseCollections.length,
+    showcaseListings: demoShowcaseListings.length,
+    showcaseReviews: demoShowcaseReviews.length,
     byCategory,
     clearedAuctionOrders: stray.length,
     catalogLinkedListings: catalogLinks.listings,

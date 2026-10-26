@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
+import { DEMO_SHOWCASE_CODE, DEMO_SHOWCASE_USER_ID, demoShowcaseLogin } from "@/lib/demo-login";
 import { DISTRICTS, parseTarget, safeNext } from "@/lib/format";
 import { headers } from "next/headers";
 
@@ -38,7 +39,9 @@ function cookieOpts() {
 }
 
 export async function requestOtp(_prev: { error?: string; code?: string; target?: string } | null, formData: FormData) {
-  const parsed = parseTarget(String(formData.get("target") || ""));
+  const raw = String(formData.get("target") || "");
+  const demo = demoShowcaseLogin(raw);
+  const parsed = demo ?? parseTarget(raw);
   if (!parsed) return { error: "target" };
   const recent = await prisma.otpChallenge.findFirst({
     where: { target: parsed.target },
@@ -47,7 +50,7 @@ export async function requestOtp(_prev: { error?: string; code?: string; target?
   if (recent && Date.now() - recent.createdAt.getTime() < 30_000) {
     return { error: "rate", target: parsed.target };
   }
-  const code = String(randomInt(100000, 999999));
+  const code = demo ? DEMO_SHOWCASE_CODE : String(randomInt(100000, 999999));
   await prisma.otpChallenge.create({
     data: {
       target: parsed.target,
@@ -60,8 +63,23 @@ export async function requestOtp(_prev: { error?: string; code?: string; target?
 }
 
 export async function verifyOtp(_prev: { error?: string } | null, formData: FormData) {
-  const parsed = parseTarget(String(formData.get("target") || ""));
+  const raw = String(formData.get("target") || "");
   const code = String(formData.get("code") || "").trim();
+  const demo = demoShowcaseLogin(raw);
+  if (demo) {
+    if (code !== DEMO_SHOWCASE_CODE) return { error: "code" };
+    const challenge = await prisma.otpChallenge.findFirst({
+      where: { target: demo.target, consumed: false, expiresAt: { gt: new Date() } },
+      orderBy: { createdAt: "desc" },
+    });
+    if (!challenge || challenge.code !== DEMO_SHOWCASE_CODE) return { error: "code" };
+    const user = await prisma.user.findUnique({ where: { id: DEMO_SHOWCASE_USER_ID } });
+    if (!user) return { error: "showcase" };
+    await prisma.otpChallenge.update({ where: { id: challenge.id }, data: { consumed: true } });
+    await setSessionCookie(user.id);
+    redirect(safeNext(formData.get("next")));
+  }
+  const parsed = parseTarget(raw);
   if (!parsed) return { error: "target" };
   const challenge = await prisma.otpChallenge.findFirst({
     where: { target: parsed.target, consumed: false, expiresAt: { gt: new Date() } },

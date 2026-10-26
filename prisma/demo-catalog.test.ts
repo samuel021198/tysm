@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { authorizedBearer } from "../lib/bootstrap";
+import { DEMO_SHOWCASE_NICKNAME, DEMO_SHOWCASE_USER_ID } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
 import {
   LEAF_CATEGORIES,
@@ -10,8 +11,13 @@ import {
   demoMessages,
   demoNotifications,
   demoOffers,
+  demoShowcaseCollections,
+  demoShowcaseListings,
+  demoShowcasePosts,
+  demoShowcaseReviews,
   demoThreads,
   demoUsers,
+  showcasePostPhotos,
 } from "./demo-catalog";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -124,6 +130,61 @@ assert(sweepRoute.includes("unconfigured") && sweepRoute.includes("unauthorized"
 assert(!/export async function GET\(\)\s*\{/.test(sweepRoute), "cron sweep is not an open handler");
 const cron = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
 assert(cron.includes("0 16 * * *") && cron.includes("/api/cron/sweep") && !cron.includes("*/10"), "publish sweep runs once per day (Hobby cron limit)");
+
+const showcase = demoUsers.find((user) => user.id === DEMO_SHOWCASE_USER_ID);
+assert(showcase && showcase.nickname === DEMO_SHOWCASE_NICKNAME && showcase.role === "USER", "showcase user");
+assert("email" in showcase && showcase.email === "showcase@tysm.hk", "showcase email stays off the 123 path");
+const avatar = "avatarUrl" in showcase ? showcase.avatarUrl : undefined;
+assert(typeof avatar === "string" && avatar.startsWith("https://") && !avatar.includes("/demo/cards/"), "showcase avatar");
+const mei = demoUsers.find((user) => user.id === "user_mei");
+const ming = demoUsers.find((user) => user.id === "user_ming");
+assert(mei && "email" in mei && mei.email === "mei@tysm.hk", "mei login unchanged");
+assert(ming && "email" in ming && ming.email === "ming@tysm.hk" && ming.phone === "+85291111111", "ming login unchanged");
+
+const userIds = new Set(demoUsers.map((user) => user.id));
+const showcaseListingIds = new Set(demoListings.map((item) => item.id));
+unique(demoShowcaseListings.map((item) => item.id), "showcase listing");
+unique(demoShowcaseCollections.map((item) => item.id), "showcase collection");
+unique(demoShowcasePosts.map((item) => item.id), "showcase post");
+unique(demoShowcaseReviews.map((item) => item.id), "showcase review");
+unique(demoShowcaseReviews.map((item) => item.orderId), "showcase order");
+assert(demoShowcasePosts.length >= 12, "showcase posts");
+assert(demoShowcaseCollections.length >= 12, "showcase collections");
+assert(demoShowcaseListings.length >= 9, "showcase shop");
+assert(demoShowcaseReviews.length >= 6, "showcase reviews");
+const publicCollections = demoShowcaseCollections.filter((item) => item.visibility === "PUBLIC");
+assert(publicCollections.length >= 10 && publicCollections.length > demoShowcaseCollections.length / 2, "collections are mostly public");
+const shown = demoShowcasePosts.map((post) => showcasePostPhotos(post));
+assert(shown.some((photos) => photos.length === 1) && shown.some((photos) => photos.length > 1), "posts mix one and many photos");
+for (const post of demoShowcasePosts) {
+  const item = demoShowcaseCollections.find((row) => row.id === post.collectionId);
+  assert(item, post.id);
+  assert(post.body.trim().length > 0, post.id);
+}
+for (const url of [
+  avatar,
+  ...demoShowcaseListings.flatMap((item) => item.photos),
+  ...demoShowcaseCollections.flatMap((item) => item.photos),
+  ...shown.flat(),
+]) {
+  assert(url.startsWith("https://images.unsplash.com/") || url.startsWith("https://images.pexels.com/"), url);
+  assert(!url.includes("/demo/cards/") && !url.endsWith(".svg"), url);
+}
+for (const item of demoShowcaseListings) {
+  assert(!showcaseListingIds.has(item.id), item.id);
+  assert(item.photos.length >= 1 && item.priceCents > 0, item.id);
+}
+for (const review of demoShowcaseReviews) {
+  assert(review.authorId !== DEMO_SHOWCASE_USER_ID && userIds.has(review.authorId), review.id);
+  assert(demoShowcaseListings.some((item) => item.id === review.listingId), review.id);
+  assert(review.stars >= 1 && review.stars <= 5 && review.comment.length > 0, review.id);
+}
+const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
+assert(auth.includes("demoShowcaseLogin") && auth.includes("DEMO_SHOWCASE_CODE") && auth.includes("DEMO_SHOWCASE_USER_ID"), "123 signs into the showcase user");
+const loginForm = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
+assert(loginForm.includes("DEMO_SHOWCASE_TARGET") && loginForm.includes("DEMO_SHOWCASE_CODE"), "login details show 123 / 123");
+const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");
+assert(reseed.includes("export const maxDuration = 120"), "reseed maxDuration is 120");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,
