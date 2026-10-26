@@ -1,4 +1,5 @@
-import { cardDisplayName, collectionVisibility, listingSuggestionCard, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
+import { readFileSync } from "fs";
+import { cardDisplayName, collectionVisibility, listingSuggestionCard, ownedPostId, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -8,6 +9,10 @@ assert(collectionVisibility(null) === "PUBLIC", "collection defaults to public")
 assert(collectionVisibility("PUBLIC") === "PUBLIC", "public stays public");
 assert(collectionVisibility("PRIVATE") === "PRIVATE", "private is explicit");
 assert(collectionVisibility("nope") === "PUBLIC", "unknown visibility is public");
+
+assert(ownedPostId(null, "user_mei") === null, "missing post cannot be deleted");
+assert(ownedPostId({ id: "p1", authorId: "user_ming" }, "user_mei") === null, "only the author can delete");
+assert(ownedPostId({ id: "p1", authorId: "user_mei" }, "user_mei") === "p1", "the author can delete their post");
 
 assert(shouldPublishPost({ forSale: true, listingPublished: true, publishToFeed: false }), "a live sale posts");
 assert(!shouldPublishPost({ forSale: true, listingPublished: false, publishToFeed: false }), "a draft sale does not post");
@@ -132,5 +137,13 @@ assert(suggestion.likeListingId === "seed_luffy", "suggestion likes reuse favori
 assert(suggestion.priceCents === 100, "suggestion can show a price");
 assert(suggestion.priceHref === "/listing/seed_luffy", "suggestion price opens the listing");
 assert(suggestion.dexHref === "/dex/demo_card_luffy", "a suggested listing opens its dex card");
+
+const collect = readFileSync(new URL("../actions/collect.ts", import.meta.url), "utf8");
+const deleteStart = collect.indexOf("export async function deletePost");
+const deleteEnd = collect.indexOf("export async function", deleteStart + 1);
+const deletePost = collect.slice(deleteStart, deleteEnd);
+assert(deletePost.includes("ownedPostId"), "delete checks the author");
+assert(deletePost.includes("authorId: user.id"), "the delete query is scoped to the viewer");
+assert(!deletePost.includes("collectionItem.delete") && !deletePost.includes("listing.delete"), "delete leaves the collection and listing");
 
 console.log("posts.test.ts ok");

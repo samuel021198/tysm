@@ -18,6 +18,15 @@ export function collectionVisibility(value: string | null | undefined): Collecti
   return value === "PRIVATE" ? "PRIVATE" : "PUBLIC";
 }
 
+/** The signed-in author is the only person who can delete this post. */
+export function ownedPostId(
+  post: { id: string; authorId: string } | null | undefined,
+  viewerId: string,
+): string | null {
+  if (!post || post.authorId !== viewerId) return null;
+  return post.id;
+}
+
 /**
  * A live sale always gets a feed post. Collect-only posts only when the owner opts in.
  * A draft or scheduled listing does not post yet.

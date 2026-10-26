@@ -9,7 +9,7 @@ import { hkdToCents, isAllowedMediaUrl } from "@/lib/format";
 import { PhotoStoreError, storeUploadedImages } from "@/lib/r2";
 import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
-import { collectionVisibility } from "@/lib/posts";
+import { collectionVisibility, ownedPostId } from "@/lib/posts";
 import { parseGrade } from "@/lib/rules";
 import { isBlocked } from "@/lib/social";
 import { GRADERS, RAW } from "@/lib/sell-wizard";
@@ -257,6 +257,25 @@ export async function addComment(formData: FormData) {
   // redirect(`/post/${id}#comments`) is the same same-page navigation as a like.
   revalidatePath(`/post/${postId}`);
   revalidatePath("/");
+}
+
+export async function deletePost(formData: FormData) {
+  const postId = String(formData.get("postId") || "");
+  const user = await viewer(postId ? `/post/${postId}` : "/me");
+  if (!postId) redirect("/?err=forbidden");
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { id: true, authorId: true },
+  });
+  if (!ownedPostId(post, user.id)) redirect("/?err=forbidden");
+  // PostPhoto, PostLike, and PostComment cascade. collectionItemId lives on Post,
+  // so the collection card and its listing stay.
+  await prisma.post.deleteMany({ where: { id: postId, authorId: user.id } });
+  revalidatePath("/");
+  revalidatePath("/me");
+  revalidatePath(`/shop/${user.id}`);
+  revalidatePath(`/post/${postId}`);
+  redirect("/me?tab=posts&ok=deleted");
 }
 
 export async function toggleCollectionVisibility(formData: FormData) {
