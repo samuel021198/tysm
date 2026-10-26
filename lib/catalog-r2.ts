@@ -4,6 +4,10 @@ import { prisma } from "./db";
 import { catalogObjectKey, putR2Object, r2Config } from "./r2";
 
 const MAX_BYTES = 8_000_000;
+/** Older unmirrored rows per call, after this call's new cards. */
+const IMAGE_BACKLOG = 200;
+/** In-flight fetch+upload pairs. Peak memory is this many bodies, not IMAGE_BACKLOG. */
+const IMAGE_CONCURRENCY = 6;
 
 function sniffImage(buf: Buffer): string | null {
   if (buf.length < 12) return null;
@@ -64,7 +68,7 @@ async function pool<T>(items: T[], limit: number, fn: (item: T) => Promise<void>
 async function mirrorImages(game: CatalogGame, items: { externalId: string; source: string }[], deadline: number): Promise<number> {
   if (!items.length || !r2Config()) return 0;
   let imagesUploaded = 0;
-  await pool(items, 4, async (item) => {
+  await pool(items, IMAGE_CONCURRENCY, async (item) => {
     if (Date.now() > deadline) return;
     try {
       const url = await mirrorRemoteImage(game, item.externalId, item.source);
@@ -106,7 +110,7 @@ async function countUnmirrored(game: CatalogGame): Promise<number> {
 }
 
 /**
- * Mirror this game's new rows, then up to 40 older ones, until `deadline`.
+ * Mirror this game's new rows, then up to IMAGE_BACKLOG older ones, until `deadline`.
  * No-ops when R2 env is missing. Does not start a cron.
  */
 export async function drainCatalogImages(
@@ -117,10 +121,10 @@ export async function drainCatalogImages(
   if (!r2Config()) return { uploaded: 0, pending: 0, configured: false };
   let uploaded = 0;
   if (Date.now() < deadline) uploaded += await mirrorImages(game, pending, deadline);
-  // ponytail: 40-image backlog per call, 4 at a time. Upgrade path: cursor on CatalogCard.id.
+  // ponytail: 200-image backlog per call, 6 at a time. high.webp is ~100KB, so this fits the 240s soft deadline; the pool stops at deadline. Upgrade path: cursor on CatalogCard.id.
   if (Date.now() < deadline - 2_000) {
     const seen = new Set(pending.map((item) => item.externalId));
-    const backlog = await listUnmirrored(game, 40);
+    const backlog = await listUnmirrored(game, IMAGE_BACKLOG);
     uploaded += await mirrorImages(
       game,
       backlog.filter((item) => !seen.has(item.externalId)),
