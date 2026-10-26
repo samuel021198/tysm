@@ -1,5 +1,11 @@
 import { prisma } from "./db";
-import { buildStoryRings, type StoryPerson } from "./stories";
+import { buildStoryRings, expiredStoryWhere, type StoryPerson } from "./stories";
+
+/** Hard-delete stories whose 24h ring has ended. Idempotent. Image bytes live on the row, so the delete drops them too. */
+export async function purgeExpiredStories(now = new Date()) {
+  const result = await prisma.story.deleteMany({ where: expiredStoryWhere(now) });
+  return result.count;
+}
 
 export async function loadStoryRings(viewerId: string | null, hidden: string[]) {
   const now = new Date();
@@ -9,9 +15,16 @@ export async function loadStoryRings(viewerId: string | null, hidden: string[]) 
         expiresAt: { gt: now },
         ...(hidden.length ? { authorId: { notIn: hidden } } : {}),
       },
-      include: { author: { select: { id: true, nickname: true, avatarUrl: true } } },
+      // imageUrl stays off this payload. The rail fetches one frame when it is opened.
+      select: {
+        id: true,
+        authorId: true,
+        createdAt: true,
+        expiresAt: true,
+        author: { select: { id: true, nickname: true, avatarUrl: true } },
+      },
       orderBy: { createdAt: "asc" },
-      take: 80,
+      take: 24,
     }),
     viewerId
       ? prisma.follow.findMany({ where: { followerId: viewerId }, select: { sellerId: true } })
@@ -32,7 +45,7 @@ export async function loadStoryRings(viewerId: string | null, hidden: string[]) 
   return buildStoryRings({
     viewer: person,
     followedIds: follows.map((row) => row.sellerId),
-    stories,
+    stories: stories.map((row) => ({ ...row, imageUrl: "" })),
     viewedIds: views.map((row) => row.storyId),
     now,
   });

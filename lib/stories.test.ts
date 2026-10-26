@@ -1,4 +1,5 @@
-import { buildStoryRings, isStoryActive, storyExpiresAt, STORY_TTL_MS, type StoryPerson, type StoryRow } from "./stories";
+import { readFileSync } from "node:fs";
+import { buildStoryRings, expiredStoryWhere, isStoryActive, storyExpiresAt, storyReadyForGc, STORY_TTL_MS, type StoryPerson, type StoryRow } from "./stories";
 import { clampPct, clampScale, containRect } from "./story-edit";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -10,6 +11,12 @@ assert(storyExpiresAt(t0).getTime() - t0.getTime() === STORY_TTL_MS, "stories la
 assert(isStoryActive(new Date(t0.getTime() + 1000), t0), "future expiry stays on the rail");
 assert(!isStoryActive(t0, t0), "the expiry instant is already hidden");
 assert(!isStoryActive(new Date(t0.getTime() - 1), t0), "past expiry is hidden");
+assert(storyReadyForGc(t0, t0) && expiredStoryWhere(t0).expiresAt.lte.getTime() === t0.getTime(), "gc deletes the expiry instant");
+assert(!storyReadyForGc(new Date(t0.getTime() + 1), t0), "a live story is not collected");
+const orders = readFileSync(new URL("./orders.ts", import.meta.url), "utf8");
+const feedSrc = readFileSync(new URL("./story-feed.ts", import.meta.url), "utf8");
+assert(orders.includes("purgeExpiredStories"), "sweep deletes expired stories");
+assert(feedSrc.includes("expiredStoryWhere") && !feedSrc.includes("imageUrl: true"), "gc shares the cutoff and the rail omits image bytes");
 
 const ming: StoryPerson = { id: "user_ming", nickname: "卡牌阿明", avatarUrl: null };
 const star: StoryPerson = { id: "user_star", nickname: "星光收藏", avatarUrl: null };

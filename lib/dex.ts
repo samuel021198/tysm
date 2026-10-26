@@ -31,6 +31,31 @@ export function categorySlugForGame(game: DexGame): string {
   return gameParam(game);
 }
 
+/** Buyer-facing dex URL. Empty ids are omitted so the UI does not invent a card. */
+export function dexPath(id: string | null | undefined): string | null {
+  const clean = id?.trim();
+  return clean ? `/dex/${clean}` : null;
+}
+
+/** Listing-level link, then each card row. The same catalog id is only offered once. */
+export function listingDexLinks(input: {
+  catalogCardId?: string | null;
+  cardName?: string | null;
+  items?: { catalogCardId?: string | null; catalogTitle?: string | null; cardName?: string | null }[];
+}): { id: string; label: string }[] {
+  const out: { id: string; label: string }[] = [];
+  const seen = new Set<string>();
+  const add = (id: string | null | undefined, label: string | null | undefined) => {
+    const clean = id?.trim() || "";
+    if (!clean || seen.has(clean)) return;
+    seen.add(clean);
+    out.push({ id: clean, label: (label || "").trim() });
+  };
+  add(input.catalogCardId, input.cardName);
+  for (const item of input.items ?? []) add(item.catalogCardId, item.catalogTitle || item.cardName);
+  return out;
+}
+
 export function gameHasRegion(game: DexGame): boolean {
   return game === "POKEMON" || game === "ONE_PIECE";
 }

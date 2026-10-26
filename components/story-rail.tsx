@@ -32,6 +32,8 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
   const router = useRouter();
   const [items, setItems] = useState(rings);
   const [cursor, setCursor] = useState<Cursor | null>(null);
+  const [images, setImages] = useState<Record<string, string>>({});
+  const [missing, setMissing] = useState<Record<string, boolean>>({});
   const itemsRef = useRef(items);
   const marked = useRef(new Set<string>());
   itemsRef.current = items;
@@ -56,7 +58,24 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
 
   useEffect(() => {
     if (!cursor) return;
-    const timer = window.setTimeout(() => setCursor((current) => (current ? advance(itemsRef.current, current, 1) : null)), 5000);
+    const story = itemsRef.current[cursor.user]?.stories[cursor.frame];
+    if (!story || story.imageUrl || images[story.id] || missing[story.id]) return;
+    const id = story.id;
+    const controller = new AbortController();
+    void fetch(`/api/stories/${id}`, { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((body: { imageUrl?: string } | null) => {
+        if (body?.imageUrl) setImages((prev) => (prev[id] ? prev : { ...prev, [id]: body.imageUrl as string }));
+        else setMissing((prev) => ({ ...prev, [id]: true }));
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setMissing((prev) => ({ ...prev, [id]: true }));
+      });
+    return () => controller.abort();
+  }, [cursor, images, missing]);
+
+  useEffect(() => {
+    if (!cursor) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setCursor(null);
       if (event.key === "ArrowRight") setCursor((current) => (current ? advance(itemsRef.current, current, 1) : null));
@@ -66,11 +85,19 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      window.clearTimeout(timer);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
   }, [cursor]);
+
+  useEffect(() => {
+    if (!cursor) return;
+    const story = itemsRef.current[cursor.user]?.stories[cursor.frame];
+    const ready = Boolean(story && (story.imageUrl || images[story.id] || missing[story.id]));
+    if (!ready) return;
+    const timer = window.setTimeout(() => setCursor((current) => (current ? advance(itemsRef.current, current, 1) : null)), 5000);
+    return () => window.clearTimeout(timer);
+  }, [cursor, images, missing]);
 
   if (items.length === 0) return null;
 
@@ -86,6 +113,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
 
   const ring = cursor ? items[cursor.user] : null;
   const frame = ring?.stories[cursor?.frame ?? -1];
+  const frameSrc = frame?.imageUrl || (frame ? images[frame.id] : "") || "";
 
   return (
     <section aria-label={tx(locale, "限時動態", "Stories")}>
@@ -114,7 +142,13 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
       </div>
       {cursor && ring && frame ? (
         <div className="fixed inset-0 z-50 bg-[#100e10] text-white" role="dialog" aria-modal="true" aria-label={ring.nickname || tx(locale, "限時動態", "Story")}>
-          <img src={frame.imageUrl} alt="" className="absolute inset-0 h-full w-full object-contain" />
+          {frameSrc ? (
+            <img src={frameSrc} alt="" className="absolute inset-0 h-full w-full object-contain" />
+          ) : (
+            <p className="absolute inset-0 grid place-items-center px-6 text-center text-sm">
+              {missing[frame.id] ? tx(locale, "呢個動態已經過咗時間。", "This story has expired.") : tx(locale, "載入緊…", "Loading…")}
+            </p>
+          )}
           <div className="absolute inset-x-0 top-0 z-20 bg-gradient-to-b from-black/55 to-transparent px-3 pt-[max(0.6rem,env(safe-area-inset-top))]">
             <div className="flex gap-1">
               {ring.stories.map((story, index) => (

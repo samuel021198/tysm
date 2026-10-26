@@ -49,6 +49,7 @@ const card = toPostCard({
   item: {
     title: "噴火龍 VMAX",
     cardName: "噴火龍",
+    catalogCardId: "demo_card_charizard",
     conditionTrack: "RAW",
     rawGrade: "A",
     grader: null,
@@ -77,6 +78,7 @@ assert(card.priceHref === "/listing/seed_charizard", "the price opens the listin
 assert(card.condition === "Raw A", "condition is on the card");
 assert(card.commentHref === "/post/p1#comments", "comments go to the post");
 assert(!card.href.includes("checkout"), "the card does not link to checkout");
+assert(card.dexHref === "/dex/demo_card_charizard", "a linked card opens the dex");
 
 const held = toPostCard({
   ...{
@@ -99,6 +101,7 @@ const held = toPostCard({
 });
 assert(held.priceCents === null, "collect-only card has no price");
 assert(held.priceHref === null, "a post without a sale has no price link");
+assert(held.dexHref === null, "no catalog id means no dex link");
 
 const suggestion = listingSuggestionCard({
   liked: true,
@@ -112,6 +115,7 @@ const suggestion = listingSuggestionCard({
     grader: null,
     gradeValue: null,
     favoriteCount: 3,
+    catalogCardId: "demo_card_luffy",
     status: "ACTIVE",
     quantityAvailable: 1,
     saleType: "BUY_NOW",
@@ -127,5 +131,6 @@ assert(suggestion.commentHref === null, "listing suggestions do not invent a thr
 assert(suggestion.likeListingId === "seed_luffy", "suggestion likes reuse favorites");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
 assert(suggestion.priceHref === "/listing/seed_luffy", "suggestion price opens the listing");
+assert(suggestion.dexHref === "/dex/demo_card_luffy", "a suggested listing opens its dex card");
 
 console.log("posts.test.ts ok");

@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
 import { syncListingInventory } from "./inventory";
+import { purgeExpiredStories } from "./story-feed";
 import { notify } from "./social";
 import {
   AUTO_RELEASE_MS,
@@ -690,6 +691,7 @@ export async function settleAuction(listingId: string) {
 
 export async function sweep() {
   const now = new Date();
+  await purgeExpiredStories(now);
   const scheduled = await prisma.listing.findMany({
     where: { status: "SCHEDULED", publishAt: { lte: now } },
     select: { id: true },

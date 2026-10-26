@@ -793,7 +793,7 @@ model PostComment {
   @@index([postId, createdAt])
 }
 
-/// Photo story. Hidden once `expiresAt` passes (24h from create). No cleanup job.
+/// Photo story. Hidden once `expiresAt` passes (24h from create). `purgeExpiredStories` in sweep deletes those rows.
 model Story {
   id        String   @id @default(cuid())
   authorId  String

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { toggleFavorite } from "@/actions/social";
+import { dexPath } from "@/lib/dex";
 import { conditionLabel } from "@/lib/rules";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
@@ -20,6 +21,7 @@ type CardListing = {
   grader: string | null;
   gradeValue: number | null;
   sellerId: string;
+  catalogCardId?: string | null;
   photos: { url: string }[];
   seller: { nickname: string };
 };
@@ -42,6 +44,7 @@ export function ListingCard({
   const live =
     listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
   const amount = live ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
+  const dexHref = dexPath(listing.catalogCardId);
   const sale =
     listing.saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : listing.saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "BIN + auction") : tx(locale, "直購", "Buy Now");
   return (
@@ -65,21 +68,28 @@ export function ListingCard({
           </button>
         </form>
       </div>
-      <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1.5 px-3 pb-3.5 pt-3">
-        <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
-        <p className="price text-[1.45rem] leading-none">{formatHkd(amount, locale)}</p>
-        {series && series.length ? (
-          <p className="flex items-center gap-1 text-[11px] text-muted">
-            {series.length >= 2 ? <Sparkline values={series} /> : null}
-            {amount >= series[series.length - 1] ? "↑" : "↓"} {tx(locale, "較上次成交", "vs last sale")} {formatHkd(Math.abs(amount - series[series.length - 1]), locale)}
+      <div className="flex flex-1 flex-col gap-1.5 px-3 pb-3.5 pt-3">
+        <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1.5">
+          <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
+          <p className="price text-[1.45rem] leading-none">{formatHkd(amount, locale)}</p>
+          {series && series.length ? (
+            <p className="flex items-center gap-1 text-[11px] text-muted">
+              {series.length >= 2 ? <Sparkline values={series} /> : null}
+              {amount >= series[series.length - 1] ? "↑" : "↓"} {tx(locale, "較上次成交", "vs last sale")} {formatHkd(Math.abs(amount - series[series.length - 1]), locale)}
+            </p>
+          ) : null}
+          <p className="mt-auto truncate text-xs leading-4 text-muted">
+            {sale}
+            {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
+            {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
           </p>
+        </Link>
+        {dexHref ? (
+          <Link href={dexHref} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
+            {tx(locale, "睇圖鑑", "View in the dex")}
+          </Link>
         ) : null}
-        <p className="mt-auto truncate text-xs leading-4 text-muted">
-          {sale}
-          {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
-          {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
-        </p>
-      </Link>
+      </div>
     </article>
   );
 }

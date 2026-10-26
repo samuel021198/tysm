@@ -258,8 +258,8 @@ export function SellForm({
   function payload() {
     return cards.map((card) => ({
       cardName: card.name,
-      catalogCardId: catalogGame ? card.catalogId : "",
-      catalogTitle: catalogGame ? card.catalogTitle : "",
+      catalogCardId: card.catalogId,
+      catalogTitle: card.catalogId ? card.catalogTitle : "",
       year: card.year,
       setName: card.setName,
       setCode: card.setCode,
