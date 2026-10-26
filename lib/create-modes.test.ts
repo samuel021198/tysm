@@ -70,4 +70,17 @@ assert(!board.includes("chips") && !board.includes("rounded-full") && !board.inc
 assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");
 assert(auth.includes('const settings = "/me/settings"') && auth.includes("${settings}?ok=saved") && auth.includes("${settings}?err=nickname") && auth.includes("${settings}?err=address"), "profile saves flash back on settings");
 
+const header = readFileSync(new URL("../components/profile-header.tsx", import.meta.url), "utf8");
+const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
+const nameAt = header.indexOf("{nickname}");
+const ratingAt = header.indexOf("評分");
+const followersAt = header.indexOf("粉絲");
+const tradesAt = header.indexOf("完成交易");
+const bioAt = header.indexOf("{blurb}");
+assert(nameAt >= 0 && nameAt < ratingAt && ratingAt < followersAt && followersAt < tradesAt && tradesAt < bioAt && bioAt < header.indexOf("{children}"), "profile header is name, rating, followers, trades, then bio");
+assert(!header.includes("準時寄出") && !header.includes("完成訂單"), "header stats drop on-time ship and the old completed-order label");
+assert(me.includes("<ProfileHeader") && shop.includes("<ProfileHeader"), "me and shop share one profile header");
+assert(shop.includes("取消關注") && shop.includes("更多") && me.includes("編輯個人檔案"), "follow, more, and edit stay on their pages");
+assert(!shop.includes("onTimePercent") && !shop.includes("準時寄出"), "shop header no longer loads on-time ship");
+
 console.log("create modes ok");
