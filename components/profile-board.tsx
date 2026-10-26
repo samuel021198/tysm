@@ -106,7 +106,7 @@ export function ProfileBoard({
                   loggedIn={viewerId != null}
                   sharePath={post.sharePath}
                   next={base}
-                  corner="left"
+                  button={false}
                 >
                   <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
                     <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
