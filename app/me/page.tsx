@@ -47,6 +47,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         reviews={board.reviews}
         drafts={board.drafts}
         favIds={board.favIds}
+        viewerId={viewer.id}
       />
     </div>
   );

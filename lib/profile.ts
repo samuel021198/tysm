@@ -2,6 +2,7 @@ import { prisma } from "./db";
 import { cardInclude } from "./feed";
 import { sellingAsk, toPostCard, type PostCardModel } from "./posts";
 import { conditionLabel } from "./rules";
+import { feedHideIds } from "./social";
 
 const postInclude = {
   author: { select: { id: true, nickname: true, avatarUrl: true } },
@@ -34,7 +35,7 @@ const postInclude = {
 
 export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
-  const [postRows, itemRows, listings, reviewRows, drafts, followers, following, favs] = await Promise.all([
+  const [postRows, itemRows, listings, reviewRows, drafts, followers, following, favs, hides] = await Promise.all([
     prisma.post.findMany({
       where: {
         authorId: ownerId,
@@ -88,9 +89,13 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     prisma.follow.count({ where: { sellerId: ownerId } }),
     prisma.follow.count({ where: { followerId: ownerId } }),
     viewerId ? prisma.favorite.findMany({ where: { userId: viewerId, listing: { sellerId: ownerId } }, select: { listingId: true } }) : Promise.resolve([]),
+    feedHideIds(viewerId),
   ]);
 
-  const posts: PostCardModel[] = postRows.map((row) =>
+  const hiddenPosts = new Set(hides.postIds);
+  const posts: PostCardModel[] = postRows
+    .filter((row) => row.authorId === viewerId || !hiddenPosts.has(row.id))
+    .map((row) =>
     toPostCard({
       postId: row.id,
       body: row.body,
@@ -191,7 +196,7 @@ function homeVisible(viewerId: string | null, hidden: string[]) {
  * Following first, then a short suggestion bucket.
  * ponytail: 8 + 8 posts, one photo, the viewer's like row only. Upgrade path: cursor pagination.
  */
-export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
+export async function loadHomeFeed(viewerId: string | null, hidden: string[], hiddenPostIds: string[] = []) {
   const follows = viewerId
     ? await prisma.follow.findMany({ where: { followerId: viewerId }, select: { sellerId: true } })
     : [];
@@ -199,10 +204,12 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
   const followedIds = follows.map((row) => row.sellerId).filter((id) => !hiddenSet.has(id));
   const include = homePostInclude(viewerId);
   const exclude = [...new Set([...hidden, ...(viewerId ? [viewerId] : []), ...followedIds])];
+  // ponytail: hidden ids are a notIn list. Upgrade path: anti-join if a viewer hides hundreds of posts.
+  const skipPosts = hiddenPostIds.length ? { id: { notIn: hiddenPostIds } } : {};
   const [primaryRows, suggestedRows] = await Promise.all([
     viewerId
       ? prisma.post.findMany({
-          where: { AND: [homeVisible(viewerId, hidden), { authorId: { in: [viewerId, ...followedIds] } }] },
+          where: { AND: [homeVisible(viewerId, hidden), { authorId: { in: [viewerId, ...followedIds] } }, skipPosts] },
           include,
           orderBy: { createdAt: "desc" },
           take: HOME_BUCKET,
@@ -215,6 +222,7 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
             OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }],
           },
           ...(exclude.length ? [{ authorId: { notIn: exclude } }] : []),
+          skipPosts,
         ],
       },
       include,

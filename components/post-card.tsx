@@ -4,6 +4,7 @@ import { togglePostLike } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { PostMenu } from "./post-menu";
 import { ShareButton } from "./share-button";
 
 export function PostCard({
@@ -11,17 +12,28 @@ export function PostCard({
   locale,
   next = "/",
   gallery = false,
+  viewerId = null,
 }: {
   post: PostCardModel;
   locale: Locale;
   next?: string;
   gallery?: boolean;
+  viewerId?: string | null;
 }) {
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
   const shown = gallery ? photos : photos.slice(0, 1);
   return (
+    <PostMenu
+      locale={locale}
+      postId={post.postId}
+      listingId={post.listingId}
+      own={viewerId != null && viewerId === post.author.id}
+      loggedIn={viewerId != null}
+      sharePath={post.sharePath}
+      next={next}
+    >
     <article className="surface overflow-hidden">
-      <div className="flex items-center gap-2 px-2.5 py-2">
+      <div className="flex items-center gap-2 px-2.5 py-2 pr-9">
         <Link href={`/shop/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
         </Link>
@@ -92,5 +104,6 @@ export function PostCard({
         ) : null}
       </div>
     </article>
+    </PostMenu>
   );
 }

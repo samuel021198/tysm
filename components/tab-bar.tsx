@@ -17,6 +17,12 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       on: pathname === "/dex" || pathname.startsWith("/dex/"),
     },
     {
+      href: "/find",
+      label: tx(locale, "搜尋", "Search"),
+      icon: "search" as const,
+      on: pathname === "/find" || pathname.startsWith("/find/"),
+    },
+    {
       href: "/market",
       label: tx(locale, "賣場", "Market"),
       icon: "bag" as const,
@@ -27,7 +33,6 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
         pathname.startsWith("/search") ||
         pathname.startsWith("/shop"),
     },
-    { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
     {
       href: meHref,
       label: tx(locale, "個人", "Profile"),
@@ -58,20 +63,18 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "book" | "bag" | "messages" | "me";
+  icon: "home" | "book" | "search" | "bag" | "me";
   on: boolean;
 }) {
   return (
     <li className="h-full">
       <Link
         href={href}
+        aria-label={label}
         aria-current={on ? "page" : undefined}
-        className={`flex h-full flex-col items-center justify-center gap-0.5 text-[11px] font-medium leading-none ${on ? "text-ink" : "text-muted"}`}
+        className={`grid h-full place-items-center ${on ? "text-ink" : "text-muted"}`}
       >
-        <span className="grid h-[18px] w-[18px] place-items-center">
-          <Icon name={icon} className="h-[18px] w-[18px]" strokeWidth={on ? 2 : 1.6} />
-        </span>
-        <span>{label}</span>
+        <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
       </Link>
     </li>
   );

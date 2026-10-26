@@ -25,10 +25,13 @@ assert(createIndexFromScroll(80, 0, 3) === 0, "zero width");
 const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), "utf8");
 const home = tab.indexOf('href: "/"');
 const dex = tab.indexOf('href: "/dex"');
+const search = tab.indexOf('href: "/find"');
 const market = tab.indexOf('href: "/market"');
-const chat = tab.indexOf('href: "/messages"');
-assert(home >= 0 && home < dex && dex < market && market < chat, "tab order Home, Dex, Market, Chat");
-assert(tab.includes("圖鑑") && tab.includes("賣場") && tab.includes('icon: "bag"'), "dex stays, market uses the bag");
+const profile = tab.indexOf('icon: "me"');
+assert(home >= 0 && home < dex && dex < search && search < market && market < profile, "tab order Home, Dex, Search, Market, Profile");
+assert(tab.includes("圖鑑") && tab.includes("賣場") && tab.includes("搜尋") && tab.includes('icon: "search"') && tab.includes('icon: "bag"'), "dex stays, search is the glass, market uses the bag");
+assert(!tab.includes('href: "/messages"'), "chat is not a tab");
+assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");

@@ -74,6 +74,7 @@ export default async function ShopPage({
         reviews={board.reviews}
         drafts={board.drafts}
         favIds={board.favIds}
+        viewerId={viewer?.id ?? null}
       />
       {viewer && viewer.id !== seller.id ? (
         <details className="mt-6 max-w-lg text-sm">
