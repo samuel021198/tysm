@@ -6,6 +6,7 @@ import type { Grader, RawGrade } from "@prisma/client";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { hkdToCents, isAllowedMediaUrl } from "@/lib/format";
+import { PhotoStoreError, storeUploadedImages } from "@/lib/r2";
 import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
 import { collectionVisibility } from "@/lib/posts";
@@ -124,18 +125,24 @@ export async function saveCollection(_prev: { error?: string } | null, formData:
     redirect(synced.postId ? `/post/${synced.postId}?ok=posted` : `/listing/${result.id}?ok=published`);
   }
 
-  const created = await createCollectionItem({
-    ownerId: user.id,
-    title,
-    note,
-    visibility,
-    conditionTrack: cond.conditionTrack,
-    rawGrade: cond.rawGrade,
-    grader: cond.grader,
-    gradeValue: cond.gradeValue,
-    photos,
-    publishToFeed: formData.get("publish") === "on",
-  });
+  let created: Awaited<ReturnType<typeof createCollectionItem>>;
+  try {
+    created = await createCollectionItem({
+      ownerId: user.id,
+      title,
+      note,
+      visibility,
+      conditionTrack: cond.conditionTrack,
+      rawGrade: cond.rawGrade,
+      grader: cond.grader,
+      gradeValue: cond.gradeValue,
+      photos,
+      publishToFeed: formData.get("publish") === "on",
+    });
+  } catch (error) {
+    if (!(error instanceof PhotoStoreError)) throw error;
+    return { error: "photo_url" };
+  }
   revalidatePath("/");
   revalidatePath("/me");
   redirect(created.postId ? `/post/${created.postId}?ok=posted` : "/me?tab=box&ok=collected");
@@ -150,11 +157,18 @@ export async function savePost(_prev: { error?: string } | null, formData: FormD
   if (photos.length > (alsoList ? 12 : 6)) return { error: "photos" };
   if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { error: "photo_url" };
   if (!alsoList) {
+    let stored = photos;
+    try {
+      stored = await storeUploadedImages(photos, "uploads/posts");
+    } catch (error) {
+      if (!(error instanceof PhotoStoreError)) throw error;
+      return { error: "photo_url" };
+    }
     const post = await prisma.post.create({
       data: {
         authorId: user.id,
         body,
-        photos: { create: photos.map((photo, position) => ({ url: photo.url, position })) },
+        photos: { create: stored.map((photo, position) => ({ url: photo.url, position })) },
       },
     });
     revalidatePath("/");

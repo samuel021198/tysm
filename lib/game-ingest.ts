@@ -1,8 +1,10 @@
 import { catalogCursor, catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog-batch";
+import { drainCatalogImages } from "./catalog-r2";
 import type { CatalogPrinting, CatalogPrintingSet } from "./catalog-source";
 import { prisma } from "./db";
 import { DEX_PLACEHOLDER, INGEST_POST_RESERVE_MS, ingestPastSoftDeadline, runIngestPostSteps, type DexGame } from "./dex";
 import { linkCatalogListings } from "./dex-link";
+import { keptMirroredUrl, r2Config } from "./r2";
 import { fetchOfficialSet, listOfficialQueue, type OfficialQueueItem } from "./op-official";
 import { fetchOptcgSet, listOptcgQueue, type OptcgQueueItem } from "./optcg";
 import { loadRiftBulk, riftSet, type RiftQueueItem } from "./riftbound";
@@ -97,10 +99,27 @@ async function enrichJapaneseNames(cards: CatalogPrinting[]): Promise<CatalogPri
   });
 }
 
-async function upsertPrintings(game: DexGame, setId: string, printRegion: CatalogPrintingSet["printRegion"], cards: CatalogPrinting[]) {
+async function upsertPrintings(
+  game: DexGame,
+  setId: string,
+  printRegion: CatalogPrintingSet["printRegion"],
+  cards: CatalogPrinting[],
+): Promise<{ externalId: string; source: string }[]> {
   const prepared = game === "ONE_PIECE" && printRegion === "JP" ? await enrichJapaneseNames(cards) : cards;
+  const r2 = r2Config();
+  const previous = new Map<string, { imageUrl: string; sourceImageUrl: string | null }>();
+  if (r2 && prepared.some((card) => card.sourceImageUrl.startsWith("https://"))) {
+    const rows = await prisma.catalogCard.findMany({
+      where: { externalId: { in: prepared.map((card) => card.externalId) } },
+      select: { externalId: true, imageUrl: true, sourceImageUrl: true },
+    });
+    for (const row of rows) previous.set(row.externalId, row);
+  }
+  const pending: { externalId: string; source: string }[] = [];
   for (const card of prepared) {
-    const imageUrl = card.sourceImageUrl.startsWith("https://") ? card.sourceImageUrl : DEX_PLACEHOLDER;
+    const source = card.sourceImageUrl;
+    const kept = keptMirroredUrl(previous.get(card.externalId), source);
+    const imageUrl = kept ?? (source.startsWith("https://") ? source : DEX_PLACEHOLDER);
     const data = {
       setId,
       game,
@@ -110,7 +129,7 @@ async function upsertPrintings(game: DexGame, setId: string, printRegion: Catalo
       nameEn: card.nameEn,
       nameJa: card.nameJa,
       imageUrl,
-      sourceImageUrl: card.sourceImageUrl || null,
+      sourceImageUrl: source || null,
       rarity: card.rarity,
       artist: card.artist,
       finish: card.finish ?? null,
@@ -120,7 +139,9 @@ async function upsertPrintings(game: DexGame, setId: string, printRegion: Catalo
       update: data,
       create: { externalId: card.externalId, ...data },
     });
+    if (!kept && r2 && source.startsWith("https://")) pending.push({ externalId: card.externalId, source });
   }
+  return pending;
 }
 
 async function fetchItem(item: WalkItem, riftCards: Map<string, CatalogPrinting[]> | null): Promise<CatalogPrintingSet | null> {
@@ -209,6 +230,7 @@ async function ingestWalk(args: {
   let sets = 0;
   let cardsWritten = 0;
   const processedSetIds: string[] = [];
+  const pending: { externalId: string; source: string }[] = [];
   let pause: { externalId: string; cardOffset: number } | null = null;
   let fetched = false;
 
@@ -244,7 +266,7 @@ async function ingestWalk(args: {
       }
       const chunk = mapped.cards.slice(index, index + CARD_CHUNK);
       index += chunk.length;
-      await upsertPrintings(args.game, setId, mapped.printRegion, chunk);
+      pending.push(...(await upsertPrintings(args.game, setId, mapped.printRegion, chunk)));
       cardsWritten += chunk.length;
     }
     if (pause) break;
@@ -270,6 +292,7 @@ async function ingestWalk(args: {
     backfill: args.backfill,
     link: (until) => linkCatalogListings({ deadlineMs: until, game: args.game }),
   });
+  const images = await drainCatalogImages(args.game, pending, args.deadline);
   return {
     done,
     cursor,
@@ -278,12 +301,12 @@ async function ingestWalk(args: {
     counts: {
       sets,
       cards: cardsWritten,
-      imagesUploaded: 0,
+      imagesUploaded: images.uploaded,
       listingsLinked: linked.listings,
       collectionLinked: linked.collectionItems,
-      r2: false,
+      r2: images.configured,
       skippedSettled: plan.skippedSettled,
-      imagesPending: 0,
+      imagesPending: images.pending,
     },
   };
 }

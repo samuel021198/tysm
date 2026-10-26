@@ -2,6 +2,7 @@ import type { CardKind, Grader, RawGrade, SaleType } from "@prisma/client";
 import { prisma } from "./db";
 import { headerIndex, parseCsv, PERSON_HEADERS, TCG_HEADERS } from "./csv";
 import { hkdToCents, isAllowedMediaUrl } from "./format";
+import { PhotoStoreError, storeUploadedImages } from "./r2";
 import { parseGrade } from "./rules";
 import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
@@ -233,11 +234,18 @@ export async function saveListing(userId: string, input: ListingInput, listingId
       const photos = [...listing.photos.map((photo) => ({ url: photo.url, role: photo.role })), ...extras].slice(0, PHOTO_MAX);
       if (photos.length < 1 || photos.length > PHOTO_MAX) return { ok: false as const, error: "photos" };
       if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { ok: false as const, error: "photo_url" };
+      let stored: PhotoInput[];
+      try {
+        stored = await storeUploadedImages(photos, "uploads/listings");
+      } catch (error) {
+        if (!(error instanceof PhotoStoreError)) throw error;
+        return { ok: false as const, error: "photo_url" };
+      }
       await prisma.$transaction([
         prisma.listing.update({ where: { id: listing.id }, data: { description } }),
         prisma.listingPhoto.deleteMany({ where: { listingId: listing.id } }),
         prisma.listingPhoto.createMany({
-          data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
+          data: stored.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
         }),
       ]);
       return done(listing.id);
@@ -250,16 +258,23 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   if (errors.length) return { ok: false as const, error: errors[0] };
   const now = new Date();
   const data = dataFor(filled, found.groupKey, now);
+  const { photos: sourcePhotos, items, ...rest } = data;
+  let photos: PhotoInput[];
+  try {
+    photos = await storeUploadedImages(sourcePhotos, "uploads/listings");
+  } catch (error) {
+    if (!(error instanceof PhotoStoreError)) throw error;
+    return { ok: false as const, error: "photo_url" };
+  }
 
   if (!listing) {
-    const { photos, items, ...rest } = data;
     const created = await prisma.listing.create({
       data: {
         sellerId: userId,
         categoryId: input.categoryId,
         ...rest,
         quantityAvailable: rest.quantity,
-        photos: { create: photos.map((photo, index) => ({ url: photo.url.trim(), role: photo.role, position: index })) },
+        photos: { create: photos.map((photo, index) => ({ url: photo.url, role: photo.role, position: index })) },
         ...(items ? { items: { create: itemRows(items) } } : {}),
       },
     });
@@ -268,7 +283,6 @@ export async function saveListing(userId: string, input: ListingInput, listingId
 
   const reserved = listing.quantity - listing.quantityAvailable;
   if (data.quantity < reserved) return { ok: false as const, error: "stock" };
-  const { photos, items, ...rest } = data;
   await prisma.$transaction([
     prisma.listing.update({
       where: { id: listing.id },
@@ -416,9 +430,17 @@ export async function importCsv(userId: string, categoryId: string, text: string
     else inputs.push(input);
   }
   if (errors.length) return { ok: false as const, error: "csv", errors };
+  let ready: ListingInput[];
+  try {
+    ready = [];
+    for (const input of inputs) ready.push({ ...input, photos: await storeUploadedImages(input.photos, "uploads/listings") });
+  } catch (error) {
+    if (!(error instanceof PhotoStoreError)) throw error;
+    return { ok: false as const, error: "photo_url", errors: [] };
+  }
   const now = new Date();
   const ids = await prisma.$transaction(
-    inputs.map((input) => {
+    ready.map((input) => {
       const { photos, items, ...rest } = dataFor(input, found.groupKey, now);
       return prisma.listing.create({
         data: {

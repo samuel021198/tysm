@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAllowedMediaUrl } from "@/lib/format";
+import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { isBlocked, notify } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
 
@@ -95,8 +96,15 @@ export async function sendMessage(formData: FormData) {
   const body = String(formData.get("body") || "").trim() || (imageUrl ? "（相片）" : "");
   if (body.length < 1 || body.length > 2000) redirect(`/messages/${threadId}?err=description`);
   if (imageUrl && !isAllowedMediaUrl(imageUrl)) redirect(`/messages/${threadId}?err=photo_url`);
+  let stored = imageUrl;
+  try {
+    if (imageUrl) stored = await storeUploadedImage(imageUrl, "uploads/messages");
+  } catch (error) {
+    if (!(error instanceof PhotoStoreError)) throw error;
+    redirect(`/messages/${threadId}?err=photo_url`);
+  }
   await prisma.message.create({
-    data: { threadId, senderId: user.id, body, imageUrl: imageUrl || null },
+    data: { threadId, senderId: user.id, body, imageUrl: stored || null },
   });
   await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
   await notify(other, "message", "新訊息", body.slice(0, 80), `/messages/${threadId}`);
