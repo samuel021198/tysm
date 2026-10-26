@@ -137,15 +137,17 @@ export async function confirmPhone(_prev: { error?: string } | null, formData: F
   redirect(next ? safeNext(next) : "/me?ok=phone");
 }
 
+const settings = "/me/settings";
+
 export async function updateProfile(formData: FormData) {
   const viewer = await getViewer();
-  if (!viewer) redirect("/login?next=/me");
+  if (!viewer) redirect(`/login?next=${settings}`);
   const nickname = String(formData.get("nickname") || "").trim();
   const bio = String(formData.get("bio") || "").trim();
   const avatarUrl = String(formData.get("avatarUrl") || "").trim();
-  if (nickname.length < 2 || nickname.length > 24) redirect("/me?err=nickname");
-  if (bio.length > 500) redirect("/me?err=description");
-  if (avatarUrl && !avatarUrl.startsWith("https://")) redirect("/me?err=photo_url");
+  if (nickname.length < 2 || nickname.length > 24) redirect(`${settings}?err=nickname`);
+  if (bio.length > 500) redirect(`${settings}?err=description`);
+  if (avatarUrl && !avatarUrl.startsWith("https://")) redirect(`${settings}?err=photo_url`);
   const storeName = String(formData.get("storeName") || "").trim();
   const storeDistrict = String(formData.get("storeDistrict") || "").trim();
   const storeLine1 = String(formData.get("storeLine1") || "").trim();
@@ -153,7 +155,7 @@ export async function updateProfile(formData: FormData) {
   const storeTouched = Boolean(storeName || storeDistrict || storeLine1 || storeHours);
   const districtOk = DISTRICTS.some(([name]) => name === storeDistrict);
   if (storeTouched && (!districtOk || storeLine1.length < 4 || storeLine1.length > 120 || storeName.length > 40 || storeHours.length > 80)) {
-    redirect("/me?err=store");
+    redirect(`${settings}?err=store`);
   }
   await prisma.user.update({
     where: { id: viewer.id },
@@ -175,17 +177,18 @@ export async function updateProfile(formData: FormData) {
     },
   });
   revalidatePath("/me");
-  redirect("/me?ok=saved");
+  revalidatePath(settings);
+  redirect(`${settings}?ok=saved`);
 }
 
 export async function saveAddress(formData: FormData) {
   const viewer = await getViewer();
-  if (!viewer) redirect("/login?next=/me");
+  if (!viewer) redirect(`/login?next=${settings}`);
   const recipient = String(formData.get("recipient") || "").trim();
   const phone = String(formData.get("phone") || "").trim();
   const line1 = String(formData.get("line1") || "").trim();
   const district = String(formData.get("district") || "").trim();
-  if (recipient.length < 2 || phone.length < 8 || line1.length < 4 || !district) redirect("/me?err=address");
+  if (recipient.length < 2 || phone.length < 8 || line1.length < 4 || !district) redirect(`${settings}?err=address`);
   const count = await prisma.address.count({ where: { userId: viewer.id } });
   if (formData.get("isDefault") === "on" || count === 0) {
     await prisma.address.updateMany({ where: { userId: viewer.id }, data: { isDefault: false } });
@@ -200,19 +203,19 @@ export async function saveAddress(formData: FormData) {
       isDefault: formData.get("isDefault") === "on" || count === 0,
     },
   });
-  redirect("/me?ok=saved");
+  redirect(`${settings}?ok=saved`);
 }
 
 export async function deleteAddress(formData: FormData) {
   const viewer = await getViewer();
-  if (!viewer) redirect("/login");
+  if (!viewer) redirect(`/login?next=${settings}`);
   await prisma.address.deleteMany({ where: { id: String(formData.get("id") || ""), userId: viewer.id } });
-  redirect("/me?ok=saved");
+  redirect(`${settings}?ok=saved`);
 }
 
 export async function clearHistory() {
   const viewer = await getViewer();
-  if (!viewer) redirect("/login?next=/me");
+  if (!viewer) redirect(`/login?next=${settings}`);
   await prisma.viewHistory.deleteMany({ where: { userId: viewer.id } });
-  redirect("/me?ok=saved");
+  redirect(`${settings}?ok=saved`);
 }

@@ -136,7 +136,7 @@ export function CheckoutForm({
           <h2 className="font-semibold">{tx(locale, "收貨地址", "Address")}</h2>
           <p className="text-xs text-muted">{tx(locale, "順豐到付需要送貨地址。面交同店舖自取唔使填。", "SF cash on delivery needs a delivery address. Meet-up and store pickup do not.")}</p>
           {addresses.length === 0 ? (
-            <p><a className="text-link" href="/me">{tx(locale, "請先在帳戶新增香港地址。", "Add a Hong Kong address in your account first.")}</a></p>
+            <p><a className="text-link" href="/me/settings#addresses">{tx(locale, "請先在帳戶新增香港地址。", "Add a Hong Kong address in your account first.")}</a></p>
           ) : (
             addresses.map((address) => (
               <label key={address.id} className="flex min-h-14 items-start gap-3 rounded-2xl bg-soft p-4 text-sm">
