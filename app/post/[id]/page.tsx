@@ -6,6 +6,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { toPostCard } from "@/lib/posts";
 import { isBlocked } from "@/lib/social";
 import { tx } from "@/lib/i18n";
+import { DeletePostForm } from "@/components/delete-post-form";
 import { Flash } from "@/components/shell";
 import { PostCard } from "@/components/post-card";
 
@@ -79,10 +80,23 @@ export default async function PostPage({
           <Link className="text-link" href={`/listing/${listing.id}`}>{tx(locale, "喺賣場查看", "View in the market")}</Link>
         </p>
       ) : null}
-      {viewer?.id === post.authorId && post.collectionItem?.catalogCardId && !post.collectionItem.listingId ? (
-        <Link href={`/sell?catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}`} className="btn btn-primary w-fit">
-          {tx(locale, "放賣", "List for sale")}
-        </Link>
+      {viewer?.id === post.authorId ? (
+        <div className="flex flex-wrap items-center gap-2">
+          {post.collectionItem?.catalogCardId && !post.collectionItem.listingId ? (
+            <Link href={`/sell?catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}`} className="btn btn-primary w-fit">
+              {tx(locale, "放賣", "List for sale")}
+            </Link>
+          ) : null}
+          <DeletePostForm
+            postId={post.id}
+            label={tx(locale, "刪除貼文", "Delete post")}
+            confirmLabel={tx(
+              locale,
+              "刪除這則貼文？留言同讚好會一併刪除。收藏同賣場會留低。",
+              "Delete this post? Comments and likes are removed. Your collection and any listing stay.",
+            )}
+          />
+        </div>
       ) : null}
       <section id="comments" className="grid gap-3">
         <h2 className="font-semibold">{tx(locale, "留言", "Comments")}</h2>
