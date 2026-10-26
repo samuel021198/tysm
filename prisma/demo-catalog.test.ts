@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { authorizedBearer } from "../lib/bootstrap";
-import { DEMO_SHOWCASE_NICKNAME, DEMO_SHOWCASE_USER_ID } from "../lib/demo-login";
+import { DEMO_ACCOUNTS, DEMO_CODE } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
 import {
   LEAF_CATEGORIES,
@@ -45,7 +45,7 @@ unique(demoNotifications.map((note) => note.id), "notification");
 unique(demoFavorites.map((row) => row.id), "favorite");
 unique(demoCart.map((row) => row.id), "cart");
 
-assert(demoUsers.length >= 10, "need more demo users");
+assert(demoUsers.filter((user) => user.role === "USER").length === DEMO_ACCOUNTS.length, "exactly three demo accounts");
 assert(active.length >= 56, "home feed should feel full");
 for (const [id] of LEAF_CATEGORIES) {
   const rows = active.filter((item) => item.categoryId === id);
@@ -111,7 +111,7 @@ for (const thread of demoThreads) {
   assert(thread.buyerId !== thread.sellerId, thread.id);
   assert(demoMessages.filter((message) => message.threadId === thread.id).length >= 2, thread.id);
 }
-assert(demoThreads.length >= 4 && demoNotifications.length >= 8 && demoFavorites.length >= 8 && demoFollows.length >= 8, "social");
+assert(demoThreads.length >= 4 && demoNotifications.length >= 8 && demoFavorites.length >= 8, "social fixtures stay in the art catalog");
 
 const back = readFileSync(new URL("../public/demo/back.svg", import.meta.url), "utf8");
 assert(back.includes("卡背") && back.includes("#f7f1e8") && back.includes("#fffaf6") && back.includes("#1b1418"), "card back should stay readable");
@@ -131,15 +131,25 @@ assert(!/export async function GET\(\)\s*\{/.test(sweepRoute), "cron sweep is no
 const cron = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
 assert(cron.includes("0 16 * * *") && cron.includes("/api/cron/sweep") && !cron.includes("*/10"), "publish sweep runs once per day (Hobby cron limit)");
 
-const showcase = demoUsers.find((user) => user.id === DEMO_SHOWCASE_USER_ID);
-assert(showcase && showcase.nickname === DEMO_SHOWCASE_NICKNAME && showcase.role === "USER", "showcase user");
-assert("email" in showcase && showcase.email === "showcase@tysm.hk", "showcase email stays off the 123 path");
-const avatar = "avatarUrl" in showcase ? showcase.avatarUrl : undefined;
-assert(typeof avatar === "string" && avatar.startsWith("https://") && !avatar.includes("/demo/cards/"), "showcase avatar");
-const mei = demoUsers.find((user) => user.id === "user_mei");
-const ming = demoUsers.find((user) => user.id === "user_ming");
-assert(mei && "email" in mei && mei.email === "mei@tysm.hk", "mei login unchanged");
-assert(ming && "email" in ming && ming.email === "ming@tysm.hk" && ming.phone === "+85291111111", "ming login unchanged");
+const people = demoUsers.filter((user) => user.role === "USER");
+assert(people.map((user) => user.nickname).join() === "Mars,Tyu,MueL", "display names stay exact");
+assert(people.every((user, index) => user.id === DEMO_ACCOUNTS[index].id && user.nickname === DEMO_ACCOUNTS[index].nickname), "seed users match the login accounts");
+const admin = demoUsers.find((user) => user.role === "ADMIN");
+assert(admin && admin.id === "user_admin" && !("email" in admin), "admin stays a system account, not a login-page demo");
+for (const person of people) {
+  const avatar = "avatarUrl" in person ? person.avatarUrl : undefined;
+  assert(typeof avatar === "string" && avatar.startsWith("https://") && !avatar.includes("/demo/cards/"), person.id);
+}
+assert(!demoUsers.some((user) => user.nickname === "卡桌阿傑" || user.id === "user_showcase" || user.id === "user_mei"), "old demo accounts are gone");
+
+const demoIds = new Set<string>(people.map((user) => user.id));
+for (const a of demoIds) {
+  for (const b of demoIds) {
+    if (a === b) continue;
+    assert(demoFollows.some((row) => row.followerId === a && row.sellerId === b), `${a} follows ${b}`);
+  }
+}
+assert(demoFollows.length === demoIds.size * (demoIds.size - 1), "mutual follows and nothing else");
 
 const userIds = new Set(demoUsers.map((user) => user.id));
 const showcaseListingIds = new Set(demoListings.map((item) => item.id));
@@ -158,11 +168,13 @@ const shown = demoShowcasePosts.map((post) => showcasePostPhotos(post));
 assert(shown.some((photos) => photos.length === 1) && shown.some((photos) => photos.length > 1), "posts mix one and many photos");
 for (const post of demoShowcasePosts) {
   const item = demoShowcaseCollections.find((row) => row.id === post.collectionId);
-  assert(item, post.id);
+  assert(item && item.ownerId === post.ownerId && demoIds.has(post.ownerId), post.id);
   assert(post.body.trim().length > 0, post.id);
 }
+for (const item of demoShowcaseListings) assert(demoIds.has(item.ownerId), item.id);
+for (const item of demoShowcaseCollections) assert(demoIds.has(item.ownerId), item.id);
 for (const url of [
-  avatar,
+  ...people.flatMap((person) => ("avatarUrl" in person && person.avatarUrl ? [person.avatarUrl] : [])),
   ...demoShowcaseListings.flatMap((item) => item.photos),
   ...demoShowcaseCollections.flatMap((item) => item.photos),
   ...shown.flat(),
@@ -175,16 +187,27 @@ for (const item of demoShowcaseListings) {
   assert(item.photos.length >= 1 && item.priceCents > 0, item.id);
 }
 for (const review of demoShowcaseReviews) {
-  assert(review.authorId !== DEMO_SHOWCASE_USER_ID && userIds.has(review.authorId), review.id);
-  assert(demoShowcaseListings.some((item) => item.id === review.listingId), review.id);
+  const listing = demoShowcaseListings.find((item) => item.id === review.listingId);
+  assert(listing && review.authorId !== listing.ownerId && userIds.has(review.authorId), review.id);
   assert(review.stars >= 1 && review.stars <= 5 && review.comment.length > 0, review.id);
 }
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
-assert(auth.includes("demoShowcaseLogin") && auth.includes("DEMO_SHOWCASE_CODE") && auth.includes("DEMO_SHOWCASE_USER_ID"), "123 signs into the showcase user");
+assert(auth.includes("demoAccountByHandle") && auth.includes("DEMO_CODE") && auth.includes("enterDemo"), "handle plus 123, and a one-tap action");
+const loginPage = readFileSync(new URL("../app/login/page.tsx", import.meta.url), "utf8");
 const loginForm = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
-assert(loginForm.includes("DEMO_SHOWCASE_TARGET") && loginForm.includes("DEMO_SHOWCASE_CODE"), "login details show 123 / 123");
+assert(loginPage.indexOf("<LoginForm") < loginPage.indexOf("DEMO_ACCOUNTS.map"), "demo accounts sit below the login form");
+assert(loginPage.includes("fixed") && loginPage.includes("bottom-[var(--tab-h)]") && loginPage.includes("enterDemo") && loginPage.includes("DEMO_CODE"), "one-tap demos are pinned to the bottom");
+const demoLogin = readFileSync(new URL("../lib/demo-login.ts", import.meta.url), "utf8");
+for (const name of ["Mars", "Tyu", "MueL"]) assert(demoLogin.includes(`nickname: "${name}"`), name);
+assert(loginPage.includes("account.nickname"), "buttons show the demo display names");
+assert(!loginPage.includes("卡桌阿傑") && !loginForm.includes("卡桌阿傑") && !loginForm.includes("mei@tysm.hk"), "old demos are off the login page");
+assert(DEMO_CODE === "123", "shared demo code");
 const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");
 assert(reseed.includes("export const maxDuration = 120"), "reseed maxDuration is 120");
+const seed = readFileSync(new URL("../lib/seed-demo.ts", import.meta.url), "utf8");
+assert(seed.includes("wipeUserContent") && seed.includes("user.deleteMany") && seed.includes("post.deleteMany") && seed.includes("listing.deleteMany"), "reseed wipes users and posts");
+assert(!seed.includes("catalogCard.deleteMany") && !seed.includes("catalogSet.deleteMany"), "reseed does not wipe the dex");
+assert(!seed.includes("user_mei") && !seed.includes("user_showcase") && !seed.includes("卡桌阿傑"), "reseed does not recreate the old demo set");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,

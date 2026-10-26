@@ -8,9 +8,9 @@ function assert(cond: unknown, msg: string): asserts cond {
 }
 
 async function main() {
-  const seller = await prisma.user.findUnique({ where: { email: "ming@tysm.hk" } });
-  const buyer = await prisma.user.findUnique({ where: { email: "mei@tysm.hk" } });
-  const rival = await prisma.user.findUnique({ where: { email: "alex@tysm.hk" } });
+  const seller = await prisma.user.findUnique({ where: { email: "mars@tysm.hk" } });
+  const buyer = await prisma.user.findUnique({ where: { email: "tyu@tysm.hk" } });
+  const rival = await prisma.user.findUnique({ where: { email: "muel@tysm.hk" } });
   assert(seller && buyer && rival, "run prisma db seed first");
   const address = await prisma.address.findFirst({ where: { userId: buyer.id, isDefault: true } });
   assert(address, "buyer needs an address");

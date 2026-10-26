@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
-import { DEMO_SHOWCASE_CODE, DEMO_SHOWCASE_USER_ID, demoShowcaseLogin } from "@/lib/demo-login";
+import { DEMO_CODE, demoAccountByHandle, demoAccountById } from "@/lib/demo-login";
 import { DISTRICTS, parseTarget, safeNext } from "@/lib/format";
 import { headers } from "next/headers";
 
@@ -40,8 +40,8 @@ function cookieOpts() {
 
 export async function requestOtp(_prev: { error?: string; code?: string; target?: string } | null, formData: FormData) {
   const raw = String(formData.get("target") || "");
-  const demo = demoShowcaseLogin(raw);
-  const parsed = demo ?? parseTarget(raw);
+  const demo = demoAccountByHandle(raw);
+  const parsed = demo ? { channel: "demo" as const, target: demo.handle } : parseTarget(raw);
   if (!parsed) return { error: "target" };
   const recent = await prisma.otpChallenge.findFirst({
     where: { target: parsed.target },
@@ -50,7 +50,7 @@ export async function requestOtp(_prev: { error?: string; code?: string; target?
   if (recent && Date.now() - recent.createdAt.getTime() < 30_000) {
     return { error: "rate", target: parsed.target };
   }
-  const code = demo ? DEMO_SHOWCASE_CODE : String(randomInt(100000, 999999));
+  const code = demo ? DEMO_CODE : String(randomInt(100000, 999999));
   await prisma.otpChallenge.create({
     data: {
       target: parsed.target,
@@ -65,15 +65,15 @@ export async function requestOtp(_prev: { error?: string; code?: string; target?
 export async function verifyOtp(_prev: { error?: string } | null, formData: FormData) {
   const raw = String(formData.get("target") || "");
   const code = String(formData.get("code") || "").trim();
-  const demo = demoShowcaseLogin(raw);
+  const demo = demoAccountByHandle(raw);
   if (demo) {
-    if (code !== DEMO_SHOWCASE_CODE) return { error: "code" };
+    if (code !== DEMO_CODE) return { error: "code" };
     const challenge = await prisma.otpChallenge.findFirst({
-      where: { target: demo.target, consumed: false, expiresAt: { gt: new Date() } },
+      where: { target: demo.handle, consumed: false, expiresAt: { gt: new Date() } },
       orderBy: { createdAt: "desc" },
     });
-    if (!challenge || challenge.code !== DEMO_SHOWCASE_CODE) return { error: "code" };
-    const user = await prisma.user.findUnique({ where: { id: DEMO_SHOWCASE_USER_ID } });
+    if (!challenge || challenge.code !== DEMO_CODE) return { error: "code" };
+    const user = await prisma.user.findUnique({ where: { id: demo.id } });
     if (!user) return { error: "showcase" };
     await prisma.otpChallenge.update({ where: { id: challenge.id }, data: { consumed: true } });
     await setSessionCookie(user.id);
@@ -119,6 +119,17 @@ export async function verifyOtp(_prev: { error?: string } | null, formData: Form
   }
   await setSessionCookie(user.id);
   redirect(safeNext(formData.get("next")));
+}
+
+/** One tap on the login footer. Only the three seeded demo ids. */
+export async function enterDemo(formData: FormData) {
+  const account = demoAccountById(String(formData.get("userId") || ""));
+  if (!account) redirect("/login?err=showcase");
+  const user = await prisma.user.findUnique({ where: { id: account.id } });
+  if (!user) redirect("/login?err=showcase");
+  await setSessionCookie(user.id);
+  const next = safeNext(formData.get("next"));
+  redirect(next === "/" || next.startsWith("/login") ? "/me" : next);
 }
 
 export async function logout() {
