@@ -100,7 +100,7 @@ export default async function DexCardPage({
           <p className="truncate text-[11px] text-muted">{compactSetLine(card.set.code, card.collectorNumber)}</p>
         </div>
         {owned ? (
-          <Link href="/me?tab=box" aria-label={tx(prefs.locale, "已加入收藏", "In your collection")} className="grid h-11 w-11 place-items-center text-rose">
+          <Link href="/me?tab=box" aria-label={tx(prefs.locale, "已加入收藏", "In your collection")} className="grid h-11 w-11 place-items-center text-accent">
             <Heart filled />
           </Link>
         ) : (
@@ -127,7 +127,7 @@ export default async function DexCardPage({
       </header>
 
       <div className="mt-3 grid grid-cols-[minmax(0,42%)_minmax(0,1fr)] items-start gap-3">
-        <img src={catalogImageSrc(card.imageUrl)} alt={title} width={240} height={336} decoding="async" className="aspect-[63/88] w-full rounded-2xl bg-[#f4efe6] object-contain shadow-card" />
+        <img src={catalogImageSrc(card.imageUrl)} alt={title} width={240} height={336} decoding="async" className="aspect-[63/88] w-full rounded-2xl bg-soft object-contain shadow-card" />
         {quoted ? (
           <Suspense fallback={<MarketSkeleton />}>
             <LiveMarketAside card={ref} locale={prefs.locale} />

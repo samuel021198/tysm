@@ -37,7 +37,7 @@ export default async function ThreadPage({
         {thread.messages.map((message) => {
           const mine = message.senderId === viewer.id;
           return (
-            <li key={message.id} className={mine ? "ml-10 rounded-[1.25rem] rounded-br-md bg-gradient-to-br from-rose/40 to-teal/30 px-3.5 py-3" : "surface mr-10 rounded-[1.25rem] rounded-bl-md px-3.5 py-3"}>
+            <li key={message.id} className={mine ? "ml-10 rounded-2xl rounded-br-md bg-accent/15 px-3.5 py-3" : "surface mr-10 rounded-2xl rounded-bl-md px-3.5 py-3"}>
               <p className="text-[15px] leading-6">{message.body}</p>
               {message.imageUrl ? <img src={message.imageUrl} alt="" className="mt-2 max-h-48 rounded-xl" /> : null}
               <p className="mt-1 text-[11px] text-muted">

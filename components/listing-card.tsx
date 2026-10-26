@@ -51,7 +51,7 @@ export function ListingCard({
     <article className="surface flex h-full flex-col overflow-hidden">
       <div className="relative">
         <Link href={`/listing/${listing.id}`} className="block">
-          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
+          <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="block aspect-[4/5] w-full bg-soft object-contain" />
         </Link>
         <span className="pointer-events-none absolute left-2.5 top-2.5 max-w-[62%] truncate rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-semibold text-ink shadow-sm">
           {conditionLabel(listing)}
@@ -61,7 +61,7 @@ export function ListingCard({
           <input type="hidden" name="next" value={next} />
           <button
             aria-label={tx(locale, "收藏", "Favorite")}
-            className={`grid h-11 w-11 place-items-center rounded-full text-2xl leading-none shadow-sm ${favorited ? "bg-[#1b1418] text-rose" : "bg-card text-[#9a5d78]"}`}
+            className={`grid h-11 w-11 place-items-center rounded-full text-2xl leading-none shadow-sm ${favorited ? "bg-card text-accent" : "bg-card text-muted"}`}
           >
             {favorited ? "♥" : "♡"}
             <span className="sr-only">{listing.favoriteCount}</span>

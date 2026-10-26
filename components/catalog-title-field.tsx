@@ -125,7 +125,7 @@ export function CatalogTitleField({
                   setOpen(false);
                 }}
               >
-                <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-12 w-9 shrink-0 rounded-md bg-[#f4efe6] object-contain" />
+                <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-12 w-9 shrink-0 rounded-md bg-soft object-contain" />
                 <span className="min-w-0">
                   <span className="block truncate text-[15px] font-semibold">{hit.cardName || hit.title}</span>
                   <span className="block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>

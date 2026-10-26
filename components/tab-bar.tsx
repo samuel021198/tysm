@@ -39,7 +39,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   return (
     <nav
       aria-label={tx(locale, "主要", "Main")}
-      className="fixed inset-x-0 bottom-0 z-40 bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_0_var(--line),0_-12px_32px_rgba(34,24,32,0.06)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="mx-auto grid h-[4.25rem] max-w-lg grid-cols-5">
         {tabs.map((tab) => (

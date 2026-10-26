@@ -38,7 +38,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
           <h2 className="font-bold"><Link href={`/shop/${sellerId}`}>{rows[0].listing.seller.nickname}</Link></h2>
           {rows.map((item) => (
             <div key={item.id} className="mt-4 flex gap-3">
-              <img src={item.listing.photos[0]?.url || "/demo/back.svg"} alt="" className="h-24 w-20 shrink-0 rounded-2xl bg-[#f4efe6] object-contain" />
+              <img src={item.listing.photos[0]?.url || "/demo/back.svg"} alt="" className="h-24 w-20 shrink-0 rounded-2xl bg-soft object-contain" />
               <div className="min-w-0 flex-1">
                 <Link href={`/listing/${item.listingId}`} className="line-clamp-2 font-medium leading-snug">{item.listing.title}</Link>
                 <p className="price mt-1 text-lg">{formatHkd(item.listing.price ?? 0, prefs.locale)}</p>
@@ -60,7 +60,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
       ))}
       {items.length ? (
         <div
-          className="fixed inset-x-0 z-30 flex items-center gap-3 bg-card/95 px-4 py-3 shadow-[0_-8px_24px_rgba(34,24,32,0.06)] backdrop-blur-xl md:static md:bg-transparent md:px-0 md:py-0 md:shadow-none"
+          className="fixed inset-x-0 z-30 flex items-center gap-3 bg-card/95 px-4 py-3 shadow-[0_-1px_0_var(--line)] backdrop-blur-xl md:static md:bg-transparent md:px-0 md:py-0 md:shadow-none"
           style={{ bottom: "var(--tab-h)" }}
         >
           <p className="min-w-0 flex-1 text-sm leading-snug">

@@ -8,8 +8,6 @@ import { CREATE_MODES, createDest, createIndexFromScroll } from "@/lib/create-mo
 import { tx, type Locale } from "@/lib/i18n";
 import { Icon } from "./icons";
 
-const TILT = ["bg-gradient-to-br", "bg-gradient-to-tr", "bg-gradient-to-bl", "bg-gradient-to-tl"] as const;
-
 export function CreatePicker({
   locale,
   loggedIn,
@@ -154,11 +152,8 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className={`fixed left-3 z-50 grid h-11 min-w-11 place-items-center rounded-full px-2.5 text-base font-bold leading-none text-[#1b1418] shadow-[0_8px_18px_rgba(58,143,164,0.35)] md:hidden ${creating ? "ring-2 ring-ink ring-offset-2 ring-offset-[var(--bg)]" : ""}`}
-        style={{
-          top: "calc(env(safe-area-inset-top) + 0.375rem)",
-          backgroundImage: "linear-gradient(135deg, #c498b2, #7cb9c8)",
-        }}
+        className={`fixed left-3 z-50 grid h-11 min-w-11 place-items-center rounded-full bg-accent px-2.5 text-base font-bold leading-none text-white shadow-sm md:hidden ${creating ? "ring-2 ring-ink ring-offset-2 ring-offset-[var(--bg)]" : ""}`}
+        style={{ top: "calc(env(safe-area-inset-top) + 0.375rem)" }}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-current={creating ? "page" : undefined}
@@ -177,11 +172,7 @@ export function CreatePicker({
       aria-label={tx(locale, "新增", "Create")}
       tabIndex={-1}
       className={`fixed inset-0 z-[80] flex flex-col text-white outline-none transition duration-300 ${present ? "opacity-100" : "opacity-0"}`}
-      style={{
-        backgroundColor: "#1b1418",
-        backgroundImage:
-          "radial-gradient(540px 320px at 8% 0%, rgba(196,152,178,0.48), transparent 62%), radial-gradient(460px 300px at 100% 12%, rgba(124,185,200,0.4), transparent 58%)",
-      }}
+      style={{ backgroundColor: "#0F172A" }}
     >
       <div className="grid grid-cols-3 items-center px-2 pt-[max(0.25rem,env(safe-area-inset-top))]">
         <button
@@ -213,8 +204,8 @@ export function CreatePicker({
               aria-hidden={i !== index}
               className="flex w-full shrink-0 snap-center snap-always items-center justify-center px-6"
             >
-              <article className="flex w-[min(20rem,86vw)] flex-col items-center rounded-[2rem] bg-card px-6 py-10 text-center text-ink shadow-card">
-                <span className={`grid h-28 w-28 place-items-center rounded-[1.75rem] from-rose to-teal text-[#1b1418] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_16px_32px_rgba(124,185,200,0.28)] ${TILT[i]}`}>
+              <article className="flex w-[min(20rem,86vw)] flex-col items-center rounded-2xl bg-card px-6 py-10 text-center text-ink shadow-card">
+                <span className="grid h-28 w-28 place-items-center rounded-2xl bg-accent text-white">
                   <Icon name={item.icon} className="h-14 w-14" strokeWidth={1.6} />
                 </span>
                 <h2 className="mt-6 font-display text-4xl font-semibold tracking-tight">{tx(locale, item.zh, item.en)}</h2>
@@ -280,10 +271,8 @@ export function CreatePicker({
             onClick={() => go(i)}
           >
             <span className="inline-flex flex-col items-center">
-              <span className={i === index ? "bg-gradient-to-r from-rose to-teal bg-clip-text text-transparent" : undefined}>
-                {tx(locale, item.zh, item.en)}
-              </span>
-              <span className={`mt-1 h-1 w-6 rounded-full bg-gradient-to-r from-rose to-teal ${i === index ? "opacity-100" : "opacity-0"}`} />
+              <span>{tx(locale, item.zh, item.en)}</span>
+              <span className={`mt-1 h-1 w-6 rounded-full bg-accent ${i === index ? "opacity-100" : "opacity-0"}`} />
             </span>
           </button>
         ))}

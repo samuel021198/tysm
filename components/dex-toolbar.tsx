@@ -17,8 +17,8 @@ const REGIONS = [
 
 function chipClass(on: boolean) {
   return on
-    ? "inline-flex h-11 items-center rounded-full bg-gradient-to-r from-rose to-teal px-4 text-sm font-semibold text-[#1b1418]"
-    : "inline-flex h-11 items-center rounded-full bg-card px-4 text-sm font-semibold text-ink shadow-card";
+    ? "inline-flex h-11 items-center rounded-full bg-accent px-4 text-sm font-semibold text-white"
+    : "inline-flex h-11 items-center rounded-full border border-line bg-card px-4 text-sm font-semibold text-ink";
 }
 
 export function DexToolbar({
@@ -212,13 +212,13 @@ export function DexToolbar({
         <input type="hidden" name="game" value={gameParam(game)} />
         {current && regions ? <input type="hidden" name="region" value={current} /> : null}
         {setId ? <input type="hidden" name="set" value={setId} /> : null}
-        <button className="inline-flex h-11 shrink-0 items-center rounded-full bg-gradient-to-r from-rose to-teal px-4 text-sm font-semibold text-[#1b1418]" type="submit">
+        <button className="inline-flex h-11 shrink-0 items-center rounded-full bg-accent px-4 text-sm font-semibold text-white" type="submit">
           {tx(locale, "搜尋", "Search")}
         </button>
       </form>
       {visible ? (
-        <div className="absolute left-0 right-0 top-[3.75rem] z-20 rounded-2xl bg-gradient-to-r from-rose to-teal p-px shadow-card">
-          <ul id={listId} ref={panelRef} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="max-h-80 overflow-y-auto overscroll-contain rounded-[15px] bg-card py-1">
+        <div className="absolute left-0 right-0 top-[3.75rem] z-20 overflow-hidden rounded-2xl border border-line bg-card shadow-card">
+          <ul id={listId} ref={panelRef} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="max-h-80 overflow-y-auto overscroll-contain bg-card py-1">
             {hits.map((hit, item) => {
               const selected = item === index;
               return (
@@ -228,10 +228,10 @@ export function DexToolbar({
                     role="option"
                     aria-selected={selected}
                     href={`/dex/${hit.id}`}
-                    className={`flex min-h-16 items-center gap-3 px-3 py-2 ${selected ? "bg-gradient-to-r from-rose/30 to-teal/25" : "hover:bg-gradient-to-r hover:from-rose/20 hover:to-teal/15"}`}
+                    className={`flex min-h-16 items-center gap-3 px-3 py-2 ${selected ? "bg-accent/10" : "hover:bg-soft"}`}
                     onMouseDown={(event) => event.preventDefault()}
                   >
-                    <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-10 shrink-0 rounded-md bg-[#f4efe6] object-contain" />
+                    <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-10 shrink-0 rounded-md bg-soft object-contain" />
                     <span className="min-w-0">
                       <span className="line-clamp-1 text-[15px] font-semibold leading-snug">{hit.cardName || hit.title}</span>
                       <span className="mt-0.5 block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>

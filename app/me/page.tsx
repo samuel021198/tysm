@@ -25,7 +25,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         {viewer.avatarUrl ? (
           <img src={viewer.avatarUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" />
         ) : (
-          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-2xl font-bold text-[#1b1418]">
+          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-accent text-2xl font-bold text-white">
             {viewer.nickname.slice(0, 1)}
           </span>
         )}

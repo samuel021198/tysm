@@ -4,46 +4,44 @@
 
 :root {
   color-scheme: light;
-  --bg: #f3eef1;
-  --card: #fffcfd;
-  --ink: #221820;
-  --muted: #7a6c74;
-  --line: rgba(36, 24, 32, 0.08);
-  --link: #1a6474;
-  --soft: #f6eef2;
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: rgba(15, 23, 42, 0.08);
+  --accent: #0f766e;
+  --link: #0f766e;
+  --soft: #f1f5f9;
   --danger: #9e2d3a;
   --ok: #1f7a62;
-  --wash-rose: rgba(196, 152, 178, 0.34);
-  --wash-teal: rgba(124, 185, 200, 0.26);
-  --shadow: 0 1px 1px rgba(34, 24, 32, 0.04), 0 14px 32px rgba(168, 120, 146, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  --field: #fffcfd;
-  --field-border: #7d6272;
-  --field-border-hover: #6e5564;
-  --field-placeholder: #6a5a64;
-  --field-focus: #1a6474;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.05);
+  --field: #ffffff;
+  --field-border: #64748b;
+  --field-border-hover: #475569;
+  --field-placeholder: #64748b;
+  --field-focus: #0f766e;
   --tab-h: calc(4.25rem + env(safe-area-inset-bottom));
   --header-h: calc(3.5rem + env(safe-area-inset-top));
 }
 
 .dark {
   color-scheme: dark;
-  --bg: #100e10;
-  --card: #1b171a;
-  --ink: #f7f2f4;
-  --muted: #b3a6ae;
-  --line: rgba(255, 255, 255, 0.08);
-  --link: #8ed0de;
-  --soft: #261f24;
-  --danger: #ff8b98;
-  --ok: #7ddcb8;
-  --wash-rose: rgba(196, 152, 178, 0.14);
-  --wash-teal: rgba(124, 185, 200, 0.1);
-  --shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 36px rgba(0, 0, 0, 0.42);
-  --field: #2c2428;
-  --field-border: #b892a4;
-  --field-border-hover: #c498b2;
-  --field-placeholder: #c4b8be;
-  --field-focus: #8ed0de;
+  --bg: #0f172a;
+  --card: #1e293b;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --line: rgba(248, 250, 252, 0.1);
+  --accent: #0f766e;
+  --link: #2dd4bf;
+  --soft: #334155;
+  --danger: #fda4af;
+  --ok: #6ee7b7;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --field: #1e293b;
+  --field-border: #94a3b8;
+  --field-border-hover: #cbd5e1;
+  --field-placeholder: #94a3b8;
+  --field-focus: #2dd4bf;
 }
 
 @media (min-width: 768px) {
@@ -61,9 +59,7 @@ html {
 body {
   min-height: 100vh;
   background-color: var(--bg);
-  background-image:
-    radial-gradient(880px 420px at -8% -12%, var(--wash-rose), transparent 58%),
-    radial-gradient(760px 380px at 108% -18%, var(--wash-teal), transparent 52%);
+  background-image: none;
   color: var(--ink);
   font-family: var(--font-sans), "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   line-height: 1.55;
@@ -90,13 +86,19 @@ h2,
 }
 
 .site-header {
-  background-color: var(--bg);
+  background-color: var(--card);
   background-image: none;
+  border-bottom: 1px solid var(--line);
 }
 
 ::selection {
-  background: #e7c3d2;
-  color: #1b1418;
+  background: #ccfbf1;
+  color: #0f172a;
+}
+
+.dark ::selection {
+  background: #134e4a;
+  color: #f8fafc;
 }
 
 a {
@@ -127,11 +129,11 @@ svg {
 .accent::after {
   content: "";
   display: block;
-  width: 2.35rem;
-  height: 3px;
-  margin-top: 0.5rem;
+  width: 1.75rem;
+  height: 2px;
+  margin-top: 0.45rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, #c498b2, #7cb9c8);
+  background: var(--accent);
 }
 
 .panel {
@@ -145,8 +147,8 @@ svg {
   top: 0;
   right: 0;
   left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #c498b2, #7cb9c8);
+  height: 2px;
+  background: var(--accent);
 }
 
 .menu-row {
@@ -160,8 +162,8 @@ svg {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 3px;
-  background: linear-gradient(#c498b2, #7cb9c8);
+  width: 2px;
+  background: var(--accent);
 }
 
 .empty {
@@ -174,23 +176,24 @@ svg {
   text-align: center;
   color: var(--muted);
   background: var(--card);
-  border-radius: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
   box-shadow: var(--shadow);
 }
 
 .empty::before {
   content: "";
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #c498b2, #7cb9c8);
-  box-shadow: 0 10px 20px rgba(124, 185, 200, 0.32);
+  background: var(--soft);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 
-/* --soft is about 1:1 with the page wash, so it cannot outline a control. */
+/* --soft sits next to the page color, so a field needs its own fill and border. */
 .field {
-  @apply w-full min-h-12 rounded-2xl text-base text-ink outline-none transition;
-  border: 2px solid var(--field-border);
+  @apply w-full min-h-12 rounded-xl text-base text-ink outline-none transition;
+  border: 1.5px solid var(--field-border);
   background-color: var(--field);
   padding: 0.5rem 1rem;
   color-scheme: inherit;
@@ -221,40 +224,27 @@ svg {
 }
 
 .btn-primary {
-  background-image: linear-gradient(105deg, #c498b2 0%, #a87590 46%, #3a8fa4 100%);
-  color: #1b1418;
-  box-shadow: 0 10px 22px rgba(58, 143, 164, 0.34);
+  background: #0f766e;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
 .sell-cta {
-  /* Same hues as #C498B2 → #7CB9C8, pushed so the button stays readable on white. */
-  background-image: linear-gradient(135deg, #b76d96 0%, #3a8fa4 100%);
-  color: #1b1418;
-  box-shadow:
-    0 0 0 3px var(--card),
-    0 0 0 5px #c498b2,
-    0 12px 22px rgba(58, 143, 164, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.dark .sell-cta {
-  box-shadow:
-    0 0 0 3px var(--card),
-    0 0 0 5px #7cb9c8,
-    0 12px 22px rgba(124, 185, 200, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  background: #115e59;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
 }
 
 .btn-ghost {
-  background: #fffdfb;
-  color: #1b1418;
-  box-shadow: inset 0 0 0 2px #5c3a4a;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: inset 0 0 0 2px #64748b;
 }
 
 .dark .btn-ghost {
-  background: #2a2226;
-  color: #fff8f4;
-  box-shadow: inset 0 0 0 2px #f0d0dc;
+  background: #1e293b;
+  color: #f8fafc;
+  box-shadow: inset 0 0 0 2px #94a3b8;
 }
 
 .btn-ghost.text-danger {
@@ -270,7 +260,8 @@ svg {
 
 .surface {
   background: var(--card);
-  border-radius: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
   box-shadow: var(--shadow);
 }
 
@@ -278,7 +269,7 @@ svg {
   width: 1.5rem;
   height: 1.5rem;
   border: 2px solid var(--line);
-  border-top-color: #7cb9c8;
+  border-top-color: var(--accent);
   border-radius: 999px;
   animation: spin 0.8s linear infinite;
 }

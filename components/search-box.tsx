@@ -374,7 +374,7 @@ export function SearchBox({
                         }}
                       >
                         {label}
-                        {tab === id ? <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-rose to-teal" /> : null}
+                        {tab === id ? <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-accent" /> : null}
                       </button>
                     ))}
                   </div>

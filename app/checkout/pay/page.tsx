@@ -36,7 +36,7 @@ export default async function PayPage({ searchParams }: { searchParams: Promise<
           <section key={order.id} className="surface grid gap-3 p-4">
             {order.items.map((item) => (
               <div key={item.id} className="flex gap-3">
-                <img src={item.imageUrl || "/demo/back.svg"} alt="" className="h-20 w-16 rounded-xl bg-[#f4efe6] object-contain" />
+                <img src={item.imageUrl || "/demo/back.svg"} alt="" className="h-20 w-16 rounded-xl bg-soft object-contain" />
                 <div className="text-sm">
                   <p className="font-medium">{item.title}</p>
                   <p className="text-muted">{order.seller.nickname} · × {item.quantity}</p>

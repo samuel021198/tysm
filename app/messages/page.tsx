@@ -32,7 +32,7 @@ export default async function MessagesPage() {
           return (
             <li key={thread.id}>
               <Link href={`/messages/${thread.id}`} className="surface flex min-h-[4.5rem] items-center gap-3 px-3 py-3">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-base font-bold text-[#1b1418]">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent text-base font-bold text-white">
                   {other.nickname.slice(0, 1)}
                 </span>
                 <span className="min-w-0 flex-1">

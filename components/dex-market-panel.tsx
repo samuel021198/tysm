@@ -183,7 +183,7 @@ export function MarketFacts({ locale, market }: { locale: Locale; market: SnkrMa
             : tx(locale, `${market.saleCount} 宗成交`, `${market.saleCount} sales`)}
         </p>
       </div>
-      <div className={`p-3 ${market.premium != null ? "surface ring-2 ring-teal" : "surface"}`}>
+      <div className={`p-3 ${market.premium != null ? "surface ring-2 ring-accent" : "surface"}`}>
         <p className="text-xs text-muted">{tx(locale, "PSA 10 對比 A 級", "PSA 10 vs grade A")}</p>
         <p className={`price mt-1 text-2xl leading-none ${market.premium != null ? "text-ok" : "text-muted"}`}>
           {market.premium != null ? `${market.premium.toFixed(1)}×` : "—"}
@@ -247,7 +247,7 @@ export async function DexSales({
         {listings.map((listing) => (
           <li key={listing.id}>
             <Link href={`/listing/${listing.id}`} className="surface flex min-h-[5.5rem] items-center gap-3 p-3">
-              <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-[#f4efe6] object-contain" />
+              <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
               <span className="min-w-0 flex-1">
                 <span className="line-clamp-2 block font-semibold">{listing.title}</span>
                 <span className="text-sm text-muted">
@@ -261,7 +261,7 @@ export async function DexSales({
         {samples.map((trade) => (
           <li key={`${trade.seller}-${trade.grade}`}>
             <div className="surface flex min-h-[5.5rem] items-center gap-3 p-3">
-              <img src={catalogImageSrc(imageUrl)} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-[#f4efe6] object-contain" />
+              <img src={catalogImageSrc(imageUrl)} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
               <span className="min-w-0 flex-1">
                 <span className="line-clamp-2 block font-semibold">{nameEn}</span>
                 <span className="text-sm text-muted">

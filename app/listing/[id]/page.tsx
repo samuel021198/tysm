@@ -342,7 +342,7 @@ export default async function ListingPage({
         </div>
         <div className="text-sm">
           <Link href={`/shop/${listing.sellerId}`} className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-sm font-bold text-[#1b1418]">
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-accent text-sm font-bold text-white">
               {listing.seller.nickname.slice(0, 1)}
             </span>
             <span>
