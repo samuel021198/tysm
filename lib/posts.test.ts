@@ -176,5 +176,10 @@ const menu = readFileSync(new URL("../components/post-menu.tsx", import.meta.url
 assert(["剷除", "分享", "隱藏", "舉報", "編輯"].every((label) => menu.includes(label)), "menu labels");
 assert(menu.includes("deletePost") && menu.includes("hideFromFeed") && menu.includes("reportAction"), "menu reuses delete, hide, and report");
 assert(menu.includes("navigator.share") && menu.includes("clipboard"), "share falls back to copying the link");
+assert(menu.includes("button = true") && menu.includes("onPointerDown") && menu.includes("onContextMenu"), "the ellipsis can be omitted; long-press and the context menu stay");
+const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
+const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
+assert(profileBoard.includes("button={false}") && !profileBoard.includes("⋯"), "profile thumbnails hide the ellipsis");
+assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 
 console.log("posts.test.ts ok");

@@ -16,6 +16,7 @@ export function PostMenu({
   sharePath,
   next,
   corner = "right",
+  button = true,
   children,
 }: {
   locale: Locale;
@@ -26,6 +27,7 @@ export function PostMenu({
   sharePath: string;
   next: string;
   corner?: "left" | "right";
+  button?: boolean;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -193,21 +195,23 @@ export function PostMenu({
       }}
     >
       {children}
-      <button
-        type="button"
-        className={trigger}
-        aria-label={tx(locale, "更多", "More")}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          setCopied(false);
-          setOpen(true);
-        }}
-      >
-        ⋯
-      </button>
+      {button ? (
+        <button
+          type="button"
+          className={trigger}
+          aria-label={tx(locale, "更多", "More")}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setCopied(false);
+            setOpen(true);
+          }}
+        >
+          ⋯
+        </button>
+      ) : null}
       {open ? (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0F172A]/40 md:items-center" onClick={() => setOpen(false)}>
           <div
