@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { HIDDEN_POSTS_COOKIE, parseHiddenPostIds } from "@/lib/hide-posts";
 import { tx } from "@/lib/i18n";
 import { profileContent } from "@/lib/profile";
 import { Flash } from "@/components/shell";
@@ -10,7 +12,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) redirect("/login?next=/me");
-  const board = await profileContent(viewer.id, viewer.id);
+  const board = await profileContent(viewer.id, viewer.id, parseHiddenPostIds((await cookies()).get(HIDDEN_POSTS_COOKIE)?.value));
   const locale = prefs.locale;
   return (
     <div className="mx-auto grid max-w-3xl gap-3">

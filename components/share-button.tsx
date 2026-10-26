@@ -2,6 +2,24 @@
 
 import { useState } from "react";
 
+export async function shareUrl(path: string): Promise<"shared" | "copied" | "aborted" | "failed"> {
+  const url = new URL(path, window.location.origin).toString();
+  try {
+    if (navigator.share) {
+      await navigator.share({ url });
+      return "shared";
+    }
+  } catch {
+    return "aborted";
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    return "copied";
+  } catch {
+    return "failed";
+  }
+}
+
 export function ShareButton({ path, label, copiedLabel, icon = false }: { path: string; label: string; copiedLabel: string; icon?: boolean }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -10,22 +28,10 @@ export function ShareButton({ path, label, copiedLabel, icon = false }: { path: 
       aria-label={icon ? (copied ? copiedLabel : label) : undefined}
       className={icon ? "grid h-10 w-10 shrink-0 place-items-center rounded-full bg-soft text-ink" : "inline-flex h-10 flex-1 items-center justify-center text-sm font-medium leading-none"}
       onClick={async () => {
-        const url = new URL(path, window.location.origin).toString();
-        try {
-          if (navigator.share) {
-            await navigator.share({ url });
-            return;
-          }
-        } catch {
-          return;
-        }
-        try {
-          await navigator.clipboard.writeText(url);
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 1500);
-        } catch {
-          setCopied(false);
-        }
+        const result = await shareUrl(path);
+        if (result !== "copied") return;
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1500);
       }}
     >
       {icon ? (

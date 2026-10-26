@@ -11,6 +11,7 @@ import {
   searchScore,
   suggestPanelDismiss,
   textHits,
+  userQueryWhere,
 } from "./search";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -33,6 +34,8 @@ assert(searchScore(pokemon, "寶可夢") > searchScore(duck, "Charizard"), "char
 assert(searchScore(duck, "可達鴨") >= 5, "english-only Psyduck title scores for 可達鴨");
 assert(searchScore(pokemon, "Charizard") >= 4, "chinese card name scores for Charizard");
 
+assert(JSON.stringify(userQueryWhere("卡牌阿明")).includes("卡牌阿明"), "user search matches the nickname");
+assert(JSON.stringify(userQueryWhere("   ")).includes('"in":[]'), "blank user search matches nothing");
 assert(searchHref("可達鴨", { cat: "pokemon" }).startsWith("/search?q=") && searchHref("可達鴨", { cat: "pokemon" }).endsWith("&cat=pokemon"), "search href keeps the query and category");
 assert(decodeURIComponent(searchHref("可達鴨", { cat: "pokemon" }).split("q=")[1]?.split("&")[0] || "") === "可達鴨", "search href round-trips Chinese");
 assert(textHits("寶可夢", "Pokémon"), "寶可夢 hits the English category name");

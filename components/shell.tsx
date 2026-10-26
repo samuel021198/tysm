@@ -12,12 +12,14 @@ export function Header({
   user,
   cartCount,
   unread,
+  messages = 0,
 }: {
   locale: Locale;
   theme: "light" | "dark";
   user: User | null;
   cartCount: number;
   unread: number;
+  messages?: number;
 }) {
   const nav = navLabels(locale);
   return (
@@ -44,6 +46,10 @@ export function Header({
               <Icon name="bell" className="h-[18px] w-[18px]" />
               {unread ? <Count n={unread} /> : null}
             </Link>
+            <Link href="/messages" aria-label={nav.messages} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
+              <Icon name="messages" className="h-[18px] w-[18px]" />
+              {messages ? <Count n={messages} /> : null}
+            </Link>
           </div>
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
             <Link className="hover:text-ink" href="/market">{nav.search}</Link>
@@ -51,7 +57,7 @@ export function Header({
             <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
             <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
             <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
-            <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
+            <Link className="hover:text-ink" href="/messages">{nav.messages}{messages ? ` (${messages})` : ""}</Link>
             <Link className="hover:text-ink" href="/notifications">{nav.notifications}{unread ? ` (${unread})` : ""}</Link>
             {user?.role === "ADMIN" ? <Link className="hover:text-ink" href="/admin">{nav.admin}</Link> : null}
             {user ? <Link className="font-medium text-ink" href="/me">{user.nickname}</Link> : <Link className="font-medium text-ink" href="/login">{nav.login}</Link>}

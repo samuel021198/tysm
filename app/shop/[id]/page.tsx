@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { HIDDEN_POSTS_COOKIE, parseHiddenPostIds } from "@/lib/hide-posts";
 import { tx } from "@/lib/i18n";
 import { onTimePercent } from "@/lib/shipping";
 import { isBlocked } from "@/lib/social";
@@ -31,7 +33,7 @@ export default async function ShopPage({
     prisma.order.count({ where: { sellerId: seller.id, status: "COMPLETED" } }),
     viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: seller.id } } }) : null,
     viewer ? prisma.block.findUnique({ where: { blockerId_blockedId: { blockerId: viewer.id, blockedId: seller.id } } }) : null,
-    profileContent(seller.id, viewer?.id ?? null),
+    profileContent(seller.id, viewer?.id ?? null, parseHiddenPostIds((await cookies()).get(HIDDEN_POSTS_COOKIE)?.value)),
   ]);
   const onTime = onTimePercent(shipped);
   const rating = board.reviews.length ? board.reviews.reduce((sum, review) => sum + review.stars, 0) / board.reviews.length : null;

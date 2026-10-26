@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { HIDDEN_POSTS_COOKIE, parseHiddenPostIds, splitHiddenKeys } from "@/lib/hide-posts";
 import { activeWhere } from "@/lib/feed";
 import { loadHomeFeed } from "@/lib/profile";
 import { loadStoryRings } from "@/lib/story-feed";
@@ -21,8 +23,9 @@ export default async function HomePage({
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const hidden = await hiddenUserIds(viewer?.id ?? null);
+  const hiddenKeys = splitHiddenKeys(parseHiddenPostIds((await cookies()).get(HIDDEN_POSTS_COOKIE)?.value));
   const [{ primary, suggested, linkedListings }, storyFeed] = await Promise.all([
-    loadHomeFeed(viewer?.id ?? null, hidden),
+    loadHomeFeed(viewer?.id ?? null, hidden, hiddenKeys.posts),
     loadStoryRings(viewer?.id ?? null, hidden),
   ]);
   const linked = [...linkedListings];
@@ -60,26 +63,28 @@ export default async function HomePage({
       })
     : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
-  const listingCards = extras.map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
+  const hiddenListings = new Set(hiddenKeys.listings);
+  const listingCards = extras
+    .map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }))
+    .filter((post) => !hiddenListings.has(post.id));
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="page-title mb-0">{tx(prefs.locale, "主頁", "Home")}</h1>
+      <div className="flex justify-end">
         <Link href="/add?kind=post" className="text-sm font-semibold text-link">
           {tx(prefs.locale, "寫貼文", "New post")}
         </Link>
       </div>
       {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
-        <p className="empty">{tx(prefs.locale, "未有動態。發一則貼文，或者上架一張卡。", "No posts yet. Write a post, or list a card.")}</p>
+        <p className="py-6 text-center text-sm text-muted">{tx(prefs.locale, "未有動態。", "No posts yet.")}</p>
       ) : null}
       {primary.length ? (
         <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
           {primary.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" owned={viewer?.id === post.author.id} />
           ))}
         </section>
       ) : null}
@@ -87,10 +92,10 @@ export default async function HomePage({
         <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "建議", "Suggested")}</h2>
           {suggested.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" owned={viewer?.id === post.author.id} />
           ))}
           {listingCards.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" owned={viewer?.id === post.author.id} />
           ))}
         </section>
       ) : null}

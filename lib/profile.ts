@@ -32,13 +32,15 @@ const postInclude = {
   },
 } as const;
 
-export async function profileContent(ownerId: string, viewerId: string | null) {
+export async function profileContent(ownerId: string, viewerId: string | null, hiddenPostIds: string[] = []) {
   const isSelf = viewerId === ownerId;
   const [postRows, itemRows, listings, reviewRows, drafts, followers, following, favs] = await Promise.all([
     prisma.post.findMany({
       where: {
         authorId: ownerId,
         ...(isSelf ? {} : { OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }] }),
+        // Own grid keeps hidden posts so 剷除 stays reachable. Other grids drop them.
+        ...(isSelf || !hiddenPostIds.length ? {} : { id: { notIn: hiddenPostIds } }),
       },
       include: postInclude,
       orderBy: { createdAt: "desc" },
@@ -191,7 +193,7 @@ function homeVisible(viewerId: string | null, hidden: string[]) {
  * Following first, then a short suggestion bucket.
  * ponytail: 8 + 8 posts, one photo, the viewer's like row only. Upgrade path: cursor pagination.
  */
-export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
+export async function loadHomeFeed(viewerId: string | null, hidden: string[], hiddenPostIds: string[] = []) {
   const follows = viewerId
     ? await prisma.follow.findMany({ where: { followerId: viewerId }, select: { sellerId: true } })
     : [];
@@ -202,7 +204,13 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
   const [primaryRows, suggestedRows] = await Promise.all([
     viewerId
       ? prisma.post.findMany({
-          where: { AND: [homeVisible(viewerId, hidden), { authorId: { in: [viewerId, ...followedIds] } }] },
+          where: {
+            AND: [
+              homeVisible(viewerId, hidden),
+              { authorId: { in: [viewerId, ...followedIds] } },
+              ...(hiddenPostIds.length ? [{ id: { notIn: hiddenPostIds } }] : []),
+            ],
+          },
           include,
           orderBy: { createdAt: "desc" },
           take: HOME_BUCKET,
@@ -215,6 +223,7 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[]) {
             OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }],
           },
           ...(exclude.length ? [{ authorId: { notIn: exclude } }] : []),
+          ...(hiddenPostIds.length ? [{ id: { notIn: hiddenPostIds } }] : []),
         ],
       },
       include,

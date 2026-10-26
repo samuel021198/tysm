@@ -59,6 +59,17 @@ function fieldContains(needle: string): Prisma.StringFilter {
   return { contains: needle, mode: "insensitive" };
 }
 
+export function userQueryWhere(query: string): Prisma.UserWhereInput {
+  const needles = searchNeedles(query);
+  if (!needles.length) return { id: { in: [] } };
+  const clause = (needle: string): Prisma.UserWhereInput => {
+    const contains = fieldContains(needle);
+    return { OR: [{ nickname: contains }, { bio: contains }] };
+  };
+  if (needles.length === 1) return clause(needles[0]);
+  return { OR: needles.map(clause) };
+}
+
 export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
   const needles = searchNeedles(query);
   if (!needles.length) return {};

@@ -46,7 +46,7 @@ export default async function MarketPage({
         className="flex h-10 w-full items-center gap-2 rounded-full border border-line bg-card pl-3 pr-3.5 text-sm shadow-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
       >
         <Icon name="search" className="h-4 w-4 shrink-0 text-muted" />
-        <span className="truncate text-[var(--field-placeholder)]">{tx(prefs.locale, "搜尋任何物品", "Search for anything")}</span>
+        <span className="truncate text-[var(--field-placeholder)]">{tx(prefs.locale, "用戶或放售", "Users or listings")}</span>
       </Link>
       <section className="mt-5" aria-labelledby="market-cats">
         <h2 id="market-cats" className="mb-2 text-sm font-semibold text-muted">

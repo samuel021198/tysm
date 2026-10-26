@@ -24,10 +24,14 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
         pathname === "/market" ||
         pathname.startsWith("/market/") ||
         pathname.startsWith("/listing/") ||
-        pathname.startsWith("/search") ||
         pathname.startsWith("/shop"),
     },
-    { href: "/messages", label: tx(locale, "聊天", "Chat"), icon: "messages" as const, on: pathname.startsWith("/messages") },
+    {
+      href: "/search",
+      label: tx(locale, "搜尋", "Search"),
+      icon: "search" as const,
+      on: pathname === "/search" || pathname.startsWith("/search/"),
+    },
     {
       href: meHref,
       label: tx(locale, "個人", "Profile"),
@@ -58,20 +62,18 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "book" | "bag" | "messages" | "me";
+  icon: "home" | "book" | "bag" | "search" | "me";
   on: boolean;
 }) {
   return (
     <li className="h-full">
       <Link
         href={href}
+        aria-label={label}
         aria-current={on ? "page" : undefined}
-        className={`flex h-full flex-col items-center justify-center gap-0.5 text-[11px] font-medium leading-none ${on ? "text-ink" : "text-muted"}`}
+        className={`flex h-full items-center justify-center ${on ? "text-ink" : "text-muted"}`}
       >
-        <span className="grid h-[18px] w-[18px] place-items-center">
-          <Icon name={icon} className="h-[18px] w-[18px]" strokeWidth={on ? 2 : 1.6} />
-        </span>
-        <span>{label}</span>
+        <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
       </Link>
     </li>
   );

@@ -79,7 +79,7 @@ export function navLabels(locale: Locale) {
     sell: en ? "Add" : "新增",
     cart: en ? "Cart" : "購物車",
     orders: en ? "Orders" : "訂單",
-    messages: en ? "Chat" : "聊天",
+    messages: en ? "Messages" : "訊息",
     login: en ? "Log in" : "登入",
     logout: en ? "Log out" : "登出",
     admin: en ? "Admin" : "管理",

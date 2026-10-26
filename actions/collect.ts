@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Grader, RawGrade } from "@prisma/client";
 import { getViewer } from "@/lib/auth";
@@ -9,6 +10,7 @@ import { hkdToCents, isAllowedMediaUrl } from "@/lib/format";
 import { PhotoStoreError, storeUploadedImages } from "@/lib/r2";
 import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
+import { HIDDEN_POSTS_COOKIE, parseHiddenPostIds, withHiddenPost } from "@/lib/hide-posts";
 import { collectionVisibility, ownedPostId } from "@/lib/posts";
 import { parseGrade } from "@/lib/rules";
 import { isBlocked } from "@/lib/social";
@@ -276,6 +278,19 @@ export async function deletePost(formData: FormData) {
   revalidatePath(`/shop/${user.id}`);
   revalidatePath(`/post/${postId}`);
   redirect("/me?tab=posts&ok=deleted");
+}
+
+export async function hidePost(formData: FormData) {
+  const jar = await cookies();
+  const next = withHiddenPost(parseHiddenPostIds(jar.get(HIDDEN_POSTS_COOKIE)?.value), String(formData.get("key") || ""));
+  jar.set(HIDDEN_POSTS_COOKIE, next.join(","), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+  revalidatePath("/", "layout");
 }
 
 export async function toggleCollectionVisibility(formData: FormData) {

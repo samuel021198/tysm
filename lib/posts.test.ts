@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { parseHiddenPostIds, splitHiddenKeys, withHiddenPost } from "./hide-posts";
 import { cardDisplayName, collectionVisibility, listingSuggestionCard, ownedPostId, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -145,5 +146,18 @@ const deletePost = collect.slice(deleteStart, deleteEnd);
 assert(deletePost.includes("ownedPostId"), "delete checks the author");
 assert(deletePost.includes("authorId: user.id"), "the delete query is scoped to the viewer");
 assert(!deletePost.includes("collectionItem.delete") && !deletePost.includes("listing.delete"), "delete leaves the collection and listing");
+
+assert(withHiddenPost(["post_a"], "post_b").join() === "post_a,post_b", "hide appends a post");
+assert(withHiddenPost(["post_a", "post_b"], "post_a").join() === "post_b,post_a", "hiding again moves it to the end");
+assert(withHiddenPost(["post_a"], "bad id").join() === "post_a", "hide ignores a bad id");
+assert(parseHiddenPostIds("post_a,,post_b,post_a").join() === "post_a,post_b", "hide cookie drops blanks and dupes");
+assert(parseHiddenPostIds(Array.from({ length: 70 }, (_, i) => `p${i}`).join(",")).length === 60, "hide cookie keeps the latest 60");
+const split = splitHiddenKeys(["post_a", "listing-seed", "post_b"]);
+assert(split.posts.join() === "post_a,post_b" && split.listings.join() === "listing-seed", "listing suggestions hide separately from posts");
+
+const menu = readFileSync(new URL("../components/post-menu.tsx", import.meta.url), "utf8");
+assert(menu.includes("剷除") && menu.includes("分享") && menu.includes("隱藏"), "post menu actions");
+assert(menu.includes("deletePost") && menu.includes("hidePost") && menu.includes("shareUrl"), "menu reuses delete, hide, and share");
+assert(menu.includes("deleteId ?"), "delete is omitted when the post is not yours");
 
 console.log("posts.test.ts ok");

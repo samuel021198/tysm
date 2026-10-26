@@ -26,8 +26,10 @@ const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), 
 const home = tab.indexOf('href: "/"');
 const dex = tab.indexOf('href: "/dex"');
 const market = tab.indexOf('href: "/market"');
-const chat = tab.indexOf('href: "/messages"');
-assert(home >= 0 && home < dex && dex < market && market < chat, "tab order Home, Dex, Market, Chat");
+const search = tab.indexOf('href: "/search"');
+assert(home >= 0 && home < dex && dex < market && market < search, "tab order Home, Dex, Market, Search");
+assert(!tab.includes('href: "/messages"'), "chat is not a bottom tab");
+assert(tab.includes('icon: "search"') && !tab.includes("<span>{label}</span>"), "search replaces chat and the bar is icons only");
 assert(tab.includes("圖鑑") && tab.includes("賣場") && tab.includes('icon: "bag"'), "dex stays, market uses the bag");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 
@@ -35,6 +37,7 @@ const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), 
 const corner = shell.indexOf('variant="corner"');
 const logo = shell.indexOf('alt="TYSM"');
 assert(corner >= 0 && logo >= 0 && corner < logo, "mobile add control sits at the top left of the header");
+assert((shell.match(/href="\/messages"/g) || []).length >= 2, "messages stay in the header on mobile and desktop");
 assert(shell.includes('variant="header"'), "desktop header still opens create");
 assert(!shell.includes("add-sheet"), "shell no longer uses the bottom sheet");
 

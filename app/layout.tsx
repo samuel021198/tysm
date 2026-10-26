@@ -39,19 +39,26 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await connection();
   const [viewer, prefs] = await Promise.all([getViewer(), getPrefs()]);
-  const [cartCount, unread] = viewer
+  const [cartCount, unread, messages] = viewer
     ? await Promise.all([
         prisma.cartItem.count({ where: { userId: viewer.id } }),
         prisma.notification.count({ where: { userId: viewer.id, readAt: null } }),
+        prisma.message.count({
+          where: {
+            readAt: null,
+            senderId: { not: viewer.id },
+            thread: { OR: [{ buyerId: viewer.id }, { sellerId: viewer.id }] },
+          },
+        }),
       ])
-    : [0, 0];
+    : [0, 0, 0];
   return (
     <html lang={prefs.locale === "en" ? "en" : "zh-HK"} className={`${sans.variable} ${display.variable}${prefs.theme === "dark" ? " dark" : ""}`}>
       <body className="font-sans antialiased">
         <a className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2" href="#main">
           Skip
         </a>
-        <Header locale={prefs.locale} theme={prefs.theme} user={viewer} cartCount={cartCount} unread={unread} />
+        <Header locale={prefs.locale} theme={prefs.theme} user={viewer} cartCount={cartCount} unread={unread} messages={messages} />
         <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-3 md:px-4 md:py-5">
           {children}
         </main>
