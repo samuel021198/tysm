@@ -1,4 +1,4 @@
-import { catalogSuggestScore, catalogSuggestion, rankCatalogSuggestions, type CatalogSuggestCard } from "./catalog-suggest";
+import { catalogSuggestScore, catalogSuggestion, listingCatalogPrefill, rankCatalogSuggestions, type CatalogSuggestCard } from "./catalog-suggest";
 import { catalogCardMatches } from "./dex";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -177,5 +177,25 @@ assert(enPaste.map((row) => row.id).join("|") === "real-en", "a pasted english t
 const ranked = rankCatalogSuggestions([zard, quiet, hot], "pika", 2);
 assert(ranked.map((row) => row.id).join("|") === "card_hot|card_quiet", "typeahead is hot-first within the name");
 assert(rankCatalogSuggestions([zard, hot], "charizard", 12)[0]?.id === "card_zard", "an exact name stays first");
+
+const linked = listingCatalogPrefill({
+  ...card({
+    id: "op01",
+    nameEn: "Roronoa Zoro",
+    collectorNumber: "OP01-001",
+    numberKey: "1",
+    printRegion: "WEST",
+    rarity: "L",
+    setNameEn: "Romance Dawn",
+    setCode: "OP-01",
+    releaseDate: "2022-12-02",
+    game: "ONE_PIECE",
+  }),
+  game: "ONE_PIECE",
+});
+assert(linked.categorySlug === "one-piece" && linked.catalogCardId === "op01", "dex prefill keeps the catalog id and sell category");
+assert(linked.catalogTitle.includes("OP-01") && linked.setName === "Romance Dawn" && linked.cardName === "Roronoa Zoro", "prefill summary uses the set code title and the set name");
+assert(linked.language === "英文" && linked.collectorNumber === "OP01-001", "prefill keeps language and collector number");
+assert(rankCatalogSuggestions([card({ id: "luffy", nameEn: "Monkey.D.Luffy", nameJa: "モンキー・D・ルフィ", game: "ONE_PIECE" }), zard], "路飛", 1)[0]?.id === "luffy", "路飛 suggests the one piece printing");
 
 console.log("catalog suggest ok");

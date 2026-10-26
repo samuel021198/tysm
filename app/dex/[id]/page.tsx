@@ -8,12 +8,11 @@ import { compactSetLine } from "@/lib/card-line";
 import { catalogTitleFromCard } from "@/lib/card-title";
 import { catalogImageSrc } from "@/lib/catalog-image";
 import { prisma } from "@/lib/db";
-import { demoMarket, usesSampleMarket } from "@/lib/demo-dex";
 import { gameHasRegion, gameParam, numberKey, parseGame, regionLabel, setDisplayName } from "@/lib/dex";
 import { getDexCard } from "@/lib/dex-query";
 import { tx, type Locale } from "@/lib/i18n";
-import { parseTrendRange, type SnkrCardRef, type TrendRange } from "@/lib/snkrdunk";
-import { DexSales, DexStory, LiveMarketAside, LiveMarketFacts, LivePricePanel, MarketAside, MarketFacts, MarketSkeleton, PricePanel } from "@/components/dex-market-panel";
+import { parseTrendRange, snkrEnabled, type SnkrCardRef, type TrendRange } from "@/lib/snkrdunk";
+import { DexSales, DexStory, GameMarketNotice, GameMarketPanel, LiveMarketAside, LiveMarketFacts, LivePricePanel, MarketSkeleton } from "@/components/dex-market-panel";
 import { ShareButton } from "@/components/share-button";
 import { Flash } from "@/components/shell";
 
@@ -54,7 +53,8 @@ export default async function DexCardPage({
   const title = cardName(card, prefs.locale);
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const back = dexBack(game, card.printRegion, card.set.id);
-  const sample = usesSampleMarket(card.game) ? demoMarket(card.id) : null;
+  const quoted = snkrEnabled(card.game);
+  const sellHref = `/sell?catalogCardId=${encodeURIComponent(card.id)}`;
   const ref: SnkrCardRef = {
     game: card.game,
     printRegion: card.printRegion,
@@ -115,7 +115,10 @@ export default async function DexCardPage({
           <summary aria-label={tx(prefs.locale, "更多", "More")} className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-full text-lg font-bold [&::-webkit-details-marker]:hidden">
             ⋯
           </summary>
-          <div className="absolute right-0 z-20 mt-1 w-40 rounded-2xl bg-card p-1 shadow-card">
+          <div className="absolute right-0 z-20 mt-1 w-44 rounded-2xl bg-card p-1 shadow-card">
+            <Link href={sellHref} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold">
+              {tx(prefs.locale, "我要放售呢張", "List this card")}
+            </Link>
             <Link href={back} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold">
               {tx(prefs.locale, "返回系列", "Back to the set")}
             </Link>
@@ -125,21 +128,19 @@ export default async function DexCardPage({
 
       <div className="mt-3 grid grid-cols-[minmax(0,42%)_minmax(0,1fr)] items-start gap-3">
         <img src={catalogImageSrc(card.imageUrl)} alt={title} width={240} height={336} decoding="async" className="aspect-[63/88] w-full rounded-2xl bg-[#f4efe6] object-contain shadow-card" />
-        {sample ? (
-          <MarketAside locale={prefs.locale} market={sample} sample />
-        ) : (
+        {quoted ? (
           <Suspense fallback={<MarketSkeleton />}>
             <LiveMarketAside card={ref} locale={prefs.locale} />
           </Suspense>
+        ) : (
+          <GameMarketNotice locale={prefs.locale} />
         )}
       </div>
-      {sample ? (
-        <MarketFacts locale={prefs.locale} market={sample} />
-      ) : (
+      {quoted ? (
         <Suspense fallback={null}>
           <LiveMarketFacts card={ref} locale={prefs.locale} />
         </Suspense>
-      )}
+      ) : null}
 
       <nav className="mt-5 flex border-b border-line" aria-label={tx(prefs.locale, "卡牌內容", "Card sections")}>
         {(
@@ -157,12 +158,12 @@ export default async function DexCardPage({
       </nav>
 
       {tab === "price" ? (
-        sample ? (
-          <PricePanel locale={prefs.locale} market={sample} range={range} cardId={card.id} sample />
-        ) : (
+        quoted ? (
           <Suspense fallback={<p className="empty">{tx(prefs.locale, "載入行情…", "Loading prices…")}</p>}>
             <LivePricePanel card={ref} locale={prefs.locale} range={range} cardId={card.id} />
           </Suspense>
+        ) : (
+          <GameMarketPanel locale={prefs.locale} />
         )
       ) : null}
       {tab === "data" ? (

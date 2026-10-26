@@ -2,7 +2,7 @@ import { catalogDisplayTitle, catalogTitleFromCard, rarityTitle } from "./card-t
 import { catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog-batch";
 import { catalogImageSrc, officialOpImageUrl } from "./catalog-image";
 import { catalogSuggestion } from "./catalog-suggest";
-import { catalogQueryTokens, catalogWhere, parseGame } from "./dex";
+import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogWhere, parseGame, type CatalogSearchCard } from "./dex";
 import { officialSet, parseOfficialCards, parseOfficialSeries } from "./op-official";
 import { mapOptcgCard, optcgExternalId, optcgNumberKey, optcgQueue, optcgSet } from "./optcg";
 import { mapRiftBulk, mapRiftCard, riftCollector } from "./riftbound";
@@ -101,9 +101,57 @@ assert(
 );
 
 const luffyTokens = catalogQueryTokens("One Piece OP01-001 Luffy");
-assert(luffyTokens.includes("Luffy") && luffyTokens.includes("OP01") && !luffyTokens.some((token) => token.toLowerCase() === "piece"), "game words drop out of a card query");
+assert(luffyTokens.includes("Luffy") && luffyTokens.includes("OP01-001") && !luffyTokens.some((token) => token.toLowerCase() === "piece"), "game words drop out of a card query");
 assert(JSON.stringify(catalogWhere("Zoro", "JP", "ONE_PIECE")).includes("ONE_PIECE"), "dex search can require a game");
 assert(!JSON.stringify(catalogWhere("Zoro", null)).includes("ONE_PIECE"), "a game filter is not implied");
+const opWhere = JSON.stringify(catalogWhere("OP-01", null, "ONE_PIECE"));
+assert(opWhere.includes("OP-01") && opWhere.includes("ONE_PIECE") && !opWhere.includes("numberKey"), "OP-01 searches the set code, not every card numbered 1");
+assert(JSON.stringify(catalogWhere("OP01", null, "ONE_PIECE")).includes("OP-01"), "OP01 still finds the hyphenated set code");
+const zoroCard: CatalogSearchCard = {
+  nameEn: "Roronoa Zoro",
+  nameJa: "ロロノア・ゾロ",
+  collectorNumber: "OP01-001",
+  numberKey: "1",
+  printRegion: "WEST",
+  rarity: "L",
+  setNameEn: "Romance Dawn",
+  setNameJa: "ロマンスドーン",
+  setCode: "OP-01",
+  releaseDate: "2022-12-02",
+};
+const otherOp: CatalogSearchCard = { ...zoroCard, collectorNumber: "EB01-003", numberKey: "3", setNameEn: "Memorial Collection", setCode: "EB-01" };
+assert(catalogCardMatches(zoroCard, "Romance Dawn") && catalogCardMatches(zoroCard, "OP-01") && catalogCardMatches(zoroCard, "OP01-001"), "one piece set name, set code, and collector number match");
+assert(!catalogCardMatches(otherOp, "OP-01") && !catalogCardMatches(otherOp, "Romance Dawn"), "OP-01 does not hit another set");
+assert(catalogCardMatches(zoroCard, "2022 One Piece OP-01 EN #OP01-001 Roronoa Zoro L"), "a pasted one piece title matches stored fields");
+assert(catalogNeedles("路飛").some((needle) => needle.toLowerCase() === "luffy"), "路飛 expands to the english name");
+assert(catalogCardMatches({ ...zoroCard, nameEn: "Monkey.D.Luffy", nameJa: "モンキー・D・ルフィ", collectorNumber: "OP01-003" }, "路飛"), "路飛 hits a luffy printing");
+const annie: CatalogSearchCard = {
+  nameEn: "Annie",
+  nameJa: "Annie",
+  collectorNumber: "001",
+  numberKey: "1",
+  printRegion: "WEST",
+  rarity: "Epic",
+  setNameEn: "Origins",
+  setNameJa: "Origins",
+  setCode: "OGN",
+  releaseDate: "2025-10-31",
+};
+assert(catalogCardMatches(annie, "Origins") && catalogCardMatches(annie, "OGN"), "riftbound set name and set code both match");
+const lebron: CatalogSearchCard = {
+  nameEn: "LeBron James",
+  nameJa: "LeBron James",
+  collectorNumber: "127",
+  numberKey: "127",
+  printRegion: "WEST",
+  rarity: null,
+  finish: "Los Angeles Lakers",
+  setNameEn: "2025-26 Topps Chrome Basketball",
+  setNameJa: "2025-26 Topps Chrome Basketball",
+  setCode: "TCB2526",
+  releaseDate: "2025-12-18",
+};
+assert(catalogCardMatches(lebron, "LeBron") && catalogCardMatches(lebron, "Chrome Basketball") && catalogCardMatches(lebron, "TCB2526"), "topps player, set name, and set code match");
 
 assert(optcgNumberKey("OP01-001_p1") === "1", "one piece number key uses the collector suffix");
 const base = mapOptcgCard(

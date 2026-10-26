@@ -183,7 +183,8 @@ export function SellForm({
   const ordered = useMemo(() => orderedCategories(categories), [categories]);
   const fallbackCategory = ordered.find((cat) => cat.slug === "pokemon")?.id || ordered[0]?.id || "";
   const editing = Boolean(initial?.listingId);
-  const [step, setStep] = useState(editing ? 3 : 0);
+  const fromDex = Boolean(initial?.catalogCardId || initial?.cardName);
+  const [step, setStep] = useState(editing ? 3 : fromDex ? 1 : 0);
   const [categoryId, setCategoryId] = useState(initial?.categoryId || fallbackCategory);
   const [price, setPrice] = useState(initial?.price || "");
   const [description, setDescription] = useState(initial?.description || "");
