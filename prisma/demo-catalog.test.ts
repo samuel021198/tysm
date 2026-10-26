@@ -118,6 +118,10 @@ assert(!authorizedBearer("demo-secret", "demo-secret"), "bearer requires the sch
 assert(!authorizedBearer("Bearer ", "demo-secret"), "empty bearer is refused");
 assert(!authorizedBearer("Bearer demo-secret", undefined), "missing secret is refused");
 assert(!authorizedBearer("Bearer demo-secret", ""), "blank secret is refused");
+const sweepRoute = readFileSync(new URL("../app/api/cron/sweep/route.ts", import.meta.url), "utf8");
+assert(sweepRoute.includes("authorizedBearer") && sweepRoute.includes("CRON_SECRET") && sweepRoute.includes("BOOTSTRAP_SECRET"), "cron sweep checks a bearer secret");
+assert(sweepRoute.includes("unconfigured") && sweepRoute.includes("unauthorized"), "cron sweep refuses a missing or wrong secret");
+assert(!/export async function GET\(\)\s*\{/.test(sweepRoute), "cron sweep is not an open handler");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,

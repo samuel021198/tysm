@@ -53,6 +53,9 @@ const ALIASES: readonly (readonly string[])[] = [
   ["洛奇亞", "ルギア", "lugia"],
   ["烈空坐", "レックウザ", "rayquaza"],
   ["伊布", "イーブイ", "eevee"],
+  ["路飛", "ルフィ", "luffy"],
+  ["索隆", "ゾロ", "zoro"],
+  ["娜美", "ナミ", "nami"],
 ];
 
 const SET_GROUPS: readonly (readonly string[])[] = [
@@ -296,14 +299,36 @@ export type CatalogSearchCard = {
   releaseDate?: string | null;
 };
 
-/** Tokens of an old-style or new-style title. `Pokemon` / `Card` drop out when anything else is left. */
+/** Tokens of an old-style or new-style title. `Pokemon` / `Card` drop out when anything else is left. Hyphenated codes stay whole (`OP-01`, `OP01-001`). */
 export function catalogQueryTokens(query: string): string[] {
   const q = query.trim().slice(0, 80);
   if (!q) return [];
-  const raw = q.match(/[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+(?:\.[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+)*/g) || [];
+  const raw = q.match(/[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+(?:[.-][0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]+)*/g) || [];
   const usable = raw.filter((token) => token.length >= 2 || /^\d$/.test(token) || /[\u3040-\u30ff\u3400-\u9fff]/.test(token));
   const kept = usable.filter((token) => !TITLE_STOP.has(foldSearch(token)));
   return (kept.length ? kept : usable).slice(0, 12);
+}
+
+/** `OP-01` / `OP01` name a set. A longer code (`OP01-001`, `FIN-1`) names a printing. */
+function setCodeToken(token: string): boolean {
+  return /^[A-Za-z]{1,8}-?\d{2}$/.test(token);
+}
+
+function printedCodeToken(token: string): boolean {
+  return /[A-Za-z]/.test(token) && /\d/.test(token) && token.includes("-") && !setCodeToken(token);
+}
+
+function codeForms(token: string): string[] {
+  const stripped = token.replace(/-/g, "");
+  const forms = new Set([token, stripped]);
+  const hyphenated = stripped.match(/^([A-Za-z]{1,8})(\d{2})$/);
+  if (hyphenated) forms.add(`${hyphenated[1]}-${hyphenated[2]}`);
+  return [...forms];
+}
+
+function sameCode(left: string | null | undefined, right: string): boolean {
+  if (!left) return false;
+  return foldSearch(left).replace(/-/g, "") === foldSearch(right).replace(/-/g, "");
 }
 
 /** Digits in `Pokemon Card 151` name the set. A bare `151` or `#151` stays a collector number. */
@@ -350,6 +375,10 @@ function fieldHas(hay: string | null | undefined, needle: string): boolean {
 function tokenHitsCard(card: CatalogSearchCard, token: string, setKeys: ReadonlySet<string>): boolean {
   const region = tokenRegion(token);
   if (region) return card.printRegion === region;
+  if (setCodeToken(token)) return codeForms(token).some((form) => sameCode(card.setCode, form));
+  if (printedCodeToken(token)) {
+    return codeForms(token).some((form) => sameCode(card.setCode, form) || sameCode(card.collectorNumber, form));
+  }
   if (/^(19|20)\d{2}$/.test(token)) {
     return (card.releaseDate || "").startsWith(token) || card.numberKey === token || fieldHas(card.collectorNumber, token);
   }
@@ -383,9 +412,23 @@ function contains(needle: string): Prisma.StringFilter {
   return { contains: needle, mode: "insensitive" };
 }
 
+function codeEquals(form: string): Prisma.StringFilter {
+  return { equals: form, mode: "insensitive" };
+}
+
 function tokenWhere(token: string, setKeys: ReadonlySet<string>): Prisma.CatalogCardWhereInput {
   const region = tokenRegion(token);
   if (region) return { printRegion: region };
+  if (setCodeToken(token)) {
+    return { OR: codeForms(token).map((form) => ({ set: { code: codeEquals(form) } })) };
+  }
+  if (printedCodeToken(token)) {
+    const or: Prisma.CatalogCardWhereInput[] = [];
+    for (const form of codeForms(token)) {
+      or.push({ set: { code: codeEquals(form) } }, { collectorNumber: codeEquals(form) });
+    }
+    return { OR: or };
+  }
   if (/^(19|20)\d{2}$/.test(token)) {
     return {
       OR: [{ set: { releaseDate: { startsWith: token } } }, { numberKey: token }, { collectorNumber: contains(token) }],

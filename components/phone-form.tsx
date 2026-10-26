@@ -6,7 +6,7 @@ import { OtpChip } from "./otp-chip";
 import { Submit } from "./submit";
 import { errText, tx, type Locale } from "@/lib/i18n";
 
-export function PhoneForm({ locale }: { locale: Locale }) {
+export function PhoneForm({ locale, next }: { locale: Locale; next?: string }) {
   const [sent, send] = useActionState(requestPhoneOtp, null);
   const [done, confirm] = useActionState(confirmPhone, null);
   return (
@@ -20,6 +20,7 @@ export function PhoneForm({ locale }: { locale: Locale }) {
         {sent?.code ? <OtpChip locale={locale} code={sent.code} inputId="phone-otp" /> : null}
       </form>
       <form action={confirm} className="grid gap-2">
+        {next ? <input type="hidden" name="next" value={next} /> : null}
         <input type="hidden" name="target" value={sent?.target || ""} />
         <input id="phone-otp" className="field" name="code" inputMode="numeric" autoComplete="one-time-code" required />
         <Submit label={tx(locale, "驗證", "Verify")} pendingLabel="…" />

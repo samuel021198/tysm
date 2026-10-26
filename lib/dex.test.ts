@@ -470,6 +470,8 @@ assert(dexPage.includes("<DexRail"), "dex browse picks a game, then its sets");
 assert(dexPage.includes("history.replaceState"), "game switches stay on the mounted dex shell");
 assert(dexPage.includes("grid-cols-3") || readFileSync("components/dex-grid.tsx", "utf8").includes("grid-cols-3"), "dex tiles are three-up on a phone");
 assert(dexDetail.includes("背景故事") && dexDetail.includes("放售") && dexDetail.includes("暫未有市場數據"), "story, sales, and empty market state");
+assert(dexDetail.includes("呢個遊戲暫時未有行情") && dexDetail.includes("snkrEnabled"), "non-pokemon market copy is intentional");
+assert(dexDetail.includes("我要放售呢張") && dexDetail.includes("catalogCardId"), "dex detail opens sell with the catalog card");
 assert(dexDetail.includes("loadSnkrMarket") && dexDetail.includes("formatJpy") && !dexDetail.includes("GBP"), "detail prices are SNKRDUNK yen");
 assert(dexToolbar.includes("/api/catalog/suggest?"), "dex search reuses catalog suggest");
 assert(dexToolbar.includes('params.set("region", current)'), "dex suggestions pass the region chip");

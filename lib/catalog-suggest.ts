@@ -1,5 +1,5 @@
 import { listingTitleFromCatalog, releaseYear, titleCasePhrase } from "./card-title";
-import { catalogAnchorMatches, catalogCardMatches, plainCatalogLabel, type CatalogSearchCard, type DexPrintRegion } from "./dex";
+import { catalogAnchorMatches, catalogCardMatches, categorySlugForGame, parseGame, plainCatalogLabel, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
 export type CatalogSuggestCard = {
@@ -50,6 +50,26 @@ export function catalogLanguage(region: DexPrintRegion): string {
 
 export function catalogGameLabel(game: string | null | undefined): string {
   return GAME_LABEL[game || "POKEMON"] || "Pokémon";
+}
+
+/** Card-details step after a dex card is chosen. The listing title stays blank; the seller writes that. */
+export function listingCatalogPrefill(card: CatalogSuggestCard & { game?: string | null }) {
+  const game = card.game || "POKEMON";
+  const suggestion = catalogSuggestion(card, game);
+  const parsed = parseGame(game);
+  return {
+    categorySlug: parsed ? categorySlugForGame(parsed) : "",
+    catalogCardId: card.id,
+    cardName: suggestion.cardName,
+    catalogTitle: suggestion.title,
+    year: suggestion.year,
+    setName: suggestion.setName,
+    setCode: suggestion.setCode,
+    collectorNumber: suggestion.collectorNumber,
+    rarity: suggestion.rarity || "",
+    language: suggestion.language,
+    game: suggestion.game,
+  };
 }
 
 export function catalogSuggestion(card: CatalogSuggestCard, game = card.game || "POKEMON"): CatalogSuggestion {

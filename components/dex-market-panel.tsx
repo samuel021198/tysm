@@ -28,6 +28,23 @@ function ask(listing: { saleType: string; auctionSettled: boolean; auctionEndsAt
   return live ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
 }
 
+const GAME_MARKET_ZH = "呢個遊戲暫時未有行情。價格、走勢同最近成交稍後先會有。";
+const GAME_MARKET_EN = "Market data isn't available for this game yet.";
+
+/** Non-Pokémon games never call SNKRDUNK. The copy is intentional, not a failed load. */
+export function GameMarketNotice({ locale }: { locale: Locale }) {
+  return (
+    <div className="min-w-0">
+      <p className="text-xs text-muted">{tx(locale, "市場價", "Market")}</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">{tx(locale, GAME_MARKET_ZH, GAME_MARKET_EN)}</p>
+    </div>
+  );
+}
+
+export function GameMarketPanel({ locale }: { locale: Locale }) {
+  return <p className="empty">{tx(locale, GAME_MARKET_ZH, GAME_MARKET_EN)}</p>;
+}
+
 export function MarketSkeleton() {
   return (
     <div className="grid gap-2" aria-hidden>
@@ -218,6 +235,8 @@ export async function DexSales({
   const hidden = await hiddenUserIds(viewer?.id ?? null);
   const listings = await salesForCard(cardId, hidden);
   const samples = usesSampleMarket(game) && listings.length === 0 ? demoTrades(cardId) : [];
+  const sellHref = `/sell?catalogCardId=${encodeURIComponent(cardId)}`;
+  const few = listings.length <= 2;
   return (
     <section className="mt-4" aria-labelledby="dex-sales">
       <h2 id="dex-sales" className="sr-only">
@@ -254,7 +273,16 @@ export async function DexSales({
           </li>
         ))}
       </ul>
-      <Link href={`/search?q=${encodeURIComponent(nameEn)}`} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-link">
+      {few ? (
+        <Link href={sellHref} className="btn btn-primary mt-4 w-full">
+          {tx(locale, "我要放售呢張", "List this card")}
+        </Link>
+      ) : (
+        <Link href={sellHref} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-link">
+          {tx(locale, "我要放售呢張", "List this card")}
+        </Link>
+      )}
+      <Link href={`/search?q=${encodeURIComponent(nameEn)}`} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-link">
         {tx(locale, "睇全部放售", "See all for sale")}
       </Link>
     </section>

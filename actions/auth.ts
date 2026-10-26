@@ -133,7 +133,8 @@ export async function confirmPhone(_prev: { error?: string } | null, formData: F
     data: { phone: parsed.target, phoneVerified: true },
   });
   revalidatePath("/me");
-  redirect("/me?ok=phone");
+  const next = String(formData.get("next") || "").trim();
+  redirect(next ? safeNext(next) : "/me?ok=phone");
 }
 
 export async function updateProfile(formData: FormData) {
