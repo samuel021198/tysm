@@ -1,4 +1,4 @@
-import { createHash, createHmac } from "crypto";
+import { createHash, createHmac, randomBytes } from "crypto";
 
 export type R2Config = {
   accountId: string;
@@ -102,4 +102,67 @@ export async function putR2Object(key: string, body: Buffer, contentType: string
     throw new Error(`r2 ${res.status} ${text.slice(0, 160).replace(/[\r\n]+/g, " ")}`);
   }
   return `${cfg.publicBase}/${key.split("/").map((part) => encodeURIComponent(part)).join("/")}`;
+}
+
+const DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([a-z0-9+/]+={0,2})$/i;
+
+export class PhotoStoreError extends Error {
+  constructor() {
+    super("photo");
+    this.name = "PhotoStoreError";
+  }
+}
+
+/** Decode a listing/story data URL. Rejects svg and anything `isAllowedMediaUrl` would reject. */
+export function imageFromDataUrl(url: string): { body: Buffer; contentType: string } | null {
+  if (url.length > 180_000) return null;
+  const match = DATA_URL.exec(url);
+  if (!match) return null;
+  const body = Buffer.from(match[2], "base64");
+  if (body.length < 8) return null;
+  return { body, contentType: match[1].toLowerCase() };
+}
+
+/**
+ * Persist a user upload. Data URLs go to R2 when configured.
+ * Missing R2 env, https URLs, and local `/demo` paths stay as they are.
+ */
+export async function storeUploadedImage(url: string, folder: string): Promise<string> {
+  if (!url.startsWith("data:")) return url;
+  if (!r2Config()) return url;
+  const image = imageFromDataUrl(url);
+  if (!image) throw new PhotoStoreError();
+  const ext = image.contentType.endsWith("png") ? "png" : image.contentType.endsWith("webp") ? "webp" : "jpg";
+  const safe = /^[a-z0-9/_-]+$/i.test(folder) ? folder.replace(/^\/+|\/+$/g, "") : "uploads";
+  const key = `${safe}/${randomBytes(12).toString("hex")}.${ext}`;
+  try {
+    return await putR2Object(key, image.body, image.contentType);
+  } catch (error) {
+    console.error("r2 upload failed", error instanceof Error ? error.message.slice(0, 160) : "error");
+    throw new PhotoStoreError();
+  }
+}
+
+export async function storeUploadedImages<T extends { url: string }>(photos: T[], folder: string): Promise<T[]> {
+  const stored: T[] = [];
+  for (const photo of photos) stored.push({ ...photo, url: await storeUploadedImage(photo.url, folder) });
+  return stored;
+}
+
+/** Keep an existing public object when the source URL has not changed. */
+export function keptMirroredUrl(
+  prior: { imageUrl: string; sourceImageUrl: string | null } | undefined,
+  source: string,
+): string | null {
+  const cfg = r2Config();
+  if (!cfg || !prior) return null;
+  if (prior.sourceImageUrl !== source) return null;
+  return prior.imageUrl.startsWith(`${cfg.publicBase}/`) ? prior.imageUrl : null;
+}
+
+export function catalogObjectKey(game: string, externalId: string, ext: string): string {
+  const folder =
+    game === "ONE_PIECE" ? "one-piece" : game === "RIFTBOUND" ? "riftbound" : game === "TOPPS_BASKETBALL" || game === "TOPPS_SOCCER" ? "topps" : game === "DEMO" ? "demo" : "pokemon";
+  const safe = externalId.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 120);
+  return `dex/${folder}/${safe}.${ext}`;
 }

@@ -77,7 +77,7 @@ npm run dev
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
 | `BOOTSTRAP_SECRET` | 重新灌示範資料或同步圖鑑時必須 | 保護 `POST /api/internal/reseed` 同 `POST /api/internal/ingest-dex`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
-| `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。未設定時圖鑑用 TCGdex 圖片網址，不把圖檔寫入 Postgres。 |
+| `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。五個 `R2_*` 要齊先會用。未齊時圖鑑留來源網址，上傳相片留 data URL，圖檔唔寫入 Postgres。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
 | `R2_BUCKET` | 否 | R2 bucket 名稱。 |
@@ -85,13 +85,15 @@ npm run dev
 
 不要提交 `.env`。
 
+R2 係可選。五個 `R2_*` 要齊，而且 `R2_PUBLIC_BASE_URL` 必須係 https、冇結尾斜線。未齊就唔會打 R2：圖鑑繼續存來源網址，上架、限時動態、訊息、貼文同收藏的上傳相片繼續存 data URL。齊咗之後，呢啲 data URL 會經 `putR2Object` 寫入 `uploads/`，資料庫只存公開網址。圖鑑同步（寶可夢、海賊王、Riftbound）會在每次請求剩餘時間內把遠端卡圖鏡像到 `dex/`。Topps 冇卡圖，唔會下載。每日 cron 仍然只掃訂單，唔會搬圖。
+
 ## 圖鑑
 
 底欄第二個分頁係圖鑑（`/dex`），唔再係賣場。賣場仍然係 `/market`，卡牌頁「放售」的「睇全部放售」會去現有搜尋。
 
-圖鑑收三款遊戲：**寶可夢**（日文同英文）、**海賊王 / One Piece**（日文同英文）、**Riftbound**（而家只有英文）。可以按卡名或卡號搜，打字時會出圖鑑建議，而且只限而家選的遊戲同語言。左邊一欄先揀遊戲，再開該遊戲的系列；寶可夢同海賊王仲可以篩日文／英文。卡牌頁有「價格」「資料」「背景故事」「放售」（放售連住現有刊登），以及「加入收藏」。寶可夢如果對到 SNKRDUNK，價格用日圓成交；對唔到、或者唔係寶可夢，價格頁顯示「暫未有市場數據」。背景故事用 TCGdex 的 flavor text，冇就留空。圖片用來源的 HTTPS 網址，未有 R2 鏡像（R2 仍然只會鏡像寶可夢，而且要齊環境變數先會做）。
+圖鑑收三款遊戲：**寶可夢**（日文同英文）、**海賊王 / One Piece**（日文同英文）、**Riftbound**（而家只有英文）。可以按卡名或卡號搜，打字時會出圖鑑建議，而且只限而家選的遊戲同語言。左邊一欄先揀遊戲，再開該遊戲的系列；寶可夢同海賊王仲可以篩日文／英文。卡牌頁有「價格」「資料」「背景故事」「放售」（放售連住現有刊登），以及「加入收藏」。寶可夢如果對到 SNKRDUNK，價格用日圓成交；對唔到、或者唔係寶可夢，價格頁顯示「暫未有市場數據」。背景故事用 TCGdex 的 flavor text，冇就留空。有齊 R2 就顯示公開網址；未齊就用來源 HTTPS。官方日文海賊王圖未鏡像之前仍然經同源 proxy。
 
-目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。圖片二進位不會寫入 Postgres。市場價唔寫入資料庫，卡牌頁即場向 SNKRDUNK 讀。
+目錄來自免費 [TCGdex](https://tcgdex.dev/)（`https://api.tcgdex.net/v2/ja` 同 `/v2/en`），基本目錄唔使 API key。同步會走每個語言可用的實體系列：跳過 Pocket、名稱帶 promo／プロモ、`official` 係 0、或者 `total` 唔喺 1–400 的系列（`usableSetResume`）。以 2026-10 的 TCGdex 計，可用系列約英文 192 個、日文 181 個，卡牌數量級約 **3.7 萬**（英約 2.0 萬、日約 1.7 萬；個別系列有列出但沒有卡，會標記之後跳過）。日文同英文名、卡圖、系列、卡號同 finish 都寫入 `CatalogCard`。有齊 R2 變數就會把 `assets.tcgdex.net` 的圖鏡像到 bucket `dex/pokemon/`，`CatalogCard.imageUrl` 存公開網址；否則用 TCGdex 的 HTTPS 圖址。來源冇變而且已經係公開網址的列會留低。圖片二進位不會寫入 Postgres。市場價唔寫入資料庫，卡牌頁即場向 SNKRDUNK 讀。
 
 ### 市場價（SNKRDUNK）
 
@@ -143,7 +145,7 @@ curl -sS -X POST "https://你的網域/api/internal/ingest-dex?lang=en&sets=4" \
 | `one-piece` | 英文：[OPTCG API](https://optcgapi.com/)（`/api/allSets/`、`/api/sets/{id}/`、starter、`/api/allPromos/`、`/api/allDonCards/`）。日文：官方卡表 [`onepiece-cardgame.com/cardlist/`](https://www.onepiece-cardgame.com/cardlist/)，每個系列一頁 HTML。 | `lang=en`、`ja` 或 `all`（預設英文先，再日文） |
 | `riftbound` | [RiftHunt](https://rifthunt.com/api/) `GET https://api.rifthunt.com/bulk/cards` | 只有英文。`lang=ja` 會回 `400` |
 
-OPTCG 係免費、唔使 key，但最新系列可能未有。以 2026-10-25 對照：英文約 59 組、5,479 張（PROMO 1,082、DON 187），官方日文卡表 63 個系列、5,058 張。OPTCG 未見日文先出的 EB-04、EB-05、ST-29；英文有合併商品（例如 OP15-EB04），日文則分開列。OPTCG 沒有發行日，標題多數沒有年份。日文沒有對等的 keyless JSON，所以 v1 讀官方卡表：每個系列一次請求，帶識別用的 User-Agent，系列之間會停一停。卡表 HTML 若沒有 `id="series"`，該系列會當失敗重試，唔會寫成空系列。日文卡名配對英文，用同一個卡號（`OP01-001`）；英文未入之前，日文列的英文名會暫時等於日文名，之後再 POST 一次（`done` 之後的 post-step）會補。Riftbound bulk 約 10 個系列、1,702 張印刷，一次下載再按系列分批 upsert。圖片都係來源 URL（Riftbound 多數係 Riot CDN），呢兩款唔會寫入 R2。官方日文圖帶 `Cross-Origin-Resource-Policy: same-site`，瀏覽器唔會喺 TYSM 顯示，所以畫面經 `GET /api/catalog/image` 代取，只允許 `https://www.onepiece-cardgame.com/images/cardlist/` 的圖檔。資料庫仍然存官方網址。
+OPTCG 係免費、唔使 key，但最新系列可能未有。以 2026-10-25 對照：英文約 59 組、5,479 張（PROMO 1,082、DON 187），官方日文卡表 63 個系列、5,058 張。OPTCG 未見日文先出的 EB-04、EB-05、ST-29；英文有合併商品（例如 OP15-EB04），日文則分開列。OPTCG 沒有發行日，標題多數沒有年份。日文沒有對等的 keyless JSON，所以 v1 讀官方卡表：每個系列一次請求，帶識別用的 User-Agent，系列之間會停一停。卡表 HTML 若沒有 `id="series"`，該系列會當失敗重試，唔會寫成空系列。日文卡名配對英文，用同一個卡號（`OP01-001`）；英文未入之前，日文列的英文名會暫時等於日文名，之後再 POST 一次（`done` 之後的 post-step）會補。Riftbound bulk 約 10 個系列、1,702 張印刷，一次下載再按系列分批 upsert。有齊 R2 變數時，同步會在剩餘時間內把 HTTPS 卡圖鏡像到 `dex/one-piece/` 同 `dex/riftbound/`（今次新卡，再加上最多 40 張舊的未鏡像卡），`CatalogCard.imageUrl` 改存公開網址。來源冇變、而且已經係公開網址的列會留低。未設定 R2 就繼續存來源 HTTPS（Riftbound 多數係 Riot CDN），`counts.r2` 係 false。`counts.imagesPending > 0` 時可以再 POST 同一條（即使 `done` 已經係 true）補鏡像。官方日文圖如果仲係 `www.onepiece-cardgame.com`，畫面經 `GET /api/catalog/image` 代取，因為來源帶 `Cross-Origin-Resource-Policy: same-site`，只允許 `https://www.onepiece-cardgame.com/images/cardlist/` 的圖檔。已經係 R2 公開網址就直接顯示，唔再代取。
 
 上架的 Riftbound 分類要靠 seed／reseed 先會出現（`cat_riftbound`）。已經上線的資料庫，部署 migration 之後打一次 reseed，或者本地 `npm run db:seed`。
 
