@@ -100,7 +100,7 @@ export default async function OrderPage({
                 <input type="radio" name="addressId" value={address.id} defaultChecked={address.isDefault} />
                 {address.recipient} {address.district} {address.line1}
               </label>
-            )) : <p className="text-sm"><a className="text-link" href="/me">{tx(locale, "順豐到付要先在帳戶新增香港地址。", "Add a Hong Kong address before choosing SF cash on delivery.")}</a></p>
+            )) : <p className="text-sm"><a className="text-link" href="/me/settings#addresses">{tx(locale, "順豐到付要先在帳戶新增香港地址。", "Add a Hong Kong address before choosing SF cash on delivery.")}</a></p>
           ) : null}
           <button className="btn btn-primary w-fit" disabled={allowed.length === 0}>{tx(locale, "儲存運送方式", "Save shipping method")}</button>
         </form>

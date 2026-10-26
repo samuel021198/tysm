@@ -72,28 +72,14 @@ export function ProfileBoard({
   const fav = new Set(favIds);
   const panel = tab === "box" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
       <div className="chips">
         {TABS.map(([id, zh, en]) => (
-          <Link key={id} href={`${base}?tab=${id}`} className={`inline-flex h-8 items-center rounded-full px-3 text-sm font-semibold leading-none ${panel === id ? "bg-accent text-white" : "border border-line bg-card text-muted"}`} aria-current={panel === id ? "page" : undefined}>
+          <Link key={id} href={`${base}?tab=${id}`} className={`inline-flex h-7 items-center rounded-full px-2.5 text-xs font-semibold leading-none ${panel === id ? "bg-accent text-white" : "border border-line bg-card text-muted"}`} aria-current={panel === id ? "page" : undefined}>
             {tx(locale, zh, en)}
           </Link>
         ))}
       </div>
-      {isSelf ? (
-        <nav className="grid gap-2">
-          {[
-            ["/orders", tx(locale, "訂單", "Orders")],
-            [`${base}?tab=drafts`, `${tx(locale, "草稿", "Drafts")}${drafts.length ? ` (${drafts.length})` : ""}`],
-            ["/me#store", tx(locale, "店舖地址", "Shop address")],
-          ].map(([href, label]) => (
-            <Link key={href} href={href} className="surface menu-row flex h-11 items-center justify-between px-3 text-sm font-medium" aria-current={href.endsWith("tab=drafts") && panel === "drafts" ? "page" : undefined}>
-              {label}
-              <span className="text-base leading-none text-muted" aria-hidden>›</span>
-            </Link>
-          ))}
-        </nav>
-      ) : null}
       {panel === "posts" ? (
         posts.length ? (
           <div className="mx-auto grid w-full max-w-lg gap-4">
@@ -107,7 +93,7 @@ export function ProfileBoard({
       ) : null}
       {panel === "box" ? (
         <>
-          {isSelf ? <p className="text-sm text-muted">{tx(locale, "預設公開。私人收藏只會喺呢度見到。", "Public by default. Private cards stay on this screen.")}</p> : null}
+          {isSelf ? <p className="text-xs text-muted">{tx(locale, "預設公開。私人收藏只會喺呢度見到。", "Public by default. Private cards stay on this screen.")}</p> : null}
           {items.length === 0 ? <p className="empty">{tx(locale, "未有收藏。", "No cards yet.")}</p> : null}
           <ul className="feed">
             {items.map((item) => (

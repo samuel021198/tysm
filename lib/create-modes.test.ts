@@ -56,4 +56,14 @@ const story = readFileSync(new URL("../components/story-composer.tsx", import.me
 assert(story.includes("getUserMedia") && story.includes('capture="environment"') && story.includes("STORY_EMOJIS"), "stories open on the camera and can switch to the system camera or stickers");
 assert(story.includes("fixed inset-0"), "the story camera is full screen");
 
+const me = readFileSync(new URL("../app/me/page.tsx", import.meta.url), "utf8");
+const settings = readFileSync(new URL("../app/me/settings/page.tsx", import.meta.url), "utf8");
+const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
+const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
+assert(tab.includes('loggedIn ? "/me" : "/login"'), "profile tab stays on the public profile");
+assert(me.includes('href="/me/settings"') && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles") && !me.includes("logout"), "/me is header plus board");
+assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
+assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");
+assert(auth.includes('const settings = "/me/settings"') && auth.includes("${settings}?ok=saved") && auth.includes("${settings}?err=nickname") && auth.includes("${settings}?err=address"), "profile saves flash back on settings");
+
 console.log("create modes ok");
