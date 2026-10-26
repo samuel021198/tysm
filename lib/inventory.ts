@@ -1,6 +1,7 @@
 import type { ConditionTrack, Grader, RawGrade } from "@prisma/client";
 import { prisma } from "./db";
 import { shouldPublishPost, type CollectionVisibility } from "./posts";
+import { storeUploadedImages } from "./r2";
 
 const listingForSync = {
   photos: { orderBy: { position: "asc" as const } },
@@ -83,6 +84,7 @@ export async function createCollectionItem(input: {
   catalogCardId?: string | null;
   cardName?: string | null;
 }) {
+  const photos = await storeUploadedImages(input.photos, "uploads/collection");
   const item = await prisma.collectionItem.create({
     data: {
       ownerId: input.ownerId,
@@ -96,7 +98,7 @@ export async function createCollectionItem(input: {
       grader: input.grader,
       gradeValue: input.gradeValue,
       photos: {
-        create: input.photos.map((photo, position) => ({ url: photo.url, role: photo.role, position })),
+        create: photos.map((photo, position) => ({ url: photo.url, role: photo.role, position })),
       },
     },
   });

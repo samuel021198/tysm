@@ -1,8 +1,9 @@
 import { catalogTitleRewrite, resolveEnglishCardName, resolveEnglishSetName } from "./card-title";
+import { drainCatalogImages } from "./catalog-r2";
 import { prisma } from "./db";
 import { DEX_PLACEHOLDER, INGEST_POST_RESERVE_MS, ingestPastSoftDeadline, runIngestPostSteps } from "./dex";
 import { linkCatalogListings } from "./dex-link";
-import { putR2Object, r2Config } from "./r2";
+import { keptMirroredUrl, r2Config } from "./r2";
 import {
   dexSetSettled,
   dexUnsettledRemaining,
@@ -89,41 +90,6 @@ function displayImage(source: string): string {
   return source || DEX_PLACEHOLDER;
 }
 
-async function mirrorToR2(externalId: string, source: string): Promise<string | null> {
-  if (!source.startsWith("https://") || !r2Config()) return null;
-  const res = await fetch(source, { signal: AbortSignal.timeout(20_000) });
-  if (!res.ok) return null;
-  const buf = Buffer.from(await res.arrayBuffer());
-  if (buf.length < 32 || buf.length > 8_000_000) return null;
-  const header = (res.headers.get("content-type") || "").split(";")[0]?.trim().toLowerCase() || "";
-  const sniffed = sniffImage(buf);
-  const contentType = header.startsWith("image/") ? header : sniffed;
-  if (!contentType) return null;
-  const ext = contentType.includes("png") ? "png" : contentType.includes("jpeg") ? "jpg" : contentType.includes("gif") ? "gif" : "webp";
-  const safe = externalId.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 120);
-  return putR2Object(`dex/pokemon/${safe}.${ext}`, buf, contentType);
-}
-
-function sniffImage(buf: Buffer): string | null {
-  if (buf[0] === 0x89 && buf[1] === 0x50) return "image/png";
-  if (buf[0] === 0xff && buf[1] === 0xd8) return "image/jpeg";
-  if (buf.toString("ascii", 0, 4) === "RIFF" && buf.toString("ascii", 8, 12) === "WEBP") return "image/webp";
-  if (buf.toString("ascii", 0, 3) === "GIF") return "image/gif";
-  return null;
-}
-
-async function pool<T>(items: T[], limit: number, fn: (item: T) => Promise<void>) {
-  let index = 0;
-  async function worker() {
-    while (index < items.length) {
-      const current = index;
-      index += 1;
-      await fn(items[current]!);
-    }
-  }
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, () => worker()));
-}
-
 async function upsertSets(sets: MappedSet[]) {
   const ids = new Map<string, string>();
   for (const set of sets) {
@@ -176,48 +142,6 @@ async function loadProgress(queue: DexQueueItem[]) {
   return new Map(rows.map((row) => [row.externalId, { count: row._count.cards, total: row.total }]));
 }
 
-async function mirrorImages(items: { externalId: string; source: string }[], deadline: number): Promise<number> {
-  if (!items.length || !r2Config()) return 0;
-  let imagesUploaded = 0;
-  await pool(items, 4, async (item) => {
-    if (Date.now() > deadline) return;
-    try {
-      const url = await mirrorToR2(item.externalId, item.source);
-      if (!url) return;
-      await prisma.catalogCard.update({ where: { externalId: item.externalId }, data: { imageUrl: url } });
-      imagesUploaded += 1;
-    } catch (error) {
-      console.error("dex image skipped", item.externalId, error instanceof Error ? error.message.slice(0, 160) : "error");
-    }
-  });
-  return imagesUploaded;
-}
-
-async function listUnmirrored(take: number): Promise<{ externalId: string; source: string }[]> {
-  const r2 = r2Config();
-  if (!r2 || take <= 0) return [];
-  const rows = await prisma.catalogCard.findMany({
-    where: {
-      sourceImageUrl: { startsWith: "https://" },
-      NOT: { imageUrl: { startsWith: `${r2.publicBase}/` } },
-    },
-    select: { externalId: true, sourceImageUrl: true },
-    take,
-  });
-  return rows.flatMap((row) => (row.sourceImageUrl ? [{ externalId: row.externalId, source: row.sourceImageUrl }] : []));
-}
-
-async function countUnmirrored(): Promise<number> {
-  const r2 = r2Config();
-  if (!r2) return 0;
-  return prisma.catalogCard.count({
-    where: {
-      sourceImageUrl: { startsWith: "https://" },
-      NOT: { imageUrl: { startsWith: `${r2.publicBase}/` } },
-    },
-  });
-}
-
 async function upsertHydratedCards(
   cards: MappedCard[],
   setId: string,
@@ -227,8 +151,8 @@ async function upsertHydratedCards(
   const r2 = r2Config();
   for (const card of cards) {
     const prior = previous.get(card.externalId);
-    const mirrored = Boolean(r2 && prior?.sourceImageUrl === card.sourceImageUrl && prior.imageUrl.startsWith(`${r2.publicBase}/`));
-    const imageUrl = mirrored ? prior!.imageUrl : displayImage(card.sourceImageUrl);
+    const kept = keptMirroredUrl(prior, card.sourceImageUrl);
+    const imageUrl = kept ?? displayImage(card.sourceImageUrl);
     const data = {
       setId,
       game: "POKEMON" as const,
@@ -248,7 +172,7 @@ async function upsertHydratedCards(
       update: data,
       create: { externalId: card.externalId, ...data },
     });
-    if (!mirrored && card.sourceImageUrl && r2) pending.push({ externalId: card.externalId, source: card.sourceImageUrl });
+    if (!kept && card.sourceImageUrl.startsWith("https://") && r2) pending.push({ externalId: card.externalId, source: card.sourceImageUrl });
   }
 }
 
@@ -439,19 +363,7 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
     link: (until) => linkCatalogListings({ deadlineMs: until }),
   });
 
-  let imagesUploaded = 0;
-  if (r2Config() && Date.now() < deadline) {
-    imagesUploaded += await mirrorImages(pending, deadline);
-    if (Date.now() < deadline - 2_000) {
-      const backlog = await listUnmirrored(40);
-      const seen = new Set(pending.map((item) => item.externalId));
-      imagesUploaded += await mirrorImages(
-        backlog.filter((item) => !seen.has(item.externalId)),
-        deadline,
-      );
-    }
-  }
-  const imagesPending = await countUnmirrored();
+  const images = await drainCatalogImages("POKEMON", pending, deadline);
 
   return {
     done,
@@ -461,12 +373,12 @@ export async function ingestDex(opts?: IngestDexOptions): Promise<IngestDexResul
     counts: {
       sets,
       cards: cardsWritten,
-      imagesUploaded,
+      imagesUploaded: images.uploaded,
       listingsLinked: linked.listings,
       collectionLinked: linked.collectionItems,
-      r2: Boolean(r2Config()),
+      r2: images.configured,
       skippedSettled: plan.skippedSettled,
-      imagesPending,
+      imagesPending: images.pending,
     },
   };
 }

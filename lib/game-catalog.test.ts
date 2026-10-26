@@ -1,6 +1,7 @@
 import { catalogDisplayTitle, catalogTitleFromCard, rarityTitle } from "./card-title";
 import { catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog-batch";
-import { catalogImageSrc, officialOpImageUrl } from "./catalog-image";
+import { catalogImageSrc, catalogTileSrc, isR2PublicUrl, officialOpImageUrl } from "./catalog-image";
+import { catalogObjectKey, imageFromDataUrl, keptMirroredUrl, r2Config, storeUploadedImage } from "./r2";
 import { catalogSuggestion } from "./catalog-suggest";
 import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogWhere, parseGame, type CatalogSearchCard } from "./dex";
 import { officialSet, parseOfficialCards, parseOfficialSeries } from "./op-official";
@@ -307,6 +308,43 @@ assert(officialOpImageUrl(official) === official, "official card art is allowed 
 assert(officialOpImageUrl("https://evil.example/images/cardlist/card/ST01-001.png") === null, "other hosts are not proxied");
 assert(catalogImageSrc(official) === `/api/catalog/image?src=${encodeURIComponent(official)}`, "official art is rewritten to the same-origin proxy");
 assert(catalogImageSrc("https://optcgapi.com/media/static/Card_Images/OP01-001.jpg").startsWith("https://optcgapi.com/"), "english art stays a direct url");
+const r2Art = "https://pub-9b9f3109670d41aeac8a465ff7b3e999.r2.dev/dex/one-piece/op-jp_ST01-001.png";
+assert(isR2PublicUrl(r2Art) && catalogImageSrc(r2Art) === r2Art, "r2 public art is not proxied");
+assert(catalogTileSrc(r2Art) === r2Art, "r2 tiles keep the stored object");
+assert(catalogTileSrc("https://assets.tcgdex.net/ja/SV/SV2a/001/high.webp") === "https://assets.tcgdex.net/ja/SV/SV2a/001/low.webp", "tcgdex tiles still ask for the small file");
+assert(!isR2PublicUrl(official), "the official host is not treated as r2");
+assert(catalogObjectKey("POKEMON", "ja:sv10-001", "webp") === "dex/pokemon/ja_sv10-001.webp", "pokemon objects stay under dex/pokemon");
+assert(catalogObjectKey("ONE_PIECE", "op-jp:ST01-001", "png") === "dex/one-piece/op-jp_ST01-001.png", "one piece objects use their own prefix");
+assert(catalogObjectKey("RIFTBOUND", "rb:abc", "jpg") === "dex/riftbound/rb_abc.jpg", "riftbound objects use their own prefix");
+const jpeg = `data:image/jpeg;base64,${Buffer.from("0123456789abcdef0123456789abcdef").toString("base64")}`;
+assert(imageFromDataUrl(jpeg)?.contentType === "image/jpeg", "jpeg data urls decode");
+assert(imageFromDataUrl("data:image/svg+xml;base64,aaaa") === null, "svg uploads are rejected");
+const uploadCheck = r2Config()
+  ? Promise.resolve()
+  : Promise.all([storeUploadedImage(jpeg, "uploads/listings"), storeUploadedImage("https://cdn.example/a.jpg", "uploads/listings")]).then(([dataUrl, httpsUrl]) => {
+      assert(dataUrl === jpeg, "missing R2 keeps the data url");
+      assert(httpsUrl === "https://cdn.example/a.jpg", "https photos are not copied");
+    });
+if (!r2Config()) {
+  assert(keptMirroredUrl({ imageUrl: r2Art, sourceImageUrl: "https://assets.example/a.webp" }, "https://assets.example/a.webp") === null, "missing R2 does not pretend an image is mirrored");
+}
+{
+  const keys = ["R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET", "R2_PUBLIC_BASE_URL"] as const;
+  const saved = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+  process.env.R2_ACCOUNT_ID = "acct";
+  process.env.R2_ACCESS_KEY_ID = "key";
+  process.env.R2_SECRET_ACCESS_KEY = "secret";
+  process.env.R2_BUCKET = "tysm-images";
+  process.env.R2_PUBLIC_BASE_URL = "https://cards.example.com";
+  const base = "https://cards.example.com/dex/pokemon/ja_sv10-001.webp";
+  assert(keptMirroredUrl({ imageUrl: base, sourceImageUrl: "https://assets.tcgdex.net/ja/SV/SV10/001/high.webp" }, "https://assets.tcgdex.net/ja/SV/SV10/001/high.webp") === base, "unchanged source keeps the r2 url");
+  assert(keptMirroredUrl({ imageUrl: base, sourceImageUrl: "https://assets.tcgdex.net/ja/SV/SV10/001/high.webp" }, "https://assets.tcgdex.net/ja/SV/SV10/001/low.webp") === null, "a new source is mirrored again");
+  assert(isR2PublicUrl("https://cards.example.com/dex/one-piece/a.png") && catalogImageSrc("https://cards.example.com/dex/one-piece/a.png") === "https://cards.example.com/dex/one-piece/a.png", "custom public base is served directly");
+  for (const key of keys) {
+    if (saved[key] == null) delete process.env[key];
+    else process.env[key] = saved[key];
+  }
+}
 
 assert(toppsRarity("Base", false) === null && toppsRarity("Base", true) === "RC" && toppsRarity("Future Stars", true) === "Future Stars RC", "base stays off the title and RC stacks on an insert");
 assert(!isParallelSubset("1980-81 Topps Chrome Basketball Mojo") && !isParallelSubset("Base Card Variations") && isParallelSubset("Gold Refractor"), "named inserts stay and color refractors drop");
@@ -346,4 +384,10 @@ const chrome = files.find((file) => file.code === "TCB2526");
 assert(chrome && mapToppsSet(chrome).cards.length >= 200 && mapToppsSet(chrome).printRegion === "WEST", "2025-26 chrome basketball maps to western printings");
 assert(toppsQueue("TOPPS_BASKETBALL")[0]?.externalId.startsWith("en:"), "topps ingest cursors use the dex cursor shape");
 
-console.log("game catalog ok");
+uploadCheck.then(
+  () => console.log("game catalog ok"),
+  (error) => {
+    console.error(error);
+    process.exit(1);
+  },
+);
