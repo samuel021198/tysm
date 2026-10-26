@@ -49,6 +49,7 @@ const ERR: Record<string, [string, string]> = {
   nickname: ["暱稱需要 2–24 字", "Nickname must be 2–24 characters"],
   target: ["請輸入電郵或 8 位香港電話", "Enter an email or an 8-digit Hong Kong phone"],
   code: ["驗證碼不正確或已過期", "Code is wrong or expired"],
+  showcase: ["示範帳戶未建立，請先重新灌入示範資料", "Demo account is not seeded yet"],
   rate: ["請 30 秒後再索取驗證碼", "Wait 30 seconds before requesting another code"],
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],

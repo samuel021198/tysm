@@ -3,7 +3,7 @@ import { seedDemo } from "@/lib/seed-demo";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 function safeMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "error";

@@ -1,4 +1,5 @@
-import { formatJpy, hkPartsToInput, isAllowedMediaUrl } from "./format";
+import { DEMO_SHOWCASE_CODE, DEMO_SHOWCASE_TARGET, DEMO_SHOWCASE_USER_ID, demoShowcaseLogin } from "./demo-login";
+import { formatJpy, hkPartsToInput, isAllowedMediaUrl, parseTarget } from "./format";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -19,5 +20,14 @@ assert(!isAllowedMediaUrl("javascript:alert(1)"), "script");
 assert(isAllowedMediaUrl(`data:image/jpeg;base64,${"a".repeat(40)}`), "jpeg upload");
 assert(!isAllowedMediaUrl(`data:image/svg+xml;base64,${"a".repeat(40)}`), "svg upload");
 assert(!isAllowedMediaUrl(`data:image/jpeg;base64,${"a".repeat(200_000)}`), "oversized upload");
+
+assert(parseTarget("123") === null, "123 is not an email or HK phone");
+assert(parseTarget("mei@tysm.hk")?.target === "mei@tysm.hk", "mei email still parses");
+assert(parseTarget("91111111")?.target === "+85291111111", "ming phone still parses");
+const demo = demoShowcaseLogin(" 123 ");
+assert(demo?.target === DEMO_SHOWCASE_TARGET && demo.channel === "demo", "trimmed 123 is the showcase login");
+assert(demoShowcaseLogin("1234") === null && demoShowcaseLogin("0123") === null, "only the exact showcase target");
+assert(demoShowcaseLogin("mei@tysm.hk") === null, "demo login does not swallow emails");
+assert(DEMO_SHOWCASE_CODE === "123" && DEMO_SHOWCASE_USER_ID === "user_showcase", "fixed showcase code and user");
 
 console.log("format ok");
