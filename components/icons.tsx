@@ -3,7 +3,7 @@ export function Icon({
   className = "h-5 w-5",
   strokeWidth = 1.75,
 }: {
-  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "note" | "camera";
+  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "note" | "camera" | "grid" | "star";
   className?: string;
   strokeWidth?: number;
 }) {
@@ -114,6 +114,28 @@ export function Icon({
       <svg {...props}>
         <path d="M8.4 7.4 9.5 5.6h5l1.1 1.8H19a1.4 1.4 0 0 1 1.4 1.4v8.2A1.4 1.4 0 0 1 19 18.4H5A1.4 1.4 0 0 1 3.6 17V8.8A1.4 1.4 0 0 1 5 7.4z" />
         <circle cx="12" cy="12.6" r="2.6" />
+      </svg>
+    );
+  }
+  if (name === "grid") {
+    return (
+      <svg {...props}>
+        <rect x="3" y="3" width="4.6" height="4.6" />
+        <rect x="9.7" y="3" width="4.6" height="4.6" />
+        <rect x="16.4" y="3" width="4.6" height="4.6" />
+        <rect x="3" y="9.7" width="4.6" height="4.6" />
+        <rect x="9.7" y="9.7" width="4.6" height="4.6" />
+        <rect x="16.4" y="9.7" width="4.6" height="4.6" />
+        <rect x="3" y="16.4" width="4.6" height="4.6" />
+        <rect x="9.7" y="16.4" width="4.6" height="4.6" />
+        <rect x="16.4" y="16.4" width="4.6" height="4.6" />
+      </svg>
+    );
+  }
+  if (name === "star") {
+    return (
+      <svg {...props}>
+        <path d="m12 3.6 2.15 5.05 5.5.48-4.18 3.6 1.28 5.42L12 15.55 7.25 18.15l1.28-5.42L4.35 9.13l5.5-.48z" />
       </svg>
     );
   }
