@@ -83,7 +83,7 @@ export function ProfileBoard({
               aria-current={on ? "page" : undefined}
               className={`relative flex h-11 items-center justify-center ${on ? "text-ink" : "text-muted"}`}
             >
-              <Icon name={item.icon} className="h-6 w-6" strokeWidth={on ? 2.15 : 1.6} />
+              <Icon name={item.icon} className="h-7 w-7" strokeWidth={on ? 2.15 : 1.6} />
               <span className="sr-only">{label}</span>
               {on ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-ink" /> : null}
             </Link>
