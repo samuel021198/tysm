@@ -122,16 +122,16 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
           const fresh = item.stories.length > 0 && !item.seen;
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
           return (
-            <button key={item.userId} type="button" className="flex w-[4.75rem] shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
-              <span className={`relative grid h-[4.25rem] w-[4.25rem] place-items-center rounded-full p-[2.5px] ${fresh ? "bg-accent" : "bg-slate-300 dark:bg-white/25"}`}>
+            <button key={item.userId} type="button" className="flex w-16 shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
+              <span className={`relative grid h-14 w-14 place-items-center rounded-full p-[2px] ${fresh ? "bg-accent" : "bg-slate-300 dark:bg-white/25"}`}>
                 <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
                   <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
                     {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}
                   </span>
                 </span>
                 {item.mine && item.stories.length === 0 ? (
-                  <span className="absolute -bottom-0.5 -right-0.5 grid h-6 w-6 place-items-center rounded-full bg-accent text-base font-bold leading-none text-white ring-2 ring-bg">
-                    +
+                  <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-accent text-sm font-bold leading-none text-white ring-2 ring-bg">
+                    <span className="block translate-y-[-0.05em]">+</span>
                   </span>
                 ) : null}
               </span>
@@ -168,8 +168,8 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
                 <span className="block truncate text-sm font-semibold">{ring.mine ? tx(locale, "你的動態", "Your story") : ring.nickname}</span>
                 <span className="block text-xs text-white/75">{ageLabel(frame.createdAt, locale)}</span>
               </span>
-              <button type="button" className="ml-auto grid h-11 w-11 place-items-center rounded-full text-2xl leading-none" aria-label={tx(locale, "關閉", "Close")} onClick={() => setCursor(null)}>
-                ×
+              <button type="button" className="ml-auto grid h-10 w-10 place-items-center rounded-full" aria-label={tx(locale, "關閉", "Close")} onClick={() => setCursor(null)}>
+                <span className="glyph-x" aria-hidden>×</span>
               </button>
             </div>
           </div>

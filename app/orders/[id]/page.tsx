@@ -48,7 +48,7 @@ export default async function OrderPage({
   return (
     <div className="grid gap-4">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <h1 className="text-2xl font-semibold">{orderStatusLabel(locale, order.status)}</h1>
+      <h1 className="page-title mb-2">{orderStatusLabel(locale, order.status)}</h1>
       <p className="text-sm text-muted">
         {chain.map((status) => (status === order.status ? `【${orderStatusLabel(locale, status)}】` : orderStatusLabel(locale, status))).join(" → ")}
         {order.status === "DISPUTED" || order.status === "REFUNDED" || order.status === "CANCELLED" ? ` · ${orderStatusLabel(locale, order.status)}` : ""}
@@ -62,7 +62,7 @@ export default async function OrderPage({
       </ul>
       <p>{tx(locale, "貨品", "Items")} {formatHkd(order.subtotal, locale)} · {shipMethodLabel(order.shippingMethod || "", locale)} {formatHkd(order.shippingTotal, locale)}</p>
       <ShipDetails locale={locale} method={order.shippingMethod} fulfillment={order.fulfillment} />
-      <p className="price text-2xl">{tx(locale, "合計", "Total")} {formatHkd(order.total, locale)}</p>
+      <p className="price text-xl">{tx(locale, "合計", "Total")} {formatHkd(order.total, locale)}</p>
       {order.trackingNumber || order.courierName ? (
         <p className="text-sm">
           {order.courierName || shipMethodLabel(order.shippingMethod || "SF", locale)}

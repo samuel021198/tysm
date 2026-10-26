@@ -21,7 +21,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
   ]);
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="mb-4 text-2xl font-semibold">{prefs.locale === "en" ? "Edit listing" : "編輯刊登"}</h1>
+      <h1 className="page-title">{prefs.locale === "en" ? "Edit listing" : "編輯刊登"}</h1>
       <SellForm
         locale={prefs.locale}
         percent={bpsToPercentLabel(bps)}

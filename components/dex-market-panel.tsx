@@ -66,7 +66,7 @@ export function MarketAside({ locale, market, sample }: { locale: Locale; market
       </div>
       {market.status === "ok" && market.price != null ? (
         <>
-          <p className="price mt-1 text-3xl leading-none">
+          <p className="price mt-1 text-2xl leading-none">
             {formatJpy(market.price)} <span className="text-sm font-semibold text-muted">JPY</span>
           </p>
           {allChange != null ? (
@@ -136,7 +136,7 @@ export function PricePanel({
     <>
       <section className="mt-4" aria-labelledby="dex-trend">
         <div className="flex items-center justify-between gap-2">
-          <h2 id="dex-trend" className="text-lg font-bold">
+          <h2 id="dex-trend" className="text-base font-semibold">
             {tx(locale, "價格走勢", "Price trend")}
           </h2>
           <div className="flex gap-1" aria-label={tx(locale, "時段", "Range")}>
@@ -185,7 +185,7 @@ export function MarketFacts({ locale, market }: { locale: Locale; market: SnkrMa
       </div>
       <div className={`p-3 ${market.premium != null ? "surface ring-2 ring-accent" : "surface"}`}>
         <p className="text-xs text-muted">{tx(locale, "PSA 10 對比 A 級", "PSA 10 vs grade A")}</p>
-        <p className={`price mt-1 text-2xl leading-none ${market.premium != null ? "text-ok" : "text-muted"}`}>
+        <p className={`price mt-1 text-xl leading-none ${market.premium != null ? "text-ok" : "text-muted"}`}>
           {market.premium != null ? `${market.premium.toFixed(1)}×` : "—"}
         </p>
         <p className="mt-1 text-xs text-muted">{market.premium != null ? tx(locale, "鑑定溢價", "Grading premium") : tx(locale, "未有對比", "No comparison")}</p>

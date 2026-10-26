@@ -14,14 +14,14 @@
   --soft: #f1f5f9;
   --danger: #9e2d3a;
   --ok: #1f7a62;
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   --field: #ffffff;
   --field-border: #64748b;
   --field-border-hover: #475569;
   --field-placeholder: #64748b;
   --field-focus: #0f766e;
-  --tab-h: calc(4.25rem + env(safe-area-inset-bottom));
-  --header-h: calc(3.5rem + env(safe-area-inset-top));
+  --tab-h: calc(3.25rem + env(safe-area-inset-bottom));
+  --header-h: calc(3rem + env(safe-area-inset-top));
 }
 
 .dark {
@@ -36,7 +36,7 @@
   --soft: #334155;
   --danger: #fda4af;
   --ok: #6ee7b7;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
   --field: #1e293b;
   --field-border: #94a3b8;
   --field-border-hover: #cbd5e1;
@@ -47,7 +47,7 @@
 @media (min-width: 768px) {
   :root {
     --tab-h: 0px;
-    --header-h: calc(4rem + env(safe-area-inset-top));
+    --header-h: calc(3.5rem + env(safe-area-inset-top));
   }
 }
 
@@ -62,7 +62,7 @@ body {
   background-image: none;
   color: var(--ink);
   font-family: var(--font-sans), "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-  line-height: 1.55;
+  line-height: 1.45;
   padding-bottom: var(--tab-h);
 }
 
@@ -115,25 +115,26 @@ svg {
   h1,
   h2 {
     font-weight: 700;
-    line-height: 1.28;
+    line-height: 1.25;
     letter-spacing: 0;
   }
 }
 
 .page-title {
-  margin-bottom: 0.9rem;
-  font-size: 1.65rem;
+  margin-bottom: 0.55rem;
+  font-size: 1.3rem;
 }
 
 .page-title::after,
 .accent::after {
   content: "";
   display: block;
-  width: 1.75rem;
-  height: 2px;
-  margin-top: 0.45rem;
+  width: 1.1rem;
+  height: 1px;
+  margin-top: 0.28rem;
   border-radius: 999px;
   background: var(--accent);
+  opacity: 0.55;
 }
 
 .panel {
@@ -147,8 +148,9 @@ svg {
   top: 0;
   right: 0;
   left: 0;
-  height: 2px;
+  height: 1px;
   background: var(--accent);
+  opacity: 0.45;
 }
 
 .menu-row {
@@ -162,29 +164,32 @@ svg {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 2px;
+  width: 1px;
   background: var(--accent);
+  opacity: 0.45;
 }
 
 .empty {
   display: grid;
   justify-items: center;
-  gap: 0.7rem;
-  margin: 1.75rem auto;
+  gap: 0.4rem;
+  margin: 1rem auto;
   max-width: 18rem;
-  padding: 1.75rem 1.25rem 1.5rem;
+  padding: 1rem 0.9rem 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
   text-align: center;
   color: var(--muted);
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  box-shadow: var(--shadow);
+  border-radius: 0.75rem;
+  box-shadow: none;
 }
 
 .empty::before {
   content: "";
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.625rem;
+  height: 1.625rem;
   border-radius: 999px;
   background: var(--soft);
   box-shadow: inset 0 0 0 1px var(--line);
@@ -192,10 +197,10 @@ svg {
 
 /* --soft sits next to the page color, so a field needs its own fill and border. */
 .field {
-  @apply w-full min-h-12 rounded-xl text-base text-ink outline-none transition;
+  @apply w-full min-h-11 rounded-[10px] text-base text-ink outline-none transition;
   border: 1.5px solid var(--field-border);
   background-color: var(--field);
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   color-scheme: inherit;
   box-shadow: none;
 }
@@ -220,19 +225,19 @@ svg {
 }
 
 .btn {
-  @apply inline-flex min-h-12 items-center justify-center rounded-full px-5 text-[15px] font-semibold transition active:scale-[0.98] disabled:opacity-60;
+  @apply inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-60;
 }
 
 .btn-primary {
   background: #0f766e;
   color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  box-shadow: none;
 }
 
 .sell-cta {
   background: #115e59;
   color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+  box-shadow: none;
 }
 
 .btn-ghost {
@@ -261,8 +266,8 @@ svg {
 .surface {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  box-shadow: var(--shadow);
+  border-radius: 0.75rem;
+  box-shadow: none;
 }
 
 .spinner {
@@ -296,10 +301,10 @@ svg {
 
 .chips {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.35rem;
   overflow-x: auto;
   scroll-snap-type: x proximity;
-  padding: 0.15rem 0.15rem 0.35rem;
+  padding: 0.05rem 0.05rem 0.2rem;
   scrollbar-width: none;
 }
 
@@ -328,13 +333,13 @@ svg {
 .feed {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 0.75rem;
+  gap: 0.6rem 0.45rem;
 }
 
 @media (min-width: 768px) {
   .feed {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.15rem 1rem;
+    gap: 0.75rem 0.6rem;
   }
 }
 
@@ -364,8 +369,8 @@ body:has(.dex-fit) > main {
   min-height: 0;
   margin-bottom: var(--tab-h);
   overflow: hidden;
-  padding-top: 0.75rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.35rem;
 }
 
 .dex-fit {
@@ -377,10 +382,26 @@ body:has(.dex-fit) > main {
 }
 
 .dex-fit .page-title {
-  margin-bottom: 0.35rem;
-  font-size: 1.35rem;
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
 }
 
 .dex-fit .page-title::after {
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
+}
+
+/* × sits high in the em box. A fixed box plus a small nudge lines it up with the label. */
+.glyph-x {
+  display: block;
+  font-size: 1.125rem;
+  line-height: 1;
+  transform: translateY(-0.06em);
+}
+
+.rounded-xl {
+  border-radius: 0.625rem;
+}
+
+.rounded-2xl {
+  border-radius: 0.75rem;
 }

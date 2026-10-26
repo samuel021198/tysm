@@ -535,12 +535,12 @@ export function SellForm({
                 ) : null}
                 <button
                   type="button"
-                  className="absolute right-1 top-1 grid h-11 w-11 place-items-center rounded-full bg-[#0F172A] text-lg text-white"
+                  className="absolute right-1 top-1 grid h-8 w-8 place-items-center rounded-full bg-[#0F172A] text-white"
                   aria-label={tx(locale, "移除相片", "Remove photo")}
                   disabled={locked}
                   onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}
                 >
-                  ×
+                  <span className="glyph-x" aria-hidden>×</span>
                 </button>
                 <div className="absolute inset-x-1 bottom-1 flex gap-1">
                   <button type="button" className="h-10 flex-1 rounded-full bg-card/95 text-xs font-semibold" disabled={index === 0} onClick={() => movePhoto(index, index - 1)}>

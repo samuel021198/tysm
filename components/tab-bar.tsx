@@ -41,7 +41,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       aria-label={tx(locale, "主要", "Main")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      <ul className="mx-auto grid h-[4.25rem] max-w-lg grid-cols-5">
+      <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-5">
         {tabs.map((tab) => (
           <Tab key={tab.href} {...tab} />
         ))}
@@ -66,9 +66,11 @@ function Tab({
       <Link
         href={href}
         aria-current={on ? "page" : undefined}
-        className={`flex h-full flex-col items-center justify-center gap-1 text-[11px] font-medium ${on ? "text-ink" : "text-muted"}`}
+        className={`flex h-full flex-col items-center justify-center gap-0.5 text-[11px] font-medium leading-none ${on ? "text-ink" : "text-muted"}`}
       >
-        <Icon name={icon} strokeWidth={on ? 2.15 : 1.7} />
+        <span className="grid h-[18px] w-[18px] place-items-center">
+          <Icon name={icon} className="h-[18px] w-[18px]" strokeWidth={on ? 2 : 1.6} />
+        </span>
         <span>{label}</span>
       </Link>
     </li>

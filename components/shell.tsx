@@ -24,24 +24,24 @@ export function Header({
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
       <div>
         <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="corner" />
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 pl-[4.75rem] pr-3 md:h-16 md:gap-3 md:px-5">
+        <div className="mx-auto flex h-12 max-w-6xl items-center gap-1 pl-14 pr-2 md:h-14 md:gap-2.5 md:px-4">
           <Link href="/" className="min-w-0 shrink pr-1">
             <img
               src={theme === "dark" ? "/brand/tysm-wordmark-on-dark.png" : "/brand/tysm-wordmark.png"}
               alt="TYSM"
-              className="h-9 w-auto max-w-full bg-transparent md:h-10"
+              className="h-7 w-auto max-w-full bg-transparent md:h-8"
             />
           </Link>
           <div className="mx-auto hidden min-w-0 max-w-xl flex-1 md:block">
             <SearchBox locale={locale} />
           </div>
           <div className="ml-auto flex items-center md:hidden">
-            <Link href="/cart" aria-label={nav.cart} className="relative grid h-11 w-11 place-items-center rounded-full active:bg-soft">
-              <Icon name="bag" />
+            <Link href="/cart" aria-label={nav.cart} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
+              <Icon name="bag" className="h-[18px] w-[18px]" />
               {cartCount ? <Count n={cartCount} /> : null}
             </Link>
-            <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-11 w-11 place-items-center rounded-full active:bg-soft">
-              <Icon name="bell" />
+            <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
+              <Icon name="bell" className="h-[18px] w-[18px]" />
               {unread ? <Count n={unread} /> : null}
             </Link>
           </div>
@@ -73,16 +73,16 @@ export function Header({
 export function PrefToggles({ locale, theme }: { locale: Locale; theme: "light" | "dark" }) {
   return (
     <form action={setPrefs} className="flex items-center">
-      <button className="grid h-11 min-w-11 place-items-center rounded-full px-2 text-xs font-semibold text-muted" name="locale" value={locale === "en" ? "zh-HK" : "en"}>
+      <button className="grid h-10 min-w-10 place-items-center rounded-full px-2 text-xs font-semibold leading-none text-muted" name="locale" value={locale === "en" ? "zh-HK" : "en"}>
         {locale === "en" ? "中" : "EN"}
       </button>
       <button
-        className="grid h-11 w-11 place-items-center rounded-full text-muted"
+        className="grid h-10 w-10 place-items-center rounded-full text-muted"
         name="theme"
         value={theme === "dark" ? "light" : "dark"}
         aria-label={theme === "dark" ? tx(locale, "淺色", "Light") : tx(locale, "深色", "Dark")}
       >
-        <Icon name={theme === "dark" ? "sun" : "moon"} className="h-5 w-5" />
+        <Icon name={theme === "dark" ? "sun" : "moon"} className="h-[18px] w-[18px]" />
       </button>
     </form>
   );
@@ -90,7 +90,7 @@ export function PrefToggles({ locale, theme }: { locale: Locale; theme: "light" 
 
 function Count({ n }: { n: number }) {
   return (
-    <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold leading-none text-white">
+    <span className="absolute right-0 top-0 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-accent px-0.5 text-[9px] font-bold leading-none text-white">
       {n > 9 ? "9+" : n}
     </span>
   );
@@ -98,8 +98,8 @@ function Count({ n }: { n: number }) {
 
 export function Footer({ locale }: { locale: Locale }) {
   return (
-    <footer className="mt-10 text-muted md:mt-20">
-      <div className="mx-auto max-w-6xl px-4 py-6 text-center md:flex md:items-center md:justify-start md:gap-4 md:py-8 md:text-left">
+    <footer className="mt-6 text-muted md:mt-12">
+      <div className="mx-auto max-w-6xl px-4 py-4 text-center md:flex md:items-center md:justify-start md:gap-4 md:py-5 md:text-left">
         <p className="font-display text-sm tracking-wide">TYSM</p>
         <p className="mt-2 flex justify-center gap-4 text-xs md:mt-0">
           <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/faq">FAQ</Link>

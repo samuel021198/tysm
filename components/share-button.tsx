@@ -8,7 +8,7 @@ export function ShareButton({ path, label, copiedLabel, icon = false }: { path: 
     <button
       type="button"
       aria-label={icon ? (copied ? copiedLabel : label) : undefined}
-      className={icon ? "grid h-12 w-12 shrink-0 place-items-center rounded-full bg-soft text-ink" : "grid h-12 flex-1 place-items-center text-sm font-medium"}
+      className={icon ? "grid h-10 w-10 shrink-0 place-items-center rounded-full bg-soft text-ink" : "inline-flex h-10 flex-1 items-center justify-center text-sm font-medium leading-none"}
       onClick={async () => {
         const url = new URL(path, window.location.origin).toString();
         try {
@@ -29,7 +29,7 @@ export function ShareButton({ path, label, copiedLabel, icon = false }: { path: 
       }}
     >
       {icon ? (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
           <circle cx="6" cy="12" r="2.1" />
           <circle cx="17" cy="7" r="2.1" />
           <circle cx="17" cy="17" r="2.1" />

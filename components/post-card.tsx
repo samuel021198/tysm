@@ -21,8 +21,8 @@ export function PostCard({
   const shown = gallery ? photos : photos.slice(0, 1);
   return (
     <article className="surface overflow-hidden">
-      <div className="flex items-center gap-3 px-3 py-3">
-        <Link href={`/shop/${post.author.id}`} className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
+      <div className="flex items-center gap-2 px-2.5 py-2">
+        <Link href={`/shop/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
         </Link>
         <Link href={`/shop/${post.author.id}`} className="min-w-0 truncate font-semibold">
@@ -39,35 +39,39 @@ export function PostCard({
           <form action={togglePostLike} className="flex-1">
             <input type="hidden" name="postId" value={post.likePostId} />
             <input type="hidden" name="next" value={next} />
-            <button type="submit" className="grid h-12 w-full place-items-center text-sm font-medium">
-              {post.liked ? "♥" : "♡"} {post.likeCount} <span className="sr-only">{tx(locale, "讚", "Like")}</span>
+            <button type="submit" className="inline-flex h-10 w-full items-center justify-center gap-1 text-sm font-medium leading-none">
+              <span className="text-base leading-none" aria-hidden>{post.liked ? "♥" : "♡"}</span>
+              <span>{post.likeCount}</span>
+              <span className="sr-only">{tx(locale, "讚", "Like")}</span>
             </button>
           </form>
         ) : post.likeListingId ? (
           <form action={toggleFavorite} className="flex-1">
             <input type="hidden" name="listingId" value={post.likeListingId} />
             <input type="hidden" name="next" value={next} />
-            <button type="submit" className="grid h-12 w-full place-items-center text-sm font-medium">
-              {post.liked ? "♥" : "♡"} {post.likeCount} <span className="sr-only">{tx(locale, "讚", "Like")}</span>
+            <button type="submit" className="inline-flex h-10 w-full items-center justify-center gap-1 text-sm font-medium leading-none">
+              <span className="text-base leading-none" aria-hidden>{post.liked ? "♥" : "♡"}</span>
+              <span>{post.likeCount}</span>
+              <span className="sr-only">{tx(locale, "讚", "Like")}</span>
             </button>
           </form>
         ) : (
-          <span className="grid h-12 flex-1 place-items-center text-sm text-muted">♡</span>
+          <span className="inline-flex h-10 flex-1 items-center justify-center text-base leading-none text-muted">♡</span>
         )}
         {post.commentHref ? (
-          <Link href={post.commentHref} className="grid h-12 flex-1 place-items-center text-sm font-medium">
+          <Link href={post.commentHref} className="inline-flex h-10 flex-1 items-center justify-center text-sm font-medium leading-none">
             {tx(locale, "留言", "Comment")} {post.commentCount || ""}
           </Link>
         ) : (
-          <span className="grid h-12 flex-1 place-items-center text-sm text-muted" title={tx(locale, "這張未有貼文", "No post yet")}>
+          <span className="inline-flex h-10 flex-1 items-center justify-center text-sm text-muted" title={tx(locale, "這張未有貼文", "No post yet")}>
             {tx(locale, "留言", "Comment")}
           </span>
         )}
         <ShareButton path={post.sharePath} label={tx(locale, "分享", "Share")} copiedLabel={tx(locale, "已複製", "Copied")} />
       </div>
-      <div className="px-3 pb-4 pt-1">
+      <div className="px-2.5 pb-3 pt-1">
         <Link href={post.href} className="block">
-          <h2 className="text-[15px] font-semibold leading-snug">
+          <h2 className="text-sm font-semibold leading-snug">
             {post.cardName}
             {post.condition ? <span className="font-medium text-muted"> · {post.condition}</span> : null}
           </h2>
@@ -79,11 +83,11 @@ export function PostCard({
         ) : null}
         {post.priceCents != null ? (
           post.priceHref ? (
-            <Link href={post.priceHref} className="price mt-1 inline-flex min-h-11 items-center text-xl leading-none">
+            <Link href={post.priceHref} className="price mt-1 inline-flex min-h-9 items-center text-lg leading-none">
               {formatHkd(post.priceCents, locale)}
             </Link>
           ) : (
-            <p className="price mt-1 text-xl leading-none">{formatHkd(post.priceCents, locale)}</p>
+            <p className="price mt-1 text-lg leading-none">{formatHkd(post.priceCents, locale)}</p>
           )
         ) : null}
       </div>

@@ -292,8 +292,8 @@ export function StoryComposer({ locale }: { locale: Locale }) {
         onChange={(event) => void useFile(event.target.files?.[0])}
       />
       <div className="flex items-center justify-between px-2 pt-[max(0.25rem,env(safe-area-inset-top))]">
-        <Link href="/" className="grid h-11 w-11 place-items-center text-3xl leading-none" aria-label={tx(locale, "關閉", "Close")}>
-          <span aria-hidden>×</span>
+        <Link href="/" className="grid h-10 w-10 place-items-center" aria-label={tx(locale, "關閉", "Close")}>
+          <span className="glyph-x" aria-hidden>×</span>
         </Link>
         <p className="text-sm font-semibold">{tx(locale, "動態", "Story")}</p>
         <span className="w-11" />

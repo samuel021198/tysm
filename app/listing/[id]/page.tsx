@@ -124,7 +124,7 @@ export default async function ListingPage({
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listingStatusLabel(locale, listing.status)}</span>
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
-        <h1 className="mt-3 text-[1.65rem] font-bold leading-tight">{listing.title}</h1>
+        <h1 className="mt-2 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>
         {listing.items.length ? (
           <ul className="mt-2 grid gap-1 text-sm text-muted">
             {listing.items.map((item) => (
@@ -384,7 +384,7 @@ export default async function ListingPage({
       </aside>
       {similar.length ? (
         <section className="order-4 lg:col-span-2 lg:col-start-1 lg:row-start-3">
-          <h2 className="mb-3 text-lg font-bold">{tx(locale, "相似貨品", "Similar items")}</h2>
+          <h2 className="mb-2 text-base font-semibold">{tx(locale, "相似貨品", "Similar items")}</h2>
           <div className="feed">
             {similar.map((item) => (
               <ListingCard key={item.id} listing={item} locale={locale} favorited={false} followed={false} next={`/listing/${id}`} />

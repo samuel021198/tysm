@@ -61,17 +61,17 @@ export function ListingCard({
           <input type="hidden" name="next" value={next} />
           <button
             aria-label={tx(locale, "收藏", "Favorite")}
-            className={`grid h-11 w-11 place-items-center rounded-full text-2xl leading-none shadow-sm ${favorited ? "bg-card text-accent" : "bg-card text-muted"}`}
+            className={`grid h-8 w-8 place-items-center rounded-full text-base leading-none shadow-sm ${favorited ? "bg-card text-accent" : "bg-card text-muted"}`}
           >
             {favorited ? "♥" : "♡"}
             <span className="sr-only">{listing.favoriteCount}</span>
           </button>
         </form>
       </div>
-      <div className="flex flex-1 flex-col gap-1.5 px-3 pb-3.5 pt-3">
-        <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1.5">
-          <h2 className="line-clamp-2 min-h-[2.6em] text-[15px] font-semibold leading-snug">{listing.title}</h2>
-          <p className="price text-[1.45rem] leading-none">{formatHkd(amount, locale)}</p>
+      <div className="flex flex-1 flex-col gap-1 px-2.5 pb-2.5 pt-2">
+        <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1">
+          <h2 className="line-clamp-2 min-h-[2.5em] text-sm font-semibold leading-snug">{listing.title}</h2>
+          <p className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</p>
           {series && series.length ? (
             <p className="flex items-center gap-1 text-[11px] text-muted">
               {series.length >= 2 ? <Sparkline values={series} /> : null}

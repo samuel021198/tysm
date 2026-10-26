@@ -39,8 +39,8 @@ export function DexRail({
   onSet: (setId: string) => void;
 }) {
   return (
-    <nav aria-label={tx(locale, "遊戲同系列", "Games and sets")} className="flex h-full min-h-0 w-[4.25rem] shrink-0 flex-col md:w-52">
-      <ul className="flex min-h-0 flex-1 flex-col gap-1">
+    <nav aria-label={tx(locale, "遊戲同系列", "Games and sets")} className="flex h-full min-h-0 w-[4.25rem] shrink-0 flex-col md:w-48">
+      <ul className="flex min-h-0 flex-1 flex-col gap-0.5">
         {GAMES.map(([value, zh, en]) => {
           const on = game === value;
           const expanded = on && open;
@@ -51,18 +51,18 @@ export function DexRail({
                 aria-current={on ? "page" : undefined}
                 aria-expanded={on ? open : false}
                 onClick={() => onGame(value)}
-                className={`flex min-h-11 w-full shrink-0 items-center rounded-xl px-2 text-left text-sm font-semibold md:px-3 ${on ? "bg-card text-ink shadow-card" : "text-muted"}`}
+                className={`flex min-h-9 w-full shrink-0 items-center rounded-lg px-1.5 text-left text-sm font-semibold leading-tight md:px-2.5 ${on ? "bg-card text-ink shadow-card" : "text-muted"}`}
               >
                 <span className="truncate">{tx(locale, zh, en)}</span>
               </button>
               {expanded ? (
-                <ul className="mt-1 grid min-h-0 flex-1 content-start gap-0.5 overflow-y-auto overscroll-contain pb-2 pl-1 md:pl-2" aria-label={tx(locale, "系列", "Sets")}>
+                <ul className="mt-0.5 grid min-h-0 flex-1 content-start gap-px overflow-y-auto overscroll-contain pb-1.5 pl-0.5 md:pl-1.5" aria-label={tx(locale, "系列", "Sets")}>
                   <li>
                     <button
                       type="button"
                       aria-current={!setId ? "page" : undefined}
                       onClick={() => onSet("")}
-                      className={`flex min-h-11 w-full items-center rounded-lg px-2 text-left text-xs md:px-3 ${!setId ? "bg-soft font-semibold text-ink" : "text-muted"}`}
+                      className={`flex min-h-8 w-full items-center rounded-md px-1.5 text-left text-xs md:px-2.5 ${!setId ? "bg-soft font-semibold text-ink" : "text-muted"}`}
                     >
                       {tx(locale, "全部", "All")}
                     </button>
@@ -77,7 +77,7 @@ export function DexRail({
                           title={name}
                           aria-current={selected ? "page" : undefined}
                           onClick={() => onSet(set.id)}
-                          className={`flex min-h-11 w-full flex-col justify-center rounded-lg px-2 text-left md:px-3 ${selected ? "bg-soft font-semibold text-ink" : "text-muted"}`}
+                          className={`flex min-h-8 w-full flex-col justify-center rounded-md px-1.5 text-left md:px-2.5 ${selected ? "bg-soft font-semibold text-ink" : "text-muted"}`}
                         >
                           <span className="truncate text-[11px] font-semibold leading-tight md:hidden">{set.code}</span>
                           <span className="hidden truncate text-xs leading-tight md:block">{name}</span>
@@ -98,7 +98,7 @@ export function DexRail({
 
 export function DexColumns({ rail, children }: { rail: ReactNode; children: ReactNode }) {
   return (
-    <div className="mt-3 flex min-h-0 min-w-0 flex-1 items-stretch gap-2 overflow-hidden md:gap-5">
+    <div className="mt-2 flex min-h-0 min-w-0 flex-1 items-stretch gap-1.5 overflow-hidden md:gap-3">
       {rail}
       <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain">{children}</div>
     </div>

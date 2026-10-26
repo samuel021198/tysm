@@ -270,10 +270,10 @@ export function SearchBox({
         >
           <div className="flex items-center gap-2">
             <div className="relative min-w-0 flex-1">
-              <Icon name="search" className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
+              <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
               <input
                 ref={inputRef}
-                className="h-12 w-full rounded-full bg-card pl-11 pr-11 text-base text-ink shadow-card outline-none ring-0 placeholder:text-[var(--field-placeholder)] focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
+                className="h-10 w-full rounded-full border border-line bg-card pl-9 pr-9 text-base text-ink shadow-none outline-none ring-0 placeholder:text-[var(--field-placeholder)] focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
                 name="q"
                 value={q}
                 role="combobox"
@@ -330,7 +330,7 @@ export function SearchBox({
               {q ? (
                 <button
                   type="button"
-                  className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-lg text-muted"
+                  className="absolute right-1 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-muted"
                   aria-label={tx(locale, "清除文字", "Clear text")}
                   onClick={() => {
                     setQ("");
@@ -338,7 +338,7 @@ export function SearchBox({
                     inputRef.current?.focus();
                   }}
                 >
-                  ×
+                  <span className="glyph-x" aria-hidden>×</span>
                 </button>
               ) : null}
             </div>
@@ -367,14 +367,14 @@ export function SearchBox({
                         type="button"
                         role="tab"
                         aria-selected={tab === id}
-                        className={`relative min-h-12 text-[15px] font-semibold ${tab === id ? "text-ink" : "text-muted"}`}
+                        className={`relative inline-flex min-h-10 items-center text-sm font-semibold leading-none ${tab === id ? "text-ink" : "text-muted"}`}
                         onClick={() => {
                           setTab(id);
                           setActive(0);
                         }}
                       >
                         {label}
-                        {tab === id ? <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-accent" /> : null}
+                        {tab === id ? <span className="absolute inset-x-0 bottom-0 h-px rounded-full bg-accent" /> : null}
                       </button>
                     ))}
                   </div>
@@ -413,13 +413,13 @@ export function SearchBox({
                         className={`flex items-stretch border-b border-line last:border-b-0 ${selected ? "bg-soft" : ""}`}
                       >
                         {row.kind === "query" ? (
-                          <button type="submit" className="flex min-h-14 min-w-0 flex-1 items-center px-1 py-2.5 text-left hover:bg-soft md:px-4">
+                          <button type="submit" className="flex min-h-11 min-w-0 flex-1 items-center px-1 py-2 text-left hover:bg-soft md:px-4">
                             {body}
                           </button>
                         ) : (
                           <Link
                             href={row.href}
-                            className="flex min-h-14 min-w-0 flex-1 items-center px-1 py-2.5 hover:bg-soft md:px-4"
+                            className="flex min-h-11 min-w-0 flex-1 items-center px-1 py-2 hover:bg-soft md:px-4"
                             onClick={() => {
                               if (row.query) pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
                               setOpen(false);
@@ -431,7 +431,7 @@ export function SearchBox({
                         {row.kind === "memory" ? (
                           <button
                             type="button"
-                            className="grid w-12 shrink-0 place-items-center text-xl text-muted hover:text-ink"
+                            className="grid w-10 shrink-0 place-items-center text-muted hover:text-ink"
                             aria-label={tx(locale, `移除「${row.label}」`, `Remove “${row.label}”`)}
                             onClick={() => {
                               const item = { query: row.query || row.label, cat: row.cat, catZh: row.catZh, catEn: row.catEn };
@@ -439,7 +439,7 @@ export function SearchBox({
                               else removeRecent(item);
                             }}
                           >
-                            ×
+                            <span className="glyph-x" aria-hidden>×</span>
                           </button>
                         ) : null}
                       </div>

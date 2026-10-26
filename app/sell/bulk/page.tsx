@@ -12,7 +12,7 @@ export default async function BulkPage() {
   const categories = await prisma.category.findMany({ where: { level: "LEAF" }, orderBy: { sort: "asc" } });
   return (
     <div className="mx-auto max-w-xl">
-      <h1 className="mb-4 text-2xl font-semibold">{tx(prefs.locale, "CSV 批量上架", "CSV upload")}</h1>
+      <h1 className="page-title">{tx(prefs.locale, "CSV 批量上架", "CSV upload")}</h1>
       <CsvForm
         locale={prefs.locale}
         categories={categories.map((cat) => ({

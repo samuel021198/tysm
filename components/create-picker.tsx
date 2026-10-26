@@ -152,7 +152,7 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className={`fixed left-3 z-50 grid h-11 min-w-11 place-items-center rounded-full bg-accent px-2.5 text-base font-bold leading-none text-white shadow-sm md:hidden ${creating ? "ring-2 ring-ink ring-offset-2 ring-offset-[var(--bg)]" : ""}`}
+        className={`fixed left-2.5 z-50 grid h-9 w-9 place-items-center rounded-full bg-accent text-white shadow-none md:hidden ${creating ? "ring-2 ring-ink ring-offset-2 ring-offset-[var(--bg)]" : ""}`}
         style={{ top: "calc(env(safe-area-inset-top) + 0.375rem)" }}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -160,7 +160,7 @@ export function CreatePicker({
         aria-label={tx(locale, "新增", "Create")}
         onClick={openPicker}
       >
-        <Icon name="plus" className="h-6 w-6" strokeWidth={2.4} />
+        <Icon name="plus" className="h-4 w-4" strokeWidth={2.25} />
       </button>
     );
 
@@ -177,11 +177,11 @@ export function CreatePicker({
       <div className="grid grid-cols-3 items-center px-2 pt-[max(0.25rem,env(safe-area-inset-top))]">
         <button
           type="button"
-          className="grid h-11 w-11 place-items-center rounded-full text-3xl leading-none text-white/90 active:bg-white/10"
+          className="grid h-10 w-10 place-items-center rounded-full text-white/90 active:bg-white/10"
           aria-label={tx(locale, "關閉", "Close")}
           onClick={close}
         >
-          <span aria-hidden>×</span>
+          <span className="glyph-x" aria-hidden>×</span>
         </button>
         <p className="text-center text-sm font-semibold">{tx(locale, "新增", "Create")}</p>
         <p className="pr-3 text-right text-sm tabular-nums text-white/70">
@@ -204,12 +204,12 @@ export function CreatePicker({
               aria-hidden={i !== index}
               className="flex w-full shrink-0 snap-center snap-always items-center justify-center px-6"
             >
-              <article className="flex w-[min(20rem,86vw)] flex-col items-center rounded-2xl bg-card px-6 py-10 text-center text-ink shadow-card">
-                <span className="grid h-28 w-28 place-items-center rounded-2xl bg-accent text-white">
-                  <Icon name={item.icon} className="h-14 w-14" strokeWidth={1.6} />
+              <article className="flex w-[min(18rem,84vw)] flex-col items-center rounded-xl bg-card px-5 py-7 text-center text-ink shadow-card">
+                <span className="grid h-16 w-16 place-items-center rounded-xl bg-accent text-white">
+                  <Icon name={item.icon} className="h-8 w-8" strokeWidth={1.6} />
                 </span>
-                <h2 className="mt-6 font-display text-4xl font-semibold tracking-tight">{tx(locale, item.zh, item.en)}</h2>
-                <p className="mt-2 text-base text-muted">{tx(locale, item.hintZh, item.hintEn)}</p>
+                <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">{tx(locale, item.zh, item.en)}</h2>
+                <p className="mt-1.5 text-sm text-muted">{tx(locale, item.hintZh, item.hintEn)}</p>
               </article>
             </section>
           ))}
@@ -217,7 +217,7 @@ export function CreatePicker({
         {index > 0 ? (
           <button
             type="button"
-            className="absolute left-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-3xl leading-none text-white md:grid"
+            className="absolute left-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-2xl leading-none text-white md:grid"
             aria-label={tx(locale, "上一個", "Previous")}
             onClick={() => go(index - 1)}
           >
@@ -227,7 +227,7 @@ export function CreatePicker({
         {index < CREATE_MODES.length - 1 ? (
           <button
             type="button"
-            className="absolute right-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-3xl leading-none text-white md:grid"
+            className="absolute right-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-2xl leading-none text-white md:grid"
             aria-label={tx(locale, "下一個", "Next")}
             onClick={() => go(index + 1)}
           >
@@ -243,7 +243,7 @@ export function CreatePicker({
       <div className="px-6">
         <Link
           href={createDest(mode.href, loggedIn)}
-          className="btn btn-primary min-h-14 w-full max-w-sm text-lg"
+          className="btn btn-primary w-full max-w-sm"
           aria-label={`${tx(locale, mode.zh, mode.en)}，${tx(locale, mode.ctaZh, mode.ctaEn)}`}
           onClick={() => {
             setPresent(false);

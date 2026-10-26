@@ -17,8 +17,8 @@ const REGIONS = [
 
 function chipClass(on: boolean) {
   return on
-    ? "inline-flex h-11 items-center rounded-full bg-accent px-4 text-sm font-semibold text-white"
-    : "inline-flex h-11 items-center rounded-full border border-line bg-card px-4 text-sm font-semibold text-ink";
+    ? "inline-flex h-8 items-center rounded-full bg-accent px-3 text-sm font-semibold leading-none text-white"
+    : "inline-flex h-8 items-center rounded-full border border-line bg-card px-3 text-sm font-semibold leading-none text-ink";
 }
 
 export function DexToolbar({
@@ -148,14 +148,14 @@ export function DexToolbar({
       <form
         action={action}
         method="get"
-        className="flex h-14 items-center gap-2 rounded-full bg-card pl-3.5 pr-1.5 shadow-card"
+        className="flex h-11 items-center gap-2 rounded-full border border-line bg-card pl-3 pr-1 shadow-none"
         onSubmit={(event) => {
           if (!onQuery) return;
           event.preventDefault();
           onQuery({ q: text.trim(), region: current });
         }}
       >
-        <Icon name="search" className="h-5 w-5 shrink-0 text-muted" />
+        <Icon name="search" className="h-4 w-4 shrink-0 text-muted" />
         <label className="sr-only" htmlFor="dex-q">
           {tx(locale, "搜尋卡牌", "Search cards")}
         </label>
@@ -172,7 +172,7 @@ export function DexToolbar({
           aria-controls={visible ? listId : undefined}
           aria-activedescendant={index >= 0 ? `${listId}-${index}` : undefined}
           placeholder={placeholder}
-          className="h-11 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-[var(--field-placeholder)]"
+          className="h-10 min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-[var(--field-placeholder)]"
           onChange={(event) => {
             setText(event.target.value);
             setActive(-1);
@@ -212,12 +212,12 @@ export function DexToolbar({
         <input type="hidden" name="game" value={gameParam(game)} />
         {current && regions ? <input type="hidden" name="region" value={current} /> : null}
         {setId ? <input type="hidden" name="set" value={setId} /> : null}
-        <button className="inline-flex h-11 shrink-0 items-center rounded-full bg-accent px-4 text-sm font-semibold text-white" type="submit">
+        <button className="inline-flex h-8 shrink-0 items-center rounded-full bg-accent px-3 text-sm font-semibold leading-none text-white" type="submit">
           {tx(locale, "搜尋", "Search")}
         </button>
       </form>
       {visible ? (
-        <div className="absolute left-0 right-0 top-[3.75rem] z-20 overflow-hidden rounded-2xl border border-line bg-card shadow-card">
+        <div className="absolute left-0 right-0 top-12 z-20 overflow-hidden rounded-xl border border-line bg-card shadow-card">
           <ul id={listId} ref={panelRef} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="max-h-80 overflow-y-auto overscroll-contain bg-card py-1">
             {hits.map((hit, item) => {
               const selected = item === index;

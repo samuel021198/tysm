@@ -157,14 +157,14 @@ export function DexBrowser({ locale, initial }: { locale: Locale; initial: DexBr
           ) : (
             <>
               <section aria-labelledby="dex-recommended">
-                <h2 id="dex-recommended" className="mb-3 text-lg font-bold">
+                <h2 id="dex-recommended" className="mb-2 text-base font-semibold">
                   {browse.game === "DEMO" ? tx(locale, "示範", "Demo") : tx(locale, "為你推薦", "For you")}
                 </h2>
                 <DexGrid cards={browse.cards} locale={locale} />
               </section>
               {browse.hot.length ? (
-                <section className="mt-8" aria-labelledby="dex-hot">
-                  <h2 id="dex-hot" className="mb-3 text-lg font-bold">
+                <section className="mt-5" aria-labelledby="dex-hot">
+                  <h2 id="dex-hot" className="mb-2 text-base font-semibold">
                     {tx(locale, "熱門", "Popular")}
                   </h2>
                   <DexGrid cards={browse.hot} locale={locale} />
