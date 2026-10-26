@@ -3,8 +3,7 @@ import { toggleCollectionVisibility } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
-import { ListingCard } from "./listing-card";
-import { PostCard } from "./post-card";
+import { Icon } from "./icons";
 
 type Item = {
   id: string;
@@ -40,11 +39,13 @@ type Sale = {
 };
 
 const TABS = [
-  ["posts", "貼文", "Posts"],
-  ["box", "公開收藏格", "Public collection"],
-  ["selling", "賣緊", "Selling"],
-  ["reviews", "評價", "Reviews"],
+  { id: "posts", zh: "貼文", en: "Posts", icon: "grid" },
+  { id: "box", zh: "收藏", en: "Collection", icon: "bookmark" },
+  { id: "selling", zh: "商店", en: "Shop", icon: "bag" },
+  { id: "reviews", zh: "評價", en: "Reviews", icon: "star" },
 ] as const;
+
+const tile = "block aspect-square w-full bg-soft object-contain";
 
 export function ProfileBoard({
   locale,
@@ -56,7 +57,6 @@ export function ProfileBoard({
   listings,
   reviews,
   drafts,
-  favIds,
 }: {
   locale: Locale;
   base: string;
@@ -69,79 +69,112 @@ export function ProfileBoard({
   drafts: Draft[];
   favIds: string[];
 }) {
-  const fav = new Set(favIds);
   const panel = tab === "box" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
   return (
-    <div className="grid gap-3">
-      <div className="chips">
-        {TABS.map(([id, zh, en]) => (
-          <Link key={id} href={`${base}?tab=${id}`} className={`inline-flex h-7 items-center rounded-full px-2.5 text-xs font-semibold leading-none ${panel === id ? "bg-accent text-white" : "border border-line bg-card text-muted"}`} aria-current={panel === id ? "page" : undefined}>
-            {tx(locale, zh, en)}
-          </Link>
-        ))}
-      </div>
+    <div className="-mx-3 sm:mx-0">
+      <nav aria-label={tx(locale, "個人內容", "Profile")} className="grid grid-cols-4 border-t border-line">
+        {TABS.map((item) => {
+          const on = panel === item.id;
+          const label = tx(locale, item.zh, item.en);
+          return (
+            <Link
+              key={item.id}
+              href={`${base}?tab=${item.id}`}
+              aria-current={on ? "page" : undefined}
+              className={`relative flex h-11 items-center justify-center ${on ? "text-ink" : "text-muted"}`}
+            >
+              <Icon name={item.icon} className="h-6 w-6" strokeWidth={on ? 2.15 : 1.6} />
+              <span className="sr-only">{label}</span>
+              {on ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-ink" /> : null}
+            </Link>
+          );
+        })}
+      </nav>
       {panel === "posts" ? (
         posts.length ? (
-          <div className="mx-auto grid w-full max-w-lg gap-4">
+          <ul className="grid grid-cols-3 gap-px">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} locale={locale} next={`${base}?tab=posts`} />
+              <li key={post.id} className="min-w-0">
+                <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
+                  <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                  {post.photos.length > 1 ? <StackMark /> : null}
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
-          <p className="empty">{tx(locale, "未有貼文。", "No posts yet.")}</p>
+          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有貼文。", "No posts yet.")}</p>
         )
       ) : null}
       {panel === "box" ? (
         <>
-          {isSelf ? <p className="text-xs text-muted">{tx(locale, "預設公開。私人收藏只會喺呢度見到。", "Public by default. Private cards stay on this screen.")}</p> : null}
-          {items.length === 0 ? <p className="empty">{tx(locale, "未有收藏。", "No cards yet.")}</p> : null}
-          <ul className="feed">
-            {items.map((item) => (
-              <li key={item.id} className="surface overflow-hidden">
-                {item.href ? (
-                  <Link href={item.href} className="block">
-                    <Thumb item={item} />
-                  </Link>
-                ) : (
-                  <Thumb item={item} />
-                )}
-                <div className="grid gap-0.5 px-2.5 py-2">
-                  <p className="text-sm font-semibold">{item.cardName}</p>
-                  <p className="text-xs text-muted">{item.condition}{item.visibility === "PRIVATE" ? ` · ${tx(locale, "私人", "Private")}` : ""}</p>
-                  {item.priceCents != null ? <p className="price text-base leading-none">{formatHkd(item.priceCents, locale)}</p> : null}
-                  {isSelf && item.catalogCardId && !item.listingId ? (
-                    <Link href={`/sell?catalogCardId=${encodeURIComponent(item.catalogCardId)}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
-                      {tx(locale, "放賣", "List for sale")}
-                    </Link>
-                  ) : null}
+          {isSelf ? <p className="px-3 pt-2 text-xs text-muted sm:px-0">{tx(locale, "預設公開。私人收藏只會喺呢度見到。", "Public by default. Private cards stay on this screen.")}</p> : null}
+          {items.length === 0 ? <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No cards yet.")}</p> : null}
+          <ul className="grid grid-cols-3 gap-px">
+            {items.map((item) => {
+              const label = item.priceCents != null ? `${item.cardName} ${formatHkd(item.priceCents, locale)}` : item.cardName;
+              return (
+                <li key={item.id} className="min-w-0">
+                  <div className="relative">
+                    {item.href ? (
+                      <Link href={item.href} aria-label={label} className="block">
+                        <img src={item.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                      </Link>
+                    ) : (
+                      <img src={item.photo || "/demo/back.svg"} alt={label} loading="lazy" decoding="async" className={tile} />
+                    )}
+                    {item.visibility === "PRIVATE" ? (
+                      <span className="pointer-events-none absolute left-1 top-1 bg-card/90 px-1 py-0.5 text-[10px] font-semibold leading-none text-ink">{tx(locale, "私人", "Private")}</span>
+                    ) : null}
+                  </div>
                   {isSelf ? (
-                    <form action={toggleCollectionVisibility}>
-                      <input type="hidden" name="id" value={item.id} />
-                      <button className="text-sm text-link">{item.visibility === "PUBLIC" ? tx(locale, "改為私人", "Make private") : tx(locale, "改為公開", "Make public")}</button>
-                    </form>
+                    <div className="flex h-7 items-center justify-between gap-1 px-1">
+                      {item.catalogCardId && !item.listingId ? (
+                        <Link href={`/sell?catalogCardId=${encodeURIComponent(item.catalogCardId)}`} className="min-w-0 truncate text-[10px] font-semibold leading-none text-link">
+                          {tx(locale, "放賣", "List for sale")}
+                        </Link>
+                      ) : (
+                        <span />
+                      )}
+                      <form action={toggleCollectionVisibility} className="ml-auto min-w-0">
+                        <input type="hidden" name="id" value={item.id} />
+                        <button className="max-w-full truncate text-[10px] font-semibold leading-none text-link">
+                          {item.visibility === "PUBLIC" ? tx(locale, "改為私人", "Make private") : tx(locale, "改為公開", "Make public")}
+                        </button>
+                      </form>
+                    </div>
                   ) : null}
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </>
       ) : null}
       {panel === "selling" ? (
         listings.length ? (
-          <div className="feed">
-            {listings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} locale={locale} favorited={fav.has(listing.id)} followed={false} next={`${base}?tab=selling`} />
-            ))}
-          </div>
+          <ul className="grid grid-cols-3 gap-px">
+            {listings.map((listing) => {
+              const amount = shopAsk(listing);
+              const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
+              return (
+                <li key={listing.id} className="min-w-0">
+                  <Link href={`/listing/${listing.id}`} aria-label={label} className="block">
+                    <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                  </Link>
+                  {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
+                </li>
+              );
+            })}
+          </ul>
         ) : (
-          <p className="empty">{tx(locale, "未有賣緊的卡。", "Nothing for sale.")}</p>
+          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有賣緊的卡。", "Nothing for sale.")}</p>
         )
       ) : null}
       {panel === "reviews" ? (
         reviews.length ? (
-          <ul className="grid gap-3 text-sm">
+          <ul className="grid gap-2 px-3 pt-3 text-sm sm:px-0">
             {reviews.map((review) => (
-              <li key={review.id} className="surface px-4 py-3">
+              <li key={review.id} className="surface px-3 py-2.5">
                 <p>{review.nickname} · {"★".repeat(review.stars)}</p>
                 <p>{review.comment}</p>
                 {review.reply ? <p className="text-muted">{tx(locale, "回覆", "Reply")}: {review.reply}</p> : null}
@@ -149,12 +182,12 @@ export function ProfileBoard({
             ))}
           </ul>
         ) : (
-          <p className="empty">{tx(locale, "未有評價。", "No reviews.")}</p>
+          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有評價。", "No reviews.")}</p>
         )
       ) : null}
       {panel === "drafts" ? (
         drafts.length ? (
-          <ul className="grid gap-2">
+          <ul className="grid gap-2 px-3 pt-3 sm:px-0">
             {drafts.map((draft) => (
               <li key={draft.id}>
                 <Link href={`/sell/${draft.id}`} className="surface flex h-11 items-center justify-between px-3 text-sm">
@@ -165,13 +198,26 @@ export function ProfileBoard({
             ))}
           </ul>
         ) : (
-          <p className="empty">{tx(locale, "未有草稿。", "No drafts.")}</p>
+          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有草稿。", "No drafts.")}</p>
         )
       ) : null}
     </div>
   );
 }
 
-function Thumb({ item }: { item: Item }) {
-  return <img src={item.photo || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />;
+function shopAsk(listing: Sale): number | null {
+  const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
+  if (auction) return listing.currentBid ?? listing.startPrice;
+  return listing.price;
+}
+
+function StackMark() {
+  return (
+    <span className="pointer-events-none absolute right-1 top-1 bg-card/90 p-0.5 text-ink" aria-hidden>
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="7" y="7" width="12" height="12" />
+        <path d="M5 16.5V5h11.5" />
+      </svg>
+    </span>
+  );
 }
