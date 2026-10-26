@@ -22,7 +22,7 @@ export function PostCard({
   return (
     <article className="surface overflow-hidden">
       <div className="flex items-center gap-3 px-3 py-3">
-        <Link href={`/shop/${post.author.id}`} className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-rose to-teal text-sm font-bold text-[#1b1418]">
+        <Link href={`/shop/${post.author.id}`} className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
         </Link>
         <Link href={`/shop/${post.author.id}`} className="min-w-0 truncate font-semibold">
@@ -31,7 +31,7 @@ export function PostCard({
       </div>
       <Link href={post.href} className="block">
         {shown.map((url, index) => (
-          <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />
+          <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-soft object-contain" />
         ))}
       </Link>
       <div className="flex items-center border-t border-line">

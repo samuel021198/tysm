@@ -88,7 +88,7 @@ export function CheckoutForm({
         <h2 className="font-semibold">{tx(locale, "貨品", "Items")}</h2>
         {lines.map((line, index) => (
           <div key={`${line.title}-${index}`} className="flex gap-3">
-            <img src={line.image || "/demo/back.svg"} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-[#f4efe6] object-contain" />
+            <img src={line.image || "/demo/back.svg"} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
             <div className="min-w-0 flex-1 text-sm">
               <p className="font-medium leading-snug">{line.title}</p>
               <p className="text-muted">{line.seller} · × {line.quantity}</p>
@@ -105,7 +105,7 @@ export function CheckoutForm({
             <p className="text-sm text-danger">{tx(locale, "呢幾件貨沒有共同運送方式，請先在購物車移除部分貨品再結帳。", "These items have no shipping method in common. Remove some from the cart and check out separately.")}</p>
           ) : (
             group.methods.map((id) => (
-              <label key={id} className={`grid gap-1 rounded-2xl p-4 text-sm ring-1 ${chosen[group.sellerId] === id ? "bg-soft ring-teal" : "bg-card ring-[#5c3a4a]/20"}`}>
+              <label key={id} className={`grid gap-1 rounded-2xl p-4 text-sm ring-1 ${chosen[group.sellerId] === id ? "bg-soft ring-accent" : "bg-card ring-line"}`}>
                 <span className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-3">
                     <input type="radio" name={`shipChoice-${group.sellerId}`} checked={chosen[group.sellerId] === id} onChange={() => setChosen((current) => ({ ...current, [group.sellerId]: id }))} />
@@ -154,7 +154,7 @@ export function CheckoutForm({
         <h2 className="font-semibold">{tx(locale, "付款方式", "Payment")}</h2>
         <div className="grid gap-2 sm:grid-cols-3">
           {PAYS.map(([id, zh, en]) => (
-            <label key={id} className={`flex min-h-14 items-center gap-2 rounded-2xl p-3 text-sm ring-1 ${pay === id ? "bg-soft ring-teal" : "bg-card ring-[#5c3a4a]/20"}`}>
+            <label key={id} className={`flex min-h-14 items-center gap-2 rounded-2xl p-3 text-sm ring-1 ${pay === id ? "bg-soft ring-accent" : "bg-card ring-line"}`}>
               <input type="radio" name="payChoice" checked={pay === id} onChange={() => setPay(id)} />
               <span className="font-medium">{tx(locale, zh, en)}</span>
             </label>

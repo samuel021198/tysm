@@ -1,4 +1,4 @@
-export const TEXT_COLORS = ["#ffffff", "#1b1418", "#c498b2", "#7cb9c8", "#f2c14e"] as const;
+export const TEXT_COLORS = ["#ffffff", "#1b1418", "#0f766e", "#64748b", "#f2c14e"] as const;
 
 export const STORY_EMOJIS = ["🔥", "⭐", "❤️", "😭", "😍", "👍", "🃏", "✨", "💎", "🏆", "😎", "🫶", "💯", "😮", "🐉", "⚡"] as const;
 

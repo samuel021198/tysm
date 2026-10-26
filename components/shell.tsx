@@ -65,7 +65,6 @@ export function Header({
             <PrefToggles locale={locale} theme={theme} />
           </div>
         </div>
-        <div className="h-px bg-gradient-to-r from-transparent via-rose/70 to-teal/80" />
       </div>
     </header>
   );
@@ -91,7 +90,7 @@ export function PrefToggles({ locale, theme }: { locale: Locale; theme: "light" 
 
 function Count({ n }: { n: number }) {
   return (
-    <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-gradient-to-br from-rose to-teal px-1 text-[10px] font-bold leading-none text-[#1b1418]">
+    <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold leading-none text-white">
       {n > 9 ? "9+" : n}
     </span>
   );

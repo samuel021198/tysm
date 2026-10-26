@@ -428,8 +428,8 @@ export function SellForm({
         <div className="grid gap-3">
           <div className="h-1.5 overflow-hidden rounded-full bg-soft">
             <div
-              className="h-full rounded-full"
-              style={{ width: `${((step + 1) / STEPS.length) * 100}%`, background: "linear-gradient(90deg,#c498b2,#7cb9c8)" }}
+              className="h-full rounded-full bg-accent"
+              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
             />
           </div>
           <ol className="grid grid-cols-4 gap-1.5" aria-label={tx(locale, "上架步驟", "Listing steps")}>
@@ -438,7 +438,7 @@ export function SellForm({
                 <button
                   type="button"
                   aria-current={index === step ? "step" : undefined}
-                  className={`min-h-11 w-full rounded-2xl px-1 text-xs font-semibold ${index === step ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}
+                  className={`min-h-11 w-full rounded-2xl px-1 text-xs font-semibold ${index === step ? "bg-accent text-white" : "bg-soft"}`}
                   onClick={() => go(index)}
                 >
                   {index + 1}. {tx(locale, zh, en)}
@@ -525,17 +525,17 @@ export function SellForm({
                   movePhoto(dragFrom.current, index);
                   dragFrom.current = null;
                 }}
-                className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#f4efe6] ring-1 ring-[#5c3a4a]/20"
+                className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-soft ring-1 ring-line"
               >
                 <img src={photo.url} alt="" className="h-full w-full object-contain" />
                 {index === 0 ? (
-                  <span className="absolute left-1.5 top-1.5 rounded-full bg-[#1b1418] px-2 py-0.5 text-[10px] font-semibold text-[#fff8f4]">
+                  <span className="absolute left-1.5 top-1.5 rounded-full bg-[#0F172A] px-2 py-0.5 text-[10px] font-semibold text-white">
                     {tx(locale, "封面", "Cover")}
                   </span>
                 ) : null}
                 <button
                   type="button"
-                  className="absolute right-1 top-1 grid h-11 w-11 place-items-center rounded-full bg-[#1b1418] text-lg text-[#fff8f4]"
+                  className="absolute right-1 top-1 grid h-11 w-11 place-items-center rounded-full bg-[#0F172A] text-lg text-white"
                   aria-label={tx(locale, "移除相片", "Remove photo")}
                   disabled={locked}
                   onClick={() => setPhotos((current) => current.filter((_, i) => i !== index))}
@@ -556,7 +556,7 @@ export function SellForm({
               </div>
             ))}
             {photos.length < PHOTO_MAX ? (
-              <label data-wizard-jump data-focus="photos-add" tabIndex={-1} className="grid aspect-[3/4] cursor-pointer place-items-center rounded-2xl border-2 border-dashed border-[#c498b2] bg-card text-sm font-semibold outline-none">
+              <label data-wizard-jump data-focus="photos-add" tabIndex={-1} className="grid aspect-[3/4] cursor-pointer place-items-center rounded-2xl border-2 border-dashed border-muted bg-card text-sm font-semibold outline-none">
                 {tx(locale, "加相片", "Add")}
                 <input ref={fileRef} className="sr-only" type="file" accept="image/*" multiple onChange={(event) => void onFiles(event.target.files)} />
               </label>
@@ -717,11 +717,11 @@ export function SellForm({
           <fieldset className="grid gap-2">
             <legend className="font-medium">{tx(locale, "貨況", "Stock")}</legend>
             <div className="grid grid-cols-2 gap-2">
-              <label className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl px-3 font-semibold ${stockType === "IN_STOCK" ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}>
+              <label className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl px-3 font-semibold ${stockType === "IN_STOCK" ? "bg-accent text-white" : "bg-soft"}`}>
                 <input className="sr-only" type="radio" name="stockType" value="IN_STOCK" checked={stockType === "IN_STOCK"} onChange={() => setStockType("IN_STOCK")} />
                 {tx(locale, "現貨", "In stock")}
               </label>
-              <label className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl px-3 font-semibold ${stockType === "PREORDER" ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}>
+              <label className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl px-3 font-semibold ${stockType === "PREORDER" ? "bg-accent text-white" : "bg-soft"}`}>
                 <input className="sr-only" type="radio" name="stockType" value="PREORDER" checked={stockType === "PREORDER"} onChange={() => setStockType("PREORDER")} />
                 {tx(locale, "預訂", "Preorder")}
               </label>
@@ -729,7 +729,7 @@ export function SellForm({
             {stockType === "IN_STOCK" ? (
               <div data-wizard-jump data-focus="shipWithin" tabIndex={-1} className="grid grid-cols-3 gap-2 outline-none">
                 {[3, 7, 30].map((days) => (
-                  <label key={days} className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${shipWithin === days ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}>
+                  <label key={days} className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${shipWithin === days ? "bg-accent text-white" : "bg-soft"}`}>
                     <input className="sr-only" type="radio" name="shipWithinDays" value={days} checked={shipWithin === days} onChange={() => setShipWithin(days)} />
                     {tx(locale, `${days} 日`, `${days} days`)}
                   </label>
@@ -802,7 +802,7 @@ export function SellForm({
           <h2 className="font-semibold">{tx(locale, "預覽", "Preview")}</h2>
           <div className="flex gap-2 overflow-x-auto">
             {photos.map((photo, index) => (
-              <img key={index} src={photo.url} alt="" className="h-28 w-20 shrink-0 rounded-xl bg-[#f4efe6] object-contain" />
+              <img key={index} src={photo.url} alt="" className="h-28 w-20 shrink-0 rounded-xl bg-soft object-contain" />
             ))}
           </div>
           <p className="text-lg font-semibold">{title || tx(locale, "未填標題", "No title yet")}</p>
@@ -835,11 +835,11 @@ export function SellForm({
           <fieldset className="grid gap-2">
             <legend className="font-medium">{tx(locale, "發布", "Publish")}</legend>
             <div className="grid grid-cols-2 gap-2">
-              <label className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${publishMode === "now" ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}>
+              <label className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${publishMode === "now" ? "bg-accent text-white" : "bg-soft"}`}>
                 <input className="sr-only" type="radio" checked={publishMode === "now"} onChange={() => setPublishMode("now")} />
                 {tx(locale, "即時", "Now")}
               </label>
-              <label className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${publishMode === "later" ? "bg-[#1b1418] text-[#fff8f4]" : "bg-soft"}`}>
+              <label className={`flex min-h-12 items-center justify-center rounded-2xl font-semibold ${publishMode === "later" ? "bg-accent text-white" : "bg-soft"}`}>
                 <input className="sr-only" type="radio" checked={publishMode === "later"} onChange={() => setPublishMode("later")} />
                 {tx(locale, "排程", "Schedule")}
               </label>

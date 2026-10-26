@@ -123,14 +123,14 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
           return (
             <button key={item.userId} type="button" className="flex w-[4.75rem] shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
-              <span className={`relative grid h-[4.25rem] w-[4.25rem] place-items-center rounded-full p-[2.5px] ${fresh ? "bg-gradient-to-br from-rose via-[#e7b7cc] to-teal" : "bg-[#d5c9cf] dark:bg-white/25"}`}>
+              <span className={`relative grid h-[4.25rem] w-[4.25rem] place-items-center rounded-full p-[2.5px] ${fresh ? "bg-accent" : "bg-slate-300 dark:bg-white/25"}`}>
                 <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
-                  <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-gradient-to-br from-rose to-teal text-sm font-bold text-[#1b1418]">
+                  <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
                     {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}
                   </span>
                 </span>
                 {item.mine && item.stories.length === 0 ? (
-                  <span className="absolute -bottom-0.5 -right-0.5 grid h-6 w-6 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-base font-bold leading-none text-[#1b1418] ring-2 ring-bg">
+                  <span className="absolute -bottom-0.5 -right-0.5 grid h-6 w-6 place-items-center rounded-full bg-accent text-base font-bold leading-none text-white ring-2 ring-bg">
                     +
                   </span>
                 ) : null}
@@ -141,7 +141,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
         })}
       </div>
       {cursor && ring && frame ? (
-        <div className="fixed inset-0 z-50 bg-[#100e10] text-white" role="dialog" aria-modal="true" aria-label={ring.nickname || tx(locale, "限時動態", "Story")}>
+        <div className="fixed inset-0 z-50 bg-[#0F172A] text-white" role="dialog" aria-modal="true" aria-label={ring.nickname || tx(locale, "限時動態", "Story")}>
           {frameSrc ? (
             <img src={frameSrc} alt="" className="absolute inset-0 h-full w-full object-contain" />
           ) : (
@@ -161,7 +161,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
               ))}
             </div>
             <div className="mt-3 flex items-center gap-3 pb-6">
-              <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-rose to-teal text-sm font-bold text-[#1b1418]">
+              <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
                 {ring.avatarUrl ? <img src={ring.avatarUrl} alt="" className="h-full w-full object-cover" /> : (ring.nickname || "你").slice(0, 1)}
               </span>
               <span className="min-w-0">

@@ -187,5 +187,5 @@ export function ProfileBoard({
 }
 
 function Thumb({ item }: { item: Item }) {
-  return <img src={item.photo || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-[#f4efe6] object-contain" />;
+  return <img src={item.photo || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />;
 }

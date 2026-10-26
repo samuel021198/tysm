@@ -50,7 +50,7 @@ export function MessageComposer({ locale, threadId }: { locale: Locale; threadId
         />
       </div>
       {imageUrl.startsWith("data:") ? (
-        <img src={imageUrl} alt="" className="h-24 w-20 rounded-xl bg-[#f4efe6] object-contain" />
+        <img src={imageUrl} alt="" className="h-24 w-20 rounded-xl bg-soft object-contain" />
       ) : null}
       {note ? <p className="text-sm text-danger">{note}</p> : null}
       <button className="btn btn-primary w-full">{tx(locale, "送出", "Send")}</button>

@@ -432,7 +432,7 @@ export function StoryComposer({ locale }: { locale: Locale }) {
             </button>
             <button
               type="button"
-              className="grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-rose to-teal shadow-[0_10px_22px_rgba(58,143,164,0.34)]"
+              className="grid h-20 w-20 place-items-center rounded-full bg-accent shadow-sm"
               aria-label={tx(locale, "影低", "Shutter")}
               onClick={() => void shutter()}
             >
@@ -446,7 +446,7 @@ export function StoryComposer({ locale }: { locale: Locale }) {
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-center">
           <button type="button" className="grid gap-3" onClick={() => void startCamera()} disabled={opening}>
-            <span className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-rose to-teal text-[#1b1418]">
+            <span className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-accent text-white">
               <Icon name="camera" className="h-10 w-10" />
             </span>
             <span className="text-lg font-semibold">{opening ? tx(locale, "開啟鏡頭…", "Opening camera…") : tx(locale, "開鏡頭", "Open camera")}</span>
