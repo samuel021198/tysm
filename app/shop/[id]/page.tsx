@@ -40,9 +40,9 @@ export default async function ShopPage({
     <div>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <div className="mb-6 flex items-start gap-4">
-        {seller.avatarUrl ? <img src={seller.avatarUrl} alt="" className="h-16 w-16 rounded-full object-cover" /> : <div className="grid h-16 w-16 place-items-center rounded-full bg-soft">{seller.nickname.slice(0, 1)}</div>}
+        {seller.avatarUrl ? <img src={seller.avatarUrl} alt="" className="h-12 w-12 rounded-full object-cover" /> : <div className="grid h-12 w-12 place-items-center rounded-full bg-soft text-sm font-semibold">{seller.nickname.slice(0, 1)}</div>}
         <div>
-          <h1 className="text-2xl font-semibold">{seller.nickname}</h1>
+          <h1 className="text-[1.3rem] font-semibold leading-tight">{seller.nickname}</h1>
           <p className="mt-1 max-w-prose text-sm">{seller.bio}</p>
           <p className="mt-2 text-sm text-muted">
             {rating != null ? `${tx(locale, "評分", "Rating")} ${rating.toFixed(1)} (${board.reviews.length})` : tx(locale, "未有評分", "No rating yet")}

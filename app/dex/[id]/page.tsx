@@ -91,29 +91,29 @@ export default async function DexCardPage({
   return (
     <div className="mx-auto max-w-lg pb-28">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <header className="flex items-start gap-1">
-        <Link href={back} aria-label={tx(prefs.locale, "返回圖鑑", "Back to the dex")} className="grid h-11 w-11 shrink-0 place-items-center rounded-full">
+      <header className="flex items-center gap-0.5">
+        <Link href={back} aria-label={tx(prefs.locale, "返回圖鑑", "Back to the dex")} className="grid h-10 w-10 shrink-0 place-items-center rounded-full">
           <Chevron />
         </Link>
-        <div className="min-w-0 flex-1 pt-1">
-          <h1 className="truncate text-xl font-bold leading-tight">{title}</h1>
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-[1.2rem] font-bold leading-tight">{title}</h1>
           <p className="truncate text-[11px] text-muted">{compactSetLine(card.set.code, card.collectorNumber)}</p>
         </div>
         {owned ? (
-          <Link href="/me?tab=box" aria-label={tx(prefs.locale, "已加入收藏", "In your collection")} className="grid h-11 w-11 place-items-center text-accent">
+          <Link href="/me?tab=box" aria-label={tx(prefs.locale, "已加入收藏", "In your collection")} className="grid h-10 w-10 place-items-center text-accent">
             <Heart filled />
           </Link>
         ) : (
           <form action={collectCatalogCard}>
             <input type="hidden" name="cardId" value={card.id} />
-            <button type="submit" aria-label={tx(prefs.locale, "加入收藏", "Add to collection")} className="grid h-11 w-11 place-items-center">
+            <button type="submit" aria-label={tx(prefs.locale, "加入收藏", "Add to collection")} className="grid h-10 w-10 place-items-center">
               <Heart />
             </button>
           </form>
         )}
         <details className="relative">
-          <summary aria-label={tx(prefs.locale, "更多", "More")} className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-full text-lg font-bold [&::-webkit-details-marker]:hidden">
-            ⋯
+          <summary aria-label={tx(prefs.locale, "更多", "More")} className="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full text-base font-bold leading-none [&::-webkit-details-marker]:hidden">
+            <span className="block translate-y-[-0.08em]">⋯</span>
           </summary>
           <div className="absolute right-0 z-20 mt-1 w-44 rounded-2xl bg-card p-1 shadow-card">
             <Link href={sellHref} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold">
@@ -233,7 +233,7 @@ function tabClass(on: boolean) {
 
 function Chevron() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
       <path d="M14.5 6.5 8.5 12l6 5.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -241,7 +241,7 @@ function Chevron() {
 
 function Heart({ filled = false }: { filled?: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.75" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.75" aria-hidden>
       <path d="M12 19.4s-6.6-4.1-6.6-8.2A3.4 3.4 0 0 1 12 8.6a3.4 3.4 0 0 1 6.6 2.6c0 4.1-6.6 8.2-6.6 8.2z" strokeLinejoin="round" />
     </svg>
   );

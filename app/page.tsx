@@ -63,7 +63,7 @@ export default async function HomePage({
   const listingCards = extras.map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
 
   return (
-    <div className="mx-auto grid max-w-lg gap-4">
+    <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
       <div className="flex items-center justify-between gap-3">
@@ -76,7 +76,7 @@ export default async function HomePage({
         <p className="empty">{tx(prefs.locale, "未有動態。發一則貼文，或者上架一張卡。", "No posts yet. Write a post, or list a card.")}</p>
       ) : null}
       {primary.length ? (
-        <section className="grid gap-4">
+        <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
           {primary.map((post) => (
             <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />
@@ -84,7 +84,7 @@ export default async function HomePage({
         </section>
       ) : null}
       {suggested.length || listingCards.length ? (
-        <section className="grid gap-4">
+        <section className="grid gap-3">
           <h2 className="text-sm font-semibold text-muted">{tx(prefs.locale, "建議", "Suggested")}</h2>
           {suggested.map((post) => (
             <PostCard key={post.id} post={post} locale={prefs.locale} next="/" />

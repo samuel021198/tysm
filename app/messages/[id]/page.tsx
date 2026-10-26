@@ -31,7 +31,7 @@ export default async function ThreadPage({
     <div className="grid gap-4">
       <ReadPing id={id} />
       <Flash locale={prefs.locale} err={sp.err} />
-      <h1 className="text-[1.65rem] font-bold">{other.nickname}</h1>
+      <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
       {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
       <ol className="grid gap-2.5">
         {thread.messages.map((message) => {

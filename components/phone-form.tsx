@@ -11,7 +11,7 @@ export function PhoneForm({ locale, next }: { locale: Locale; next?: string }) {
   const [done, confirm] = useActionState(confirmPhone, null);
   return (
     <div className="surface mx-auto grid max-w-lg gap-4 p-5">
-      <h1 className="text-[1.65rem] font-bold">{tx(locale, "驗證電話先可以賣", "Verify your phone to sell")}</h1>
+      <h1 className="text-[1.3rem] font-bold leading-tight">{tx(locale, "驗證電話先可以賣", "Verify your phone to sell")}</h1>
       <p className="text-sm text-muted">{tx(locale, "輸入 8 位香港電話。驗證碼會顯示在呢度。", "Enter an 8-digit Hong Kong number. The code is shown here.")}</p>
       <form action={send} className="grid gap-2">
         <input className="field" name="target" placeholder="91234567" required />

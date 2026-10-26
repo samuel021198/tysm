@@ -43,9 +43,9 @@ export default async function MarketPage({
       <h1 className="page-title">{tx(prefs.locale, "賣場", "Market")}</h1>
       <Link
         href="/search"
-        className="flex h-12 w-full items-center gap-2 rounded-full bg-card pl-3.5 pr-4 text-base shadow-card outline-none focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
+        className="flex h-10 w-full items-center gap-2 rounded-full border border-line bg-card pl-3 pr-3.5 text-sm shadow-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--field-focus)]"
       >
-        <Icon name="search" className="h-5 w-5 shrink-0 text-muted" />
+        <Icon name="search" className="h-4 w-4 shrink-0 text-muted" />
         <span className="truncate text-[var(--field-placeholder)]">{tx(prefs.locale, "搜尋任何物品", "Search for anything")}</span>
       </Link>
       <section className="mt-5" aria-labelledby="market-cats">
@@ -57,17 +57,17 @@ export default async function MarketPage({
             const group = en ? cat.parent?.nameEn : cat.parent?.nameZh;
             return (
               <li key={cat.id}>
-                <Link href={`/search?cat=${cat.slug}`} className="surface flex min-h-[4.75rem] flex-col justify-center px-3.5 py-3 active:scale-[0.99]">
+                <Link href={`/search?cat=${cat.slug}`} className="surface flex min-h-14 flex-col justify-center px-3 py-2 active:scale-[0.99]">
                   {group ? <span className="text-[11px] font-medium text-muted">{group}</span> : null}
-                  <span className="text-[15px] font-semibold">{en ? cat.nameEn : cat.nameZh}</span>
+                  <span className="text-sm font-semibold">{en ? cat.nameEn : cat.nameZh}</span>
                 </Link>
               </li>
             );
           })}
         </ul>
       </section>
-      <section className="mt-8" aria-labelledby="market-latest">
-        <h2 id="market-latest" className="mb-3 text-lg font-bold">
+      <section className="mt-5" aria-labelledby="market-latest">
+        <h2 id="market-latest" className="mb-2 text-base font-semibold">
           {tx(prefs.locale, "熱門／最新", "Popular / latest")}
         </h2>
         {listings.length === 0 ? <p className="empty">{tx(prefs.locale, "暫時未有刊登。", "No listings yet.")}</p> : null}

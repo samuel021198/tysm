@@ -1,6 +1,6 @@
 export function Icon({
   name,
-  className = "h-6 w-6",
+  className = "h-5 w-5",
   strokeWidth = 1.75,
 }: {
   name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "note" | "camera";

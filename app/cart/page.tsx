@@ -34,14 +34,14 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
       <p className="mb-4 text-sm text-muted">{tx(prefs.locale, "每位賣家會分開一張訂單。平台不收取運費，亦不會把每件貨的運費相加。結帳時只可以揀該賣家有開、而且每件貨都有的方式。", "Each seller becomes a separate order. The platform does not charge shipping and does not add a fee per item. At checkout you can only pick a method that seller enabled on every item.")}</p>
       {items.length === 0 ? <p className="empty">{tx(prefs.locale, "購物車是空的。", "Your cart is empty.")}</p> : null}
       {[...groups.entries()].map(([sellerId, rows]) => (
-        <section key={sellerId} className="surface mb-4 p-4">
-          <h2 className="font-bold"><Link href={`/shop/${sellerId}`}>{rows[0].listing.seller.nickname}</Link></h2>
+        <section key={sellerId} className="surface mb-3 p-3">
+          <h2 className="text-sm font-semibold"><Link href={`/shop/${sellerId}`}>{rows[0].listing.seller.nickname}</Link></h2>
           {rows.map((item) => (
-            <div key={item.id} className="mt-4 flex gap-3">
-              <img src={item.listing.photos[0]?.url || "/demo/back.svg"} alt="" className="h-24 w-20 shrink-0 rounded-2xl bg-soft object-contain" />
+            <div key={item.id} className="mt-3 flex items-start gap-3">
+              <img src={item.listing.photos[0]?.url || "/demo/back.svg"} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
               <div className="min-w-0 flex-1">
-                <Link href={`/listing/${item.listingId}`} className="line-clamp-2 font-medium leading-snug">{item.listing.title}</Link>
-                <p className="price mt-1 text-lg">{formatHkd(item.listing.price ?? 0, prefs.locale)}</p>
+                <Link href={`/listing/${item.listingId}`} className="line-clamp-2 text-sm font-medium leading-snug">{item.listing.title}</Link>
+                <p className="price mt-1 text-base leading-none">{formatHkd(item.listing.price ?? 0, prefs.locale)}</p>
                 <p className="text-sm text-muted">
                   {offeredMethods(item.listing, hasStoreAddress(item.listing.seller)).map((method) => shipMethodLabel(method, prefs.locale)).join(" · ") || tx(prefs.locale, "未有運送方式", "No shipping method")}
                   {" · "}
@@ -65,7 +65,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
         >
           <p className="min-w-0 flex-1 text-sm leading-snug">
             <span className="block text-muted">{tx(prefs.locale, "貨品總額", "Items")}</span>
-            <span className="price text-xl">{formatHkd(goods, prefs.locale)}</span>
+            <span className="price text-lg leading-none">{formatHkd(goods, prefs.locale)}</span>
           </p>
           <Link className="btn btn-primary shrink-0" href="/checkout">{tx(prefs.locale, "結帳", "Checkout")}</Link>
         </div>

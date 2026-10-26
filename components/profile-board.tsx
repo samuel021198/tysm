@@ -75,8 +75,8 @@ export function ProfileBoard({
     <div className="grid gap-4">
       <div className="chips">
         {TABS.map(([id, zh, en]) => (
-          <Link key={id} href={`${base}?tab=${id}`} className={`inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold ${panel === id ? "bg-[#221820]" : "bg-card"}`} aria-current={panel === id ? "page" : undefined}>
-            <span className={panel === id ? "text-[#fffcfd]" : "text-muted"}>{tx(locale, zh, en)}</span>
+          <Link key={id} href={`${base}?tab=${id}`} className={`inline-flex h-8 items-center rounded-full px-3 text-sm font-semibold leading-none ${panel === id ? "bg-accent text-white" : "border border-line bg-card text-muted"}`} aria-current={panel === id ? "page" : undefined}>
+            {tx(locale, zh, en)}
           </Link>
         ))}
       </div>
@@ -87,9 +87,9 @@ export function ProfileBoard({
             [`${base}?tab=drafts`, `${tx(locale, "草稿", "Drafts")}${drafts.length ? ` (${drafts.length})` : ""}`],
             ["/me#store", tx(locale, "店舖地址", "Shop address")],
           ].map(([href, label]) => (
-            <Link key={href} href={href} className="surface menu-row flex h-14 items-center justify-between px-4 font-medium" aria-current={href.endsWith("tab=drafts") && panel === "drafts" ? "page" : undefined}>
+            <Link key={href} href={href} className="surface menu-row flex h-11 items-center justify-between px-3 text-sm font-medium" aria-current={href.endsWith("tab=drafts") && panel === "drafts" ? "page" : undefined}>
               {label}
-              <span className="text-muted" aria-hidden>›</span>
+              <span className="text-base leading-none text-muted" aria-hidden>›</span>
             </Link>
           ))}
         </nav>
@@ -119,10 +119,10 @@ export function ProfileBoard({
                 ) : (
                   <Thumb item={item} />
                 )}
-                <div className="grid gap-1 px-3 py-3">
+                <div className="grid gap-0.5 px-2.5 py-2">
                   <p className="text-sm font-semibold">{item.cardName}</p>
                   <p className="text-xs text-muted">{item.condition}{item.visibility === "PRIVATE" ? ` · ${tx(locale, "私人", "Private")}` : ""}</p>
-                  {item.priceCents != null ? <p className="price text-lg leading-none">{formatHkd(item.priceCents, locale)}</p> : null}
+                  {item.priceCents != null ? <p className="price text-base leading-none">{formatHkd(item.priceCents, locale)}</p> : null}
                   {isSelf && item.catalogCardId && !item.listingId ? (
                     <Link href={`/sell?catalogCardId=${encodeURIComponent(item.catalogCardId)}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
                       {tx(locale, "放賣", "List for sale")}
@@ -171,7 +171,7 @@ export function ProfileBoard({
           <ul className="grid gap-2">
             {drafts.map((draft) => (
               <li key={draft.id}>
-                <Link href={`/sell/${draft.id}`} className="surface flex h-14 items-center justify-between px-4">
+                <Link href={`/sell/${draft.id}`} className="surface flex h-11 items-center justify-between px-3 text-sm">
                   <span className="min-w-0 truncate">{draft.title}</span>
                   <span className="text-sm text-muted">{listingStatusLabel(locale, draft.status)}</span>
                 </Link>

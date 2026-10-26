@@ -64,13 +64,13 @@ export function PurchasePanel({
       {showBuy && price != null ? (
         <div>
           <p className="text-xs font-medium text-muted">{tx(locale, "直購價", "Buy It Now")}</p>
-          <p className="price text-3xl">{formatHkd(price, locale)}</p>
+          <p className="price text-2xl leading-none">{formatHkd(price, locale)}</p>
         </div>
       ) : null}
       {live || endsAt ? (
         <div className="grid gap-1 rounded-2xl bg-soft p-3">
           <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
-          <p className="price text-2xl">{formatHkd(publicBid, locale)}</p>
+          <p className="price text-xl leading-none">{formatHkd(publicBid, locale)}</p>
           {live ? (
             <p className="text-sm">
               {tx(locale, "下一口最低", "Next minimum")} {formatHkd(minBid, locale)}

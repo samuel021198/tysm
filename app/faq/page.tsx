@@ -15,7 +15,7 @@ export default async function FaqPage() {
   const en = locale === "en";
   return (
     <div className="grid max-w-3xl gap-4">
-      <h1 className="text-2xl font-semibold">FAQ</h1>
+      <h1 className="page-title">FAQ</h1>
       {qa.map(([zhQ, enQ, zhA, enA]) => (
         <section key={zhQ}>
           <h2 className="font-semibold">{en ? enQ : zhQ}</h2>

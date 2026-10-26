@@ -19,18 +19,18 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
   ]);
   const locale = prefs.locale;
   return (
-    <div className="mx-auto grid max-w-3xl gap-8">
+    <div className="mx-auto grid max-w-3xl gap-5">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <div className="surface flex items-center gap-4 p-4">
+      <div className="surface flex items-center gap-3 p-3">
         {viewer.avatarUrl ? (
-          <img src={viewer.avatarUrl} alt="" className="h-16 w-16 shrink-0 rounded-full object-cover" />
+          <img src={viewer.avatarUrl} alt="" className="h-12 w-12 shrink-0 rounded-full object-cover" />
         ) : (
-          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-accent text-2xl font-bold text-white">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent text-lg font-bold leading-none text-white">
             {viewer.nickname.slice(0, 1)}
           </span>
         )}
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-bold">{viewer.nickname}</h1>
+          <h1 className="truncate text-[1.3rem] font-bold leading-tight">{viewer.nickname}</h1>
           {viewer.bio ? <p className="mt-1 text-sm">{viewer.bio}</p> : null}
           <p className="mt-1 text-sm text-muted">
             {tx(locale, "關注", "Following")} {board.following} · {tx(locale, "粉絲", "Followers")} {board.followers}
@@ -58,9 +58,9 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           ["/cart", tx(locale, "購物車", "Cart")],
           ...(viewer.role === "ADMIN" ? [["/admin", tx(locale, "管理", "Admin")] as const] : []),
         ].map(([href, label]) => (
-          <Link key={href} href={href} className="surface menu-row flex h-14 items-center justify-between px-4 font-medium">
+          <Link key={href} href={href} className="surface menu-row flex h-11 items-center justify-between px-3 text-sm font-medium">
             {label}
-            <span className="text-muted" aria-hidden>›</span>
+            <span className="text-base leading-none text-muted" aria-hidden>›</span>
           </Link>
         ))}
       </nav>

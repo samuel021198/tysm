@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           Skip
         </a>
         <Header locale={prefs.locale} theme={prefs.theme} user={viewer} cartCount={cartCount} unread={unread} />
-        <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-4 md:px-5 md:py-8">
+        <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-3 md:px-4 md:py-5">
           {children}
         </main>
         <Footer locale={prefs.locale} />

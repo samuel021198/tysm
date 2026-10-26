@@ -31,7 +31,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   return (
     <div>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <h1 className="mb-3 text-2xl font-semibold">{tx(locale, "管理", "Admin")}</h1>
+      <h1 className="page-title">{tx(locale, "管理", "Admin")}</h1>
       <nav className="chips -mx-3 mb-4 text-sm md:mx-0">
         {tabs.map((item) => (
           <Link key={item} href={`/admin?tab=${item}`} className={`inline-flex h-11 shrink-0 items-center rounded-full px-4 ${item === tab ? "bg-card font-semibold shadow-card" : "bg-soft text-muted"}`}>

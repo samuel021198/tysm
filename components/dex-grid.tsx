@@ -37,7 +37,7 @@ export function DexGrid({ cards, locale }: { cards: DexGridCard[]; locale: Local
                 decoding="async"
                 className="aspect-[63/88] w-full bg-soft object-contain"
               />
-              <span className="line-clamp-2 px-1.5 pt-1.5 text-[15px] font-semibold leading-snug">{title}</span>
+              <span className="line-clamp-2 px-1.5 pt-1 text-sm font-semibold leading-snug">{title}</span>
               <span className="line-clamp-1 px-1.5 pb-1.5 text-[10px] leading-tight text-muted">{compactSetLine(card.set.code, card.collectorNumber)}</span>
             </Link>
           </li>
