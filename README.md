@@ -242,7 +242,7 @@ npm run db:seed
 
 Seed 可以只跑一次。之後的示範目錄更新用下面的 reseed。
 
-5. Vercel Cron 每 10 分鐘（`*/10 * * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管，同埋刪走超過 24 小時的限時動態。頁面開啟時亦會做同樣的掃瞄。這條路由要 `Authorization: Bearer`，密鑰係 `CRON_SECRET`（Vercel Cron 自動帶）或 `BOOTSTRAP_SECRET`。兩個都未設定會回 `503`，密鑰不對會回 `401`。Hobby 方案如果只接受每日一次，要改用支援分鐘級 cron 的方案；否則預約刊登會等到有人開頁先至上架。
+5. Vercel Cron 每日 00:00（香港時間，`0 16 * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管，同埋刪走超過 24 小時的限時動態。頁面開啟時亦會做同樣的掃瞄，所以預約刊登唔使靠密排程先至上架。這條路由要 `Authorization: Bearer`，密鑰係 `CRON_SECRET`（Vercel Cron 自動帶）或 `BOOTSTRAP_SECRET`。兩個都未設定會回 `503`，密鑰不對會回 `401`。Hobby 方案只接受每日一次的 cron，唔可以用 `*/10 * * * *` 這類一天跑多次的排程。
 
 ## 重新灌示範資料
 

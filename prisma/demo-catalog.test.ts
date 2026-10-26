@@ -123,7 +123,7 @@ assert(sweepRoute.includes("authorizedBearer") && sweepRoute.includes("CRON_SECR
 assert(sweepRoute.includes("unconfigured") && sweepRoute.includes("unauthorized"), "cron sweep refuses a missing or wrong secret");
 assert(!/export async function GET\(\)\s*\{/.test(sweepRoute), "cron sweep is not an open handler");
 const cron = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
-assert(cron.includes("*/10 * * * *") && cron.includes("/api/cron/sweep"), "publish sweep runs every 10 minutes");
+assert(cron.includes("0 16 * * *") && cron.includes("/api/cron/sweep") && !cron.includes("*/10"), "publish sweep runs once per day (Hobby cron limit)");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,
