@@ -42,6 +42,7 @@ export function SearchBox({
   pullAccount = true,
   accountRecent = NO_RECENT,
   scope = null,
+  to = "find",
 }: {
   locale: Locale;
   initial?: string;
@@ -50,6 +51,8 @@ export function SearchBox({
   pullAccount?: boolean;
   accountRecent?: string[];
   scope?: { slug: string; nameZh: string; nameEn: string } | null;
+  /** Header search is universal. The market page keeps listing filters on `/search`. */
+  to?: "find" | "search";
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -79,6 +82,7 @@ export function SearchBox({
     tab,
     listings: suggestions.listings,
     categories: suggestions.categories,
+    to,
   });
   const index = rows.length ? Math.min(active, rows.length - 1) : -1;
 
@@ -257,7 +261,7 @@ export function SearchBox({
       >
         <form
           role="search"
-          action="/search"
+          action={to === "search" ? "/search" : "/find"}
           className="max-md:flex max-md:min-h-0 max-md:flex-1 max-md:flex-col"
           onSubmit={(event) => {
             if (!query) {

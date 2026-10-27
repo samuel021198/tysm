@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { authorizedBearer } from "../lib/bootstrap";
+import { DEMO_CARDS } from "../lib/demo-dex";
 import { DEMO_ACCOUNTS, DEMO_CODE } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
 import {
@@ -191,6 +192,31 @@ for (const review of demoShowcaseReviews) {
   assert(listing && review.authorId !== listing.ownerId && userIds.has(review.authorId), review.id);
   assert(review.stars >= 1 && review.stars <= 5 && review.comment.length > 0, review.id);
 }
+for (const item of demoShowcaseCollections) {
+  const owned = demoShowcaseListings.filter((row) => row.ownerId === item.ownerId);
+  const match =
+    owned.find((row) => row.title === item.title) ||
+    owned.find((row) => row.photos.join("|") === item.photos.join("|"));
+  assert((item.listingId ?? null) === (match?.id ?? null), `${item.id} should link the matching listing`);
+}
+const dexIds = new Set(DEMO_CARDS.map((card) => card.id));
+const tagged = [...demoShowcaseCollections, ...demoShowcaseListings].filter((item) => item.catalogCardId);
+assert(tagged.length >= 4, "a few showcase rows open the dex");
+for (const item of tagged) assert(item.catalogCardId && dexIds.has(item.catalogCardId), item.id);
+assert(demoShowcaseCollections.some((item) => item.catalogCardId && !item.listingId), "an unlisted card keeps a dex id for 放賣");
+assert(demoShowcaseListings.some((item) => item.catalogCardId), "a live listing can open the dex");
+for (const thread of demoThreads) {
+  assert(userIds.has(thread.buyerId) && userIds.has(thread.sellerId), thread.id);
+  const listing = demoShowcaseListings.find((item) => item.id === thread.listingId);
+  assert(listing && listing.ownerId === thread.sellerId, `${thread.id} listing`);
+}
+for (const message of demoMessages) assert(userIds.has(message.senderId), message.id);
+for (const note of demoNotifications) assert(userIds.has(note.userId), note.id);
+for (const row of demoFavorites) {
+  assert(userIds.has(row.userId), row.id);
+  const listing = demoShowcaseListings.find((item) => item.id === row.listingId);
+  assert(listing && listing.ownerId !== row.userId, row.id);
+}
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
 assert(auth.includes("demoAccountByHandle") && auth.includes("DEMO_CODE") && auth.includes("enterDemo"), "handle plus 123, and a one-tap action");
 const loginPage = readFileSync(new URL("../app/login/page.tsx", import.meta.url), "utf8");
@@ -208,6 +234,8 @@ const seed = readFileSync(new URL("../lib/seed-demo.ts", import.meta.url), "utf8
 assert(seed.includes("wipeUserContent") && seed.includes("user.deleteMany") && seed.includes("post.deleteMany") && seed.includes("listing.deleteMany"), "reseed wipes users and posts");
 assert(!seed.includes("catalogCard.deleteMany") && !seed.includes("catalogSet.deleteMany"), "reseed does not wipe the dex");
 assert(!seed.includes("user_mei") && !seed.includes("user_showcase") && !seed.includes("卡桌阿傑"), "reseed does not recreate the old demo set");
+assert(seed.includes("demoThreads") && seed.includes("demoMessages") && seed.includes("demoNotifications") && seed.includes("demoFavorites"), "reseed writes chat, the bell, and favorites");
+assert(seed.includes("item.listingId") && seed.includes("attachShowcaseDex"), "reseed links collection rows to listings and the dex");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,

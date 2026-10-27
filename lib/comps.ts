@@ -76,7 +76,9 @@ export async function loadComps(listing: Identity): Promise<{ matched: CompRow[]
   };
 }
 
-export async function loadCompSeries(): Promise<Map<string, number[]>> {
+export type CompPoint = { listingId: string; unitPrice: number };
+
+export async function loadCompSeries(): Promise<Map<string, CompPoint[]>> {
   const rows = await prisma.orderItem.findMany({
     where: { order: { status: "COMPLETED" } },
     include: {
@@ -88,13 +90,19 @@ export async function loadCompSeries(): Promise<Map<string, number[]>> {
     orderBy: { order: { completedAt: "asc" } },
     take: 240,
   });
-  const series = new Map<string, number[]>();
+  const series = new Map<string, CompPoint[]>();
   for (const row of rows) {
     const key = compKey({ ...row.listing, cardName: row.cardName ?? row.listing.cardName, personName: row.personName ?? row.listing.personName });
-    if (!key) continue;
+    if (!key || row.unitPrice <= 0) continue;
     const bucket = series.get(key) ?? [];
-    bucket.push(row.unitPrice);
+    bucket.push({ listingId: row.listingId, unitPrice: row.unitPrice });
     series.set(key, bucket);
   }
   return series;
+}
+
+/** Prices of other sales. A listing's own completed order is the same ask, which printed ↑ HK$0.00. */
+export function priorSalePrices(points: CompPoint[] | undefined, listingId: string): number[] {
+  if (!points?.length) return [];
+  return points.filter((point) => point.listingId !== listingId && point.unitPrice > 0).map((point) => point.unitPrice);
 }

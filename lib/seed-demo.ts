@@ -5,11 +5,16 @@ import {
   EXTRA_CARD_CATEGORIES,
   LEAF_CATEGORIES,
   demoAddresses,
+  demoFavorites,
   demoFollows,
+  demoMessages,
+  demoNotifications,
+  demoSearches,
   demoShowcaseCollections,
   demoShowcaseListings,
   demoShowcasePosts,
   demoShowcaseReviews,
+  demoThreads,
   demoUsers,
 } from "../prisma/demo-catalog";
 
@@ -197,7 +202,7 @@ async function seedShowcase() {
   for (const item of demoShowcaseCollections) {
     const data = {
       ownerId: item.ownerId,
-      listingId: null,
+      listingId: item.listingId ?? null,
       visibility: item.visibility,
       title: item.title,
       note: "",
@@ -259,6 +264,75 @@ async function seedShowcase() {
       where: { id },
       update: data,
       create: { id, ...data },
+    });
+  }
+}
+
+async function attachShowcaseDex() {
+  for (const item of demoShowcaseCollections) {
+    await prisma.collectionItem.update({
+      where: { id: item.id },
+      data: { catalogCardId: item.catalogCardId ?? null },
+    });
+  }
+  for (const item of demoShowcaseListings) {
+    await prisma.listing.update({
+      where: { id: item.id },
+      data: { catalogCardId: item.catalogCardId ?? null },
+    });
+  }
+}
+
+async function seedSocial() {
+  for (const thread of demoThreads) {
+    const data = { listingId: thread.listingId, buyerId: thread.buyerId, sellerId: thread.sellerId };
+    await prisma.messageThread.upsert({
+      where: { id: thread.id },
+      update: data,
+      create: { id: thread.id, ...data },
+    });
+  }
+  for (const [index, message] of demoMessages.entries()) {
+    const data = {
+      threadId: message.threadId,
+      senderId: message.senderId,
+      body: message.body,
+      readAt: message.read ? daysAgo(1) : null,
+      createdAt: new Date(Date.now() - (demoMessages.length - index) * 60_000),
+    };
+    await prisma.message.upsert({
+      where: { id: message.id },
+      update: { senderId: data.senderId, body: data.body, readAt: data.readAt },
+      create: { id: message.id, ...data },
+    });
+  }
+  for (const note of demoNotifications) {
+    const data = {
+      userId: note.userId,
+      type: note.type,
+      title: note.title,
+      body: note.body,
+      href: note.href,
+      readAt: note.read ? daysAgo(1) : null,
+    };
+    await prisma.notification.upsert({
+      where: { id: note.id },
+      update: data,
+      create: { id: note.id, ...data },
+    });
+  }
+  for (const row of demoFavorites) {
+    await prisma.favorite.upsert({
+      where: { id: row.id },
+      update: { userId: row.userId, listingId: row.listingId },
+      create: row,
+    });
+  }
+  for (const row of demoSearches) {
+    await prisma.searchHistory.upsert({
+      where: { id: row.id },
+      update: { userId: row.userId, query: row.query },
+      create: row,
     });
   }
 }
@@ -351,6 +425,8 @@ export async function seedDemo() {
 
   await seedShowcase();
   await ensureDemoCatalog();
+  await attachShowcaseDex();
+  await seedSocial();
 
   const catalogCardsAfter = await prisma.catalogCard.count();
   const catalogSetsAfter = await prisma.catalogSet.count();
@@ -364,6 +440,10 @@ export async function seedDemo() {
     listings: demoShowcaseListings.length,
     reviews: demoShowcaseReviews.length,
     follows: demoFollows.length,
+    threads: demoThreads.length,
+    messages: demoMessages.length,
+    notifications: demoNotifications.length,
+    favorites: demoFavorites.length,
     addresses: demoAddresses.length,
     stories: demoUsers.filter((user) => user.role === "USER").length,
     catalogCardsBefore,

@@ -56,6 +56,12 @@ export async function feedHideIds(userId: string | null): Promise<{ postIds: str
   return { postIds, listingIds };
 }
 
+export async function followedSellerIds(userId: string | null): Promise<Set<string>> {
+  if (!userId) return new Set();
+  const rows = await prisma.follow.findMany({ where: { followerId: userId }, select: { sellerId: true } });
+  return new Set(rows.map((row) => row.sellerId));
+}
+
 export async function hiddenUserIds(userId: string | null): Promise<string[]> {
   if (!userId) return [];
   const rows = await prisma.block.findMany({

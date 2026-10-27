@@ -1,3 +1,4 @@
+import { priorSalePrices } from "./comps";
 import { minimumNextBid } from "./rules";
 import { buildFulfillment, courierFor, intersectOffered, mockTracking, onTimePercent, parseShipMethod, shipDays, shipFee } from "./shipping";
 
@@ -37,5 +38,7 @@ assert(onTimePercent([{ shippedAt: early, shipBy: later }]) === 100, "shipped be
 assert(onTimePercent([{ shippedAt: later, shipBy: early }]) === 0, "late ship");
 assert(onTimePercent([{ shippedAt: early, shipBy: null }]) === null, "missing deadline is not counted as 0%");
 assert(minimumNextBid(50000, 82000, true) === 84000, "HK$820 next bid is HK$840");
+assert(priorSalePrices([{ listingId: "a", unitPrice: 12800 }, { listingId: "b", unitPrice: 8600 }], "b").join() === "12800", "a card's own sale is not the last price");
+assert(priorSalePrices([{ listingId: "a", unitPrice: 0 }], "b").length === 0, "a zero sale is not a comparison");
 
 console.log("market ok");

@@ -5,7 +5,6 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { markNotifications } from "@/actions/social";
-import { Icon } from "@/components/icons";
 
 export default async function NotificationsPage() {
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
@@ -16,9 +15,6 @@ export default async function NotificationsPage() {
     <div>
       <div className="mb-3 flex items-center gap-1">
         <h1 className="page-title mb-0 min-w-0 flex-1">{tx(locale, "通知", "Notifications")}</h1>
-        <Link href="/messages" aria-label={tx(locale, "聊天", "Chat")} className="grid h-10 w-10 shrink-0 place-items-center rounded-full active:bg-soft">
-          <Icon name="messages" className="h-[18px] w-[18px]" />
-        </Link>
         <form action={markNotifications}>
           <button className="px-1 text-sm font-medium">{tx(locale, "全部已讀", "Mark all read")}</button>
         </form>

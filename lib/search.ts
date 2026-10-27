@@ -172,6 +172,15 @@ export function searchHref(query: string, extra?: { cat?: string }): string {
   return search ? `/search?${search}` : "/search";
 }
 
+/** Universal search: users, posts, and listings. Market filters stay on `searchHref`. */
+export function findHref(query: string): string {
+  const params = new URLSearchParams();
+  const q = query.trim().slice(0, 80);
+  if (q) params.set("q", q);
+  const search = params.toString();
+  return search ? `/find?${search}` : "/find";
+}
+
 export function textHits(query: string, text: string): boolean {
   const raw = query.trim();
   const folded = foldSearch(raw);
@@ -224,11 +233,11 @@ export function mergeMemory(primary: MemoryItem[], incoming: MemoryItem[], limit
   return out;
 }
 
-function memoryRow(item: MemoryItem): SuggestRow {
+function memoryRow(item: MemoryItem, to: "find" | "search"): SuggestRow {
   return {
     key: `m:${memoryKey(item)}`,
     kind: "memory",
-    href: searchHref(item.query, { cat: item.cat }),
+    href: to === "find" ? findHref(item.query) : searchHref(item.query, { cat: item.cat }),
     label: item.query,
     hintZh: item.catZh ? `在${item.catZh}` : undefined,
     hintEn: item.catEn ? `in ${item.catEn}` : undefined,
@@ -246,11 +255,13 @@ export function buildSuggestRows(input: {
   tab: "recent" | "saved";
   listings: SuggestListing[];
   categories: SuggestCategory[];
+  to?: "find" | "search";
 }): SuggestRow[] {
+  const to = input.to ?? "search";
   const q = input.query.trim().slice(0, 80);
   if (!q) {
     const source = input.tab === "saved" ? input.saved : input.recent;
-    return source.map((item) => memoryRow(item));
+    return source.map((item) => memoryRow(item, to));
   }
 
   const rows: SuggestRow[] = [];
@@ -262,13 +273,13 @@ export function buildSuggestRows(input: {
     return true;
   };
 
-  push({ key: `q:${q}`, kind: "query", href: searchHref(q), label: q, query: q });
+  push({ key: `q:${q}`, kind: "query", href: to === "find" ? findHref(q) : searchHref(q), label: q, query: q });
 
   let recentShown = 0;
   for (const item of input.recent) {
     if (recentShown >= 3) break;
     if (!textHits(q, item.query)) continue;
-    if (push(memoryRow(item))) recentShown += 1;
+    if (push(memoryRow(item, to))) recentShown += 1;
   }
 
   let cats = 0;
@@ -277,7 +288,7 @@ export function buildSuggestRows(input: {
     const ok = push({
       key: `c:${q}|${slug}`,
       kind: "category",
-      href: searchHref(q, { cat: slug }),
+      href: to === "find" ? findHref(q) : searchHref(q, { cat: slug }),
       label: q,
       hintZh: `在${nameZh}`,
       hintEn: `in ${nameEn}`,

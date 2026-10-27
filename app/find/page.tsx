@@ -8,6 +8,7 @@ import { cardDisplayName } from "@/lib/posts";
 import { listingQueryWhere, postQueryWhere, searchScore, userQueryWhere } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
+import { FindSearch } from "@/components/find-search";
 import { Flash } from "@/components/shell";
 
 function one(value: string | string[] | undefined) {
@@ -113,23 +114,31 @@ export default async function FindPage({
     }));
   }
 
+  if (viewer && q) {
+    await prisma.$transaction([
+      prisma.searchHistory.deleteMany({ where: { userId: viewer.id, query: q } }),
+      prisma.searchHistory.create({ data: { userId: viewer.id, query: q } }),
+    ]);
+  }
+  const history = viewer
+    ? await prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 24 })
+    : [];
+  const accountRecent: string[] = [];
+  const seenRecent = new Set<string>();
+  for (const row of history) {
+    if (seenRecent.has(row.query)) continue;
+    seenRecent.add(row.query);
+    accountRecent.push(row.query);
+    if (accountRecent.length >= 12) break;
+  }
+
   const empty = q && users.length === 0 && posts.length === 0 && listings.length === 0;
   const locale = prefs.locale;
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <form action="/find" role="search">
-        <input
-          type="search"
-          name="q"
-          defaultValue={q}
-          placeholder={tx(locale, "搜尋", "Search")}
-          aria-label={tx(locale, "搜尋", "Search")}
-          className="field"
-          autoFocus
-        />
-      </form>
+      <FindSearch key={q} locale={locale} initial={q} account={accountRecent} showHistory={!q} />
       {empty ? <p className="text-sm text-muted">{tx(locale, "沒有結果", "No results")}</p> : null}
       {users.length ? (
         <section>

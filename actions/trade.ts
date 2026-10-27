@@ -32,9 +32,11 @@ export async function saveListingAction(_prev: { error?: string } | null, formDa
   const input = parseListingForm(formData);
   if (!input) return { error: "category" };
   const listingId = String(formData.get("listingId") || "") || undefined;
-  const result = await saveListing(user.id, input, listingId);
+  const collectionItemId = String(formData.get("collectionItemId") || "") || undefined;
+  const result = await saveListing(user.id, input, listingId, collectionItemId);
   if (!result.ok) return { error: result.error };
   revalidatePath("/");
+  revalidatePath("/me");
   revalidatePath(`/listing/${result.id}`);
   const ok = input.intent === "draft" ? "draft" : input.intent === "schedule" ? "scheduled" : "published";
   if (formData.get("alsoPost") === "on" && result.postId) redirect(`/post/${result.postId}?ok=posted`);

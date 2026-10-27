@@ -216,7 +216,7 @@ async function leaf(categoryId: string) {
   return { category, groupKey: category.groupKey || category.parent?.groupKey || "tcg" };
 }
 
-export async function saveListing(userId: string, input: ListingInput, listingId?: string) {
+export async function saveListing(userId: string, input: ListingInput, listingId?: string, collectionItemId?: string) {
   const found = await leaf(input.categoryId);
   if (!found) return { ok: false as const, error: "category" };
   const listing = listingId
@@ -248,7 +248,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
           data: stored.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
         }),
       ]);
-      return done(listing.id);
+      return done(listing.id, userId, collectionItemId);
     }
   }
 
@@ -278,7 +278,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         ...(items ? { items: { create: itemRows(items) } } : {}),
       },
     });
-    return done(created.id);
+    return done(created.id, userId, collectionItemId);
   }
 
   const reserved = listing.quantity - listing.quantityAvailable;
@@ -304,10 +304,16 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         ]
       : []),
   ]);
-  return done(listing.id);
+  return done(listing.id, userId, collectionItemId);
 }
 
-async function done(id: string) {
+async function done(id: string, userId: string, collectionItemId?: string) {
+  if (collectionItemId) {
+    await prisma.collectionItem.updateMany({
+      where: { id: collectionItemId, ownerId: userId, OR: [{ listingId: null }, { listingId: id }] },
+      data: { listingId: id },
+    });
+  }
   const synced = await syncListingInventory(id);
   return { ok: true as const, id, postId: synced.postId };
 }
