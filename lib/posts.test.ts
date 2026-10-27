@@ -214,10 +214,10 @@ assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "th
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
 assert(postCard.includes("aspect-[4/5]"), "feed photos keep the 4:5 frame");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
-const followAt = home.indexOf("關注中");
-const followHead = home.slice(followAt - 240, followAt);
-assert(followHead.includes("mb-1 flex items-baseline justify-between"), "new post shares the following row");
-assert(!followHead.includes("grid gap-3"), "the following label is not a loose row above the first post");
+const railAt = home.indexOf("<StoryRail");
+const primaryAt = home.indexOf("primary.map");
+assert(railAt >= 0 && primaryAt > railAt && home.slice(Math.max(0, railAt - 80), primaryAt).includes("grid gap-1"), "stories sit tight above the following posts");
+assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following label");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
 const gallery = readFileSync(new URL("../components/gallery.tsx", import.meta.url), "utf8");
