@@ -1,8 +1,9 @@
 import { prisma } from "./db";
 import { cardInclude } from "./feed";
-import { sellingAsk, toPostCard, type PostCardModel } from "./posts";
-import { conditionLabel } from "./rules";
-import { feedHideIds } from "./social";
+import { cardDisplayName, toPostCard, wishlistPostVisible, type PostCardModel } from "./posts";
+import { feedHideIds, hiddenUserIds } from "./social";
+
+export type ProfileThumb = { id: string; href: string; photo: string | null; label: string };
 
 const postInclude = {
   author: { select: { id: true, nickname: true, avatarUrl: true } },
@@ -36,7 +37,7 @@ const postInclude = {
 
 export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
-  const [postRows, itemRows, listings, reviewRows, drafts, followers, completed, favs, hides] = await Promise.all([
+  const [postRows, listings, reviewRows, drafts, followers, completed, favs, hides, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
     prisma.post.findMany({
       where: {
         authorId: ownerId,
@@ -45,27 +46,6 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       include: postInclude,
       orderBy: { createdAt: "desc" },
       take: 24,
-    }),
-    prisma.collectionItem.findMany({
-      where: { ownerId, ...(isSelf ? {} : { visibility: "PUBLIC" }) },
-      include: {
-        photos: { orderBy: { position: "asc" }, take: 1 },
-        post: { select: { id: true } },
-        listing: {
-          select: {
-            id: true,
-            status: true,
-            quantityAvailable: true,
-            saleType: true,
-            price: true,
-            currentBid: true,
-            startPrice: true,
-            auctionSettled: true,
-          },
-        },
-      },
-      orderBy: { updatedAt: "desc" },
-      take: 48,
     }),
     prisma.listing.findMany({
       where: { sellerId: ownerId, status: "ACTIVE", quantityAvailable: { gt: 0 } },
@@ -91,6 +71,45 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     prisma.order.count({ where: { sellerId: ownerId, status: "COMPLETED" } }),
     viewerId ? prisma.favorite.findMany({ where: { userId: viewerId, listing: { sellerId: ownerId } }, select: { listingId: true } }) : Promise.resolve([]),
     feedHideIds(viewerId),
+    isSelf
+      ? prisma.favorite.findMany({
+          where: { userId: ownerId },
+          orderBy: { createdAt: "desc" },
+          take: 24,
+          select: {
+            id: true,
+            listing: { select: { id: true, title: true, photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } } } },
+          },
+        })
+      : Promise.resolve([]),
+    isSelf
+      ? prisma.postSave.findMany({
+          where: { userId: ownerId },
+          orderBy: { createdAt: "desc" },
+          take: 24,
+          select: {
+            id: true,
+            post: {
+              select: {
+                id: true,
+                body: true,
+                authorId: true,
+                photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+                collectionItem: {
+                  select: {
+                    visibility: true,
+                    ownerId: true,
+                    title: true,
+                    cardName: true,
+                    photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+                  },
+                },
+              },
+            },
+          },
+        })
+      : Promise.resolve([]),
+    isSelf ? hiddenUserIds(ownerId) : Promise.resolve([]),
   ]);
 
   const hiddenPosts = new Set(hides.postIds);
@@ -110,21 +129,27 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     }),
   );
 
-  const items = itemRows.map((item) => ({
-    id: item.id,
-    cardName: item.title || item.cardName || "",
-    condition: conditionLabel(item),
-    visibility: item.visibility,
-    photo: item.photos[0]?.url ?? null,
-    priceCents: sellingAsk(item.listing),
-    href: item.post ? `/post/${item.post.id}` : item.listing && sellingAsk(item.listing) != null ? `/listing/${item.listing.id}` : null,
-    catalogCardId: item.catalogCardId,
-    listingId: item.listingId,
+  const blocked = new Set(blockedIds);
+  const savedListings: ProfileThumb[] = savedListingRows.map((row) => ({
+    id: row.id,
+    href: `/listing/${row.listing.id}`,
+    photo: row.listing.photos[0]?.url ?? null,
+    label: row.listing.title,
   }));
+  const savedPosts: ProfileThumb[] = savedPostRows
+    .map((row) => row.post)
+    .filter((post) => wishlistPostVisible(post, ownerId, blocked))
+    .map((post) => ({
+      id: post.id,
+      href: `/post/${post.id}`,
+      photo: post.photos[0]?.url ?? post.collectionItem?.photos[0]?.url ?? null,
+      label: cardDisplayName({ cardName: post.collectionItem?.cardName, title: post.collectionItem?.title, body: post.body }),
+    }));
 
   return {
     posts,
-    items,
+    savedListings,
+    savedPosts,
     listings,
     reviews: reviewRows.map((review) => ({
       id: review.id,

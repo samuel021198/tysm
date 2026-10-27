@@ -86,9 +86,10 @@ assert(tab.includes('loggedIn ? "/me" : "/login"'), "profile tab stays on the pu
 assert(me.includes('href="/me/settings"') && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles") && !me.includes("logout"), "/me is header plus board");
 assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
 assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
-assert(board.includes("貼文") && board.includes("My Binder") && board.includes("我的卡") && board.includes("商店") && board.includes("評價"), "profile tab names");
-assert(!board.includes("收藏"), "the binder tab is not labeled 收藏");
-assert(board.includes('icon: "grid"') && board.includes('icon: "binder"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
+assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");
+assert(board.includes('id: "posts"') && board.includes('id: "saved"'), "My Binder is own posts; 收藏 is the wishlist tab");
+assert(!board.includes("我的卡") && !board.includes('id: "box"') && !board.includes("CollectionMenu") && !board.includes("collectionItemId"), "the owned-card grid is off the profile");
+assert(board.includes('icon: "binder"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
 assert(!board.includes("chips") && !board.includes("rounded-full") && !board.includes("<PostCard") && !board.includes("<ListingCard"), "profile tabs are not pills and image tabs are thumbnails");
 assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");
 assert(auth.includes('const settings = "/me/settings"') && auth.includes("${settings}?ok=saved") && auth.includes("${settings}?err=nickname") && auth.includes("${settings}?err=address"), "profile saves flash back on settings");

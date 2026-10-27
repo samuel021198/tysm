@@ -62,7 +62,8 @@ export default async function ShopPage({
         tab={sp.tab || "posts"}
         isSelf={viewer?.id === seller.id}
         posts={board.posts}
-        items={board.items}
+        savedListings={board.savedListings}
+        savedPosts={board.savedPosts}
         listings={board.listings}
         reviews={board.reviews}
         drafts={board.drafts}
