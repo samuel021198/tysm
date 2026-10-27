@@ -1,8 +1,10 @@
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
+import { shareLabel, shareTarget } from "@/lib/share";
 import { isBlocked } from "@/lib/social";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
@@ -36,9 +38,18 @@ export default async function ThreadPage({
       <ol className="grid gap-2.5">
         {thread.messages.map((message) => {
           const mine = message.senderId === viewer.id;
+          const linked = shareTarget(message.body);
           return (
             <li key={message.id} className={mine ? "ml-10 rounded-2xl rounded-br-md bg-accent/15 px-3.5 py-3" : "surface mr-10 rounded-2xl rounded-bl-md px-3.5 py-3"}>
-              <p className="text-[15px] leading-6">{message.body}</p>
+              <p className="text-[15px] leading-6">
+                {linked ? (
+                  <Link href={linked} className="font-semibold text-link">
+                    {shareLabel(linked, prefs.locale)}
+                  </Link>
+                ) : (
+                  message.body
+                )}
+              </p>
               {message.imageUrl ? <img src={message.imageUrl} alt="" className="mt-2 max-h-48 rounded-xl" /> : null}
               <p className="mt-1 text-[11px] text-muted">
                 {formatHKT(message.createdAt, prefs.locale)} · {mine ? (message.readAt ? tx(prefs.locale, "已讀", "Read") : tx(prefs.locale, "已送出", "Sent")) : message.sender.nickname}

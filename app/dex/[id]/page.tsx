@@ -175,7 +175,7 @@ export default async function DexCardPage({
               </button>
             </form>
           )}
-          <ShareButton path={`/dex/${card.id}`} label={tx(prefs.locale, "分享", "Share")} copiedLabel={tx(prefs.locale, "已複製", "Copied")} icon />
+          <ShareButton path={`/dex/${card.id}`} label={tx(prefs.locale, "分享", "Share")} copiedLabel={tx(prefs.locale, "已複製", "Copied")} internalLabel={tx(prefs.locale, "內部分享", "In TYSM")} icon />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { Footer, Header } from "@/components/shell";
 import { TabBar } from "@/components/tab-bar";
+import { TabSwipe } from "@/components/tab-swipe";
 import "./globals.css";
 
 const sans = Noto_Sans_HK({
@@ -53,7 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </a>
         <Header locale={prefs.locale} theme={prefs.theme} user={viewer} cartCount={cartCount} unread={unread} />
         <main id="main" className="mx-auto min-h-[70vh] w-full max-w-6xl px-3 py-3 md:px-4 md:py-5">
-          {children}
+          <TabSwipe loggedIn={Boolean(viewer)}>{children}</TabSwipe>
         </main>
         <Footer locale={prefs.locale} />
         <TabBar locale={prefs.locale} loggedIn={Boolean(viewer)} />

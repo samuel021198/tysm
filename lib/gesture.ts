@@ -22,6 +22,8 @@ export function gestureEnd(input: {
   allowRight: boolean;
   allowDown: boolean;
   edgeGuard: boolean;
+  /** When set with edgeGuard, a left swipe from the right screen edge is left for the tab pager. */
+  viewportWidth?: number;
 }): GestureDir | null {
   const adx = Math.abs(input.dx);
   const ady = Math.abs(input.dy);
@@ -31,7 +33,11 @@ export function gestureEnd(input: {
   }
   if (input.axis !== "x") return null;
   if (adx < SWIPE_X || adx <= ady) return null;
-  if (input.dx < 0) return "left";
+  if (input.dx < 0) {
+    const width = input.viewportWidth ?? 0;
+    if (input.edgeGuard && width > 0 && input.startX > width - EDGE_GUARD) return null;
+    return "left";
+  }
   if (input.allowRight && (!input.edgeGuard || input.startX >= EDGE_GUARD)) return "right";
   return null;
 }

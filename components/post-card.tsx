@@ -4,6 +4,7 @@ import { togglePostLike } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
 import { ShareButton } from "./share-button";
@@ -24,6 +25,16 @@ export function PostCard({
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
   const shown = gallery ? photos : photos.slice(0, 1);
   const likeFormId = post.likePostId || post.likeListingId ? `like-${post.id}` : undefined;
+  const commentLabel = post.commentCount ? `${tx(locale, "留言", "Comment")} ${post.commentCount}` : tx(locale, "留言", "Comment");
+  const dexLabel = tx(locale, "睇圖鑑", "View in the dex");
+  const price =
+    post.priceCents == null ? null : post.priceHref ? (
+      <Link href={post.priceHref} className="price inline-flex min-h-9 items-center text-lg leading-none">
+        {formatHkd(post.priceCents, locale)}
+      </Link>
+    ) : (
+      <p className="price text-lg leading-none">{formatHkd(post.priceCents, locale)}</p>
+    );
   return (
     <PostMenu
       locale={locale}
@@ -78,15 +89,23 @@ export function PostCard({
           <span className="inline-flex h-10 flex-1 items-center justify-center text-base leading-none text-muted">♡</span>
         )}
         {post.commentHref ? (
-          <Link href={post.commentHref} className="inline-flex h-10 flex-1 items-center justify-center text-sm font-medium leading-none">
-            {tx(locale, "留言", "Comment")} {post.commentCount || ""}
+          <Link href={post.commentHref} aria-label={commentLabel} title={commentLabel} className="inline-flex h-10 flex-1 items-center justify-center gap-1 text-sm font-medium leading-none">
+            <Icon name="messages" className="h-4 w-4" />
+            {post.commentCount ? <span>{post.commentCount}</span> : null}
           </Link>
         ) : (
-          <span className="inline-flex h-10 flex-1 items-center justify-center text-sm text-muted" title={tx(locale, "這張未有貼文", "No post yet")}>
-            {tx(locale, "留言", "Comment")}
+          <span className="inline-flex h-10 flex-1 items-center justify-center text-muted" title={tx(locale, "這張未有貼文", "No post yet")} aria-label={commentLabel}>
+            <Icon name="messages" className="h-4 w-4" />
           </span>
         )}
-        <ShareButton path={post.sharePath} label={tx(locale, "分享", "Share")} copiedLabel={tx(locale, "已複製", "Copied")} />
+        <ShareButton
+          icon
+          className="inline-flex h-10 flex-1 items-center justify-center text-ink"
+          path={post.sharePath}
+          label={tx(locale, "分享", "Share")}
+          copiedLabel={tx(locale, "已複製", "Copied")}
+          internalLabel={tx(locale, "內部分享", "In TYSM")}
+        />
       </div>
       <div className="px-2.5 pb-3 pt-1">
         <Link href={post.href} className="block">
@@ -95,19 +114,15 @@ export function PostCard({
             {post.condition ? <span className="font-medium text-muted"> · {post.condition}</span> : null}
           </h2>
         </Link>
-        {post.dexHref ? (
-          <Link href={post.dexHref} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
-            {tx(locale, "睇圖鑑", "View in the dex")}
-          </Link>
-        ) : null}
-        {post.priceCents != null ? (
-          post.priceHref ? (
-            <Link href={post.priceHref} className="price mt-1 inline-flex min-h-9 items-center text-lg leading-none">
-              {formatHkd(post.priceCents, locale)}
-            </Link>
-          ) : (
-            <p className="price mt-1 text-lg leading-none">{formatHkd(post.priceCents, locale)}</p>
-          )
+        {post.dexHref || price ? (
+          <div className="mt-1 flex items-center gap-1">
+            {post.dexHref ? (
+              <Link href={post.dexHref} aria-label={dexLabel} title={dexLabel} className="grid h-9 w-9 shrink-0 place-items-center text-link">
+                <Icon name="book" className="h-[18px] w-[18px]" />
+              </Link>
+            ) : null}
+            {price}
+          </div>
         ) : null}
       </div>
     </article>

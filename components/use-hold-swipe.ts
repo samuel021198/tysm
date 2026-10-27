@@ -98,6 +98,7 @@ export function useHoldSwipe(options: Options) {
           allowRight: Boolean(opts.current.onSwipeRight),
           allowDown: Boolean(opts.current.onSwipeDown),
           edgeGuard: Boolean(opts.current.edgeGuard),
+          viewportWidth: window.innerWidth,
         })
       : null;
     reset();

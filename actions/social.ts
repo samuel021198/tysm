@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isAllowedMediaUrl, safeNext } from "@/lib/format";
+import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { isBlocked, notify } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
@@ -115,6 +116,22 @@ export async function sendMessage(formData: FormData) {
   });
   await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
   await notify(other, "message", "新訊息", body.slice(0, 80), `/messages/${threadId}`);
+  redirect(`/messages/${threadId}`);
+}
+
+export async function shareIntoThread(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const path = shareTarget(formData.get("path"));
+  const back = path ? `/messages?share=${encodeURIComponent(path)}` : "/messages";
+  const user = await viewer(back);
+  if (!path) redirect("/messages?err=forbidden");
+  const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+  if (!thread || (thread.buyerId !== user.id && thread.sellerId !== user.id)) redirect(`${back}&err=forbidden`);
+  const other = thread.buyerId === user.id ? thread.sellerId : thread.buyerId;
+  if (await isBlocked(user.id, other)) redirect(`${back}&err=blocked`);
+  await prisma.message.create({ data: { threadId, senderId: user.id, body: path } });
+  await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
+  await notify(other, "message", "新訊息", path, `/messages/${threadId}`);
   redirect(`/messages/${threadId}`);
 }
 

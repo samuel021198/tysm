@@ -15,7 +15,7 @@ export function Gallery({ photos, alt, locale }: { photos: { url: string; role: 
   const current = photos[index] ?? photos[0];
   return (
     <div className="-mx-3 md:mx-0">
-      <div {...gesture}>
+      <div {...gesture} data-gesture="">
         <img src={current.url} alt={alt} className="aspect-[4/3] w-full bg-soft object-contain md:aspect-[4/5] md:rounded-2xl" />
       </div>
       {photos.length > 1 ? (

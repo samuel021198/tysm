@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { tx, type Locale } from "@/lib/i18n";
+import { subscribeTabIntent } from "@/lib/tabs";
 import { Icon } from "./icons";
 
 export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean }) {
   const pathname = usePathname();
+  const [intent, setIntent] = useState<number | null>(null);
+  useEffect(() => subscribeTabIntent(setIntent), []);
   const meHref = loggedIn ? "/me" : "/login";
   const tabs = [
     { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
@@ -47,8 +51,8 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-5">
-        {tabs.map((tab) => (
-          <Tab key={tab.href} {...tab} />
+        {tabs.map((tab, index) => (
+          <Tab key={tab.href} {...tab} on={intent == null ? tab.on : intent === index} />
         ))}
       </ul>
     </nav>
