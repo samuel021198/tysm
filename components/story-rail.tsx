@@ -125,7 +125,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
 
   return (
     <section aria-label={tx(locale, "限時動態", "Stories")}>
-      <div className="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
+      <div className="flex gap-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
         {items.map((item, index) => {
           const fresh = item.stories.length > 0 && !item.seen;
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
