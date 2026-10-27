@@ -141,7 +141,7 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className="sell-cta inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold"
+        className="inline-flex h-10 items-center text-sm font-medium text-muted hover:text-ink"
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={openPicker}
@@ -152,15 +152,14 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className={`fixed left-2.5 z-50 grid h-9 w-9 place-items-center rounded-full bg-accent text-white shadow-none md:hidden ${creating ? "ring-2 ring-ink ring-offset-2 ring-offset-[var(--bg)]" : ""}`}
-        style={{ top: "calc(env(safe-area-inset-top) + 0.375rem)" }}
+        className={`absolute left-1 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full active:bg-soft md:hidden ${creating ? "bg-soft text-ink" : "text-muted"}`}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-current={creating ? "page" : undefined}
         aria-label={tx(locale, "新增", "Create")}
         onClick={openPicker}
       >
-        <Icon name="plus" className="h-4 w-4" strokeWidth={2.25} />
+        <Icon name="plus" className="h-[18px] w-[18px]" />
       </button>
     );
 

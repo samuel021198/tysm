@@ -47,7 +47,7 @@
 @media (min-width: 768px) {
   :root {
     --tab-h: 0px;
-    --header-h: calc(3.5rem + env(safe-area-inset-top));
+    --header-h: calc(6.5rem + env(safe-area-inset-top));
   }
 }
 

@@ -33,7 +33,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  title: { default: "TYSM", template: "%s · TYSM" },
+  title: { default: "TSM", template: "%s · TSM" },
   description: "Hong Kong marketplace for trading cards. HKD, escrow, auctions and offers.",
 };
 

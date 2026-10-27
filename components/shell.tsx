@@ -22,48 +22,46 @@ export function Header({
   const nav = navLabels(locale);
   return (
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
-      <div>
+      <div className="relative mx-auto flex h-12 max-w-6xl items-center justify-center">
         <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="corner" />
-        <div className="mx-auto flex h-12 max-w-6xl items-center gap-1 pl-14 pr-2 md:h-14 md:gap-2.5 md:px-4">
-          <Link href="/" className="min-w-0 shrink pr-1">
-            <img
-              src={theme === "dark" ? "/brand/tysm-wordmark-on-dark.png" : "/brand/tysm-wordmark.png"}
-              alt="TYSM"
-              className="h-7 w-auto max-w-full bg-transparent md:h-8"
-            />
+        <Link href="/" className="relative z-10">
+          <img
+            src="/brand/tsm-monogram.png"
+            alt="TSM"
+            className="block h-7 w-auto bg-transparent md:h-8"
+          />
+        </Link>
+        <div className="absolute inset-y-0 right-1 flex items-center md:hidden">
+          <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full text-muted active:bg-soft">
+            <Icon name="bell" className="h-[18px] w-[18px]" />
+            {unread ? <Count n={unread} /> : null}
           </Link>
-          <div className="mx-auto hidden min-w-0 max-w-xl flex-1 md:block">
-            <SearchBox locale={locale} />
-          </div>
-          <div className="ml-auto flex items-center md:hidden">
-            <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
-              <Icon name="bell" className="h-[18px] w-[18px]" />
-              {unread ? <Count n={unread} /> : null}
-            </Link>
-            <Link href="/messages" aria-label={nav.messages} className="grid h-10 w-10 place-items-center rounded-full active:bg-soft">
-              <Icon name="messages" className="h-[18px] w-[18px]" />
-            </Link>
-          </div>
-          <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">
-            <Link className="hover:text-ink" href="/market">{nav.search}</Link>
-            <Link className="hover:text-ink" href="/dex">{nav.dex}</Link>
-            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
-            <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
-            <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
-            <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
-            <Link className="hover:text-ink" href="/notifications">{nav.notifications}{unread ? ` (${unread})` : ""}</Link>
-            {user?.role === "ADMIN" ? <Link className="hover:text-ink" href="/admin">{nav.admin}</Link> : null}
-            {user ? <Link className="font-medium text-ink" href="/me">{user.nickname}</Link> : <Link className="font-medium text-ink" href="/login">{nav.login}</Link>}
-            {user ? (
-              <form action={logout}>
-                <button className="text-sm text-muted hover:text-ink">{nav.logout}</button>
-              </form>
-            ) : null}
-          </nav>
-          <div className="hidden md:block">
-            <PrefToggles locale={locale} theme={theme} />
-          </div>
+          <Link href="/messages" aria-label={nav.messages} className="grid h-10 w-10 place-items-center rounded-full text-muted active:bg-soft">
+            <Icon name="messages" className="h-[18px] w-[18px]" />
+          </Link>
         </div>
+      </div>
+      <div className="mx-auto hidden h-14 max-w-6xl items-center gap-2.5 px-4 md:flex">
+        <div className="min-w-0 max-w-xl flex-1">
+          <SearchBox locale={locale} />
+        </div>
+        <nav className="ml-auto flex items-center gap-x-4 text-sm font-medium text-muted">
+          <Link className="hover:text-ink" href="/market">{nav.search}</Link>
+          <Link className="hover:text-ink" href="/dex">{nav.dex}</Link>
+          <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
+          <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
+          <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
+          <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
+          <Link className="hover:text-ink" href="/notifications">{nav.notifications}{unread ? ` (${unread})` : ""}</Link>
+          {user?.role === "ADMIN" ? <Link className="hover:text-ink" href="/admin">{nav.admin}</Link> : null}
+          {user ? <Link className="font-medium text-ink" href="/me">{user.nickname}</Link> : <Link className="font-medium text-ink" href="/login">{nav.login}</Link>}
+          {user ? (
+            <form action={logout}>
+              <button className="text-sm text-muted hover:text-ink">{nav.logout}</button>
+            </form>
+          ) : null}
+        </nav>
+        <PrefToggles locale={locale} theme={theme} />
       </div>
     </header>
   );
@@ -99,7 +97,7 @@ export function Footer({ locale }: { locale: Locale }) {
   return (
     <footer className="mt-6 text-muted md:mt-12">
       <div className="mx-auto max-w-6xl px-4 py-4 text-center md:flex md:items-center md:justify-start md:gap-4 md:py-5 md:text-left">
-        <p className="font-display text-sm tracking-wide">TYSM</p>
+        <p className="font-display text-sm tracking-wide">TSM</p>
         <p className="mt-2 flex justify-center gap-4 text-xs md:mt-0">
           <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/faq">FAQ</Link>
           <Link className="inline-flex min-h-11 items-center md:min-h-0" href="/terms">{tx(locale, "條款", "Terms")}</Link>
