@@ -3,16 +3,19 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { compactSetLine } from "@/lib/card-line";
 import { tx, type Locale } from "@/lib/i18n";
 import {
   buildSuggestRows,
   memoryKey,
   suggestPanelDismiss,
   type MemoryItem,
+  type SuggestCard,
   type SuggestCategory,
   type SuggestListing,
   type SuggestRow,
 } from "@/lib/search";
+import type { CatalogHit } from "./catalog-title-field";
 import {
   MEMORY_EVENT,
   clearRecent,
@@ -71,13 +74,14 @@ export function SearchBox({
   const [tab, setTab] = useState<"recent" | "saved">("recent");
   const [recent, setRecent] = useState<MemoryItem[]>(() => accountRecent.map((query) => ({ query })));
   const [saved, setSaved] = useState<MemoryItem[]>([]);
-  const [pack, setPack] = useState<{ q: string; listings: SuggestListing[]; categories: SuggestCategory[] }>({
+  const [pack, setPack] = useState<{ q: string; listings: SuggestListing[]; categories: SuggestCategory[]; cards: SuggestCard[] }>({
     q: "",
     listings: [],
     categories: [],
+    cards: [],
   });
   const query = q.trim();
-  const suggestions = pack.q === query ? pack : { q: query, listings: [], categories: [] };
+  const suggestions = pack.q === query ? pack : { q: query, listings: [], categories: [], cards: [] };
   const rows = buildSuggestRows({
     query,
     recent,
@@ -85,6 +89,7 @@ export function SearchBox({
     tab,
     listings: suggestions.listings,
     categories: suggestions.categories,
+    cards: suggestions.cards,
     to,
   });
   const index = rows.length ? Math.min(active, rows.length - 1) : -1;
@@ -142,10 +147,27 @@ export function SearchBox({
     const ctrl = new AbortController();
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/suggest?q=${encodeURIComponent(query)}`, { signal: ctrl.signal });
-        if (!res.ok) return;
-        const data = (await res.json()) as { listings?: SuggestListing[]; categories?: SuggestCategory[] };
-        setPack({ q: query, listings: data.listings ?? [], categories: data.categories ?? [] });
+        const suggestUrl = `/api/suggest?q=${encodeURIComponent(query)}`;
+        const catalogUrl = query.length >= 2 ? `/api/catalog/suggest?q=${encodeURIComponent(query)}` : "";
+        const [suggestRes, catalogRes] = await Promise.all([
+          fetch(suggestUrl, { signal: ctrl.signal }),
+          catalogUrl ? fetch(catalogUrl, { signal: ctrl.signal }) : Promise.resolve(null),
+        ]);
+        const data = suggestRes.ok
+          ? ((await suggestRes.json()) as { listings?: SuggestListing[]; categories?: SuggestCategory[] })
+          : { listings: [], categories: [] };
+        let cards: SuggestCard[] = [];
+        if (catalogRes?.ok) {
+          const body = (await catalogRes.json()) as { cards?: CatalogHit[] };
+          cards = (body.cards ?? []).map((card) => ({
+            id: card.id,
+            label: card.cardName || card.title,
+            imageUrl: card.imageUrl,
+            hint: compactSetLine(card.setCode, card.collectorNumber),
+          }));
+        }
+        if (!suggestRes.ok && !catalogRes?.ok) return;
+        setPack({ q: query, listings: data.listings ?? [], categories: data.categories ?? [], cards });
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
       }
@@ -410,12 +432,16 @@ export function SearchBox({
                   {rows.map((row, rowIndex) => {
                     const subtitle = hint(row);
                     const selected = rowIndex === index;
+                    const thumb = row.imageUrl ? (
+                      <img src={row.imageUrl} alt="" className="mr-3 h-12 w-9 shrink-0 rounded-md bg-soft object-contain" />
+                    ) : null;
                     const body = (
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[16px] leading-snug">{row.label}</span>
                         {subtitle ? <span className="block truncate text-[13px] leading-snug text-muted">{subtitle}</span> : null}
                       </span>
                     );
+                    const rowClass = `flex ${row.imageUrl ? "min-h-16" : "min-h-11"} min-w-0 flex-1 items-center px-1 py-2 text-left hover:bg-soft md:px-4`;
                     return (
                       <div
                         key={row.key}
@@ -425,20 +451,22 @@ export function SearchBox({
                         className={`flex items-stretch border-b border-line last:border-b-0 ${selected ? "bg-soft" : ""}`}
                       >
                         {row.kind === "query" ? (
-                          <button type="submit" className="flex min-h-11 min-w-0 flex-1 items-center px-1 py-2 text-left hover:bg-soft md:px-4">
+                          <button type="submit" className={rowClass}>
+                            {thumb}
                             {body}
                           </button>
                         ) : (
                           <Link
                             href={row.href}
-                            className="flex min-h-11 min-w-0 flex-1 items-center px-1 py-2 hover:bg-soft md:px-4"
+                            className={rowClass}
                             onClick={() => {
                               if (row.query) pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
-                              setOpen(false);
-                            }}
-                          >
-                            {body}
-                          </Link>
+                            setOpen(false);
+                          }}
+                        >
+                          {thumb}
+                          {body}
+                        </Link>
                         )}
                         {row.kind === "memory" ? (
                           <button

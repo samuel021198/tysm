@@ -3,12 +3,12 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
 import { formatHkd } from "@/lib/format";
-import { tx } from "@/lib/i18n";
+import { tx, type Locale } from "@/lib/i18n";
 import { cardDisplayName } from "@/lib/posts";
-import { listingQueryWhere, postQueryWhere, searchScore, userQueryWhere } from "@/lib/search";
+import { cardHubListingWhere, cardHubPostWhere, findHref, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
-import { FindSearch } from "@/components/find-search";
+import { SearchBox } from "@/components/search-box";
 import { Flash } from "@/components/shell";
 
 function one(value: string | string[] | undefined) {
@@ -22,78 +22,110 @@ export default async function FindPage({
 }) {
   const sp = await searchParams;
   const q = one(sp.q).trim().slice(0, 80);
+  const card = one(sp.card).trim().slice(0, 80);
+  const show = marketShow(one(sp.show));
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
   const viewerId = viewer?.id ?? null;
+  const locale = prefs.locale;
 
   let users: { id: string; nickname: string; avatarUrl: string | null }[] = [];
   let posts: { id: string; name: string; author: string; photo: string | null }[] = [];
   let listings: { id: string; name: string; photo: string | null; price: number | null }[] = [];
+  let people: { id: string; nickname: string; avatarUrl: string | null }[] = [];
 
   if (q) {
     await sweep();
-    const [userRows, postRows, listingRows] = await Promise.all([
-      prisma.user.findMany({
-        where: { AND: [userQueryWhere(q), ...(hidden.length ? [{ id: { notIn: hidden } }] : [])] },
-        select: { id: true, nickname: true, avatarUrl: true },
-        orderBy: { nickname: "asc" },
-        take: 8,
-      }),
-      prisma.post.findMany({
-        where: {
-          AND: [
-            postQueryWhere(q),
-            ...(hidden.length ? [{ authorId: { notIn: hidden } }] : []),
-            ...(hides.postIds.length ? [{ id: { notIn: hides.postIds } }] : []),
-            {
-              OR: [
-                { collectionItemId: null },
-                { collectionItem: { visibility: "PUBLIC" } },
-                ...(viewerId ? [{ authorId: viewerId }] : []),
+    const wantListings = show !== "post";
+    const wantPosts = show !== "listing";
+    const listingWhere = { AND: [activeWhere(hidden), cardHubListingWhere(q, card), ...(hides.listingIds.length ? [{ id: { notIn: hides.listingIds } }] : [])] };
+    const postText = cardHubPostWhere(q, card);
+    const [userRows, postRows, listingRows, favRows, saveRows] = await Promise.all([
+      wantPosts
+        ? prisma.user.findMany({
+            where: { AND: [userQueryWhere(q), ...(hidden.length ? [{ id: { notIn: hidden } }] : [])] },
+            select: { id: true, nickname: true, avatarUrl: true },
+            orderBy: { nickname: "asc" },
+            take: 8,
+          })
+        : Promise.resolve([]),
+      wantPosts
+        ? prisma.post.findMany({
+            where: {
+              AND: [
+                postText,
+                ...(hidden.length ? [{ authorId: { notIn: hidden } }] : []),
+                ...(hides.postIds.length ? [{ id: { notIn: hides.postIds } }] : []),
+                {
+                  OR: [
+                    { collectionItemId: null },
+                    { collectionItem: { visibility: "PUBLIC" } },
+                    ...(viewerId ? [{ authorId: viewerId }] : []),
+                  ],
+                },
               ],
             },
-          ],
-        },
-        select: {
-          id: true,
-          body: true,
-          author: { select: { nickname: true } },
-          photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
-          collectionItem: {
             select: {
+              id: true,
+              body: true,
+              author: { select: { nickname: true } },
+              photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+              collectionItem: {
+                select: {
+                  title: true,
+                  cardName: true,
+                  photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+                  listing: { select: { title: true, cardName: true, personName: true } },
+                },
+              },
+            },
+            orderBy: { createdAt: "desc" },
+            take: 8,
+          })
+        : Promise.resolve([]),
+      wantListings
+        ? prisma.listing.findMany({
+            where: listingWhere,
+            select: {
+              id: true,
               title: true,
               cardName: true,
+              personName: true,
+              game: true,
+              price: true,
+              currentBid: true,
+              startPrice: true,
+              saleType: true,
               photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
-              listing: { select: { title: true, cardName: true, personName: true } },
+              category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } },
             },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 8,
-      }),
-      prisma.listing.findMany({
-        where: {
-          AND: [
-            activeWhere(hidden),
-            listingQueryWhere(q),
-            ...(hides.listingIds.length ? [{ id: { notIn: hides.listingIds } }] : []),
-          ],
-        },
-        select: {
-          id: true,
-          title: true,
-          cardName: true,
-          personName: true,
-          game: true,
-          price: true,
-          currentBid: true,
-          startPrice: true,
-          saleType: true,
-          photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
-          category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } },
-        },
-        take: 40,
-      }),
+            take: 40,
+          })
+        : Promise.resolve([]),
+      wantPosts
+        ? prisma.favorite.findMany({
+            where: { listing: listingWhere, ...(hidden.length ? { userId: { notIn: hidden } } : {}) },
+            select: { user: { select: { id: true, nickname: true, avatarUrl: true } } },
+            orderBy: { createdAt: "desc" },
+            take: 16,
+          })
+        : Promise.resolve([]),
+      wantPosts
+        ? prisma.postSave.findMany({
+            where: {
+              post: {
+                AND: [
+                  postText,
+                  { OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }] },
+                ],
+              },
+              ...(hidden.length ? { userId: { notIn: hidden } } : {}),
+            },
+            select: { user: { select: { id: true, nickname: true, avatarUrl: true } } },
+            orderBy: { createdAt: "desc" },
+            take: 16,
+          })
+        : Promise.resolve([]),
     ]);
     users = userRows;
     posts = postRows.map((post) => ({
@@ -114,6 +146,14 @@ export default async function FindPage({
       photo: listing.photos[0]?.url || null,
       price: listing.saleType === "AUCTION" ? listing.currentBid ?? listing.startPrice : listing.price ?? listing.currentBid,
     }));
+    const seen = new Set<string>();
+    people = [];
+    for (const row of [...favRows, ...saveRows]) {
+      if (seen.has(row.user.id)) continue;
+      seen.add(row.user.id);
+      people.push(row.user);
+      if (people.length >= 8) break;
+    }
   }
 
   if (viewer && q) {
@@ -134,52 +174,29 @@ export default async function FindPage({
     if (accountRecent.length >= 12) break;
   }
 
-  const empty = q && users.length === 0 && posts.length === 0 && listings.length === 0;
-  const locale = prefs.locale;
+  const empty = q && users.length === 0 && posts.length === 0 && listings.length === 0 && people.length === 0;
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <FindSearch key={q} locale={locale} initial={q} account={accountRecent} showHistory={!q} />
-      {empty ? <p className="text-sm text-muted">{tx(locale, "沒有結果", "No results")}</p> : null}
+      <SearchBox key={q} locale={locale} initial={q} autoFocus={!q} rememberVisit pullAccount={false} accountRecent={accountRecent} to="find" />
+      {q ? <HubChips locale={locale} show={show} q={q} card={card} /> : null}
+      {empty ? <p className="text-sm text-muted">{emptyCopy(locale, show)}</p> : null}
       {users.length ? (
         <section>
           <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "用戶", "Users")}</h2>
           <ul>
             {users.map((user) => (
               <li key={user.id}>
-                <Link href={`/shop/${user.id}`} className="flex h-11 items-center gap-2 text-sm font-medium">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
-                    {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" /> : user.nickname.slice(0, 1)}
-                  </span>
-                  <span className="truncate">{user.nickname}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-      {posts.length ? (
-        <section>
-          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "貼文", "Posts")}</h2>
-          <ul>
-            {posts.map((post) => (
-              <li key={post.id}>
-                <Link href={`/post/${post.id}`} className="flex h-12 items-center gap-2">
-                  <img src={post.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium">{post.name || post.author}</span>
-                    <span className="block truncate text-xs text-muted">{post.author}</span>
-                  </span>
-                </Link>
+                <PersonLink user={user} />
               </li>
             ))}
           </ul>
         </section>
       ) : null}
       {listings.length ? (
-        <section>
-          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "放售", "For sale")}</h2>
+        <section aria-label={tx(locale, "上架", "Listings")}>
+          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "上架", "Listings")}</h2>
           <ul>
             {listings.map((listing) => (
               <li key={listing.id}>
@@ -195,6 +212,80 @@ export default async function FindPage({
           </ul>
         </section>
       ) : null}
+      {posts.length || people.length ? (
+        <section aria-label={tx(locale, "貼文", "Posts")}>
+          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "貼文", "Posts")}</h2>
+          {posts.length ? (
+            <ul>
+              {posts.map((post) => (
+                <li key={post.id}>
+                  <Link href={`/post/${post.id}`} className="flex h-12 items-center gap-2">
+                    <img src={post.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium">{post.name || post.author}</span>
+                      <span className="block truncate text-xs text-muted">{post.author}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {people.length ? (
+            <div className="mt-2">
+              <h3 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "收藏", "Saved")}</h3>
+              <ul>
+                {people.map((user) => (
+                  <li key={user.id}>
+                    <PersonLink user={user} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </div>
+  );
+}
+
+function PersonLink({ user }: { user: { id: string; nickname: string; avatarUrl: string | null } }) {
+  return (
+    <Link href={`/shop/${user.id}`} className="flex h-11 items-center gap-2 text-sm font-medium">
+      <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
+        {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" /> : user.nickname.slice(0, 1)}
+      </span>
+      <span className="truncate">{user.nickname}</span>
+    </Link>
+  );
+}
+
+function emptyCopy(locale: Locale, show: MarketShow) {
+  if (show === "listing") return tx(locale, "未有上架。", "No listings.");
+  if (show === "post") return tx(locale, "未有相關貼文。", "No posts.");
+  return tx(locale, "未有相關上架或貼文。", "No listings or posts.");
+}
+
+function HubChips({ locale, show, q, card }: { locale: Locale; show: MarketShow; q: string; card: string }) {
+  const items = [
+    ["all", "全部", "All"],
+    ["listing", "上架", "Listings"],
+    ["post", "貼文", "Posts"],
+  ] as const;
+  return (
+    <nav className="chips" aria-label={tx(locale, "結果類型", "Result type")}>
+      {items.map(([id, zh, en]) => {
+        const on = show === id;
+        return (
+          <Link
+            key={id}
+            href={findHref(q, { card: card || undefined, show: id })}
+            aria-current={on ? "page" : undefined}
+            className={`inline-flex h-11 items-center rounded-full px-3 text-sm leading-none ${on ? "bg-soft font-semibold text-ink" : "font-medium text-muted"}`}
+          >
+            {tx(locale, zh, en)}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

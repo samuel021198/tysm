@@ -76,6 +76,7 @@ export function navLabels(locale: Locale) {
   return {
     search: en ? "Market" : "賣場",
     dex: en ? "Dex" : "圖鑑",
+    news: en ? "News" : "新聞",
     sell: en ? "Add" : "新增",
     cart: en ? "Cart" : "購物車",
     orders: en ? "Orders" : "訂單",

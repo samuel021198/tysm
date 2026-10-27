@@ -1,12 +1,12 @@
 import { AXIS_LOCK, EDGE_GUARD, SWIPE_X } from "./gesture";
 
 /** Bottom tab roots, left to right. Profile is /me or /login. */
-export const TAB_ROOTS = ["/", "/dex", "/find", "/market"] as const;
+export const TAB_ROOTS = ["/", "/news", "/find", "/market"] as const;
 
 /** Only these pages are the pager. Nested routes keep their own gestures. */
 export function tabPagerIndex(pathname: string): number | null {
   if (pathname === "/") return 0;
-  if (pathname === "/dex") return 1;
+  if (pathname === "/news") return 1;
   if (pathname === "/find") return 2;
   if (pathname === "/market") return 3;
   if (pathname === "/me" || pathname === "/login") return 4;

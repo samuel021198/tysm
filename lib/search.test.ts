@@ -2,6 +2,8 @@ import { readFileSync } from "fs";
 import { clearRecent, pullAccountRecent, pushRecent, readRecent, removeRecent } from "./search-memory";
 import {
   buildSuggestRows,
+  cardHubListingWhere,
+  cardHubPostWhere,
   categoryMatches,
   foldSearch,
   forgetMemory,
@@ -53,6 +55,10 @@ assert(searchScore(pokemon, "Charizard") >= 4, "chinese card name scores for Cha
 
 assert(searchHref("可達鴨", { cat: "pokemon" }).startsWith("/search?q=") && searchHref("可達鴨", { cat: "pokemon" }).endsWith("&cat=pokemon"), "search href keeps the query and category");
 assert(findHref("可達鴨") === `/find?q=${encodeURIComponent("可達鴨")}`, "find href is the universal search");
+assert(
+  findHref("噴火龍", { card: "card_z", show: "post" }) === `/find?q=${encodeURIComponent("噴火龍")}&card=card_z&show=post`,
+  "a picked card opens the hub on the post chip",
+);
 assert(decodeURIComponent(searchHref("可達鴨", { cat: "pokemon" }).split("q=")[1]?.split("&")[0] || "") === "可達鴨", "search href round-trips Chinese");
 assert(textHits("寶可夢", "Pokémon"), "寶可夢 hits the English category name");
 assert(textHits("Pokemon", "寶可夢"), "Pokemon hits the Chinese category name");
@@ -139,12 +145,14 @@ assert(marketSearchHref({ q: "皮卡丘", cat: "pokemon", sort: "relevance" }, "
 assert(marketSearchHref({ q: "皮卡丘", sort: "new" }) === `/search?q=${encodeURIComponent("皮卡丘")}&sort=new`, "all is the default chip and stays off the URL");
 assert(marketSearchHref({}) === "/search", "an empty market search has no query string");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
-assert(find.includes("用戶") && find.includes("貼文") && find.includes("放售"), "search shows users, posts, and listings");
+assert(find.includes("用戶") && find.includes("貼文") && find.includes("上架") && find.includes("全部") && find.includes("收藏"), "search hub chips are 全部, 上架, 貼文, plus people who saved the card");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
-assert(find.includes("searchHistory.create") && find.includes("FindSearch"), "find records a query and shows history");
+assert(find.includes("searchHistory.create") && find.includes("SearchBox"), "find records a query and keeps the search box");
+assert(find.includes("cardHubListingWhere") && find.includes("cardHubPostWhere"), "a card name search loads listings and posts");
 const box = readFileSync(new URL("../components/search-box.tsx", import.meta.url), "utf8");
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
 assert(box.includes('to = "find"') && box.includes('"/find"'), "the header search box submits to find");
+assert(box.includes("/api/catalog/suggest") && !box.includes("/dex"), "typeahead still reads the catalog and does not open the dex");
 assert(shell.includes("<SearchBox") && !shell.includes('to="search"'), "the header uses the universal search");
 const marketPage = readFileSync(new URL("../app/search/page.tsx", import.meta.url), "utf8");
 assert(marketPage.includes('to="search"'), "market filters stay on /search");
@@ -170,6 +178,22 @@ const findRows = buildSuggestRows({
   to: "find",
 });
 assert(findRows[0]?.href.startsWith("/find?q="), "a recent query reruns on find");
+const cardRows = buildSuggestRows({
+  query: "2022",
+  recent: [],
+  saved: [],
+  tab: "recent",
+  listings: [{ id: "1", title: "ignore me" }],
+  categories: [{ slug: "pokemon", nameZh: "寶可夢", nameEn: "Pokémon" }],
+  cards: [{ id: "card_z", label: "Charizard", imageUrl: "/demo/cards/seed_charizard.svg", hint: "SV 006" }],
+});
+assert(cardRows[0]?.kind === "query" && cardRows.some((row) => row.kind === "card" && row.label === "Charizard" && row.imageUrl?.includes("charizard")), "typing a year keeps catalog cards with a thumb");
+assert(cardRows.some((row) => row.href.startsWith("/find?") && row.href.includes("card=card_z")) && !cardRows.some((row) => row.kind === "listing" || row.href.includes("/dex")), "a catalog suggestion opens the card hub");
+const hubPost = JSON.stringify(cardHubPostWhere("皮卡丘", "card_pika"));
+assert(hubPost.includes("catalogCardId") && hubPost.includes("皮卡丘") && !JSON.stringify(postQueryWhere("皮卡丘")).includes("catalogCard"), "the hub can pin a catalog card without searching collection titles");
+const hubListing = JSON.stringify(cardHubListingWhere("Charizard", "card_z"));
+assert(hubListing.includes("catalogCardId") && hubListing.includes("Charizard"), "the hub matches the card name and the picked printing");
+assert(JSON.stringify(cardHubListingWhere("", "")).includes("in"), "a blank hub matches nothing");
 
 void (async () => {
   const store = new Map<string, string>();

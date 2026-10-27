@@ -851,3 +851,30 @@ model StoryView {
   @@unique([storyId, userId])
   @@index([userId])
 }
+
+enum NewsTag {
+  RELEASE
+  RESTOCK
+  DATE
+}
+
+/// One card-news row. Tag is stored for later filters; the list does not show pills.
+model NewsItem {
+  id         String    @id
+  slug       String    @unique
+  title      String
+  source     String
+  teaser     String    @default("")
+  body       String    @default("")
+  coverUrl   String?
+  brandColor String    @default("#111111")
+  linkUrl    String?
+  tag        NewsTag   @default(RELEASE)
+  eventAt    DateTime?
+  /// 即將搶／今日開賣 sorts ahead of later calendar dates.
+  hot        Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([hot, eventAt])
+}
