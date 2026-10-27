@@ -91,5 +91,11 @@ assert(containRect(90, 160, 90, 160).w === 90, "a story-shaped photo fills the s
 assert(containRect(100, 100, 200, 100).w === 100 && containRect(100, 100, 200, 100).h === 50, "a landscape photo is contained");
 const rail = readFileSync(new URL("../components/story-rail.tsx", import.meta.url), "utf8");
 assert(rail.includes("onSwipeLeft") && rail.includes("onSwipeRight") && rail.includes("onSwipeDown") && rail.includes("上一則") && rail.includes("下一則"), "stories still tap, and swipe left, right, and down");
+assert(rail.includes('href="/story/new"') && rail.includes("{item.mine ? ("), "the plus on your avatar always opens a new story");
+assert(!rail.includes("item.stories.length === 0"), "a live story does not hide the add badge");
+const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following chrome between stories and posts");
+assert(home.includes("<StoryRail") && home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still sit under the story rail");
+assert(home.includes('tx(prefs.locale, "建議"'), "suggested posts stay labeled apart from the silent following feed");
 
 console.log("stories ok");
