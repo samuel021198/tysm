@@ -125,13 +125,13 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
 
   return (
     <section aria-label={tx(locale, "限時動態", "Stories")}>
-      <div className="flex gap-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
+      <div className="flex w-full justify-start gap-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
         {items.map((item, index) => {
           const fresh = item.stories.length > 0 && !item.seen;
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
           return (
-            <button key={item.userId} type="button" className="flex w-16 shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
-              <span className={`relative grid h-14 w-14 place-items-center rounded-full p-[2px] ${fresh ? "bg-accent" : "bg-slate-300 dark:bg-white/25"}`}>
+            <button key={item.userId} type="button" className="flex w-[4.25rem] shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
+              <span className={`relative grid h-16 w-16 place-items-center rounded-full p-[3px] ${fresh ? "bg-accent" : "bg-accent/30"}`}>
                 <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
                   <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
                     {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}

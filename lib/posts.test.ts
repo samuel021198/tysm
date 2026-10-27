@@ -212,14 +212,20 @@ assert(postCard.includes('name="book"') && postCard.includes("aria-label={dexLab
 assert(!postCard.includes("min-h-11 items-center text-sm font-semibold text-link"), "the dex caption is not a text link");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
-assert(postCard.includes("aspect-[4/5]"), "feed photos keep the 4:5 frame");
+assert(postCard.includes("aspect-[4/5]") && postCard.includes("object-cover"), "feed photos keep the 4:5 cover frame");
+assert(postCard.includes("object-contain"), "detail photos show the whole image");
+assert(postCard.includes("h-10 min-w-10") && postCard.includes("strokeWidth={2.25}"), "actions are at least 40px with a deeper stroke");
+assert(postCard.includes("flex h-9 items-center"), "price and dex keep one meta row");
+assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 const followAt = home.indexOf("關注中");
 const followHead = home.slice(followAt - 240, followAt);
-assert(followHead.includes("mb-1 flex items-baseline justify-between"), "new post shares the following row");
-assert(!followHead.includes("grid gap-3"), "the following label is not a loose row above the first post");
+assert(!home.includes("寫貼文"), "write-post is not a lone feed link");
+assert(home.includes("grid gap-1"), "stories stay close to the first posts");
+assert(followHead.includes("mb-1") && !followHead.includes("grid gap-3"), "the following label stays tight above the first post");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
+assert(strip.includes("object-contain"), "a detail strip shows the whole photo");
 const gallery = readFileSync(new URL("../components/gallery.tsx", import.meta.url), "utf8");
 assert(gallery.includes("onSwipeLeft") && gallery.includes("onSwipeRight"), "listing photos swipe between frames");
 

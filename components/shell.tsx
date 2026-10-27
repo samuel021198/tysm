@@ -3,6 +3,7 @@ import { logout, setPrefs } from "@/actions/auth";
 import type { User } from "@prisma/client";
 import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
 import { CreatePicker } from "./create-picker";
+import { HeaderMenu } from "./header-menu";
 import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
 
@@ -20,18 +21,15 @@ export function Header({
   unread: number;
 }) {
   const nav = navLabels(locale);
+  const item = "flex h-10 items-center justify-between gap-2 rounded-lg px-2.5 text-sm font-medium text-ink hover:bg-soft";
   return (
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
-      <div className="relative mx-auto flex h-12 max-w-6xl items-center justify-center">
+      <div className="relative mx-auto flex h-12 max-w-6xl items-center justify-center md:hidden">
         <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="corner" />
         <Link href="/" className="relative z-10">
-          <img
-            src="/brand/tsm-monogram.png"
-            alt="TSM"
-            className="block h-7 w-auto bg-transparent md:h-8"
-          />
+          <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-7 w-auto bg-transparent" />
         </Link>
-        <div className="absolute inset-y-0 right-1 flex items-center md:hidden">
+        <div className="absolute inset-y-0 right-1 flex items-center">
           <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full text-muted active:bg-soft">
             <Icon name="bell" className="h-[18px] w-[18px]" />
             {unread ? <Count n={unread} /> : null}
@@ -41,27 +39,46 @@ export function Header({
           </Link>
         </div>
       </div>
-      <div className="mx-auto hidden h-14 max-w-6xl items-center gap-2.5 px-4 md:flex">
-        <div className="min-w-0 max-w-xl flex-1">
-          <SearchBox locale={locale} />
+      <div className="mx-auto hidden h-14 w-full max-w-6xl px-4 md:flex">
+        <div className="mx-auto flex h-full w-full max-w-lg items-center">
+          <div className="min-w-0 flex-1 pr-3">
+            <SearchBox locale={locale} />
+          </div>
+          <Link href="/" className="relative z-10 shrink-0">
+            <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-10 w-auto bg-transparent" />
+          </Link>
+          <nav className="flex flex-1 items-center justify-end gap-1 pl-3 text-sm font-medium text-ink">
+            <Link className="inline-flex h-10 items-center hover:text-link" href="/market">{nav.search}</Link>
+            <Link className="inline-flex h-10 items-center hover:text-link" href="/dex">{nav.dex}</Link>
+            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
+            <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="inline-flex h-10 items-center gap-1 hover:text-link">
+              {nav.notifications}
+              {unread ? <Pill n={unread} /> : null}
+            </Link>
+            <HeaderMenu label={user ? user.nickname : nav.profile} badge={cartCount}>
+              {user ? (
+                <Link className={item} href="/me">{user.nickname}</Link>
+              ) : (
+                <Link className={item} href="/login">{nav.login}</Link>
+              )}
+              <Link className={item} href="/cart">
+                <span>{nav.cart}</span>
+                {cartCount ? <Pill n={cartCount} /> : null}
+              </Link>
+              <Link className={item} href="/orders">{nav.orders}</Link>
+              <Link className={item} href="/messages">{nav.messages}</Link>
+              {user?.role === "ADMIN" ? <Link className={item} href="/admin">{nav.admin}</Link> : null}
+              {user ? (
+                <form action={logout}>
+                  <button className="flex h-10 w-full items-center rounded-lg px-2.5 text-left text-sm font-medium text-muted hover:bg-soft hover:text-ink">{nav.logout}</button>
+                </form>
+              ) : null}
+              <div className="mt-1 border-t border-line pt-1">
+                <PrefToggles locale={locale} theme={theme} />
+              </div>
+            </HeaderMenu>
+          </nav>
         </div>
-        <nav className="ml-auto flex items-center gap-x-4 text-sm font-medium text-muted">
-          <Link className="hover:text-ink" href="/market">{nav.search}</Link>
-          <Link className="hover:text-ink" href="/dex">{nav.dex}</Link>
-          <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
-          <Link className="hover:text-ink" href="/cart">{nav.cart}{cartCount ? ` (${cartCount})` : ""}</Link>
-          <Link className="hover:text-ink" href="/orders">{nav.orders}</Link>
-          <Link className="hover:text-ink" href="/messages">{nav.messages}</Link>
-          <Link className="hover:text-ink" href="/notifications">{nav.notifications}{unread ? ` (${unread})` : ""}</Link>
-          {user?.role === "ADMIN" ? <Link className="hover:text-ink" href="/admin">{nav.admin}</Link> : null}
-          {user ? <Link className="font-medium text-ink" href="/me">{user.nickname}</Link> : <Link className="font-medium text-ink" href="/login">{nav.login}</Link>}
-          {user ? (
-            <form action={logout}>
-              <button className="text-sm text-muted hover:text-ink">{nav.logout}</button>
-            </form>
-          ) : null}
-        </nav>
-        <PrefToggles locale={locale} theme={theme} />
       </div>
     </header>
   );
@@ -87,8 +104,16 @@ export function PrefToggles({ locale, theme }: { locale: Locale; theme: "light" 
 
 function Count({ n }: { n: number }) {
   return (
-    <span className="absolute right-0 top-0 grid h-3.5 min-w-3.5 place-items-center rounded-full bg-accent px-0.5 text-[9px] font-bold leading-none text-white">
+    <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-semibold leading-none text-white">
       {n > 9 ? "9+" : n}
+    </span>
+  );
+}
+
+function Pill({ n }: { n: number }) {
+  return (
+    <span className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-accent/15 px-1 text-[10px] font-semibold leading-none text-accent">
+      {n > 99 ? "99+" : n}
     </span>
   );
 }

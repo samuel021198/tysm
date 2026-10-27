@@ -15,7 +15,7 @@ export function PhotoStrip({ photos }: { photos: string[] }) {
           alt=""
           loading={index === 0 ? "eager" : "lazy"}
           decoding="async"
-          className="block aspect-[4/5] min-w-full shrink-0 snap-center bg-soft object-cover"
+          className="block max-h-[70vh] min-w-full shrink-0 snap-center bg-soft object-contain"
         />
       ))}
     </div>

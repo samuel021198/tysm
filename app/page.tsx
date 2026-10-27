@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
@@ -67,11 +66,6 @@ export default async function HomePage({
     : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
   const listingCards = extras.map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
-  const writePost = (
-    <Link href="/add?kind=post" className="shrink-0 text-sm font-semibold leading-none text-link">
-      {tx(prefs.locale, "寫貼文", "New post")}
-    </Link>
-  );
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">
@@ -80,19 +74,14 @@ export default async function HomePage({
         <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
         {primary.length ? (
           <section>
-            <div className="mb-1 flex items-baseline justify-between gap-3">
-              <h2 className="text-sm font-semibold leading-none text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
-              {writePost}
-            </div>
+            <h2 className="mb-1 text-sm font-semibold leading-none text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
             <div className="grid gap-3">
               {primary.map((post) => (
                 <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
               ))}
             </div>
           </section>
-        ) : (
-          <div className="flex justify-end">{writePost}</div>
-        )}
+        ) : null}
       </div>
       {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
         <p className="empty">{tx(prefs.locale, "未有動態。", "No posts yet.")}</p>
