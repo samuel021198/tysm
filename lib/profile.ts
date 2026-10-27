@@ -35,7 +35,7 @@ const postInclude = {
 
 export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
-  const [postRows, itemRows, listings, reviewRows, drafts, followers, following, favs, hides] = await Promise.all([
+  const [postRows, itemRows, listings, reviewRows, drafts, followers, completed, favs, hides] = await Promise.all([
     prisma.post.findMany({
       where: {
         authorId: ownerId,
@@ -87,7 +87,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
         })
       : Promise.resolve([]),
     prisma.follow.count({ where: { sellerId: ownerId } }),
-    prisma.follow.count({ where: { followerId: ownerId } }),
+    prisma.order.count({ where: { sellerId: ownerId, status: "COMPLETED" } }),
     viewerId ? prisma.favorite.findMany({ where: { userId: viewerId, listing: { sellerId: ownerId } }, select: { listingId: true } }) : Promise.resolve([]),
     feedHideIds(viewerId),
   ]);
@@ -133,7 +133,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     })),
     drafts,
     followers,
-    following,
+    completed,
     favIds: favs.map((row) => row.listingId),
   };
 }

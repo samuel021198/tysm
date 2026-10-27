@@ -36,13 +36,12 @@ export function Header({
             <SearchBox locale={locale} />
           </div>
           <div className="ml-auto flex items-center md:hidden">
-            <Link href="/cart" aria-label={nav.cart} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
-              <Icon name="bag" className="h-[18px] w-[18px]" />
-              {cartCount ? <Count n={cartCount} /> : null}
-            </Link>
             <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full active:bg-soft">
               <Icon name="bell" className="h-[18px] w-[18px]" />
               {unread ? <Count n={unread} /> : null}
+            </Link>
+            <Link href="/messages" aria-label={nav.messages} className="grid h-10 w-10 place-items-center rounded-full active:bg-soft">
+              <Icon name="messages" className="h-[18px] w-[18px]" />
             </Link>
           </div>
           <nav className="ml-auto hidden items-center gap-x-4 text-sm font-medium text-muted md:flex">

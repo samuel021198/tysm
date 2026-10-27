@@ -70,6 +70,7 @@ export type SellInitial = {
   photos: Photo[];
   locked: boolean;
   catalogCardId?: string;
+  collectionItemId?: string;
   cards?: SellCardInitial[];
   stockType?: string;
   shipWithinDays?: number | null;
@@ -403,6 +404,7 @@ export function SellForm({
   return (
     <form ref={formRef} action={action} noValidate onSubmit={onSubmit} className="grid min-w-0 gap-4">
       {initial?.listingId ? <input type="hidden" name="listingId" value={initial.listingId} /> : null}
+      {initial?.collectionItemId ? <input type="hidden" name="collectionItemId" value={initial.collectionItemId} /> : null}
       {linkPost ? <input type="hidden" name="alsoPost" value="on" /> : null}
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
       <input type="hidden" name="cards" value={JSON.stringify(payload())} />

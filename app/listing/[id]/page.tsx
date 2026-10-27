@@ -7,7 +7,7 @@ import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
-import { isBlocked } from "@/lib/social";
+import { followedSellerIds, isBlocked } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
 import { bpsToPercentLabel, conditionLabel, minimumNextBid } from "@/lib/rules";
@@ -68,7 +68,7 @@ export default async function ListingPage({
 
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
-  const [mine, bidCount, offers, similar, sales, comps, favored, following, bps] = await Promise.all([
+  const [mine, bidCount, offers, similar, sales, comps, favored, following, bps, follows] = await Promise.all([
     viewer ? prisma.proxyBid.findUnique({ where: { listingId_bidderId: { listingId: id, bidderId: viewer.id } } }) : null,
     prisma.proxyBid.count({ where: { listingId: id } }),
     viewer
@@ -97,6 +97,7 @@ export default async function ListingPage({
     viewer ? prisma.favorite.findUnique({ where: { userId_listingId: { userId: viewer.id, listingId: id } } }) : null,
     viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: listing.sellerId } } }) : null,
     getCommissionBps(),
+    followedSellerIds(viewer?.id ?? null),
   ]);
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
   const quote = listing.price != null ? Math.round((listing.price * bps) / 10000) : 0;
@@ -387,7 +388,7 @@ export default async function ListingPage({
           <h2 className="mb-2 text-base font-semibold">{tx(locale, "相似貨品", "Similar items")}</h2>
           <div className="feed">
             {similar.map((item) => (
-              <ListingCard key={item.id} listing={item} locale={locale} favorited={false} followed={false} next={`/listing/${id}`} />
+              <ListingCard key={item.id} listing={item} locale={locale} favorited={false} followed={follows.has(item.sellerId)} next={`/listing/${id}`} />
             ))}
           </div>
         </section>

@@ -848,52 +848,50 @@ export const demoOffers = [
 ];
 
 export const demoThreads = [
-  { id: "seed_thread_mei", listingId: "seed_charizard", buyerId: "user_mei", sellerId: "user_ming" },
-  { id: "seed_thread_yuki", listingId: "seed_messi", buyerId: "user_yuki", sellerId: "user_star" },
-  { id: "seed_thread_ho", listingId: "seed_mewtwo", buyerId: "user_ho", sellerId: "user_ken" },
-  { id: "seed_thread_oscar", listingId: "seed_judge", buyerId: "user_oscar", sellerId: "user_wai" },
-  { id: "seed_thread_alex", listingId: "seed_curry", buyerId: "user_alex", sellerId: "user_star" },
+  { id: "thread_tyu_mars", listingId: "mars_list_03", buyerId: "user_tyu", sellerId: "user_mars" },
+  { id: "thread_mars_tyu", listingId: "tyu_list_03", buyerId: "user_mars", sellerId: "user_tyu" },
+  { id: "thread_muel_mars", listingId: "mars_list_01", buyerId: "user_muel", sellerId: "user_mars" },
+  { id: "thread_mars_muel", listingId: "muel_list_03", buyerId: "user_mars", sellerId: "user_muel" },
+  { id: "thread_tyu_muel", listingId: "muel_list_02", buyerId: "user_tyu", sellerId: "user_muel" },
 ];
 
 export const demoMessages = [
-  { id: "seed_msg_1", threadId: "seed_thread_mei", senderId: "user_mei", body: "請問噴火龍可以看多啲卡角嗎？", read: true },
-  { id: "seed_msg_2", threadId: "seed_thread_mei", senderId: "user_ming", body: "可以，相片有正面同背面，四角都尖。", read: false },
-  { id: "seed_msg_yuki_1", threadId: "seed_thread_yuki", senderId: "user_yuki", body: "美斯呢張卡角有冇白邊？", read: true },
-  { id: "seed_msg_yuki_2", threadId: "seed_thread_yuki", senderId: "user_star", body: "有少少，所以先標 Raw C，相片有特寫。", read: false },
-  { id: "seed_msg_ho_1", threadId: "seed_thread_ho", senderId: "user_ho", body: "超夢拍賣可唔可以順豐到屯門？", read: true },
-  { id: "seed_msg_ho_2", threadId: "seed_thread_ho", senderId: "user_ken", body: "可以，運費已包順豐站。", read: false },
-  { id: "seed_msg_oscar_1", threadId: "seed_thread_oscar", senderId: "user_oscar", body: "PSA 10 證書號碼方便核對嗎？", read: true },
-  { id: "seed_msg_oscar_2", threadId: "seed_thread_oscar", senderId: "user_wai", body: "有，刊登頁面有 cert，可以上 PSA 查。", read: false },
-  { id: "seed_msg_alex_1", threadId: "seed_thread_alex", senderId: "user_alex", body: "居里我出緊價，完場前會唔會延長？", read: true },
-  { id: "seed_msg_alex_2", threadId: "seed_thread_alex", senderId: "user_star", body: "最後兩分鐘有出價會延長兩分鐘。", read: false },
+  { id: "msg_tyu_mars_1", threadId: "thread_tyu_mars", senderId: "user_tyu", body: "平鋪呢組可唔可以約旺角交收？", read: true },
+  { id: "msg_tyu_mars_2", threadId: "thread_tyu_mars", senderId: "user_mars", body: "可以，週末下午旺角站。我再傳相。", read: false },
+  { id: "msg_mars_tyu_1", threadId: "thread_mars_tyu", senderId: "user_mars", body: "桌上一排入面有冇單張閃卡？", read: true },
+  { id: "msg_mars_tyu_2", threadId: "thread_mars_tyu", senderId: "user_tyu", body: "有一張，特寫喺第二張相。", read: false },
+  { id: "msg_muel_mars_1", threadId: "thread_muel_mars", senderId: "user_muel", body: "手持那疊我睇過相，卡角乾淨嗎？", read: true },
+  { id: "msg_muel_mars_2", threadId: "thread_muel_mars", senderId: "user_mars", body: "四角都尖，同相片一樣。", read: false },
+  { id: "msg_mars_muel_1", threadId: "thread_mars_muel", senderId: "user_mars", body: "桌上一組可以順豐到付嗎？", read: true },
+  { id: "msg_mars_muel_2", threadId: "thread_mars_muel", senderId: "user_muel", body: "可以，運費到付。", read: false },
+  { id: "msg_tyu_muel_1", threadId: "thread_tyu_muel", senderId: "user_tyu", body: "卡盒同特寫係同一套嗎？", read: true },
+  { id: "msg_tyu_muel_2", threadId: "thread_tyu_muel", senderId: "user_muel", body: "係，盒面同卡面都影咗。", read: false },
 ];
 
 export const demoNotifications = [
-  { id: "seed_note_mei", userId: "user_mei", type: "message", title: "新訊息", body: "卡牌阿明回覆了你。", href: "/messages/seed_thread_mei", read: false },
-  { id: "seed_note_ming_offer", userId: "user_ming", type: "offer", title: "收到新議價", body: "Alex 對噴火龍 VMAX 出價。", href: "/listing/seed_charizard", read: false },
-  { id: "seed_note_star_bid", userId: "user_star", type: "bid", title: "拍賣有新出價", body: "居里簽名卡有人加價。", href: "/listing/seed_curry", read: false },
-  { id: "seed_note_yuki", userId: "user_yuki", type: "message", title: "新訊息", body: "星光收藏回覆了美斯卡。", href: "/messages/seed_thread_yuki", read: true },
-  { id: "seed_note_ken", userId: "user_ken", type: "message", title: "新訊息", body: "何生問超夢點寄。", href: "/messages/seed_thread_ho", read: false },
-  { id: "seed_note_ho", userId: "user_ho", type: "bid", title: "你已被超價", body: "耶馬爾拍賣你而家唔領先。", href: "/listing/seed_yamal", read: false },
-  { id: "seed_note_oscar", userId: "user_oscar", type: "message", title: "新訊息", body: "維港球星回覆了證書問題。", href: "/messages/seed_thread_oscar", read: false },
-  { id: "seed_note_wai", userId: "user_wai", type: "order", title: "拍賣有人領先", body: "賈吉 PSA 10 仲有人出價。", href: "/listing/seed_judge", read: true },
-  { id: "seed_note_alex", userId: "user_alex", type: "order", title: "爭議處理中", body: "周杰倫示範單仲等管理員。", href: "/orders/seed_order_dispute", read: false },
-  { id: "seed_note_lam", userId: "user_lam", type: "offer", title: "收到新議價", body: "何生對周潤發出價。", href: "/listing/seed_chow", read: false },
+  { id: "note_mars_tyu", userId: "user_mars", type: "message", title: "新訊息", body: "Tyu 問平鋪那組可唔可以交收。", href: "/messages/thread_tyu_mars", read: false },
+  { id: "note_tyu_mars", userId: "user_tyu", type: "message", title: "新訊息", body: "Mars 問桌上一排有冇閃卡。", href: "/messages/thread_mars_tyu", read: false },
+  { id: "note_mars_muel", userId: "user_mars", type: "message", title: "新訊息", body: "MueL 問手持那疊的卡角。", href: "/messages/thread_muel_mars", read: false },
+  { id: "note_muel_mars", userId: "user_muel", type: "message", title: "新訊息", body: "Mars 問桌上一組點寄。", href: "/messages/thread_mars_muel", read: true },
+  { id: "note_muel_tyu", userId: "user_muel", type: "message", title: "新訊息", body: "Tyu 問卡盒同特寫。", href: "/messages/thread_tyu_muel", read: false },
+  { id: "note_tyu_order", userId: "user_tyu", type: "order", title: "交易完成", body: "你同 Mars 的訂單已完成。", href: "/orders", read: true },
+  { id: "note_mars_order", userId: "user_mars", type: "order", title: "交易完成", body: "你同 Tyu 的訂單已完成。", href: "/orders", read: true },
+  { id: "note_muel_order", userId: "user_muel", type: "order", title: "收到評價", body: "Mars 留低咗評價。", href: "/me?tab=reviews", read: false },
+  { id: "note_mars_fav", userId: "user_mars", type: "message", title: "有人睇緊你的卡", body: "Tyu 收藏咗你的布面單卡。", href: "/listing/mars_list_02", read: false },
+  { id: "note_tyu_fav", userId: "user_tyu", type: "message", title: "有人睇緊你的卡", body: "Mars 收藏咗你的桌上單卡。", href: "/listing/tyu_list_02", read: false },
 ];
 
 export const demoFavorites = [
-  { id: "seed_fav_mei_zard", userId: "user_mei", listingId: "seed_charizard" },
-  { id: "seed_fav_mei_luffy", userId: "user_mei", listingId: "seed_luffy" },
-  { id: "seed_fav_mei_iu", userId: "user_mei", listingId: "seed_iu" },
-  { id: "seed_fav_yuki_nami", userId: "user_yuki", listingId: "seed_nami" },
-  { id: "seed_fav_yuki_jennie", userId: "user_yuki", listingId: "seed_jennie" },
-  { id: "seed_fav_yuki_boa", userId: "user_yuki", listingId: "seed_boa" },
-  { id: "seed_fav_ho_messi", userId: "user_ho", listingId: "seed_messi" },
-  { id: "seed_fav_ho_ronaldo", userId: "user_ho", listingId: "seed_ronaldo" },
-  { id: "seed_fav_oscar_pika", userId: "user_oscar", listingId: "seed_pikachu" },
-  { id: "seed_fav_oscar_judge", userId: "user_oscar", listingId: "seed_judge" },
-  { id: "seed_fav_alex_curry", userId: "user_alex", listingId: "seed_curry" },
-  { id: "seed_fav_lam_jay", userId: "user_lam", listingId: "seed_jay" },
+  { id: "fav_mars_tyu_1", userId: "user_mars", listingId: "tyu_list_01" },
+  { id: "fav_mars_tyu_2", userId: "user_mars", listingId: "tyu_list_02" },
+  { id: "fav_mars_tyu_3", userId: "user_mars", listingId: "tyu_list_03" },
+  { id: "fav_mars_muel_1", userId: "user_mars", listingId: "muel_list_01" },
+  { id: "fav_tyu_mars_1", userId: "user_tyu", listingId: "mars_list_01" },
+  { id: "fav_tyu_mars_2", userId: "user_tyu", listingId: "mars_list_02" },
+  { id: "fav_tyu_mars_3", userId: "user_tyu", listingId: "mars_list_03" },
+  { id: "fav_tyu_muel_1", userId: "user_tyu", listingId: "muel_list_02" },
+  { id: "fav_muel_mars_1", userId: "user_muel", listingId: "mars_list_01" },
+  { id: "fav_muel_tyu_1", userId: "user_muel", listingId: "tyu_list_01" },
 ];
 
 export const demoCart = [
@@ -930,10 +928,9 @@ export const demoViews = [
 ];
 
 export const demoSearches = [
-  { id: "seed_search_mei", userId: "user_mei", query: "噴火龍" },
-  { id: "seed_search_yuki", userId: "user_yuki", query: "Luffy" },
-  { id: "seed_search_oscar", userId: "user_oscar", query: "PSA" },
-  { id: "seed_search_ho", userId: "user_ho", query: "美斯" },
+  { id: "search_mars_tyu", userId: "user_mars", query: "Tyu" },
+  { id: "search_mars_pile", userId: "user_mars", query: "卡堆" },
+  { id: "search_tyu_mars", userId: "user_tyu", query: "Mars" },
 ];
 
 const shot = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
@@ -965,6 +962,7 @@ export type ShowcaseListing = {
   description: string;
   priceCents: number;
   photos: string[];
+  catalogCardId?: string | null;
 };
 
 export type ShowcaseCollection = {
@@ -973,6 +971,8 @@ export type ShowcaseCollection = {
   title: string;
   visibility: "PUBLIC" | "PRIVATE";
   photos: string[];
+  listingId: string | null;
+  catalogCardId?: string | null;
 };
 
 export type ShowcasePost = {
@@ -996,30 +996,30 @@ export type ShowcaseReview = {
 };
 
 export const demoShowcaseListings: ShowcaseListing[] = [
-  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: "手持實拍。A stack of cards held up to the light.", priceCents: 12800, photos: [spread, holo] },
+  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: "手持實拍。A stack of cards held up to the light.", priceCents: 12800, photos: [spread, holo], catalogCardId: "demo_card_charizard" },
   { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: "布面實拍。One card on cloth.", priceCents: 8600, photos: [cloth] },
   { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪實拍。Cards spread on a table.", priceCents: 6400, photos: [color, table] },
   { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: "卡堆實拍。A pile of pulled cards.", priceCents: 9800, photos: [pileB, stackA] },
-  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: "單卡實拍。A single card on the table.", priceCents: 5400, photos: [single] },
+  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: "單卡實拍。A single card on the table.", priceCents: 5400, photos: [single], catalogCardId: "demo_card_pikachu" },
   { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: "排列實拍。Cards lined up on a table.", priceCents: 7200, photos: [bunch] },
-  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: "疊卡實拍。A tall stack of cards.", priceCents: 11200, photos: [pileC] },
+  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: "疊卡實拍。A tall stack of cards.", priceCents: 11200, photos: [pileC], catalogCardId: "demo_card_mewtwo" },
   { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒實拍。A box stack and a close-up.", priceCents: 15400, photos: [logoStack, closeup] },
   { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌面實拍。A group of cards on the table.", priceCents: 6800, photos: [group] },
 ];
 
 export const demoShowcaseCollections: ShowcaseCollection[] = [
-  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo] },
-  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth] },
-  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table] },
-  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color] },
-  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA] },
-  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single] },
-  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch] },
-  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo] },
-  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC] },
-  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack] },
-  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup] },
-  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo] },
+  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo], listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
+  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth], listingId: "mars_list_02" },
+  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table], listingId: null, catalogCardId: "demo_card_eevee" },
+  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color], listingId: null, catalogCardId: "demo_card_gengar" },
+  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA], listingId: "tyu_list_01" },
+  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single], listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
+  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch], listingId: "tyu_list_03" },
+  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo], listingId: null },
+  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC], listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
+  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack], listingId: null },
+  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup], listingId: null, catalogCardId: "demo_card_umbreon" },
+  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo], listingId: null },
 ];
 
 export const demoShowcasePosts: ShowcasePost[] = [

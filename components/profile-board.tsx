@@ -143,10 +143,15 @@ export function ProfileBoard({
                   </div>
                   {isSelf ? (
                     <div className="flex h-7 items-center justify-between gap-1 px-1">
-                      {item.catalogCardId && !item.listingId ? (
-                        <Link href={`/sell?catalogCardId=${encodeURIComponent(item.catalogCardId)}`} className="min-w-0 truncate text-[10px] font-semibold leading-none text-link">
+                      {!item.listingId ? (
+                        <Link
+                          href={`/sell?collectionItemId=${encodeURIComponent(item.id)}${item.catalogCardId ? `&catalogCardId=${encodeURIComponent(item.catalogCardId)}` : ""}`}
+                          className="min-w-0 truncate text-[10px] font-semibold leading-none text-link"
+                        >
                           {tx(locale, "放賣", "List for sale")}
                         </Link>
+                      ) : item.priceCents != null ? (
+                        <span className="min-w-0 truncate text-[10px] font-semibold leading-none">{formatHkd(item.priceCents, locale)}</span>
                       ) : (
                         <span />
                       )}

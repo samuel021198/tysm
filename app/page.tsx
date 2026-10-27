@@ -25,8 +25,11 @@ export default async function HomePage({
     loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds),
     loadStoryRings(viewer?.id ?? null, hidden),
   ]);
+  const covered = new Set(
+    [...primary, ...suggested].filter((post) => post.priceCents != null).flatMap((post) => post.photos),
+  );
   const linked = [...linkedListings];
-  const extras = await prisma.listing.findMany({
+  const extras = (await prisma.listing.findMany({
     where: {
       ...activeWhere(hidden),
       ...([...linked, ...hides.listingIds].length ? { id: { notIn: [...linked, ...hides.listingIds] } } : {}),
@@ -54,8 +57,8 @@ export default async function HomePage({
       seller: { select: { id: true, nickname: true, avatarUrl: true } },
     },
     orderBy: { publishedAt: "desc" },
-    take: 4,
-  });
+    take: 12,
+  })).filter((listing) => !covered.has(listing.photos[0]?.url || "")).slice(0, 4);
   const favRows = viewer && extras.length
     ? await prisma.favorite.findMany({
         where: { userId: viewer.id, listingId: { in: extras.map((listing) => listing.id) } },

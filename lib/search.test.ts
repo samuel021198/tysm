@@ -8,6 +8,7 @@ import {
   mergeMemory,
   postQueryWhere,
   rememberMemory,
+  findHref,
   searchHref,
   searchNeedles,
   searchScore,
@@ -37,6 +38,7 @@ assert(searchScore(duck, "可達鴨") >= 5, "english-only Psyduck title scores f
 assert(searchScore(pokemon, "Charizard") >= 4, "chinese card name scores for Charizard");
 
 assert(searchHref("可達鴨", { cat: "pokemon" }).startsWith("/search?q=") && searchHref("可達鴨", { cat: "pokemon" }).endsWith("&cat=pokemon"), "search href keeps the query and category");
+assert(findHref("可達鴨") === `/find?q=${encodeURIComponent("可達鴨")}`, "find href is the universal search");
 assert(decodeURIComponent(searchHref("可達鴨", { cat: "pokemon" }).split("q=")[1]?.split("&")[0] || "") === "可達鴨", "search href round-trips Chinese");
 assert(textHits("寶可夢", "Pokémon"), "寶可夢 hits the English category name");
 assert(textHits("Pokemon", "寶可夢"), "Pokemon hits the Chinese category name");
@@ -109,6 +111,22 @@ assert(JSON.stringify(postQueryWhere("")).includes("in"), "a blank post search m
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
 assert(find.includes("用戶") && find.includes("貼文") && find.includes("放售"), "search shows users, posts, and listings");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
+assert(find.includes("searchHistory.create") && find.includes("FindSearch"), "find records a query and shows history");
+const box = readFileSync(new URL("../components/search-box.tsx", import.meta.url), "utf8");
+const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
+assert(box.includes('to = "find"') && box.includes('"/find"'), "the header search box submits to find");
+assert(shell.includes("<SearchBox") && !shell.includes('to="search"'), "the header uses the universal search");
+assert(readFileSync(new URL("../app/search/page.tsx", import.meta.url), "utf8").includes('to="search"'), "market filters stay on /search");
+const findRows = buildSuggestRows({
+  query: "",
+  recent: [{ query: "Tyu" }],
+  saved: [],
+  tab: "recent",
+  listings: [],
+  categories: [],
+  to: "find",
+});
+assert(findRows[0]?.href.startsWith("/find?q="), "a recent query reruns on find");
 
 void (async () => {
   const store = new Map<string, string>();

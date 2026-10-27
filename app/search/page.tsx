@@ -2,14 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere, cardInclude } from "@/lib/feed";
-import { hiddenUserIds } from "@/lib/social";
+import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { ListingCard } from "@/components/listing-card";
 import { tx } from "@/lib/i18n";
 import { SaveSearchButton, SearchBox } from "@/components/search-box";
 import { SearchFilters } from "@/components/search-filters";
-import { compKey, loadCompSeries } from "@/lib/comps";
+import { compKey, loadCompSeries, priorSalePrices } from "@/lib/comps";
 import { hkdToCents } from "@/lib/format";
 import { listingQueryWhere, searchScore } from "@/lib/search";
 
@@ -93,11 +93,11 @@ export default async function SearchPage({
     accountRecent.push(row.query);
     if (accountRecent.length >= 12) break;
   }
-  const favIds = new Set(
-    viewer
-      ? (await prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } })).map((row) => row.listingId)
-      : [],
-  );
+  const [favRows, follows] = await Promise.all([
+    viewer ? prisma.favorite.findMany({ where: { userId: viewer.id }, select: { listingId: true } }) : Promise.resolve([]),
+    followedSellerIds(viewer?.id ?? null),
+  ]);
+  const favIds = new Set(favRows.map((row) => row.listingId));
 
   return (
     <div>
@@ -112,6 +112,7 @@ export default async function SearchPage({
         rememberVisit
         pullAccount={false}
         accountRecent={accountRecent}
+        to="search"
         scope={chosen ? { slug: chosen.slug, nameZh: chosen.nameZh, nameEn: chosen.nameEn } : null}
       />
       <SearchFilters
@@ -139,7 +140,7 @@ export default async function SearchPage({
       {shown.length === 0 ? <p className="empty">{tx(prefs.locale, "找不到相關卡牌。", "No matching cards.")}</p> : null}
       <div className="feed">
         {shown.map((listing) => (
-          <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={false} next="/search" series={compSeries.get(compKey(listing))} />
+          <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={follows.has(listing.sellerId)} next="/search" series={priorSalePrices(compSeries.get(compKey(listing)), listing.id)} />
         ))}
       </div>
     </div>

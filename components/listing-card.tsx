@@ -72,12 +72,7 @@ export function ListingCard({
         <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1">
           <h2 className="line-clamp-2 min-h-[2.5em] text-sm font-semibold leading-snug">{listing.title}</h2>
           <p className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</p>
-          {series && series.length ? (
-            <p className="flex items-center gap-1 text-[11px] text-muted">
-              {series.length >= 2 ? <Sparkline values={series} /> : null}
-              {amount >= series[series.length - 1] ? "↑" : "↓"} {tx(locale, "較上次成交", "vs last sale")} {formatHkd(Math.abs(amount - series[series.length - 1]), locale)}
-            </p>
-          ) : null}
+          {series && series.length ? <PriceDelta locale={locale} amount={amount} series={series} /> : null}
           <p className="mt-auto truncate text-xs leading-4 text-muted">
             {sale}
             {followed ? ` · ${tx(locale, "關注中", "Following")}` : ""}
@@ -91,5 +86,21 @@ export function ListingCard({
         ) : null}
       </div>
     </article>
+  );
+}
+
+function PriceDelta({ locale, amount, series }: { locale: Locale; amount: number; series: number[] }) {
+  const last = series[series.length - 1];
+  const delta = amount - last;
+  if (series.length < 2 && delta === 0) return null;
+  return (
+    <p className="flex items-center gap-1 text-[11px] text-muted">
+      {series.length >= 2 ? <Sparkline values={series} /> : null}
+      {delta !== 0 ? (
+        <>
+          {delta > 0 ? "↑" : "↓"} {tx(locale, "較上次成交", "vs last sale")} {formatHkd(Math.abs(delta), locale)}
+        </>
+      ) : null}
+    </p>
   );
 }

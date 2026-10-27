@@ -54,7 +54,6 @@ export default async function DexCardPage({
   const setName = setDisplayName(card.set, card.printRegion, prefs.locale);
   const back = dexBack(game, card.printRegion, card.set.id);
   const quoted = snkrEnabled(card.game);
-  const sellHref = `/sell?catalogCardId=${encodeURIComponent(card.id)}`;
   const ref: SnkrCardRef = {
     game: card.game,
     printRegion: card.printRegion,
@@ -99,31 +98,6 @@ export default async function DexCardPage({
           <h1 className="truncate text-[1.2rem] font-bold leading-tight">{title}</h1>
           <p className="truncate text-[11px] text-muted">{compactSetLine(card.set.code, card.collectorNumber)}</p>
         </div>
-        {owned ? (
-          <Link href="/me?tab=box" aria-label={tx(prefs.locale, "已加入收藏", "In your collection")} className="grid h-10 w-10 place-items-center text-accent">
-            <Heart filled />
-          </Link>
-        ) : (
-          <form action={collectCatalogCard}>
-            <input type="hidden" name="cardId" value={card.id} />
-            <button type="submit" aria-label={tx(prefs.locale, "加入收藏", "Add to collection")} className="grid h-10 w-10 place-items-center">
-              <Heart />
-            </button>
-          </form>
-        )}
-        <details className="relative">
-          <summary aria-label={tx(prefs.locale, "更多", "More")} className="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full text-base font-bold leading-none [&::-webkit-details-marker]:hidden">
-            <span className="block translate-y-[-0.08em]">⋯</span>
-          </summary>
-          <div className="absolute right-0 z-20 mt-1 w-44 rounded-2xl bg-card p-1 shadow-card">
-            <Link href={sellHref} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold">
-              {tx(prefs.locale, "我要放售呢張", "List this card")}
-            </Link>
-            <Link href={back} className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold">
-              {tx(prefs.locale, "返回系列", "Back to the set")}
-            </Link>
-          </div>
-        </details>
       </header>
 
       <div className="mt-3 grid grid-cols-[minmax(0,42%)_minmax(0,1fr)] items-start gap-3">
@@ -239,10 +213,3 @@ function Chevron() {
   );
 }
 
-function Heart({ filled = false }: { filled?: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <path d="M12 19.4s-6.6-4.1-6.6-8.2A3.4 3.4 0 0 1 12 8.6a3.4 3.4 0 0 1 6.6 2.6c0 4.1-6.6 8.2-6.6 8.2z" strokeLinejoin="round" />
-    </svg>
-  );
-}

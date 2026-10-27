@@ -154,6 +154,7 @@ export function PostMenu({
       );
     }
     if (action === "report") {
+      if (own) return null;
       if (!flags.report || !report) return <button key={action} type="button" role="menuitem" className={row} disabled>{labels.report}</button>;
       return (
         <form key={action} action={reportAction} className="grid px-3">

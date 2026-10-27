@@ -180,6 +180,9 @@ assert(menu.includes("button = true") && menu.includes("onPointerDown") && menu.
 const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
 assert(profileBoard.includes("button={false}") && !profileBoard.includes("⋯"), "profile thumbnails hide the ellipsis");
+assert(menu.includes('if (own) return null'), "own posts do not offer report");
+const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");
+assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 
 console.log("posts.test.ts ok");
