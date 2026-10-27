@@ -2,14 +2,22 @@
 
 import { useState } from "react";
 import { tx, type Locale } from "@/lib/i18n";
+import { useHoldSwipe } from "./use-hold-swipe";
 
 export function Gallery({ photos, alt, locale }: { photos: { url: string; role: string }[]; alt: string; locale: Locale }) {
   const [index, setIndex] = useState(0);
+  const count = photos.length;
+  const gesture = useHoldSwipe({
+    onSwipeLeft: count > 1 ? () => setIndex((current) => Math.min(count - 1, current + 1)) : undefined,
+    onSwipeRight: count > 1 ? () => setIndex((current) => Math.max(0, current - 1)) : undefined,
+  });
   if (!photos.length) return <div className="grid aspect-[4/3] place-items-center bg-soft text-sm text-muted md:aspect-[4/5] md:rounded-2xl">No photo</div>;
   const current = photos[index] ?? photos[0];
   return (
     <div className="-mx-3 md:mx-0">
-      <img src={current.url} alt={alt} className="aspect-[4/3] w-full bg-soft object-contain md:aspect-[4/5] md:rounded-2xl" />
+      <div {...gesture}>
+        <img src={current.url} alt={alt} className="aspect-[4/3] w-full bg-soft object-contain md:aspect-[4/5] md:rounded-2xl" />
+      </div>
       {photos.length > 1 ? (
         <div className="chips mt-3 md:mx-0">
           {photos.map((photo, i) => (

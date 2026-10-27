@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { toggleCollectionVisibility } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { CollectionMenu } from "./collection-menu";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
 
@@ -127,41 +127,34 @@ export function ProfileBoard({
           <ul className="grid grid-cols-3 gap-px">
             {items.map((item) => {
               const label = item.priceCents != null ? `${item.cardName} ${formatHkd(item.priceCents, locale)}` : item.cardName;
+              const sellHref = !item.listingId
+                ? `/sell?collectionItemId=${encodeURIComponent(item.id)}${item.catalogCardId ? `&catalogCardId=${encodeURIComponent(item.catalogCardId)}` : ""}`
+                : null;
+              const thumb = (
+                <div className="relative">
+                  {item.href ? (
+                    <Link href={item.href} aria-label={label} className="block">
+                      <img src={item.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                    </Link>
+                  ) : (
+                    <img src={item.photo || "/demo/back.svg"} alt={label} loading="lazy" decoding="async" className={tile} />
+                  )}
+                  {item.visibility === "PRIVATE" ? (
+                    <span className="pointer-events-none absolute left-1 top-1 bg-card/90 px-1 py-0.5 text-[10px] font-semibold leading-none text-ink">{tx(locale, "私人", "Private")}</span>
+                  ) : null}
+                </div>
+              );
               return (
                 <li key={item.id} className="min-w-0">
-                  <div className="relative">
-                    {item.href ? (
-                      <Link href={item.href} aria-label={label} className="block">
-                        <img src={item.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                      </Link>
-                    ) : (
-                      <img src={item.photo || "/demo/back.svg"} alt={label} loading="lazy" decoding="async" className={tile} />
-                    )}
-                    {item.visibility === "PRIVATE" ? (
-                      <span className="pointer-events-none absolute left-1 top-1 bg-card/90 px-1 py-0.5 text-[10px] font-semibold leading-none text-ink">{tx(locale, "私人", "Private")}</span>
-                    ) : null}
-                  </div>
                   {isSelf ? (
-                    <div className="flex h-7 items-center justify-between gap-1 px-1">
-                      {!item.listingId ? (
-                        <Link
-                          href={`/sell?collectionItemId=${encodeURIComponent(item.id)}${item.catalogCardId ? `&catalogCardId=${encodeURIComponent(item.catalogCardId)}` : ""}`}
-                          className="min-w-0 truncate text-[10px] font-semibold leading-none text-link"
-                        >
-                          {tx(locale, "放賣", "List for sale")}
-                        </Link>
-                      ) : item.priceCents != null ? (
-                        <span className="min-w-0 truncate text-[10px] font-semibold leading-none">{formatHkd(item.priceCents, locale)}</span>
-                      ) : (
-                        <span />
-                      )}
-                      <form action={toggleCollectionVisibility} className="ml-auto min-w-0">
-                        <input type="hidden" name="id" value={item.id} />
-                        <button className="max-w-full truncate text-[10px] font-semibold leading-none text-link">
-                          {item.visibility === "PUBLIC" ? tx(locale, "改為私人", "Make private") : tx(locale, "改為公開", "Make public")}
-                        </button>
-                      </form>
-                    </div>
+                    <CollectionMenu locale={locale} sellHref={sellHref} itemId={item.id} visibility={item.visibility} next={`${base}?tab=box`}>
+                      {thumb}
+                    </CollectionMenu>
+                  ) : (
+                    thumb
+                  )}
+                  {item.priceCents != null ? (
+                    <p className="flex h-7 items-center truncate px-1 text-[10px] font-semibold leading-none">{formatHkd(item.priceCents, locale)}</p>
                   ) : null}
                 </li>
               );

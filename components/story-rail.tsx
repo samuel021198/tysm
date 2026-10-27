@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { markStorySeen } from "@/actions/stories";
 import { tx, type Locale } from "@/lib/i18n";
 import type { StoryRing } from "@/lib/stories";
+import { useHoldSwipe } from "./use-hold-swipe";
 
 type Cursor = { user: number; frame: number };
 
@@ -37,6 +38,13 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
   const itemsRef = useRef(items);
   const marked = useRef(new Set<string>());
   itemsRef.current = items;
+  const viewerGesture = useHoldSwipe({
+    onSwipeLeft: () => setCursor((current) => (current ? advance(itemsRef.current, current, 1) : null)),
+    onSwipeRight: () => setCursor((current) => (current ? advance(itemsRef.current, current, -1) : null)),
+    onSwipeDown: () => setCursor(null),
+    edgeGuard: true,
+    trackButtons: true,
+  });
 
   useEffect(() => setItems(rings), [rings]);
 
@@ -141,7 +149,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
         })}
       </div>
       {cursor && ring && frame ? (
-        <div className="fixed inset-0 z-50 bg-[#0F172A] text-white" role="dialog" aria-modal="true" aria-label={ring.nickname || tx(locale, "限時動態", "Story")}>
+        <div className="fixed inset-0 z-50 bg-[#0F172A] text-white" role="dialog" aria-modal="true" aria-label={ring.nickname || tx(locale, "限時動態", "Story")} {...viewerGesture}>
           {frameSrc ? (
             <img src={frameSrc} alt="" className="absolute inset-0 h-full w-full object-contain" />
           ) : (

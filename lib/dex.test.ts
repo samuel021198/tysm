@@ -485,7 +485,7 @@ assert(
   "listing and item links stay unique",
 );
 const listingPage = readFileSync("app/listing/[id]/page.tsx", "utf8");
-const box = readFileSync("components/profile-board.tsx", "utf8");
+const box = readFileSync("components/profile-board.tsx", "utf8") + readFileSync("components/collection-menu.tsx", "utf8");
 const sellPage = readFileSync("app/sell/page.tsx", "utf8");
 const sellForm = readFileSync("components/sell-form.tsx", "utf8");
 assert(listingPage.includes("睇圖鑑") && listingPage.includes("listingDexLinks"), "listing detail links back to the dex");

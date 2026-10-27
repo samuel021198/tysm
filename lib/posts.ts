@@ -1,4 +1,5 @@
 import { dexPath } from "./dex";
+import { safeNext } from "./format";
 import { conditionLabel } from "./rules";
 
 export type CollectionVisibility = "PUBLIC" | "PRIVATE";
@@ -16,6 +17,16 @@ export type AskListing = {
 /** Missing or unknown values stay public. The binder is public unless the owner switches it. */
 export function collectionVisibility(value: string | null | undefined): CollectionVisibility {
   return value === "PRIVATE" ? "PRIVATE" : "PUBLIC";
+}
+
+/** Stay on /me or /shop/[id] after a collection action. Anything else goes back to the box tab. */
+export function collectionBoardNext(value: unknown): string {
+  const url = new URL(safeNext(value).split("#")[0], "http://local");
+  if (url.pathname !== "/me" && !/^\/shop\/[^/]+$/.test(url.pathname)) return "/me?tab=box";
+  url.searchParams.delete("ok");
+  url.searchParams.delete("err");
+  if (!url.searchParams.has("tab")) url.searchParams.set("tab", "box");
+  return `${url.pathname}${url.search}`;
 }
 
 /** The signed-in author is the only person who can delete this post. */
