@@ -150,6 +150,15 @@ const marketPage = readFileSync(new URL("../app/search/page.tsx", import.meta.ur
 assert(marketPage.includes('to="search"'), "market filters stay on /search");
 assert(marketPage.includes("listedPostWhere") && marketPage.includes("全部") && marketPage.includes("上架") && marketPage.includes("貼文"), "market search chips include listed posts");
 assert(marketPage.includes("show={show}"), "a new market query keeps the result chip");
+assert(
+  marketPage.includes('const split = show === "all" && shown.length > 0 && postCards.length > 0;') && (marketPage.match(/\{split \? <h2/g) || []).length === 2,
+  "上架 and 貼文 labels only show together under 全部",
+);
+const filters = readFileSync(new URL("../components/search-filters.tsx", import.meta.url), "utf8");
+const panelAt = filters.indexOf("{open ? (");
+assert(filters.includes("useState(false)") && panelAt !== -1, "market filters start collapsed");
+assert(filters.indexOf('name="cat"') > panelAt && filters.indexOf('name="num"') > panelAt && filters.indexOf("套用") > panelAt, "category, card number, and the rest open from 篩選");
+assert(filters.indexOf("篩選") < panelAt && filters.includes("sort !== \"relevance\""), "the resting control is 篩選, and the default sort does not count");
 assert(find.includes("collectionItem?.listing?.cardName"), "find names a priced post from the linked listing");
 const findRows = buildSuggestRows({
   query: "",
