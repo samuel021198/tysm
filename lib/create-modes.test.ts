@@ -93,7 +93,16 @@ assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.i
 assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");
 assert(board.includes('id: "posts"') && board.includes('id: "saved"'), "My Binder is own posts; 收藏 is the wishlist tab");
 assert(!board.includes("我的卡") && !board.includes('id: "box"') && !board.includes("CollectionMenu") && !board.includes("collectionItemId"), "the owned-card grid is off the profile");
-assert(board.includes("未有卡片") && board.includes("開始放第一張") && !board.includes("未有貼文"), "My Binder empty state talks about cards");
+const ownEmptyTitle = board.indexOf('tx(locale, "未有卡片。", "No cards yet.")');
+const ownEmptyLink = board.indexOf("開始放第一張");
+assert(
+  ownEmptyTitle !== -1 &&
+    ownEmptyLink > ownEmptyTitle &&
+    board.includes('className="block font-semibold text-ink underline underline-offset-2"') &&
+    board.includes('tx(locale, "未有卡片", "No cards yet")') &&
+    !board.includes("未有貼文"),
+  "own My Binder empty title ends with a stop, then the add link on the next line",
+);
 assert(board.includes('icon: "binder"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
 assert(!board.includes("chips") && !board.includes("rounded-full") && !board.includes("<PostCard") && !board.includes("<ListingCard"), "profile tabs are not pills and image tabs are thumbnails");
 assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");
