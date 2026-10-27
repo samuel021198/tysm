@@ -43,6 +43,7 @@ export function SearchBox({
   accountRecent = NO_RECENT,
   scope = null,
   to = "find",
+  show = "all",
 }: {
   locale: Locale;
   initial?: string;
@@ -53,6 +54,8 @@ export function SearchBox({
   scope?: { slug: string; nameZh: string; nameEn: string } | null;
   /** Header search is universal. The market page keeps listing filters on `/search`. */
   to?: "find" | "search";
+  /** Result chip on `/search`. A new query keeps 上架 or 貼文. */
+  show?: "all" | "listing" | "post";
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -272,6 +275,7 @@ export function SearchBox({
             if (suggestPanelDismiss("submit", { mobileSheet: mobileSheet(), insidePanel: false, focusInside: false })) setOpen(false);
           }}
         >
+          {to === "search" && (show === "listing" || show === "post") ? <input type="hidden" name="show" value={show} /> : null}
           <div className="flex items-center gap-2">
             <div className="relative min-w-0 flex-1">
               <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
@@ -291,7 +295,11 @@ export function SearchBox({
                 spellCheck={false}
                 enterKeyHint="search"
                 autoFocus={autoFocus}
-                placeholder={tx(locale, "搜尋任何物品", "Search for anything")}
+                placeholder={
+                  to === "search"
+                    ? tx(locale, "搜尋上架或標價貼文", "Search listings or priced posts")
+                    : tx(locale, "搜尋任何物品", "Search for anything")
+                }
                 aria-label={tx(locale, "搜尋", "Search")}
                 onFocus={() => {
                   setRecent(readRecent());

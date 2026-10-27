@@ -70,6 +70,31 @@ export function userQueryWhere(query: string): Prisma.UserWhereInput {
   };
 }
 
+function listingNeedleWhere(needle: string): Prisma.ListingWhereInput {
+  const contains = fieldContains(needle);
+  return {
+    OR: [
+      { title: contains },
+      { cardName: contains },
+      { personName: contains },
+      { setName: contains },
+      { game: contains },
+      { description: contains },
+      { items: { some: { OR: [{ cardName: contains }, { catalogTitle: contains }, { setName: contains }] } } },
+      {
+        category: {
+          OR: [
+            { nameZh: contains },
+            { nameEn: contains },
+            { parent: { OR: [{ nameZh: contains }, { nameEn: contains }] } },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+/** Post text plus the listing reached via CollectionItem.listing. Collection item title is not a search field. */
 export function postQueryWhere(query: string): Prisma.PostWhereInput {
   const needles = searchNeedles(query);
   if (!needles.length) return { id: { in: [] } };
@@ -79,15 +104,7 @@ export function postQueryWhere(query: string): Prisma.PostWhereInput {
       OR: [
         { body: contains },
         { author: { nickname: contains } },
-        {
-          collectionItem: {
-            OR: [
-              { title: contains },
-              { cardName: contains },
-              { listing: { OR: [{ title: contains }, { cardName: contains }, { personName: contains }] } },
-            ],
-          },
-        },
+        { collectionItem: { listing: listingNeedleWhere(needle) } },
       ],
     };
   };
@@ -98,31 +115,63 @@ export function postQueryWhere(query: string): Prisma.PostWhereInput {
 export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
   const needles = searchNeedles(query);
   if (!needles.length) return {};
-  const clause = (needle: string): Prisma.ListingWhereInput => {
-    const contains = fieldContains(needle);
-    return {
-      OR: [
-        { title: contains },
-        { cardName: contains },
-        { personName: contains },
-        { setName: contains },
-        { game: contains },
-        { description: contains },
-        { items: { some: { OR: [{ cardName: contains }, { catalogTitle: contains }, { setName: contains }] } } },
-        {
-          category: {
-            OR: [
-              { nameZh: contains },
-              { nameEn: contains },
-              { parent: { OR: [{ nameZh: contains }, { nameEn: contains }] } },
-            ],
-          },
-        },
-      ],
-    };
-  };
-  if (needles.length === 1) return clause(needles[0]);
-  return { OR: needles.map(clause) };
+  if (needles.length === 1) return listingNeedleWhere(needles[0]);
+  return { OR: needles.map(listingNeedleWhere) };
+}
+
+export type MarketShow = "all" | "listing" | "post";
+
+export function marketShow(value: string | undefined | null): MarketShow {
+  return value === "listing" || value === "post" ? value : "all";
+}
+
+/** Keep the active result chip while the other market filters change. `all` stays off the URL. */
+export function marketSearchHref(
+  current: {
+    q?: string;
+    cat?: string;
+    cond?: string;
+    min?: string;
+    sort?: string;
+    pmin?: string;
+    pmax?: string;
+    sale?: string;
+    set?: string;
+    num?: string;
+  },
+  show: MarketShow = "all",
+): string {
+  const params = new URLSearchParams();
+  const entries: [string, string | undefined][] = [
+    ["q", current.q],
+    ["cat", current.cat],
+    ["cond", current.cond],
+    ["min", current.min],
+    ["sort", current.sort && current.sort !== "relevance" ? current.sort : ""],
+    ["pmin", current.pmin],
+    ["pmax", current.pmax],
+    ["sale", current.sale],
+    ["set", current.set],
+    ["num", current.num],
+  ];
+  for (const [key, value] of entries) {
+    const next = value?.trim();
+    if (next) params.set(key, next);
+  }
+  if (show !== "all") params.set("show", show);
+  const search = params.toString();
+  return search ? `/search?${search}` : "/search";
+}
+
+/**
+ * 賣場 posts: the linked listing has to pass the market filter (active, category, condition, …).
+ * Pass that filter without the text query. Text matches the post body, the author, or the listing.
+ */
+export function listedPostWhere(listingWhere: Prisma.ListingWhereInput, query = ""): Prisma.PostWhereInput {
+  const linked: Prisma.PostWhereInput = { collectionItem: { listing: listingWhere } };
+  const q = query.trim();
+  if (!q) return linked;
+  return { AND: [linked, postQueryWhere(q)] };
 }
 
 export type MemoryItem = {

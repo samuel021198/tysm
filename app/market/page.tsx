@@ -44,6 +44,7 @@ export default async function MarketPage({
         <h1 className="page-title mb-0">{tx(prefs.locale, "賣場", "Market")}</h1>
         <Link href="/search" className="text-sm font-semibold text-link">{tx(prefs.locale, "篩選", "Filters")}</Link>
       </div>
+      <p className="mt-1 text-sm text-muted">{tx(prefs.locale, "篩選可以睇上架同已標價貼文。未標價的動態唔會入賣場。", "Filters cover listings and priced posts. Posts without a price stay out.")}</p>
       <section className="mt-5" aria-labelledby="market-cats">
         <h2 id="market-cats" className="mb-2 text-sm font-semibold text-muted">
           {tx(prefs.locale, "分類", "Categories")}

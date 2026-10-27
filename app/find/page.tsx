@@ -64,6 +64,7 @@ export default async function FindPage({
               title: true,
               cardName: true,
               photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+              listing: { select: { title: true, cardName: true, personName: true } },
             },
           },
         },
@@ -98,8 +99,9 @@ export default async function FindPage({
     posts = postRows.map((post) => ({
       id: post.id,
       name: cardDisplayName({
-        cardName: post.collectionItem?.cardName,
-        title: post.collectionItem?.title,
+        cardName: post.collectionItem?.listing?.cardName || post.collectionItem?.cardName,
+        personName: post.collectionItem?.listing?.personName,
+        title: post.collectionItem?.listing?.title || post.collectionItem?.title,
         body: post.body,
       }),
       author: post.author.nickname,
