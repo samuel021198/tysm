@@ -141,7 +141,7 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className="inline-flex h-9 items-center gap-1 rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15"
+        className="inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15"
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={openPicker}

@@ -214,7 +214,14 @@ export function ProfileBoard({
           ))}
         </ul>
       ) : (
-        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有貼文。", "No posts yet.")}</p>
+        <p className="empty mx-3 sm:mx-0">
+          {tx(locale, "未有卡片", "No cards yet")}
+          {isSelf ? (
+            <Link href="/add" className="font-semibold text-ink underline underline-offset-2">
+              {tx(locale, "開始放第一張", "Add the first card")}
+            </Link>
+          ) : null}
+        </p>
       );
     }
     if (id === "saved") {
