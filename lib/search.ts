@@ -119,6 +119,32 @@ export function listingQueryWhere(query: string): Prisma.ListingWhereInput {
   return { OR: needles.map(listingNeedleWhere) };
 }
 
+/** Name search, plus the catalog card when a suggestion was picked. Blank input matches nothing. */
+export function cardHubListingWhere(query: string, cardId = ""): Prisma.ListingWhereInput {
+  const id = cardId.trim();
+  const exact: Prisma.ListingWhereInput | null = id
+    ? { OR: [{ catalogCardId: id }, { items: { some: { catalogCardId: id } } }] }
+    : null;
+  const text = searchNeedles(query).length ? listingQueryWhere(query) : null;
+  if (text && exact) return { OR: [text, exact] };
+  if (text) return text;
+  if (exact) return exact;
+  return { id: { in: [] } };
+}
+
+/** Posts that mention the card, or whose listing is that card. Does not search CollectionItem title. */
+export function cardHubPostWhere(query: string, cardId = ""): Prisma.PostWhereInput {
+  const id = cardId.trim();
+  const exact: Prisma.PostWhereInput | null = id
+    ? { collectionItem: { listing: { OR: [{ catalogCardId: id }, { items: { some: { catalogCardId: id } } }] } } }
+    : null;
+  const text = searchNeedles(query).length ? postQueryWhere(query) : null;
+  if (text && exact) return { OR: [text, exact] };
+  if (text) return text;
+  if (exact) return exact;
+  return { id: { in: [] } };
+}
+
 export type MarketShow = "all" | "listing" | "post";
 
 export function marketShow(value: string | undefined | null): MarketShow {
@@ -195,6 +221,13 @@ export type SuggestCategory = {
   nameEn: string;
 };
 
+export type SuggestCard = {
+  id: string;
+  label: string;
+  imageUrl?: string;
+  hint?: string;
+};
+
 export type SuggestRow = {
   key: string;
   href: string;
@@ -205,7 +238,8 @@ export type SuggestRow = {
   cat?: string;
   catZh?: string;
   catEn?: string;
-  kind: "query" | "memory" | "category" | "listing";
+  imageUrl?: string;
+  kind: "query" | "memory" | "category" | "listing" | "card";
 };
 
 export function memoryKey(item: { query: string; cat?: string | null }): string {
@@ -222,10 +256,13 @@ export function searchHref(query: string, extra?: { cat?: string }): string {
 }
 
 /** Universal search: users, posts, and listings. Market filters stay on `searchHref`. */
-export function findHref(query: string): string {
+export function findHref(query: string, extra?: { card?: string; show?: MarketShow }): string {
   const params = new URLSearchParams();
   const q = query.trim().slice(0, 80);
   if (q) params.set("q", q);
+  const card = extra?.card?.trim();
+  if (card) params.set("card", card);
+  if (extra?.show && extra.show !== "all") params.set("show", extra.show);
   const search = params.toString();
   return search ? `/find?${search}` : "/find";
 }
@@ -304,6 +341,7 @@ export function buildSuggestRows(input: {
   tab: "recent" | "saved";
   listings: SuggestListing[];
   categories: SuggestCategory[];
+  cards?: SuggestCard[];
   to?: "find" | "search";
 }): SuggestRow[] {
   const to = input.to ?? "search";
@@ -323,6 +361,24 @@ export function buildSuggestRows(input: {
   };
 
   push({ key: `q:${q}`, kind: "query", href: to === "find" ? findHref(q) : searchHref(q), label: q, query: q });
+
+  if (input.cards?.length) {
+    for (const card of input.cards) {
+      const label = card.label.trim();
+      if (!label) continue;
+      push({
+        key: `d:${card.id}`,
+        kind: "card",
+        href: findHref(label, { card: card.id }),
+        label,
+        hintZh: card.hint,
+        hintEn: card.hint,
+        imageUrl: card.imageUrl,
+        query: label,
+      });
+    }
+    return rows;
+  }
 
   let recentShown = 0;
   for (const item of input.recent) {

@@ -7,9 +7,9 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(adjacentTab("/", 1, true) === "/dex", "home swipe left opens the dex");
-assert(adjacentTab("/dex", -1, true) === "/", "dex swipe right opens home");
-assert(adjacentTab("/dex", 1, true) === "/find", "dex swipe left opens search");
+assert(adjacentTab("/", 1, true) === "/news", "home swipe left opens news");
+assert(adjacentTab("/news", -1, true) === "/", "news swipe right opens home");
+assert(adjacentTab("/news", 1, true) === "/find", "news swipe left opens search");
 assert(adjacentTab("/find", 1, true) === "/market", "search swipe left opens the market");
 assert(adjacentTab("/market", -1, true) === "/find", "market swipe right opens search");
 assert(adjacentTab("/market", 1, true) === "/me", "market swipe left opens profile");

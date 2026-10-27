@@ -74,6 +74,10 @@ export async function saveCollection(_prev: { error?: string } | null, formData:
   if (cond.conditionTrack === "GRADED" && (cond.gradeValue == null || !cond.grader)) return { error: "grade" };
   const visibility = collectionVisibility(String(formData.get("visibility") || ""));
   const forSale = formData.get("forSale") === "on";
+  const rawCatalog = String(formData.get("catalogCardId") || "").trim();
+  const catalogCardId = rawCatalog
+    ? (await prisma.catalogCard.findUnique({ where: { id: rawCatalog }, select: { id: true } }))?.id ?? null
+    : null;
 
   if (forSale) {
     if (!user.phoneVerified) return { error: "phone" };
@@ -115,6 +119,7 @@ export async function saveCollection(_prev: { error?: string } | null, formData:
       photos,
       publishAt: null,
       intent: "publish",
+      catalogCardId,
     };
     const result = await saveListing(user.id, input);
     if (!result.ok) return { error: result.error };
@@ -138,6 +143,8 @@ export async function saveCollection(_prev: { error?: string } | null, formData:
       gradeValue: cond.gradeValue,
       photos,
       publishToFeed: formData.get("publish") === "on",
+      catalogCardId,
+      cardName: title,
     });
   } catch (error) {
     if (!(error instanceof PhotoStoreError)) throw error;
