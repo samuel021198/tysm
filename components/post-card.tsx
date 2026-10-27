@@ -60,7 +60,7 @@ export function PostCard({
           <PhotoStrip photos={photos} />
         ) : (
           shown.map((url, index) => (
-            <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-soft object-contain" />
+            <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-soft object-cover" />
           ))
         )}
       </Link>
