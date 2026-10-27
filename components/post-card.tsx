@@ -112,6 +112,12 @@ export function PostCard({
           copiedLabel={tx(locale, "已複製", "Copied")}
           internalLabel={tx(locale, "內部分享", "In TYSM")}
         />
+        {post.dexHref ? (
+          <Link href={post.dexHref} aria-label={dexLabel} title={dexLabel} className={`${action} text-link`}>
+            <Icon name="book" className="h-5 w-5" strokeWidth={2.25} />
+          </Link>
+        ) : null}
+        {price ? <div className="ml-auto shrink-0 pr-2.5">{price}</div> : null}
       </div>
       <div className="px-2.5 pb-3 pt-1">
         <Link href={post.href} className="block min-w-0">
@@ -120,14 +126,6 @@ export function PostCard({
             {post.condition ? <span className="shrink-0 font-medium text-muted">{post.condition}</span> : null}
           </h2>
         </Link>
-        <div className="mt-1 flex h-9 items-center gap-1">
-          {post.dexHref ? (
-            <Link href={post.dexHref} aria-label={dexLabel} title={dexLabel} className="grid h-9 w-9 shrink-0 place-items-center text-link">
-              <Icon name="book" className="h-[18px] w-[18px]" strokeWidth={2.25} />
-            </Link>
-          ) : null}
-          {price}
-        </div>
       </div>
     </article>
     </PostMenu>
