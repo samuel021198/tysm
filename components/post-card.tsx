@@ -39,13 +39,15 @@ export function PostCard({
   }, [post.postId]);
   const dexLabel = tx(locale, "睇圖鑑", "View in the dex");
   const saveLabel = tx(locale, "收藏", "Favorite");
+  const priceClass = "price mt-1 inline-block text-[15px] leading-none";
+  const likeLabel = post.likeCount ? `${tx(locale, "讚", "Like")} ${post.likeCount}` : tx(locale, "讚", "Like");
   const price =
     post.priceCents == null ? null : post.priceHref ? (
-      <Link href={post.priceHref} className="price inline-flex h-9 items-center text-lg leading-none">
+      <Link href={post.priceHref} className={priceClass}>
         {formatHkd(post.priceCents, locale)}
       </Link>
     ) : (
-      <p className="price inline-flex h-9 items-center text-lg leading-none">{formatHkd(post.priceCents, locale)}</p>
+      <p className={priceClass}>{formatHkd(post.priceCents, locale)}</p>
     );
   const photoClass = gallery
     ? "block max-h-[70vh] w-full bg-soft object-contain"
@@ -83,17 +85,14 @@ export function PostCard({
           <form id={likeFormId} action={togglePostLike}>
             <input type="hidden" name="postId" value={post.likePostId} />
             <input type="hidden" name="next" value={next} />
-            <button type="submit" className={action}>
+            <button type="submit" className={action} aria-label={likeLabel}>
               <Heart on={post.liked} />
-              <span>{post.likeCount}</span>
-              <span className="sr-only">{tx(locale, "讚", "Like")}</span>
             </button>
           </form>
         ) : null}
         {post.postId ? (
           <button type="button" aria-label={commentLabel} title={commentLabel} aria-expanded={commentsOpen} aria-haspopup="dialog" className={action} onClick={() => setCommentsOpen(true)}>
             <Icon name="messages" className="h-5 w-5" strokeWidth={2.25} />
-            {count ? <span>{count}</span> : null}
           </button>
         ) : (
           <span className={`${action} text-muted`} title={tx(locale, "這張未有貼文", "No post yet")} aria-label={commentLabel}>
@@ -113,9 +112,8 @@ export function PostCard({
             <Icon name="book" className="h-5 w-5" strokeWidth={2.25} />
           </Link>
         ) : null}
-        <div className="ml-auto flex shrink-0 items-center pr-1">
+        <div className="ml-auto flex shrink-0 items-center">
           <SavePost post={post} next={next} label={saveLabel} action={action} />
-          {price ? <div className="pr-1.5">{price}</div> : null}
         </div>
       </div>
       <div className="px-2.5 pb-3 pt-1">
@@ -125,6 +123,7 @@ export function PostCard({
             {post.condition ? <span className="shrink-0 font-medium text-muted">{post.condition}</span> : null}
           </h2>
         </Link>
+        {price}
       </div>
     </article>
     {commentsOpen && post.postId ? (
