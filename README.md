@@ -75,10 +75,11 @@ npm run dev
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
 | `R2_BUCKET` | 否 | R2 bucket 名稱。 |
 | `R2_PUBLIC_BASE_URL` | 否 | 公開讀取網址，https，不要結尾斜線。例如 `https://cards.example.com`。 |
+| `TENOR_API_KEY` | 否 | 留言 sheet 的 GIF 搜尋（Tenor）。未設定時搜尋關閉，仍可貼上 tenor.com、giphy.com 或 klipy.com 的 https GIF 連結。 |
 
 不要提交 `.env`。
 
-R2 係可選。五個 `R2_*` 要齊，而且 `R2_PUBLIC_BASE_URL` 必須係 https、冇結尾斜線。未齊就唔會打 R2：圖鑑繼續存來源網址，上架、限時動態、訊息、貼文同收藏的上傳相片繼續存 data URL。齊咗之後，呢啲 data URL 會經 `putR2Object` 寫入 `uploads/`，資料庫只存公開網址。圖鑑同步（寶可夢、海賊王、Riftbound）會在每次請求剩餘時間內把遠端卡圖鏡像到 `dex/`。Topps 冇卡圖，唔會下載。每日 cron 仍然只掃訂單，唔會搬圖。
+R2 係可選。五個 `R2_*` 要齊，而且 `R2_PUBLIC_BASE_URL` 必須係 https、冇結尾斜線。未齊就唔會打 R2：圖鑑繼續存來源網址，上架、限時動態、訊息、貼文、留言同收藏的上傳相片繼續存 data URL。齊咗之後，呢啲 data URL 會經 `putR2Object` 寫入 `uploads/`（留言相片在 `uploads/comments`），資料庫只存公開網址。GIF 連結唔會再下載，直接存 tenor／giphy／klipy 的 https。圖鑑同步（寶可夢、海賊王、Riftbound）會在每次請求剩餘時間內把遠端卡圖鏡像到 `dex/`。Topps 冇卡圖，唔會下載。每日 cron 仍然只掃訂單，唔會搬圖。
 
 ## 圖鑑
 

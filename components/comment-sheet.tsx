@@ -3,12 +3,28 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { COMMENT_REACTS, cleanComment, replyDraft } from "@/lib/comments";
+import { COMMENT_REACTS, cleanComment, cleanCommentImage, replyDraft, type GifPick } from "@/lib/comments";
 import { SWIPE_DOWN } from "@/lib/gesture";
 import { errText, tx, type Locale } from "@/lib/i18n";
+import { fileToDataUrl } from "./photo-file";
 
 type Person = { id: string; nickname: string; avatarUrl: string | null };
-type Comment = { id: string; body: string; createdAt: string; author: Person };
+type Comment = { id: string; body: string; imageUrl: string | null; createdAt: string; author: Person };
+
+function shownGifs(value: unknown): GifPick[] {
+  if (!Array.isArray(value)) return [];
+  const out: GifPick[] = [];
+  for (const row of value) {
+    if (!row || typeof row !== "object") continue;
+    const item = row as { id?: unknown; previewUrl?: unknown; url?: unknown };
+    const url = cleanCommentImage(item.url);
+    const previewUrl = cleanCommentImage(item.previewUrl);
+    const id = String(item.id ?? "").trim();
+    if (!url || !previewUrl || !id) continue;
+    out.push({ id, previewUrl, url });
+  }
+  return out;
+}
 
 export function CommentSheet({
   postId,
@@ -24,18 +40,26 @@ export function CommentSheet({
   const [comments, setComments] = useState<Comment[]>([]);
   const [viewer, setViewer] = useState<Person | null>(null);
   const [draft, setDraft] = useState("");
+  const [attachment, setAttachment] = useState<string | null>(null);
+  const [gifOpen, setGifOpen] = useState(false);
+  const [gifQuery, setGifQuery] = useState("");
+  const [gifs, setGifs] = useState<GifPick[]>([]);
+  const [gifConfigured, setGifConfigured] = useState(true);
+  const [gifSettled, setGifSettled] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [offset, setOffset] = useState(0);
   const [keyboard, setKeyboard] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const busy = useRef(false);
   const drag = useRef<{ y: number; id: number } | null>(null);
   const pull = useRef<number | null>(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   const title = tx(locale, "回應", "Replies");
+  const pasted = cleanCommentImage(gifQuery);
 
   useEffect(() => {
     const y = window.scrollY;
@@ -102,34 +126,100 @@ export function CommentSheet({
     if (el) el.scrollTop = el.scrollHeight;
   }, [comments.length, loading]);
 
+  useEffect(() => {
+    if (!gifOpen || (pasted && pasted.startsWith("https://"))) return;
+    let cancel = false;
+    const ac = new AbortController();
+    const query = gifQuery;
+    const handle = setTimeout(() => {
+      const params = new URLSearchParams({ q: query, locale });
+      fetch(`/api/gifs?${params}`, { signal: ac.signal })
+        .then((res) => res.json())
+        .then((data: { gifs?: unknown; configured?: boolean } | null) => {
+          if (cancel) return;
+          setGifConfigured(data?.configured !== false);
+          setGifs(shownGifs(data?.gifs));
+          setGifSettled(query);
+        })
+        .catch((err: unknown) => {
+          if (cancel || (err instanceof DOMException && err.name === "AbortError")) return;
+          setGifs([]);
+          setGifSettled(query);
+        });
+    }, query ? 250 : 0);
+    return () => {
+      cancel = true;
+      ac.abort();
+      clearTimeout(handle);
+    };
+  }, [gifOpen, gifQuery, locale, pasted]);
+
+  async function onPhoto(file: File | undefined) {
+    if (!file) return;
+    try {
+      setAttachment(await fileToDataUrl(file));
+      setGifOpen(false);
+      setError("");
+    } catch {
+      setError(tx(locale, "相片讀唔到，請改用 JPG、PNG 或 WebP。", "That photo could not be read. Use JPG, PNG, or WebP."));
+    }
+    if (fileRef.current) fileRef.current.value = "";
+  }
+
+  function useGif(url: string) {
+    setAttachment(url);
+    setGifOpen(false);
+    setGifQuery("");
+    setError("");
+  }
+
   async function send(raw: string, fromDraft = false) {
-    const body = cleanComment(raw);
-    if (!body || busy.current || !viewer) return;
+    const text = cleanComment(raw);
+    const image = fromDraft ? attachment : null;
+    if ((!text && !image) || busy.current || !viewer) return;
     busy.current = true;
     setError("");
     const tempId = `tmp-${Date.now()}`;
-    const optimistic: Comment = { id: tempId, body, createdAt: new Date().toISOString(), author: viewer };
+    const optimistic: Comment = {
+      id: tempId,
+      body: text ?? "",
+      imageUrl: image,
+      createdAt: new Date().toISOString(),
+      author: viewer,
+    };
     setComments((list) => [...list, optimistic]);
-    if (fromDraft) setDraft("");
+    if (fromDraft) {
+      setDraft("");
+      setAttachment(null);
+      setGifOpen(false);
+      setGifQuery("");
+    }
     try {
       const res = await fetch(`/api/posts/${postId}/comments`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify({ body: text ?? "", imageUrl: image ?? "" }),
       });
       const data = (await res.json().catch(() => null)) as { comment?: Comment; error?: string } | null;
       const created = data?.comment;
       if (!res.ok || !created) {
         setComments((list) => list.filter((item) => item.id !== tempId));
-        if (fromDraft) setDraft(body);
-        setError(data?.error === "comment" ? errText(locale, "comment") : tx(locale, "送出失敗", "Could not send"));
+        if (fromDraft) {
+          setDraft(text ?? "");
+          setAttachment(image);
+        }
+        const code = data?.error === "comment" || data?.error === "photo_url" ? data.error : "";
+        setError(code ? errText(locale, code) : tx(locale, "送出失敗", "Could not send"));
         return;
       }
       setComments((list) => list.map((item) => (item.id === tempId ? created : item)));
       onPosted();
     } catch {
       setComments((list) => list.filter((item) => item.id !== tempId));
-      if (fromDraft) setDraft(body);
+      if (fromDraft) {
+        setDraft(text ?? "");
+        setAttachment(image);
+      }
       setError(tx(locale, "送出失敗", "Could not send"));
     } finally {
       busy.current = false;
@@ -219,9 +309,10 @@ export function CommentSheet({
                 </Link>
                 <div className="min-w-0 flex-1">
                   <p>
-                    <Link href={`/shop/${comment.author.id}`} className="font-semibold">{comment.author.nickname}</Link>{" "}
-                    {comment.body}
+                    <Link href={`/shop/${comment.author.id}`} className="font-semibold">{comment.author.nickname}</Link>
+                    {comment.body ? <> {comment.body}</> : null}
                   </p>
+                  {comment.imageUrl ? <img src={comment.imageUrl} alt="" className="mt-1 max-h-40 max-w-[12rem] rounded-lg bg-soft object-contain" /> : null}
                   {viewer ? (
                     <button
                       type="button"
@@ -242,6 +333,21 @@ export function CommentSheet({
         {error ? <p className="px-3 pb-1 text-xs text-danger">{error}</p> : null}
         {!loading && viewer ? (
           <>
+            {attachment ? (
+              <div className="px-3">
+                <div className="relative w-fit">
+                  <img src={attachment} alt="" className="h-16 max-w-[7.5rem] rounded-lg bg-soft object-contain" />
+                  <button
+                    type="button"
+                    className="absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-ink text-xs leading-none text-card"
+                    aria-label={tx(locale, "移除", "Remove")}
+                    onClick={() => setAttachment(null)}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ) : null}
             <div className="flex justify-between px-2">
               {COMMENT_REACTS.map((emoji) => (
                 <button key={emoji} type="button" className="grid h-9 w-9 place-items-center text-lg" aria-label={emoji} onClick={() => void send(emoji)}>
@@ -249,8 +355,39 @@ export function CommentSheet({
                 </button>
               ))}
             </div>
+            {gifOpen ? (
+              <div className="grid gap-1 border-t border-line px-3 py-2">
+                <input
+                  value={gifQuery}
+                  onChange={(event) => setGifQuery(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter") return;
+                    event.preventDefault();
+                    if (pasted?.startsWith("https://")) useGif(pasted);
+                  }}
+                  placeholder={tx(locale, "搜尋 GIF 或貼上連結", "Search GIFs or paste a link")}
+                  aria-label={tx(locale, "搜尋 GIF 或貼上連結", "Search GIFs or paste a link")}
+                  className="min-h-9 bg-transparent text-sm outline-none placeholder:text-muted"
+                />
+                {pasted?.startsWith("https://") ? (
+                  <button type="button" className="w-fit" onClick={() => useGif(pasted)} aria-label="GIF">
+                    <img src={pasted} alt="" className="h-16 max-w-[7.5rem] rounded-lg bg-soft object-contain" />
+                  </button>
+                ) : (
+                  <div className="grid max-h-36 grid-cols-4 gap-1 overflow-y-auto">
+                    {gifs.map((gif) => (
+                      <button key={gif.id} type="button" className="overflow-hidden rounded-md bg-soft" onClick={() => useGif(gif.url)} aria-label="GIF">
+                        <img src={gif.previewUrl} alt="" className="h-16 w-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {!gifConfigured && !pasted ? <p className="text-xs text-muted">{tx(locale, "可以貼上 GIF 連結", "Paste a GIF link")}</p> : null}
+                {gifConfigured && gifQuery && gifSettled === gifQuery && !pasted && gifs.length === 0 ? <p className="text-xs text-muted">{tx(locale, "沒有 GIF", "No GIFs")}</p> : null}
+              </div>
+            ) : null}
             <form
-              className="flex items-center gap-2 border-t border-line px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+              className="flex items-center gap-1 border-t border-line px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
               onSubmit={(event) => {
                 event.preventDefault();
                 void send(draft, true);
@@ -268,7 +405,18 @@ export function CommentSheet({
                 className="min-h-10 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
                 aria-label={tx(locale, "加入對話……", "Join the conversation…")}
               />
-              <button type="submit" className="grid h-9 w-9 shrink-0 place-items-center text-link disabled:text-muted" disabled={!cleanComment(draft)} aria-label={tx(locale, "送出", "Send")}>
+              <button type="button" className="grid h-9 w-9 shrink-0 place-items-center" aria-label={tx(locale, "相片", "Photo")} onClick={() => fileRef.current?.click()}>
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <rect x="3.5" y="5" width="17" height="14" rx="2" />
+                  <circle cx="9" cy="10" r="1.4" />
+                  <path d="M20.5 15.5 15 11l-8.5 8" />
+                </svg>
+              </button>
+              <input ref={fileRef} className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void onPhoto(event.target.files?.[0])} />
+              <button type="button" className="grid h-9 w-9 shrink-0 place-items-center" aria-label="GIF" aria-pressed={gifOpen} onClick={() => setGifOpen((open) => !open)}>
+                <span className="rounded-[4px] border-[1.5px] border-current px-[3px] py-px text-[9px] font-bold leading-none tracking-wide">GIF</span>
+              </button>
+              <button type="submit" className="grid h-9 w-9 shrink-0 place-items-center text-link disabled:text-muted" disabled={!cleanComment(draft) && !attachment} aria-label={tx(locale, "送出", "Send")}>
                 <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M5 12h13M13 6l6 6-6 6" />
                 </svg>

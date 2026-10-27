@@ -1,7 +1,8 @@
 import { revalidatePath } from "next/cache";
 import { getViewer } from "@/lib/auth";
-import { cleanComment } from "@/lib/comments";
+import { commentWrite } from "@/lib/comments";
 import { prisma } from "@/lib/db";
+import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { isBlocked } from "@/lib/social";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,7 @@ const authorSelect = { id: true, nickname: true, avatarUrl: true } as const;
 const commentSelect = {
   id: true,
   body: true,
+  imageUrl: true,
   createdAt: true,
   author: { select: authorSelect },
 } as const;
@@ -30,8 +32,20 @@ async function readable(postId: string, viewerId: string | null) {
   return post;
 }
 
-function present(comment: { id: string; body: string; createdAt: Date; author: { id: string; nickname: string; avatarUrl: string | null } }) {
-  return { id: comment.id, body: comment.body, createdAt: comment.createdAt.toISOString(), author: comment.author };
+function present(comment: {
+  id: string;
+  body: string;
+  imageUrl: string | null;
+  createdAt: Date;
+  author: { id: string; nickname: string; avatarUrl: string | null };
+}) {
+  return {
+    id: comment.id,
+    body: comment.body,
+    imageUrl: comment.imageUrl,
+    createdAt: comment.createdAt.toISOString(),
+    author: comment.author,
+  };
 }
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -63,11 +77,20 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   } catch {
     return json({ error: "comment" }, 400);
   }
-  const raw = payload && typeof payload === "object" && "body" in payload ? (payload as { body?: unknown }).body : "";
-  const body = cleanComment(String(raw ?? "").slice(0, 400));
-  if (!body) return json({ error: "comment" }, 400);
+  const raw = payload && typeof payload === "object" ? (payload as { body?: unknown; imageUrl?: unknown }) : {};
+  const written = commentWrite(raw.body, raw.imageUrl);
+  if (!written.ok) return json({ error: written.error }, 400);
+  let imageUrl = written.imageUrl;
+  if (imageUrl) {
+    try {
+      imageUrl = await storeUploadedImage(imageUrl, "uploads/comments");
+    } catch (error) {
+      if (error instanceof PhotoStoreError) return json({ error: "photo_url" }, 400);
+      throw error;
+    }
+  }
   const comment = await prisma.postComment.create({
-    data: { postId: id, authorId: viewer.id, body },
+    data: { postId: id, authorId: viewer.id, body: written.body, imageUrl },
     select: commentSelect,
   });
   revalidatePath("/");
