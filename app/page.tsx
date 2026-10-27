@@ -73,13 +73,10 @@ export default async function HomePage({
       <div className="grid gap-1">
         <StoryRail locale={prefs.locale} rings={storyFeed.rings} />
         {primary.length ? (
-          <section>
-            <h2 className="mb-1 text-sm font-semibold leading-none text-muted">{tx(prefs.locale, "關注中", "Following")}</h2>
-            <div className="grid gap-3">
-              {primary.map((post) => (
-                <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
-              ))}
-            </div>
+          <section className="grid gap-3">
+            {primary.map((post) => (
+              <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
+            ))}
           </section>
         ) : null}
       </div>

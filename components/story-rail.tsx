@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { markStorySeen } from "@/actions/stories";
 import { tx, type Locale } from "@/lib/i18n";
@@ -130,21 +131,27 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
           const fresh = item.stories.length > 0 && !item.seen;
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
           return (
-            <button key={item.userId} type="button" className="flex w-[4.25rem] shrink-0 flex-col items-center gap-1" onClick={() => openRing(index)}>
-              <span className={`relative grid h-16 w-16 place-items-center rounded-full p-[3px] ${fresh ? "bg-accent" : "bg-accent/30"}`}>
-                <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
-                  <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
-                    {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}
+            <div key={item.userId} className="relative w-[4.25rem] shrink-0">
+              <button type="button" className="flex w-full flex-col items-center gap-1" onClick={() => openRing(index)}>
+                <span className={`grid h-16 w-16 place-items-center rounded-full p-[3px] ${fresh ? "bg-accent" : "bg-accent/30"}`}>
+                  <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
+                    <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
+                      {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}
+                    </span>
                   </span>
                 </span>
-                {item.mine && item.stories.length === 0 ? (
-                  <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-accent text-sm font-bold leading-none text-white ring-2 ring-bg">
-                    <span className="block translate-y-[-0.05em]">+</span>
-                  </span>
-                ) : null}
-              </span>
-              <span className="w-full truncate text-center text-[11px] font-medium">{name}</span>
-            </button>
+                <span className="w-full truncate text-center text-[11px] font-medium">{name}</span>
+              </button>
+              {item.mine ? (
+                <Link
+                  href="/story/new"
+                  aria-label={tx(locale, "新增動態", "New story")}
+                  className="absolute right-[calc((4.25rem-4rem)/2-0.125rem)] top-[calc(4rem-1.25rem+0.125rem)] z-10 grid h-5 w-5 place-items-center rounded-full bg-accent text-sm font-bold leading-none text-white ring-2 ring-bg"
+                >
+                  <span className="block translate-y-[-0.05em]" aria-hidden>+</span>
+                </Link>
+              ) : null}
+            </div>
           );
         })}
       </div>

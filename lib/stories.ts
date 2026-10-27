@@ -46,7 +46,7 @@ export type StoryRing = {
 };
 
 /**
- * Home rings: your own row first (a "+" when you have nothing live), then people
+ * Home rings: your own row first (a "+" always opens a new story), then people
  * you follow who still have an active story. If that follow set is empty, fill
  * from everyone else's active stories — the same suggestion pool as the home
  * feed — so a demo account that follows the wrong sellers still sees rings.

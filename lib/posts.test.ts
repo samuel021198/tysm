@@ -218,11 +218,10 @@ assert(postCard.includes("h-10 min-w-10") && postCard.includes("strokeWidth={2.2
 assert(postCard.includes("flex h-9 items-center"), "price and dex keep one meta row");
 assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
-const followAt = home.indexOf("關注中");
-const followHead = home.slice(followAt - 240, followAt);
-assert(!home.includes("寫貼文"), "write-post is not a lone feed link");
-assert(home.includes("grid gap-1"), "stories stay close to the first posts");
-assert(followHead.includes("mb-1") && !followHead.includes("grid gap-3"), "the following label stays tight above the first post");
+const railAt = home.indexOf("<StoryRail");
+const primaryAt = home.indexOf("primary.map");
+assert(railAt >= 0 && primaryAt > railAt && home.slice(Math.max(0, railAt - 80), primaryAt).includes("grid gap-1"), "stories sit tight above the following posts");
+assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following label");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
 assert(strip.includes("object-contain"), "a detail strip shows the whole photo");
