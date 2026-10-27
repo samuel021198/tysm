@@ -119,6 +119,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     toPostCard({
       postId: row.id,
       body: row.body,
+      tags: row.tags,
       author: row.author,
       photos: row.photos,
       item: row.collectionItem,
@@ -175,12 +176,12 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
   };
 }
 
-const HOME_BUCKET = 8;
+const HOME_BUCKET = 12;
 
 function homePostInclude(viewerId: string | null) {
   return {
     author: { select: { id: true, nickname: true, avatarUrl: true } },
-    photos: { orderBy: { position: "asc" as const }, take: 1 },
+    photos: { orderBy: { position: "asc" as const }, take: 4 },
     likes: {
       where: viewerId ? { userId: viewerId } : { userId: { in: [] as string[] } },
       select: { userId: true },
@@ -201,7 +202,7 @@ function homePostInclude(viewerId: string | null) {
         rawGrade: true,
         grader: true,
         gradeValue: true,
-        photos: { orderBy: { position: "asc" as const }, take: 1, select: { url: true } },
+        photos: { orderBy: { position: "asc" as const }, take: 4, select: { url: true } },
         listing: {
           select: {
             id: true,
@@ -236,7 +237,7 @@ function homeVisible(viewerId: string | null, hidden: string[]) {
 
 /**
  * Following first, then a short suggestion bucket.
- * ponytail: 8 + 8 posts, one photo, the viewer's like row only. Upgrade path: cursor pagination.
+ * ponytail: 12 + 12 posts, up to 4 photos, the viewer's like row only. Upgrade path: cursor pagination.
  */
 export async function loadHomeFeed(viewerId: string | null, hidden: string[], hiddenPostIds: string[] = []) {
   const follows = viewerId
@@ -277,6 +278,7 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[], hi
     return toPostCard({
       postId: row.id,
       body: row.body,
+      tags: row.tags,
       author: row.author,
       photos: row.photos,
       item: row.collectionItem,

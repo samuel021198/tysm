@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
+import { TopicField } from "@/components/topic-field";
 
 export default async function EditPostPage({
   params,
@@ -26,14 +27,7 @@ export default async function EditPostPage({
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <form action={updatePost} className="grid gap-2">
         <input type="hidden" name="postId" value={post.id} />
-        <textarea
-          name="body"
-          defaultValue={post.body}
-          maxLength={500}
-          className="field min-h-28"
-          aria-label={tx(prefs.locale, "內文", "Caption")}
-          placeholder={tx(prefs.locale, "寫幾隻字", "Write a caption")}
-        />
+        <TopicField locale={prefs.locale} defaultValue={post.body} placeholder={tx(prefs.locale, "寫幾隻字，可以加 #PC #FS #ISO", "Write a caption. #PC #FS #ISO work too.")} />
         <button className="btn btn-primary w-fit">{tx(prefs.locale, "儲存", "Save")}</button>
       </form>
     </div>

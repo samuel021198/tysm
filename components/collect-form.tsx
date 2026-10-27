@@ -5,8 +5,10 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { saveCollection, savePost } from "@/actions/collect";
 import { errText, tx, type Locale } from "@/lib/i18n";
+import { displayCaption } from "@/lib/tags";
 import { fileToDataUrl } from "./photo-file";
 import { SellForm, type SellInitial } from "./sell-form";
+import { TopicField } from "./topic-field";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
@@ -91,7 +93,7 @@ export function CollectForm({
   }
 
   if (mode === "post" && alsoList) {
-    const line = body.trim().split("\n")[0]?.trim().slice(0, 80) ?? "";
+    const line = displayCaption(body).split(/[。！？\n]/)[0]?.trim().slice(0, 40) ?? "";
     const initial: SellInitial = {
       categoryId: categories.find((cat) => cat.slug === "pokemon")?.id || categories[0]?.id || "",
       title: line.length >= 2 ? line : "",
@@ -181,7 +183,7 @@ export function CollectForm({
 
       {mode === "post" ? (
         <>
-          <textarea className="field min-h-28" name="body" maxLength={500} value={body} placeholder={tx(locale, "寫幾隻字…", "Write something…")} onChange={(event) => setBody(event.target.value)} />
+          <TopicField locale={locale} value={body} onChange={setBody} />
           <label className="surface flex items-center justify-between gap-3 px-4 py-3">
             <span>
               <span className="block font-semibold">{tx(locale, "同時上架", "List it too")}</span>

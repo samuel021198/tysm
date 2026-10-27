@@ -751,6 +751,8 @@ model Post {
   authorId         String
   collectionItemId String?  @unique
   body             String   @default("")
+  /// Topic labels without the leading #. Search uses exact match.
+  tags             String[] @default([])
   createdAt        DateTime @default(now())
 
   author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)

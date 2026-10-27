@@ -1,4 +1,5 @@
 import { DEMO_ACCOUNTS } from "../lib/demo-login";
+import { traderCollections, traderFollows, traderListings, traderPosts, traderUsers } from "./demo-traders";
 import { resolveAuction } from "../lib/rules";
 
 const hk = (dollars: number) => Math.round(dollars * 100);
@@ -826,6 +827,7 @@ export const demoUsers = [
     bio: "收藏運動卡同寶可夢，喜歡堆疊同單卡特寫。",
     avatarUrl: portrait("photo-1500648767791-00dcc994a43e"),
   },
+  ...traderUsers,
 ];
 
 export const demoStores: { userId: string; storeName: string; storeDistrict: string; storeLine1: string; storeHours: string }[] = [];
@@ -911,10 +913,13 @@ const demoPairs = [
   ["user_tyu", "user_muel"],
 ] as const;
 
-export const demoFollows = demoPairs.flatMap(([a, b]) => [
-  { id: `follow_${a}_${b}`, followerId: a, sellerId: b },
-  { id: `follow_${b}_${a}`, followerId: b, sellerId: a },
-]);
+export const demoFollows = [
+  ...demoPairs.flatMap(([a, b]) => [
+    { id: `follow_${a}_${b}`, followerId: a, sellerId: b },
+    { id: `follow_${b}_${a}`, followerId: b, sellerId: a },
+  ]),
+  ...traderFollows,
+];
 
 export const demoViews = [
   { id: "seed_view_mei_zard", userId: "user_mei", listingId: "seed_charizard" },
@@ -963,6 +968,13 @@ export type ShowcaseListing = {
   priceCents: number;
   photos: string[];
   catalogCardId?: string | null;
+  categoryId?: string;
+  game?: string | null;
+  setName?: string | null;
+  cardName?: string | null;
+  personName?: string | null;
+  cardKind?: "TCG" | "ATHLETE" | "CELEBRITY";
+  language?: string | null;
 };
 
 export type ShowcaseCollection = {
@@ -981,6 +993,7 @@ export type ShowcasePost = {
   collectionId: string;
   body: string;
   ageDays: number;
+  tags: string[];
 };
 
 export type ShowcaseReview = {
@@ -995,46 +1008,56 @@ export type ShowcaseReview = {
   ageDays: number;
 };
 
+const marsSell01 = "今日手持呢疊噴火龍，卡面乾淨，四角都尖。燈光下閃面無花，同實卡一樣。想換或者放賣都可以傾，價錢寫咗喺下面。 #FS #Charizard";
+const marsSell02 = "單卡放喺布上面影，白邊同卡角都睇到。收咗半年，狀態同相一樣。而家放賣，可約旺角交收。 #賣 #寶可夢";
+const tyuSell01 = "收工整理今日的卡堆，閃面同普通卡分開影。狀態都係近全新，白邊少。呢組放賣，價錢係實價。 #FS #寶可夢";
+const tyuSell02 = "這張先單獨影，卡面無花，四角尖。收藏咗一陣，而家讓出。可順豐或者旺角交收。 #賣 #寶可夢";
+const tyuSell03 = "排開先睇有冇白邊，大部分都乾淨。呢排想騰空間，所以放賣。有興趣可以睇相再問。 #FS";
+const muelSell01 = "疊高先數張數，入面有幾張閃。狀態同相一樣，無大花。整疊放賣，價錢寫喺下面。 #賣 #寶可夢";
+
 export const demoShowcaseListings: ShowcaseListing[] = [
-  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: "手持實拍。A stack of cards held up to the light.", priceCents: 12800, photos: [spread, holo], catalogCardId: "demo_card_charizard" },
-  { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: "布面實拍。One card on cloth.", priceCents: 8600, photos: [cloth] },
-  { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪實拍。Cards spread on a table.", priceCents: 6400, photos: [color, table] },
-  { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: "卡堆實拍。A pile of pulled cards.", priceCents: 9800, photos: [pileB, stackA] },
-  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: "單卡實拍。A single card on the table.", priceCents: 5400, photos: [single], catalogCardId: "demo_card_pikachu" },
-  { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: "排列實拍。Cards lined up on a table.", priceCents: 7200, photos: [bunch] },
-  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: "疊卡實拍。A tall stack of cards.", priceCents: 11200, photos: [pileC], catalogCardId: "demo_card_mewtwo" },
-  { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒實拍。A box stack and a close-up.", priceCents: 15400, photos: [logoStack, closeup] },
-  { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌面實拍。A group of cards on the table.", priceCents: 6800, photos: [group] },
+  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: marsSell01, priceCents: 12800, photos: [spread, holo, closeup], catalogCardId: "demo_card_charizard", categoryId: "cat_pokemon", game: "Pokémon", setName: "151", cardName: "噴火龍", cardKind: "TCG", language: "日文" },
+  { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: marsSell02, priceCents: 8600, photos: [cloth, single, holo], categoryId: "cat_pokemon", game: "Pokémon", cardName: "布面單卡", cardKind: "TCG", language: "日文" },
+  { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪一組放喺檯面，色卡同閃卡都有。狀態同相一樣，白邊少。而家放賣，週末旺角交收。 #FS", priceCents: 6400, photos: [color, table], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: tyuSell01, priceCents: 9800, photos: [pileB, stackA, bunch], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: tyuSell02, priceCents: 5400, photos: [single, holo, cloth], catalogCardId: "demo_card_pikachu", categoryId: "cat_pokemon", game: "Pokémon", setName: "SV2a", cardName: "皮卡丘", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: tyuSell03, priceCents: 7200, photos: [bunch, table, color], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: muelSell01, priceCents: 11200, photos: [pileC, stackA, logoStack], catalogCardId: "demo_card_mewtwo", categoryId: "cat_pokemon", game: "Pokémon", cardName: "超夢", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒同特寫係同一套，盒面同卡面都影咗。狀態近全新，角位尖。而家放賣，可順豐到付。 #賣", priceCents: 15400, photos: [logoStack, closeup], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌上一組卡排開影，閃面同普通卡都有。狀態同相一樣。而家放賣，油尖旺可交收。 #FS", priceCents: 6800, photos: [group, holo], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  ...traderListings,
 ];
 
 export const demoShowcaseCollections: ShowcaseCollection[] = [
-  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo], listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
-  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth], listingId: "mars_list_02" },
-  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table], listingId: null, catalogCardId: "demo_card_eevee" },
-  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color], listingId: null, catalogCardId: "demo_card_gengar" },
-  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA], listingId: "tyu_list_01" },
-  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single], listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
-  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch], listingId: "tyu_list_03" },
-  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo], listingId: null },
-  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC], listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
-  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack], listingId: null },
-  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup], listingId: null, catalogCardId: "demo_card_umbreon" },
-  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo], listingId: null },
+  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo, closeup], listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
+  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth, single, holo], listingId: "mars_list_02" },
+  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table, color], listingId: null, catalogCardId: "demo_card_eevee" },
+  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color, pileA, handHolo], listingId: null, catalogCardId: "demo_card_gengar" },
+  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA, bunch], listingId: "tyu_list_01" },
+  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single, holo, cloth], listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
+  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch, table, color], listingId: "tyu_list_03" },
+  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo, holo, closeup], listingId: null },
+  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC, stackA, logoStack], listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
+  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack, pileC, group], listingId: null },
+  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup, table], listingId: null, catalogCardId: "demo_card_umbreon" },
+  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo, closeup], listingId: null },
+  ...traderCollections,
 ];
 
 export const demoShowcasePosts: ShowcasePost[] = [
-  { id: "mars_post_01", ownerId: MARS, collectionId: "mars_col_01", body: "今日手持，卡面乾淨。", ageDays: 0 },
-  { id: "mars_post_02", ownerId: MARS, collectionId: "mars_col_02", body: "單卡放喺布上面影。", ageDays: 1 },
-  { id: "mars_post_03", ownerId: MARS, collectionId: "mars_col_03", body: "開完放喺桌面，未入冊。", ageDays: 2 },
-  { id: "mars_post_04", ownerId: MARS, collectionId: "mars_col_04", body: "呢組色卡留喺檯面。", ageDays: 3 },
-  { id: "tyu_post_01", ownerId: TYU, collectionId: "tyu_col_01", body: "收工整理今日的卡堆。", ageDays: 1 },
-  { id: "tyu_post_02", ownerId: TYU, collectionId: "tyu_col_02", body: "這張先單獨影。", ageDays: 2 },
-  { id: "tyu_post_03", ownerId: TYU, collectionId: "tyu_col_03", body: "排開先睇有冇白邊。", ageDays: 4 },
-  { id: "tyu_post_04", ownerId: TYU, collectionId: "tyu_col_04", body: "閃卡先收住，未公開。", ageDays: 5 },
-  { id: "muel_post_01", ownerId: MUEL, collectionId: "muel_col_01", body: "疊高先數張數。", ageDays: 2 },
-  { id: "muel_post_02", ownerId: MUEL, collectionId: "muel_col_02", body: "卡盒封面同實卡一起影。", ageDays: 3 },
-  { id: "muel_post_03", ownerId: MUEL, collectionId: "muel_col_03", body: "桌面同特寫都有。", ageDays: 6 },
-  { id: "muel_post_04", ownerId: MUEL, collectionId: "muel_col_04", body: "特寫先自己睇。", ageDays: 7 },
+  { id: "mars_post_01", ownerId: MARS, collectionId: "mars_col_01", body: marsSell01, tags: ["FS", "Charizard"], ageDays: 0 },
+  { id: "mars_post_02", ownerId: MARS, collectionId: "mars_col_02", body: marsSell02, tags: ["賣", "寶可夢"], ageDays: 1 },
+  { id: "mars_post_03", ownerId: MARS, collectionId: "mars_col_03", body: "開完放喺桌面，未入冊，先自己睇一排。呢組留喺收藏，暫時唔放。喜歡色卡的可以睇下，唔賣。 #PC", tags: ["PC"], ageDays: 2 },
+  { id: "mars_post_04", ownerId: MARS, collectionId: "mars_col_04", body: "檯面呢組色卡我好鍾意，但缺一張同系列。有人放緊可以搵我。其餘自己留，唔賣。 #PC #ISO", tags: ["PC", "ISO"], ageDays: 3 },
+  { id: "tyu_post_01", ownerId: TYU, collectionId: "tyu_col_01", body: tyuSell01, tags: ["FS", "寶可夢"], ageDays: 1 },
+  { id: "tyu_post_02", ownerId: TYU, collectionId: "tyu_col_02", body: tyuSell02, tags: ["賣", "寶可夢"], ageDays: 2 },
+  { id: "tyu_post_03", ownerId: TYU, collectionId: "tyu_col_03", body: tyuSell03, tags: ["FS"], ageDays: 4 },
+  { id: "tyu_post_04", ownerId: TYU, collectionId: "tyu_col_04", body: "閃卡先收住，未公開，卡套都未除。自己先影低角度同反光。呢張留喺收藏，唔會放上賣場。 #PC", tags: ["PC"], ageDays: 5 },
+  { id: "muel_post_01", ownerId: MUEL, collectionId: "muel_col_01", body: muelSell01, tags: ["賣", "寶可夢"], ageDays: 2 },
+  { id: "muel_post_02", ownerId: MUEL, collectionId: "muel_col_02", body: "卡盒封面同實卡一起影，呢套留喺櫃入面。開盒的時候卡角都好好。純粹分享，暫時唔放。 #PC", tags: ["PC"], ageDays: 3 },
+  { id: "muel_post_03", ownerId: MUEL, collectionId: "muel_col_03", body: "桌面同特寫都有，月亮伊布的閃面好靚。我仲想搵同系列另一張。有人放緊可以傳訊息。 #PC #ISO", tags: ["PC", "ISO"], ageDays: 6 },
+  { id: "muel_post_04", ownerId: MUEL, collectionId: "muel_col_04", body: "特寫先自己睇，未決定放唔放。卡面乾淨，但我想再對下光。而家只係收藏記錄。 #PC", tags: ["PC"], ageDays: 7 },
+  ...traderPosts,
 ];
 
 export const demoShowcaseReviews: ShowcaseReview[] = [

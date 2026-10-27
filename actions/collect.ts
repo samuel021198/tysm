@@ -11,6 +11,7 @@ import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
 import { collectionBoardNext, collectionVisibility, ownedPostId } from "@/lib/posts";
 import { parseGrade } from "@/lib/rules";
+import { tagsFromCaption } from "@/lib/tags";
 import { isBlocked } from "@/lib/social";
 import { GRADERS, RAW } from "@/lib/sell-wizard";
 
@@ -168,6 +169,7 @@ export async function savePost(_prev: { error?: string } | null, formData: FormD
       data: {
         authorId: user.id,
         body,
+        tags: tagsFromCaption(body),
         photos: { create: stored.map((photo, position) => ({ url: photo.url, position })) },
       },
     });
@@ -223,7 +225,7 @@ export async function savePost(_prev: { error?: string } | null, formData: FormD
   };
   const result = await saveListing(user.id, input);
   if (!result.ok) return { error: result.error };
-  const synced = await syncListingInventory(result.id, { postBody: body });
+  const synced = await syncListingInventory(result.id, { postBody: body, tags: tagsFromCaption(body) });
   revalidatePath("/");
   revalidatePath("/me");
   revalidatePath("/search");
@@ -310,7 +312,7 @@ export async function updatePost(formData: FormData) {
   if (!ownedPostId(post, user.id)) redirect("/?err=forbidden");
   const photos = await prisma.postPhoto.count({ where: { postId } });
   if (body.length < 1 && photos < 1) redirect(`/post/${postId}/edit?err=post`);
-  await prisma.post.updateMany({ where: { id: postId, authorId: user.id }, data: { body } });
+  await prisma.post.updateMany({ where: { id: postId, authorId: user.id }, data: { body, tags: tagsFromCaption(body) } });
   revalidatePath("/");
   revalidatePath("/me");
   revalidatePath("/find");

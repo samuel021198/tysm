@@ -63,6 +63,7 @@ export default async function FavoritesPage() {
       toPostCard({
         postId: post.id,
         body: post.body,
+        tags: post.tags,
         author: post.author,
         photos: post.photos,
         item: post.collectionItem,

@@ -1,0 +1,521 @@
+import { TRIAL_ACCOUNTS } from "../lib/demo-login";
+
+const shot = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
+const portrait = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&h=800&q=80`;
+
+const FRAMES = [
+  "photo-1613771404784-3a5686aa2be3",
+  "photo-1613771404721-1f92d799e49f",
+  "photo-1611931960487-4932667079f1",
+  "photo-1616196334218-caffdc9b2317",
+  "photo-1647892591880-58c55fd726d8",
+  "photo-1647892591717-28c7fd63bb3f",
+  "photo-1647893977173-59619da505d9",
+  "photo-1636391671086-6b4b776cd031",
+  "photo-1703023689733-6a4281149189",
+  "photo-1640271215810-ce65ba65ef0b",
+  "photo-1647892591703-4552c35a58e7",
+  "photo-1647893977168-6316f6c9ae44",
+  "photo-1672759043716-620e810abac8",
+  "photo-1742743032379-8dbd2c2fe9df",
+  "photo-1606503153255-59d8b8b82176",
+];
+
+function frames(start: number, count: number) {
+  return Array.from({ length: count }, (_, index) => shot(FRAMES[(start + index) % FRAMES.length]));
+}
+
+const PROFILES: Record<string, { phone: string; bio: string; avatarUrl: string }> = {
+  kai: {
+    phone: "+85291000011",
+    bio: "油麻地收寶可夢。PSA 同裸卡都玩，週末旺角交收。",
+    avatarUrl: portrait("photo-1506794778202-cad84cf45f1d"),
+  },
+  hoi: {
+    phone: "+85291000012",
+    bio: "海賊王日版，OP 系列為主。觀塘可以自取。",
+    avatarUrl: portrait("photo-1438761681033-6461ffad8d80"),
+  },
+  suki: {
+    phone: "+85291000013",
+    bio: "沙田收藏，少放賣。鍾意噴火龍同月亮伊布。",
+    avatarUrl: portrait("photo-1534528741775-53994a69daeb"),
+  },
+  lok: {
+    phone: "+85291000014",
+    bio: "Riftbound 玩家，科學園約。新卡入套先影。",
+    avatarUrl: portrait("photo-1527980965255-d3b416303d12"),
+  },
+  yan: {
+    phone: "+85291000015",
+    bio: "Topps 足球，銅鑼灣。美斯同沙拿都收。",
+    avatarUrl: portrait("photo-1544005313-94ddf0286df2"),
+  },
+  jun: {
+    phone: "+85291000016",
+    bio: "深水埗舊卡。寶可夢 WOTC 同評級都有。",
+    avatarUrl: portrait("photo-1539571696357-5a69c17a67c6"),
+  },
+  mika: {
+    phone: "+85291000017",
+    bio: "尖沙咀。寶可夢同海賊王都收，影完先入冊。",
+    avatarUrl: portrait("photo-1524504388940-b1c1722653e1"),
+  },
+  bao: {
+    phone: "+85291000018",
+    bio: "荃灣放賣為主，價實。交收前會再影卡角。",
+    avatarUrl: portrait("photo-1507591064344-4c6ce005b128"),
+  },
+  rafa: {
+    phone: "+85291000019",
+    bio: "紅磡球星卡。NBA 同足球分開兩本冊。",
+    avatarUrl: portrait("photo-1488426862026-3ee34a7d66df"),
+  },
+  ace: {
+    phone: "+85291000020",
+    bio: "將軍澳。海賊王 SEC 同 Riftbound 都玩。",
+    avatarUrl: portrait("photo-1517841905240-472988babdf9"),
+  },
+};
+
+export const traderUsers = TRIAL_ACCOUNTS.map((account) => {
+  const profile = PROFILES[account.handle];
+  return {
+    id: account.id,
+    email: `${account.handle}@tysm.hk`,
+    phone: profile.phone,
+    nickname: account.nickname,
+    role: "USER" as const,
+    phoneVerified: true,
+    bio: profile.bio,
+    avatarUrl: profile.avatarUrl,
+  };
+});
+
+const LOCKED = ["user_mars", "user_tyu", "user_muel"] as const;
+const PAIRS = [
+  ["user_kai", "user_hoi"],
+  ["user_suki", "user_lok"],
+  ["user_yan", "user_jun"],
+  ["user_mika", "user_bao"],
+  ["user_rafa", "user_ace"],
+] as const;
+
+export const traderFollows = [
+  ...LOCKED.flatMap((followerId) =>
+    TRIAL_ACCOUNTS.map((account) => ({
+      id: `follow_${followerId}_${account.id}`,
+      followerId,
+      sellerId: account.id,
+    })),
+  ),
+  ...PAIRS.flatMap(([a, b]) => [
+    { id: `follow_${a}_${b}`, followerId: a, sellerId: b },
+    { id: `follow_${b}_${a}`, followerId: b, sellerId: a },
+  ]),
+];
+
+type TraderRow = {
+  key: string;
+  ownerId: string;
+  title: string;
+  body: string;
+  tags: string[];
+  photos: string[];
+  ageDays: number;
+  priceCents?: number;
+  categoryId?: string;
+  game?: string | null;
+  setName?: string | null;
+  cardName?: string | null;
+  personName?: string | null;
+  cardKind?: "TCG" | "ATHLETE" | "CELEBRITY";
+  language?: string | null;
+  catalogCardId?: string | null;
+};
+
+const rows: TraderRow[] = [
+  {
+    key: "kai_01",
+    ownerId: "user_kai",
+    title: "噴火龍 PSA10",
+    body: "呢張噴火龍收咗兩年，殼面乾淨，標籤無花。四角同相片一樣尖，燈光下無大刮。而家放賣，可約油麻地交收。 #FS #Charizard #PSA10",
+    tags: ["FS", "Charizard", "PSA10"],
+    photos: frames(0, 3),
+    ageDays: 0,
+    priceCents: 188000,
+    categoryId: "cat_pokemon",
+    game: "Pokémon",
+    setName: "151",
+    cardName: "噴火龍",
+    cardKind: "TCG",
+    language: "日文",
+    catalogCardId: "demo_card_charizard",
+  },
+  {
+    key: "kai_02",
+    ownerId: "user_kai",
+    title: "月亮伊布卡冊",
+    body: "月亮伊布留喺卡冊第一頁，自己睇多過放。閃面保存得好好，套都未除。純粹分享收藏，暫時唔賣。 #PC #寶可夢",
+    tags: ["PC", "寶可夢"],
+    photos: frames(3, 3),
+    ageDays: 3,
+  },
+  {
+    key: "kai_03",
+    ownerId: "user_kai",
+    title: "求同系列皮卡丘",
+    body: "仲差一張同系列的皮卡丘，有人放緊可以搵我。其餘卡都自己留喺冊入面。收藏為主，唔急著放。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(6, 2),
+    ageDays: 8,
+  },
+  {
+    key: "hoi_01",
+    ownerId: "user_hoi",
+    title: "路飛 OP09",
+    body: "路飛呢張係 OP09，日版，卡角尖，白邊少。收的時候已經入套，狀態同相一樣。而家放賣，觀塘可以自取。 #FS #OP09",
+    tags: ["FS", "OP09"],
+    photos: frames(2, 4),
+    ageDays: 1,
+    priceCents: 128000,
+    categoryId: "cat_onepiece",
+    game: "One Piece",
+    setName: "OP09",
+    cardName: "路飛",
+    cardKind: "TCG",
+    language: "日文",
+    catalogCardId: "demo_card_luffy",
+  },
+  {
+    key: "hoi_02",
+    ownerId: "user_hoi",
+    title: "索隆收藏",
+    body: "索隆留喺收藏，未捨得放。卡面無花，我自己好鍾意呢張構圖。純粹打卡，唔賣。 #PC",
+    tags: ["PC"],
+    photos: frames(5, 2),
+    ageDays: 4,
+  },
+  {
+    key: "hoi_03",
+    ownerId: "user_hoi",
+    title: "盒同實卡",
+    body: "盒同實卡一起影低，方便自己對編號。整套未齊，所以先收住。有同系列想交流可以留言。 #PC #海賊王",
+    tags: ["PC", "海賊王"],
+    photos: frames(8, 3),
+    ageDays: 9,
+  },
+  {
+    key: "suki_01",
+    ownerId: "user_suki",
+    title: "布上皮卡丘",
+    body: "皮卡丘放咗喺布上面影，白邊同卡角都清楚。收咗半年，狀態同相一樣。而家讓出，價錢係實價。 #賣 #寶可夢",
+    tags: ["賣", "寶可夢"],
+    photos: frames(1, 3),
+    ageDays: 0,
+    priceCents: 68000,
+    categoryId: "cat_pokemon",
+    game: "Pokémon",
+    setName: "SV2a",
+    cardName: "皮卡丘",
+    cardKind: "TCG",
+    language: "日文",
+    catalogCardId: "demo_card_pikachu",
+  },
+  {
+    key: "suki_02",
+    ownerId: "user_suki",
+    title: "入坑噴火龍",
+    body: "噴火龍係我入坑第一張，一直留喺卡冊。閃面保存得好好，幾乎無花。分享吓，唔放賣。 #PC #Charizard",
+    tags: ["PC", "Charizard"],
+    photos: frames(4, 4),
+    ageDays: 5,
+  },
+  {
+    key: "suki_03",
+    ownerId: "user_suki",
+    title: "求超夢",
+    body: "想搵一張同系列的超夢，有放的話可以傳訊息。其餘自己留，唔賣。收藏先，交易其次。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(9, 2),
+    ageDays: 11,
+  },
+  {
+    key: "lok_01",
+    ownerId: "user_lok",
+    title: "Riftbound 新卡",
+    body: "Riftbound 呢張新收，卡面乾淨，四角尖。玩完一局就入套，狀態同相一樣。而家放賣，科學園可以交收。 #FS #Riftbound",
+    tags: ["FS", "Riftbound"],
+    photos: frames(7, 3),
+    ageDays: 1,
+    priceCents: 46000,
+    categoryId: "cat_riftbound",
+    game: "Riftbound",
+    setName: "Origins",
+    cardName: "Annie",
+    cardKind: "TCG",
+    language: "英文",
+  },
+  {
+    key: "lok_02",
+    ownerId: "user_lok",
+    title: "牌組以外",
+    body: "另一張留喺牌組外面，自己先賞。反光同相片一樣，無大花。純粹收藏，唔放。 #PC #Riftbound",
+    tags: ["PC", "Riftbound"],
+    photos: frames(10, 2),
+    ageDays: 6,
+  },
+  {
+    key: "lok_03",
+    ownerId: "user_lok",
+    title: "補同系列",
+    body: "仲想補一張同系列，有人放緊可以搵我。而家呢張自己留喺套入面。收藏為主，唔急。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(12, 3),
+    ageDays: 12,
+  },
+  {
+    key: "yan_01",
+    ownerId: "user_yan",
+    title: "美斯球衣卡",
+    body: "美斯球衣卡放喺檯面影，角位乾淨。收咗一季，狀態同相一樣。而家放賣，銅鑼灣可交收。 #賣",
+    tags: ["賣"],
+    photos: frames(3, 4),
+    ageDays: 2,
+    priceCents: 96000,
+    categoryId: "cat_football",
+    cardKind: "ATHLETE",
+    personName: "美斯",
+    cardName: "美斯",
+    language: "英文",
+  },
+  {
+    key: "yan_02",
+    ownerId: "user_yan",
+    title: "沙拿卡冊",
+    body: "另一張沙拿留喺卡冊，自己睇。居中同相片一樣，無白邊問題。分享收藏，唔賣。 #PC",
+    tags: ["PC"],
+    photos: frames(8, 2),
+    ageDays: 7,
+  },
+  {
+    key: "yan_03",
+    ownerId: "user_yan",
+    title: "球星慢收",
+    body: "球星卡我收得慢，每一張都入套。呢組暫時留低，未打算放。純粹打卡。 #PC",
+    tags: ["PC"],
+    photos: frames(11, 3),
+    ageDays: 13,
+  },
+  {
+    key: "jun_01",
+    ownerId: "user_jun",
+    title: "舊噴火龍",
+    body: "舊噴火龍收咗好耐，殼無大花，標籤清楚。四角同相片一樣。而家放賣，深水埗可以面交。 #FS #Charizard #PSA10",
+    tags: ["FS", "Charizard", "PSA10"],
+    photos: frames(4, 3),
+    ageDays: 0,
+    priceCents: 248000,
+    categoryId: "cat_pokemon",
+    game: "Pokémon",
+    setName: "Base",
+    cardName: "噴火龍",
+    cardKind: "TCG",
+    language: "英文",
+    catalogCardId: "demo_card_charizard",
+  },
+  {
+    key: "jun_02",
+    ownerId: "user_jun",
+    title: "鐵盒舊卡",
+    body: "其餘舊卡留喺鐵盒，未決定放唔放。卡角有少少白，我都照收。分享吓收藏。 #PC #寶可夢",
+    tags: ["PC", "寶可夢"],
+    photos: frames(7, 2),
+    ageDays: 5,
+  },
+  {
+    key: "jun_03",
+    ownerId: "user_jun",
+    title: "換舊皮卡丘",
+    body: "想換一張同年代的皮卡丘，有的話可以傾。呢張自己留，唔賣。收藏先。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(13, 4),
+    ageDays: 10,
+  },
+  {
+    key: "mika_01",
+    ownerId: "user_mika",
+    title: "路飛領袖卡",
+    body: "路飛領袖卡卡面乾淨，閃位同相一樣。收的時候已經確認無花。而家放賣，尖沙咀可交收。 #FS #OP09",
+    tags: ["FS", "OP09"],
+    photos: frames(6, 3),
+    ageDays: 1,
+    priceCents: 168000,
+    categoryId: "cat_onepiece",
+    game: "One Piece",
+    setName: "OP09",
+    cardName: "路飛",
+    cardKind: "TCG",
+    language: "日文",
+    catalogCardId: "demo_card_luffy",
+  },
+  {
+    key: "mika_02",
+    ownerId: "user_mika",
+    title: "寶可夢卡冊",
+    body: "寶可夢呢疊留喺卡冊，自己先睇。閃面保存得好好，套都未除。純粹分享，唔放。 #PC #寶可夢",
+    tags: ["PC", "寶可夢"],
+    photos: frames(9, 4),
+    ageDays: 6,
+  },
+  {
+    key: "mika_03",
+    ownerId: "user_mika",
+    title: "兩套對編號",
+    body: "海賊王同寶可夢我都收，呢組未齊。先影低對編號，方便自己睇。暫時唔賣。 #PC #海賊王",
+    tags: ["PC", "海賊王"],
+    photos: frames(1, 2),
+    ageDays: 12,
+  },
+  {
+    key: "bao_01",
+    ownerId: "user_bao",
+    title: "實價單卡",
+    body: "呢張放賣，卡角尖，白邊少，同相片一樣。收貨之後檢查過，無大花。荃灣可以自取，價錢實。 #賣 #寶可夢",
+    tags: ["賣", "寶可夢"],
+    photos: frames(5, 3),
+    ageDays: 0,
+    priceCents: 88000,
+    categoryId: "cat_pokemon",
+    game: "Pokémon",
+    setName: "SV8a",
+    cardName: "耿鬼",
+    cardKind: "TCG",
+    language: "繁體中文",
+    catalogCardId: "demo_card_gengar",
+  },
+  {
+    key: "bao_02",
+    ownerId: "user_bao",
+    title: "自己留的閃",
+    body: "另一張自己留，唔連這張放。閃面我好鍾意，所以收住。分享吓近況。 #PC",
+    tags: ["PC"],
+    photos: frames(11, 2),
+    ageDays: 4,
+  },
+  {
+    key: "bao_03",
+    ownerId: "user_bao",
+    title: "收藏同放賣分開",
+    body: "仲收緊同系列，有人放可以傳訊息。而家呢張自己留喺冊入面。收藏同放賣我會分開寫。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(14, 3),
+    ageDays: 9,
+  },
+  {
+    key: "rafa_01",
+    ownerId: "user_rafa",
+    title: "居里簽名卡",
+    body: "居里簽名卡角位乾淨，簽名同相一樣清楚。收咗一年，殼面無花。而家放賣，紅磡可交收。 #FS",
+    tags: ["FS"],
+    photos: frames(2, 3),
+    ageDays: 2,
+    priceCents: 128000,
+    categoryId: "cat_basketball",
+    cardKind: "ATHLETE",
+    personName: "居里",
+    cardName: "居里",
+    language: "英文",
+  },
+  {
+    key: "rafa_02",
+    ownerId: "user_rafa",
+    title: "展示架球星",
+    body: "另一張球星卡留喺展示架，自己睇。居中無白邊，狀態同相一樣。純粹收藏。 #PC",
+    tags: ["PC"],
+    photos: frames(6, 2),
+    ageDays: 7,
+  },
+  {
+    key: "rafa_03",
+    ownerId: "user_rafa",
+    title: "兩本冊",
+    body: "足球同籃球我都收，呢張未捨得放。狀態同相一樣，角位乾淨。分享吓。 #PC",
+    tags: ["PC"],
+    photos: frames(10, 4),
+    ageDays: 14,
+  },
+  {
+    key: "ace_01",
+    ownerId: "user_ace",
+    title: "SEC 路飛",
+    body: "SEC 路飛收咗即入套，卡面無花，四角尖。燈光下同相片一樣。而家放賣，將軍澳可交收。 #賣 #OP09",
+    tags: ["賣", "OP09"],
+    photos: frames(8, 4),
+    ageDays: 1,
+    priceCents: 210000,
+    categoryId: "cat_onepiece",
+    game: "One Piece",
+    setName: "OP09",
+    cardName: "路飛",
+    cardKind: "TCG",
+    language: "日文",
+    catalogCardId: "demo_card_luffy",
+  },
+  {
+    key: "ace_02",
+    ownerId: "user_ace",
+    title: "Riftbound 留套",
+    body: "Riftbound 留喺牌組旁邊，自己先玩。卡面乾淨，四角尖。暫時唔放。 #PC #Riftbound",
+    tags: ["PC", "Riftbound"],
+    photos: frames(0, 2),
+    ageDays: 6,
+  },
+  {
+    key: "ace_03",
+    ownerId: "user_ace",
+    title: "求同系列 SEC",
+    body: "想補一張同系列 SEC，有放的話可以傾。其餘自己留喺冊入面。收藏為主。 #PC #ISO",
+    tags: ["PC", "ISO"],
+    photos: frames(12, 3),
+    ageDays: 11,
+  },
+];
+
+export const traderListings = rows
+  .filter((row) => row.priceCents)
+  .map((row) => ({
+    id: `${row.key}_list`,
+    ownerId: row.ownerId,
+    title: row.title,
+    description: row.body,
+    priceCents: row.priceCents as number,
+    photos: row.photos,
+    catalogCardId: row.catalogCardId ?? null,
+    categoryId: row.categoryId,
+    game: row.game ?? null,
+    setName: row.setName ?? null,
+    cardName: row.cardName ?? null,
+    personName: row.personName ?? null,
+    cardKind: row.cardKind,
+    language: row.language ?? null,
+  }));
+
+export const traderCollections = rows.map((row) => ({
+  id: `${row.key}_col`,
+  ownerId: row.ownerId,
+  title: row.title,
+  visibility: "PUBLIC" as const,
+  photos: row.photos,
+  listingId: row.priceCents ? `${row.key}_list` : null,
+  catalogCardId: row.catalogCardId ?? null,
+}));
+
+export const traderPosts = rows.map((row) => ({
+  id: `${row.key}_post`,
+  ownerId: row.ownerId,
+  collectionId: `${row.key}_col`,
+  body: row.body,
+  ageDays: row.ageDays,
+  tags: row.tags,
+}));

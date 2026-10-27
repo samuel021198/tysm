@@ -7,7 +7,9 @@ import { DISTRICTS, hkPartsToInput } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { PHOTO_MAX, parseListingForm, wizardFocusField, wizardPublishIssues, wizardStepForIssue, type ListingInput } from "@/lib/sell-wizard";
 import { enhanceDataUrl, fileToDataUrl } from "./photo-file";
+import { insertTag, tagsFromCaption } from "@/lib/tags";
 import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
+import { TopicSuggest } from "./topic-field";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
@@ -590,12 +592,18 @@ export function SellForm({
             name="description"
             maxLength={5000}
             value={description}
-            placeholder={tx(locale, "可留空。可以寫 #標籤。", "Optional. Hashtags are fine.")}
+            placeholder={tx(locale, "可留空。可以加話題，例如 #PC #FS。", "Optional. Topics like #PC #FS are fine.")}
             aria-invalid={shown.includes("description")}
             onChange={(event) => setDescription(event.target.value)}
           />
           <FieldError locale={locale} codes={shown} code="description" />
         </label>
+        <TopicSuggest
+          locale={locale}
+          tags={tagsFromCaption(description)}
+          partial={null}
+          onPick={(tag) => setDescription((current) => insertTag(current, current.length, tag).text)}
+        />
       </div>
 
       {!locked ? (
@@ -640,7 +648,7 @@ export function SellForm({
                     game={catalogGame}
                     value={card.name}
                     named={false}
-                    label={tx(locale, "卡名（選填）", "Card name (optional)")}
+                    label={tx(locale, "卡名", "Card name")}
                     placeholder={
                       catalogGame === "one-piece"
                         ? tx(locale, "打卡名，例如 路飛 或 OP01-001", "Card name, e.g. Luffy or OP01-001")
@@ -658,7 +666,7 @@ export function SellForm({
                   />
                 ) : (
                   <label className="grid gap-1 text-sm font-medium">
-                    {tx(locale, "卡名（選填）", "Card name (optional)")}
+                    {tx(locale, "卡名", "Card name")}
                     <input className="field" value={card.name} maxLength={80} placeholder={tx(locale, "自己填卡名", "Type the card name")} onChange={(event) => patchCard(index, { name: event.target.value })} />
                   </label>
                 )}

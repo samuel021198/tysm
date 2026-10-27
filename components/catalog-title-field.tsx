@@ -110,6 +110,7 @@ export function CatalogTitleField({
           }}
         />
       </label>
+      {open && hits.length ? null : <p className="text-[11px] leading-4 text-muted">{tx(locale, "搵唔到？自己入卡名", "Not listed? Type the name yourself")}</p>}
       {open && hits.length ? (
         <ul id={listId} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="grid max-h-80 overflow-y-auto rounded-2xl border border-line bg-card shadow-card">
           {hits.map((hit) => (
@@ -133,6 +134,16 @@ export function CatalogTitleField({
               </button>
             </li>
           ))}
+          <li>
+            <button
+              type="button"
+              className="min-h-11 w-full px-3 text-left text-[11px] text-muted"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => setOpen(false)}
+            >
+              {tx(locale, "搵唔到？自己入卡名", "Not listed? Type the name yourself")}
+            </button>
+          </li>
         </ul>
       ) : null}
     </div>
