@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { cleanComment, COMMENT_REACTS, replyDraft } from "./comments";
+import { cleanComment, cleanCommentImage, commentWrite, COMMENT_REACTS, replyDraft, tenorGif } from "./comments";
 import { EDGE_GUARD, gestureEnd, HOLD_MS, lockAxis, SWIPE_DOWN, SWIPE_X } from "./gesture";
 import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard, wishlistPostVisible } from "./posts";
 
@@ -95,6 +95,31 @@ assert(card.commentHref === "/post/p1#comments", "a post keeps its comment threa
 assert(cleanComment("  你好  ") === "你好", "a comment trims");
 assert(cleanComment("   ") === null && cleanComment("a".repeat(301)) === null, "empty and oversized comments are dropped");
 assert(cleanComment("a".repeat(300))?.length === 300, "300 characters still fit");
+const jpeg = `data:image/jpeg;base64,${"a".repeat(40)}`;
+const tenorGifUrl = "https://media.tenor.com/images/example1/tenor.gif";
+assert(cleanCommentImage(jpeg) === jpeg, "a jpeg upload is a comment photo");
+assert(cleanCommentImage(`data:image/gif;base64,${"a".repeat(40)}`) === null, "gif data urls stay off the photo path");
+assert(cleanCommentImage(tenorGifUrl) === tenorGifUrl, "a tenor gif link is kept");
+assert(cleanCommentImage("https://media.giphy.com/media/abc/giphy.gif")?.endsWith("giphy.gif"), "a giphy link is kept");
+assert(cleanCommentImage("https://c.tenor.com/clip.gif") === "https://c.tenor.com/clip.gif", "tenor content host is kept");
+assert(cleanCommentImage("https://tenor.com/view/excited-gif-1") === null, "a tenor page is not an image");
+assert(cleanCommentImage("https://evil.example/a.gif") === null, "an unknown gif host is dropped");
+assert(cleanCommentImage("http://media.tenor.com/a.gif") === null && cleanCommentImage("") === null, "http and blank images are dropped");
+const textOnly = commentWrite("  你好  ", "");
+const gifOnly = commentWrite("", tenorGifUrl);
+const photoOnly = commentWrite("", jpeg);
+const emptyComment = commentWrite("", "");
+const oversizedComment = commentWrite("a".repeat(301), tenorGifUrl);
+const badHost = commentWrite("hi", "https://evil.example/a.gif");
+assert(textOnly.ok && textOnly.body === "你好" && textOnly.imageUrl === null, "text comments stay text");
+assert(gifOnly.ok && gifOnly.imageUrl === tenorGifUrl && gifOnly.body === "", "a gif can be the whole comment");
+assert(photoOnly.ok && photoOnly.imageUrl === jpeg, "a photo can be the whole comment");
+assert(!emptyComment.ok && emptyComment.error === "comment", "an empty composer is rejected");
+assert(!oversizedComment.ok && oversizedComment.error === "comment", "oversized text is rejected even with a gif");
+assert(!badHost.ok && badHost.error === "photo_url", "a bad attachment is rejected");
+const picked = tenorGif({ id: "16716839537051746769", media_formats: { gif: { url: tenorGifUrl }, tinygif: { url: "https://media.tenor.com/images/example1/tenor-small.gif" } } });
+assert(picked?.url === tenorGifUrl && picked.previewUrl.endsWith("tenor-small.gif"), "a tenor row keeps the preview and the gif");
+assert(tenorGif({ id: "1", media_formats: { gif: { url: "https://evil.example/a.gif" } } }) === null, "a tenor row drops an unknown host");
 assert(replyDraft("阿明", "hello") === "@阿明 hello", "reply prefixes the nickname");
 assert(replyDraft("阿明", "@舊 hello") === "@阿明 hello", "a new reply replaces the previous mention");
 assert(COMMENT_REACTS.includes("❤️") && COMMENT_REACTS.length === 8, "quick reacts stay a short row");
@@ -267,8 +292,14 @@ const sheet = readFileSync(new URL("../components/comment-sheet.tsx", import.met
 const commentRoute = readFileSync(new URL("../app/api/posts/[id]/comments/route.ts", import.meta.url), "utf8");
 assert(postCard.includes("CommentSheet") && !postCard.includes("href={post.commentHref}"), "the comment icon opens a sheet");
 assert(sheet.includes("回應") && sheet.includes("加入對話……") && sheet.includes('role="dialog"'), "the sheet is a reply tray with the conversation field");
-assert(sheet.includes("/api/posts/") && !sheet.includes("router.refresh") && !sheet.includes("location.reload"), "sending a comment stays in the sheet");
-assert(commentRoute.includes("prisma.postComment") && commentRoute.includes("cleanComment") && !commentRoute.includes("redirect("), "comments reuse PostComment without a redirect");
+assert(sheet.includes("/api/posts/") && sheet.includes("/api/gifs") && !sheet.includes("router.refresh") && !sheet.includes("location.reload"), "sending a comment stays in the sheet");
+assert(sheet.includes('aria-label="GIF"') && sheet.includes('aria-label={tx(locale, "相片", "Photo")}') && sheet.includes('aria-label={tx(locale, "移除", "Remove")}'), "photo and gif attach are icons, with remove");
+assert(sheet.includes("fileToDataUrl") && sheet.includes("imageUrl") && sheet.includes("cleanCommentImage"), "the composer previews a photo or gif before send");
+assert(commentRoute.includes("prisma.postComment") && commentRoute.includes("commentWrite") && commentRoute.includes("storeUploadedImage") && commentRoute.includes("uploads/comments") && !commentRoute.includes("redirect("), "comment photos reuse the upload store without a redirect");
+const gifRoute = readFileSync(new URL("../app/api/gifs/route.ts", import.meta.url), "utf8");
+assert(gifRoute.includes("TENOR_API_KEY") && gifRoute.includes("tenor.googleapis.com") && gifRoute.includes("tenorGif") && !gifRoute.includes("redirect("), "gif search stays behind the tenor key");
+const commentImageMigration = readFileSync(new URL("../prisma/migrations/20261027143000_post_comment_image/migration.sql", import.meta.url), "utf8");
+assert(commentImageMigration.includes('ADD COLUMN "imageUrl" TEXT') && !commentImageMigration.includes("NOT NULL"), "older text-only comments stay valid");
 const gallery = readFileSync(new URL("../components/gallery.tsx", import.meta.url), "utf8");
 assert(gallery.includes("onSwipeLeft") && gallery.includes("onSwipeRight"), "listing photos swipe between frames");
 

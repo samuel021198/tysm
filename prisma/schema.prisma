@@ -803,6 +803,8 @@ model PostComment {
   postId    String
   authorId  String
   body      String
+  /// Photo or GIF. Null keeps a text-only comment.
+  imageUrl  String?
   createdAt DateTime @default(now())
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
