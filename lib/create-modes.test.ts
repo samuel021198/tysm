@@ -8,9 +8,10 @@ function assert(cond: unknown, msg: string): asserts cond {
 assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "動態|貼文|上架", "create modes are story, post, sell");
 assert(CREATE_MODES.map((mode) => mode.href).join("|") === "/story/new|/add?kind=post|/sell", "create mode routes");
 assert(!CREATE_MODES.some((mode) => mode.zh.includes("收藏")), "collect-only is not a create mode");
-assert(!CREATE_MODES.some((mode) => `${mode.zh}${mode.ctaZh}`.includes("貼子")), "post copy says 貼文, not 貼子");
+assert(!CREATE_MODES.some((mode) => `${mode.zh}${mode.en}${mode.hintZh}${mode.hintEn}`.includes("貼子")), "post copy says 貼文, not 貼子");
+assert(!CREATE_MODES.some((mode) => "ctaZh" in mode || "ctaEn" in mode), "modes do not carry a second cta label");
 const post = CREATE_MODES.find((mode) => mode.id === "post");
-assert(post?.zh === "貼文" && post.ctaZh === "寫貼文" && post.en === "Post" && post.ctaEn === "New post", "post labels");
+assert(post?.zh === "貼文" && post.en === "Post" && post.hintZh === "寫一則貼文，可以同時上架", "post label and single hint");
 assert(createDefaultIndex() === CREATE_MODES.findIndex((mode) => mode.id === "post"), "default index is post");
 assert(CREATE_MODES[createDefaultIndex()]?.id === "post", "opening the picker lands on post");
 assert(createDest("/sell", true) === "/sell", "logged-in dest stays on the flow");
@@ -58,12 +59,15 @@ const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8")
 assert(!css.includes("6.5rem") && css.includes("3.5rem"), "desktop header height is a single row");
 
 const picker = readFileSync(new URL("../components/create-picker.tsx", import.meta.url), "utf8");
-assert(picker.includes("CREATE_MODES.map") && picker.includes('role="tablist"') && picker.includes('role="tab"'), "modes are chips in a tablist");
-assert(picker.includes("createDefaultIndex") && picker.includes('role="dialog"') && picker.includes("createDest"), "dialog opens on the default mode and continues through createDest");
+assert(picker.includes("CREATE_MODES.map") && picker.includes("createDest") && picker.includes('role="menu"'), "each mode is one row in a menu");
+assert(!picker.includes('role="tab"') && !picker.includes('role="tabpanel"') && !picker.includes("btn-primary") && !picker.includes("ctaZh"), "segment, preview card, and extra cta are not stacked");
+assert(picker.includes("createDefaultIndex") && picker.includes("data-mode") && picker.includes("preventScroll: true"), "opening the menu focuses the default mode without scrolling");
+assert(!picker.includes("createPortal") && !picker.includes("fixed inset-0"), "picker is a card on the header, not a full-screen sheet");
 assert(!picker.includes("snap-x") && !picker.includes("snap-mandatory") && !picker.includes("createIndexFromScroll"), "swipe scroller is gone");
 assert(!picker.includes("左右滑動揀") && !picker.includes("Swipe to choose"), "swipe hint is gone");
 assert(!picker.includes(" / {CREATE_MODES.length}") && !picker.includes("‹") && !picker.includes("›"), "page counter and desktop arrows are gone");
-assert(!picker.includes("bg-card") && picker.includes("bg-[#1E293B]") && picker.includes("#0F172A"), "preview card is dark on the dark sheet");
+assert(picker.includes("bg-card") && picker.includes("border-line") && picker.includes("text-ink") && picker.includes("shadow-card"), "picker is a light card");
+assert(!picker.includes("bg-[#1E293B]") && !picker.includes('backgroundColor: "#0F172A"') && !picker.includes("h-16 w-16"), "dark sheet and oversized icon tile are gone");
 assert(picker.includes("md:hidden") && picker.includes('name="plus"'), "top-left control is a plus icon");
 assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("text-muted"), "mobile add matches header icon buttons");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is not a filled accent pill");
@@ -71,7 +75,7 @@ assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "de
 assert(!picker.includes("rounded-full bg-accent text-white"), "add is not a solid brand circle");
 assert(!picker.includes('tx(locale, "加"') && !picker.includes("加入收藏") && !picker.includes("我的收藏"), "加 text and collect-only are gone from the picker");
 assert(!picker.includes("想做咩") && !picker.includes("rounded-t-"), "bottom sheet copy is retired");
-assert(picker.includes("CREATE_MODES.length"), "selection stays within the mode list");
+assert(picker.includes("links.length"), "arrow keys stay inside the mode list");
 
 const collect = readFileSync(new URL("../components/collect-form.tsx", import.meta.url), "utf8");
 assert(collect.includes("同時上架"), "the post composer can list at the same time");

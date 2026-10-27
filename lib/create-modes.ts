@@ -6,8 +6,6 @@ export const CREATE_MODES = [
     en: "Story",
     hintZh: "影張相，24 小時後消失",
     hintEn: "A photo that disappears in 24 hours",
-    ctaZh: "發動態",
-    ctaEn: "New story",
     icon: "camera",
   },
   {
@@ -17,8 +15,6 @@ export const CREATE_MODES = [
     en: "Post",
     hintZh: "寫一則貼文，可以同時上架",
     hintEn: "Write a post, and list it for sale if you want",
-    ctaZh: "寫貼文",
-    ctaEn: "New post",
     icon: "note",
   },
   {
@@ -28,8 +24,6 @@ export const CREATE_MODES = [
     en: "List",
     hintZh: "四步上架：相片、價錢、運送",
     hintEn: "Four steps: photos, price, and shipping",
-    ctaZh: "去上架",
-    ctaEn: "List a card",
     icon: "tag",
   },
 ] as const;

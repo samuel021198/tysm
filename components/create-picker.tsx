@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 import { CREATE_MODES, createDefaultIndex, createDest } from "@/lib/create-modes";
 import { tx, type Locale } from "@/lib/i18n";
 import { Icon } from "./icons";
@@ -20,193 +19,91 @@ export function CreatePicker({
   label?: string;
 }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const [present, setPresent] = useState(false);
-  const [index, setIndex] = useState(createDefaultIndex);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const closeTimer = useRef<number | null>(null);
-
-  const pathRef = useRef(pathname);
-  useEffect(() => {
-    if (pathRef.current === pathname) return;
-    pathRef.current = pathname;
-    setPresent(false);
-    setOpen(false);
-  }, [pathname]);
-
-  const creating =
-    pathname.startsWith("/sell") || pathname.startsWith("/add") || pathname.startsWith("/story");
-  const mode = CREATE_MODES[index] ?? CREATE_MODES[createDefaultIndex()];
-
-  function close() {
-    setPresent(false);
-    triggerRef.current?.focus();
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    closeTimer.current = window.setTimeout(() => setOpen(false), 280);
-  }
-
-  function openPicker() {
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setIndex(createDefaultIndex());
-    setOpen(true);
-    requestAnimationFrame(() => setPresent(true));
-  }
-
-  function select(next: number) {
-    setIndex(Math.min(CREATE_MODES.length - 1, Math.max(0, next)));
-  }
+  const rootRef = useRef<HTMLDetailsElement>(null);
+  const creating = pathname.startsWith("/sell") || pathname.startsWith("/add") || pathname.startsWith("/story");
 
   useEffect(() => {
-    if (!open) return;
-    setIndex(createDefaultIndex());
-    const frame = requestAnimationFrame(() => {
-      setPresent(true);
-      dialogRef.current?.focus();
-    });
-    function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        return;
-      }
-      if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-        event.preventDefault();
-        const dir = event.key === "ArrowRight" ? 1 : -1;
-        setIndex((current) => Math.min(CREATE_MODES.length - 1, Math.max(0, current + dir)));
-        return;
-      }
-      if (event.key !== "Tab" || !dialogRef.current) return;
-      const nodes = [...dialogRef.current.querySelectorAll<HTMLElement>("button, a[href]")].filter(
-        (el) => !el.hasAttribute("disabled") && el.getClientRects().length > 0,
-      );
-      const first = nodes[0];
-      const last = nodes[nodes.length - 1];
-      if (!first || !last) return;
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+    function onPointer(event: PointerEvent) {
+      const root = rootRef.current;
+      if (!root?.open || !(event.target instanceof Node) || root.contains(event.target)) return;
+      root.open = false;
     }
+    function onKey(event: KeyboardEvent) {
+      const root = rootRef.current;
+      if (!root?.open || event.key !== "Escape") return;
+      event.preventDefault();
+      root.open = false;
+      root.querySelector("summary")?.focus();
+    }
+    document.addEventListener("pointerdown", onPointer);
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     return () => {
-      cancelAnimationFrame(frame);
+      document.removeEventListener("pointerdown", onPointer);
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-      if (closeTimer.current) window.clearTimeout(closeTimer.current);
     };
-  }, [open]);
+  }, []);
 
-  const trigger =
-    variant === "header" ? (
-      <button
-        ref={triggerRef}
-        type="button"
-        className="inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={openPicker}
-      >
-        <Icon name="plus" className="h-3.5 w-3.5" strokeWidth={2.25} />
-        {label}
-      </button>
-    ) : (
-      <button
-        ref={triggerRef}
-        type="button"
-        className={`absolute left-1 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full active:bg-soft md:hidden ${creating ? "bg-soft text-ink" : "text-muted"}`}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-current={creating ? "page" : undefined}
-        aria-label={tx(locale, "新增", "Create")}
-        onClick={openPicker}
-      >
-        <Icon name="plus" className="h-[18px] w-[18px]" />
-      </button>
-    );
+  function onToggle(event: React.ToggleEvent<HTMLDetailsElement>) {
+    const root = event.currentTarget;
+    if (!root.open) return;
+    const id = CREATE_MODES[createDefaultIndex()]?.id;
+    requestAnimationFrame(() => {
+      root.querySelector<HTMLElement>(`[data-mode="${id}"]`)?.focus({ preventScroll: true });
+    });
+  }
 
-  const dialog = (
-    <div
-      ref={dialogRef}
-      role="dialog"
-      aria-modal="true"
-      aria-label={tx(locale, "新增", "Create")}
-      tabIndex={-1}
-      className={`fixed inset-0 z-[80] flex flex-col text-white outline-none transition duration-300 ${present ? "opacity-100" : "opacity-0"}`}
-      style={{ backgroundColor: "#0F172A" }}
-    >
-      <div className="grid grid-cols-3 items-center px-2 pt-[max(0.25rem,env(safe-area-inset-top))]">
-        <button
-          type="button"
-          className="grid h-10 w-10 place-items-center rounded-full text-white/90 active:bg-white/10"
-          aria-label={tx(locale, "關閉", "Close")}
-          onClick={close}
-        >
-          <span className="glyph-x" aria-hidden>×</span>
-        </button>
-        <p className="text-center text-sm font-semibold">{tx(locale, "新增", "Create")}</p>
-        <span />
-      </div>
+  function onMenuKey(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    const links = [...event.currentTarget.querySelectorAll<HTMLElement>("a[href]")];
+    if (!links.length) return;
+    event.preventDefault();
+    const dir = event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1;
+    const current = links.findIndex((el) => el === document.activeElement);
+    links[(current + dir + links.length) % links.length]?.focus({ preventScroll: true });
+  }
 
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6">
-        <div role="tablist" aria-label={tx(locale, "新增", "Create")} className="inline-flex rounded-full bg-white/10 p-1">
-          {CREATE_MODES.map((item, i) => (
-            <button
-              key={item.id}
-              id={`create-tab-${item.id}`}
-              type="button"
-              role="tab"
-              aria-selected={i === index}
-              aria-controls="create-panel"
-              className={`min-h-9 rounded-full px-3.5 text-sm font-semibold ${i === index ? "bg-white text-[#0F172A]" : "text-white/75"}`}
-              onClick={() => select(i)}
-            >
-              {tx(locale, item.zh, item.en)}
-            </button>
-          ))}
-        </div>
-        <article
-          id="create-panel"
-          role="tabpanel"
-          aria-labelledby={`create-tab-${mode.id}`}
-          className="mt-8 flex w-[min(18rem,84vw)] flex-col items-center rounded-2xl border border-white/10 bg-[#1E293B] px-5 py-8 text-center text-white"
-        >
-          <span className="grid h-16 w-16 place-items-center rounded-2xl bg-accent text-white">
-            <Icon name={mode.icon} className="h-8 w-8" strokeWidth={1.6} />
-          </span>
-          <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">{tx(locale, mode.zh, mode.en)}</h2>
-          <p className="mt-1.5 text-sm text-white/70">{tx(locale, mode.hintZh, mode.hintEn)}</p>
-        </article>
-        <p className="sr-only" aria-live="polite">
-          {tx(locale, mode.zh, mode.en)}
-        </p>
-      </div>
-
-      <div className="flex justify-center px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-        <Link
-          href={createDest(mode.href, loggedIn)}
-          className="btn btn-primary w-full max-w-sm"
-          aria-label={`${tx(locale, mode.zh, mode.en)}，${tx(locale, mode.ctaZh, mode.ctaEn)}`}
-          onClick={() => {
-            setPresent(false);
-            setOpen(false);
-          }}
-        >
-          {tx(locale, mode.ctaZh, mode.ctaEn)}
-        </Link>
-      </div>
-    </div>
-  );
+  const rootClass = variant === "header" ? "relative shrink-0" : "absolute left-1 top-1/2 z-10 -translate-y-1/2 md:hidden";
+  const summaryClass =
+    variant === "header"
+      ? "inline-flex h-9 shrink-0 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15 [&::-webkit-details-marker]:hidden"
+      : `grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full active:bg-soft [&::-webkit-details-marker]:hidden ${creating ? "bg-soft text-ink" : "text-muted"}`;
 
   return (
-    <>
-      {trigger}
-      {open ? createPortal(dialog, document.body) : null}
-    </>
+    <details key={pathname} ref={rootRef} className={rootClass} onToggle={onToggle}>
+      <summary
+        className={summaryClass}
+        aria-haspopup="menu"
+        aria-label={variant === "header" && label ? undefined : tx(locale, "新增", "Create")}
+        aria-current={variant === "corner" && creating ? "page" : undefined}
+      >
+        <Icon name="plus" className={variant === "header" ? "h-3.5 w-3.5" : "h-[18px] w-[18px]"} strokeWidth={variant === "header" ? 2.25 : 1.75} />
+        {variant === "header" ? label : null}
+      </summary>
+      <div
+        role="menu"
+        aria-label={tx(locale, "新增", "Create")}
+        onKeyDown={onMenuKey}
+        className={`absolute top-full z-50 w-64 rounded-xl border border-line bg-card p-1 text-ink shadow-card ${variant === "header" ? "right-0 mt-4" : "left-0 mt-1"}`}
+      >
+        {CREATE_MODES.map((item) => (
+          <Link
+            key={item.id}
+            href={createDest(item.href, loggedIn)}
+            data-mode={item.id}
+            role="menuitem"
+            className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left outline-none hover:bg-soft focus:bg-soft"
+            onClick={() => {
+              if (rootRef.current) rootRef.current.open = false;
+            }}
+          >
+            <Icon name={item.icon} className="h-4 w-4 shrink-0 text-muted" />
+            <span className="min-w-0">
+              <span className="block text-sm font-medium leading-tight">{tx(locale, item.zh, item.en)}</span>
+              <span className="mt-0.5 block text-xs leading-snug text-muted">{tx(locale, item.hintZh, item.hintEn)}</span>
+            </span>
+          </Link>
+        ))}
+      </div>
+    </details>
   );
 }
