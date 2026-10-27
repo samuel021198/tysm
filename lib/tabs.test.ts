@@ -78,7 +78,7 @@ const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta
 const messages = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
 const social = readFileSync(new URL("../actions/social.ts", import.meta.url), "utf8");
 assert(shareButton.includes("internalLabel") && shareButton.includes("navigator.share") && shareButton.includes("clipboard"), "the sheet offers in-app share and the system share");
-assert(postCard.includes("內部分享") && postCard.includes('name="messages"') && postCard.includes('name="book"'), "feed actions are icons, including in-app share");
+assert(postCard.includes("內部分享") && postCard.includes('name="messages"') && !postCard.includes('name="book"') && !postCard.includes("/dex"), "feed actions are icons, including in-app share, and do not open the dex");
 assert(messages.includes("shareIntoThread") && messages.includes("內部分享"), "in-app share picks an existing thread");
 assert(social.includes("export async function shareIntoThread") && social.includes("shareTarget"), "a shared card is sent as a message");
 

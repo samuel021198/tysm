@@ -1,4 +1,3 @@
-import { dexPath } from "./dex";
 import { safeNext } from "./format";
 import { conditionLabel } from "./rules";
 
@@ -68,6 +67,35 @@ export function sellingAsk(listing: AskListing | null | undefined): number | nul
   return listing.price;
 }
 
+export type PostBuy =
+  | { kind: "checkout"; href: string }
+  | { kind: "contact"; listingId: string };
+
+/**
+ * Priced cart listings go straight to checkout. Auction-only sales message the seller.
+ * A showcase post (#PC, no live ask) buys nothing.
+ * ponytail: ignores binLockOrderId. A listing locked mid-checkout still offers 買 until checkout rejects it.
+ * Upgrade path: pass the lock into this function.
+ */
+export function postBuy(listing: (AskListing & { id: string }) | null | undefined): PostBuy | null {
+  if (!listing || sellingAsk(listing) == null) return null;
+  if (listing.saleType !== "AUCTION" && listing.price != null) {
+    return { kind: "checkout", href: `/checkout?buy=${encodeURIComponent(listing.id)}&qty=1` };
+  }
+  return { kind: "contact", listingId: listing.id };
+}
+
+function postPrice(listing: (AskListing & { id: string }) | null): {
+  cents: number | null;
+  href: string | null;
+  buy: PostBuy | null;
+} {
+  const buy = postBuy(listing);
+  if (!listing || !buy) return { cents: null, href: null, buy: null };
+  if (buy.kind === "checkout") return { cents: listing.price, href: buy.href, buy };
+  return { cents: sellingAsk(listing), href: `/listing/${listing.id}`, buy };
+}
+
 export function cardDisplayName(parts: {
   cardName?: string | null;
   personName?: string | null;
@@ -100,7 +128,8 @@ export type PostCardModel = {
   saveListingId: string | null;
   sharePath: string;
   commentHref: string | null;
-  dexHref: string | null;
+  /** Checkout when the listing can be carted. Contact when it is auction-only. Null on a showcase post. */
+  buy: PostBuy | null;
 };
 
 export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "edit"] as const;
@@ -181,6 +210,7 @@ export function toPostCard(input: {
         title: input.item.title || listing?.title,
       })
     : cardDisplayName({ body: input.body });
+  const price = postPrice(listing);
   return {
     id: input.postId,
     postId: input.postId,
@@ -190,8 +220,8 @@ export function toPostCard(input: {
     photos,
     cardName,
     condition: input.item ? conditionLabel(input.item) : null,
-    priceCents: sellingAsk(listing),
-    priceHref: sellingAsk(listing) != null && listing ? `/listing/${listing.id}` : null,
+    priceCents: price.cents,
+    priceHref: price.href,
     likeCount: input.likeCount,
     commentCount: input.commentCount,
     liked: input.liked,
@@ -202,11 +232,11 @@ export function toPostCard(input: {
     saveListingId: null,
     sharePath: `/post/${input.postId}`,
     commentHref: `/post/${input.postId}#comments`,
-    dexHref: dexPath(input.item?.catalogCardId || input.item?.listing?.catalogCardId),
+    buy: price.buy,
   };
 }
 
-/** Active listings that do not have a post yet. Same card chrome, no buy button, comment is not wired. */
+/** Active listings that do not have a post yet. Same card chrome. Comment is not wired. The price still buys. */
 export function listingSuggestionCard(input: {
   listing: AskListing & {
     id: string;
@@ -224,6 +254,7 @@ export function listingSuggestionCard(input: {
   saved: boolean;
 }): PostCardModel {
   const listing = input.listing;
+  const price = postPrice(listing);
   return {
     id: `listing-${listing.id}`,
     postId: null,
@@ -237,8 +268,8 @@ export function listingSuggestionCard(input: {
     photos: listing.photos.map((photo) => photo.url),
     cardName: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
     condition: conditionLabel(listing),
-    priceCents: sellingAsk(listing),
-    priceHref: sellingAsk(listing) != null ? `/listing/${listing.id}` : null,
+    priceCents: price.cents,
+    priceHref: price.href,
     likeCount: 0,
     commentCount: 0,
     liked: false,
@@ -249,6 +280,6 @@ export function listingSuggestionCard(input: {
     saveListingId: listing.id,
     sharePath: `/listing/${listing.id}`,
     commentHref: null,
-    dexHref: dexPath(listing.catalogCardId),
+    buy: price.buy,
   };
 }
