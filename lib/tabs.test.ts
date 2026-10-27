@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { EDGE_GUARD, gestureEnd, SWIPE_X } from "./gesture";
 import { shareLabel, shareTarget } from "./share";
-import { adjacentTab, tabAxis, tabPagerIndex, tabSwipeDirection } from "./tabs";
+import { adjacentTab, profileSwipeDirection, profileTabHref, profileTabStep, tabAxis, tabPagerIndex, tabSwipeDirection } from "./tabs";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -33,6 +33,14 @@ assert(
   tabSwipeDirection({ ...page, dx: -SWIPE_X, startX: 390 - EDGE_GUARD + 1, owner: "card" }) === 1,
   "the right screen edge of a card moves to the next tab",
 );
+assert(profileTabStep("posts", 1) === "saved" && profileTabStep("saved", 1) === "selling", "profile tabs move My Binder, 收藏, 商店");
+assert(profileTabStep("selling", 1) === "reviews" && profileTabStep("reviews", 1) === null, "評價 is the last profile tab");
+assert(profileTabStep("posts", -1) === null && profileTabStep("saved", -1) === "posts", "the profile pager stops on My Binder");
+assert(profileTabStep("drafts", 1) === "posts" && profileTabStep("drafts", -1) === null, "drafts swipe back onto My Binder");
+assert(profileTabHref("/me?tab=posts&ok=saved", "reviews") === "/me?tab=reviews", "switching tabs drops the flash query");
+assert(profileTabHref("/shop/user_tyu", "selling") === "/shop/user_tyu?tab=selling", "a shop board keeps its path");
+assert(profileSwipeDirection({ ...page, dx: -SWIPE_X, startX: 180 }) === 1, "a profile swipe left moves forward");
+assert(profileSwipeDirection({ ...page, dx: SWIPE_X, startX: EDGE_GUARD - 1 }) === null, "the profile board leaves the left edge for back");
 assert(tabAxis(4, 3) === null && tabAxis(22, 4) === "x" && tabAxis(6, 20) === "y", "the pager waits for a clear axis");
 assert(tabAxis(20, 18) === null, "a diagonal flick is not yet a tab swipe");
 
@@ -58,6 +66,11 @@ const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8
 assert(layout.includes("<TabSwipe") && layout.includes("loggedIn={Boolean(viewer)}"), "the pager wraps the page");
 assert(swipe.includes("data-gesture") && swipe.includes("data-card-swipe") && swipe.includes('role="dialog"') && swipe.includes("pointerType"), "carousels, cards, and overlays keep their gestures");
 assert(swipe.includes("setTabIntent") && bar.includes("subscribeTabIntent"), "the tab highlight follows the swipe");
+const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
+const hold = readFileSync(new URL("../components/use-hold-swipe.ts", import.meta.url), "utf8");
+assert(profileBoard.includes("replaceState") && profileBoard.includes("data-profile-pager") && profileBoard.includes("data-gesture"), "profile tabs swap without a page load and keep the back gesture");
+assert(profileBoard.includes("profileSwipeDirection") && profileBoard.includes("bg-ink"), "the profile underline follows the swipe");
+assert(hold.includes("data-profile-pager") && hold.includes("data-gesture"), "profile tabs and photo carousels keep the post menu swipe");
 assert(swipe.includes('document.getElementById("main")'), "the swipe starts on the page, not the tab bar");
 
 const shareButton = readFileSync(new URL("../components/share-button.tsx", import.meta.url), "utf8");

@@ -102,6 +102,13 @@ export function useHoldSwipe(options: Options) {
         })
       : null;
     reset();
+    // Photo carousels own horizontal swipes. On the profile board, tab paging does.
+    // Long-press still opens the menu; this only drops left/right.
+    const taken = horizontalTaken(event);
+    if ((dir === "left" || dir === "right") && taken) {
+      armSuppress();
+      return;
+    }
     if (dir) {
       armSuppress();
       fire(dir);
@@ -124,8 +131,18 @@ export function useHoldSwipe(options: Options) {
     onPointerCancel: reset,
     onClickCapture,
     style: {
-      touchAction: options.onSwipeDown ? ("none" as const) : ("pan-y" as const),
+      // manipulation, not pan-y: a child photo strip has to pan horizontally.
+      touchAction: options.onSwipeDown ? ("none" as const) : ("manipulation" as const),
       WebkitTouchCallout: "none" as const,
     },
   };
+}
+
+function horizontalTaken(event: React.PointerEvent): boolean {
+  const target = event.target;
+  const current = event.currentTarget;
+  if (!(target instanceof Element) || !(current instanceof Element)) return false;
+  const gesture = target.closest("[data-gesture]");
+  if (gesture && gesture !== current && current.contains(gesture)) return true;
+  return Boolean(current.closest("[data-profile-pager]"));
 }

@@ -57,6 +57,43 @@ export function tabSwipeDirection(input: {
   return input.dx < 0 ? 1 : -1;
 }
 
+/** Profile board, left to right. Drafts stay off this strip. */
+export const PROFILE_TABS = ["posts", "saved", "selling", "reviews"] as const;
+export type ProfileTabId = (typeof PROFILE_TABS)[number];
+
+export function profileTabIndex(tab: string): number {
+  return PROFILE_TABS.indexOf(tab as ProfileTabId);
+}
+
+/** 1 = next (swipe left). Drafts are outside the strip; swipe left lands on My Binder. */
+export function profileTabStep(tab: string, dir: -1 | 1): ProfileTabId | null {
+  const index = profileTabIndex(tab);
+  if (index < 0) return dir === 1 ? PROFILE_TABS[0] : null;
+  const next = index + dir;
+  if (next < 0 || next >= PROFILE_TABS.length) return null;
+  return PROFILE_TABS[next];
+}
+
+/** Tab query without flashing ok/err. No navigation — the board calls history.replaceState. */
+export function profileTabHref(base: string, tab: string): string {
+  const url = new URL(base.split("#")[0], "http://local");
+  url.searchParams.set("tab", tab);
+  url.searchParams.delete("ok");
+  url.searchParams.delete("err");
+  return `${url.pathname}${url.search}`;
+}
+
+/** Same thresholds as the bottom pager. The left edge stays the browser back gesture. */
+export function profileSwipeDirection(input: {
+  dx: number;
+  dy: number;
+  startX: number;
+  axis: "x" | "y" | null;
+  viewportWidth: number;
+}): -1 | 1 | null {
+  return tabSwipeDirection({ ...input, owner: null });
+}
+
 let intent: number | null = null;
 const listeners = new Set<(index: number | null) => void>();
 

@@ -150,7 +150,17 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     posts,
     savedListings,
     savedPosts,
-    listings,
+    // Dates on the Prisma row cannot cross into the client profile board.
+    listings: listings.map((row) => ({
+      id: row.id,
+      title: row.title,
+      saleType: row.saleType,
+      price: row.price,
+      startPrice: row.startPrice,
+      currentBid: row.currentBid,
+      auctionSettled: row.auctionSettled,
+      photos: row.photos.map((photo) => ({ url: photo.url })),
+    })),
     reviews: reviewRows.map((review) => ({
       id: review.id,
       nickname: review.author.nickname,

@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { formatHkd } from "@/lib/format";
+import { EDGE_GUARD } from "@/lib/gesture";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
+import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, tabAxis } from "@/lib/tabs";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
 
@@ -15,16 +20,8 @@ type Sale = {
   price: number | null;
   startPrice: number | null;
   currentBid: number | null;
-  auctionEndsAt: Date | null;
   auctionSettled: boolean;
-  favoriteCount: number;
-  conditionTrack: "RAW" | "GRADED";
-  rawGrade: string | null;
-  grader: string | null;
-  gradeValue: number | null;
-  sellerId: string;
   photos: { url: string }[];
-  seller: { nickname: string };
 };
 
 const TABS = [
@@ -36,10 +33,16 @@ const TABS = [
 
 const tile = "block aspect-square w-full bg-soft object-contain";
 
+function shownTab(tab: string, isSelf: boolean) {
+  if (tab === "saved" || tab === "selling" || tab === "reviews") return tab;
+  if (tab === "drafts" && isSelf) return "drafts";
+  return "posts";
+}
+
 export function ProfileBoard({
   locale,
   base,
-  tab,
+  tab: initial,
   isSelf,
   posts,
   savedListings,
@@ -63,110 +66,262 @@ export function ProfileBoard({
   viewerId: string | null;
 }) {
   // Legacy ?tab=box was the owned-card grid. It now opens My Binder (own posts).
-  const panel = tab === "saved" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
+  const [tab, setTab] = useState(() => shownTab(initial, isSelf));
+  const [offset, setOffset] = useState(0);
+  const [animate, setAnimate] = useState(false);
+  const frame = useRef<HTMLDivElement>(null);
+  const origin = useRef<{ x: number; y: number; id: number } | null>(null);
+  const axis = useRef<"x" | "y" | null>(null);
+  const lockX = useRef(false);
+  const busy = useRef(false);
+  const suppress = useRef(false);
+  const timer = useRef(0);
+  const raf = useRef(0);
+  const tabRef = useRef(tab);
+  const baseRef = useRef(base);
+  tabRef.current = tab;
+  baseRef.current = base;
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(timer.current);
+      window.cancelAnimationFrame(raf.current);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    function onTouchMove(event: TouchEvent) {
+      if (lockX.current && event.cancelable) event.preventDefault();
+    }
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => el.removeEventListener("touchmove", onTouchMove);
+  }, []);
+
+  function apply(next: string) {
+    setTab(next);
+    window.history.replaceState(null, "", profileTabHref(baseRef.current, next));
+  }
+
+  function onPointerDown(event: React.PointerEvent) {
+    if (event.pointerType !== "touch" || busy.current) return;
+    if (document.querySelector('[role="dialog"], [role="menu"]')) return;
+    if (!(event.target instanceof Element)) return;
+    if (event.target.closest("input, textarea, select")) return;
+    const gesture = event.target.closest("[data-gesture]");
+    if (gesture && gesture !== frame.current) return;
+    origin.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    axis.current = null;
+    lockX.current = false;
+    setAnimate(false);
+  }
+
+  function onPointerMove(event: React.PointerEvent) {
+    const start = origin.current;
+    if (!start || event.pointerId !== start.id || busy.current) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (!axis.current) axis.current = tabAxis(dx, dy);
+    if (axis.current !== "x") {
+      lockX.current = false;
+      return;
+    }
+    if (dx > 0 && start.x < EDGE_GUARD) {
+      lockX.current = false;
+      return;
+    }
+    lockX.current = true;
+    const index = profileTabIndex(tabRef.current);
+    const atStart = index <= 0;
+    const atEnd = index < 0 || index >= TABS.length - 1;
+    let slide = dx;
+    if (tabRef.current === "drafts" || (atStart && dx > 0) || (atEnd && dx < 0)) slide = dx * 0.22;
+    setOffset(slide);
+  }
+
+  function end(event: React.PointerEvent, commit: boolean) {
+    const start = origin.current;
+    if (!start || event.pointerId !== start.id) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    const locked = axis.current;
+    origin.current = null;
+    axis.current = null;
+    lockX.current = false;
+    if (Math.hypot(dx, dy) > 24) {
+      suppress.current = true;
+      window.setTimeout(() => {
+        suppress.current = false;
+      }, 400);
+    }
+    const dir = commit
+      ? profileSwipeDirection({ dx, dy, startX: start.x, axis: locked, viewportWidth: window.innerWidth })
+      : null;
+    const next = dir ? profileTabStep(tabRef.current, dir) : null;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!next || !dir || reduce || tabRef.current === "drafts") {
+      setAnimate(!reduce && !next);
+      setOffset(0);
+      if (next) apply(next);
+      return;
+    }
+    const width = frame.current?.clientWidth || window.innerWidth;
+    busy.current = true;
+    setAnimate(true);
+    // Turn the transition on before moving, or the settle skips the animation.
+    raf.current = requestAnimationFrame(() => {
+      setOffset(dir > 0 ? -width : width);
+      timer.current = window.setTimeout(() => {
+        busy.current = false;
+        setAnimate(false);
+        setOffset(0);
+        apply(next);
+      }, 180);
+    });
+  }
+
+  const index = profileTabIndex(tab);
+  const width = frame.current?.clientWidth || 1;
+  const progress = index < 0 ? null : Math.min(TABS.length - 1, Math.max(0, index - offset / width));
+  const motion = animate ? "transform 180ms ease" : "none";
+  const neighborId = offset < -8 ? profileTabStep(tab, 1) : offset > 8 ? profileTabStep(tab, -1) : null;
+  const active = progress == null ? -1 : Math.round(progress);
+
+  function panel(id: string) {
+    if (id === "posts") {
+      return posts.length ? (
+        <ul className="grid grid-cols-3 gap-px">
+          {posts.map((post) => (
+            <li key={post.id} className="min-w-0">
+              <PostMenu
+                locale={locale}
+                postId={post.postId}
+                listingId={post.listingId}
+                own={viewerId != null && viewerId === post.author.id}
+                loggedIn={viewerId != null}
+                sharePath={post.sharePath}
+                next={base}
+                button={false}
+              >
+                <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
+                  <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                  {post.photos.length > 1 ? <StackMark /> : null}
+                </Link>
+              </PostMenu>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有貼文。", "No posts yet.")}</p>
+      );
+    }
+    if (id === "saved") {
+      return isSelf && (savedListings.length || savedPosts.length) ? (
+        <>
+          {savedListings.length ? (
+            <section>
+              <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貨品", "Products")}</h2>
+              <ThumbGrid rows={savedListings} emptyLabel={tx(locale, "收藏", "Favorite")} />
+            </section>
+          ) : null}
+          {savedPosts.length ? (
+            <section>
+              <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貼文", "Posts")}</h2>
+              <ThumbGrid rows={savedPosts} emptyLabel={tx(locale, "貼文", "Post")} />
+            </section>
+          ) : null}
+        </>
+      ) : (
+        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No favorites yet.")}</p>
+      );
+    }
+    if (id === "selling") {
+      return listings.length ? (
+        <ul className="grid grid-cols-3 gap-px">
+          {listings.map((listing) => {
+            const amount = shopAsk(listing);
+            const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
+            return (
+              <li key={listing.id} className="min-w-0">
+                <Link href={`/listing/${listing.id}`} aria-label={label} className="block">
+                  <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                </Link>
+                {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有賣緊的卡。", "Nothing for sale.")}</p>
+      );
+    }
+    if (id === "reviews") {
+      return reviews.length ? (
+        <ul className="grid gap-2 px-3 pt-3 text-sm sm:px-0">
+          {reviews.map((review) => (
+            <li key={review.id} className="surface px-3 py-2.5">
+              <p>{review.nickname} · {"★".repeat(review.stars)}</p>
+              <p>{review.comment}</p>
+              {review.reply ? <p className="text-muted">{tx(locale, "回覆", "Reply")}: {review.reply}</p> : null}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有評價。", "No reviews.")}</p>
+      );
+    }
+    return null;
+  }
+
   return (
-    <div className="-mx-3 sm:mx-0">
-      <nav aria-label={tx(locale, "個人內容", "Profile")} className="grid grid-cols-4 border-t border-line">
-        {TABS.map((item) => {
-          const on = panel === item.id;
+    <div
+      ref={frame}
+      className="-mx-3 overflow-hidden sm:mx-0"
+      data-gesture=""
+      data-profile-pager=""
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={(event) => end(event, true)}
+      onPointerCancel={(event) => end(event, false)}
+      onClickCapture={(event) => {
+        if (!suppress.current) return;
+        suppress.current = false;
+        event.preventDefault();
+        event.stopPropagation();
+      }}
+    >
+      <nav aria-label={tx(locale, "個人內容", "Profile")} className="relative grid grid-cols-4 border-t border-line">
+        {TABS.map((item, i) => {
+          const on = i === active;
           const label = tx(locale, item.zh, item.en);
           return (
-            <Link
+            <button
               key={item.id}
-              href={`${base}?tab=${item.id}`}
+              type="button"
               aria-current={on ? "page" : undefined}
               className={`relative flex h-11 items-center justify-center ${on ? "text-ink" : "text-muted"}`}
+              onClick={() => {
+                if (item.id === tab && !busy.current) return;
+                window.clearTimeout(timer.current);
+                window.cancelAnimationFrame(raf.current);
+                busy.current = false;
+                setAnimate(false);
+                setOffset(0);
+                apply(item.id);
+              }}
             >
               <Icon name={item.icon} className="h-7 w-7" strokeWidth={on ? 2.15 : 1.6} />
               <span className="sr-only">{label}</span>
-              {on ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-ink" /> : null}
-            </Link>
+            </button>
           );
         })}
+        {progress != null ? (
+          <span className="pointer-events-none absolute bottom-0 left-0 h-0.5 w-1/4 bg-ink" style={{ transform: `translateX(${progress * 100}%)`, transition: motion }} />
+        ) : null}
       </nav>
-      {panel === "posts" ? (
-        posts.length ? (
-          <ul className="grid grid-cols-3 gap-px">
-            {posts.map((post) => (
-              <li key={post.id} className="min-w-0">
-                <PostMenu
-                  locale={locale}
-                  postId={post.postId}
-                  listingId={post.listingId}
-                  own={viewerId != null && viewerId === post.author.id}
-                  loggedIn={viewerId != null}
-                  sharePath={post.sharePath}
-                  next={base}
-                  button={false}
-                >
-                  <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
-                    <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                    {post.photos.length > 1 ? <StackMark /> : null}
-                  </Link>
-                </PostMenu>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有貼文。", "No posts yet.")}</p>
-        )
-      ) : null}
-      {panel === "saved" ? (
-        isSelf && (savedListings.length || savedPosts.length) ? (
-          <>
-            {savedListings.length ? (
-              <section>
-                <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貨品", "Products")}</h2>
-                <ThumbGrid rows={savedListings} emptyLabel={tx(locale, "收藏", "Favorite")} />
-              </section>
-            ) : null}
-            {savedPosts.length ? (
-              <section>
-                <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貼文", "Posts")}</h2>
-                <ThumbGrid rows={savedPosts} emptyLabel={tx(locale, "貼文", "Post")} />
-              </section>
-            ) : null}
-          </>
-        ) : (
-          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No favorites yet.")}</p>
-        )
-      ) : null}
-      {panel === "selling" ? (
-        listings.length ? (
-          <ul className="grid grid-cols-3 gap-px">
-            {listings.map((listing) => {
-              const amount = shopAsk(listing);
-              const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
-              return (
-                <li key={listing.id} className="min-w-0">
-                  <Link href={`/listing/${listing.id}`} aria-label={label} className="block">
-                    <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                  </Link>
-                  {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有賣緊的卡。", "Nothing for sale.")}</p>
-        )
-      ) : null}
-      {panel === "reviews" ? (
-        reviews.length ? (
-          <ul className="grid gap-2 px-3 pt-3 text-sm sm:px-0">
-            {reviews.map((review) => (
-              <li key={review.id} className="surface px-3 py-2.5">
-                <p>{review.nickname} · {"★".repeat(review.stars)}</p>
-                <p>{review.comment}</p>
-                {review.reply ? <p className="text-muted">{tx(locale, "回覆", "Reply")}: {review.reply}</p> : null}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有評價。", "No reviews.")}</p>
-        )
-      ) : null}
-      {panel === "drafts" ? (
+      {tab === "drafts" ? (
         drafts.length ? (
           <ul className="grid gap-2 px-3 pt-3 sm:px-0">
             {drafts.map((draft) => (
@@ -181,7 +336,22 @@ export function ProfileBoard({
         ) : (
           <p className="empty mx-3 sm:mx-0">{tx(locale, "未有草稿。", "No drafts.")}</p>
         )
-      ) : null}
+      ) : (
+        <div className="relative overflow-hidden">
+          <div className="min-w-0" style={{ transform: `translate3d(${offset}px, 0, 0)`, transition: motion }}>
+            {panel(tab)}
+          </div>
+          {neighborId ? (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 min-w-0"
+              style={{ transform: `translate3d(calc(${offset < 0 ? "100%" : "-100%"} + ${offset}px), 0, 0)`, transition: motion }}
+            >
+              {panel(neighborId)}
+            </div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }
