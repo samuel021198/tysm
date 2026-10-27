@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { togglePostLike, togglePostSave } from "@/actions/collect";
 import { toggleFavorite } from "@/actions/social";
-import { togglePostLike } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
@@ -24,9 +24,10 @@ export function PostCard({
 }) {
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
   const shown = gallery ? photos : photos.slice(0, 1);
-  const likeFormId = post.likePostId || post.likeListingId ? `like-${post.id}` : undefined;
+  const likeFormId = post.likePostId ? `like-${post.id}` : undefined;
   const commentLabel = post.commentCount ? `${tx(locale, "留言", "Comment")} ${post.commentCount}` : tx(locale, "留言", "Comment");
   const dexLabel = tx(locale, "睇圖鑑", "View in the dex");
+  const saveLabel = tx(locale, "收藏", "Favorite");
   const price =
     post.priceCents == null ? null : post.priceHref ? (
       <Link href={post.priceHref} className="price inline-flex h-9 items-center text-lg leading-none">
@@ -79,21 +80,7 @@ export function PostCard({
               <span className="sr-only">{tx(locale, "讚", "Like")}</span>
             </button>
           </form>
-        ) : post.likeListingId ? (
-          <form id={likeFormId} action={toggleFavorite}>
-            <input type="hidden" name="listingId" value={post.likeListingId} />
-            <input type="hidden" name="next" value={next} />
-            <button type="submit" className={action}>
-              <Heart on={post.liked} />
-              <span>{post.likeCount}</span>
-              <span className="sr-only">{tx(locale, "讚", "Like")}</span>
-            </button>
-          </form>
-        ) : (
-          <span className={`${action} text-muted`}>
-            <Heart on={false} />
-          </span>
-        )}
+        ) : null}
         {post.commentHref ? (
           <Link href={post.commentHref} aria-label={commentLabel} title={commentLabel} className={action}>
             <Icon name="messages" className="h-5 w-5" strokeWidth={2.25} />
@@ -117,7 +104,10 @@ export function PostCard({
             <Icon name="book" className="h-5 w-5" strokeWidth={2.25} />
           </Link>
         ) : null}
-        {price ? <div className="ml-auto shrink-0 pr-2.5">{price}</div> : null}
+        <div className="ml-auto flex shrink-0 items-center pr-1">
+          <SavePost post={post} next={next} label={saveLabel} action={action} />
+          {price ? <div className="pr-1.5">{price}</div> : null}
+        </div>
       </div>
       <div className="px-2.5 pb-3 pt-1">
         <Link href={post.href} className="block min-w-0">
@@ -129,6 +119,37 @@ export function PostCard({
       </div>
     </article>
     </PostMenu>
+  );
+}
+
+function SavePost({
+  post,
+  next,
+  label,
+  action,
+}: {
+  post: PostCardModel;
+  next: string;
+  label: string;
+  action: string;
+}) {
+  if (!post.savePostId && !post.saveListingId) return null;
+  return (
+    <form action={post.savePostId ? togglePostSave : toggleFavorite}>
+      {post.savePostId ? <input type="hidden" name="postId" value={post.savePostId} /> : <input type="hidden" name="listingId" value={post.saveListingId || ""} />}
+      <input type="hidden" name="next" value={next} />
+      <button type="submit" className={action} aria-label={label} aria-pressed={post.saved}>
+        <Bookmark on={post.saved} />
+      </button>
+    </form>
+  );
+}
+
+function Bookmark({ on }: { on: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill={on ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M7.2 5h9.6a1 1 0 0 1 1 1V20l-5.8-3.3L6.2 20V6a1 1 0 0 1 1-1z" />
+    </svg>
   );
 }
 

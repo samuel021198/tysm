@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { EDGE_GUARD, gestureEnd, HOLD_MS, lockAxis, SWIPE_DOWN, SWIPE_X } from "./gesture";
-import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
+import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard, wishlistPostVisible } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -83,8 +83,10 @@ const card = toPostCard({
   likeCount: 2,
   commentCount: 1,
   liked: false,
+  saved: true,
 });
 assert(card.postId === "p1" && card.listingId === "seed_charizard", "selling post keeps both ids");
+assert(card.savePostId === "p1" && card.saved && card.saveListingId === null, "a post saves into the wishlist");
 assert(card.priceCents === 128000, "selling post keeps the price");
 assert(card.priceHref === "/listing/seed_charizard", "the price opens the listing");
 assert(card.condition === "Raw A", "condition is on the card");
@@ -101,6 +103,7 @@ const held = toPostCard({
     likeCount: 0,
     commentCount: 0,
     liked: false,
+    saved: false,
   },
   item: {
     title: "舊卡",
@@ -117,7 +120,7 @@ assert(held.priceHref === null, "a post without a sale has no price link");
 assert(held.dexHref === null, "no catalog id means no dex link");
 
 const suggestion = listingSuggestionCard({
-  liked: true,
+  saved: true,
   listing: {
     id: "seed_luffy",
     title: "路飛",
@@ -127,7 +130,6 @@ const suggestion = listingSuggestionCard({
     rawGrade: "A",
     grader: null,
     gradeValue: null,
-    favoriteCount: 3,
     catalogCardId: "demo_card_luffy",
     status: "ACTIVE",
     quantityAvailable: 1,
@@ -142,12 +144,27 @@ const suggestion = listingSuggestionCard({
 });
 assert(suggestion.postId === null && suggestion.listingId === "seed_luffy", "suggestion is a listing, not a post");
 assert(suggestion.commentHref === null, "listing suggestions do not invent a thread");
-assert(suggestion.likeListingId === "seed_luffy", "suggestion likes reuse favorites");
+assert(suggestion.saveListingId === "seed_luffy" && suggestion.saved, "suggestion saves reuse favorites");
+assert(suggestion.likeListingId === null && suggestion.likePostId === null, "a suggestion does not pretend a favorite is a like");
+assert(wishlistPostVisible({ authorId: "a", collectionItem: null }, "me", new Set()), "a plain post stays on the wishlist");
+assert(!wishlistPostVisible({ authorId: "a", collectionItem: null }, "me", new Set(["a"])), "a blocked author leaves the wishlist");
+assert(
+  !wishlistPostVisible({ authorId: "a", collectionItem: { visibility: "PRIVATE", ownerId: "a" } }, "me", new Set()),
+  "someone else's private card leaves the wishlist",
+);
+assert(
+  wishlistPostVisible({ authorId: "me", collectionItem: { visibility: "PRIVATE", ownerId: "me" } }, "me", new Set()),
+  "the owner still sees their own private card",
+);
 assert(suggestion.priceCents === 100, "suggestion can show a price");
 assert(suggestion.priceHref === "/listing/seed_luffy", "suggestion price opens the listing");
 assert(suggestion.dexHref === "/dex/demo_card_luffy", "a suggested listing opens its dex card");
 
 const collect = readFileSync(new URL("../actions/collect.ts", import.meta.url), "utf8");
+const saveStart = collect.indexOf("export async function togglePostSave");
+const saveFn = collect.slice(saveStart, collect.indexOf("export async function", saveStart + 1));
+assert(saveFn.includes("prisma.postSave") && saveFn.includes("readablePost"), "saving a post checks the viewer can read it");
+assert(saveFn.includes('revalidatePath("/me/favorites")'), "a post save refreshes the wishlist");
 const deleteStart = collect.indexOf("export async function deletePost");
 const deleteEnd = collect.indexOf("export async function", deleteStart + 1);
 const deletePost = collect.slice(deleteStart, deleteEnd);
@@ -212,6 +229,9 @@ assert(postCard.includes('name="book"') && postCard.includes("aria-label={dexLab
 assert(!postCard.includes("min-h-11 items-center text-sm font-semibold text-link"), "the dex caption is not a text link");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
+assert(postCard.includes("togglePostSave") && postCard.includes("toggleFavorite") && postCard.includes('tx(locale, "收藏", "Favorite")'), "posts and listing cards can be saved to 收藏");
+const favPage = readFileSync(new URL("../app/me/favorites/page.tsx", import.meta.url), "utf8");
+assert(favPage.includes("prisma.postSave") && favPage.includes("wishlistPostVisible") && favPage.includes('tx(prefs.locale, "收藏", "Favorites")'), "the wishlist page lists saved posts and listings");
 assert(postCard.includes("aspect-[4/5]") && postCard.includes("object-cover"), "feed photos keep the 4:5 cover frame");
 assert(postCard.includes("object-contain"), "detail photos show the whole image");
 assert(postCard.includes("h-10 min-w-10") && postCard.includes("strokeWidth={2.25}"), "actions are at least 40px with a deeper stroke");

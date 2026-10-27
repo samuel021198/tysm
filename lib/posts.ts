@@ -29,6 +29,18 @@ export function collectionBoardNext(value: unknown): string {
   return `${url.pathname}${url.search}`;
 }
 
+/** A saved post stays on the wishlist unless the author blocked the viewer or hid the card. */
+export function wishlistPostVisible(
+  post: { authorId: string; collectionItem: { visibility: CollectionVisibility; ownerId: string } | null },
+  viewerId: string,
+  hiddenAuthorIds: ReadonlySet<string>,
+): boolean {
+  if (hiddenAuthorIds.has(post.authorId)) return false;
+  const item = post.collectionItem;
+  if (item?.visibility === "PRIVATE" && item.ownerId !== viewerId) return false;
+  return true;
+}
+
 /** The signed-in author is the only person who can delete this post. */
 export function ownedPostId(
   post: { id: string; authorId: string } | null | undefined,
@@ -82,6 +94,10 @@ export type PostCardModel = {
   liked: boolean;
   likePostId: string | null;
   likeListingId: string | null;
+  /** Wishlist. A post save, or a listing favorite when the card has no post. */
+  saved: boolean;
+  savePostId: string | null;
+  saveListingId: string | null;
   sharePath: string;
   commentHref: string | null;
   dexHref: string | null;
@@ -154,6 +170,7 @@ export function toPostCard(input: {
   likeCount: number;
   commentCount: number;
   liked: boolean;
+  saved: boolean;
 }): PostCardModel {
   const listing = input.item?.listing ?? null;
   const photos = (input.item?.photos.length ? input.item.photos : input.photos).map((photo) => photo.url);
@@ -180,6 +197,9 @@ export function toPostCard(input: {
     liked: input.liked,
     likePostId: input.postId,
     likeListingId: null,
+    saved: input.saved,
+    savePostId: input.postId,
+    saveListingId: null,
     sharePath: `/post/${input.postId}`,
     commentHref: `/post/${input.postId}#comments`,
     dexHref: dexPath(input.item?.catalogCardId || input.item?.listing?.catalogCardId),
@@ -197,12 +217,11 @@ export function listingSuggestionCard(input: {
     rawGrade: string | null;
     grader: string | null;
     gradeValue: number | null;
-    favoriteCount: number;
     catalogCardId?: string | null;
     photos: { url: string }[];
     seller: { id: string; nickname: string; avatarUrl?: string | null };
   };
-  liked: boolean;
+  saved: boolean;
 }): PostCardModel {
   const listing = input.listing;
   return {
@@ -220,11 +239,14 @@ export function listingSuggestionCard(input: {
     condition: conditionLabel(listing),
     priceCents: sellingAsk(listing),
     priceHref: sellingAsk(listing) != null ? `/listing/${listing.id}` : null,
-    likeCount: listing.favoriteCount,
+    likeCount: 0,
     commentCount: 0,
-    liked: input.liked,
+    liked: false,
     likePostId: null,
-    likeListingId: listing.id,
+    likeListingId: null,
+    saved: input.saved,
+    savePostId: null,
+    saveListingId: listing.id,
     sharePath: `/listing/${listing.id}`,
     commentHref: null,
     dexHref: dexPath(listing.catalogCardId),

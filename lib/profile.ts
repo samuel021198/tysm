@@ -8,6 +8,7 @@ const postInclude = {
   author: { select: { id: true, nickname: true, avatarUrl: true } },
   photos: { orderBy: { position: "asc" as const } },
   likes: { select: { userId: true } },
+  saves: { select: { userId: true } },
   _count: { select: { comments: true, likes: true } },
   collectionItem: {
     include: {
@@ -105,6 +106,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       likeCount: row._count.likes,
       commentCount: row._count.comments,
       liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
+      saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
     }),
   );
 
@@ -145,6 +147,11 @@ function homePostInclude(viewerId: string | null) {
     author: { select: { id: true, nickname: true, avatarUrl: true } },
     photos: { orderBy: { position: "asc" as const }, take: 1 },
     likes: {
+      where: viewerId ? { userId: viewerId } : { userId: { in: [] as string[] } },
+      select: { userId: true },
+      take: 1,
+    },
+    saves: {
       where: viewerId ? { userId: viewerId } : { userId: { in: [] as string[] } },
       select: { userId: true },
       take: 1,
@@ -241,6 +248,7 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[], hi
       likeCount: row._count.likes,
       commentCount: row._count.comments,
       liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
+      saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
     });
   }
   const primary = primaryRows.map(toCard);

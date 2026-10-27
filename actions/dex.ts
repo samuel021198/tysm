@@ -8,6 +8,7 @@ import { getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { createCollectionItem } from "@/lib/inventory";
 
+/** Hidden from the dex page. Catalog stays a directory. Existing binder rows are left in place. */
 export async function collectCatalogCard(formData: FormData) {
   const id = String(formData.get("cardId") || "");
   const next = id ? `/dex/${id}` : "/dex";
