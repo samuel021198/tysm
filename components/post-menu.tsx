@@ -6,6 +6,7 @@ import { deletePost, hideFromFeed } from "@/actions/collect";
 import { reportAction } from "@/actions/social";
 import { tx, type Locale } from "@/lib/i18n";
 import { hideTarget, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, type PostMenuAction } from "@/lib/posts";
+import { ShareSheet } from "./share-button";
 import { useHoldSwipe } from "./use-hold-swipe";
 
 export function PostMenu({
@@ -35,14 +36,14 @@ export function PostMenu({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const flags = postMenuFlags({ own, loggedIn, postId, listingId });
   const editHref = postEditHref(postId, listingId);
   const report = reportTarget(postId, listingId);
   const hide = hideTarget(postId, listingId);
   const labels: Record<PostMenuAction, string> = {
     delete: tx(locale, "剷除", "Remove"),
-    share: copied ? tx(locale, "已複製", "Copied") : tx(locale, "分享", "Share"),
+    share: tx(locale, "分享", "Share"),
     hide: tx(locale, "隱藏", "Hide"),
     report: tx(locale, "舉報", "Report"),
     edit: tx(locale, "編輯", "Edit"),
@@ -64,7 +65,6 @@ export function PostMenu({
   }, [open]);
 
   function openMenu() {
-    setCopied(false);
     setOpen(true);
   }
 
@@ -80,29 +80,19 @@ export function PostMenu({
     edgeGuard: true,
   });
 
-  async function share() {
-    const url = new URL(sharePath, window.location.origin).toString();
-    try {
-      if (navigator.share) {
-        await navigator.share({ url });
-        setOpen(false);
-        return;
-      }
-    } catch {
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-    } catch {
-      setCopied(false);
-    }
-  }
-
   function item(action: PostMenuAction) {
     if (action === "share") {
       return (
-        <button key={action} type="button" role="menuitem" className={row} onClick={() => void share()}>
+        <button
+          key={action}
+          type="button"
+          role="menuitem"
+          className={row}
+          onClick={() => {
+            setOpen(false);
+            setShareOpen(true);
+          }}
+        >
           {labels.share}
         </button>
       );
@@ -168,6 +158,7 @@ export function PostMenu({
   return (
     <div
       className="relative"
+      data-card-swipe=""
       {...gesture}
       onContextMenu={(event) => {
         event.preventDefault();
@@ -185,7 +176,6 @@ export function PostMenu({
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            setCopied(false);
             setOpen(true);
           }}
         >
@@ -203,6 +193,15 @@ export function PostMenu({
             {POST_MENU_ORDER.map(item)}
           </div>
         </div>
+      ) : null}
+      {shareOpen ? (
+        <ShareSheet
+          path={sharePath}
+          label={tx(locale, "分享", "Share")}
+          copiedLabel={tx(locale, "已複製", "Copied")}
+          internalLabel={tx(locale, "內部分享", "In TYSM")}
+          onClose={() => setShareOpen(false)}
+        />
       ) : null}
     </div>
   );

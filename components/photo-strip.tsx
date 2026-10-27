@@ -5,6 +5,7 @@ export function PhotoStrip({ photos }: { photos: string[] }) {
   return (
     <div
       className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      data-gesture=""
       onPointerDown={(event) => event.stopPropagation()}
     >
       {photos.map((url, index) => (

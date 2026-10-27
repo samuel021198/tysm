@@ -25,7 +25,7 @@ export function CollectionMenu({
   const [open, setOpen] = useState(false);
   const row = "flex h-11 w-full items-center px-3 text-left text-sm font-medium";
   const privacy = visibility === "PUBLIC" ? tx(locale, "改為私人", "Make private") : tx(locale, "改為公開", "Make public");
-  const gesture = useHoldSwipe({ onLongPress: () => setOpen(true), onSwipeLeft: () => setOpen(true) });
+  const gesture = useHoldSwipe({ onLongPress: () => setOpen(true), onSwipeLeft: () => setOpen(true), edgeGuard: true });
 
   useEffect(() => {
     if (!open) return;
@@ -39,6 +39,7 @@ export function CollectionMenu({
   return (
     <div
       className="relative"
+      data-card-swipe=""
       {...gesture}
       onContextMenu={(event) => {
         event.preventDefault();
