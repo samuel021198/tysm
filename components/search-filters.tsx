@@ -17,6 +17,7 @@ export function SearchFilters({
   sale,
   setName,
   number,
+  show = "all",
   categories,
 }: {
   locale: Locale;
@@ -30,6 +31,7 @@ export function SearchFilters({
   sale: string;
   setName: string;
   number: string;
+  show?: string;
   categories: Cat[];
 }) {
   const extraOn = Boolean(pmin || pmax || sale || setName || number);
@@ -37,6 +39,7 @@ export function SearchFilters({
   return (
     <form action="/search" className="mt-3 grid grid-cols-2 gap-2.5 md:grid-cols-5">
       {q ? <input type="hidden" name="q" value={q} /> : null}
+      {show === "listing" || show === "post" ? <input type="hidden" name="show" value={show} /> : null}
       <select className="field col-span-2 md:col-span-1" name="cat" defaultValue={cat} aria-label={tx(locale, "分類", "Category")}>
         <option value="">{tx(locale, "全部分類", "All categories")}</option>
         {categories.map((category) => (

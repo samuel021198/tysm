@@ -6,6 +6,9 @@ import {
   foldSearch,
   forgetMemory,
   mergeMemory,
+  listedPostWhere,
+  marketSearchHref,
+  marketShow,
   postQueryWhere,
   rememberMemory,
   findHref,
@@ -19,6 +22,17 @@ import {
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
+}
+
+function collectCollectionItems(value: unknown, found: string[][]) {
+  if (!value || typeof value !== "object") return;
+  if (Array.isArray(value)) {
+    for (const row of value) collectCollectionItems(row, found);
+    return;
+  }
+  const record = value as Record<string, unknown>;
+  if (record.collectionItem && typeof record.collectionItem === "object") found.push(Object.keys(record.collectionItem));
+  for (const child of Object.values(record)) collectCollectionItems(child, found);
 }
 
 const has = (q: string, term: string) => searchNeedles(q).some((needle) => foldSearch(needle) === foldSearch(term));
@@ -105,9 +119,25 @@ assert(suggestPanelDismiss("escape", dismiss) && suggestPanelDismiss("submit", d
 
 const users = JSON.stringify(userQueryWhere("阿明"));
 assert(users.includes("nickname") && !users.includes("catalog"), "user search is nicknames, not the dex");
-const posts = JSON.stringify(postQueryWhere("皮卡丘"));
-assert(posts.includes("body") && posts.includes("cardName") && !posts.includes("catalog"), "post search skips the dex");
+const postWhere = postQueryWhere("皮卡丘");
+const posts = JSON.stringify(postWhere);
+assert(posts.includes("body") && posts.includes("nickname") && posts.includes("cardName") && posts.includes("listing"), "post search uses the body, the author, and the linked listing");
+assert(!posts.includes("catalogCard"), "post search skips the dex");
+const itemKeys: string[][] = [];
+collectCollectionItems(postWhere, itemKeys);
+assert(itemKeys.length > 0 && itemKeys.every((keys) => keys.length === 1 && keys[0] === "listing"), "a post does not search CollectionItem title or card name");
 assert(JSON.stringify(postQueryWhere("")).includes("in"), "a blank post search matches nothing");
+const listed = listedPostWhere({ status: "ACTIVE" });
+assert(JSON.stringify(listed).includes("ACTIVE") && !JSON.stringify(listed).includes("body"), "market posts with no query still require a listing");
+const listedQuery = listedPostWhere({ status: "ACTIVE" }, "皮卡丘");
+assert(
+  Array.isArray(listedQuery.AND) && JSON.stringify(listedQuery).includes("body") && JSON.stringify(listedQuery).includes("ACTIVE"),
+  "a market post query keeps the listing gate",
+);
+assert(marketShow(undefined) === "all" && marketShow("post") === "post" && marketShow("listing") === "listing" && marketShow("nope") === "all", "result chips default to all");
+assert(marketSearchHref({ q: "皮卡丘", cat: "pokemon", sort: "relevance" }, "post") === `/search?q=${encodeURIComponent("皮卡丘")}&cat=pokemon&show=post`, "the post chip keeps the market filters");
+assert(marketSearchHref({ q: "皮卡丘", sort: "new" }) === `/search?q=${encodeURIComponent("皮卡丘")}&sort=new`, "all is the default chip and stays off the URL");
+assert(marketSearchHref({}) === "/search", "an empty market search has no query string");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
 assert(find.includes("用戶") && find.includes("貼文") && find.includes("放售"), "search shows users, posts, and listings");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
@@ -116,7 +146,11 @@ const box = readFileSync(new URL("../components/search-box.tsx", import.meta.url
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
 assert(box.includes('to = "find"') && box.includes('"/find"'), "the header search box submits to find");
 assert(shell.includes("<SearchBox") && !shell.includes('to="search"'), "the header uses the universal search");
-assert(readFileSync(new URL("../app/search/page.tsx", import.meta.url), "utf8").includes('to="search"'), "market filters stay on /search");
+const marketPage = readFileSync(new URL("../app/search/page.tsx", import.meta.url), "utf8");
+assert(marketPage.includes('to="search"'), "market filters stay on /search");
+assert(marketPage.includes("listedPostWhere") && marketPage.includes("全部") && marketPage.includes("上架") && marketPage.includes("貼文"), "market search chips include listed posts");
+assert(marketPage.includes("show={show}"), "a new market query keeps the result chip");
+assert(find.includes("collectionItem?.listing?.cardName"), "find names a priced post from the linked listing");
 const findRows = buildSuggestRows({
   query: "",
   recent: [{ query: "Tyu" }],
