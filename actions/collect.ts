@@ -9,7 +9,7 @@ import { hkdToCents, isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { PhotoStoreError, storeUploadedImages } from "@/lib/r2";
 import { createCollectionItem, syncListingInventory } from "@/lib/inventory";
 import { saveListing, type ListingInput } from "@/lib/listings";
-import { collectionVisibility, ownedPostId } from "@/lib/posts";
+import { collectionBoardNext, collectionVisibility, ownedPostId } from "@/lib/posts";
 import { parseGrade } from "@/lib/rules";
 import { isBlocked } from "@/lib/social";
 import { GRADERS, RAW } from "@/lib/sell-wizard";
@@ -333,15 +333,20 @@ export async function hideFromFeed(formData: FormData) {
 }
 
 export async function toggleCollectionVisibility(formData: FormData) {
-  const user = await viewer("/me?tab=box");
+  const next = collectionBoardNext(formData.get("next"));
+  const user = await viewer(next);
   const id = String(formData.get("id") || "");
   const item = await prisma.collectionItem.findUnique({ where: { id } });
-  if (!item || item.ownerId !== user.id) redirect("/me?tab=box&err=forbidden");
+  const fail = next.includes("?") ? `${next}&err=forbidden` : `${next}?err=forbidden`;
+  if (!item || item.ownerId !== user.id) redirect(fail);
   await prisma.collectionItem.update({
     where: { id },
     data: { visibility: item.visibility === "PUBLIC" ? "PRIVATE" : "PUBLIC" },
   });
   revalidatePath("/me");
   revalidatePath("/");
-  redirect("/me?tab=box&ok=saved");
+  revalidatePath(`/shop/${item.ownerId}`);
+  const url = new URL(next, "http://local");
+  url.searchParams.set("ok", "saved");
+  redirect(`${url.pathname}${url.search}`);
 }

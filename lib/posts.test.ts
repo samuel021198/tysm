@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { cardDisplayName, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
+import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -9,6 +9,11 @@ assert(collectionVisibility(null) === "PUBLIC", "collection defaults to public")
 assert(collectionVisibility("PUBLIC") === "PUBLIC", "public stays public");
 assert(collectionVisibility("PRIVATE") === "PRIVATE", "private is explicit");
 assert(collectionVisibility("nope") === "PUBLIC", "unknown visibility is public");
+assert(collectionBoardNext("/me?tab=box&ok=saved") === "/me?tab=box", "toggling on /me stays on the box tab");
+assert(collectionBoardNext("/shop/user_tyu?tab=box") === "/shop/user_tyu?tab=box", "toggling on a shop stays on that shop");
+assert(collectionBoardNext("/shop/user_tyu") === "/shop/user_tyu?tab=box", "a shop without a tab returns to the box");
+assert(collectionBoardNext("https://evil.example/admin") === "/me?tab=box", "a foreign path does not leave the profile");
+assert(collectionBoardNext("/me/settings") === "/me?tab=box", "settings is not a collection board");
 
 assert(ownedPostId(null, "user_mei") === null, "missing post cannot be deleted");
 assert(ownedPostId({ id: "p1", authorId: "user_ming" }, "user_mei") === null, "only the author can delete");
@@ -180,6 +185,13 @@ assert(menu.includes("button = true") && menu.includes("onPointerDown") && menu.
 const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
 assert(profileBoard.includes("button={false}") && !profileBoard.includes("⋯"), "profile thumbnails hide the ellipsis");
+const collectionMenu = readFileSync(new URL("../components/collection-menu.tsx", import.meta.url), "utf8");
+assert(collectionMenu.includes("onPointerDown") && collectionMenu.includes("onContextMenu") && collectionMenu.includes("480"), "collection menu uses the same long-press");
+assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy live in the long-press menu");
+assert(profileBoard.includes("isSelf") && profileBoard.includes("<CollectionMenu") && profileBoard.includes("sellHref"), "only the owner gets collection actions");
+assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
+assert(profileBoard.includes("formatHkd(item.priceCents, locale)"), "listed price stays under the thumb");
+assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not render the privacy form itself");
 assert(menu.includes('if (own) return null'), "own posts do not offer report");
 const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");
 assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
