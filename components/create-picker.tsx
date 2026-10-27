@@ -141,11 +141,12 @@ export function CreatePicker({
       <button
         ref={triggerRef}
         type="button"
-        className="inline-flex h-10 items-center text-sm font-medium text-muted hover:text-ink"
+        className="inline-flex h-9 items-center gap-1 rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15"
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={openPicker}
       >
+        <Icon name="plus" className="h-3.5 w-3.5" strokeWidth={2.25} />
         {label}
       </button>
     ) : (

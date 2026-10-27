@@ -40,15 +40,29 @@ const logo = shell.indexOf('alt="TSM"');
 assert(corner >= 0 && logo >= 0 && corner < logo, "mobile add control sits at the top left of the header");
 assert(shell.includes('src="/brand/tsm-monogram.png"'), "header uses the TSM monogram");
 assert(shell.includes("flex h-12 max-w-6xl items-center justify-center"), "brand mark is centered in the header");
+assert(shell.includes("md:hidden"), "the centered mark row is the mobile header");
 assert(!shell.includes("tysm-wordmark"), "old wordmark is not referenced");
 assert(shell.includes('variant="header"'), "desktop header still opens create");
 assert(!shell.includes("add-sheet"), "shell no longer uses the bottom sheet");
+const desktopAt = shell.indexOf("hidden h-14");
+const desktop = desktopAt >= 0 ? shell.slice(desktopAt) : "";
+assert(
+  desktop.includes("max-w-lg") && desktop.indexOf("<SearchBox") < desktop.indexOf("tsm-monogram") && desktop.indexOf("tsm-monogram") < desktop.indexOf('variant="header"'),
+  "desktop header is one row: search, mark, nav, on the feed width",
+);
+assert(!shell.includes("h-14 max-w-6xl"), "desktop tools are not a second full-width bar");
+assert(shell.includes('href="/cart"') && shell.includes('href="/orders"') && shell.includes('href="/messages"'), "compact menu keeps cart, orders, and chat");
+assert(shell.includes("bg-accent/15"), "notification and cart counts use a small pill");
+const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+assert(!css.includes("6.5rem") && css.includes("3.5rem"), "desktop header height is a single row");
 
 const picker = readFileSync(new URL("../components/create-picker.tsx", import.meta.url), "utf8");
 assert(picker.includes("CREATE_MODES") && picker.includes("snap-x") && picker.includes("snap-mandatory"), "picker swipes the shared modes");
 assert(picker.includes("md:hidden") && picker.includes('name="plus"'), "top-left control is a plus icon");
 assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("text-muted"), "mobile add matches header icon buttons");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is not a filled accent pill");
+assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "desktop add is a quiet accent control");
+assert(!picker.includes("rounded-full bg-accent text-white"), "add is not a solid brand circle");
 assert(!picker.includes('tx(locale, "加"') && !picker.includes("加入收藏") && !picker.includes("我的收藏"), "加 text and collect-only are gone from the picker");
 assert(!picker.includes("想做咩") && !picker.includes("rounded-t-"), "bottom sheet copy is retired");
 assert(picker.includes("CREATE_MODES.length"), "the tab row follows the mode count");

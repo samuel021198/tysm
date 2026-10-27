@@ -126,14 +126,14 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
 
   return (
     <section aria-label={tx(locale, "限時動態", "Stories")}>
-      <div className="flex gap-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
+      <div className="flex w-full justify-start gap-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-gesture="">
         {items.map((item, index) => {
           const fresh = item.stories.length > 0 && !item.seen;
           const name = item.mine ? tx(locale, "你的", "You") : item.nickname;
           return (
-            <div key={item.userId} className="relative w-16 shrink-0">
+            <div key={item.userId} className="relative w-[4.25rem] shrink-0">
               <button type="button" className="flex w-full flex-col items-center gap-1" onClick={() => openRing(index)}>
-                <span className={`grid h-14 w-14 place-items-center rounded-full p-[2px] ${fresh ? "bg-accent" : "bg-slate-300 dark:bg-white/25"}`}>
+                <span className={`grid h-16 w-16 place-items-center rounded-full p-[3px] ${fresh ? "bg-accent" : "bg-accent/30"}`}>
                   <span className="grid h-full w-full place-items-center rounded-full bg-card p-[2px]">
                     <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-accent text-sm font-bold text-white">
                       {item.avatarUrl ? <img src={item.avatarUrl} alt="" className="h-full w-full object-cover" /> : (item.nickname || "你").slice(0, 1)}
@@ -146,7 +146,7 @@ export function StoryRail({ locale, rings }: { locale: Locale; rings: StoryRing[
                 <Link
                   href="/story/new"
                   aria-label={tx(locale, "新增動態", "New story")}
-                  className="absolute right-[calc((4rem-3.5rem)/2-0.125rem)] top-[calc(3.5rem-1.25rem+0.125rem)] z-10 grid h-5 w-5 place-items-center rounded-full bg-accent text-sm font-bold leading-none text-white ring-2 ring-bg"
+                  className="absolute right-[calc((4.25rem-4rem)/2-0.125rem)] top-[calc(4rem-1.25rem+0.125rem)] z-10 grid h-5 w-5 place-items-center rounded-full bg-accent text-sm font-bold leading-none text-white ring-2 ring-bg"
                 >
                   <span className="block translate-y-[-0.05em]" aria-hidden>+</span>
                 </Link>
