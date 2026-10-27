@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { togglePostLike, togglePostSave } from "@/actions/collect";
 import { openThread, toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
@@ -126,6 +126,9 @@ export function PostCard({
             {post.condition ? <span className="shrink-0 font-medium text-muted">{post.condition}</span> : null}
           </h2>
         </Link>
+        {!gallery && post.caption ? (
+          <FeedCaption text={post.caption} more={tx(locale, "更多", "More")} />
+        ) : null}
         {price}
         {gallery ? null : <TopicChips tags={post.tags} className="mt-1.5" />}
       </div>
@@ -136,6 +139,58 @@ export function PostCard({
     </PostMenu>
     {gallery && buy && post.priceCents != null ? <BuyBar locale={locale} price={priceText} buy={buy} /> : null}
     </>
+  );
+}
+
+/** line-clamp reports scrollHeight equal to the box, so compare an unclamped copy. */
+function textOverflows(el: HTMLElement): boolean {
+  if (el.clientWidth === 0) return false;
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.className = "";
+  clone.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;display:block;width:${el.clientWidth}px;height:auto;overflow:visible`;
+  el.parentElement?.appendChild(clone);
+  const over = clone.offsetHeight > el.clientHeight + 1;
+  clone.remove();
+  return over;
+}
+
+function FeedCaption({ text, more }: { text: string; more: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [overflow, setOverflow] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || open) return;
+    const measure = () => setOverflow(textOverflows(el));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    let live = true;
+    document.fonts?.ready.then(() => {
+      if (live) measure();
+    });
+    return () => {
+      live = false;
+      ro.disconnect();
+    };
+  }, [text, open]);
+
+  return (
+    <p className="relative mt-1 text-sm leading-5 text-muted">
+      <span ref={ref} className={open ? "block" : "line-clamp-2 block"}>
+        {text}
+      </span>
+      {!open && overflow ? (
+        <button
+          type="button"
+          className="absolute bottom-0 right-0 border-0 bg-[linear-gradient(to_left,var(--card)_72%,transparent)] pl-3 font-medium leading-5 text-ink"
+          onClick={() => setOpen(true)}
+        >
+          {more}
+        </button>
+      ) : null}
+    </p>
   );
 }
 
