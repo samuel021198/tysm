@@ -215,10 +215,10 @@ assert(gestureEnd({ ...base, dx: SWIPE_X, dy: 6, axis: "x", startX: EDGE_GUARD }
 assert(gestureEnd({ ...base, dx: SWIPE_X, dy: 6, axis: "x", startX: EDGE_GUARD - 1 }) === null, "the screen edge stays a browser back gesture");
 assert(gestureEnd({ ...base, dx: 8, dy: SWIPE_DOWN, axis: "y", allowDown: true }) === "down", "swipe down closes a story");
 assert(lockAxis(4, 3) === null && lockAxis(20, 4) === "x" && lockAxis(4, 20) === "y", "axis locks only after the finger commits");
-assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy live in the long-press menu");
-assert(profileBoard.includes("isSelf") && profileBoard.includes("<CollectionMenu") && profileBoard.includes("sellHref"), "only the owner gets collection actions");
+assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy stay on the collection menu");
+assert(!profileBoard.includes("<CollectionMenu") && !profileBoard.includes("sellHref") && !profileBoard.includes("collectionItemId"), "the profile does not show the owned-card grid");
+assert(profileBoard.includes("savedListings") && profileBoard.includes("savedPosts") && profileBoard.includes("貨品") && profileBoard.includes("貼文"), "收藏 tab shows saved products and posts");
 assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
-assert(profileBoard.includes("formatHkd(item.priceCents, locale)"), "listed price stays under the thumb");
 assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not render the privacy form itself");
 assert(menu.includes('if (own) return null'), "own posts do not offer report");
 const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");

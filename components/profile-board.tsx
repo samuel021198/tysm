@@ -2,21 +2,9 @@ import Link from "next/link";
 import { formatHkd } from "@/lib/format";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
-import { CollectionMenu } from "./collection-menu";
+import type { ProfileThumb } from "@/lib/profile";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
-
-type Item = {
-  id: string;
-  cardName: string;
-  condition: string;
-  visibility: "PUBLIC" | "PRIVATE";
-  photo: string | null;
-  priceCents: number | null;
-  href: string | null;
-  catalogCardId: string | null;
-  listingId: string | null;
-};
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
 type Draft = { id: string; title: string; status: string };
@@ -40,8 +28,8 @@ type Sale = {
 };
 
 const TABS = [
-  { id: "posts", zh: "貼文", en: "Posts", icon: "grid" },
-  { id: "box", zh: "My Binder", en: "My Binder", icon: "binder" },
+  { id: "posts", zh: "My Binder", en: "My Binder", icon: "binder" },
+  { id: "saved", zh: "收藏", en: "Favorites", icon: "bookmark" },
   { id: "selling", zh: "商店", en: "Shop", icon: "bag" },
   { id: "reviews", zh: "評價", en: "Reviews", icon: "star" },
 ] as const;
@@ -54,7 +42,8 @@ export function ProfileBoard({
   tab,
   isSelf,
   posts,
-  items,
+  savedListings,
+  savedPosts,
   listings,
   reviews,
   drafts,
@@ -65,20 +54,22 @@ export function ProfileBoard({
   tab: string;
   isSelf: boolean;
   posts: PostCardModel[];
-  items: Item[];
+  savedListings: ProfileThumb[];
+  savedPosts: ProfileThumb[];
   listings: Sale[];
   reviews: Review[];
   drafts: Draft[];
   favIds: string[];
   viewerId: string | null;
 }) {
-  const panel = tab === "box" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
+  // Legacy ?tab=box was the owned-card grid. It now opens My Binder (own posts).
+  const panel = tab === "saved" || tab === "selling" || tab === "reviews" || (tab === "drafts" && isSelf) ? tab : "posts";
   return (
     <div className="-mx-3 sm:mx-0">
       <nav aria-label={tx(locale, "個人內容", "Profile")} className="grid grid-cols-4 border-t border-line">
         {TABS.map((item) => {
           const on = panel === item.id;
-          const label = item.id === "box" ? tx(locale, "My Binder，我的卡", "My Binder") : tx(locale, item.zh, item.en);
+          const label = tx(locale, item.zh, item.en);
           return (
             <Link
               key={item.id}
@@ -120,50 +111,25 @@ export function ProfileBoard({
           <p className="empty mx-3 sm:mx-0">{tx(locale, "未有貼文。", "No posts yet.")}</p>
         )
       ) : null}
-      {panel === "box" ? (
-        <>
-          <p className="px-3 pt-2 text-xs text-muted sm:px-0">
-            <span className="font-medium text-ink">My Binder</span>
-            {isSelf ? tx(locale, " · 我的卡。預設公開，私人卡只會喺呢度見到。", ". Public by default. Private cards stay on this screen.") : null}
-          </p>
-          {items.length === 0 ? <p className="empty mx-3 sm:mx-0">{tx(locale, "My Binder 未有卡。", "Nothing in My Binder yet.")}</p> : null}
-          <ul className="grid grid-cols-3 gap-px">
-            {items.map((item) => {
-              const label = item.priceCents != null ? `${item.cardName} ${formatHkd(item.priceCents, locale)}` : item.cardName;
-              const sellHref = !item.listingId
-                ? `/sell?collectionItemId=${encodeURIComponent(item.id)}${item.catalogCardId ? `&catalogCardId=${encodeURIComponent(item.catalogCardId)}` : ""}`
-                : null;
-              const thumb = (
-                <div className="relative">
-                  {item.href ? (
-                    <Link href={item.href} aria-label={label} className="block">
-                      <img src={item.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                    </Link>
-                  ) : (
-                    <img src={item.photo || "/demo/back.svg"} alt={label} loading="lazy" decoding="async" className={tile} />
-                  )}
-                  {item.visibility === "PRIVATE" ? (
-                    <span className="pointer-events-none absolute left-1 top-1 bg-card/90 px-1 py-0.5 text-[10px] font-semibold leading-none text-ink">{tx(locale, "私人", "Private")}</span>
-                  ) : null}
-                </div>
-              );
-              return (
-                <li key={item.id} className="min-w-0">
-                  {isSelf ? (
-                    <CollectionMenu locale={locale} sellHref={sellHref} itemId={item.id} visibility={item.visibility} next={`${base}?tab=box`}>
-                      {thumb}
-                    </CollectionMenu>
-                  ) : (
-                    thumb
-                  )}
-                  {item.priceCents != null ? (
-                    <p className="flex h-7 items-center truncate px-1 text-[10px] font-semibold leading-none">{formatHkd(item.priceCents, locale)}</p>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        </>
+      {panel === "saved" ? (
+        isSelf && (savedListings.length || savedPosts.length) ? (
+          <>
+            {savedListings.length ? (
+              <section>
+                <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貨品", "Products")}</h2>
+                <ThumbGrid rows={savedListings} emptyLabel={tx(locale, "收藏", "Favorite")} />
+              </section>
+            ) : null}
+            {savedPosts.length ? (
+              <section>
+                <h2 className="px-3 pt-2 text-xs font-semibold text-muted sm:px-0">{tx(locale, "貼文", "Posts")}</h2>
+                <ThumbGrid rows={savedPosts} emptyLabel={tx(locale, "貼文", "Post")} />
+              </section>
+            ) : null}
+          </>
+        ) : (
+          <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No favorites yet.")}</p>
+        )
       ) : null}
       {panel === "selling" ? (
         listings.length ? (
@@ -217,6 +183,20 @@ export function ProfileBoard({
         )
       ) : null}
     </div>
+  );
+}
+
+function ThumbGrid({ rows, emptyLabel }: { rows: ProfileThumb[]; emptyLabel: string }) {
+  return (
+    <ul className="grid grid-cols-3 gap-px">
+      {rows.map((row) => (
+        <li key={row.id} className="min-w-0">
+          <Link href={row.href} aria-label={row.label || emptyLabel} className="block">
+            <img src={row.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 

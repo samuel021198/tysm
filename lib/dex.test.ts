@@ -486,11 +486,13 @@ assert(
   "listing and item links stay unique",
 );
 const listingPage = readFileSync("app/listing/[id]/page.tsx", "utf8");
-const box = readFileSync("components/profile-board.tsx", "utf8") + readFileSync("components/collection-menu.tsx", "utf8");
+const postPage = readFileSync("app/post/[id]/page.tsx", "utf8");
+const sellFromCollection = postPage + readFileSync("components/collection-menu.tsx", "utf8");
 const sellPage = readFileSync("app/sell/page.tsx", "utf8");
 const sellForm = readFileSync("components/sell-form.tsx", "utf8");
 assert(listingPage.includes("睇圖鑑") && listingPage.includes("listingDexLinks"), "listing detail links back to the dex");
-assert(box.includes("放賣") && box.includes("collectionItemId") && box.includes("catalogCardId") && box.includes("!item.listingId"), "collection sell binds the item and skips a card that is already listed");
+assert(sellFromCollection.includes("放賣") && sellFromCollection.includes("collectionItemId") && sellFromCollection.includes("catalogCardId") && postPage.includes("!post.collectionItem.listingId"), "collection sell still binds the item and skips a card that is already listed");
+assert(!readFileSync("components/profile-board.tsx", "utf8").includes("collectionItemId"), "the profile grid no longer sells from an owned card");
 assert(sellPage.includes("collectionItemId") && sellForm.includes('name="collectionItemId"'), "publishing a collection item writes the listing back");
 assert(sellPage.includes("prefill?.catalogCardId") && !sellPage.includes("categoryId ? prefill"), "dex prefill keeps the catalog id when the category slug is missing");
 assert(sellForm.includes("catalogCardId: card.catalogId"), "a picked catalog card is submitted with the listing");

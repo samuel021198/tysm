@@ -35,7 +35,8 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         tab={sp.tab || "posts"}
         isSelf
         posts={board.posts}
-        items={board.items}
+        savedListings={board.savedListings}
+        savedPosts={board.savedPosts}
         listings={board.listings}
         reviews={board.reviews}
         drafts={board.drafts}
