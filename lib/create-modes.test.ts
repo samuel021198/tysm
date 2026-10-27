@@ -1,26 +1,23 @@
 import { readFileSync } from "fs";
-import { CREATE_MODES, createDest, createIndexFromScroll } from "./create-modes";
+import { CREATE_MODES, createDefaultIndex, createDest } from "./create-modes";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "動態|貼子|上架", "create mode order starts at stories");
+assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "動態|貼文|上架", "create modes are story, post, sell");
 assert(CREATE_MODES.map((mode) => mode.href).join("|") === "/story/new|/add?kind=post|/sell", "create mode routes");
 assert(!CREATE_MODES.some((mode) => mode.zh.includes("收藏")), "collect-only is not a create mode");
+assert(!CREATE_MODES.some((mode) => `${mode.zh}${mode.ctaZh}`.includes("貼子")), "post copy says 貼文, not 貼子");
+const post = CREATE_MODES.find((mode) => mode.id === "post");
+assert(post?.zh === "貼文" && post.ctaZh === "寫貼文" && post.en === "Post" && post.ctaEn === "New post", "post labels");
+assert(createDefaultIndex() === CREATE_MODES.findIndex((mode) => mode.id === "post"), "default index is post");
+assert(CREATE_MODES[createDefaultIndex()]?.id === "post", "opening the picker lands on post");
 assert(createDest("/sell", true) === "/sell", "logged-in dest stays on the flow");
 assert(
   createDest("/add?kind=post", false) === `/login?next=${encodeURIComponent("/add?kind=post")}`,
   "logged-out post keeps the kind query",
 );
-
-assert(createIndexFromScroll(0, 390, 3) === 0, "origin");
-assert(createIndexFromScroll(194, 390, 3) === 0, "before the halfway snap");
-assert(createIndexFromScroll(195, 390, 3) === 1, "halfway snaps forward");
-assert(createIndexFromScroll(780, 390, 3) === 2, "last page");
-assert(createIndexFromScroll(4000, 390, 3) === 2, "clamped");
-assert(createIndexFromScroll(-40, 390, 3) === 0, "negative");
-assert(createIndexFromScroll(80, 0, 3) === 0, "zero width");
 
 const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), "utf8");
 const home = tab.indexOf('href: "/"');
@@ -61,7 +58,12 @@ const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8")
 assert(!css.includes("6.5rem") && css.includes("3.5rem"), "desktop header height is a single row");
 
 const picker = readFileSync(new URL("../components/create-picker.tsx", import.meta.url), "utf8");
-assert(picker.includes("CREATE_MODES") && picker.includes("snap-x") && picker.includes("snap-mandatory"), "picker swipes the shared modes");
+assert(picker.includes("CREATE_MODES.map") && picker.includes('role="tablist"') && picker.includes('role="tab"'), "modes are chips in a tablist");
+assert(picker.includes("createDefaultIndex") && picker.includes('role="dialog"') && picker.includes("createDest"), "dialog opens on the default mode and continues through createDest");
+assert(!picker.includes("snap-x") && !picker.includes("snap-mandatory") && !picker.includes("createIndexFromScroll"), "swipe scroller is gone");
+assert(!picker.includes("左右滑動揀") && !picker.includes("Swipe to choose"), "swipe hint is gone");
+assert(!picker.includes(" / {CREATE_MODES.length}") && !picker.includes("‹") && !picker.includes("›"), "page counter and desktop arrows are gone");
+assert(!picker.includes("bg-card") && picker.includes("bg-[#1E293B]") && picker.includes("#0F172A"), "preview card is dark on the dark sheet");
 assert(picker.includes("md:hidden") && picker.includes('name="plus"'), "top-left control is a plus icon");
 assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("text-muted"), "mobile add matches header icon buttons");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is not a filled accent pill");
@@ -69,7 +71,7 @@ assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "de
 assert(!picker.includes("rounded-full bg-accent text-white"), "add is not a solid brand circle");
 assert(!picker.includes('tx(locale, "加"') && !picker.includes("加入收藏") && !picker.includes("我的收藏"), "加 text and collect-only are gone from the picker");
 assert(!picker.includes("想做咩") && !picker.includes("rounded-t-"), "bottom sheet copy is retired");
-assert(picker.includes("CREATE_MODES.length"), "the tab row follows the mode count");
+assert(picker.includes("CREATE_MODES.length"), "selection stays within the mode list");
 
 const collect = readFileSync(new URL("../components/collect-form.tsx", import.meta.url), "utf8");
 assert(collect.includes("同時上架"), "the post composer can list at the same time");

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { CREATE_MODES, createDest, createIndexFromScroll } from "@/lib/create-modes";
+import { CREATE_MODES, createDefaultIndex, createDest } from "@/lib/create-modes";
 import { tx, type Locale } from "@/lib/i18n";
 import { Icon } from "./icons";
 
@@ -22,14 +22,10 @@ export function CreatePicker({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [present, setPresent] = useState(false);
-  const [index, setIndex] = useState(0);
-  const scroller = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(createDefaultIndex);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const indexRef = useRef(0);
-  const programmatic = useRef<number | null>(null);
   const closeTimer = useRef<number | null>(null);
-  const goRef = useRef<(next: number) => void>(() => {});
 
   const pathRef = useRef(pathname);
   useEffect(() => {
@@ -41,11 +37,10 @@ export function CreatePicker({
 
   const creating =
     pathname.startsWith("/sell") || pathname.startsWith("/add") || pathname.startsWith("/story");
-  const mode = CREATE_MODES[index] ?? CREATE_MODES[0];
+  const mode = CREATE_MODES[index] ?? CREATE_MODES[createDefaultIndex()];
 
   function close() {
     setPresent(false);
-    programmatic.current = null;
     triggerRef.current?.focus();
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
     closeTimer.current = window.setTimeout(() => setOpen(false), 280);
@@ -53,42 +48,19 @@ export function CreatePicker({
 
   function openPicker() {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setIndex(createDefaultIndex());
     setOpen(true);
     requestAnimationFrame(() => setPresent(true));
   }
 
-  function go(next: number) {
-    const el = scroller.current;
-    const clamped = Math.min(CREATE_MODES.length - 1, Math.max(0, next));
-    programmatic.current = clamped;
-    indexRef.current = clamped;
-    setIndex(clamped);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    el?.scrollTo({ left: clamped * (el.clientWidth || 0), behavior: reduce ? "auto" : "smooth" });
-    window.setTimeout(() => {
-      if (programmatic.current === clamped) programmatic.current = null;
-    }, reduce ? 0 : 480);
-  }
-
-  goRef.current = go;
-
-  function syncFromScroll() {
-    const el = scroller.current;
-    if (!el || programmatic.current !== null) return;
-    const next = createIndexFromScroll(el.scrollLeft, el.clientWidth, CREATE_MODES.length);
-    if (next !== indexRef.current) {
-      indexRef.current = next;
-      setIndex(next);
-    }
+  function select(next: number) {
+    setIndex(Math.min(CREATE_MODES.length - 1, Math.max(0, next)));
   }
 
   useEffect(() => {
     if (!open) return;
-    indexRef.current = 0;
-    programmatic.current = null;
-    setIndex(0);
+    setIndex(createDefaultIndex());
     const frame = requestAnimationFrame(() => {
-      if (scroller.current) scroller.current.scrollLeft = 0;
       setPresent(true);
       dialogRef.current?.focus();
     });
@@ -101,7 +73,7 @@ export function CreatePicker({
       if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
         event.preventDefault();
         const dir = event.key === "ArrowRight" ? 1 : -1;
-        goRef.current(indexRef.current + dir);
+        setIndex((current) => Math.min(CREATE_MODES.length - 1, Math.max(0, current + dir)));
         return;
       }
       if (event.key !== "Tab" || !dialogRef.current) return;
@@ -119,18 +91,12 @@ export function CreatePicker({
         first.focus();
       }
     }
-    function onScrollEnd() {
-      programmatic.current = null;
-      syncFromScroll();
-    }
     document.addEventListener("keydown", onKey);
-    scroller.current?.addEventListener("scrollend", onScrollEnd);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       cancelAnimationFrame(frame);
       document.removeEventListener("keydown", onKey);
-      scroller.current?.removeEventListener("scrollend", onScrollEnd);
       document.body.style.overflow = prev;
       if (closeTimer.current) window.clearTimeout(closeTimer.current);
     };
@@ -184,63 +150,44 @@ export function CreatePicker({
           <span className="glyph-x" aria-hidden>×</span>
         </button>
         <p className="text-center text-sm font-semibold">{tx(locale, "新增", "Create")}</p>
-        <p className="pr-3 text-right text-sm tabular-nums text-white/70">
-          {index + 1} / {CREATE_MODES.length}
+        <span />
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-6">
+        <div role="tablist" aria-label={tx(locale, "新增", "Create")} className="inline-flex rounded-full bg-white/10 p-1">
+          {CREATE_MODES.map((item, i) => (
+            <button
+              key={item.id}
+              id={`create-tab-${item.id}`}
+              type="button"
+              role="tab"
+              aria-selected={i === index}
+              aria-controls="create-panel"
+              className={`min-h-9 rounded-full px-3.5 text-sm font-semibold ${i === index ? "bg-white text-[#0F172A]" : "text-white/75"}`}
+              onClick={() => select(i)}
+            >
+              {tx(locale, item.zh, item.en)}
+            </button>
+          ))}
+        </div>
+        <article
+          id="create-panel"
+          role="tabpanel"
+          aria-labelledby={`create-tab-${mode.id}`}
+          className="mt-8 flex w-[min(18rem,84vw)] flex-col items-center rounded-2xl border border-white/10 bg-[#1E293B] px-5 py-8 text-center text-white"
+        >
+          <span className="grid h-16 w-16 place-items-center rounded-2xl bg-accent text-white">
+            <Icon name={mode.icon} className="h-8 w-8" strokeWidth={1.6} />
+          </span>
+          <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">{tx(locale, mode.zh, mode.en)}</h2>
+          <p className="mt-1.5 text-sm text-white/70">{tx(locale, mode.hintZh, mode.hintEn)}</p>
+        </article>
+        <p className="sr-only" aria-live="polite">
+          {tx(locale, mode.zh, mode.en)}
         </p>
       </div>
 
-      <div className="relative min-h-0 flex-1">
-        <div
-          ref={scroller}
-          onScroll={syncFromScroll}
-          className="flex h-full snap-x snap-mandatory touch-pan-x overflow-x-auto overflow-y-hidden overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:h-0"
-        >
-          {CREATE_MODES.map((item, i) => (
-            <section
-              key={item.id}
-              id={`create-panel-${item.id}`}
-              role="tabpanel"
-              aria-labelledby={`create-tab-${item.id}`}
-              aria-hidden={i !== index}
-              className="flex w-full shrink-0 snap-center snap-always items-center justify-center px-6"
-            >
-              <article className="flex w-[min(18rem,84vw)] flex-col items-center rounded-xl bg-card px-5 py-7 text-center text-ink shadow-card">
-                <span className="grid h-16 w-16 place-items-center rounded-xl bg-accent text-white">
-                  <Icon name={item.icon} className="h-8 w-8" strokeWidth={1.6} />
-                </span>
-                <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight">{tx(locale, item.zh, item.en)}</h2>
-                <p className="mt-1.5 text-sm text-muted">{tx(locale, item.hintZh, item.hintEn)}</p>
-              </article>
-            </section>
-          ))}
-        </div>
-        {index > 0 ? (
-          <button
-            type="button"
-            className="absolute left-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-2xl leading-none text-white md:grid"
-            aria-label={tx(locale, "上一個", "Previous")}
-            onClick={() => go(index - 1)}
-          >
-            <span aria-hidden>‹</span>
-          </button>
-        ) : null}
-        {index < CREATE_MODES.length - 1 ? (
-          <button
-            type="button"
-            className="absolute right-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-2xl leading-none text-white md:grid"
-            aria-label={tx(locale, "下一個", "Next")}
-            onClick={() => go(index + 1)}
-          >
-            <span aria-hidden>›</span>
-          </button>
-        ) : null}
-      </div>
-
-      <p className="sr-only" aria-live="polite">
-        {tx(locale, mode.zh, mode.en)}
-      </p>
-      <p className="pb-1 text-center text-xs text-white/60">{tx(locale, "左右滑動揀", "Swipe to choose")}</p>
-      <div className="px-6">
+      <div className="flex justify-center px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
         <Link
           href={createDest(mode.href, loggedIn)}
           className="btn btn-primary w-full max-w-sm"
@@ -252,30 +199,6 @@ export function CreatePicker({
         >
           {tx(locale, mode.ctaZh, mode.ctaEn)}
         </Link>
-      </div>
-      <div
-        role="tablist"
-        aria-label={tx(locale, "新增", "Create")}
-        className="grid px-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1"
-        style={{ gridTemplateColumns: `repeat(${CREATE_MODES.length}, minmax(0, 1fr))` }}
-      >
-        {CREATE_MODES.map((item, i) => (
-          <button
-            key={item.id}
-            id={`create-tab-${item.id}`}
-            type="button"
-            role="tab"
-            aria-selected={i === index}
-            aria-controls={`create-panel-${item.id}`}
-            className={`min-h-14 whitespace-nowrap px-1 text-[13px] font-semibold ${i === index ? "" : "text-white/75"}`}
-            onClick={() => go(i)}
-          >
-            <span className="inline-flex flex-col items-center">
-              <span>{tx(locale, item.zh, item.en)}</span>
-              <span className={`mt-1 h-1 w-6 rounded-full bg-accent ${i === index ? "opacity-100" : "opacity-0"}`} />
-            </span>
-          </button>
-        ))}
       </div>
     </div>
   );
