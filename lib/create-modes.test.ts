@@ -50,6 +50,10 @@ assert(
   desktop.includes("max-w-lg") && desktop.indexOf("<SearchBox") < desktop.indexOf("tsm-monogram") && desktop.indexOf("tsm-monogram") < desktop.indexOf('variant="header"'),
   "desktop header is one row: search, mark, nav, on the feed width",
 );
+assert(
+  desktop.includes('href="/market"') && desktop.includes('href="/dex"') && desktop.includes("whitespace-nowrap") && desktop.includes("shrink-0"),
+  "desktop market and dex labels stay on one line",
+);
 assert(!shell.includes("h-14 max-w-6xl"), "desktop tools are not a second full-width bar");
 assert(shell.includes('href="/cart"') && shell.includes('href="/orders"') && shell.includes('href="/messages"'), "compact menu keeps cart, orders, and chat");
 assert(shell.includes("bg-accent/15"), "notification and cart counts use a small pill");
@@ -89,6 +93,7 @@ assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.i
 assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");
 assert(board.includes('id: "posts"') && board.includes('id: "saved"'), "My Binder is own posts; 收藏 is the wishlist tab");
 assert(!board.includes("我的卡") && !board.includes('id: "box"') && !board.includes("CollectionMenu") && !board.includes("collectionItemId"), "the owned-card grid is off the profile");
+assert(board.includes("未有卡片") && board.includes("開始放第一張") && !board.includes("未有貼文"), "My Binder empty state talks about cards");
 assert(board.includes('icon: "binder"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
 assert(!board.includes("chips") && !board.includes("rounded-full") && !board.includes("<PostCard") && !board.includes("<ListingCard"), "profile tabs are not pills and image tabs are thumbnails");
 assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");

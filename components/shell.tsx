@@ -47,11 +47,11 @@ export function Header({
           <Link href="/" className="relative z-10 shrink-0">
             <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-10 w-auto bg-transparent" />
           </Link>
-          <nav className="flex flex-1 items-center justify-end gap-1 pl-3 text-sm font-medium text-ink">
-            <Link className="inline-flex h-10 items-center hover:text-link" href="/market">{nav.search}</Link>
-            <Link className="inline-flex h-10 items-center hover:text-link" href="/dex">{nav.dex}</Link>
+          <nav className="flex flex-1 items-center justify-end gap-2 pl-2 text-sm font-medium text-ink">
+            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/market">{nav.search}</Link>
+            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/dex">{nav.dex}</Link>
             <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
-            <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="inline-flex h-10 items-center gap-1 hover:text-link">
+            <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap hover:text-link">
               {nav.notifications}
               {unread ? <Pill n={unread} /> : null}
             </Link>
