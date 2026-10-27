@@ -192,6 +192,7 @@ export default async function SearchPage({
     }),
   );
   const resultCount = shown.length + postCards.length;
+  const split = show === "all" && shown.length > 0 && postCards.length > 0;
   const history = viewer
     ? await prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 24 })
     : [];
@@ -236,14 +237,15 @@ export default async function SearchPage({
         number={number}
         show={show}
         categories={categories.map((category) => ({ slug: category.slug, nameZh: category.nameZh, nameEn: category.nameEn }))}
-      />
-      <ResultChips
-        locale={prefs.locale}
-        show={show}
-        hrefFor={(next) => marketSearchHref({ q, cat, cond, min, sort, pmin, pmax, sale, set: setName, num: number }, next)}
-      />
+      >
+        <ResultChips
+          locale={prefs.locale}
+          show={show}
+          hrefFor={(next) => marketSearchHref({ q, cat, cond, min, sort, pmin, pmax, sale, set: setName, num: number }, next)}
+        />
+      </SearchFilters>
       {q ? (
-        <div className="mb-3 mt-4 flex items-center justify-between gap-3 text-sm">
+        <div className="mb-3 flex items-center justify-between gap-3 text-sm">
           <p className="text-muted">
             {resultCount} {tx(prefs.locale, "件", "results")}
           </p>
@@ -252,8 +254,8 @@ export default async function SearchPage({
       ) : null}
       {resultCount === 0 ? <p className="empty">{emptyCopy(prefs.locale, show)}</p> : null}
       {shown.length ? (
-        <section className={postCards.length ? "mb-6" : undefined} aria-label={tx(prefs.locale, "上架", "Listings")}>
-          {show === "all" && postCards.length ? <h2 className="mb-2 text-sm font-semibold text-muted">{tx(prefs.locale, "上架", "Listings")}</h2> : null}
+        <section className={split ? "mb-5" : undefined} aria-label={tx(prefs.locale, "上架", "Listings")}>
+          {split ? <h2 className="mb-1 text-xs font-medium text-muted">{tx(prefs.locale, "上架", "Listings")}</h2> : null}
           <div className="feed">
             {shown.map((listing) => (
               <ListingCard key={listing.id} listing={listing} locale={prefs.locale} favorited={favIds.has(listing.id)} followed={follows.has(listing.sellerId)} next="/search" series={priorSalePrices(compSeries.get(compKey(listing)), listing.id)} />
@@ -263,7 +265,7 @@ export default async function SearchPage({
       ) : null}
       {postCards.length ? (
         <section aria-label={tx(prefs.locale, "貼文", "Posts")}>
-          {show === "all" && shown.length ? <h2 className="mb-2 text-sm font-semibold text-muted">{tx(prefs.locale, "貼文", "Posts")}</h2> : null}
+          {split ? <h2 className="mb-1 text-xs font-medium text-muted">{tx(prefs.locale, "貼文", "Posts")}</h2> : null}
           <div className="mx-auto grid w-full max-w-lg gap-3">
             {postCards.map((post) => (
               <PostCard key={post.id} post={post} locale={prefs.locale} next="/search" viewerId={viewerId} />
@@ -296,7 +298,7 @@ function ResultChips({
     ["post", "貼文", "Posts"],
   ] as const;
   return (
-    <nav className="chips mt-4" aria-label={tx(locale, "結果類型", "Result type")}>
+    <nav className="chips" aria-label={tx(locale, "結果類型", "Result type")}>
       {items.map(([id, zh, en]) => {
         const on = show === id;
         return (
