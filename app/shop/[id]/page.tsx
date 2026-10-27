@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
@@ -81,7 +80,6 @@ export default async function ShopPage({
           </form>
         </details>
       ) : null}
-      <p className="mt-6 text-sm"><Link href="/">{tx(locale, "返回主頁", "Back home")}</Link></p>
     </div>
   );
 }

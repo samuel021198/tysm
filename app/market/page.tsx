@@ -22,7 +22,6 @@ export default async function MarketPage({
     prisma.category.findMany({
       where: { level: "LEAF" },
       orderBy: [{ parent: { sort: "asc" } }, { sort: "asc" }],
-      include: { parent: { select: { nameZh: true, nameEn: true } } },
     }),
     prisma.listing.findMany({
       where: activeWhere(hidden),
@@ -44,25 +43,17 @@ export default async function MarketPage({
         <h1 className="page-title mb-0">{tx(prefs.locale, "賣場", "Market")}</h1>
         <Link href="/search" className="text-sm font-semibold text-link">{tx(prefs.locale, "篩選", "Filters")}</Link>
       </div>
-      <p className="mt-1 text-sm text-muted">{tx(prefs.locale, "篩選可以睇上架同已標價貼文。未標價的貼文唔會入賣場。", "Filters cover listings and priced posts. Posts without a price stay out.")}</p>
-      <section className="mt-5" aria-labelledby="market-cats">
-        <h2 id="market-cats" className="mb-2 text-sm font-semibold text-muted">
-          {tx(prefs.locale, "分類", "Categories")}
-        </h2>
-        <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {categories.map((cat) => {
-            const group = en ? cat.parent?.nameEn : cat.parent?.nameZh;
-            return (
-              <li key={cat.id}>
-                <Link href={`/search?cat=${cat.slug}`} className="surface flex min-h-14 flex-col justify-center px-3 py-2 active:scale-[0.99]">
-                  {group ? <span className="text-[11px] font-medium text-muted">{group}</span> : null}
-                  <span className="text-sm font-semibold">{en ? cat.nameEn : cat.nameZh}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <nav aria-label={tx(prefs.locale, "分類", "Categories")} className="chips mt-3 !flex-nowrap !overflow-x-auto">
+        {categories.map((cat) => (
+          <Link
+            key={cat.id}
+            href={`/search?cat=${cat.slug}`}
+            className="inline-flex h-8 items-center rounded-full border border-line bg-card px-2.5 text-xs font-medium"
+          >
+            {en ? cat.nameEn : cat.nameZh}
+          </Link>
+        ))}
+      </nav>
       <section className="mt-5" aria-labelledby="market-latest">
         <h2 id="market-latest" className="mb-2 text-base font-semibold">
           {tx(prefs.locale, "熱門／最新", "Popular / latest")}
