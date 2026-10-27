@@ -12,6 +12,7 @@ import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
 import { ShareButton } from "./share-button";
+import { TopicChips } from "./topic-chips";
 
 export function PostCard({
   post,
@@ -126,6 +127,7 @@ export function PostCard({
           </h2>
         </Link>
         {price}
+        {gallery ? null : <TopicChips tags={post.tags} className="mt-1.5" />}
       </div>
     </article>
     {commentsOpen && post.postId ? (

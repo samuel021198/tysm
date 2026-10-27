@@ -2,13 +2,14 @@ import type { ConditionTrack, Grader, RawGrade } from "@prisma/client";
 import { prisma } from "./db";
 import { shouldPublishPost, type CollectionVisibility } from "./posts";
 import { storeUploadedImages } from "./r2";
+import { mergeTags, tagsFromCaption } from "./tags";
 
 const listingForSync = {
   photos: { orderBy: { position: "asc" as const } },
 } as const;
 
 /** Keep the collection row attached to this listing and post once the sale is live. */
-export async function syncListingInventory(listingId: string, opts?: { visibility?: CollectionVisibility; postBody?: string }) {
+export async function syncListingInventory(listingId: string, opts?: { visibility?: CollectionVisibility; postBody?: string; tags?: string[] }) {
   const listing = await prisma.listing.findUnique({ where: { id: listingId }, include: listingForSync });
   if (!listing) return { itemId: null as string | null, postId: null as string | null };
   const existing = await prisma.collectionItem.findUnique({ where: { listingId } });
@@ -53,19 +54,26 @@ export async function syncListingInventory(listingId: string, opts?: { visibilit
       })),
     });
   }
-  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE", opts?.postBody, listing.description);
+  const postId = await ensurePost(item.id, listing.sellerId, listing.status === "ACTIVE", opts?.postBody, listing.description, opts?.tags);
   return { itemId: item.id, postId };
 }
 
-async function ensurePost(itemId: string, authorId: string, listingPublished: boolean, postBody?: string, fallback = "") {
+async function ensurePost(itemId: string, authorId: string, listingPublished: boolean, postBody?: string, fallback = "", tags?: string[]) {
   const existing = await prisma.post.findUnique({ where: { collectionItemId: itemId } });
+  const source = postBody ?? fallback;
+  const nextTags = mergeTags(tags ?? [], tagsFromCaption(source));
   if (existing) {
-    if (postBody != null) await prisma.post.update({ where: { id: existing.id }, data: { body: postBody.slice(0, 500) } });
+    if (postBody != null) {
+      await prisma.post.update({
+        where: { id: existing.id },
+        data: { body: postBody.slice(0, 500), tags: nextTags },
+      });
+    }
     return existing.id;
   }
   if (!shouldPublishPost({ forSale: true, listingPublished, publishToFeed: false })) return null;
   const post = await prisma.post.create({
-    data: { authorId, collectionItemId: itemId, body: (postBody ?? fallback).slice(0, 500) },
+    data: { authorId, collectionItemId: itemId, body: source.slice(0, 500), tags: nextTags },
   });
   return post.id;
 }
@@ -105,6 +113,8 @@ export async function createCollectionItem(input: {
   if (!shouldPublishPost({ forSale: false, listingPublished: false, publishToFeed: input.publishToFeed })) {
     return { itemId: item.id, postId: null as string | null };
   }
-  const post = await prisma.post.create({ data: { authorId: input.ownerId, collectionItemId: item.id, body: input.note } });
+  const post = await prisma.post.create({
+    data: { authorId: input.ownerId, collectionItemId: item.id, body: input.note, tags: tagsFromCaption(input.note) },
+  });
   return { itemId: item.id, postId: post.id };
 }

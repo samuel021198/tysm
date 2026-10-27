@@ -62,7 +62,7 @@ async function seedShowcase() {
   for (const [index, item] of demoShowcaseListings.entries()) {
     const data = {
       sellerId: item.ownerId,
-      categoryId: "cat_idols",
+      categoryId: item.categoryId ?? "cat_idols",
       status: "ACTIVE" as const,
       saleType: "BUY_NOW" as const,
       title: item.title,
@@ -89,12 +89,12 @@ async function seedShowcase() {
       auctionSettled: false,
       bidsVoided: false,
       binLockOrderId: null,
-      cardKind: "CELEBRITY" as const,
-      game: null,
-      setName: null,
-      cardName: null,
-      language: null,
-      personName: item.title,
+      cardKind: item.cardKind ?? "CELEBRITY",
+      game: item.game ?? null,
+      setName: item.setName ?? null,
+      cardName: item.cardName ?? null,
+      language: item.language ?? null,
+      personName: item.cardKind && item.cardKind !== "CELEBRITY" ? item.personName ?? null : item.personName ?? item.title,
       seasonYear: "2026",
       brandSeries: "實拍",
       conditionTrack: "RAW" as const,
@@ -239,6 +239,7 @@ async function seedShowcase() {
       authorId: post.ownerId,
       collectionItemId: item.id,
       body: post.body,
+      tags: post.tags,
       createdAt: daysAgo(post.ageDays),
     };
     await prisma.post.upsert({

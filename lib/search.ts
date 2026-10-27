@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { tagLookup } from "./tags";
 
 // ponytail: hand-kept zh/en aliases, capped at 8 needles. Upgrade path: a DB synonym table if the catalog outgrows this list.
 const GROUPS: readonly (readonly string[])[] = [
@@ -100,10 +101,12 @@ export function postQueryWhere(query: string): Prisma.PostWhereInput {
   if (!needles.length) return { id: { in: [] } };
   const clause = (needle: string): Prisma.PostWhereInput => {
     const contains = fieldContains(needle);
+    const tags = tagLookup(needle);
     return {
       OR: [
         { body: contains },
         { author: { nickname: contains } },
+        ...(tags.length ? [{ tags: { hasSome: tags } }] : []),
         { collectionItem: { listing: listingNeedleWhere(needle) } },
       ],
     };

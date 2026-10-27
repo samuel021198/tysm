@@ -182,6 +182,7 @@ export default async function SearchPage({
     toPostCard({
       postId: row.id,
       body: row.body,
+      tags: row.tags,
       author: row.author,
       photos: row.photos,
       item: row.collectionItem,

@@ -1,5 +1,6 @@
 import { safeNext } from "./format";
 import { conditionLabel } from "./rules";
+import { mergeTags, tagsFromCaption } from "./tags";
 
 export type CollectionVisibility = "PUBLIC" | "PRIVATE";
 
@@ -130,6 +131,7 @@ export type PostCardModel = {
   commentHref: string | null;
   /** Checkout when the listing can be carted. Contact when it is auction-only. Null on a showcase post. */
   buy: PostBuy | null;
+  tags: string[];
 };
 
 export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "edit"] as const;
@@ -200,6 +202,7 @@ export function toPostCard(input: {
   commentCount: number;
   liked: boolean;
   saved: boolean;
+  tags?: string[];
 }): PostCardModel {
   const listing = input.item?.listing ?? null;
   const photos = (input.item?.photos.length ? input.item.photos : input.photos).map((photo) => photo.url);
@@ -233,6 +236,7 @@ export function toPostCard(input: {
     sharePath: `/post/${input.postId}`,
     commentHref: `/post/${input.postId}#comments`,
     buy: price.buy,
+    tags: mergeTags(input.tags ?? [], tagsFromCaption(input.body)),
   };
 }
 
@@ -281,5 +285,6 @@ export function listingSuggestionCard(input: {
     sharePath: `/listing/${listing.id}`,
     commentHref: null,
     buy: price.buy,
+    tags: [],
   };
 }

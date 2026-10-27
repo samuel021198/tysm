@@ -4,9 +4,11 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { toPostCard } from "@/lib/posts";
 import { isBlocked } from "@/lib/social";
+import { displayCaption } from "@/lib/tags";
 import { tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
 import { PostCard } from "@/components/post-card";
+import { TopicChips } from "@/components/topic-chips";
 
 export default async function PostPage({
   params,
@@ -59,6 +61,7 @@ export default async function PostPage({
   const card = toPostCard({
     postId: post.id,
     body: post.body,
+    tags: post.tags,
     author: post.author,
     photos: post.photos,
     item: post.collectionItem,
@@ -67,11 +70,13 @@ export default async function PostPage({
     liked: viewer ? post.likes.some((like) => like.userId === viewer.id) : false,
     saved: viewer ? post.saves.some((save) => save.userId === viewer.id) : false,
   });
+  const caption = displayCaption(post.body);
   return (
     <div className="mx-auto grid max-w-lg gap-4">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <PostCard post={card} locale={locale} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
-      {post.body ? <p className="px-1 text-sm">{post.body}</p> : null}
+      {caption ? <p className="px-1 text-sm leading-6 text-muted">{caption}</p> : null}
+      <TopicChips tags={card.tags} className="px-1" />
       {viewer?.id === post.authorId && post.collectionItem && !post.collectionItem.listingId ? (
         <Link
           href={`/sell?collectionItemId=${encodeURIComponent(post.collectionItem.id)}${post.collectionItem.catalogCardId ? `&catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}` : ""}`}

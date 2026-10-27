@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { authorizedBearer } from "../lib/bootstrap";
 import { DEMO_CARDS } from "../lib/demo-dex";
-import { DEMO_ACCOUNTS, DEMO_CODE } from "../lib/demo-login";
+import { DEMO_ACCOUNTS, DEMO_CODE, TRIAL_ACCOUNTS } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
 import {
   LEAF_CATEGORIES,
@@ -46,7 +46,7 @@ unique(demoNotifications.map((note) => note.id), "notification");
 unique(demoFavorites.map((row) => row.id), "favorite");
 unique(demoCart.map((row) => row.id), "cart");
 
-assert(demoUsers.filter((user) => user.role === "USER").length === DEMO_ACCOUNTS.length, "exactly three demo accounts");
+assert(demoUsers.filter((user) => user.role === "USER").length === DEMO_ACCOUNTS.length + TRIAL_ACCOUNTS.length, "three locked demos plus ten traders");
 assert(active.length >= 56, "home feed should feel full");
 for (const [id] of LEAF_CATEGORIES) {
   const rows = active.filter((item) => item.categoryId === id);
@@ -133,8 +133,9 @@ const cron = readFileSync(new URL("../vercel.json", import.meta.url), "utf8");
 assert(cron.includes("0 16 * * *") && cron.includes("/api/cron/sweep") && !cron.includes("*/10"), "publish sweep runs once per day (Hobby cron limit)");
 
 const people = demoUsers.filter((user) => user.role === "USER");
-assert(people.map((user) => user.nickname).join() === "Mars,Tyu,MueL", "display names stay exact");
-assert(people.every((user, index) => user.id === DEMO_ACCOUNTS[index].id && user.nickname === DEMO_ACCOUNTS[index].nickname), "seed users match the login accounts");
+assert(people.slice(0, 3).map((user) => user.nickname).join() === "Mars,Tyu,MueL", "locked display names stay exact");
+assert(people.slice(0, 3).every((user, index) => user.id === DEMO_ACCOUNTS[index].id && user.nickname === DEMO_ACCOUNTS[index].nickname), "seed users match the login accounts");
+assert(people.slice(3).every((user, index) => user.id === TRIAL_ACCOUNTS[index].id && user.nickname === TRIAL_ACCOUNTS[index].nickname), "trial traders keep their handles");
 const admin = demoUsers.find((user) => user.role === "ADMIN");
 assert(admin && admin.id === "user_admin" && !("email" in admin), "admin stays a system account, not a login-page demo");
 for (const person of people) {
@@ -144,13 +145,24 @@ for (const person of people) {
 assert(!demoUsers.some((user) => user.nickname === "卡桌阿傑" || user.id === "user_showcase" || user.id === "user_mei"), "old demo accounts are gone");
 
 const demoIds = new Set<string>(people.map((user) => user.id));
-for (const a of demoIds) {
-  for (const b of demoIds) {
+const lockedIds = DEMO_ACCOUNTS.map((row) => row.id);
+const traderIds = TRIAL_ACCOUNTS.map((row) => row.id);
+for (const a of lockedIds) {
+  for (const b of lockedIds) {
     if (a === b) continue;
     assert(demoFollows.some((row) => row.followerId === a && row.sellerId === b), `${a} follows ${b}`);
   }
+  for (const b of traderIds) assert(demoFollows.some((row) => row.followerId === a && row.sellerId === b), `${a} follows ${b}`);
 }
-assert(demoFollows.length === demoIds.size * (demoIds.size - 1), "mutual follows and nothing else");
+const mutualTraders = traderIds.filter((id) =>
+  traderIds.some(
+    (other) =>
+      other !== id &&
+      demoFollows.some((row) => row.followerId === id && row.sellerId === other) &&
+      demoFollows.some((row) => row.followerId === other && row.sellerId === id),
+  ),
+);
+assert(mutualTraders.length >= 8, "some traders follow each other");
 
 const userIds = new Set(demoUsers.map((user) => user.id));
 const showcaseListingIds = new Set(demoListings.map((item) => item.id));
@@ -166,12 +178,29 @@ assert(demoShowcaseReviews.length >= 6, "showcase reviews");
 const publicCollections = demoShowcaseCollections.filter((item) => item.visibility === "PUBLIC");
 assert(publicCollections.length >= 10 && publicCollections.length > demoShowcaseCollections.length / 2, "collections are mostly public");
 const shown = demoShowcasePosts.map((post) => showcasePostPhotos(post));
-assert(shown.some((photos) => photos.length === 1) && shown.some((photos) => photos.length > 1), "posts mix one and many photos");
+assert(shown.every((photos) => photos.length >= 2 && photos.length <= 4), "posts carry two to four photos");
+assert(shown.some((photos) => photos.length >= 3), "some posts are longer carousels");
 for (const post of demoShowcasePosts) {
   const item = demoShowcaseCollections.find((row) => row.id === post.collectionId);
   assert(item && item.ownerId === post.ownerId && demoIds.has(post.ownerId), post.id);
   assert(post.body.trim().length > 0, post.id);
+  assert(post.tags.length >= 1 && post.tags.length <= 3, post.id);
+  const sentences = post.body
+    .replace(/#[\p{L}\p{N}_]+/gu, "")
+    .split(/[。！？]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  assert(sentences.length >= 2 && sentences.length <= 4, `${post.id} captions`);
+  if (item.listingId) assert(post.tags.some((tag) => tag === "FS" || tag === "賣"), `${post.id} selling topic`);
+  else assert(post.tags.includes("PC"), `${post.id} collection topic`);
 }
+for (const person of people) {
+  assert(demoShowcasePosts.filter((post) => post.ownerId === person.id).length >= 3, `${person.id} posts`);
+}
+const publicPosts = demoShowcasePosts.filter((post) => demoShowcaseCollections.find((item) => item.id === post.collectionId)?.visibility === "PUBLIC");
+const sellingPosts = publicPosts.filter((post) => demoShowcaseCollections.find((item) => item.id === post.collectionId)?.listingId);
+const showcaseShare = (publicPosts.length - sellingPosts.length) / publicPosts.length;
+assert(showcaseShare >= 0.55 && showcaseShare <= 0.65, "feed is mostly showcase");
 for (const item of demoShowcaseListings) assert(demoIds.has(item.ownerId), item.id);
 for (const item of demoShowcaseCollections) assert(demoIds.has(item.ownerId), item.id);
 for (const url of [
@@ -226,6 +255,7 @@ assert(loginPage.includes("fixed") && loginPage.includes("bottom-[var(--tab-h)]"
 const demoLogin = readFileSync(new URL("../lib/demo-login.ts", import.meta.url), "utf8");
 for (const name of ["Mars", "Tyu", "MueL"]) assert(demoLogin.includes(`nickname: "${name}"`), name);
 assert(loginPage.includes("account.nickname"), "buttons show the demo display names");
+assert(loginPage.includes("DEMO_ACCOUNTS.map") && !loginPage.includes("TRIAL_ACCOUNTS"), "one-tap buttons stay Mars, Tyu, and MueL");
 assert(!loginPage.includes("卡桌阿傑") && !loginForm.includes("卡桌阿傑") && !loginForm.includes("mei@tysm.hk"), "old demos are off the login page");
 assert(DEMO_CODE === "123", "shared demo code");
 const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");

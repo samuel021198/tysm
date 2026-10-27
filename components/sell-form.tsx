@@ -7,7 +7,9 @@ import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { PHOTO_MAX, parseListingForm, wizardFocusField, wizardPublishIssues, wizardStepForIssue, type ListingInput } from "@/lib/sell-wizard";
 import { enhanceDataUrl, fileToDataUrl } from "./photo-file";
+import { insertTag, tagsFromCaption } from "@/lib/tags";
 import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
+import { TopicSuggest } from "./topic-field";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
@@ -597,12 +599,18 @@ export function SellForm({
             name="description"
             maxLength={5000}
             value={description}
-            placeholder={tx(locale, "可留空。可以寫 #標籤。", "Optional. Hashtags are fine.")}
+            placeholder={tx(locale, "可留空。可以加話題，例如 #PC #FS。", "Optional. Topics like #PC #FS are fine.")}
             aria-invalid={shown.includes("description")}
             onChange={(event) => setDescription(event.target.value)}
           />
           <FieldError locale={locale} codes={shown} code="description" />
         </label>
+        <TopicSuggest
+          locale={locale}
+          tags={tagsFromCaption(description)}
+          partial={null}
+          onPick={(tag) => setDescription((current) => insertTag(current, current.length, tag).text)}
+        />
       </div>
 
       {!locked ? (
