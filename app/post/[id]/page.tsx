@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { addComment } from "@/actions/collect";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { toPostCard } from "@/lib/posts";
@@ -29,7 +28,6 @@ export default async function PostPage({
         likes: { select: { userId: true } },
         saves: { select: { userId: true } },
         _count: { select: { comments: true, likes: true } },
-        comments: { include: { author: { select: { id: true, nickname: true } } }, orderBy: { createdAt: "asc" }, take: 50 },
         collectionItem: {
           include: {
             photos: { orderBy: { position: "asc" } },
@@ -89,27 +87,6 @@ export default async function PostPage({
           {tx(locale, "放賣", "List for sale")}
         </Link>
       ) : null}
-      <section id="comments" className="grid gap-3">
-        <h2 className="font-semibold">{tx(locale, "留言", "Comments")}</h2>
-        {post.comments.length === 0 ? <p className="text-sm text-muted">{tx(locale, "未有留言。", "No comments yet.")}</p> : null}
-        <ul className="grid gap-3 text-sm">
-          {post.comments.map((comment) => (
-            <li key={comment.id}>
-              <Link href={`/shop/${comment.author.id}`} className="font-semibold">{comment.author.nickname}</Link>
-              <p>{comment.body}</p>
-            </li>
-          ))}
-        </ul>
-        {viewer ? (
-          <form key={post.comments.at(-1)?.id ?? "none"} action={addComment} className="grid gap-2">
-            <input type="hidden" name="postId" value={post.id} />
-            <textarea className="field" name="body" maxLength={300} required placeholder={tx(locale, "寫一句", "Write a comment")} />
-            <button className="btn btn-primary w-fit">{tx(locale, "送出", "Send")}</button>
-          </form>
-        ) : (
-          <Link href={`/login?next=${encodeURIComponent(`/post/${post.id}`)}`} className="text-sm text-link">{tx(locale, "登入之後先可以留言", "Log in to comment")}</Link>
-        )}
-      </section>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { cleanComment, COMMENT_REACTS, replyDraft } from "./comments";
 import { EDGE_GUARD, gestureEnd, HOLD_MS, lockAxis, SWIPE_DOWN, SWIPE_X } from "./gesture";
 import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard, wishlistPostVisible } from "./posts";
 
@@ -90,7 +91,13 @@ assert(card.savePostId === "p1" && card.saved && card.saveListingId === null, "a
 assert(card.priceCents === 128000, "selling post keeps the price");
 assert(card.priceHref === "/listing/seed_charizard", "the price opens the listing");
 assert(card.condition === "Raw A", "condition is on the card");
-assert(card.commentHref === "/post/p1#comments", "comments go to the post");
+assert(card.commentHref === "/post/p1#comments", "a post keeps its comment thread");
+assert(cleanComment("  你好  ") === "你好", "a comment trims");
+assert(cleanComment("   ") === null && cleanComment("a".repeat(301)) === null, "empty and oversized comments are dropped");
+assert(cleanComment("a".repeat(300))?.length === 300, "300 characters still fit");
+assert(replyDraft("阿明", "hello") === "@阿明 hello", "reply prefixes the nickname");
+assert(replyDraft("阿明", "@舊 hello") === "@阿明 hello", "a new reply replaces the previous mention");
+assert(COMMENT_REACTS.includes("❤️") && COMMENT_REACTS.length === 8, "quick reacts stay a short row");
 assert(!card.href.includes("checkout"), "the card does not link to checkout");
 assert(card.dexHref === "/dex/demo_card_charizard", "a linked card opens the dex");
 
@@ -223,6 +230,7 @@ assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not
 assert(menu.includes('if (own) return null'), "own posts do not offer report");
 const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");
 assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
+assert(!postPage.includes("addComment"), "the post page does not submit comments through a navigation");
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
 assert(postCard.includes('name="book"') && postCard.includes("aria-label={dexLabel}"), "the dex link is an icon with a label");
@@ -251,6 +259,16 @@ assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no 
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
 assert(strip.includes("object-contain"), "a detail strip shows the whole photo");
+assert(strip.includes("aria-current") && strip.includes("data-gesture"), "dots mark the page and the strip keeps the card menu");
+const carouselAt = postCard.indexOf("photos.length > 1");
+const carouselBranch = postCard.slice(carouselAt, postCard.indexOf(": (", carouselAt));
+assert(carouselBranch.includes("PhotoStrip") && !carouselBranch.includes("<Link"), "feed and detail carousels are not one link");
+const sheet = readFileSync(new URL("../components/comment-sheet.tsx", import.meta.url), "utf8");
+const commentRoute = readFileSync(new URL("../app/api/posts/[id]/comments/route.ts", import.meta.url), "utf8");
+assert(postCard.includes("CommentSheet") && !postCard.includes("href={post.commentHref}"), "the comment icon opens a sheet");
+assert(sheet.includes("回應") && sheet.includes("加入對話……") && sheet.includes('role="dialog"'), "the sheet is a reply tray with the conversation field");
+assert(sheet.includes("/api/posts/") && !sheet.includes("router.refresh") && !sheet.includes("location.reload"), "sending a comment stays in the sheet");
+assert(commentRoute.includes("prisma.postComment") && commentRoute.includes("cleanComment") && !commentRoute.includes("redirect("), "comments reuse PostComment without a redirect");
 const gallery = readFileSync(new URL("../components/gallery.tsx", import.meta.url), "utf8");
 assert(gallery.includes("onSwipeLeft") && gallery.includes("onSwipeRight"), "listing photos swipe between frames");
 

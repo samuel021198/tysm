@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { togglePostLike, togglePostSave } from "@/actions/collect";
 import { toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { CommentSheet } from "./comment-sheet";
 import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
@@ -23,9 +27,16 @@ export function PostCard({
   viewerId?: string | null;
 }) {
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
-  const shown = gallery ? photos : photos.slice(0, 1);
   const likeFormId = post.likePostId ? `like-${post.id}` : undefined;
-  const commentLabel = post.commentCount ? `${tx(locale, "留言", "Comment")} ${post.commentCount}` : tx(locale, "留言", "Comment");
+  const [count, setCount] = useState(post.commentCount);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const commentLabel = count ? `${tx(locale, "留言", "Comment")} ${count}` : tx(locale, "留言", "Comment");
+  useEffect(() => {
+    if (!post.postId) return;
+    if (window.location.hash !== "#comments") return;
+    if (window.location.pathname !== `/post/${post.postId}`) return;
+    setCommentsOpen(true);
+  }, [post.postId]);
   const dexLabel = tx(locale, "睇圖鑑", "View in the dex");
   const saveLabel = tx(locale, "收藏", "Favorite");
   const price =
@@ -60,15 +71,13 @@ export function PostCard({
           {post.author.nickname}
         </Link>
       </div>
-      <Link href={post.href} className="block">
-        {gallery && photos.length > 1 ? (
-          <PhotoStrip photos={photos} />
-        ) : (
-          shown.map((url, index) => (
-            <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className={photoClass} />
-          ))
-        )}
-      </Link>
+      {photos.length > 1 ? (
+        <PhotoStrip photos={photos} href={post.href} imageClass={photoClass} />
+      ) : (
+        <Link href={post.href} className="block">
+          <img src={photos[0]} alt="" loading="eager" decoding="async" className={photoClass} />
+        </Link>
+      )}
       <div className="flex items-center border-t border-line">
         {post.likePostId ? (
           <form id={likeFormId} action={togglePostLike}>
@@ -81,11 +90,11 @@ export function PostCard({
             </button>
           </form>
         ) : null}
-        {post.commentHref ? (
-          <Link href={post.commentHref} aria-label={commentLabel} title={commentLabel} className={action}>
+        {post.postId ? (
+          <button type="button" aria-label={commentLabel} title={commentLabel} aria-expanded={commentsOpen} aria-haspopup="dialog" className={action} onClick={() => setCommentsOpen(true)}>
             <Icon name="messages" className="h-5 w-5" strokeWidth={2.25} />
-            {post.commentCount ? <span>{post.commentCount}</span> : null}
-          </Link>
+            {count ? <span>{count}</span> : null}
+          </button>
         ) : (
           <span className={`${action} text-muted`} title={tx(locale, "這張未有貼文", "No post yet")} aria-label={commentLabel}>
             <Icon name="messages" className="h-5 w-5" strokeWidth={2.25} />
@@ -118,6 +127,9 @@ export function PostCard({
         </Link>
       </div>
     </article>
+    {commentsOpen && post.postId ? (
+      <CommentSheet postId={post.postId} locale={locale} onClose={() => setCommentsOpen(false)} onPosted={() => setCount((n) => n + 1)} />
+    ) : null}
     </PostMenu>
   );
 }
