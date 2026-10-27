@@ -42,7 +42,6 @@ export default async function HomePage({
       rawGrade: true,
       grader: true,
       gradeValue: true,
-      favoriteCount: true,
       status: true,
       quantityAvailable: true,
       saleType: true,
@@ -65,7 +64,7 @@ export default async function HomePage({
       })
     : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
-  const listingCards = extras.map((listing) => listingSuggestionCard({ listing, liked: favIds.has(listing.id) }));
+  const listingCards = extras.map((listing) => listingSuggestionCard({ listing, saved: favIds.has(listing.id) }));
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">

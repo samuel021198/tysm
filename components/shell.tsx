@@ -138,7 +138,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     saved: ["已儲存", "Saved"],
     published: ["已刊登，而家公開", "Published. It is live now"],
     story: ["限時動態已發佈，24 小時後消失", "Story posted. It disappears in 24 hours"],
-    collected: ["已加入收藏", "Added to your collection"],
+    collected: ["已加入 My Binder", "Added to My Binder"],
     posted: ["已發到動態", "Posted"],
     deleted: ["已刪除貼文", "Post deleted"],
     draft: ["已存草稿，未有公開", "Draft saved. Not live yet"],

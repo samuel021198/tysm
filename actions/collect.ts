@@ -244,6 +244,24 @@ export async function togglePostLike(formData: FormData) {
   revalidatePath("/");
   revalidatePath(`/post/${postId}`);
   revalidatePath("/me");
+  revalidatePath("/me/favorites");
+}
+
+export async function togglePostSave(formData: FormData) {
+  const postId = String(formData.get("postId") || "");
+  const next = String(formData.get("next") || `/post/${postId}`);
+  const user = await viewer(next);
+  const post = await readablePost(postId, user.id);
+  if (!post) redirect("/?err=forbidden");
+  const existing = await prisma.postSave.findUnique({ where: { userId_postId: { userId: user.id, postId } } });
+  if (existing) await prisma.postSave.delete({ where: { id: existing.id } });
+  else await prisma.postSave.create({ data: { userId: user.id, postId } });
+  revalidatePath("/");
+  revalidatePath(`/post/${postId}`);
+  revalidatePath("/me");
+  revalidatePath("/me/favorites");
+  const nextPath = next.split("?")[0];
+  if (nextPath.startsWith("/") && nextPath !== `/post/${postId}` && nextPath !== "/") revalidatePath(nextPath);
 }
 
 export async function addComment(formData: FormData) {
@@ -268,8 +286,8 @@ export async function deletePost(formData: FormData) {
     select: { id: true, authorId: true },
   });
   if (!ownedPostId(post, user.id)) redirect("/?err=forbidden");
-  // PostPhoto, PostLike, and PostComment cascade. collectionItemId lives on Post,
-  // so the collection card and its listing stay.
+  // PostPhoto, PostLike, PostSave, and PostComment cascade. collectionItemId lives on Post,
+  // so the binder card and its listing stay.
   await prisma.post.deleteMany({ where: { id: postId, authorId: user.id } });
   revalidatePath("/");
   revalidatePath("/me");

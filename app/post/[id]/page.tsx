@@ -27,6 +27,7 @@ export default async function PostPage({
         author: { select: { id: true, nickname: true, avatarUrl: true } },
         photos: { orderBy: { position: "asc" } },
         likes: { select: { userId: true } },
+        saves: { select: { userId: true } },
         _count: { select: { comments: true, likes: true } },
         comments: { include: { author: { select: { id: true, nickname: true } } }, orderBy: { createdAt: "asc" }, take: 50 },
         collectionItem: {
@@ -66,6 +67,7 @@ export default async function PostPage({
     likeCount: post._count.likes,
     commentCount: post._count.comments,
     liked: viewer ? post.likes.some((like) => like.userId === viewer.id) : false,
+    saved: viewer ? post.saves.some((save) => save.userId === viewer.id) : false,
   });
   const listing = post.collectionItem?.listing;
   const selling = card.priceCents != null && listing;

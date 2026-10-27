@@ -15,7 +15,10 @@ export default async function AddPage({ searchParams }: { searchParams: Promise<
   return (
     <div className="mx-auto grid max-w-lg gap-4">
       <div className="flex items-end justify-between gap-3">
-        <h1 className="page-title mb-0">{mode === "post" ? tx(prefs.locale, "貼子", "New post") : tx(prefs.locale, "加入收藏", "Add to collection")}</h1>
+        <div>
+          <h1 className="page-title mb-0">{mode === "post" ? tx(prefs.locale, "貼子", "New post") : tx(prefs.locale, "加入 My Binder", "Add to My Binder")}</h1>
+          {mode === "collection" ? <p className="text-xs text-muted">{tx(prefs.locale, "我的卡", "Your cards")}</p> : null}
+        </div>
         {mode === "collection" ? (
           <Link href="/sell" className="text-sm text-link">{tx(prefs.locale, "進階上架", "Advanced")}</Link>
         ) : null}

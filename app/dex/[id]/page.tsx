@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { collectCatalogCard } from "@/actions/dex";
-import { getPrefs, getViewer } from "@/lib/auth";
+import { getPrefs } from "@/lib/auth";
 import { compactSetLine } from "@/lib/card-line";
 import { catalogTitleFromCard } from "@/lib/card-title";
 import { catalogImageSrc } from "@/lib/catalog-image";
-import { prisma } from "@/lib/db";
 import { gameHasRegion, gameParam, numberKey, parseGame, regionLabel, setDisplayName } from "@/lib/dex";
 import { getDexCard } from "@/lib/dex-query";
 import { tx, type Locale } from "@/lib/i18n";
@@ -44,10 +42,7 @@ export default async function DexCardPage({
   const card = await getDexCard(id);
   if (!card) notFound();
   const game = parseGame(card.game) ?? "POKEMON";
-  const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
-  const owned = viewer
-    ? await prisma.collectionItem.findFirst({ where: { ownerId: viewer.id, catalogCardId: card.id }, select: { id: true } }).then(Boolean)
-    : false;
+  const prefs = await getPrefs();
   const tab = sp.tab === "data" || sp.tab === "story" || sp.tab === "sales" ? sp.tab : "price";
   const range = parseTrendRange(sp.range);
   const title = cardName(card, prefs.locale);
@@ -162,19 +157,7 @@ export default async function DexCardPage({
       ) : null}
 
       <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur">
-        <div className="mx-auto flex max-w-lg items-center gap-2">
-          {owned ? (
-            <Link href="/me?tab=box" className="btn btn-primary flex-1">
-              {tx(prefs.locale, "已加入收藏", "In your collection")}
-            </Link>
-          ) : (
-            <form action={collectCatalogCard} className="flex-1">
-              <input type="hidden" name="cardId" value={card.id} />
-              <button className="btn btn-primary w-full" type="submit">
-                {tx(prefs.locale, "加入收藏", "Add to collection")}
-              </button>
-            </form>
-          )}
+        <div className="mx-auto flex max-w-lg items-center justify-end">
           <ShareButton path={`/dex/${card.id}`} label={tx(prefs.locale, "分享", "Share")} copiedLabel={tx(prefs.locale, "已複製", "Copied")} internalLabel={tx(prefs.locale, "內部分享", "In TYSM")} icon />
         </div>
       </div>

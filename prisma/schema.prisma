@@ -190,6 +190,7 @@ model User {
   collection      CollectionItem[]
   posts           Post[]
   postLikes       PostLike[]
+  postSaves       PostSave[]
   postComments    PostComment[]
   stories         Story[]
   storyViews      StoryView[]
@@ -756,6 +757,7 @@ model Post {
   collectionItem CollectionItem? @relation(fields: [collectionItemId], references: [id], onDelete: Cascade)
   photos         PostPhoto[]
   likes          PostLike[]
+  saves          PostSave[]
   comments       PostComment[]
 
   @@index([authorId, createdAt])
@@ -781,6 +783,19 @@ model PostLike {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId])
+}
+
+/// Wishlist save of a post. Not a like, and not a card in My Binder.
+model PostSave {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([postId])
 }
 
 model PostComment {

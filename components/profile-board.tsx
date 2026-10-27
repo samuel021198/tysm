@@ -41,7 +41,7 @@ type Sale = {
 
 const TABS = [
   { id: "posts", zh: "貼文", en: "Posts", icon: "grid" },
-  { id: "box", zh: "收藏", en: "Collection", icon: "bookmark" },
+  { id: "box", zh: "My Binder", en: "My Binder", icon: "binder" },
   { id: "selling", zh: "商店", en: "Shop", icon: "bag" },
   { id: "reviews", zh: "評價", en: "Reviews", icon: "star" },
 ] as const;
@@ -78,7 +78,7 @@ export function ProfileBoard({
       <nav aria-label={tx(locale, "個人內容", "Profile")} className="grid grid-cols-4 border-t border-line">
         {TABS.map((item) => {
           const on = panel === item.id;
-          const label = tx(locale, item.zh, item.en);
+          const label = item.id === "box" ? tx(locale, "My Binder，我的卡", "My Binder") : tx(locale, item.zh, item.en);
           return (
             <Link
               key={item.id}
@@ -122,8 +122,11 @@ export function ProfileBoard({
       ) : null}
       {panel === "box" ? (
         <>
-          {isSelf ? <p className="px-3 pt-2 text-xs text-muted sm:px-0">{tx(locale, "預設公開。私人收藏只會喺呢度見到。", "Public by default. Private cards stay on this screen.")}</p> : null}
-          {items.length === 0 ? <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No cards yet.")}</p> : null}
+          <p className="px-3 pt-2 text-xs text-muted sm:px-0">
+            <span className="font-medium text-ink">My Binder</span>
+            {isSelf ? tx(locale, " · 我的卡。預設公開，私人卡只會喺呢度見到。", ". Public by default. Private cards stay on this screen.") : null}
+          </p>
+          {items.length === 0 ? <p className="empty mx-3 sm:mx-0">{tx(locale, "My Binder 未有卡。", "Nothing in My Binder yet.")}</p> : null}
           <ul className="grid grid-cols-3 gap-px">
             {items.map((item) => {
               const label = item.priceCents != null ? `${item.cardName} ${formatHkd(item.priceCents, locale)}` : item.cardName;

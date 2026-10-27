@@ -50,8 +50,8 @@ export function PostMenu({
   };
   const confirmLabel = tx(
     locale,
-    "刪除這則貼文？留言同讚好會一併刪除。收藏同賣場會留低。",
-    "Delete this post? Comments and likes are removed. Your collection and any listing stay.",
+    "刪除這則貼文？留言同讚好會一併刪除。My Binder 同賣場會留低。",
+    "Delete this post? Comments and likes are removed. My Binder and any listing stay.",
   );
   const row = "flex h-11 w-full items-center px-3 text-left text-sm font-medium disabled:text-muted";
 

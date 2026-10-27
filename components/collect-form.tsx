@@ -175,7 +175,7 @@ export function CollectForm({
         </div>
         {photoNote ? <p className="text-sm text-danger">{photoNote}</p> : null}
         {mode === "collection" ? (
-          <p className="text-sm text-muted">{tx(locale, "收藏至少一張相。放賣至少兩張，評級卡要有正面同背面。", "One photo to collect. Two to sell. Graded cards need a front and a back.")}</p>
+          <p className="text-sm text-muted">{tx(locale, "My Binder 至少一張相。放賣至少兩張，評級卡要有正面同背面。", "One photo for My Binder. Two to sell. Graded cards need a front and a back.")}</p>
         ) : null}
       </div>
 
@@ -230,8 +230,8 @@ export function CollectForm({
             {tx(locale, "備註", "Note")}
             <textarea className="field" name="note" maxLength={500} placeholder={tx(locale, "可留空", "Optional")} />
           </label>
-          <fieldset className="grid gap-2">
-            <legend className="text-sm font-medium">{tx(locale, "收藏格", "Collection")}</legend>
+          <fieldset className="grid gap-2" aria-label={tx(locale, "My Binder，我的卡", "My Binder")}>
+            <legend className="text-sm font-medium">My Binder</legend>
             <label className="inline-flex h-11 items-center gap-2 text-sm">
               <input type="radio" name="visibility" value="PUBLIC" defaultChecked />
               {tx(locale, "公開", "Public")}
@@ -286,7 +286,7 @@ export function CollectForm({
               {tx(locale, "發佈到動態", "Post to the feed")}
             </label>
           )}
-          <Submit label={forSale ? tx(locale, "加入並放賣", "Collect and list") : tx(locale, "加入收藏", "Add to collection")} />
+          <Submit label={forSale ? tx(locale, "加入 My Binder 並放賣", "Add to My Binder and list") : tx(locale, "加入 My Binder", "Add to My Binder")} />
         </>
       )}
     </form>
