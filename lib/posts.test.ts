@@ -215,7 +215,13 @@ assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && po
 assert(postCard.includes("aspect-[4/5]") && postCard.includes("object-cover"), "feed photos keep the 4:5 cover frame");
 assert(postCard.includes("object-contain"), "detail photos show the whole image");
 assert(postCard.includes("h-10 min-w-10") && postCard.includes("strokeWidth={2.25}"), "actions are at least 40px with a deeper stroke");
-assert(postCard.includes("flex h-9 items-center"), "price and dex keep one meta row");
+const actionsAt = postCard.indexOf("border-t border-line");
+const shareAt = postCard.indexOf("<ShareButton");
+const bookAt = postCard.indexOf('name="book"');
+const priceAt = postCard.indexOf("{price ?");
+const titleAt = postCard.indexOf("post.cardName");
+assert(actionsAt >= 0 && shareAt > actionsAt && bookAt > shareAt && priceAt > bookAt && priceAt < titleAt, "dex sits next to share, price is on that row, title stays below");
+assert(postCard.includes("ml-auto") && !postCard.includes("mt-1 flex h-9 items-center"), "price is flush right; it no longer takes a row under the title");
 assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 const railAt = home.indexOf("<StoryRail");
