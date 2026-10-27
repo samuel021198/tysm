@@ -89,5 +89,7 @@ assert(clampPct(120) === 96 && clampPct(-4) === 4, "overlay position stays on th
 assert(clampScale(4) === 2.6 && clampScale(0.2) === 0.6, "sticker scale stays in range");
 assert(containRect(90, 160, 90, 160).w === 90, "a story-shaped photo fills the stage");
 assert(containRect(100, 100, 200, 100).w === 100 && containRect(100, 100, 200, 100).h === 50, "a landscape photo is contained");
+const rail = readFileSync(new URL("../components/story-rail.tsx", import.meta.url), "utf8");
+assert(rail.includes("onSwipeLeft") && rail.includes("onSwipeRight") && rail.includes("onSwipeDown") && rail.includes("上一則") && rail.includes("下一則"), "stories still tap, and swipe left, right, and down");
 
 console.log("stories ok");

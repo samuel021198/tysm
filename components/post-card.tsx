@@ -4,6 +4,7 @@ import { togglePostLike } from "@/actions/collect";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
 import { ShareButton } from "./share-button";
 
@@ -22,6 +23,7 @@ export function PostCard({
 }) {
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
   const shown = gallery ? photos : photos.slice(0, 1);
+  const likeFormId = post.likePostId || post.likeListingId ? `like-${post.id}` : undefined;
   return (
     <PostMenu
       locale={locale}
@@ -31,6 +33,7 @@ export function PostCard({
       loggedIn={viewerId != null}
       sharePath={post.sharePath}
       next={next}
+      swipeRightFormId={likeFormId}
     >
     <article className="surface overflow-hidden">
       <div className="flex items-center gap-2 px-2.5 py-2 pr-9">
@@ -42,13 +45,17 @@ export function PostCard({
         </Link>
       </div>
       <Link href={post.href} className="block">
-        {shown.map((url, index) => (
-          <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-soft object-contain" />
-        ))}
+        {gallery && photos.length > 1 ? (
+          <PhotoStrip photos={photos} />
+        ) : (
+          shown.map((url, index) => (
+            <img key={`${url}-${index}`} src={url} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" className="block aspect-[4/5] w-full bg-soft object-contain" />
+          ))
+        )}
       </Link>
       <div className="flex items-center border-t border-line">
         {post.likePostId ? (
-          <form action={togglePostLike} className="flex-1">
+          <form id={likeFormId} action={togglePostLike} className="flex-1">
             <input type="hidden" name="postId" value={post.likePostId} />
             <input type="hidden" name="next" value={next} />
             <button type="submit" className="inline-flex h-10 w-full items-center justify-center gap-1 text-sm font-medium leading-none">
@@ -58,7 +65,7 @@ export function PostCard({
             </button>
           </form>
         ) : post.likeListingId ? (
-          <form action={toggleFavorite} className="flex-1">
+          <form id={likeFormId} action={toggleFavorite} className="flex-1">
             <input type="hidden" name="listingId" value={post.likeListingId} />
             <input type="hidden" name="next" value={next} />
             <button type="submit" className="inline-flex h-10 w-full items-center justify-center gap-1 text-sm font-medium leading-none">

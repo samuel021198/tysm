@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toggleCollectionVisibility } from "@/actions/collect";
 import { tx, type Locale } from "@/lib/i18n";
+import { useHoldSwipe } from "./use-hold-swipe";
 
-/** Owner long-press on a collection thumb. Same hold as PostMenu: 480ms, cancel if the finger moves. */
+/** Owner long-press or swipe-left on a collection thumb. */
 export function CollectionMenu({
   locale,
   sellHref,
@@ -22,11 +23,9 @@ export function CollectionMenu({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const timer = useRef(0);
-  const suppressClick = useRef(false);
-  const startPt = useRef<{ x: number; y: number } | null>(null);
   const row = "flex h-11 w-full items-center px-3 text-left text-sm font-medium";
   const privacy = visibility === "PUBLIC" ? tx(locale, "改為私人", "Make private") : tx(locale, "改為公開", "Make public");
+  const gesture = useHoldSwipe({ onLongPress: () => setOpen(true), onSwipeLeft: () => setOpen(true) });
 
   useEffect(() => {
     if (!open) return;
@@ -37,49 +36,10 @@ export function CollectionMenu({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function cancelHold() {
-    if (timer.current) window.clearTimeout(timer.current);
-    timer.current = 0;
-    startPt.current = null;
-  }
-
-  function onPointerDown(event: React.PointerEvent) {
-    if (event.button !== 0) return;
-    const target = event.target;
-    if (target instanceof Element && target.closest("button, input, textarea, select, label")) return;
-    startPt.current = { x: event.clientX, y: event.clientY };
-    timer.current = window.setTimeout(() => {
-      timer.current = 0;
-      suppressClick.current = true;
-      setOpen(true);
-      window.setTimeout(() => {
-        suppressClick.current = false;
-      }, 800);
-    }, 480);
-  }
-
-  function onPointerMove(event: React.PointerEvent) {
-    const start = startPt.current;
-    if (!start) return;
-    if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) cancelHold();
-  }
-
-  function onClickCapture(event: React.MouseEvent) {
-    if (!suppressClick.current) return;
-    suppressClick.current = false;
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
   return (
     <div
       className="relative"
-      style={{ WebkitTouchCallout: "none" }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={cancelHold}
-      onPointerCancel={cancelHold}
-      onClickCapture={onClickCapture}
+      {...gesture}
       onContextMenu={(event) => {
         event.preventDefault();
         setOpen(true);

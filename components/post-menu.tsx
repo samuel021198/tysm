@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { deletePost, hideFromFeed } from "@/actions/collect";
 import { reportAction } from "@/actions/social";
 import { tx, type Locale } from "@/lib/i18n";
 import { hideTarget, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, type PostMenuAction } from "@/lib/posts";
+import { useHoldSwipe } from "./use-hold-swipe";
 
 export function PostMenu({
   locale,
@@ -17,6 +18,7 @@ export function PostMenu({
   next,
   corner = "right",
   button = true,
+  swipeRightFormId,
   children,
 }: {
   locale: Locale;
@@ -28,13 +30,12 @@ export function PostMenu({
   next: string;
   corner?: "left" | "right";
   button?: boolean;
+  /** Existing like or favorite form. Swipe right submits it. */
+  swipeRightFormId?: string;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const timer = useRef(0);
-  const suppressClick = useRef(false);
-  const startPt = useRef<{ x: number; y: number } | null>(null);
   const flags = postMenuFlags({ own, loggedIn, postId, listingId });
   const editHref = postEditHref(postId, listingId);
   const report = reportTarget(postId, listingId);
@@ -62,39 +63,22 @@ export function PostMenu({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function cancelHold() {
-    if (timer.current) window.clearTimeout(timer.current);
-    timer.current = 0;
-    startPt.current = null;
+  function openMenu() {
+    setCopied(false);
+    setOpen(true);
   }
 
-  function onPointerDown(event: React.PointerEvent) {
-    if (event.button !== 0) return;
-    const target = event.target;
-    if (target instanceof Element && target.closest("button, input, textarea, select, label")) return;
-    startPt.current = { x: event.clientX, y: event.clientY };
-    timer.current = window.setTimeout(() => {
-      timer.current = 0;
-      suppressClick.current = true;
-      setOpen(true);
-      window.setTimeout(() => {
-        suppressClick.current = false;
-      }, 800);
-    }, 480);
-  }
-
-  function onPointerMove(event: React.PointerEvent) {
-    const start = startPt.current;
-    if (!start) return;
-    if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) cancelHold();
-  }
-
-  function onClickCapture(event: React.MouseEvent) {
-    if (!suppressClick.current) return;
-    suppressClick.current = false;
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  const gesture = useHoldSwipe({
+    onLongPress: openMenu,
+    onSwipeLeft: openMenu,
+    onSwipeRight: swipeRightFormId
+      ? () => {
+          const form = document.getElementById(swipeRightFormId);
+          if (form instanceof HTMLFormElement) form.requestSubmit();
+        }
+      : undefined,
+    edgeGuard: true,
+  });
 
   async function share() {
     const url = new URL(sharePath, window.location.origin).toString();
@@ -184,15 +168,10 @@ export function PostMenu({
   return (
     <div
       className="relative"
-      style={{ WebkitTouchCallout: "none" }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={cancelHold}
-      onPointerCancel={cancelHold}
-      onClickCapture={onClickCapture}
+      {...gesture}
       onContextMenu={(event) => {
         event.preventDefault();
-        setOpen(true);
+        openMenu();
       }}
     >
       {children}

@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { EDGE_GUARD, gestureEnd, HOLD_MS, lockAxis, SWIPE_DOWN, SWIPE_X } from "./gesture";
 import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -181,12 +182,22 @@ const menu = readFileSync(new URL("../components/post-menu.tsx", import.meta.url
 assert(["剷除", "分享", "隱藏", "舉報", "編輯"].every((label) => menu.includes(label)), "menu labels");
 assert(menu.includes("deletePost") && menu.includes("hideFromFeed") && menu.includes("reportAction"), "menu reuses delete, hide, and report");
 assert(menu.includes("navigator.share") && menu.includes("clipboard"), "share falls back to copying the link");
-assert(menu.includes("button = true") && menu.includes("onPointerDown") && menu.includes("onContextMenu"), "the ellipsis can be omitted; long-press and the context menu stay");
+assert(menu.includes("button = true") && menu.includes("useHoldSwipe") && menu.includes("onLongPress") && menu.includes("onSwipeLeft") && menu.includes("onContextMenu"), "the ellipsis can be omitted; long-press, swipe-left, and the context menu stay");
+assert(menu.includes("swipeRightFormId") && menu.includes("requestSubmit"), "swipe right submits the existing like form");
 const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
 assert(profileBoard.includes("button={false}") && !profileBoard.includes("⋯"), "profile thumbnails hide the ellipsis");
 const collectionMenu = readFileSync(new URL("../components/collection-menu.tsx", import.meta.url), "utf8");
-assert(collectionMenu.includes("onPointerDown") && collectionMenu.includes("onContextMenu") && collectionMenu.includes("480"), "collection menu uses the same long-press");
+assert(collectionMenu.includes("useHoldSwipe") && collectionMenu.includes("onSwipeLeft") && collectionMenu.includes("onContextMenu"), "collection thumbs swipe left into the same menu");
+assert(HOLD_MS === 480 && SWIPE_X === 64 && SWIPE_DOWN === 72, "hold and swipe thresholds stay intentional");
+const base = { startX: 80, allowRight: true, allowDown: false, edgeGuard: true };
+assert(gestureEnd({ ...base, dx: -SWIPE_X, dy: 8, axis: "x" }) === "left", "a horizontal left swipe opens the menu");
+assert(gestureEnd({ ...base, dx: -40, dy: 4, axis: "x" }) === null, "a short drag is not a swipe");
+assert(gestureEnd({ ...base, dx: -80, dy: 100, axis: "y" }) === null, "a vertical drag does not open the menu");
+assert(gestureEnd({ ...base, dx: SWIPE_X, dy: 6, axis: "x", startX: EDGE_GUARD }) === "right", "swipe right likes once clear of the edge");
+assert(gestureEnd({ ...base, dx: SWIPE_X, dy: 6, axis: "x", startX: EDGE_GUARD - 1 }) === null, "the screen edge stays a browser back gesture");
+assert(gestureEnd({ ...base, dx: 8, dy: SWIPE_DOWN, axis: "y", allowDown: true }) === "down", "swipe down closes a story");
+assert(lockAxis(4, 3) === null && lockAxis(20, 4) === "x" && lockAxis(4, 20) === "y", "axis locks only after the finger commits");
 assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy live in the long-press menu");
 assert(profileBoard.includes("isSelf") && profileBoard.includes("<CollectionMenu") && profileBoard.includes("sellHref"), "only the owner gets collection actions");
 assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
@@ -196,5 +207,10 @@ assert(menu.includes('if (own) return null'), "own posts do not offer report");
 const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");
 assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
+assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
+const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
+assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
+const gallery = readFileSync(new URL("../components/gallery.tsx", import.meta.url), "utf8");
+assert(gallery.includes("onSwipeLeft") && gallery.includes("onSwipeRight"), "listing photos swipe between frames");
 
 console.log("posts.test.ts ok");
