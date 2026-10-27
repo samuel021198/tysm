@@ -795,7 +795,7 @@ export const demoListings: DemoListing[] = [
 const portrait = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&h=800&q=80`;
 
 export const demoUsers = [
-  { id: "user_admin", emailKey: "admin" as const, phoneKey: "admin" as const, nickname: "TYSM 管理員", role: "ADMIN" as const, phoneVerified: true, bio: "平台管理員。" },
+  { id: "user_admin", emailKey: "admin" as const, phoneKey: "admin" as const, nickname: "TSM 管理員", role: "ADMIN" as const, phoneVerified: true, bio: "平台管理員。" },
   {
     id: DEMO_ACCOUNTS[0].id,
     email: "mars@tysm.hk",

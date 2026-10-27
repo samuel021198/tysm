@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     where: { id },
     include: { photos: { orderBy: { position: "asc" }, take: 1 } },
   });
-  if (!listing) return { title: "TYSM" };
+  if (!listing) return { title: "TSM" };
   return {
     title: listing.title,
     description: listing.description.slice(0, 160),
@@ -215,7 +215,7 @@ export default async function ListingPage({
             </div>
             <p className="text-sm text-muted">
               {comps.matched.length
-                ? tx(locale, "同一品相的站內成交", "Sold on TYSM at the same grade")
+                ? tx(locale, "同一品相的站內成交", "Sold on TSM at the same grade")
                 : tx(locale, "同卡其他品相", "Same card, other grades")}
             </p>
             <ul className="mt-2 grid gap-2 text-sm">
