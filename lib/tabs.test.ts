@@ -7,9 +7,9 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(adjacentTab("/", 1, true) === "/dex", "home swipe left opens the dex");
-assert(adjacentTab("/dex", -1, true) === "/", "dex swipe right opens home");
-assert(adjacentTab("/dex", 1, true) === "/find", "dex swipe left opens search");
+assert(adjacentTab("/", 1, true) === "/news", "home swipe left opens news");
+assert(adjacentTab("/news", -1, true) === "/", "news swipe right opens home");
+assert(adjacentTab("/news", 1, true) === "/find", "news swipe left opens search");
 assert(adjacentTab("/find", 1, true) === "/market", "search swipe left opens the market");
 assert(adjacentTab("/market", -1, true) === "/find", "market swipe right opens search");
 assert(adjacentTab("/market", 1, true) === "/me", "market swipe left opens profile");
@@ -78,7 +78,7 @@ const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta
 const messages = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
 const social = readFileSync(new URL("../actions/social.ts", import.meta.url), "utf8");
 assert(shareButton.includes("internalLabel") && shareButton.includes("navigator.share") && shareButton.includes("clipboard"), "the sheet offers in-app share and the system share");
-assert(postCard.includes("內部分享") && postCard.includes('name="messages"') && postCard.includes('name="book"'), "feed actions are icons, including in-app share");
+assert(postCard.includes("內部分享") && postCard.includes('name="messages"') && !postCard.includes('name="book"') && !postCard.includes("/dex"), "feed actions are icons, including in-app share, and do not open the dex");
 assert(messages.includes("shareIntoThread") && messages.includes("內部分享"), "in-app share picks an existing thread");
 assert(social.includes("export async function shareIntoThread") && social.includes("shareTarget"), "a shared card is sent as a message");
 

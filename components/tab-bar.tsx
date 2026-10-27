@@ -15,10 +15,10 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   const tabs = [
     { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
     {
-      href: "/dex",
-      label: tx(locale, "圖鑑", "Dex"),
-      icon: "book" as const,
-      on: pathname === "/dex" || pathname.startsWith("/dex/"),
+      href: "/news",
+      label: tx(locale, "新聞", "News"),
+      icon: "news" as const,
+      on: pathname === "/news" || pathname.startsWith("/news/"),
     },
     {
       href: "/find",
@@ -67,7 +67,7 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "book" | "search" | "bag" | "me";
+  icon: "home" | "news" | "search" | "bag" | "me";
   on: boolean;
 }) {
   return (

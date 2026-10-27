@@ -29,6 +29,7 @@ export function CatalogTitleField({
   placeholder,
   named = true,
   pinOnPick,
+  onFree,
   game,
 }: {
   locale: Locale;
@@ -41,6 +42,8 @@ export function CatalogTitleField({
   /** False when this is a card-name lookup and the listing title is a different field. */
   named?: boolean;
   pinOnPick?: (hit: CatalogHit) => string;
+  /** Use the typed string and drop any catalog link. */
+  onFree?: (name: string) => void;
   /** Catalog game slug. Suggestions stay inside this game. */
   game?: string;
 }) {
@@ -58,6 +61,7 @@ export function CatalogTitleField({
       setOpen(false);
       return;
     }
+    setOpen(document.activeElement === inputRef.current);
     const token = ++request.current;
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
@@ -69,12 +73,12 @@ export function CatalogTitleField({
           if (token !== request.current) return;
           const cards = Array.isArray(body.cards) ? body.cards : [];
           setHits(cards);
-          setOpen(cards.length > 0 && document.activeElement === inputRef.current);
+          setOpen(document.activeElement === inputRef.current);
         })
         .catch(() => {
           if (token !== request.current) return;
           setHits([]);
-          setOpen(false);
+          setOpen(document.activeElement === inputRef.current);
         });
     }, 180);
     return () => {
@@ -90,6 +94,7 @@ export function CatalogTitleField({
         <input
           className="field"
           name={named ? "title" : undefined}
+          required={named || undefined}
           minLength={named ? 2 : undefined}
           maxLength={80}
           value={value}
@@ -103,48 +108,56 @@ export function CatalogTitleField({
           placeholder={placeholder ?? tx(locale, "打卡名，例如 2022 Charizard", "Card name, e.g. 2022 Charizard")}
           onChange={(event) => onValue(event.target.value)}
           onFocus={() => {
-            if (hits.length) setOpen(true);
+            if (value.trim().length >= 2 && value.trim() !== pinned.current) setOpen(true);
           }}
           onKeyDown={(event) => {
             if (event.key === "Escape") setOpen(false);
           }}
         />
       </label>
-      {open && hits.length ? null : <p className="text-[11px] leading-4 text-muted">{tx(locale, "搵唔到？自己入卡名", "Not listed? Type the name yourself")}</p>}
-      {open && hits.length ? (
-        <ul id={listId} role="listbox" aria-label={tx(locale, "圖鑑建議", "Dex suggestions")} className="grid max-h-80 overflow-y-auto rounded-2xl border border-line bg-card shadow-card">
-          {hits.map((hit) => (
-            <li key={hit.id}>
-              <button
-                type="button"
-                role="option"
-                className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left active:bg-soft"
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => {
-                  pinned.current = (pinOnPick ?? ((row) => row.title))(hit);
-                  onPick(hit);
-                  setOpen(false);
-                }}
-              >
-                <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-12 w-9 shrink-0 rounded-md bg-soft object-contain" />
-                <span className="min-w-0">
-                  <span className="block truncate text-[15px] font-semibold">{hit.cardName || hit.title}</span>
-                  <span className="block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>
-                </span>
-              </button>
-            </li>
-          ))}
-          <li>
-            <button
-              type="button"
-              className="min-h-11 w-full px-3 text-left text-[11px] text-muted"
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => setOpen(false)}
-            >
-              {tx(locale, "搵唔到？自己入卡名", "Not listed? Type the name yourself")}
-            </button>
-          </li>
-        </ul>
+      {open && value.trim().length >= 2 ? (
+        <div id={listId} className="grid max-h-80 overflow-y-auto rounded-2xl border border-line bg-card shadow-card">
+          {hits.length ? (
+            <ul role="listbox" aria-label={tx(locale, "卡名建議", "Card suggestions")}>
+              {hits.map((hit) => (
+                <li key={hit.id}>
+                  <button
+                    type="button"
+                    role="option"
+                    className="flex min-h-14 w-full items-center gap-3 px-3 py-2 text-left active:bg-soft"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => {
+                      pinned.current = (pinOnPick ?? ((row) => row.title))(hit);
+                      onPick(hit);
+                      setOpen(false);
+                    }}
+                  >
+                    <img src={hit.imageUrl || "/demo/back.svg"} alt="" className="h-12 w-9 shrink-0 rounded-md bg-soft object-contain" />
+                    <span className="min-w-0">
+                      <span className="block truncate text-[15px] font-semibold">{hit.cardName || hit.title}</span>
+                      <span className="block truncate text-[11px] text-muted">{compactSetLine(hit.setCode, hit.collectorNumber)}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <button
+            type="button"
+            className="min-h-11 w-full border-t border-line px-3 text-left text-sm text-muted"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => {
+              const name = value.trim();
+              pinned.current = name;
+              onValue(name);
+              onFree?.(name);
+              setHits([]);
+              setOpen(false);
+            }}
+          >
+            {tx(locale, "搵唔到？自己入卡名", "Can't find it? Use this name")}
+          </button>
+        </div>
       ) : null}
     </div>
   );

@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
+import { NEWS_SAMPLES } from "./news";
 import { courierFor, mockTracking } from "./shipping";
 import {
   EXTRA_CARD_CATEGORIES,
@@ -338,6 +339,29 @@ async function seedSocial() {
   }
 }
 
+async function seedNews() {
+  for (const row of NEWS_SAMPLES) {
+    const data = {
+      slug: row.slug,
+      title: row.title,
+      source: row.source,
+      teaser: row.teaser,
+      body: row.body,
+      coverUrl: row.coverUrl,
+      brandColor: row.brandColor,
+      linkUrl: row.linkUrl,
+      tag: row.tag,
+      eventAt: row.eventAt,
+      hot: row.hot,
+    };
+    await prisma.newsItem.upsert({
+      where: { id: row.id },
+      update: data,
+      create: { id: row.id, ...data },
+    });
+  }
+}
+
 export async function seedDemo() {
   const catalogCardsBefore = await prisma.catalogCard.count();
   const catalogSetsBefore = await prisma.catalogSet.count();
@@ -428,6 +452,7 @@ export async function seedDemo() {
   await ensureDemoCatalog();
   await attachShowcaseDex();
   await seedSocial();
+  await seedNews();
 
   const catalogCardsAfter = await prisma.catalogCard.count();
   const catalogSetsAfter = await prisma.catalogSet.count();

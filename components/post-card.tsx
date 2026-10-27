@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { togglePostLike, togglePostSave } from "@/actions/collect";
-import { toggleFavorite } from "@/actions/social";
+import { openThread, toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
-import type { PostCardModel } from "@/lib/posts";
+import type { PostBuy, PostCardModel } from "@/lib/posts";
 import { CommentSheet } from "./comment-sheet";
 import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
@@ -38,23 +38,30 @@ export function PostCard({
     if (window.location.pathname !== `/post/${post.postId}`) return;
     setCommentsOpen(true);
   }, [post.postId]);
-  const dexLabel = tx(locale, "睇圖鑑", "View in the dex");
   const saveLabel = tx(locale, "收藏", "Favorite");
   const priceClass = "price mt-1 inline-block text-[15px] leading-none";
   const likeLabel = post.likeCount ? `${tx(locale, "讚", "Like")} ${post.likeCount}` : tx(locale, "讚", "Like");
+  const own = viewerId != null && viewerId === post.author.id;
+  const buy = own ? null : post.buy;
+  const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
   const price =
-    post.priceCents == null ? null : post.priceHref ? (
-      <Link href={post.priceHref} className={priceClass}>
-        {formatHkd(post.priceCents, locale)}
+    post.priceCents == null ? null : buy && post.priceHref ? (
+      <Link
+        href={post.priceHref}
+        className={priceClass}
+        aria-label={buy.kind === "checkout" ? `${tx(locale, "買", "Buy")} ${priceText}` : undefined}
+      >
+        {priceText}
       </Link>
     ) : (
-      <p className={priceClass}>{formatHkd(post.priceCents, locale)}</p>
+      <p className={priceClass}>{priceText}</p>
     );
   const photoClass = gallery
     ? "block max-h-[70vh] w-full bg-soft object-contain"
     : "block aspect-[4/5] w-full bg-soft object-cover";
   const action = "inline-flex h-10 min-w-10 items-center gap-1 pl-2.5 pr-2 text-sm font-medium leading-none";
   return (
+    <>
     <PostMenu
       locale={locale}
       postId={post.postId}
@@ -108,11 +115,6 @@ export function PostCard({
           copiedLabel={tx(locale, "已複製", "Copied")}
           internalLabel={tx(locale, "內部分享", "In TYSM")}
         />
-        {post.dexHref ? (
-          <Link href={post.dexHref} aria-label={dexLabel} title={dexLabel} className={`${action} text-link`}>
-            <Icon name="book" className="h-5 w-5" strokeWidth={2.25} />
-          </Link>
-        ) : null}
         <div className="ml-auto flex shrink-0 items-center">
           <SavePost post={post} next={next} label={saveLabel} action={action} />
         </div>
@@ -132,6 +134,29 @@ export function PostCard({
       <CommentSheet postId={post.postId} locale={locale} onClose={() => setCommentsOpen(false)} onPosted={() => setCount((n) => n + 1)} />
     ) : null}
     </PostMenu>
+    {gallery && buy && post.priceCents != null ? <BuyBar locale={locale} price={priceText} buy={buy} /> : null}
+    </>
+  );
+}
+
+function BuyBar({ locale, price, buy }: { locale: Locale; price: string; buy: PostBuy }) {
+  return (
+    <>
+      <div className="h-20" aria-hidden />
+      <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur md:bottom-0">
+        <div className="mx-auto flex max-w-lg items-center gap-3">
+          <p className="price min-w-0 flex-1 truncate text-lg leading-none">{price}</p>
+          {buy.kind === "checkout" ? (
+            <Link href={buy.href} className="btn btn-primary shrink-0 px-5">{tx(locale, "買", "Buy")}</Link>
+          ) : (
+            <form action={openThread}>
+              <input type="hidden" name="listingId" value={buy.listingId} />
+              <button className="btn btn-ghost shrink-0">{tx(locale, "聯絡賣家", "Contact seller")}</button>
+            </form>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
 

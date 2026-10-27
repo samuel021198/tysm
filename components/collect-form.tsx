@@ -6,6 +6,7 @@ import Link from "next/link";
 import { saveCollection, savePost } from "@/actions/collect";
 import { errText, tx, type Locale } from "@/lib/i18n";
 import { displayCaption } from "@/lib/tags";
+import { CatalogTitleField } from "./catalog-title-field";
 import { fileToDataUrl } from "./photo-file";
 import { SellForm, type SellInitial } from "./sell-form";
 import { TopicField } from "./topic-field";
@@ -64,6 +65,11 @@ export function CollectForm({
   const [alsoList, setAlsoList] = useState(false);
   const [listToken, setListToken] = useState(0);
   const [body, setBody] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [catalogId, setCatalogId] = useState("");
+  const [game, setGame] = useState("");
+  const [setName, setSetName] = useState("");
+  const [language, setLanguage] = useState(locale === "en" ? "English" : "日文");
   const [track, setTrack] = useState<"RAW" | "GRADED">("RAW");
   const [categoryId, setCategoryId] = useState(categories[0]?.id || "");
   const [photoNote, setPhotoNote] = useState("");
@@ -195,10 +201,28 @@ export function CollectForm({
         </>
       ) : (
         <>
-          <label className="grid gap-1 text-sm font-medium">
-            {tx(locale, "卡名", "Card name")}
-            <input className="field" name="title" required minLength={2} maxLength={80} placeholder={tx(locale, "例如噴火龍 VMAX", "e.g. Charizard VMAX")} />
-          </label>
+          <input type="hidden" name="catalogCardId" value={catalogId} />
+          <CatalogTitleField
+            locale={locale}
+            value={cardName}
+            label={tx(locale, "卡名", "Card name")}
+            placeholder={tx(locale, "例如噴火龍 VMAX", "e.g. Charizard VMAX")}
+            pinOnPick={(hit) => hit.cardName || hit.title}
+            onValue={(value) => {
+              setCardName(value);
+              setCatalogId("");
+            }}
+            onPick={(hit) => {
+              const name = hit.cardName || hit.title;
+              setCardName(name);
+              setCatalogId(hit.id);
+              if (hit.game) setGame(hit.game);
+              if (hit.setName) setSetName(hit.setName);
+              if (hit.language) setLanguage(hit.language);
+              if (hit.imageUrl) addPhoto(hit.imageUrl);
+            }}
+            onFree={() => setCatalogId("")}
+          />
           <fieldset className="grid gap-2">
             <legend className="text-sm font-medium">{tx(locale, "品相", "Condition")}</legend>
             <div className="flex gap-2">
@@ -267,9 +291,9 @@ export function CollectForm({
               </label>
               {group === "tcg" ? (
                 <div className="grid gap-2">
-                  <input className="field" name="game" required placeholder={tx(locale, "遊戲，例如 Pokémon", "Game, e.g. Pokémon")} />
-                  <input className="field" name="setName" required placeholder={tx(locale, "系列", "Set")} />
-                  <input className="field" name="language" required defaultValue={locale === "en" ? "Japanese" : "日文"} placeholder={tx(locale, "語言", "Language")} />
+                  <input className="field" name="game" required value={game} placeholder={tx(locale, "遊戲，例如 Pokémon", "Game, e.g. Pokémon")} onChange={(event) => setGame(event.target.value)} />
+                  <input className="field" name="setName" required value={setName} placeholder={tx(locale, "系列", "Set")} onChange={(event) => setSetName(event.target.value)} />
+                  <input className="field" name="language" required value={language} placeholder={tx(locale, "語言", "Language")} onChange={(event) => setLanguage(event.target.value)} />
                 </div>
               ) : (
                 <div className="grid gap-2">
