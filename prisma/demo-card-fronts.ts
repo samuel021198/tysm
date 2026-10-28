@@ -52,3 +52,41 @@ export const SEED_CARD_FRONT_HOSTS = [
 export function isSeedCardFront(url: string): boolean {
   return SEED_CARD_FRONT_HOSTS.some((host) => url.startsWith(host));
 }
+
+/** 4:5 center crop. Feed covers use the same frame, so the scene stays in view. */
+const scene = (id: string) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200&h=1500&fit=crop`;
+
+/**
+ * Editorial post covers: hand, desk, shelf, lightbox. Card faces stay on the listing.
+ * ponytail: 17 scenes, cycled by collection index. Upgrade path: one photo per post if the feed looks repeated.
+ */
+export const SCENE_COVERS = [
+  scene("9661254"),
+  scene("9661252"),
+  scene("9560279"),
+  scene("7708402"),
+  scene("7783412"),
+  scene("9343494"),
+  scene("9572050"),
+  scene("7783409"),
+  scene("9661257"),
+  scene("7708411"),
+  scene("7783410"),
+  scene("9560283"),
+  scene("7708403"),
+  scene("9661256"),
+  scene("16321207"),
+  scene("7708404"),
+  scene("7783411"),
+] as const;
+
+export function isSceneCover(url: string): boolean {
+  return (SCENE_COVERS as readonly string[]).includes(url);
+}
+
+/** First frame is the scene. Later frames stay the card close-ups. Caps at four. */
+export function withSceneCover(photos: string[], index: number): string[] {
+  const cover = SCENE_COVERS[index % SCENE_COVERS.length];
+  return [cover, ...photos].slice(0, 4);
+}

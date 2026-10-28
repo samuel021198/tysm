@@ -5,7 +5,7 @@ import { DEMO_ACCOUNTS, DEMO_CODE, TRIAL_ACCOUNTS } from "../lib/demo-login";
 import { DISTRICTS } from "../lib/format";
 import { collectorEvents, merchantEvents, postEvents, tallyRanks } from "../lib/rank";
 import { resolveAuction } from "../lib/rules";
-import { isSeedCardFront } from "./demo-card-fronts";
+import { isSceneCover, isSeedCardFront } from "./demo-card-fronts";
 import {
   LEAF_CATEGORIES,
   demoCart,
@@ -230,14 +230,29 @@ const CARD_BACK_PILES = [
   "photo-1606503153255",
 ];
 for (const photos of shown) assert(new Set(photos).size === photos.length, "a post does not repeat one frame");
-for (const url of [
-  ...demoShowcaseListings.flatMap((item) => item.photos),
-  ...demoShowcaseCollections.flatMap((item) => item.photos),
-  ...shown.flat(),
-]) {
+for (const url of demoShowcaseListings.flatMap((item) => item.photos)) {
   assert(isSeedCardFront(url), url);
-  assert(!url.includes("unsplash.com") && !url.includes("/demo/cards/") && !url.endsWith(".svg"), url);
+  assert(!url.includes("unsplash.com") && !url.includes("pexels.com") && !url.includes("/demo/cards/") && !url.endsWith(".svg"), url);
   assert(!CARD_BACK_PILES.some((id) => url.includes(id)), url);
+}
+for (const photos of shown) {
+  assert(isSceneCover(photos[0]), `${photos[0]} post cover`);
+  assert(!CARD_BACK_PILES.some((id) => photos[0].includes(id)), photos[0]);
+  for (const url of photos.slice(1)) {
+    assert(isSeedCardFront(url), url);
+    assert(!url.includes("unsplash.com") && !url.includes("pexels.com") && !url.endsWith(".svg"), url);
+  }
+}
+const coverByOwner = new Map<string, string[]>();
+for (const post of demoShowcasePosts) {
+  const cover = showcasePostPhotos(post)[0];
+  const seen = coverByOwner.get(post.ownerId) ?? [];
+  assert(!seen.includes(cover), `${post.ownerId} repeats a cover`);
+  seen.push(cover);
+  coverByOwner.set(post.ownerId, seen);
+  const item = demoShowcaseCollections.find((row) => row.id === post.collectionId);
+  const listing = item?.listingId ? demoShowcaseListings.find((row) => row.id === item.listingId) : null;
+  if (listing) assert(cover !== listing.photos[0], `${post.id} cover stays off the listing scan`);
 }
 const cover = (id: string) => demoShowcaseListings.find((item) => item.id === id)?.photos[0] || "";
 assert(cover("bao_01_list").includes("ja_SV2a-094"), "bao sell cover is a gengar front");
@@ -265,9 +280,10 @@ for (const review of demoShowcaseReviews) {
 }
 for (const item of demoShowcaseCollections) {
   const owned = demoShowcaseListings.filter((row) => row.ownerId === item.ownerId);
+  const cardKey = item.photos.filter((url) => !isSceneCover(url)).join("|");
   const match =
     owned.find((row) => row.title === item.title) ||
-    owned.find((row) => row.photos.join("|") === item.photos.join("|"));
+    owned.find((row) => row.photos.join("|") === cardKey);
   assert((item.listingId ?? null) === (match?.id ?? null), `${item.id} should link the matching listing`);
 }
 const dexIds = new Set(DEMO_CARDS.map((card) => card.id));
