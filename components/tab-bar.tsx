@@ -79,9 +79,15 @@ function Tab({
         href={href}
         aria-label={label}
         aria-current={on ? "page" : undefined}
-        className={`grid h-full place-items-center ${accent ? "text-accent" : on ? "text-ink" : "text-muted"}`}
+        className={`grid h-full place-items-center ${accent ? "text-white" : on ? "text-ink" : "text-muted"}`}
       >
-        <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
+        {accent ? (
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-white">
+            <Icon name={icon} className="h-[22px] w-[22px] text-white" strokeWidth={2} />
+          </span>
+        ) : (
+          <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
+        )}
       </Link>
     </li>
   );

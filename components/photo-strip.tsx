@@ -33,7 +33,7 @@ export function PhotoStrip({
   }
 
   return (
-    <div>
+    <div className="relative">
       <div
         ref={scroller}
         className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -75,21 +75,19 @@ export function PhotoStrip({
           />
         ))}
       </div>
-      <div className="flex items-center justify-center gap-1 py-1.5">
+      <div className="pointer-events-none absolute inset-x-0 bottom-3 flex items-center justify-center gap-1.5">
         {photos.map((url, i) => (
           <button
             key={`${url}-dot-${i}`}
             type="button"
             aria-label={`${i + 1} / ${photos.length}`}
             aria-current={i === index ? "true" : undefined}
-            className="grid h-6 w-6 place-items-center"
+            className={`pointer-events-auto relative h-2.5 w-2.5 shrink-0 rounded-full before:absolute before:-inset-1.5 before:content-[''] ${i === index ? "bg-accent" : "bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.92)]"}`}
             onClick={(event) => {
               event.stopPropagation();
               go(i);
             }}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${i === index ? "bg-ink" : "bg-ink/30"}`} />
-          </button>
+          />
         ))}
       </div>
     </div>

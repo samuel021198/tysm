@@ -2,12 +2,11 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
 import { loadHomeFeed } from "@/lib/profile";
-import { feedHideIds, hiddenUserIds, loadFollowRail } from "@/lib/social";
+import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { listingSuggestionCard } from "@/lib/posts";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
 import { PostCard } from "@/components/post-card";
-import { FollowRail } from "@/components/follow-rail";
 import { tx } from "@/lib/i18n";
 
 export default async function HomePage({
@@ -19,10 +18,7 @@ export default async function HomePage({
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
-  const [{ primary, suggested, linkedListings }, people] = await Promise.all([
-    loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds),
-    loadFollowRail(viewer?.id ?? null, hidden),
-  ]);
+  const { primary, suggested, linkedListings } = await loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds);
   const covered = new Set(
     [...primary, ...suggested].filter((post) => post.priceCents != null).flatMap((post) => post.photos),
   );
@@ -68,16 +64,13 @@ export default async function HomePage({
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <div className="grid gap-1">
-        <FollowRail locale={prefs.locale} people={people} />
-        {primary.length ? (
-          <section className="grid gap-3">
-            {primary.map((post) => (
-              <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
-            ))}
-          </section>
-        ) : null}
-      </div>
+      {primary.length ? (
+        <section className="grid gap-3">
+          {primary.map((post) => (
+            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
+          ))}
+        </section>
+      ) : null}
       {primary.length === 0 && suggested.length === 0 && listingCards.length === 0 ? (
         <p className="empty">{tx(prefs.locale, "未有動態。", "No posts yet.")}</p>
       ) : null}

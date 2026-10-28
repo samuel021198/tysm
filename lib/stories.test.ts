@@ -96,7 +96,7 @@ assert(rail.includes("absolute inset-0") && rail.includes("shrink-0"), "avatar b
 assert(!rail.includes("限時動態") && !rail.includes("/story/new") && !rail.includes("onSwipeLeft") && !rail.includes('role="dialog"') && !rail.includes("p-[3px]") && !rail.includes("story-bar"), "the rail is not a story ring or viewer");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following chrome between the rail and posts");
-assert(home.includes("<FollowRail") && !home.includes("StoryRail") && !home.includes("loadStoryRings") && home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still sit under the avatar rail");
+assert(!home.includes("FollowRail") && !home.includes("loadFollowRail") && !home.includes("StoryRail") && home.indexOf("primary.map") < home.indexOf("suggested.map"), "home hides the following rail; following posts still lead");
 assert(home.includes('tx(prefs.locale, "建議"'), "suggested posts stay labeled apart from the silent following feed");
 
 console.log("stories ok");
