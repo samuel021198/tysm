@@ -47,7 +47,7 @@ const picker = readFileSync(new URL("../components/catalog-title-field.tsx", imp
 const collect = readFileSync(new URL("../components/collect-form.tsx", import.meta.url), "utf8");
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
 assert(list.includes("暫時未有卡聞。") && list.includes("h-[72px]") && !list.includes("chips") && !list.includes("快訊"), "the news list is a quiet cover row");
-assert(!list.includes("coverUrl"), "the list thumb is always the brand logo, even after ingest fills a product photo");
+assert(list.includes("coverUrl={row.coverUrl}"), "the list prefers a product photo when coverUrl is set");
 const cover = readFileSync(new URL("../components/news-cover.tsx", import.meta.url), "utf8");
 assert(
   cover.includes("object-cover") && cover.indexOf("if (coverUrl)") < cover.indexOf("newsBrandLogo(source)"),
