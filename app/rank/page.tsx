@@ -28,9 +28,9 @@ export default async function RankPage({ searchParams }: { searchParams: Promise
         {rows.length === 0 ? (
           <p className="py-10 text-center text-sm text-muted">{tx(locale, "暫時未有排行。", "No ranking yet.")}</p>
         ) : (
-          <ul className="mt-3 grid gap-2.5">
+          <ul className="mt-3 grid grid-cols-1 gap-2.5">
             {rows.map((row, index) => (
-              <li key={row.id}>
+              <li key={row.id} className="min-w-0">
                 <RankLink locale={locale} tab={tab} row={row} rank={index + 1} />
               </li>
             ))}
@@ -73,8 +73,8 @@ function RankLink({ locale, tab, row, rank }: { locale: Locale; tab: RankTab; ro
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{(row.byline || row.name).slice(0, 1)}</span>
       )}
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[15px] font-semibold leading-tight">{row.name}</span>
-        {row.byline ? <span className="mt-0.5 block truncate text-[11px] leading-4 text-muted">{row.byline}</span> : null}
+        <span className="block max-w-full truncate text-[15px] font-semibold leading-tight">{row.name}</span>
+        {row.byline ? <span className="mt-0.5 block max-w-full truncate text-[11px] leading-4 text-muted">{row.byline}</span> : null}
         {row.tags.length ? (
           <span className="mt-1 flex flex-wrap gap-1">
             {row.tags.map((tag) => (

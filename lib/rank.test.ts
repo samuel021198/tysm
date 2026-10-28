@@ -163,6 +163,16 @@ assert(src.includes("avatarUrl: post.author.avatarUrl") && src.includes("coverUr
 assert(src.includes("name: postRankLabel(post, locale)") && src.includes("byline: post.author.nickname.trim()"), "a post row labels the caption and keeps the author as the byline");
 assert(!src.includes("name: post.author.nickname"), "the author nickname is not the post rank title");
 assert(page.includes("row.byline") && page.includes("row.name"), "the caption is the primary label and the author sits under it");
+const link = page.slice(page.indexOf("function RankLink"));
+const markAt = link.indexOf("<RankMark");
+const avatarAt = link.indexOf("row.avatarUrl", markAt);
+const captionAt = link.indexOf("{row.name}", avatarAt);
+const bylineAt = link.indexOf("{row.byline}", captionAt);
+const coverAt = link.indexOf("row.coverUrl", bylineAt);
+assert(markAt < avatarAt && avatarAt < captionAt && captionAt < bylineAt && bylineAt < coverAt, "a post row stays rank, avatar, caption, author, then cover");
+assert(page.includes("grid-cols-1") && page.includes('className="min-w-0"'), "a long caption cannot widen the rank list");
+assert(link.includes("min-w-0 flex-1") && link.lastIndexOf("max-w-full truncate", captionAt) > avatarAt, "the middle column shrinks and the caption ellipsizes on one line");
+assert(!page.includes("slice(0, 32)") && !page.includes("slice(0, 36)") && !src.includes("slice(0, 32)"), "the rank caption is not cut to a fixed character count");
 assert(src.includes("coverUrl: null") && !src.includes("/u/") && !page.includes("/u/"), "collectors stay on the shop profile");
 assert(page.includes("row.coverUrl") && page.includes('name="bag"') && page.includes("M12 19.2"), "posts show the cover, shops a bag, likes a heart");
 assert(!page.includes("成交") && !page.includes("likes") && !page.includes("Likes") && !page.includes("讚好"), "the row shows the icon and number, not a metric label");
