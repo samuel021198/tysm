@@ -10,9 +10,11 @@ import { makeOffer, respondOffer } from "@/lib/offers";
 import {
   arrangeMeetup,
   cancelDeal,
+  confirmDeal,
   confirmReceived,
   confirmSellerPaid,
   markDealSold,
+  releaseReserve,
   uploadProof,
 } from "@/lib/deals";
 import {
@@ -190,6 +192,20 @@ export async function confirmAction(formData: FormData) {
   const user = await viewer(dealNext(formData, id));
   const result = await confirmReceived(user.id, id);
   redirect(`${dealNext(formData, id)}?${result.ok ? "ok=done" : `err=${result.error}`}`);
+}
+
+export async function confirmDealAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await confirmDeal(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=reserved" : `err=${result.error}`}`);
+}
+
+export async function releaseReserveAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await releaseReserve(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=released" : `err=${result.error}`}`);
 }
 
 export async function arrangeDealAction(formData: FormData) {

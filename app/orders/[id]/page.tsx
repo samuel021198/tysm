@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { dealPhase } from "@/lib/deal-phase";
-import { meetupNote } from "@/lib/deals";
+import { meetupNote, sellerPayment } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { DealPanel } from "@/components/deal-panel";
@@ -53,6 +53,7 @@ export default async function OrderPage({
           viewerId={viewer.id}
           next={`/orders/${id}`}
           reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
+          payment={sellerPayment(order.seller)}
           order={order}
         />
       ) : null}

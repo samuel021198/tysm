@@ -54,6 +54,7 @@ const ERR: Record<string, [string, string]> = {
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],
   state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
+  reserved: ["呢件貨已有人確認，保留中", "This item is already reserved"],
   login: ["請先登入", "Log in first"],
   blocked: ["你同對方已互相隱藏", "You and this member have blocked each other"],
   review: ["而家不能評價", "A review is not available"],

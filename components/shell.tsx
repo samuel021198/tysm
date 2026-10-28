@@ -137,6 +137,8 @@ export function Footer({ locale }: { locale: Locale }) {
 export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: string }) {
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
+    reserved: ["已保留，買家可以上傳付款證明", "Reserved. The buyer can upload payment proof"],
+    released: ["已解除保留", "Reserve released"],
     published: ["已刊登，而家公開", "Published. It is live now"],
     story: ["限時動態已發佈，24 小時後消失", "Story posted. It disappears in 24 hours"],
     collected: ["已加入 My Binder", "Added to My Binder"],
