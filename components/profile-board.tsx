@@ -7,7 +7,7 @@ import { EDGE_GUARD } from "@/lib/gesture";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
-import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, tabAxis } from "@/lib/tabs";
+import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
 
@@ -107,7 +107,7 @@ export function ProfileBoard({
 
   function onPointerDown(event: React.PointerEvent) {
     if (event.pointerType !== "touch" || busy.current) return;
-    if (document.querySelector('[role="dialog"], [role="menu"]')) return;
+    if (swipeBlocked()) return;
     if (!(event.target instanceof Element)) return;
     if (event.target.closest("input, textarea, select")) return;
     const gesture = event.target.closest("[data-gesture]");

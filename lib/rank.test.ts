@@ -10,6 +10,7 @@ import {
   postEvents,
   rankPath,
   rankTab,
+  rankTabStep,
   RANK_WINDOW_MS,
   sortRank,
   tallyRanks,
@@ -26,6 +27,9 @@ const hours = (n: number) => new Date(now.getTime() - n * 60 * 60 * 1000);
 
 assert(rankTab(undefined) === "shops" && rankTab("nope") === "shops" && rankTab("collectors") === "collectors" && rankTab("posts") === "posts", "unknown segment stays on shops");
 assert(rankPath("shops") === "/rank" && rankPath("collectors") === "/rank?tab=collectors" && rankPath("posts") === "/rank?tab=posts", "segments are a query on /rank");
+assert(rankTabStep("shops", 1) === "collectors" && rankTabStep("collectors", 1) === "posts", "rank swipe moves 商戶, 收藏家, 貼文");
+assert(rankTabStep("posts", -1) === "collectors" && rankTabStep("collectors", -1) === "shops", "rank swipe moves back");
+assert(rankTabStep("shops", -1) === null && rankTabStep("posts", 1) === null, "rank segments stop at the ends");
 
 assert(rankBucket(hours(1), now) === "current", "yesterday is the current window");
 assert(rankBucket(hours(24 * 3 - 1), now) === "current", "just inside 3 days is current");
@@ -162,5 +166,8 @@ assert(page.includes("#E0B53A") && page.includes("#B7C0C8") && page.includes("#C
 assert(page.includes("change.text"), "the percent change stays on the row");
 assert(tab.includes('href: "/rank"') && tab.includes("排行") && tab.includes('icon: "rank"') && !tab.includes('href: "/market"'), "bottom nav fourth tab is rank");
 assert(shell.includes('href="/rank"'), "desktop nav includes rank");
+const pager = readFileSync(new URL("../components/rank-pager.tsx", import.meta.url), "utf8");
+assert(page.includes("<RankPager") && pager.includes("rankTabStep") && pager.includes("data-rank-pager") && pager.includes("adjacentTab"), "rank content swipes segments, then the neighbouring root");
+assert(pager.includes("tabAxis") && pager.includes("swipeBlocked"), "rank swipe waits for a horizontal axis and an open sheet");
 
 console.log("rank.test.ts ok");
