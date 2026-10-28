@@ -5,17 +5,34 @@ import { sendMessage } from "@/actions/social";
 import { composerCanSend, composerExpanded } from "@/lib/message-composer";
 import { tx, type Locale } from "@/lib/i18n";
 import { Icon } from "./icons";
+import { OfferSheet, type OfferChoice } from "./offer-sheet";
 import { fileToDataUrl } from "./photo-file";
 import { pinThreadToEnd } from "./thread-scroll";
 
 const MAX_H = 144;
 
-export function MessageComposer({ locale, threadId, focus = false }: { locale: Locale; threadId: string; focus?: boolean }) {
+export function MessageComposer({
+  locale,
+  threadId,
+  focus = false,
+  canOffer = false,
+  bound = null,
+  choices = [],
+}: {
+  locale: Locale;
+  threadId: string;
+  focus?: boolean;
+  canOffer?: boolean;
+  bound?: OfferChoice | null;
+  choices?: OfferChoice[];
+}) {
   const [imageUrl, setImageUrl] = useState("");
   const [body, setBody] = useState("");
   const [note, setNote] = useState("");
   const [focused, setFocused] = useState(focus);
   const [tray, setTray] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [offer, setOffer] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const draft = useRef({ body: "", image: "" });
@@ -45,6 +62,7 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
   }
 
   return (
+    <>
     <form
       action={async (formData) => {
         if (busy.current) return;
@@ -65,7 +83,7 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
           setPending(false);
         }
       }}
-      className={`sticky z-20 bg-card/95 px-1.5 py-1 shadow-card backdrop-blur md:static ${expanded ? "rounded-2xl" : "rounded-full"}`}
+      className={`relative sticky z-20 bg-card/95 px-1.5 py-1 shadow-card backdrop-blur md:static ${expanded ? "rounded-2xl" : "rounded-full"}`}
       style={{ bottom: "calc(var(--tab-h) + 0.35rem)" }}
       onFocus={() => setFocused(true)}
       onBlur={(event) => {
@@ -96,16 +114,13 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
         <button
           type="button"
           className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted"
-          aria-label={tx(locale, "加入相片", "Add photo")}
-          aria-expanded={expanded}
+          aria-label={tx(locale, "更多", "More")}
+          aria-expanded={menu}
+          aria-haspopup="menu"
           onMouseDown={(event) => event.preventDefault()}
-          onClick={() => {
-            const open = expanded;
-            setTray(true);
-            if (open) fileRef.current?.click();
-          }}
+          onClick={() => setMenu((open) => !open)}
         >
-          <Icon name="camera" className="h-5 w-5" />
+          <Icon name="plus" className="h-5 w-5" />
         </button>
         <textarea
           ref={boxRef}
@@ -147,6 +162,42 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
         </div>
       ) : null}
       {note ? <p className="px-2 pb-1 text-sm text-danger">{note}</p> : null}
+      {menu ? (
+        <>
+          <button type="button" className="fixed inset-0 z-20 cursor-default" aria-label={tx(locale, "關閉", "Close")} onClick={() => setMenu(false)} />
+          <div role="menu" className="absolute bottom-12 left-1 z-30 grid min-w-[9.5rem] gap-0.5 rounded-2xl border border-line bg-card p-1.5 shadow-card">
+            {canOffer ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="rounded-xl px-3 py-2 text-left text-sm font-semibold"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => {
+                  setMenu(false);
+                  setOffer(true);
+                }}
+              >
+                {tx(locale, "提出要約", "Make offer")}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              role="menuitem"
+              className="rounded-xl px-3 py-2 text-left text-sm font-semibold"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => {
+                setMenu(false);
+                setTray(true);
+                fileRef.current?.click();
+              }}
+            >
+              {tx(locale, "加入相片", "Add photo")}
+            </button>
+          </div>
+        </>
+      ) : null}
     </form>
+    {offer ? <OfferSheet locale={locale} threadId={threadId} bound={bound} choices={choices} onClose={() => setOffer(false)} /> : null}
+    </>
   );
 }

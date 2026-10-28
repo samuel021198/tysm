@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { shareIntoThread } from "@/actions/social";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { dealEventCopy, readDealEvent } from "@/lib/deal-phase";
 import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { shareLabel, shareTarget } from "@/lib/share";
@@ -36,8 +37,13 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
         {visible.map((thread) => {
           const other = thread.buyerId === viewer.id ? thread.seller : thread.buyer;
           const last = thread.messages[0];
-          const shared = last ? shareTarget(last.body) : null;
-          const preview = last ? (shared ? shareLabel(shared, prefs.locale) : last.body) : tx(prefs.locale, "未有訊息", "No messages yet");
+          const event = last ? readDealEvent(last.body) : null;
+          const shared = last && !event ? shareTarget(last.body) : null;
+          const preview = event
+            ? dealEventCopy(prefs.locale, event).text
+            : last
+              ? (shared ? shareLabel(shared, prefs.locale) : last.body)
+              : tx(prefs.locale, "未有訊息", "No messages yet");
           const row = (
             <>
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent text-base font-bold text-white">

@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { dealPhase } from "@/lib/deal-phase";
+import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, readDealEvent, readDealMeta } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -19,7 +19,7 @@ export default async function ThreadPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ err?: string; compose?: string }>;
+  searchParams: Promise<{ err?: string; ok?: string; compose?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
@@ -54,16 +54,51 @@ export default async function ThreadPage({
     return phase !== "CANCELLED" && phase !== "DONE";
   });
   const order = open ?? orders.find((row) => dealPhase(row) === "DONE") ?? orders[0] ?? null;
+  const phase = order ? dealPhase(order) : null;
+  const pending = order ? readDealMeta(order.fulfillment).offer?.status === "PENDING" : false;
+  const blocked = order
+    ? order.items.some((item) => dealBlocked(dealPhase(order), item.listing.status, item.listing.binLockOrderId, order.id))
+    : Boolean(thread.listing?.binLockOrderId);
+  const listingClosed = Boolean(thread.listing && thread.listing.status !== "ACTIVE");
+  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed);
+  const listPrice = thread.listing ? (thread.listing.price ?? thread.listing.currentBid ?? thread.listing.startPrice) : null;
+  const bound = thread.listing ? { id: thread.listing.id, title: thread.listing.title, priceCents: listPrice, cover: null as string | null } : null;
+  // ponytail: 30 newest unlocked listings. A paged sheet is the upgrade if a shop has more.
+  const choices = !thread.listingId && canOffer
+    ? (
+        await prisma.listing.findMany({
+          where: { sellerId: otherId, status: "ACTIVE", quantityAvailable: { gte: 1 } },
+          include: { photos: { take: 1, orderBy: { position: "asc" } } },
+          orderBy: { updatedAt: "desc" },
+          take: 30,
+        })
+      ).map((listing) => ({
+        id: listing.id,
+        title: listing.title,
+        priceCents: listing.price ?? listing.currentBid ?? listing.startPrice,
+        cover: listing.photos[0]?.url ?? null,
+      }))
+    : [];
   return (
     <div className="thread-fit">
       <ReadPing id={id} />
-      <Flash locale={prefs.locale} err={sp.err} />
+      <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <ThreadScroll>
         <div className="grid gap-2.5">
         <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
         {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
         <ol className="grid content-start gap-2.5">
           {thread.messages.map((message) => {
+            const event = readDealEvent(message.body);
+            if (event) {
+              const copy = dealEventCopy(prefs.locale, event);
+              return (
+                <li key={message.id} className="mx-auto grid max-w-[18rem] justify-items-center gap-0.5 px-3 py-1 text-center text-xs text-muted">
+                  <p>{copy.text}</p>
+                  {copy.note ? <p>{copy.note}</p> : null}
+                </li>
+              );
+            }
             const mine = message.senderId === viewer.id;
             const linked = shareTarget(message.body);
             const card = linked ? cards.get(linked) : undefined;
@@ -103,7 +138,7 @@ export default async function ThreadPage({
         </ol>
         </div>
       </ThreadScroll>
-      <MessageComposer locale={prefs.locale} threadId={id} focus={sp.compose === "1"} />
+      <MessageComposer locale={prefs.locale} threadId={id} focus={sp.compose === "1"} canOffer={canOffer} bound={bound} choices={choices} />
     </div>
   );
 }

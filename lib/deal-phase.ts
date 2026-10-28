@@ -1,3 +1,6 @@
+import { formatHkd } from "./format";
+import type { Locale } from "./i18n";
+
 /** Private handover phases. Old OrderStatus values stay in the database; the UI reads these. */
 
 export const DEAL_BANNER = "私下交收・平台唔代收、唔擔保";
@@ -5,19 +8,44 @@ export const DEAL_ACK = "我明白：雙方自行交收，錢貨風險自負；T
 export const DEAL_RISK = "平台只提供配對同聊天紀錄；付款方式、交收、真偽同爭議由買賣雙方自行負責。";
 export const RESERVE_BADGE = "保留中";
 export const RESERVE_BLOCKED = "呢件貨已有人確認，保留中";
-export const PROOF_WAIT = "等賣家確認交易後先上傳付款證明";
+export const OFFER_EMPTY = "對方而家冇可要約嘅貨";
+export const OFFER_NOTE_MAX = 80;
 
 export type DealPhase = "CHATTING" | "ARRANGED" | "CONFIRMED" | "PROOF" | "SELLER_PAID" | "DONE" | "CANCELLED";
+
+export type DealOffer = {
+  by: string;
+  name: string;
+  amount: number;
+  note: string;
+  status: "PENDING" | "ACCEPTED";
+};
 
 export type DealMeta = {
   private?: boolean;
   meetupAgreed?: boolean;
   confirmed?: boolean;
   proofs: { url: string }[];
+  offer: DealOffer | null;
 };
 
+function readOffer(value: unknown): DealOffer | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const row = value as Record<string, unknown>;
+  const by = row.by;
+  const name = row.name;
+  const amount = row.amount;
+  const note = row.note;
+  const status = row.status;
+  if (typeof by !== "string" || !by || typeof name !== "string" || !name.trim()) return null;
+  if (typeof amount !== "number" || !Number.isSafeInteger(amount) || amount <= 0 || amount > 1_000_000_000) return null;
+  if (typeof note !== "string" || note.length > OFFER_NOTE_MAX) return null;
+  if (status !== "PENDING" && status !== "ACCEPTED") return null;
+  return { by, name: name.trim(), amount, note, status };
+}
+
 export function readDealMeta(fulfillment: unknown): DealMeta {
-  const empty: DealMeta = { proofs: [] };
+  const empty: DealMeta = { proofs: [], offer: null };
   if (!fulfillment || typeof fulfillment !== "object" || Array.isArray(fulfillment)) return empty;
   const deal = (fulfillment as { deal?: unknown }).deal;
   if (!deal || typeof deal !== "object" || Array.isArray(deal)) return empty;
@@ -35,7 +63,30 @@ export function readDealMeta(fulfillment: unknown): DealMeta {
     meetupAgreed: row.meetupAgreed === true,
     confirmed: row.confirmed === true,
     proofs,
+    offer: readOffer(row.offer),
   };
+}
+
+/** Empty is allowed. Null means the note is longer than one short line. */
+export function cleanOfferNote(raw: string): { ok: true; note: string } | { ok: false } {
+  const note = raw.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim();
+  if (note.length > OFFER_NOTE_MAX) return { ok: false };
+  return { ok: true, note };
+}
+
+/** Bound chat skips the picker. An unbound chat uses how many of the other person's active listings there are. */
+export function offerEntry(bound: boolean, activeCount: number): "bound" | "empty" | "auto" | "pick" {
+  if (bound) return "bound";
+  if (activeCount <= 0) return "empty";
+  if (activeCount === 1) return "auto";
+  return "pick";
+}
+
+/** Omit「提出要約」from the + menu. No greyed-out row. */
+export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false): boolean {
+  if (pending || blocked) return false;
+  if (phase == null) return true;
+  return phase === "CHATTING" || phase === "ARRANGED";
 }
 
 /** Map a stored order onto the handover the buyer and seller actually see. */
@@ -72,12 +123,7 @@ export function phaseLabel(locale: "zh-HK" | "en", phase: DealPhase): string {
   return (locale === "en" ? en : zh)[phase];
 }
 
-/** Seller lock. Buyer never confirms this step. */
-export function canSellerLock(phase: DealPhase): boolean {
-  return phase === "CHATTING" || phase === "ARRANGED";
-}
-
-/** Seller can drop the reserve before proof, so another buyer can be locked. */
+/** Either party can drop the reserve before proof, so the listing can be offered again. */
 export function canReleaseReserve(phase: DealPhase): boolean {
   return phase === "CONFIRMED";
 }
@@ -129,4 +175,55 @@ export function canCancel(phase: DealPhase, listingStatus: string): boolean {
 
 export function canArrange(phase: DealPhase): boolean {
   return phase === "CHATTING";
+}
+
+const DEAL_MARK = "\u2063";
+
+export type DealEvent =
+  | { kind: "offer"; name: string; amount: number; note: string }
+  | { kind: "accept" }
+  | { kind: "decline" }
+  | { kind: "withdraw" }
+  | { kind: "release"; name: string };
+
+export function dealEventBody(event: DealEvent): string {
+  return DEAL_MARK + JSON.stringify(event);
+}
+
+export function readDealEvent(body: string): DealEvent | null {
+  if (!body.startsWith(DEAL_MARK)) return null;
+  let row: unknown;
+  try {
+    row = JSON.parse(body.slice(DEAL_MARK.length));
+  } catch {
+    return null;
+  }
+  if (!row || typeof row !== "object" || Array.isArray(row)) return null;
+  const kind = (row as { kind?: unknown }).kind;
+  if (kind === "accept" || kind === "decline" || kind === "withdraw") return { kind };
+  if (kind === "release") {
+    const name = (row as { name?: unknown }).name;
+    if (typeof name !== "string" || !name.trim()) return null;
+    return { kind, name: name.trim() };
+  }
+  if (kind !== "offer") return null;
+  const name = (row as { name?: unknown }).name;
+  const amount = (row as { amount?: unknown }).amount;
+  const note = (row as { note?: unknown }).note;
+  if (typeof name !== "string" || !name.trim()) return null;
+  if (typeof amount !== "number" || !Number.isSafeInteger(amount) || amount <= 0) return null;
+  if (typeof note !== "string" || note.length > OFFER_NOTE_MAX) return null;
+  return { kind, name: name.trim(), amount, note };
+}
+
+export function dealEventCopy(locale: Locale, event: DealEvent): { text: string; note: string } {
+  const en = locale === "en";
+  if (event.kind === "offer") {
+    const price = formatHkd(event.amount, locale);
+    return { text: en ? `${event.name} made an offer ${price}` : `${event.name} 提出要約 ${price}`, note: event.note };
+  }
+  if (event.kind === "accept") return { text: en ? "Offer accepted · Reserved" : "要約已接受 · 保留中", note: "" };
+  if (event.kind === "decline") return { text: en ? "Offer declined" : "要約已拒絕", note: "" };
+  if (event.kind === "withdraw") return { text: en ? "Offer withdrawn" : "要約已撤回", note: "" };
+  return { text: en ? `${event.name} released the hold` : `${event.name} 已解除保留`, note: "" };
 }
