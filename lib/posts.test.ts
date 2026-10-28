@@ -299,12 +299,14 @@ assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis butto
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
 assert(!postCard.includes("睇圖鑑") && !postCard.includes("/dex") && !postCard.includes('name="book"') && !postCard.includes("dexHref"), "posts do not offer the dex");
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
-assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("傾交收") && handover.includes('name="check"'), "detail shows one handover check, not checkout");
-assert(!handover.includes("議價") && !handover.includes("bargain") && handover.split("<button").length === 2, "the handover control is a single check");
+const handoverButton = handover.slice(handover.indexOf("<button"), handover.indexOf("</button>"));
+assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("傾交收") && handoverButton.includes('aria-label={label}') && handoverButton.includes('name="check"') && !handoverButton.replace("aria-label={label}", "").includes("{label}"), "detail shows one icon-only handover check, not checkout");
+assert(!handover.includes("議價") && !handover.includes("bargain") && handover.split("<button").length === 2 && !handoverButton.includes("w-full"), "the handover control is a single check");
 assert(!postCard.includes("bargain") && !postCard.includes("議價"), "the price row has no bargain button");
 const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
 const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
-assert(!purchase.includes("議價") && !purchase.includes("送出議價") && purchase.includes("傾交收") && purchase.includes('name="check"'), "listing buy bar uses the same check");
+const dockButton = purchase.slice(purchase.indexOf('form="handover-form"'), purchase.indexOf("</button>", purchase.indexOf('form="handover-form"')));
+assert(!purchase.includes("議價") && !purchase.includes("送出議價") && dockButton.includes('aria-label={tx(locale, "傾交收", "Arrange handover")}') && dockButton.includes('name="check"') && !dockButton.replace('aria-label={tx(locale, "傾交收", "Arrange handover")}', "").includes("傾交收"), "listing buy bar uses the same icon-only check");
 assert(!listingPage.includes("議價") && !listingPage.includes("再議價"), "listing copy does not say 議價");
 assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");

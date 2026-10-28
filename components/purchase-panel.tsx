@@ -127,9 +127,8 @@ export function PurchasePanel({
           }
         >
           {showHandover ? (
-            <button form="handover-form" className="btn btn-primary shrink-0 gap-1.5 px-3">
+            <button form="handover-form" className="btn btn-primary shrink-0" aria-label={tx(locale, "傾交收", "Arrange handover")}>
               <Icon name="check" className="h-4 w-4" strokeWidth={2.5} />
-              {tx(locale, "傾交收", "Arrange handover")}
             </button>
           ) : null}
           {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
