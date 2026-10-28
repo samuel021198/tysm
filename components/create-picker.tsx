@@ -20,7 +20,7 @@ export function CreatePicker({
 }) {
   const pathname = usePathname();
   const rootRef = useRef<HTMLDetailsElement>(null);
-  const creating = pathname.startsWith("/sell") || pathname.startsWith("/add") || pathname.startsWith("/story");
+  const creating = pathname.startsWith("/sell") || pathname.startsWith("/add");
 
   useEffect(() => {
     function onPointer(event: PointerEvent) {
@@ -66,7 +66,7 @@ export function CreatePicker({
   const summaryClass =
     variant === "header"
       ? "inline-flex h-9 shrink-0 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15 [&::-webkit-details-marker]:hidden"
-      : `grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full active:bg-soft [&::-webkit-details-marker]:hidden ${creating ? "bg-soft text-ink" : "text-muted"}`;
+      : `grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full text-accent active:bg-soft [&::-webkit-details-marker]:hidden${creating ? " bg-soft" : ""}`;
 
   return (
     <details key={pathname} ref={rootRef} className={rootClass} onToggle={onToggle}>

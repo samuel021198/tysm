@@ -24,6 +24,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       href: "/find",
       label: tx(locale, "搜尋", "Search"),
       icon: "search" as const,
+      accent: true,
       on: pathname === "/find" || pathname.startsWith("/find/"),
     },
     {
@@ -64,11 +65,13 @@ function Tab({
   label,
   icon,
   on,
+  accent = false,
 }: {
   href: string;
   label: string;
   icon: "home" | "news" | "search" | "bag" | "me";
   on: boolean;
+  accent?: boolean;
 }) {
   return (
     <li className="h-full">
@@ -76,7 +79,7 @@ function Tab({
         href={href}
         aria-label={label}
         aria-current={on ? "page" : undefined}
-        className={`grid h-full place-items-center ${on ? "text-ink" : "text-muted"}`}
+        className={`grid h-full place-items-center ${accent ? "text-accent" : on ? "text-ink" : "text-muted"}`}
       >
         <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
       </Link>
