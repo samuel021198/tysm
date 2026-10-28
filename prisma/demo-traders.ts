@@ -1,5 +1,5 @@
 import { TRIAL_ACCOUNTS } from "../lib/demo-login";
-import { fronts } from "./demo-card-fronts";
+import { fronts, withSceneCover } from "./demo-card-fronts";
 
 const portrait = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&h=800&q=80`;
 
@@ -479,12 +479,13 @@ export const traderListings = rows
     language: row.language ?? null,
   }));
 
-export const traderCollections = rows.map((row) => ({
+export const traderCollections = rows.map((row, index) => ({
   id: `${row.key}_col`,
   ownerId: row.ownerId,
   title: row.title,
   visibility: "PUBLIC" as const,
-  photos: row.photos,
+  // 12 boss collections are listed before these rows, so covers stay in one sequence.
+  photos: withSceneCover(row.photos, index + 12),
   listingId: row.priceCents ? `${row.key}_list` : null,
   catalogCardId: row.catalogCardId ?? null,
 }));

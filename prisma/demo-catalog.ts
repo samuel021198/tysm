@@ -1,5 +1,5 @@
 import { DEMO_ACCOUNTS } from "../lib/demo-login";
-import { fronts } from "./demo-card-fronts";
+import { fronts, withSceneCover } from "./demo-card-fronts";
 import { traderCollections, traderFollows, traderListings, traderPosts, traderUsers } from "./demo-traders";
 import { resolveAuction } from "../lib/rules";
 
@@ -1042,18 +1042,18 @@ export const demoShowcaseListings: ShowcaseListing[] = [
 ];
 
 export const demoShowcaseCollections: ShowcaseCollection[] = [
-  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: mars01, listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
-  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: mars02, listingId: "mars_list_02" },
-  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: marsCol03, listingId: null, catalogCardId: "demo_card_eevee" },
-  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: marsCol04, listingId: null, catalogCardId: "demo_card_gengar" },
-  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: tyu01, listingId: "tyu_list_01" },
-  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: tyu02, listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
-  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: tyu03, listingId: "tyu_list_03" },
-  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: tyu04, listingId: null },
-  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: muel01, listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
-  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: muelCol02, listingId: null },
-  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: muelCol03, listingId: null, catalogCardId: "demo_card_umbreon" },
-  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: muel04, listingId: null },
+  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: withSceneCover(mars01, 0), listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
+  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: withSceneCover(mars02, 1), listingId: "mars_list_02" },
+  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: withSceneCover(marsCol03, 2), listingId: null, catalogCardId: "demo_card_eevee" },
+  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: withSceneCover(marsCol04, 3), listingId: null, catalogCardId: "demo_card_gengar" },
+  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: withSceneCover(tyu01, 4), listingId: "tyu_list_01" },
+  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: withSceneCover(tyu02, 5), listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
+  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: withSceneCover(tyu03, 6), listingId: "tyu_list_03" },
+  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: withSceneCover(tyu04, 7), listingId: null },
+  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: withSceneCover(muel01, 8), listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
+  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: withSceneCover(muelCol02, 9), listingId: null },
+  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: withSceneCover(muelCol03, 10), listingId: null, catalogCardId: "demo_card_umbreon" },
+  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: withSceneCover(muel04, 11), listingId: null },
   ...traderCollections,
 ];
 
