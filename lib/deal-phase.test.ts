@@ -18,7 +18,9 @@ import {
   cleanOfferNote,
   dealEventBody,
   dealEventCopy,
+  offerAckGate,
   offerEntry,
+  offerFormLocked,
   readDealEvent,
   dealBlocked,
   dealPhase,
@@ -57,6 +59,13 @@ assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUp
 assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && canOfferFromMenu("ARRANGED", false), "either party can offer while talking");
 assert(!canOfferFromMenu("CHATTING", true) && !canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true), "the + item is omitted once an offer is pending, reserved, finished, or blocked");
 assert(offerEntry(true, 4) === "bound" && offerEntry(false, 0) === "empty" && offerEntry(false, 1) === "auto" && offerEntry(false, 2) === "pick", "a bound thread skips the picker; an unbound thread follows the active count");
+assert(offerFormLocked(false, false) && !offerFormLocked(false, true) && !offerFormLocked(true, false), "price and note unlock after the checkbox or a stored ack");
+const missingAck = offerAckGate(false, null);
+const postedAck = offerAckGate(false, "1");
+const storedAck = offerAckGate(true, null);
+assert(!missingAck.ok && missingAck.error === "deal_ack", "an offer without the checkbox is refused");
+assert(postedAck.ok && postedAck.record, "the first checkbox is stored on the account");
+assert(storedAck.ok && !storedAck.record, "a stored ack is not required again");
 assert(canReleaseReserve("CONFIRMED") && !canReleaseReserve("CHATTING") && !canReleaseReserve("PROOF"), "release is the pre-proof unlock");
 assert(!canSeePayment("CHATTING") && !canSeePayment("ARRANGED") && canSeePayment("CONFIRMED") && canSeePayment("PROOF"), "payment details stay hidden until the lock");
 assert(showPaymentDetails("CONFIRMED", true, 0) && showPaymentDetails("PROOF", true, 1) && !showPaymentDetails("DONE", false, 0) && !showPaymentDetails("CHATTING", false, 0), "payment copy follows the lock, not old completed rows");

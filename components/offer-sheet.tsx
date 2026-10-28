@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { makeDealOfferAction } from "@/actions/trade";
-import { OFFER_EMPTY, offerEntry } from "@/lib/deal-phase";
+import { ackP2pRisk, makeDealOfferAction } from "@/actions/trade";
+import { DEAL_ACK, OFFER_EMPTY, offerEntry, offerFormLocked } from "@/lib/deal-phase";
 import { centsToInput, formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { DealDisclaimer } from "./deal-disclaimer";
 
 export type OfferChoice = {
   id: string;
@@ -18,22 +19,32 @@ export function OfferSheet({
   threadId,
   bound,
   choices,
+  acked,
+  persisted,
+  onAcked,
   onClose,
 }: {
   locale: Locale;
   threadId: string;
   bound: OfferChoice | null;
   choices: OfferChoice[];
+  /** This visit, including a checkbox just ticked. */
+  acked: boolean;
+  /** Already stored on the account when the thread loaded. */
+  persisted: boolean;
+  onAcked: () => void;
   onClose: () => void;
 }) {
   const entry = offerEntry(Boolean(bound), choices.length);
   const [picked, setPicked] = useState<OfferChoice | null>(entry === "bound" ? bound : entry === "auto" ? (choices[0] ?? null) : null);
   const listing = picked;
+  const locked = offerFormLocked(acked, false);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={tx(locale, "提出要約", "Make offer")}>
       <button type="button" className="absolute inset-0 cursor-default" aria-label={tx(locale, "關閉", "Close")} onClick={onClose} />
       <div className="relative z-10 max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
+        <DealDisclaimer className="mb-3" />
         {entry === "empty" ? (
           <p className="py-6 text-center text-sm">{tx(locale, OFFER_EMPTY, "They have nothing you can offer on right now")}</p>
         ) : null}
@@ -59,6 +70,23 @@ export function OfferSheet({
           <form action={makeDealOfferAction} className="grid gap-3">
             <input type="hidden" name="threadId" value={threadId} />
             <input type="hidden" name="listingId" value={listing.id} />
+            {acked && !persisted ? <input type="hidden" name="ack" value="1" /> : null}
+            {!acked ? (
+              <label className="flex items-start gap-2.5 rounded-2xl border border-line bg-soft px-3 py-2.5 text-sm leading-5">
+                <input
+                  type="checkbox"
+                  name="ack"
+                  value="1"
+                  className="mt-0.5 h-5 w-5 shrink-0 accent-[#3d8ea3]"
+                  onChange={(event) => {
+                    if (!event.target.checked) return;
+                    onAcked();
+                    void ackP2pRisk();
+                  }}
+                />
+                <span>{DEAL_ACK}</span>
+              </label>
+            ) : null}
             <div>
               {entry === "pick" ? (
                 <button type="button" className="mb-2 text-xs font-semibold text-link" onClick={() => setPicked(null)}>
@@ -71,10 +99,11 @@ export function OfferSheet({
             <label className="grid gap-1 text-xs font-semibold">
               {tx(locale, "最終價錢", "Final price")}
               <input
-                className="field"
+                className="field disabled:opacity-40"
                 name="price"
                 inputMode="decimal"
                 required
+                disabled={locked}
                 defaultValue={listing.priceCents != null ? centsToInput(listing.priceCents) : ""}
                 placeholder="HK$"
                 aria-label={tx(locale, "最終價錢", "Final price")}
@@ -83,14 +112,15 @@ export function OfferSheet({
             <label className="grid gap-1 text-xs font-semibold">
               {tx(locale, "交收備註", "Handover note")}
               <input
-                className="field"
+                className="field disabled:opacity-40"
                 name="note"
                 maxLength={80}
+                disabled={locked}
                 placeholder={tx(locale, "時間／地點／方式", "Time, place, or method")}
                 aria-label={tx(locale, "交收備註", "Handover note")}
               />
             </label>
-            <button className="btn btn-primary w-full">{tx(locale, "提出要約", "Make offer")}</button>
+            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{tx(locale, "提出要約", "Make offer")}</button>
           </form>
         ) : null}
       </div>

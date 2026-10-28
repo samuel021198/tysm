@@ -82,6 +82,21 @@ export function offerEntry(bound: boolean, activeCount: number): "bound" | "empt
   return "pick";
 }
 
+/** Price and note stay locked until this account has acked, or the checkbox is on. */
+export function offerFormLocked(acked: boolean, checked: boolean): boolean {
+  return !acked && !checked;
+}
+
+/** Server gate. A stored ack skips the checkbox; a posted checkbox records one. */
+export function offerAckGate(
+  acked: boolean,
+  posted: unknown,
+): { ok: true; record: boolean } | { ok: false; error: "deal_ack" } {
+  if (acked) return { ok: true, record: false };
+  if (posted === "1") return { ok: true, record: true };
+  return { ok: false, error: "deal_ack" };
+}
+
 /** Omit「提出要約」from the + menu. No greyed-out row. */
 export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false): boolean {
   if (pending || blocked) return false;

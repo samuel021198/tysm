@@ -43,7 +43,13 @@ assert(page.includes("<DealStream") && page.includes("<MessageComposer") && page
 assert(!scroll.includes("paddingTop") && !scroll.includes("ResizeObserver") && !scroll.includes("sticky"), "the scroller does not reserve a deal-bar inset");
 assert(scroll.includes("onScroll") && scroll.includes("scrollHeight - el.scrollTop") && scroll.includes("pinThreadToEnd"), "a reader at the bottom stays with the newest row; scrolling up is left alone");
 assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
-assert(!page.includes("<DealPanel") && !page.includes("DEAL_BANNER") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card or banner");
+assert(!page.includes("<DealPanel") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card");
+const disclaimer = readFileSync(new URL("../components/deal-disclaimer.tsx", import.meta.url), "utf8");
+assert(page.includes("<DealDisclaimer") && page.indexOf("<DealDisclaimer") < page.indexOf("<ThreadScroll"), "the handover line sits above the message list");
+assert(!page.includes("sticky") && !disclaimer.includes("sticky") && !disclaimer.includes("fixed"), "the thread disclaimer is not sticky and does not cover the log");
+assert(disclaimer.includes("DEAL_BANNER") && disclaimer.includes("bg-soft"), "the disclaimer is the locked one-line gray banner");
+const orderPage = readFileSync(new URL("../app/orders/[id]/page.tsx", import.meta.url), "utf8");
+assert(orderPage.includes("<DealDisclaimer") && !orderPage.includes("sticky"), "the handover page shows the same line in normal flow");
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
 assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
 assert(!deal.includes("確認交易") && !deal.includes("提出要約") && !deal.includes("canSellerLock"), "make offer is not a deal-card button");
@@ -53,6 +59,13 @@ assert(src.includes('name="plus"') && src.includes("提出要約") && src.includ
 const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.url), "utf8");
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
+assert(sheet.includes("DealDisclaimer") && sheet.includes("DEAL_ACK") && sheet.includes("offerFormLocked") && sheet.includes("disabled={locked}"), "the offer form keeps a risk line and locks price until the first checkbox");
+assert(sheet.includes("ackP2pRisk") && src.includes("riskAcked") && src.includes("persisted={riskAcked}"), "the checkbox is once per account, then the form opens straight away");
+assert(!src.includes("localStorage"), "the ack is not stored only in the browser");
+const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
+const login = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
+assert(!auth.includes("p2pRiskAckAt") && !login.includes("DEAL_ACK") && !login.includes("p2pRiskAck"), "registration does not record or require this ack");
+assert(login.includes("服務條款") && login.includes('name="accept"'), "signup keeps its own terms tick");
 assert(handover.includes("傾交收") && !handover.includes("提出要約"), "posts keep 傾交收 and do not grow an offer button");
 assert(deal.includes("ProofForm") && deal.includes("交收詳情"), "proof upload and the detail link stay available");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
