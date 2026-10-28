@@ -5,6 +5,7 @@ import {
   formatRankChange,
   merchantEvents,
   rankBucket,
+  postRankLabel,
   rankDisplayName,
   rankMetricLabel,
   postEvents,
@@ -135,6 +136,12 @@ assert(sortRank([
 assert(rankDisplayName("shops", { nickname: "Mars", storeName: " 火星卡店 " }) === "火星卡店", "a shop with a name shows the shop");
 assert(rankDisplayName("shops", { nickname: "Mars", storeName: "  " }) === "Mars", "a blank shop name falls back to the member");
 assert(rankDisplayName("collectors", { nickname: "Mars", storeName: "火星卡店" }) === "Mars", "a collector is the member, not the shop");
+assert(postRankLabel({ body: "  開箱留低。 #PC  ", collectionItem: { title: "手持一疊卡", cardName: "噴火龍" } }, "zh-HK") === "開箱留低。", "a post rank label is the caption, without the topic token");
+assert(postRankLabel({ body: "第一行\n第二行", collectionItem: null }, "zh-HK") === "第一行 第二行", "a post rank label stays one line");
+assert(postRankLabel({ body: "   ", collectionItem: { title: "手持一疊卡", cardName: "噴火龍" } }, "zh-HK") === "噴火龍", "an empty caption uses the card name");
+assert(postRankLabel({ body: "#PC", collectionItem: { title: "皮卡丘", cardName: null } }, "zh-HK") === "皮卡丘", "a tag-only caption falls back to the collection title");
+assert(postRankLabel({ body: "", collectionItem: { title: "皮卡丘", cardName: " " } }, "zh-HK") === "皮卡丘", "a blank card name falls through to the collection title");
+assert(postRankLabel({ body: "", collectionItem: { title: "  ", cardName: " " } }, "zh-HK") === "貼文" && postRankLabel({ body: "", collectionItem: null }, "en") === "Post", "a blank post still has a short label");
 
 assert(rankMetricLabel("shops", 4, "zh-HK") === "近 3 日成交量 4", "shop metric is 3-day volume");
 assert(rankMetricLabel("collectors", 2, "zh-HK") === "近 3 日獲讚 2", "collector metric is likes received");
@@ -159,6 +166,9 @@ assert(page.includes("暫時未有排行。") && shopsAt >= 0 && shopsAt < colle
 assert(page.includes("grid-cols-3"), "the switcher is one row of three tabs");
 assert(page.includes("href={row.href}") && src.includes("`/shop/${user.id}`") && src.includes("`/post/${post.id}`"), "shops open a profile and posts open the post");
 assert(src.includes("avatarUrl: post.author.avatarUrl") && src.includes("coverUrl: postCover(post)"), "a post row keeps the author avatar and puts the cover beside it");
+assert(src.includes("name: postRankLabel(post, locale)") && src.includes("byline: post.author.nickname.trim()"), "a post row labels the caption and keeps the author as the byline");
+assert(!src.includes("name: post.author.nickname"), "the author nickname is not the post rank title");
+assert(page.includes("row.byline") && page.includes("row.name"), "the caption is the primary label and the author sits under it");
 assert(src.includes("coverUrl: null") && !src.includes("/u/") && !page.includes("/u/"), "collectors stay on the shop profile");
 assert(page.includes("row.coverUrl") && page.includes('name="bag"') && page.includes("M12 19.2"), "posts show the cover, shops a bag, likes a heart");
 assert(!page.includes("成交") && !page.includes("likes") && !page.includes("Likes") && !page.includes("讚好"), "the row shows the icon and number, not a metric label");
