@@ -174,6 +174,33 @@ export function parseNewsIngest(body: unknown): NewsIngestResult {
   return { ok: true, value };
 }
 
+export type NewsDeleteResult = { ok: true; slugs: string[] } | { ok: false; error: string };
+
+/** Slugs from `?slug=` plus `{ slug }` and/or `{ slugs }`. Duplicates collapse; one bad token rejects the batch. */
+export function parseNewsDelete(querySlugs: readonly string[], body: unknown): NewsDeleteResult {
+  const raw: unknown[] = [...querySlugs];
+  if (body !== undefined) {
+    if (!isRecord(body)) return { ok: false, error: "invalid_body" };
+    if (has(body, "slug")) raw.push(body.slug);
+    if (has(body, "slugs")) {
+      if (!Array.isArray(body.slugs)) return { ok: false, error: "invalid_slug" };
+      raw.push(...body.slugs);
+    }
+  }
+  if (!raw.length) return { ok: false, error: "invalid_slug" };
+
+  const slugs: string[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    const slug = readSlug(item);
+    if (!slug) return { ok: false, error: "invalid_slug" };
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+    slugs.push(slug);
+  }
+  return { ok: true, slugs };
+}
+
 /** Create fills schema defaults. Update writes only the keys the body sent, plus title and source. */
 export function planNewsUpsert(existing: { id: string } | null, input: NewsIngestInput): NewsUpsertPlan {
   if (existing) {

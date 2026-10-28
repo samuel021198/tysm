@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
-import { POST } from "../app/api/internal/news/route";
-import { parseNewsIngest, planNewsUpsert, newsIdForSlug } from "./news-ingest";
+import { DELETE, POST } from "../app/api/internal/news/route";
+import { parseNewsDelete, parseNewsIngest, planNewsUpsert, newsIdForSlug } from "./news-ingest";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -74,11 +74,28 @@ assert(!mismatch.ok && mismatch.error === "id_mismatch", "a different id does no
 const cleared = parseNewsIngest({ ...base, eventAt: null, coverUrl: "", linkUrl: null });
 assert(cleared.ok && cleared.value.eventAt === null && cleared.value.coverUrl === null && cleared.value.linkUrl === null, "null clears dated and linked fields");
 
+const one = parseNewsDelete([], { slug: "riftbound-radiance" });
+assert(one.ok && one.slugs.join() === "riftbound-radiance", "a single slug body parses");
+const batch = parseNewsDelete(["topps-five-star-2026"], { slugs: ["topps-five-star-2026", "op-18-dominance"] });
+assert(batch.ok && batch.slugs.join() === "topps-five-star-2026,op-18-dominance", "query and body slugs merge without duplicates");
+const both = parseNewsDelete(["chrome-tennis-sapphire"], { slug: "op-eb05-heroines", slugs: ["pokemon-30th-battle-deck"] });
+assert(both.ok && both.slugs.join() === "chrome-tennis-sapphire,op-eb05-heroines,pokemon-30th-battle-deck", "slug and slugs are both kept");
+const none = parseNewsDelete([], undefined);
+assert(!none.ok && none.error === "invalid_slug", "delete needs a slug");
+const badList = parseNewsDelete([], { slugs: "op-18-dominance" });
+assert(!badList.ok && badList.error === "invalid_slug", "slugs must be an array");
+const badToken = parseNewsDelete(["../etc"], undefined);
+assert(!badToken.ok && badToken.error === "invalid_slug", "a bad slug rejects the batch");
+const badBody = parseNewsDelete([], null);
+assert(!badBody.ok && badBody.error === "invalid_body", "delete body stays an object");
+
 const route = readFileSync(new URL("../app/api/internal/news/route.ts", import.meta.url), "utf8");
 assert(route.includes("authorizedBearer") && route.includes("BOOTSTRAP_SECRET"), "news ingest reuses the bootstrap bearer");
 assert(route.includes("unauthorized") && route.includes("401") && route.includes("400"), "bad auth is 401 and a bad body is 400");
 assert(route.includes("parseNewsIngest") && route.includes("planNewsUpsert"), "the route publishes through the helper");
-assert(route.includes('revalidatePath("/news")'), "the list refreshes after publish");
+assert(route.includes("export async function DELETE") && route.includes("parseNewsDelete"), "delete goes through the same route");
+assert(route.includes("deleteMany") && route.includes("missing"), "delete reports removed and missing slugs");
+assert(route.includes('revalidatePath("/news")') && route.includes("revalidatePath(`/news/${slug}`)"), "the list and each deleted slug refresh");
 assert(!route.includes("seedDemo") && !route.includes("draft"), "publish does not reseed and has no draft");
 const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");
 assert(reseed.includes("seedDemo") && !reseed.includes("news-ingest") && !reseed.includes("parseNewsIngest"), "reseed behavior stays put");
@@ -103,6 +120,24 @@ async function checkRoute() {
   delete process.env.BOOTSTRAP_SECRET;
   const missing = await call("Bearer test-secret", "{}");
   assert(missing.status === 503 && (await missing.json()).error === "unconfigured", "no secret is 503");
+  process.env.BOOTSTRAP_SECRET = "test-secret";
+  const drop = (authorization: string, url = "http://localhost/api/internal/news", body?: string) =>
+    DELETE(
+      new Request(url, {
+        method: "DELETE",
+        headers: { authorization, ...(body ? { "content-type": "application/json" } : {}) },
+        body,
+      }),
+    );
+  const denied = await drop("Bearer wrong", "http://localhost/api/internal/news?slug=riftbound-radiance");
+  assert(denied.status === 401 && (await denied.json()).error === "unauthorized", "delete rejects a bad bearer");
+  const empty = await drop("Bearer test-secret");
+  assert(empty.status === 400 && (await empty.json()).error === "invalid_slug", "delete without a slug is 400");
+  const junk = await drop("Bearer test-secret", "http://localhost/api/internal/news", "{");
+  assert(junk.status === 400 && (await junk.json()).error === "invalid_json", "delete rejects invalid json");
+  delete process.env.BOOTSTRAP_SECRET;
+  const unconfigured = await drop("Bearer test-secret", "http://localhost/api/internal/news?slug=riftbound-radiance");
+  assert(unconfigured.status === 503 && (await unconfigured.json()).error === "unconfigured", "delete without a secret is 503");
   if (previous === undefined) delete process.env.BOOTSTRAP_SECRET;
   else process.env.BOOTSTRAP_SECRET = previous;
   console.log("news ingest ok");
