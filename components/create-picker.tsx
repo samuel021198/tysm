@@ -20,7 +20,7 @@ export function CreatePicker({
 }) {
   const pathname = usePathname();
   const rootRef = useRef<HTMLDetailsElement>(null);
-  const creating = pathname.startsWith("/sell") || pathname.startsWith("/add") || pathname.startsWith("/story");
+  const creating = pathname.startsWith("/sell") || pathname.startsWith("/add");
 
   useEffect(() => {
     function onPointer(event: PointerEvent) {

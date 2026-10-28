@@ -285,20 +285,6 @@ svg {
   }
 }
 
-@keyframes story-bar {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.story-bar {
-  transform-origin: left center;
-  animation: story-bar 5s linear forwards;
-}
-
 .chips {
   display: flex;
   gap: 0.35rem;

@@ -149,6 +149,7 @@ const held = toPostCard({
 });
 assert(held.postId === "p2" && held.listingId === null, "collect post has no listing");
 assert(held.priceCents === null && held.priceHref === null && held.buy === null, "a #PC showcase post has no price and no buy");
+assert(held.caption === "", "a topic-only #PC post does not invent a caption line");
 assert(postBuy(null) === null, "no listing is not for sale");
 
 const suggestion = listingSuggestionCard({
@@ -188,6 +189,7 @@ assert(
   wishlistPostVisible({ authorId: "me", collectionItem: { visibility: "PRIVATE", ownerId: "me" } }, "me", new Set()),
   "the owner still sees their own private card",
 );
+assert(suggestion.caption === "", "a listing suggestion has no post caption");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
 assert(suggestion.priceHref === "/checkout?buy=seed_luffy&qty=1" && suggestion.buy?.kind === "checkout", "suggestion price opens checkout");
 assert(!suggestion.priceHref.includes("/dex"), "a suggested listing does not open the dex");
@@ -326,7 +328,7 @@ const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url),
 assert(!shop.includes("返回主頁") && !shop.includes('href="/faq"') && !shop.includes('href="/terms"'), "profile content does not repeat home or the site footer");
 assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
-assert(!home.includes("StoryRail") && !home.includes("loadStoryRings"), "home feed does not mount the following avatar rail");
+assert(!home.includes("FollowRail") && !home.includes("loadFollowRail") && !home.includes("StoryRail"), "home feed does not mount the following avatar rail");
 assert(home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still lead the home feed");
 assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following label");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");

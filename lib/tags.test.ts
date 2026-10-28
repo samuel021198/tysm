@@ -48,6 +48,7 @@ const card = toPostCard({
   saved: false,
 });
 assert(card.tags.join() === "PC", "a post card keeps its topics");
+assert(card.caption === "留喺收藏。", "the feed caption keeps the sentence and drops the topic");
 
 const field = readFileSync(new URL("../components/topic-field.tsx", import.meta.url), "utf8");
 const chips = readFileSync(new URL("../components/topic-chips.tsx", import.meta.url), "utf8");
@@ -57,6 +58,14 @@ const cardUi = readFileSync(new URL("../components/post-card.tsx", import.meta.u
 assert(field.includes("話題") && field.includes("Topics") && !/hashtag/i.test(field), "the composer says 話題");
 assert(chips.includes("text-[11px]") && chips.includes("findHref") && !/hashtag/i.test(chips), "chips stay small and open search");
 assert(cardUi.includes("TopicChips") && cardUi.includes("aspect-[4/5]"), "feed chips sit on the card, the cover stays 4:5");
+const titleAt = cardUi.indexOf("post.cardName");
+const captionAt = cardUi.indexOf("post.caption");
+const priceAt = cardUi.indexOf("{price}");
+const chipsAt = cardUi.indexOf("<TopicChips");
+assert(titleAt >= 0 && captionAt > titleAt && priceAt > captionAt && chipsAt > priceAt, "caption sits above the price; chips stay under it");
+assert(cardUi.includes("line-clamp-2") && cardUi.includes('tx(locale, "更多", "More")') && cardUi.includes("setOpen(true)"), "a feed caption clamps two lines and 更多 expands it");
+assert(cardUi.includes("cloneNode") && !cardUi.includes("scrollHeight > el.clientHeight"), "更多 compares an unclamped copy; line-clamp scrollHeight matches the box");
+assert(cardUi.includes("!gallery && post.caption"), "detail keeps the full caption outside the card");
 assert(sell.includes("TopicSuggest") && catalog.includes("搵唔到？自己入卡名"), "listing copy keeps topics and the own-name line");
 
 console.log("tags ok");

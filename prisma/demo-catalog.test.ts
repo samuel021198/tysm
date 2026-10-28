@@ -3,6 +3,7 @@ import { authorizedBearer } from "../lib/bootstrap";
 import { DEMO_CARDS } from "../lib/demo-dex";
 import { DEMO_ACCOUNTS, DEMO_CODE, TRIAL_ACCOUNTS } from "../lib/demo-login";
 import { resolveAuction } from "../lib/rules";
+import { isSeedCardFront } from "./demo-card-fronts";
 import {
   LEAF_CATEGORIES,
   demoCart,
@@ -203,15 +204,51 @@ const showcaseShare = (publicPosts.length - sellingPosts.length) / publicPosts.l
 assert(showcaseShare >= 0.55 && showcaseShare <= 0.65, "feed is mostly showcase");
 for (const item of demoShowcaseListings) assert(demoIds.has(item.ownerId), item.id);
 for (const item of demoShowcaseCollections) assert(demoIds.has(item.ownerId), item.id);
+for (const url of people.flatMap((person) => ("avatarUrl" in person && person.avatarUrl ? [person.avatarUrl] : []))) {
+  assert(url.startsWith("https://images.unsplash.com/") || url.startsWith("https://images.pexels.com/"), url);
+}
+const CARD_BACK_PILES = [
+  "photo-1613771404784",
+  "photo-1613771404721",
+  "photo-1611931960487",
+  "photo-1616196334218",
+  "photo-1647892591880",
+  "photo-1647892591717",
+  "photo-1647893977173",
+  "photo-1636391671086",
+  "photo-1703023689733",
+  "photo-1640271215810",
+  "photo-1647892591703",
+  "photo-1647893977168",
+  "photo-1672759043716",
+  "photo-1742743032379",
+  "photo-1606503153255",
+];
+for (const photos of shown) assert(new Set(photos).size === photos.length, "a post does not repeat one frame");
 for (const url of [
-  ...people.flatMap((person) => ("avatarUrl" in person && person.avatarUrl ? [person.avatarUrl] : [])),
   ...demoShowcaseListings.flatMap((item) => item.photos),
   ...demoShowcaseCollections.flatMap((item) => item.photos),
   ...shown.flat(),
 ]) {
-  assert(url.startsWith("https://images.unsplash.com/") || url.startsWith("https://images.pexels.com/"), url);
-  assert(!url.includes("/demo/cards/") && !url.endsWith(".svg"), url);
+  assert(isSeedCardFront(url), url);
+  assert(!url.includes("unsplash.com") && !url.includes("/demo/cards/") && !url.endsWith(".svg"), url);
+  assert(!CARD_BACK_PILES.some((id) => url.includes(id)), url);
 }
+const cover = (id: string) => demoShowcaseListings.find((item) => item.id === id)?.photos[0] || "";
+assert(cover("bao_01_list").includes("ja_SV2a-094"), "bao sell cover is a gengar front");
+assert(cover("kai_01_list").includes("ja_SV2a-201"), "kai sell cover is a charizard front");
+assert(cover("jun_01_list").includes("/en/base/base1/4/"), "jun sell cover is the base charizard front");
+assert(cover("suki_01_list").includes("ja_SV2a-025"), "suki sell cover is a pikachu front");
+assert(cover("mars_list_01").includes("ja_SV2a-006"), "mars sell cover is a charizard front");
+assert(cover("tyu_list_02").includes("ja_SV2a-025"), "tyu sell cover is a pikachu front");
+assert(cover("muel_list_01").includes("ja_SV2a-150"), "muel sell cover is a mewtwo front");
+assert(cover("hoi_01_list").includes("OP09-119"), "hoi sell cover is a luffy front");
+assert(cover("ace_01_list").includes("OP09-119"), "ace sell cover is a luffy front");
+assert(cover("mika_01_list").includes("ST01-001"), "mika sell cover is a luffy leader front");
+assert(cover("lok_01_list").includes("532d75dc36a16eb5954253a77366fcceac7aec62"), "lok sell cover is an annie front");
+assert(cover("yan_01_list").includes("messi58reg"), "yan sell cover is a messi front");
+assert(cover("rafa_01_list").includes("curry154"), "rafa sell cover is a curry front");
+for (const item of demoShowcaseListings) assert(isSeedCardFront(item.photos[0] || ""), `${item.id} cover`);
 for (const item of demoShowcaseListings) {
   assert(!showcaseListingIds.has(item.id), item.id);
   assert(item.photos.length >= 1 && item.priceCents > 0, item.id);

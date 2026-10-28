@@ -1,4 +1,5 @@
 import { DEMO_ACCOUNTS } from "../lib/demo-login";
+import { fronts } from "./demo-card-fronts";
 import { traderCollections, traderFollows, traderListings, traderPosts, traderUsers } from "./demo-traders";
 import { resolveAuction } from "../lib/rules";
 
@@ -938,23 +939,21 @@ export const demoSearches = [
   { id: "search_tyu_mars", userId: "user_tyu", query: "Mars" },
 ];
 
-const shot = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
-
-const spread = shot("photo-1613771404784-3a5686aa2be3");
-const holo = shot("photo-1613771404721-1f92d799e49f");
-const cloth = shot("photo-1611931960487-4932667079f1");
-const color = shot("photo-1616196334218-caffdc9b2317");
-const pileA = shot("photo-1647892591880-58c55fd726d8");
-const pileB = shot("photo-1647892591717-28c7fd63bb3f");
-const stackA = shot("photo-1647893977173-59619da505d9");
-const single = shot("photo-1636391671086-6b4b776cd031");
-const bunch = shot("photo-1703023689733-6a4281149189");
-const group = shot("photo-1640271215810-ce65ba65ef0b");
-const pileC = shot("photo-1647892591703-4552c35a58e7");
-const logoStack = shot("photo-1647893977168-6316f6c9ae44");
-const closeup = shot("photo-1672759043716-620e810abac8");
-const handHolo = shot("photo-1742743032379-8dbd2c2fe9df");
-const table = shot("photo-1606503153255-59d8b8b82176");
+const mars01 = [fronts.charizard, fronts.charizardSar, fronts.pikachu];
+const mars02 = [fronts.eevee, fronts.mew, fronts.dragonite];
+const mars03 = [fronts.gengar, fronts.snorlax];
+const marsCol03 = [fronts.eevee, fronts.pikachu, fronts.mew];
+const marsCol04 = [fronts.gengar, fronts.umbreon, fronts.dragonite];
+const tyu01 = [fronts.umbreon, fronts.charizard, fronts.eevee];
+const tyu02 = [fronts.pikachu, fronts.pikachuEx, fronts.eevee];
+const tyu03 = [fronts.snorlax, fronts.gengar, fronts.mewtwo];
+const tyu04 = [fronts.umbreonSar, fronts.glaceon, fronts.charizardSar];
+const muel01 = [fronts.mewtwo, fronts.charizard, fronts.umbreon];
+const muel02 = [fronts.charizardSar, fronts.mew];
+const muel03 = [fronts.snorlax, fronts.dragonite];
+const muelCol02 = [fronts.dragonite, fronts.snorlax, fronts.mewtwo];
+const muelCol03 = [fronts.umbreonSar, fronts.umbreon, fronts.glaceon];
+const muel04 = [fronts.glaceon, fronts.umbreonSar, fronts.pikachuEx];
 
 const MARS = "user_mars";
 const TYU = "user_tyu";
@@ -1016,31 +1015,31 @@ const tyuSell03 = "排開先睇有冇白邊，大部分都乾淨。呢排想騰�
 const muelSell01 = "疊高先數張數，入面有幾張閃。狀態同相一樣，無大花。整疊放賣，價錢寫喺下面。 #賣 #寶可夢";
 
 export const demoShowcaseListings: ShowcaseListing[] = [
-  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: marsSell01, priceCents: 12800, photos: [spread, holo, closeup], catalogCardId: "demo_card_charizard", categoryId: "cat_pokemon", game: "Pokémon", setName: "151", cardName: "噴火龍", cardKind: "TCG", language: "日文" },
-  { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: marsSell02, priceCents: 8600, photos: [cloth, single, holo], categoryId: "cat_pokemon", game: "Pokémon", cardName: "布面單卡", cardKind: "TCG", language: "日文" },
-  { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪一組放喺檯面，色卡同閃卡都有。狀態同相一樣，白邊少。而家放賣，週末旺角交收。 #FS", priceCents: 6400, photos: [color, table], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
-  { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: tyuSell01, priceCents: 9800, photos: [pileB, stackA, bunch], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
-  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: tyuSell02, priceCents: 5400, photos: [single, holo, cloth], catalogCardId: "demo_card_pikachu", categoryId: "cat_pokemon", game: "Pokémon", setName: "SV2a", cardName: "皮卡丘", cardKind: "TCG", language: "日文" },
-  { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: tyuSell03, priceCents: 7200, photos: [bunch, table, color], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
-  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: muelSell01, priceCents: 11200, photos: [pileC, stackA, logoStack], catalogCardId: "demo_card_mewtwo", categoryId: "cat_pokemon", game: "Pokémon", cardName: "超夢", cardKind: "TCG", language: "日文" },
-  { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒同特寫係同一套，盒面同卡面都影咗。狀態近全新，角位尖。而家放賣，可順豐到付。 #賣", priceCents: 15400, photos: [logoStack, closeup], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
-  { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌上一組卡排開影，閃面同普通卡都有。狀態同相一樣。而家放賣，油尖旺可交收。 #FS", priceCents: 6800, photos: [group, holo], categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "mars_list_01", ownerId: MARS, title: "手持一疊卡", description: marsSell01, priceCents: 12800, photos: mars01, catalogCardId: "demo_card_charizard", categoryId: "cat_pokemon", game: "Pokémon", setName: "151", cardName: "噴火龍", cardKind: "TCG", language: "日文" },
+  { id: "mars_list_02", ownerId: MARS, title: "布面單卡", description: marsSell02, priceCents: 8600, photos: mars02, categoryId: "cat_pokemon", game: "Pokémon", cardName: "布面單卡", cardKind: "TCG", language: "日文" },
+  { id: "mars_list_03", ownerId: MARS, title: "平鋪一組", description: "平鋪一組放喺檯面，色卡同閃卡都有。狀態同相一樣，白邊少。而家放賣，週末旺角交收。 #FS", priceCents: 6400, photos: mars03, categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_01", ownerId: TYU, title: "今日卡堆", description: tyuSell01, priceCents: 9800, photos: tyu01, categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_02", ownerId: TYU, title: "桌上單卡", description: tyuSell02, priceCents: 5400, photos: tyu02, catalogCardId: "demo_card_pikachu", categoryId: "cat_pokemon", game: "Pokémon", setName: "SV2a", cardName: "皮卡丘", cardKind: "TCG", language: "日文" },
+  { id: "tyu_list_03", ownerId: TYU, title: "桌上一排", description: tyuSell03, priceCents: 7200, photos: tyu03, categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_01", ownerId: MUEL, title: "疊高的卡", description: muelSell01, priceCents: 11200, photos: muel01, catalogCardId: "demo_card_mewtwo", categoryId: "cat_pokemon", game: "Pokémon", cardName: "超夢", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_02", ownerId: MUEL, title: "卡盒同特寫", description: "卡盒同特寫係同一套，盒面同卡面都影咗。狀態近全新，角位尖。而家放賣，可順豐到付。 #賣", priceCents: 15400, photos: muel02, categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
+  { id: "muel_list_03", ownerId: MUEL, title: "桌上一組卡", description: "桌上一組卡排開影，閃面同普通卡都有。狀態同相一樣。而家放賣，油尖旺可交收。 #FS", priceCents: 6800, photos: muel03, categoryId: "cat_pokemon", game: "Pokémon", cardKind: "TCG", language: "日文" },
   ...traderListings,
 ];
 
 export const demoShowcaseCollections: ShowcaseCollection[] = [
-  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: [spread, holo, closeup], listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
-  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: [cloth, single, holo], listingId: "mars_list_02" },
-  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: [pileA, table, color], listingId: null, catalogCardId: "demo_card_eevee" },
-  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: [color, pileA, handHolo], listingId: null, catalogCardId: "demo_card_gengar" },
-  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: [pileB, stackA, bunch], listingId: "tyu_list_01" },
-  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: [single, holo, cloth], listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
-  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: [bunch, table, color], listingId: "tyu_list_03" },
-  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: [handHolo, holo, closeup], listingId: null },
-  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: [pileC, stackA, logoStack], listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
-  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: [logoStack, pileC, group], listingId: null },
-  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: [group, closeup, table], listingId: null, catalogCardId: "demo_card_umbreon" },
-  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: [handHolo, holo, closeup], listingId: null },
+  { id: "mars_col_01", ownerId: MARS, title: "手持一疊卡", visibility: "PUBLIC", photos: mars01, listingId: "mars_list_01", catalogCardId: "demo_card_charizard" },
+  { id: "mars_col_02", ownerId: MARS, title: "布面單卡", visibility: "PUBLIC", photos: mars02, listingId: "mars_list_02" },
+  { id: "mars_col_03", ownerId: MARS, title: "開完未入冊", visibility: "PUBLIC", photos: marsCol03, listingId: null, catalogCardId: "demo_card_eevee" },
+  { id: "mars_col_04", ownerId: MARS, title: "檯面色卡", visibility: "PUBLIC", photos: marsCol04, listingId: null, catalogCardId: "demo_card_gengar" },
+  { id: "tyu_col_01", ownerId: TYU, title: "今日卡堆", visibility: "PUBLIC", photos: tyu01, listingId: "tyu_list_01" },
+  { id: "tyu_col_02", ownerId: TYU, title: "桌上單卡", visibility: "PUBLIC", photos: tyu02, listingId: "tyu_list_02", catalogCardId: "demo_card_pikachu" },
+  { id: "tyu_col_03", ownerId: TYU, title: "排開睇白邊", visibility: "PUBLIC", photos: tyu03, listingId: "tyu_list_03" },
+  { id: "tyu_col_04", ownerId: TYU, title: "未公開閃卡", visibility: "PRIVATE", photos: tyu04, listingId: null },
+  { id: "muel_col_01", ownerId: MUEL, title: "疊高的卡", visibility: "PUBLIC", photos: muel01, listingId: "muel_list_01", catalogCardId: "demo_card_mewtwo" },
+  { id: "muel_col_02", ownerId: MUEL, title: "卡盒封面", visibility: "PUBLIC", photos: muelCol02, listingId: null },
+  { id: "muel_col_03", ownerId: MUEL, title: "桌面同特寫", visibility: "PUBLIC", photos: muelCol03, listingId: null, catalogCardId: "demo_card_umbreon" },
+  { id: "muel_col_04", ownerId: MUEL, title: "自己先睇的特寫", visibility: "PRIVATE", photos: muel04, listingId: null },
   ...traderCollections,
 ];
 
