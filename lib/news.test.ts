@@ -53,7 +53,8 @@ assert(
   "a real cover image wins",
 );
 assert(cover.includes("bg-white") && cover.includes("object-contain"), "logo thumbs are white and contained");
-assert(!cover.includes("slice(0, 1)") && !cover.includes("backgroundColor"), "news covers are not letter blocks");
+assert(!cover.includes("slice(0, 1)") && !cover.includes("backgroundColor") && !cover.includes("color"), "news covers are not letter blocks");
+assert(!list.includes("color=") && !detail.includes("color="), "list and detail do not pass a brand color");
 assert(detail.includes("睇原文") && detail.includes("newsSourceLine"), "detail is cover, title, source, then the source link");
 assert(tab.includes('href: "/news"') && tab.includes("新聞") && tab.includes('icon: "news"') && !tab.includes('href: "/dex"'), "bottom nav replaces the dex slot");
 assert(shell.includes('href="/news"') && !shell.includes('href="/dex"'), "desktop nav does not link the dex");

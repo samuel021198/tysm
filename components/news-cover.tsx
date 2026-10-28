@@ -6,7 +6,6 @@ export function NewsCover({
   className = "",
 }: {
   source: string;
-  color: string;
   coverUrl?: string | null;
   className?: string;
 }) {
