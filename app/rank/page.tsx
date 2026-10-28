@@ -63,17 +63,18 @@ function RankLink({ locale, tab, row, rank }: { locale: Locale; tab: RankTab; ro
   return (
     <Link
       href={row.href}
-      aria-label={`${tx(locale, `第 ${rank} 名`, `Rank ${rank}`)} ${row.name} ${metric} ${change.text}`}
+      aria-label={`${tx(locale, `第 ${rank} 名`, `Rank ${rank}`)} ${[row.name, row.byline].filter(Boolean).join(" ")} ${metric} ${change.text}`}
       className="flex items-center gap-2.5 rounded-2xl border border-line bg-card px-3 py-2.5 shadow-card"
     >
       <RankMark rank={rank} />
       {row.avatarUrl ? (
         <img src={row.avatarUrl} alt="" className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-line" />
       ) : (
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{row.name.slice(0, 1)}</span>
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{(row.byline || row.name).slice(0, 1)}</span>
       )}
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[15px] font-semibold leading-tight">{row.name}</span>
+        {row.byline ? <span className="mt-0.5 block truncate text-[11px] leading-4 text-muted">{row.byline}</span> : null}
         {row.tags.length ? (
           <span className="mt-1 flex flex-wrap gap-1">
             {row.tags.map((tag) => (

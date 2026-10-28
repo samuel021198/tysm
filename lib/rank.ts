@@ -1,6 +1,7 @@
 import type { OrderStatus } from "@prisma/client";
 import { prisma } from "./db";
-import type { Locale } from "./i18n";
+import { tx, type Locale } from "./i18n";
+import { displayCaption } from "./tags";
 
 /** Rolling window. The prior window is the 3 days before that, for the % change. */
 export const RANK_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
@@ -56,6 +57,8 @@ export type PostLikeRow = { postId: string; at: Date };
 export type RankRow = {
   id: string;
   name: string;
+  /** Author under a post caption. Shops and collectors leave this empty. */
+  byline: string | null;
   avatarUrl: string | null;
   /** Post cover. Shops and collectors leave this empty; the row uses the avatar instead. */
   coverUrl: string | null;
@@ -146,6 +149,23 @@ export function rankDisplayName(tab: RankTab, user: { nickname: string; storeNam
   return user.nickname;
 }
 
+function rankLine(text: string): string {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+/** 人氣貼文 primary label. Caption first; a blank body uses the collection item, then a short placeholder. */
+export function postRankLabel(
+  post: { body: string; collectionItem: { title: string; cardName: string | null } | null },
+  locale: Locale,
+): string {
+  const caption = rankLine(displayCaption(post.body));
+  if (caption) return caption;
+  const item = post.collectionItem;
+  const title = rankLine(item?.cardName || "") || rankLine(item?.title || "");
+  if (title) return title;
+  return tx(locale, "貼文", "Post");
+}
+
 export function rankMetricLabel(tab: RankTab, current: number, locale: Locale): string {
   if (locale === "en") {
     if (tab === "shops") return `Volume, last 3 days: ${current}`;
@@ -219,7 +239,7 @@ async function loadLikes(since: Date): Promise<LikeRow[]> {
  */
 export async function loadRank(tab: RankTab, locale: Locale, hiddenIds: string[], now = new Date()): Promise<RankRow[]> {
   const since = new Date(now.getTime() - RANK_WINDOW_MS * 2);
-  if (tab === "posts") return loadPostRank(since, hiddenIds, now);
+  if (tab === "posts") return loadPostRank(since, hiddenIds, now, locale);
   const events = tab === "shops" ? merchantEvents(await loadMerchantOrders(since, locale)) : collectorEvents(await loadLikes(since));
   const hidden = new Set(hiddenIds);
   const scores = tallyRanks(events, now).filter((row) => !hidden.has(row.id));
@@ -236,6 +256,7 @@ export async function loadRank(tab: RankTab, locale: Locale, hiddenIds: string[]
     rows.push({
       id: user.id,
       name: rankDisplayName(tab, user),
+      byline: null,
       avatarUrl: user.avatarUrl,
       coverUrl: null,
       href: `/shop/${user.id}`,
@@ -255,7 +276,7 @@ function postCover(post: {
   return post.collectionItem?.photos[0]?.url ?? post.photos[0]?.url ?? null;
 }
 
-async function loadPostRank(since: Date, hiddenIds: string[], now: Date): Promise<RankRow[]> {
+async function loadPostRank(since: Date, hiddenIds: string[], now: Date, locale: Locale): Promise<RankRow[]> {
   const likes = await prisma.postLike.findMany({
     where: { createdAt: { gte: since } },
     select: { createdAt: true, post: { select: { id: true, authorId: true } } },
@@ -270,9 +291,16 @@ async function loadPostRank(since: Date, hiddenIds: string[], now: Date): Promis
     where: { id: { in: scores.map((row) => row.id) } },
     select: {
       id: true,
+      body: true,
       author: { select: { nickname: true, avatarUrl: true } },
       photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
-      collectionItem: { select: { photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } } } },
+      collectionItem: {
+        select: {
+          title: true,
+          cardName: true,
+          photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+        },
+      },
     },
   });
   const byId = new Map(posts.map((post) => [post.id, post]));
@@ -282,7 +310,8 @@ async function loadPostRank(since: Date, hiddenIds: string[], now: Date): Promis
     if (!post) continue;
     rows.push({
       id: post.id,
-      name: post.author.nickname,
+      name: postRankLabel(post, locale),
+      byline: post.author.nickname.trim() || null,
       avatarUrl: post.author.avatarUrl,
       coverUrl: postCover(post),
       href: `/post/${post.id}`,
