@@ -23,7 +23,7 @@ export default async function NewsPage() {
           {rows.map((row) => (
             <li key={row.id} className="border-b border-line last:border-b-0">
               <Link href={`/news/${row.slug}`} className="flex items-start gap-3 py-3">
-                <NewsCover source={row.source} className="h-[72px] w-[72px] shrink-0 rounded-lg text-sm" />
+                <NewsCover source={row.source} coverUrl={row.coverUrl} className="h-[72px] w-[72px] shrink-0 rounded-lg text-sm" />
                 <span className="min-w-0 flex-1">
                   <span className="line-clamp-2 text-[15px] font-semibold leading-snug">{row.title}</span>
                   <span className="mt-0.5 block text-[13px] text-muted">{newsSourceLine(row.source, row.eventAt, now, locale)}</span>
