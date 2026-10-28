@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { bidAction, offerAction } from "@/actions/trade";
+import { bidAction } from "@/actions/trade";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { BuyDock } from "./buy-dock";
 import { Countdown } from "./countdown";
 import { HandoverForm } from "./handover-form";
-import { Submit } from "./submit";
+import { Icon } from "./icons";
 
 export function PurchasePanel({
   locale,
@@ -24,8 +24,6 @@ export function PurchasePanel({
   showBid,
   bidBanned,
   showHandover,
-  showOffer,
-  minOffer,
   loggedIn,
   bidsVoided,
   ownerNote,
@@ -44,8 +42,6 @@ export function PurchasePanel({
   showBid: boolean;
   bidBanned: boolean;
   showHandover: boolean;
-  showOffer: boolean;
-  minOffer: number | null;
   loggedIn: boolean;
   bidsVoided: boolean;
   ownerNote: string | null;
@@ -87,7 +83,7 @@ export function PurchasePanel({
       ) : null}
       {bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
 
-      {showHandover ? <HandoverForm locale={locale} listingId={id} bargain={false} layout="stack" /> : null}
+      {showHandover ? <HandoverForm locale={locale} listingId={id} layout="stack" /> : null}
       <div className="grid gap-2">
         {showBid ? (
           <button form="bid-form" className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Place bid")}</button>
@@ -113,17 +109,6 @@ export function PurchasePanel({
       ) : null}
       {bidBanned ? <p className="text-sm text-danger">{tx(locale, "你已被禁止出價。", "Bidding is disabled on your account.")}</p> : null}
 
-      {showOffer && minOffer != null ? (
-        <form action={offerAction} className="grid gap-2">
-          <input type="hidden" name="listingId" value={id} />
-          <label className="grid gap-1 text-sm">
-            {tx(locale, "你的議價 HKD", "Your offer HKD")}
-            <input className="field" name="amount" inputMode="decimal" required />
-          </label>
-          <p className="text-xs text-muted">{tx(locale, "最低接受價", "Minimum offer")} {formatHkd(minOffer, locale)} · {tx(locale, "最多 3 輪，24 小時有效", "3 rounds, valid for 24 hours")}</p>
-          <Submit label={tx(locale, "送出議價", "Send offer")} pendingLabel="…" />
-        </form>
-      ) : null}
       {ownerNote ? <p className="text-sm text-muted">{ownerNote}</p> : null}
 
       {live || showHandover ? (
@@ -141,7 +126,12 @@ export function PurchasePanel({
             ) : null
           }
         >
-          {showHandover ? <button form="handover-form" className="btn btn-primary shrink-0 px-3">{tx(locale, "傾交收", "Arrange")}</button> : null}
+          {showHandover ? (
+            <button form="handover-form" className="btn btn-primary shrink-0 gap-1.5 px-3">
+              <Icon name="check" className="h-4 w-4" strokeWidth={2.5} />
+              {tx(locale, "傾交收", "Arrange handover")}
+            </button>
+          ) : null}
           {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
           {!loggedIn && live && !showHandover ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}
         </BuyDock>

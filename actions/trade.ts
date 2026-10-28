@@ -6,7 +6,7 @@ import { getViewer } from "@/lib/auth";
 import { hkdToCents } from "@/lib/format";
 import { importCsv, parseListingForm, relistListing, saveListing, unlistListing, deleteDraft } from "@/lib/listings";
 import { placeBid } from "@/lib/bids";
-import { makeOffer, respondOffer } from "@/lib/offers";
+import { respondOffer } from "@/lib/offers";
 import {
   arrangeMeetup,
   cancelDeal,
@@ -93,15 +93,6 @@ export async function bidAction(formData: FormData) {
   const result = await placeBid(user.id, id, max);
   revalidatePath(`/listing/${id}`);
   redirect(`/listing/${id}?${result.ok ? "ok=bid" : `err=${result.error}`}`);
-}
-
-export async function offerAction(formData: FormData) {
-  const id = String(formData.get("listingId") || "");
-  const user = await viewer(`/listing/${id}`);
-  const amount = hkdToCents(String(formData.get("amount") || ""));
-  if (amount == null) redirect(`/listing/${id}?err=offer`);
-  const result = await makeOffer(user.id, id, amount);
-  redirect(`/listing/${id}?${result.ok ? "ok=offer" : `err=${result.error}`}`);
 }
 
 export async function offerRespondAction(formData: FormData) {

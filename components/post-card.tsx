@@ -52,7 +52,7 @@ export function PostCard({
           <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
         )}
         {buy && post.listingId ? (
-          <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} bargain={buy.kind === "deal"} layout="row" />
+          <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} layout="row" />
         ) : null}
       </div>
     );
@@ -138,7 +138,7 @@ export function PostCard({
     ) : null}
     </PostMenu>
     {gallery && buy && post.listingId && post.priceCents != null ? (
-      <BuyBar locale={locale} price={priceText} listingId={post.listingId} postId={post.postId} bargain={buy.kind === "deal"} />
+      <BuyBar locale={locale} price={priceText} listingId={post.listingId} postId={post.postId} />
     ) : null}
     </>
   );
@@ -201,13 +201,11 @@ function BuyBar({
   price,
   listingId,
   postId,
-  bargain,
 }: {
   locale: Locale;
   price: string;
   listingId: string;
   postId: string | null;
-  bargain: boolean;
 }) {
   return (
     <>
@@ -215,7 +213,7 @@ function BuyBar({
       <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur md:bottom-0">
         <div className="mx-auto flex max-w-lg items-start gap-3">
           <p className="price min-w-0 flex-1 truncate pt-2 text-lg leading-none">{price}</p>
-          <HandoverForm locale={locale} listingId={listingId} postId={postId} bargain={bargain} layout="row" />
+          <HandoverForm locale={locale} listingId={listingId} postId={postId} layout="row" />
         </div>
       </div>
     </>

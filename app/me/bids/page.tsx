@@ -57,8 +57,8 @@ export default async function BidsPage() {
         ))}
       </section>
       <section>
-        <h2 className="mb-3 text-base font-semibold">{tx(locale, "我的議價", "My offers")}</h2>
-        {offers.length === 0 ? <p>{tx(locale, "未有議價。", "No offers.")}</p> : null}
+        <h2 className="mb-3 text-base font-semibold">{tx(locale, "我的傾交收", "My handovers")}</h2>
+        {offers.length === 0 ? <p>{tx(locale, "未有傾交收。", "No handovers.")}</p> : null}
         {offers.map((offer) => (
           <p key={offer.id}><Link href={`/listing/${offer.listingId}`}>{offer.listing.title}</Link> · {formatHkd(offer.amount, locale)} · {offerStatusLabel(locale, offer.status)} · {tx(locale, "第", "Round")} {offer.round}/3</p>
         ))}

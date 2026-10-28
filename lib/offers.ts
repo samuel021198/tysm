@@ -6,39 +6,6 @@ import { insertOrder } from "./orders";
 import { notify } from "./social";
 import { MAX_OFFER_ROUNDS, OFFER_TTL_MS, conditionLabel } from "./rules";
 
-export async function makeOffer(userId: string, listingId: string, amount: number) {
-  try {
-    const created = await prisma.$transaction(async (tx) => {
-      const listing = await tx.listing.findUnique({ where: { id: listingId } });
-      if (!listing || listing.status !== "ACTIVE" || !listing.offersEnabled || listing.price == null) throw new Fail("unavailable");
-      if (listing.sellerId === userId) throw new Fail("own");
-      if (listing.binLockOrderId) throw new Fail("locked");
-      if (listing.minOffer == null || amount < listing.minOffer || amount >= listing.price) throw new Fail("offer");
-      const active = await tx.offer.findFirst({
-        where: { listingId, buyerId: userId, status: { in: ["PENDING", "COUNTERED"] } },
-      });
-      if (active) throw new Fail("rounds");
-      const offer = await tx.offer.create({
-        data: {
-          listingId,
-          buyerId: userId,
-          status: "PENDING",
-          round: 1,
-          amount,
-          expiresAt: new Date(Date.now() + OFFER_TTL_MS),
-        },
-      });
-      return { sellerId: listing.sellerId, title: listing.title, id: offer.id };
-    });
-    await notify(created.sellerId, "offer", "收到新議價", created.title, `/listing/${listingId}`);
-    return { ok: true as const, id: created.id };
-  } catch (error) {
-    const code = asFail(error);
-    if (code) return { ok: false as const, error: code };
-    throw error;
-  }
-}
-
 async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amount: number) {
   const offer = await tx.offer.findUnique({ where: { id: offerId }, include: { listing: { include: { photos: { take: 1, orderBy: { position: "asc" } } } } } });
   if (!offer || !["PENDING", "COUNTERED"].includes(offer.status)) throw new Fail("state");
@@ -131,7 +98,7 @@ export async function respondOffer(userId: string, offerId: string, action: stri
       throw new Fail("state");
     });
     const threadId = result.orderId ? await attachDealThread(result.orderId) : null;
-    const title = result.kind === "accepted" ? "議價已接受" : result.kind === "declined" ? "議價已被拒絕" : "議價有回覆";
+    const title = result.kind === "accepted" ? "已接受" : result.kind === "declined" ? "已被拒絕" : "有回覆";
     const href = threadId ? `/messages/${threadId}` : result.orderId ? `/orders/${result.orderId}` : `/listing/${result.listingId}`;
     await notify(result.buyerId, "offer", title, result.kind === "accepted" ? "去聊天傾交收。" : "打開貨品頁查看。", href);
     return { ok: true as const, orderId: result.orderId, threadId };

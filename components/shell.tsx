@@ -147,7 +147,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     draft: ["已存草稿，未有公開", "Draft saved. Not live yet"],
     scheduled: ["已預約刊登，未有即時公開", "Scheduled. Not live yet"],
     bid: ["出價已記錄", "Bid placed"],
-    offer: ["議價已更新", "Offer updated"],
+    offer: ["傾交收已更新", "Handover updated"],
     paid: ["付款狀態已更新", "Payment updated"],
     done: ["交收已完成，可以評價", "Handover finished. You can leave a review"],
     dispute: ["爭議已提交", "Dispute submitted"],

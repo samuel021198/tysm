@@ -83,16 +83,14 @@ export async function startHandover(formData: FormData) {
   const postId = String(formData.get("postId") || "") || null;
   const back = postId ? `/post/${postId}` : `/listing/${listingId}`;
   const user = await viewer(back);
-  const intent = formData.get("intent") === "bargain" ? "bargain" : "deal";
   const result = await openHandover(user.id, {
     listingId,
     postId,
-    intent,
     ack: formData.get("ack") === "1",
   });
   if (!result.ok) redirect(`${back}?err=${result.error}`);
   revalidatePath(`/listing/${listingId}`);
-  redirect(`/messages/${result.threadId}${result.compose ? "?compose=1" : ""}`);
+  redirect(`/messages/${result.threadId}`);
 }
 
 export async function openThread(formData: FormData) {
