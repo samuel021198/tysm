@@ -873,7 +873,7 @@ model NewsItem {
   linkUrl    String?
   tag        NewsTag   @default(RELEASE)
   eventAt    DateTime?
-  /// 即將搶／今日開賣 sorts ahead of later calendar dates.
+  /// 入庫標記。公開列表按 createdAt 排序，唔再用呢個欄置頂。
   hot        Boolean   @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

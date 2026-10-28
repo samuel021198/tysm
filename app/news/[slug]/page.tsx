@@ -23,7 +23,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
     <article className="mx-auto grid max-w-lg gap-3">
       <NewsCover source={row.source} coverUrl={row.coverUrl} className="aspect-[4/5] max-h-80 w-full rounded-2xl text-3xl" />
       <h1 className="text-xl font-semibold leading-snug">{row.title}</h1>
-      <p className="text-sm text-muted">{newsSourceLine(row.source, row.eventAt, new Date(), locale)}</p>
+      <p className="text-sm text-muted">{newsSourceLine(row.source, row.updatedAt, new Date(), locale)}</p>
       {row.body ? <p className="whitespace-pre-wrap text-sm leading-6">{row.body}</p> : null}
       {outbound ? (
         <a className="inline-flex min-h-11 w-fit items-center text-sm font-semibold text-link" href={outbound} target="_blank" rel="noreferrer">

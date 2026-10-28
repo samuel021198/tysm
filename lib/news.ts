@@ -33,28 +33,39 @@ function hkParts(date: Date) {
   return { y: n("year"), m: n("month"), d: n("day") };
 }
 
-/** `今日` when the event is today in Hong Kong, otherwise `M/D`. Undated rows say 即將. */
-export function newsWhenLabel(eventAt: Date | null, now: Date, locale: Locale): string {
-  if (!eventAt) return locale === "en" ? "Soon" : "即將";
-  const event = hkParts(eventAt);
-  const today = hkParts(now);
-  if (event.y === today.y && event.m === today.m && event.d === today.d) return locale === "en" ? "Today" : "今日";
-  return `${event.m}/${event.d}`;
+const HOUR_MS = 60 * 60 * 1000;
+
+function hkDayNumber(date: Date): number {
+  const { y, m, d } = hkParts(date);
+  return Date.UTC(y, m - 1, d) / 86_400_000;
 }
 
-export function newsSourceLine(source: string, eventAt: Date | null, now: Date, locale: Locale): string {
-  return `${source} · ${newsWhenLabel(eventAt, now, locale)}`;
+/**
+ * Relative clock for a news row. This reads `updatedAt` (upsert refreshes it).
+ * List order is separate: `createdAt` descending, via `compareNewsByCreatedAt` / Prisma `orderBy`.
+ * Under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日; older → M/D.
+ */
+export function newsUpdatedAgo(updatedAt: Date, now: Date, locale: Locale): string {
+  const diff = now.getTime() - updatedAt.getTime();
+  if (diff < HOUR_MS) return locale === "en" ? "Just now" : "剛剛";
+  const hours = Math.floor(diff / HOUR_MS);
+  if (hours < 24) {
+    if (locale === "en") return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+    return `${hours} 小時前`;
+  }
+  if (hkDayNumber(now) - hkDayNumber(updatedAt) === 1) return locale === "en" ? "Yesterday" : "昨日";
+  const updated = hkParts(updatedAt);
+  return `${updated.m}/${updated.d}`;
 }
 
-export type NewsSortable = { hot: boolean; eventAt: Date | null; title: string };
+/** `source ·` last-write time. Pass `updatedAt`, not `createdAt`. */
+export function newsSourceLine(source: string, updatedAt: Date, now: Date, locale: Locale): string {
+  return `${source} · ${newsUpdatedAgo(updatedAt, now, locale)}`;
+}
 
-/** Hot drops first, then upcoming dates. Undated rows sit at the end of their group. */
-export function compareNews(a: NewsSortable, b: NewsSortable): number {
-  if (a.hot !== b.hot) return a.hot ? -1 : 1;
-  const ae = a.eventAt?.getTime() ?? Number.POSITIVE_INFINITY;
-  const be = b.eventAt?.getTime() ?? Number.POSITIVE_INFINITY;
-  if (ae !== be) return ae - be;
-  return a.title.localeCompare(b.title, "zh-HK");
+/** Newest ingest first. Ignores hot, eventAt, and updatedAt. */
+export function compareNewsByCreatedAt(a: { createdAt: Date }, b: { createdAt: Date }): number {
+  return b.createdAt.getTime() - a.createdAt.getTime();
 }
 
 const POKEMON = "https://www.pokemon.com/us/pokemon-news";
