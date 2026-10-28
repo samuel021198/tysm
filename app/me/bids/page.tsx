@@ -51,7 +51,7 @@ export default async function BidsPage() {
       </section>
       <section>
         <h2 className="mb-3 text-base font-semibold">{tx(locale, "贏得", "Won")}</h2>
-        {won.length === 0 ? <p>{tx(locale, "未有得標訂單。", "No auction wins.")}</p> : null}
+        {won.length === 0 ? <p>{tx(locale, "未有得標交收。", "No auction wins.")}</p> : null}
         {won.map((order) => (
           <p key={order.id}><Link href={`/orders/${order.id}`}>{order.items[0]?.title}</Link> · {formatHkd(order.total, locale)} · {orderStatusLabel(locale, order.status)}</p>
         ))}

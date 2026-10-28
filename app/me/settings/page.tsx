@@ -24,7 +24,7 @@ export default async function MeSettingsPage({ searchParams }: { searchParams: P
     ...(viewer.role === "ADMIN" ? [["/admin", tx(locale, "管理", "Admin")] as [string, string]] : []),
   ];
   const commerce: [string, string][] = [
-    ["/orders", tx(locale, "訂單", "Orders")],
+    ["/orders", tx(locale, "交收", "Handovers")],
     ["/me?tab=drafts", `${tx(locale, "草稿", "Drafts")}${draftCount ? ` (${draftCount})` : ""}`],
     ["#store", tx(locale, "店舖地址", "Shop address")],
   ];
@@ -44,22 +44,17 @@ export default async function MeSettingsPage({ searchParams }: { searchParams: P
         <Menu rows={commerce} />
       </section>
       <form action={updateProfile} className="surface grid gap-2 p-3">
-        <h2 className="text-sm font-semibold">{tx(locale, "個人資料同收款", "Profile and payout")}</h2>
+        <h2 className="text-sm font-semibold">{tx(locale, "個人資料", "Profile")}</h2>
         <input className="field" name="nickname" defaultValue={viewer.nickname} required />
         <textarea className="field" name="bio" defaultValue={viewer.bio || ""} placeholder={tx(locale, "簡介", "Bio")} />
         <input className="field" name="avatarUrl" defaultValue={viewer.avatarUrl || ""} placeholder="https:// avatar" />
-        <div className="grid gap-2 md:grid-cols-3">
-          <input className="field" name="payoutMethod" defaultValue={viewer.payoutMethod || ""} placeholder="FPS / PayMe / Bank" />
-          <input className="field" name="payoutHolder" defaultValue={viewer.payoutHolder || ""} placeholder={tx(locale, "戶名", "Account name")} />
-          <input className="field" name="payoutAccount" defaultValue={viewer.payoutAccount || ""} placeholder={tx(locale, "帳戶", "Account")} />
-        </div>
         <label className="text-xs"><input type="checkbox" name="notifyBids" defaultChecked={viewer.notifyBids} /> {tx(locale, "出價通知", "Bid alerts")}</label>
         <label className="text-xs"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "議價通知", "Offer alerts")}</label>
-        <label className="text-xs"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "訂單通知", "Order alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "交收通知", "Handover alerts")}</label>
         <label className="text-xs"><input type="checkbox" name="notifyMessages" defaultChecked={viewer.notifyMessages} /> {tx(locale, "訊息通知", "Message alerts")}</label>
         <div id="store" className="grid gap-2 rounded-xl border border-line p-2.5">
           <h3 className="text-sm font-medium">{tx(locale, "店舖地址", "Shop address")}</h3>
-          <p className="text-xs text-muted">{tx(locale, "店舖自取會用這個固定地址，買家結帳時見到。留空就代表未有店舖自取。", "Store pickup uses this fixed address. Buyers see it at checkout. Leave it blank if you do not offer pickup.")}</p>
+          <p className="text-xs text-muted">{tx(locale, "店舖自取會用這個固定地址，傾交收時見到。留空就代表未有店舖自取。", "Store pickup uses this fixed address during a handover. Leave it blank if you do not offer pickup.")}</p>
           <input className="field" name="storeName" defaultValue={viewer.storeName || ""} placeholder={tx(locale, "店名（可選）", "Shop name (optional)")} maxLength={40} />
           <select className="field" name="storeDistrict" defaultValue={viewer.storeDistrict || ""}>
             <option value="">{tx(locale, "店舖地區", "Shop district")}</option>

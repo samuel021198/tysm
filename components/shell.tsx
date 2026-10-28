@@ -147,7 +147,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     bid: ["出價已記錄", "Bid placed"],
     offer: ["議價已更新", "Offer updated"],
     paid: ["付款狀態已更新", "Payment updated"],
-    done: ["訂單已完成，託管已撥出（模擬）", "Order completed. Escrow released (mock)."],
+    done: ["交收已完成，可以評價", "Handover finished. You can leave a review"],
     dispute: ["爭議已提交", "Dispute submitted"],
     cart: ["已加入購物車", "Added to cart"],
     phone: ["電話已驗證", "Phone verified"],

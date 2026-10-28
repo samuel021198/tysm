@@ -5,8 +5,8 @@ import type { Locale } from "./i18n";
 /** Rolling window. The prior window is the 3 days before that, for the % change. */
 export const RANK_WINDOW_MS = 3 * 24 * 60 * 60 * 1000;
 
-/** A deal counts once money has moved. Unpaid, cancelled, and refunded orders do not. */
-export const COUNTED_ORDER_STATUSES: OrderStatus[] = ["IN_ESCROW", "AWAITING_SHIP", "SHIPPED", "COMPLETED", "DISPUTED"];
+/** 人氣商戶 counts finished handovers only. Talking, proof, and cancelled deals do not. */
+export const COUNTED_ORDER_STATUSES: OrderStatus[] = ["COMPLETED"];
 
 const COUNTED = new Set<string>(COUNTED_ORDER_STATUSES);
 
@@ -38,7 +38,6 @@ export type RankScore = { id: string; current: number; prior: number; tags: stri
 export type VolumeRow = {
   sellerId: string;
   status: string;
-  paidAt: Date | null;
   completedAt: Date | null;
   createdAt: Date;
   items: { quantity: number; tag: string | null }[];
@@ -65,9 +64,9 @@ export type RankRow = {
   tags: string[];
 };
 
-/** Payment is the deal. Completed-without-pay and unpaid rows fall back so older data still counts. */
-export function dealAt(order: { paidAt: Date | null; completedAt: Date | null; createdAt: Date }): Date {
-  return order.paidAt ?? order.completedAt ?? order.createdAt;
+/** A finished handover counts from the moment both sides confirmed. */
+export function dealAt(order: { completedAt: Date | null; createdAt: Date }): Date {
+  return order.completedAt ?? order.createdAt;
 }
 
 export function rankBucket(at: Date, now: Date): "current" | "prior" | null {
@@ -175,16 +174,11 @@ async function loadMerchantOrders(since: Date, locale: Locale): Promise<VolumeRo
   const orders = await prisma.order.findMany({
     where: {
       status: { in: COUNTED_ORDER_STATUSES },
-      OR: [
-        { paidAt: { gte: since } },
-        { AND: [{ paidAt: null }, { completedAt: { gte: since } }] },
-        { AND: [{ paidAt: null }, { completedAt: null }, { createdAt: { gte: since } }] },
-      ],
+      OR: [{ completedAt: { gte: since } }, { AND: [{ completedAt: null }, { createdAt: { gte: since } }] }],
     },
     select: {
       sellerId: true,
       status: true,
-      paidAt: true,
       completedAt: true,
       createdAt: true,
       items: { select: { quantity: true, listing: { select: { game: true, category: { select: { nameZh: true, nameEn: true } } } } } },
@@ -193,7 +187,6 @@ async function loadMerchantOrders(since: Date, locale: Locale): Promise<VolumeRo
   return orders.map((order) => ({
     sellerId: order.sellerId,
     status: order.status,
-    paidAt: order.paidAt,
     completedAt: order.completedAt,
     createdAt: order.createdAt,
     items: order.items.map((item) => ({ quantity: item.quantity, tag: itemTag(item.listing, locale) })),

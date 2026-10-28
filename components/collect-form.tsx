@@ -47,7 +47,6 @@ export function CollectForm({
   mode,
   categories,
   phoneVerified,
-  percent = "8",
   storeReady = false,
   storeLabel = "",
 }: {
@@ -55,7 +54,6 @@ export function CollectForm({
   mode: "collection" | "post";
   categories: Cat[];
   phoneVerified: boolean;
-  percent?: string;
   storeReady?: boolean;
   storeLabel?: string;
 }) {
@@ -147,7 +145,7 @@ export function CollectForm({
           <input type="checkbox" checked={alsoList} onChange={(event) => toggleList(event.target.checked)} className="h-6 w-6" />
         </label>
         {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
-        <SellForm key={listToken} locale={locale} categories={categories} percent={percent} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} />
+        <SellForm key={listToken} locale={locale} categories={categories} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} />
       </div>
     );
   }

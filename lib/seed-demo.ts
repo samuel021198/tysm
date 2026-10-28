@@ -1,6 +1,5 @@
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
-import { RANK_WINDOW_MS } from "./rank";
 import { NEWS_SAMPLES } from "./news";
 import { courierFor, mockTracking } from "./shipping";
 import {
@@ -281,32 +280,30 @@ async function seedRank() {
     const listing = listings.get(row.listingId);
     if (!listing || listing.ownerId !== row.sellerId || row.buyerId === row.sellerId) throw new Error(row.id);
     const paidAt = hoursAgo(row.hoursAgo);
-    const recent = row.hoursAgo * 60 * 60 * 1000 < RANK_WINDOW_MS;
     const subtotal = listing.priceCents * row.quantity;
-    const commissionAmount = Math.round((subtotal * 800) / 10000);
     const order = {
       buyerId: row.buyerId,
       sellerId: row.sellerId,
-      status: recent ? ("AWAITING_SHIP" as const) : ("COMPLETED" as const),
+      status: "COMPLETED" as const,
       source: "BUY_NOW" as const,
       subtotal,
       shippingTotal: 0,
       total: subtotal,
-      commissionBps: 800,
-      commissionAmount,
-      sellerProceeds: subtotal - commissionAmount,
-      paymentOutcome: "SUCCESS" as const,
+      commissionBps: 0,
+      commissionAmount: 0,
+      sellerProceeds: subtotal,
+      paymentOutcome: "NONE" as const,
       shipDays: 3,
       paidAt,
-      shippedAt: recent ? null : new Date(paidAt.getTime() + 12 * 60 * 60 * 1000),
-      completedAt: recent ? null : new Date(paidAt.getTime() + 24 * 60 * 60 * 1000),
-      escrowReleasedAt: recent ? null : new Date(paidAt.getTime() + 24 * 60 * 60 * 1000),
-      shipBy: new Date(paidAt.getTime() + 3 * 86400000),
+      shippedAt: paidAt,
+      completedAt: paidAt,
+      escrowReleasedAt: null,
+      shipBy: null,
       autoReleaseAt: null,
-      shippingMethod: "SF_COD",
-      courierName: courierFor("SF_COD"),
-      trackingNumber: recent ? null : mockTracking(row.id, "SF_COD"),
-      paymentBrand: "FPS",
+      shippingMethod: "MEET",
+      courierName: courierFor("MEET"),
+      trackingNumber: null,
+      paymentBrand: null,
       payBy: null,
       addressSnapshot: { recipient: "示範買家", phone: "+85290000000", line1: "彌敦道 1 號", district: "油尖旺" },
       createdAt: paidAt,

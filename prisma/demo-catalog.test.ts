@@ -340,9 +340,8 @@ const shopRank = tallyRanks(
   merchantEvents(
     demoRankOrders.map((order) => ({
       sellerId: order.sellerId,
-      status: "AWAITING_SHIP",
-      paidAt: rankAt(order.hoursAgo),
-      completedAt: null,
+      status: "COMPLETED",
+      completedAt: rankAt(order.hoursAgo),
       createdAt: rankAt(order.hoursAgo),
       items: [{ quantity: order.quantity, tag: "寶可夢" }],
     })),

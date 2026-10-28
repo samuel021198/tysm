@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { togglePostLike, togglePostSave } from "@/actions/collect";
-import { openThread, toggleFavorite } from "@/actions/social";
+import { toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
-import type { PostBuy, PostCardModel } from "@/lib/posts";
+import type { PostCardModel } from "@/lib/posts";
+import { HandoverForm } from "./handover-form";
 import { CommentSheet } from "./comment-sheet";
 import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
@@ -39,22 +40,21 @@ export function PostCard({
     setCommentsOpen(true);
   }, [post.postId]);
   const saveLabel = tx(locale, "收藏", "Favorite");
-  const priceClass = "price mt-1 inline-block text-[15px] leading-none";
   const likeLabel = post.likeCount ? `${tx(locale, "讚", "Like")} ${post.likeCount}` : tx(locale, "讚", "Like");
-  const own = viewerId != null && viewerId === post.author.id;
-  const buy = own ? null : post.buy;
+  const buy = viewerId != null && viewerId === post.author.id ? null : post.buy;
   const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
   const price =
-    post.priceCents == null ? null : buy && post.priceHref ? (
-      <Link
-        href={post.priceHref}
-        className={priceClass}
-        aria-label={buy.kind === "checkout" ? `${tx(locale, "買", "Buy")} ${priceText}` : undefined}
-      >
-        {priceText}
-      </Link>
-    ) : (
-      <p className={priceClass}>{priceText}</p>
+    post.priceCents == null ? null : (
+      <div className="mt-1 flex items-start justify-between gap-2">
+        {buy?.kind === "contact" && post.priceHref ? (
+          <Link href={post.priceHref} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
+        ) : (
+          <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
+        )}
+        {buy && post.listingId ? (
+          <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} bargain={buy.kind === "deal"} layout="row" />
+        ) : null}
+      </div>
     );
   const photoClass = gallery
     ? "block max-h-[70vh] w-full bg-soft object-contain"
@@ -137,7 +137,9 @@ export function PostCard({
       <CommentSheet postId={post.postId} locale={locale} onClose={() => setCommentsOpen(false)} onPosted={() => setCount((n) => n + 1)} />
     ) : null}
     </PostMenu>
-    {gallery && buy && post.priceCents != null ? <BuyBar locale={locale} price={priceText} buy={buy} /> : null}
+    {gallery && buy && post.listingId && post.priceCents != null ? (
+      <BuyBar locale={locale} price={priceText} listingId={post.listingId} postId={post.postId} bargain={buy.kind === "deal"} />
+    ) : null}
     </>
   );
 }
@@ -194,21 +196,26 @@ function FeedCaption({ text, more }: { text: string; more: string }) {
   );
 }
 
-function BuyBar({ locale, price, buy }: { locale: Locale; price: string; buy: PostBuy }) {
+function BuyBar({
+  locale,
+  price,
+  listingId,
+  postId,
+  bargain,
+}: {
+  locale: Locale;
+  price: string;
+  listingId: string;
+  postId: string | null;
+  bargain: boolean;
+}) {
   return (
     <>
-      <div className="h-20" aria-hidden />
+      <div className="h-36" aria-hidden />
       <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur md:bottom-0">
-        <div className="mx-auto flex max-w-lg items-center gap-3">
-          <p className="price min-w-0 flex-1 truncate text-lg leading-none">{price}</p>
-          {buy.kind === "checkout" ? (
-            <Link href={buy.href} className="btn btn-primary shrink-0 px-5">{tx(locale, "買", "Buy")}</Link>
-          ) : (
-            <form action={openThread}>
-              <input type="hidden" name="listingId" value={buy.listingId} />
-              <button className="btn btn-ghost shrink-0">{tx(locale, "聯絡賣家", "Contact seller")}</button>
-            </form>
-          )}
+        <div className="mx-auto flex max-w-lg items-start gap-3">
+          <p className="price min-w-0 flex-1 truncate pt-2 text-lg leading-none">{price}</p>
+          <HandoverForm locale={locale} listingId={listingId} postId={postId} bargain={bargain} layout="row" />
         </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
+import { openHandover } from "@/lib/deals";
 import { isBlocked, notify } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
 
@@ -75,6 +76,23 @@ export async function reportAction(formData: FormData) {
   }
   await prisma.report.create({ data: { reporterId: user.id, targetType, targetId, reason: reason.slice(0, 1000) } });
   redirect(`${next}?ok=report`);
+}
+
+export async function startHandover(formData: FormData) {
+  const listingId = String(formData.get("listingId") || "");
+  const postId = String(formData.get("postId") || "") || null;
+  const back = postId ? `/post/${postId}` : `/listing/${listingId}`;
+  const user = await viewer(back);
+  const intent = formData.get("intent") === "bargain" ? "bargain" : "deal";
+  const result = await openHandover(user.id, {
+    listingId,
+    postId,
+    intent,
+    ack: formData.get("ack") === "1",
+  });
+  if (!result.ok) redirect(`${back}?err=${result.error}`);
+  revalidatePath(`/listing/${listingId}`);
+  redirect(`/messages/${result.threadId}${result.compose ? "?compose=1" : ""}`);
 }
 
 export async function openThread(formData: FormData) {

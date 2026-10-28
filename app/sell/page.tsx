@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
+import { getPrefs, getViewer } from "@/lib/auth";
 import { listingCatalogPrefill } from "@/lib/catalog-suggest";
-import { bpsToPercentLabel, formatGradeValue } from "@/lib/rules";
+import { formatGradeValue } from "@/lib/rules";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { getDexCard } from "@/lib/dex-query";
@@ -121,9 +121,8 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) redirect(`/login?next=${encodeURIComponent(nextPath)}`);
   if (!viewer.phoneVerified) return <PhoneForm locale={prefs.locale} next={nextParams.size ? nextPath : undefined} />;
-  const [categories, bps, sold, collection] = await Promise.all([
+  const [categories, sold, collection] = await Promise.all([
     prisma.category.findMany({ where: { level: "LEAF" }, orderBy: { sort: "asc" } }),
-    getCommissionBps(),
     prisma.orderItem.findMany({
       where: { order: { status: "COMPLETED" } },
       include: { order: { select: { completedAt: true } } },
@@ -235,7 +234,6 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
       </p>
       <SellForm
         locale={prefs.locale}
-        percent={bpsToPercentLabel(bps)}
         categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
         hints={sold.map((item) => ({ title: item.title, price: formatHkd(item.unitPrice, prefs.locale) }))}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}

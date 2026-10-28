@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd } from "@/lib/format";
+import { DEAL_RISK } from "@/lib/deal-phase";
 import { tx } from "@/lib/i18n";
 import { hasStoreAddress, offeredMethods, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
@@ -28,10 +29,10 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
   }
 
   return (
-    <div className={items.length ? "pb-24 md:pb-0" : undefined}>
+    <div>
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <h1 className="page-title">{tx(prefs.locale, "購物車", "Cart")}</h1>
-      <p className="mb-4 text-sm text-muted">{tx(prefs.locale, "每位賣家會分開一張訂單。平台不收取運費，亦不會把每件貨的運費相加。結帳時只可以揀該賣家有開、而且每件貨都有的方式。", "Each seller becomes a separate order. The platform does not charge shipping and does not add a fee per item. At checkout you can only pick a method that seller enabled on every item.")}</p>
+      <p className="mb-4 text-sm text-muted">{DEAL_RISK} {tx(prefs.locale, "要傾交收，請打開貨品頁。", "To arrange a handover, open the listing.")}</p>
       {items.length === 0 ? <p className="empty">{tx(prefs.locale, "購物車是空的。", "Your cart is empty.")}</p> : null}
       {[...groups.entries()].map(([sellerId, rows]) => (
         <section key={sellerId} className="surface mb-3 p-3">
@@ -45,7 +46,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
                 <p className="text-sm text-muted">
                   {offeredMethods(item.listing, hasStoreAddress(item.listing.seller)).map((method) => shipMethodLabel(method, prefs.locale)).join(" · ") || tx(prefs.locale, "未有運送方式", "No shipping method")}
                   {" · "}
-                  {tx(prefs.locale, "平台運費 HK$0", "Platform shipping HK$0")}
+                  {tx(prefs.locale, "交收方式", "Handover")}
                 </p>
                 <form action={cartUpdate} className="mt-2 flex flex-wrap gap-2">
                   <input type="hidden" name="listingId" value={item.listingId} />
@@ -59,16 +60,10 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
         </section>
       ))}
       {items.length ? (
-        <div
-          className="fixed inset-x-0 z-30 flex items-center gap-3 bg-card/95 px-4 py-3 shadow-[0_-1px_0_var(--line)] backdrop-blur-xl md:static md:bg-transparent md:px-0 md:py-0 md:shadow-none"
-          style={{ bottom: "var(--tab-h)" }}
-        >
-          <p className="min-w-0 flex-1 text-sm leading-snug">
-            <span className="block text-muted">{tx(prefs.locale, "貨品總額", "Items")}</span>
-            <span className="price text-lg leading-none">{formatHkd(goods, prefs.locale)}</span>
-          </p>
-          <Link className="btn btn-primary shrink-0" href="/checkout">{tx(prefs.locale, "結帳", "Checkout")}</Link>
-        </div>
+        <p className="text-sm">
+          <span className="text-muted">{tx(prefs.locale, "貨品總額（只供顯示）", "Items (display only)")} </span>
+          <span className="price">{formatHkd(goods, prefs.locale)}</span>
+        </p>
       ) : null}
     </div>
   );

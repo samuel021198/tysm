@@ -69,19 +69,17 @@ export function sellingAsk(listing: AskListing | null | undefined): number | nul
 }
 
 export type PostBuy =
-  | { kind: "checkout"; href: string }
+  | { kind: "deal"; listingId: string }
   | { kind: "contact"; listingId: string };
 
 /**
- * Priced cart listings go straight to checkout. Auction-only sales message the seller.
+ * A priced listing opens a seller thread (議價 or 傾交收). Auction-only sales do the same without an offer button.
  * A showcase post (#PC, no live ask) buys nothing.
- * ponytail: ignores binLockOrderId. A listing locked mid-checkout still offers 買 until checkout rejects it.
- * Upgrade path: pass the lock into this function.
  */
 export function postBuy(listing: (AskListing & { id: string }) | null | undefined): PostBuy | null {
   if (!listing || sellingAsk(listing) == null) return null;
   if (listing.saleType !== "AUCTION" && listing.price != null) {
-    return { kind: "checkout", href: `/checkout?buy=${encodeURIComponent(listing.id)}&qty=1` };
+    return { kind: "deal", listingId: listing.id };
   }
   return { kind: "contact", listingId: listing.id };
 }
@@ -93,7 +91,7 @@ function postPrice(listing: (AskListing & { id: string }) | null): {
 } {
   const buy = postBuy(listing);
   if (!listing || !buy) return { cents: null, href: null, buy: null };
-  if (buy.kind === "checkout") return { cents: listing.price, href: buy.href, buy };
+  if (buy.kind === "deal") return { cents: listing.price, href: null, buy };
   return { cents: sellingAsk(listing), href: `/listing/${listing.id}`, buy };
 }
 
