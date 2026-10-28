@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { EDGE_GUARD } from "@/lib/gesture";
 import { rankPath, rankTabStep, type RankTab } from "@/lib/rank";
@@ -20,14 +20,34 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
   const timer = useRef(0);
   tabRef.current = tab;
   signedIn.current = loggedIn;
-  const [offset, setOffset] = useState(0);
-  const [animate, setAnimate] = useState(false);
+
+  function paint(dx: number, live: boolean) {
+    const el = frame.current;
+    if (!el) return;
+    const reduce = !live && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.style.transition = live || reduce ? "none" : "transform 180ms ease";
+    el.style.transform = dx ? `translate3d(${dx}px,0,0)` : "";
+  }
+
+  // Partial link prefetch stops at app/loading.tsx and aliases every ?tab= to that shell.
+  function warm() {
+    const next = rankTabStep(tabRef.current, 1);
+    const prev = rankTabStep(tabRef.current, -1);
+    if (next) router.prefetch(rankPath(next));
+    if (prev) router.prefetch(rankPath(prev));
+  }
 
   useEffect(() => {
-    setOffset(0);
-    setAnimate(false);
     busy.current = false;
+    const el = frame.current;
+    if (!el) return;
+    el.style.transition = "none";
+    el.style.transform = "";
   }, [tab]);
+
+  useEffect(() => {
+    warm();
+  }, [tab, router]);
 
   useEffect(
     () => () => {
@@ -64,7 +84,7 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
     origin.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
     axis.current = null;
     lockX.current = false;
-    setAnimate(false);
+    if (frame.current) frame.current.style.transition = "none";
   }
 
   function onPointerMove(event: React.PointerEvent) {
@@ -81,11 +101,20 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
       lockX.current = false;
       return;
     }
+    if (!lockX.current) {
+      warm();
+      // The row moves with the finger. Capture keeps pointermove coming after it slides out from under the touch.
+      try {
+        frame.current?.setPointerCapture(event.pointerId);
+      } catch {
+        // The pointer can already be gone. The drag still tracks while the finger is over the page.
+      }
+    }
     lockX.current = true;
     const dir = dx < 0 ? 1 : -1;
     const segment = rankTabStep(tabRef.current, dir);
     const href = segment ? rankPath(segment) : adjacentTab("/rank", dir, signedIn.current);
-    setOffset(href ? dx * 0.28 : dx * 0.08);
+    paint(href ? dx * 0.28 : dx * 0.08, true);
     const index = tabPagerIndex("/rank");
     if (!segment && href && index != null && Math.abs(dx) > 24) setTabIntent(index + dir);
     else setTabIntent(null);
@@ -113,8 +142,7 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!href || !dir) {
       setTabIntent(null);
-      setAnimate(true);
-      setOffset(0);
+      paint(0, false);
       return;
     }
     if (!rankTabStep(tabRef.current, dir)) {
@@ -122,8 +150,7 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
       if (index != null) setTabIntent(index + dir);
     }
     busy.current = true;
-    setAnimate(true);
-    setOffset(reduce ? 0 : dir > 0 ? -window.innerWidth * 0.22 : window.innerWidth * 0.22);
+    paint(reduce ? 0 : dir > 0 ? -window.innerWidth * 0.22 : window.innerWidth * 0.22, false);
     timer.current = window.setTimeout(() => {
       router.push(href);
     }, reduce ? 0 : 160);
@@ -134,7 +161,6 @@ export function RankPager({ tab, loggedIn, children }: { tab: RankTab; loggedIn:
       ref={frame}
       data-gesture=""
       data-rank-pager=""
-      style={{ transform: offset ? `translate3d(${offset}px,0,0)` : undefined, transition: animate ? "transform 180ms ease" : "none" }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={(event) => end(event, true)}
