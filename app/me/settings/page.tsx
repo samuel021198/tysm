@@ -49,7 +49,7 @@ export default async function MeSettingsPage({ searchParams }: { searchParams: P
         <textarea className="field" name="bio" defaultValue={viewer.bio || ""} placeholder={tx(locale, "簡介", "Bio")} />
         <input className="field" name="avatarUrl" defaultValue={viewer.avatarUrl || ""} placeholder="https:// avatar" />
         <label className="text-xs"><input type="checkbox" name="notifyBids" defaultChecked={viewer.notifyBids} /> {tx(locale, "出價通知", "Bid alerts")}</label>
-        <label className="text-xs"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "議價通知", "Offer alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "傾交收通知", "Handover alerts")}</label>
         <label className="text-xs"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "交收通知", "Handover alerts")}</label>
         <label className="text-xs"><input type="checkbox" name="notifyMessages" defaultChecked={viewer.notifyMessages} /> {tx(locale, "訊息通知", "Message alerts")}</label>
         <div id="store" className="grid gap-2 rounded-xl border border-line p-2.5">

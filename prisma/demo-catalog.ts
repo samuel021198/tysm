@@ -246,7 +246,7 @@ export const demoListings: DemoListing[] = [
     title: "噴火龍 VMAX Charizard", price: 1280, offerMin: 1000, qty: 2, ship: 20,
     number: "020/189", rarity: "SR",
     kind: tcg, game: "Pokémon", setName: "仰天峰", language: "日文", raw: "A", views: 128,
-    notes: ["卡面乾淨，四角尖", "兩張庫存，接受議價"],
+    notes: ["卡面乾淨，四角尖", "兩張庫存，歡迎傾交收"],
   }),
   card({
     id: "seed_pikachu", sellerId: "user_ming", categoryId: "cat_pokemon",
@@ -277,7 +277,7 @@ export const demoListings: DemoListing[] = [
     zh: "耿鬼", en: "Gengar", line: "無印 · Raw B",
     price: 260, offerMin: 180, ship: 18,
     kind: tcg, game: "Pokémon", setName: "無印", language: "日文", raw: "B", views: 41,
-    notes: ["卡角有少少白", "可以議價"],
+    notes: ["卡角有少少白", "可以傾交收"],
   }),
   card({
     id: "seed_umbreon", sellerId: "user_ming", categoryId: "cat_pokemon",
@@ -343,7 +343,7 @@ export const demoListings: DemoListing[] = [
     price: 1880, offerMin: 1400, ship: 25, number: "118/106", rarity: "SEC",
     kind: tcg, game: "One Piece", setName: "OP-06", language: "日文",
     grader: "PSA", score: 10, cert: "91220018", views: 77,
-    notes: ["三刀流 SEC", "接受議價"],
+    notes: ["三刀流 SEC", "歡迎傾交收"],
   }),
   card({
     id: "seed_ace", sellerId: "user_ken", categoryId: "cat_onepiece",
@@ -366,7 +366,7 @@ export const demoListings: DemoListing[] = [
     zh: "羅", en: "Law", line: "OP-05 · Raw C",
     title: "羅 Law", price: 240, offerMin: 160, ship: 16,
     kind: tcg, game: "One Piece", setName: "OP-05", language: "日文", raw: "C", views: 29,
-    notes: ["有輕微白邊", "歡迎議價"],
+    notes: ["有輕微白邊", "歡迎傾交收"],
   }),
   card({
     id: "seed_boa", sellerId: "user_lam", categoryId: "cat_onepiece",
@@ -405,7 +405,7 @@ export const demoListings: DemoListing[] = [
     zh: "哈蘭德", en: "Haaland", line: "Topps Chrome · BGS 9.5",
     price: 2100, offerMin: 1600, ship: 24,
     kind: athlete, season: "2023", brand: "Topps", grader: "BGS", score: 9.5, cert: "001711902", views: 91,
-    notes: ["新秀亮面", "可以議價"],
+    notes: ["新秀亮面", "可以傾交收"],
   }),
   card({
     id: "seed_mbappe", sellerId: "user_wai", categoryId: "cat_football",
@@ -492,7 +492,7 @@ export const demoListings: DemoListing[] = [
     zh: "基爾吉斯", en: "SGA", line: "Select · 2023 · Raw C",
     price: 310, offerMin: 220, ship: 16,
     kind: athlete, season: "2023", brand: "Panini", raw: "C", views: 22,
-    notes: ["雷霆", "可以議價"],
+    notes: ["雷霆", "可以傾交收"],
   }),
 
   card({
@@ -500,7 +500,7 @@ export const demoListings: DemoListing[] = [
     zh: "大谷翔平", en: "Shohei Ohtani", line: "Bowman · 2018 · Raw A",
     price: 420, offerMin: 300, ship: 22,
     kind: athlete, season: "2018", brand: "Bowman", raw: "A", views: 84,
-    notes: ["新秀卡", "接受議價"],
+    notes: ["新秀卡", "歡迎傾交收"],
   }),
   card({
     id: "seed_judge", sellerId: "user_wai", categoryId: "cat_baseball",
@@ -522,7 +522,7 @@ export const demoListings: DemoListing[] = [
     zh: "卓奧特", en: "Mike Trout", line: "Topps Update · Raw B",
     price: 380, offerMin: 250, ship: 18,
     kind: athlete, season: "2011", brand: "Topps", raw: "B", views: 40,
-    notes: ["經典新秀", "可以議價"],
+    notes: ["經典新秀", "可以傾交收"],
   }),
   card({
     id: "seed_yamamoto", sellerId: "user_ming", categoryId: "cat_baseball",
@@ -576,7 +576,7 @@ export const demoListings: DemoListing[] = [
     zh: "林俊傑", en: "JJ Lin", line: "JJ20 · Raw A",
     price: 540, offerMin: 400, ship: 12,
     kind: celeb, season: "2024", brand: "官方小卡", raw: "A", views: 42,
-    notes: ["接受議價"],
+    notes: ["歡迎傾交收"],
   }),
   card({
     id: "seed_taylor", sellerId: "user_star", categoryId: "cat_singers",
@@ -606,7 +606,7 @@ export const demoListings: DemoListing[] = [
     zh: "周潤發", en: "Chow Yun-fat", line: "英雄本色 · Raw A",
     price: 680, offerMin: 500, ship: 15,
     kind: celeb, season: "1986", brand: "電影紀念", raw: "A", views: 57,
-    notes: ["經典港產", "可以議價"],
+    notes: ["經典港產", "可以傾交收"],
   }),
   card({
     id: "seed_leung", sellerId: "user_lam", categoryId: "cat_actors",
@@ -674,7 +674,7 @@ export const demoListings: DemoListing[] = [
     zh: "陳卓賢", en: "Ian Chan", line: "MIRROR · PSA 9",
     price: 890, offerMin: 650, ship: 8,
     kind: celeb, season: "2024", brand: "MIRROR", grader: "PSA", score: 9, cert: "70024519", views: 83,
-    notes: ["可以議價"],
+    notes: ["可以傾交收"],
   }),
   card({
     id: "seed_gigi", sellerId: "user_star", categoryId: "cat_idols",
@@ -697,7 +697,7 @@ export const demoListings: DemoListing[] = [
     saleType: both, price: 680, offerMin: 480, start: 120, hours: 40, ship: 16,
     kind: celeb, season: "2023", brand: "官方小卡", raw: "D", views: 27,
     bids: [{ bidderId: H, max: 180, at: t0 }, { bidderId: O, max: 300, at: t1 }],
-    notes: ["有少少彎", "直購、拍賣、議價都可以"],
+    notes: ["有少少彎", "直購、拍賣都可以，歡迎傾交收"],
   }),
   card({
     id: "seed_edan", sellerId: "user_lam", categoryId: "cat_idols",

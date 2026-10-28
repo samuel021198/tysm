@@ -61,7 +61,7 @@ async function shareTargetFor(listingId: string, sellerId: string, postId: strin
 
 export async function openHandover(
   userId: string,
-  input: { listingId: string; postId?: string | null; intent: "deal" | "bargain"; ack: boolean },
+  input: { listingId: string; postId?: string | null; ack: boolean },
 ) {
   if (!input.ack) return { ok: false as const, error: "terms" };
   const listing = await prisma.listing.findUnique({
@@ -86,7 +86,7 @@ export async function openHandover(
     const imageUrl = share.image && isAllowedMediaUrl(share.image) ? share.image : null;
     await prisma.message.create({ data: { threadId: thread.id, senderId: userId, body: share.path, imageUrl } });
     await prisma.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
-    await notify(listing.sellerId, "message", input.intent === "bargain" ? "想議價" : "想傾交收", listing.title, `/messages/${thread.id}`);
+    await notify(listing.sellerId, "message", "想傾交收", listing.title, `/messages/${thread.id}`);
   }
 
   if (listing.status === "ACTIVE") {
@@ -125,7 +125,7 @@ export async function openHandover(
     });
   }
 
-  return { ok: true as const, threadId: thread.id, compose: input.intent === "bargain" };
+  return { ok: true as const, threadId: thread.id };
 }
 
 export async function attachDealThread(orderId: string): Promise<string | null> {

@@ -299,7 +299,13 @@ assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis butto
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
 assert(!postCard.includes("睇圖鑑") && !postCard.includes("/dex") && !postCard.includes('name="book"') && !postCard.includes("dexHref"), "posts do not offer the dex");
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
-assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("議價") && handover.includes("傾交收"), "detail shows handover buttons, not checkout");
+assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("傾交收") && handover.includes('name="check"'), "detail shows one handover check, not checkout");
+assert(!handover.includes("議價") && !handover.includes("bargain") && handover.split("<button").length === 2, "the handover control is a single check");
+assert(!postCard.includes("bargain") && !postCard.includes("議價"), "the price row has no bargain button");
+const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
+const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
+assert(!purchase.includes("議價") && !purchase.includes("送出議價") && purchase.includes("傾交收") && purchase.includes('name="check"'), "listing buy bar uses the same check");
+assert(!listingPage.includes("議價") && !listingPage.includes("再議價"), "listing copy does not say 議價");
 assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");

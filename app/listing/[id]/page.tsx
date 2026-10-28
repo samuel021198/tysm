@@ -266,11 +266,11 @@ export default async function ListingPage({
         ) : null}
         {offers.length ? (
           <section className="mt-6 grid gap-3">
-            <h2 className="font-semibold">{tx(locale, "議價", "Offers")}</h2>
+            <h2 className="font-semibold">{tx(locale, "傾交收", "Handover")}</h2>
             {offers.map((offer) => (
               <div key={offer.id} className="surface p-4 text-sm">
                 <p>
-                  {owner ? offer.buyer.nickname : tx(locale, "你的議價", "Your offer")} · {tx(locale, "第", "Round")} {offer.round}/3 · {offerStatusLabel(locale, offer.status)}
+                  {owner ? offer.buyer.nickname : tx(locale, "傾交收", "Handover")} · {tx(locale, "第", "Round")} {offer.round}/3 · {offerStatusLabel(locale, offer.status)}
                 </p>
                 <p>{formatHkd(offer.amount, locale)}{offer.counterAmount ? ` → ${formatHkd(offer.counterAmount, locale)}` : ""}</p>
                 <p className="text-muted">{tx(locale, "到期", "Expires")} {formatHKT(offer.expiresAt, locale)}</p>
@@ -290,12 +290,6 @@ export default async function ListingPage({
                     <input type="hidden" name="listingId" value={id} />
                     <button className="btn btn-primary" name="act" value="accept">{tx(locale, "接受還價", "Accept counter")}</button>
                     <button className="btn-ghost btn" name="act" value="decline">{tx(locale, "拒絕", "Decline")}</button>
-                    {offer.round < 3 ? (
-                      <>
-                        <input className="field w-full sm:max-w-40" name="counter" placeholder="HKD" />
-                        <button className="btn-ghost btn" name="act" value="counter">{tx(locale, "再議價", "Offer again")}</button>
-                      </>
-                    ) : null}
                   </form>
                 ) : null}
               </div>
@@ -319,8 +313,6 @@ export default async function ListingPage({
           showBid={showBid}
           bidBanned={Boolean(viewer?.bidBanned)}
           showHandover={showHandover}
-          showOffer={Boolean(listing.offersEnabled && listing.minOffer && viewer && !owner)}
-          minOffer={listing.minOffer}
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={null}
