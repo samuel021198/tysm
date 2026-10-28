@@ -48,6 +48,8 @@ export type RankRow = {
   id: string;
   name: string;
   avatarUrl: string | null;
+  /** Post cover. Shops and collectors leave this empty; the row uses the avatar instead. */
+  coverUrl: string | null;
   href: string;
   current: number;
   prior: number;
@@ -226,6 +228,7 @@ export async function loadRank(tab: RankTab, locale: Locale, hiddenIds: string[]
       id: user.id,
       name: rankDisplayName(tab, user),
       avatarUrl: user.avatarUrl,
+      coverUrl: null,
       href: `/shop/${user.id}`,
       current: score.current,
       prior: score.prior,
@@ -258,7 +261,7 @@ async function loadPostRank(since: Date, hiddenIds: string[], now: Date): Promis
     where: { id: { in: scores.map((row) => row.id) } },
     select: {
       id: true,
-      author: { select: { nickname: true } },
+      author: { select: { nickname: true, avatarUrl: true } },
       photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
       collectionItem: { select: { photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } } } },
     },
@@ -271,7 +274,8 @@ async function loadPostRank(since: Date, hiddenIds: string[], now: Date): Promis
     rows.push({
       id: post.id,
       name: post.author.nickname,
-      avatarUrl: postCover(post),
+      avatarUrl: post.author.avatarUrl,
+      coverUrl: postCover(post),
       href: `/post/${post.id}`,
       current: score.current,
       prior: score.prior,
