@@ -8,7 +8,7 @@ import { cardDisplayName } from "@/lib/posts";
 import { cardHubListingWhere, cardHubPostWhere, findHref, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
-import { SearchBox } from "@/components/search-box";
+import { FindExplore } from "@/components/find-explore";
 import { Flash } from "@/components/shell";
 
 function one(value: string | string[] | undefined) {
@@ -24,8 +24,17 @@ export default async function FindPage({
   const q = one(sp.q).trim().slice(0, 80);
   const card = one(sp.card).trim().slice(0, 80);
   const show = marketShow(one(sp.show));
+  const drafting = one(sp.draft) === "1";
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
-  const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
+  const [hidden, hides, categories] = await Promise.all([
+    hiddenUserIds(viewer?.id ?? null),
+    feedHideIds(viewer?.id ?? null),
+    prisma.category.findMany({
+      where: { level: { in: ["GROUP", "LEAF"] } },
+      orderBy: { sort: "asc" },
+      select: { slug: true, nameZh: true, nameEn: true },
+    }),
+  ]);
   const viewerId = viewer?.id ?? null;
   const locale = prefs.locale;
 
@@ -34,8 +43,8 @@ export default async function FindPage({
   let listings: { id: string; name: string; photo: string | null; price: number | null }[] = [];
   let people: { id: string; nickname: string; avatarUrl: string | null }[] = [];
 
+  if (q && !drafting) await sweep();
   if (q) {
-    await sweep();
     const wantListings = show !== "post";
     const wantPosts = show !== "listing";
     const listingWhere = { AND: [activeWhere(hidden), cardHubListingWhere(q, card), ...(hides.listingIds.length ? [{ id: { notIn: hides.listingIds } }] : [])] };
@@ -156,15 +165,69 @@ export default async function FindPage({
     }
   }
 
-  if (viewer && q) {
+  if (viewer && q && !drafting) {
     await prisma.$transaction([
       prisma.searchHistory.deleteMany({ where: { userId: viewer.id, query: q } }),
       prisma.searchHistory.create({ data: { userId: viewer.id, query: q } }),
     ]);
   }
-  const history = viewer
-    ? await prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 24 })
-    : [];
+  // ponytail: two 30-row reads merged in memory. Upgrade path: one ranked union if the grid grows past a few screens.
+  const [history, postCovers, listingCovers] = await Promise.all([
+    viewer ? prisma.searchHistory.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 24 }) : Promise.resolve([]),
+    q
+      ? Promise.resolve([])
+      : prisma.post.findMany({
+          where: {
+            AND: [
+              ...(hidden.length ? [{ authorId: { notIn: hidden } }] : []),
+              ...(hides.postIds.length ? [{ id: { notIn: hides.postIds } }] : []),
+              {
+                OR: [
+                  { collectionItemId: null },
+                  { collectionItem: { visibility: "PUBLIC" } },
+                  ...(viewerId ? [{ authorId: viewerId }] : []),
+                ],
+              },
+            ],
+          },
+          select: {
+            id: true,
+            body: true,
+            createdAt: true,
+            photos: { orderBy: { position: "asc" as const }, take: 1, select: { url: true } },
+            collectionItem: {
+              select: {
+                title: true,
+                cardName: true,
+                photos: { orderBy: { position: "asc" as const }, take: 1, select: { url: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 30,
+        }),
+    q
+      ? Promise.resolve([])
+      : prisma.listing.findMany({
+          where: {
+            AND: [
+              activeWhere(hidden),
+              { OR: [{ price: { gt: 0 } }, { currentBid: { gt: 0 } }, { startPrice: { gt: 0 } }] },
+              ...(hides.listingIds.length ? [{ id: { notIn: hides.listingIds } }] : []),
+            ],
+          },
+          select: {
+            id: true,
+            title: true,
+            cardName: true,
+            createdAt: true,
+            publishedAt: true,
+            photos: { orderBy: { position: "asc" as const }, take: 1, select: { url: true } },
+          },
+          orderBy: { publishedAt: "desc" },
+          take: 30,
+        }),
+  ]);
   const accountRecent: string[] = [];
   const seenRecent = new Set<string>();
   for (const row of history) {
@@ -173,77 +236,101 @@ export default async function FindPage({
     accountRecent.push(row.query);
     if (accountRecent.length >= 12) break;
   }
+  const tiles = [
+    ...postCovers.map((post) => ({
+      key: `post:${post.id}`,
+      href: `/post/${post.id}`,
+      image: post.collectionItem?.photos[0]?.url || post.photos[0]?.url || "/demo/back.svg",
+      label: (post.collectionItem?.cardName || post.collectionItem?.title || post.body || "貼文").trim().slice(0, 80) || "貼文",
+      at: post.createdAt.getTime(),
+    })),
+    ...listingCovers.map((listing) => ({
+      key: `listing:${listing.id}`,
+      href: `/listing/${listing.id}`,
+      image: listing.photos[0]?.url || "/demo/back.svg",
+      label: (listing.cardName || listing.title).trim().slice(0, 80),
+      at: (listing.publishedAt ?? listing.createdAt).getTime(),
+    })),
+  ]
+    .sort((a, b) => b.at - a.at)
+    .slice(0, 36)
+    .map((tile) => ({ key: tile.key, href: tile.href, image: tile.image, label: tile.label }));
 
   const empty = q && users.length === 0 && posts.length === 0 && listings.length === 0 && people.length === 0;
 
   return (
-    <div className="mx-auto grid max-w-lg gap-3">
+    <div className="mx-auto max-w-lg">
       <Flash locale={locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <SearchBox key={q} locale={locale} initial={q} autoFocus={!q} rememberVisit pullAccount={false} accountRecent={accountRecent} to="find" />
-      {q ? <HubChips locale={locale} show={show} q={q} card={card} /> : null}
-      {empty ? <p className="text-sm text-muted">{emptyCopy(locale, show)}</p> : null}
-      {users.length ? (
-        <section>
-          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "用戶", "Users")}</h2>
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>
-                <PersonLink user={user} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-      {listings.length ? (
-        <section aria-label={tx(locale, "上架", "Listings")}>
-          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "上架", "Listings")}</h2>
-          <ul>
-            {listings.map((listing) => (
-              <li key={listing.id}>
-                <Link href={`/listing/${listing.id}`} className="flex h-12 items-center gap-2">
-                  <img src={listing.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium">{listing.name}</span>
-                    {listing.price != null ? <span className="block text-xs font-semibold">{formatHkd(listing.price, locale)}</span> : null}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-      {posts.length || people.length ? (
-        <section aria-label={tx(locale, "貼文", "Posts")}>
-          <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "貼文", "Posts")}</h2>
-          {posts.length ? (
-            <ul>
-              {posts.map((post) => (
-                <li key={post.id}>
-                  <Link href={`/post/${post.id}`} className="flex h-12 items-center gap-2">
-                    <img src={post.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-medium">{post.name || post.author}</span>
-                      <span className="block truncate text-xs text-muted">{post.author}</span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          {people.length ? (
-            <div className="mt-2">
-              <h3 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "收藏", "Saved")}</h3>
-              <ul>
-                {people.map((user) => (
-                  <li key={user.id}>
-                    <PersonLink user={user} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </section>
-      ) : null}
+      <FindExplore locale={locale} initial={q} show={show} accountRecent={accountRecent} categories={categories} tiles={tiles}>
+        {q ? (
+          <>
+            <HubChips locale={locale} show={show} q={q} card={card} />
+            {empty ? <p className="text-sm text-muted">{emptyCopy(locale, show)}</p> : null}
+            {users.length ? (
+              <section>
+                <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "用戶", "Users")}</h2>
+                <ul>
+                  {users.map((user) => (
+                    <li key={user.id}>
+                      <PersonLink user={user} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+            {listings.length ? (
+              <section aria-label={tx(locale, "上架", "Listings")}>
+                <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "上架", "Listings")}</h2>
+                <ul>
+                  {listings.map((listing) => (
+                    <li key={listing.id}>
+                      <Link href={`/listing/${listing.id}`} className="flex h-12 items-center gap-2">
+                        <img src={listing.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-medium">{listing.name}</span>
+                          {listing.price != null ? <span className="block text-xs font-semibold">{formatHkd(listing.price, locale)}</span> : null}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+            {posts.length || people.length ? (
+              <section aria-label={tx(locale, "貼文", "Posts")}>
+                <h2 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "貼文", "Posts")}</h2>
+                {posts.length ? (
+                  <ul>
+                    {posts.map((post) => (
+                      <li key={post.id}>
+                        <Link href={`/post/${post.id}`} className="flex h-12 items-center gap-2">
+                          <img src={post.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
+                          <span className="min-w-0">
+                            <span className="block truncate text-sm font-medium">{post.name || post.author}</span>
+                            <span className="block truncate text-xs text-muted">{post.author}</span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {people.length ? (
+                  <div className="mt-2">
+                    <h3 className="mb-1 text-xs font-semibold text-muted">{tx(locale, "收藏", "Saved")}</h3>
+                    <ul>
+                      {people.map((user) => (
+                        <li key={user.id}>
+                          <PersonLink user={user} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </section>
+            ) : null}
+          </>
+        ) : null}
+      </FindExplore>
     </div>
   );
 }

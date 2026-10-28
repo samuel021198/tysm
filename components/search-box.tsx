@@ -7,6 +7,7 @@ import { compactSetLine } from "@/lib/card-line";
 import { tx, type Locale } from "@/lib/i18n";
 import {
   buildSuggestRows,
+  findHref,
   memoryKey,
   suggestPanelDismiss,
   type MemoryItem,
@@ -47,6 +48,11 @@ export function SearchBox({
   scope = null,
   to = "find",
   show = "all",
+  pinned = false,
+  placeholder,
+  onFocusChange,
+  onValueChange,
+  onSettle,
 }: {
   locale: Locale;
   initial?: string;
@@ -59,6 +65,13 @@ export function SearchBox({
   to?: "find" | "search";
   /** Result chip on `/search`. A new query keeps 上架 or 貼文. */
   show?: "all" | "listing" | "post";
+  /** Stay in the page column. Explore owns the empty and result states. */
+  pinned?: boolean;
+  placeholder?: string;
+  onFocusChange?: (open: boolean) => void;
+  onValueChange?: (value: string) => void;
+  /** Cancel a live query replace before a committed navigation. */
+  onSettle?: () => void;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -131,10 +144,22 @@ export function SearchBox({
   }, [rememberVisit, initial, scope?.slug, scope?.nameZh, scope?.nameEn]);
 
   useEffect(() => {
+    if (pinned) {
+      const input = inputRef.current;
+      if (input && document.activeElement === input) return;
+      setQ(initial);
+      return;
+    }
     setQ(initial);
     if (initial.trim()) setOpen(false);
     else if (autoFocus) setOpen(true);
-  }, [initial, autoFocus]);
+  }, [initial, autoFocus, pinned]);
+
+  const focusNotify = useRef(onFocusChange);
+  focusNotify.current = onFocusChange;
+  useEffect(() => {
+    focusNotify.current?.(open);
+  }, [open]);
 
   useEffect(() => {
     if (!open || !narrow) return;
@@ -195,13 +220,13 @@ export function SearchBox({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !mobileSheet()) return;
+    if (!open || pinned || !mobileSheet()) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [open]);
+  }, [open, pinned]);
 
   useEffect(() => {
     if (!open) return;
@@ -212,7 +237,7 @@ export function SearchBox({
         inputRef.current?.blur();
         return;
       }
-      if (event.key !== "Tab" || !mobileSheet()) return;
+      if (event.key !== "Tab" || pinned || !mobileSheet()) return;
       const root = rootRef.current;
       if (!root) return;
       const nodes = [...root.querySelectorAll<HTMLElement>("a[href], button, input")].filter((el) => !el.hasAttribute("disabled"));
@@ -259,6 +284,7 @@ export function SearchBox({
       pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
     }
     setOpen(false);
+    onSettle?.();
     router.push(row.href);
   }
 
@@ -272,14 +298,14 @@ export function SearchBox({
       : tx(locale, "未有最近搜尋", "No recent searches");
 
   return (
-    <div className={open ? "max-md:h-12" : undefined}>
+    <div className={open && !pinned ? "max-md:h-12" : undefined}>
       <div
         ref={rootRef}
-        role={open && narrow ? "dialog" : undefined}
-        aria-modal={open && narrow ? true : undefined}
+        role={open && narrow && !pinned ? "dialog" : undefined}
+        aria-modal={open && narrow && !pinned ? true : undefined}
         aria-label={open ? tx(locale, "搜尋", "Search") : undefined}
         className={
-          open
+          open && !pinned
             ? "max-md:fixed max-md:inset-0 max-md:z-[60] max-md:flex max-md:flex-col max-md:bg-bg max-md:px-3 max-md:pb-[env(safe-area-inset-bottom)] max-md:pt-[max(0.75rem,env(safe-area-inset-top))] md:relative"
             : "relative"
         }
@@ -287,14 +313,19 @@ export function SearchBox({
         <form
           role="search"
           action={to === "search" ? "/search" : "/find"}
-          className="max-md:flex max-md:min-h-0 max-md:flex-1 max-md:flex-col"
+          className={open && !pinned ? "max-md:flex max-md:min-h-0 max-md:flex-1 max-md:flex-col" : undefined}
           onSubmit={(event) => {
             if (!query) {
               event.preventDefault();
               return;
             }
             pushRecent({ query });
-            if (suggestPanelDismiss("submit", { mobileSheet: mobileSheet(), insidePanel: false, focusInside: false })) setOpen(false);
+            onSettle?.();
+            if (pinned) {
+              event.preventDefault();
+              router.push(findHref(query));
+            }
+            if (suggestPanelDismiss("submit", { mobileSheet: mobileSheet() && !pinned, insidePanel: false, focusInside: false })) setOpen(false);
           }}
         >
           {to === "search" && (show === "listing" || show === "post") ? <input type="hidden" name="show" value={show} /> : null}
@@ -318,9 +349,10 @@ export function SearchBox({
                 enterKeyHint="search"
                 autoFocus={autoFocus}
                 placeholder={
-                  to === "search"
+                  placeholder ??
+                  (to === "search"
                     ? tx(locale, "搜尋上架或標價貼文", "Search listings or priced posts")
-                    : tx(locale, "搜尋任何物品", "Search for anything")
+                    : tx(locale, "搜尋任何物品", "Search for anything"))
                 }
                 aria-label={tx(locale, "搜尋", "Search")}
                 onFocus={() => {
@@ -336,13 +368,14 @@ export function SearchBox({
                     if (!alive.current) return;
                     const activeEl = document.activeElement;
                     const focusInside = immediate || (activeEl instanceof Node && !!rootRef.current?.contains(activeEl));
-                    if (suggestPanelDismiss("blur", { mobileSheet: mobileSheet(), insidePanel: false, focusInside })) setOpen(false);
+                    if (suggestPanelDismiss("blur", { mobileSheet: mobileSheet() && !pinned, insidePanel: false, focusInside })) setOpen(false);
                   }, 0);
                 }}
                 onChange={(event) => {
                   setQ(event.target.value);
                   setActive(0);
                   setOpen(true);
+                  onValueChange?.(event.target.value);
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -369,6 +402,7 @@ export function SearchBox({
                   onClick={() => {
                     setQ("");
                     setActive(0);
+                    onValueChange?.("");
                     inputRef.current?.focus();
                   }}
                 >
@@ -376,16 +410,20 @@ export function SearchBox({
                 </button>
               ) : null}
             </div>
-            {open ? (
+            {open && !pinned ? (
               <button type="button" className="min-h-12 min-w-11 shrink-0 px-2 text-[15px] font-medium text-link md:hidden" onClick={close}>
                 {tx(locale, "取消", "Cancel")}
               </button>
             ) : null}
           </div>
-          {open ? (
+          {open && (!pinned || query.length >= 1) ? (
             <div
               ref={panelRef}
-              className="mt-1 min-h-0 flex-1 overflow-y-auto overscroll-contain md:absolute md:left-0 md:right-0 md:z-30 md:mt-2 md:max-h-[min(70vh,28rem)] md:rounded-2xl md:bg-card md:py-1 md:shadow-card"
+              className={
+                pinned
+                  ? "mt-2 max-h-[min(40vh,18rem)] overflow-y-auto overscroll-contain rounded-2xl bg-card py-1 shadow-card"
+                  : "mt-1 min-h-0 flex-1 overflow-y-auto overscroll-contain md:absolute md:left-0 md:right-0 md:z-30 md:mt-2 md:max-h-[min(70vh,28rem)] md:rounded-2xl md:bg-card md:py-1 md:shadow-card"
+              }
             >
               {query ? null : (
                 <div className="flex items-end justify-between border-b border-line px-1 md:px-4">
@@ -461,12 +499,13 @@ export function SearchBox({
                             className={rowClass}
                             onClick={() => {
                               if (row.query) pushRecent({ query: row.query, cat: row.cat, catZh: row.catZh, catEn: row.catEn });
-                            setOpen(false);
-                          }}
-                        >
-                          {thumb}
-                          {body}
-                        </Link>
+                              onSettle?.();
+                              setOpen(false);
+                            }}
+                          >
+                            {thumb}
+                            {body}
+                          </Link>
                         )}
                         {row.kind === "memory" ? (
                           <button

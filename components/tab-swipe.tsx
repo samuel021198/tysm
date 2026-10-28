@@ -21,7 +21,7 @@ function swipeOwner(target: EventTarget | null): SwipeOwner {
   return card ? "card" : null;
 }
 
-/** Touch pager across the five tab roots. Mouse and desktop stay as taps. */
+/** Touch pager across the tab roots. Mouse and desktop stay as taps. */
 export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();

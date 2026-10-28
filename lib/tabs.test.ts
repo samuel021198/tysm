@@ -16,7 +16,7 @@ assert(adjacentTab("/rank", 1, true) === "/me", "rank swipe left opens profile")
 assert(adjacentTab("/rank", 1, false) === "/login", "logged-out profile tab is login");
 assert(adjacentTab("/me", -1, true) === "/rank", "profile swipe right opens rank");
 assert(adjacentTab("/login", -1, false) === "/rank", "login swipe right opens rank");
-assert(tabPagerIndex("/market") === null && adjacentTab("/market", 1, true) === null, "the market page is not a tab");
+assert(tabPagerIndex("/market") === null && adjacentTab("/market", 1, true) === null, "market is not a tab");
 assert(adjacentTab("/", -1, true) === null && adjacentTab("/me", 1, true) === null, "the pager stops at the ends");
 assert(tabPagerIndex("/listing/abc") === null && adjacentTab("/dex/card", 1, true) === null, "nested pages are not the pager");
 assert(tabPagerIndex("/find") === 2 && tabPagerIndex("/rank") === 3 && tabPagerIndex("/me") === 4, "roots map onto the five tabs");

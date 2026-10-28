@@ -25,7 +25,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       label: tx(locale, "搜尋", "Search"),
       icon: "search" as const,
       accent: true,
-      on: pathname === "/find" || pathname.startsWith("/find/"),
+      on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
     },
     {
       href: "/rank",

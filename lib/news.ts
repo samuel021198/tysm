@@ -63,6 +63,20 @@ const RIFTBOUND = "https://riftbound.leagueoflegends.com/en-us/news/";
 const TOPPS = "https://www.topps.com/";
 const PANINI = "https://www.panini.com/";
 
+/** Official source marks. Used when a row has no product cover. */
+export const NEWS_BRAND_LOGOS = {
+  Topps: "/brands/topps.svg",
+  Pokémon: "/brands/pokemon.jpg",
+  "One Piece": "/brands/one-piece.png",
+  Riftbound: "/brands/riftbound.png",
+  Panini: "/brands/panini.png",
+} as const;
+
+export function newsBrandLogo(source: string): string | null {
+  if (source in NEWS_BRAND_LOGOS) return NEWS_BRAND_LOGOS[source as keyof typeof NEWS_BRAND_LOGOS];
+  return null;
+}
+
 /** Timely rows from the 2026-10-27 digest. One product per row, not one digest post. */
 export const NEWS_SAMPLES: NewsSample[] = [
   {

@@ -1,6 +1,6 @@
 import { AXIS_LOCK, EDGE_GUARD, SWIPE_X } from "./gesture";
 
-/** Bottom tab roots, left to right. Profile is /me or /login. */
+/** Bottom tab roots, left to right. Profile is /me or /login. Market redirects to search. */
 export const TAB_ROOTS = ["/", "/news", "/find", "/rank"] as const;
 
 /** Only these pages are the pager. Nested routes keep their own gestures. */
