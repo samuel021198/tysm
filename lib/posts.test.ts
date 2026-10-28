@@ -326,14 +326,14 @@ const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url),
 assert(!shop.includes("返回主頁") && !shop.includes('href="/faq"') && !shop.includes('href="/terms"'), "profile content does not repeat home or the site footer");
 assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
-const railAt = home.indexOf("<StoryRail");
-const primaryAt = home.indexOf("primary.map");
-assert(railAt >= 0 && primaryAt > railAt && home.slice(Math.max(0, railAt - 80), primaryAt).includes("grid gap-1"), "stories sit tight above the following posts");
+assert(!home.includes("StoryRail") && !home.includes("loadStoryRings"), "home feed does not mount the following avatar rail");
+assert(home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still lead the home feed");
 assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following label");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");
 assert(strip.includes("object-contain"), "a detail strip shows the whole photo");
 assert(strip.includes("aria-current") && strip.includes("data-gesture"), "dots mark the page and the strip keeps the card menu");
+assert(strip.includes("h-2.5 w-2.5") && strip.includes("bg-white") && strip.includes("shadow-[0_0_0_1px_rgba(15,23,42,0.92)]") && strip.includes("bg-accent"), "carousel dots are 10px; inactive white with a dark stroke; active accent");
 const carouselAt = postCard.indexOf("photos.length > 1");
 const carouselBranch = postCard.slice(carouselAt, postCard.indexOf(": (", carouselAt));
 assert(carouselBranch.includes("PhotoStrip") && !carouselBranch.includes("<Link"), "feed and detail carousels are not one link");

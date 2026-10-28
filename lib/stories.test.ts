@@ -97,7 +97,7 @@ assert(rail.includes('href="/story/new"') && rail.includes("{item.mine ? ("), "t
 assert(!rail.includes("item.stories.length === 0"), "a live story does not hide the add badge");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following chrome between stories and posts");
-assert(home.includes("<StoryRail") && home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still sit under the story rail");
+assert(!home.includes("StoryRail") && !home.includes("loadStoryRings") && home.indexOf("primary.map") < home.indexOf("suggested.map"), "home hides the following rail; following posts still lead");
 assert(home.includes('tx(prefs.locale, "建議"'), "suggested posts stay labeled apart from the silent following feed");
 
 console.log("stories ok");

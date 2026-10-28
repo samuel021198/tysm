@@ -66,7 +66,7 @@ export function CreatePicker({
   const summaryClass =
     variant === "header"
       ? "inline-flex h-9 shrink-0 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15 [&::-webkit-details-marker]:hidden"
-      : `grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full active:bg-soft [&::-webkit-details-marker]:hidden ${creating ? "bg-soft text-ink" : "text-muted"}`;
+      : "grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full bg-accent text-white [&::-webkit-details-marker]:hidden";
 
   return (
     <details key={pathname} ref={rootRef} className={rootClass} onToggle={onToggle}>
@@ -76,7 +76,7 @@ export function CreatePicker({
         aria-label={variant === "header" && label ? undefined : tx(locale, "新增", "Create")}
         aria-current={variant === "corner" && creating ? "page" : undefined}
       >
-        <Icon name="plus" className={variant === "header" ? "h-3.5 w-3.5" : "h-[18px] w-[18px]"} strokeWidth={variant === "header" ? 2.25 : 1.75} />
+        <Icon name="plus" className={variant === "header" ? "h-3.5 w-3.5" : "h-[18px] w-[18px] text-white"} strokeWidth={2.25} />
         {variant === "header" ? label : null}
       </summary>
       <div
