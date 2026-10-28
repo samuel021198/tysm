@@ -2,19 +2,24 @@ import {
   DEAL_ACK,
   DEAL_BANNER,
   DEAL_RISK,
-  PROOF_WAIT,
+  OFFER_EMPTY,
   RESERVE_BADGE,
   RESERVE_BLOCKED,
   canArrange,
   canBuyerReceive,
   canCancel,
   canMarkSold,
+  canOfferFromMenu,
   canReleaseReserve,
   canSeePayment,
   showPaymentDetails,
   canSellerConfirm,
-  canSellerLock,
   canUploadProof,
+  cleanOfferNote,
+  dealEventBody,
+  dealEventCopy,
+  offerEntry,
+  readDealEvent,
   dealBlocked,
   dealPhase,
   phaseLabel,
@@ -45,11 +50,13 @@ const labels = (["CHATTING", "ARRANGED", "CONFIRMED", "PROOF", "SELLER_PAID", "D
 assert(labels.join() === "洽談中,約定中,保留中,待確認收款,已收款,已完成,已取消", "zh labels are the handover states");
 assert(phaseLabel("zh-HK", "CONFIRMED") === RESERVE_BADGE, "the lock badge is 保留中");
 assert(RESERVE_BLOCKED === "呢件貨已有人確認，保留中", "other threads use the reserved copy");
-assert(PROOF_WAIT === "等賣家確認交易後先上傳付款證明", "buyer waits for the seller lock");
+assert(OFFER_EMPTY === "對方而家冇可要約嘅貨", "an unbound chat with nothing to offer says so");
 assert(!labels.some((label) => label.includes("待付款") || label.includes("托管") || label.includes("託管") || label.includes("放款") || label.includes("已確認")), "payment chips stay off the labels");
 
-assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUploadProof("CONFIRMED", 0) && !canUploadProof("CONFIRMED", 1), "proof opens only after the seller lock, and only once");
-assert(canSellerLock("CHATTING") && canSellerLock("ARRANGED") && !canSellerLock("CONFIRMED") && !canSellerLock("PROOF"), "only the seller locks, and only before reserve");
+assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUploadProof("CONFIRMED", 0) && !canUploadProof("CONFIRMED", 1), "proof opens only after the offer is accepted, and only once");
+assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && canOfferFromMenu("ARRANGED", false), "either party can offer while talking");
+assert(!canOfferFromMenu("CHATTING", true) && !canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true), "the + item is omitted once an offer is pending, reserved, finished, or blocked");
+assert(offerEntry(true, 4) === "bound" && offerEntry(false, 0) === "empty" && offerEntry(false, 1) === "auto" && offerEntry(false, 2) === "pick", "a bound thread skips the picker; an unbound thread follows the active count");
 assert(canReleaseReserve("CONFIRMED") && !canReleaseReserve("CHATTING") && !canReleaseReserve("PROOF"), "release is the pre-proof unlock");
 assert(!canSeePayment("CHATTING") && !canSeePayment("ARRANGED") && canSeePayment("CONFIRMED") && canSeePayment("PROOF"), "payment details stay hidden until the lock");
 assert(showPaymentDetails("CONFIRMED", true, 0) && showPaymentDetails("PROOF", true, 1) && !showPaymentDetails("DONE", false, 0) && !showPaymentDetails("CHATTING", false, 0), "payment copy follows the lock, not old completed rows");
@@ -66,6 +73,19 @@ assert(canCancel("CONFIRMED", "ACTIVE") && canCancel("PROOF", "ACTIVE") && canAr
 assert(readDealMeta({ deal: { private: true, confirmed: true, proofs: [{ url: " https://cdn.example/p.jpg " }, { url: "" }] } }).proofs.length === 1, "blank proof urls are dropped");
 assert(readDealMeta({ deal: { confirmed: true, proofs: [] } }).confirmed === true, "the lock flag round-trips");
 assert(readDealMeta({ deal: { proofs: [] } }).confirmed !== true, "a new deal is not reserved");
-assert(readDealMeta(null).proofs.length === 0, "missing fulfillment has no proof");
+assert(readDealMeta(null).proofs.length === 0 && readDealMeta(null).offer === null, "missing fulfillment has no proof or offer");
+assert(readDealMeta({ deal: { proofs: [], offer: { by: "u", name: "Alex", amount: 500, note: "旺角", status: "PENDING" } } }).offer?.amount === 500, "a pending offer round-trips");
+assert(readDealMeta({ deal: { proofs: [], offer: { by: "", name: "Alex", amount: 500, note: "", status: "PENDING" } } }).offer === null, "a blank offerer is dropped");
+const note = cleanOfferNote("  旺角\n7pm ");
+assert(note.ok && note.note === "旺角 7pm", "a handover note is one line");
+assert(!cleanOfferNote("x".repeat(81)).ok && cleanOfferNote("").ok, "an empty note is allowed and a long one is not");
+assert(offerEntry(true, 0) === "bound", "a bound thread does not care that the counterparty has no other listings");
+const offered = dealEventCopy("zh-HK", { kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
+assert(offered.text === "Alex 提出要約 HK$123.00" && offered.note === "旺角", "the offer bubble names the price");
+assert(dealEventCopy("zh-HK", { kind: "accept" }).text === "要約已接受 · 保留中", "accept copy is locked");
+assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "要約已拒絕" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "要約已撤回", "decline and withdraw copy is locked");
+assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已解除保留", "release names who unlocked");
+const body = dealEventBody({ kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
+assert(readDealEvent(body)?.kind === "offer" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
 
 console.log("deal-phase.test.ts ok");

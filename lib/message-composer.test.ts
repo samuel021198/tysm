@@ -45,8 +45,15 @@ assert(scroll.includes("onScroll") && scroll.includes("scrollHeight - el.scrollT
 assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
 assert(!page.includes("<DealPanel") && !page.includes("DEAL_BANNER") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card or banner");
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
-assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"') && deal.includes("canSellerLock(phase)"), "stream bubble uses the same confirm-deal lock");
-assert(deal.includes("確認交易") && deal.includes("已收款") && deal.includes("已收貨") && deal.includes("解除保留") && deal.includes("約定交收") && deal.includes("取消交收"), "primary handover actions stay on the bubble");
+assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
+assert(!deal.includes("確認交易") && !deal.includes("提出要約") && !deal.includes("canSellerLock"), "make offer is not a deal-card button");
+assert(deal.includes("接受要約") && deal.includes("拒絕") && deal.includes("撤回要約") && deal.includes("等待對方回應"), "a pending offer is accepted, declined, or withdrawn on the bubble");
+assert(deal.includes("已收款") && deal.includes("已收貨") && deal.includes("解除保留") && deal.includes("約定交收") && deal.includes("取消交收"), "later handover actions stay on the bubble");
+assert(src.includes('name="plus"') && src.includes("提出要約") && src.includes("canOffer") && !src.includes('name="camera"'), "the left control is + and offer is a menu item");
+const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.url), "utf8");
+const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
+assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
+assert(handover.includes("傾交收") && !handover.includes("提出要約"), "posts keep 傾交收 and do not grow an offer button");
 assert(deal.includes("ProofForm") && deal.includes("交收詳情"), "proof upload and the detail link stay available");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
 assert(deal.includes("DEAL_BANNER") && deal.includes("{stream ? null : <p className=\"text-xs font-semibold\">{DEAL_BANNER}</p>}"), "the disclaimer banner stays on the detail card");

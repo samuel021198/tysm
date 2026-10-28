@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
-import { readDealMeta, type DealMeta } from "./deal-phase";
+import { cleanOfferNote, dealEventBody, dealPhase, readDealMeta, type DealOffer } from "./deal-phase";
 import { Fail, asFail } from "./fail";
 import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
@@ -28,16 +28,39 @@ export type ShareCard = {
   cover: string | null;
 };
 
-function withDeal(existing: unknown, patch: Partial<DealMeta>, extra?: Record<string, unknown>): Prisma.InputJsonValue {
+function withDeal(
+  existing: unknown,
+  patch: { meetupAgreed?: boolean; confirmed?: boolean; proofs?: { url: string }[]; offer?: DealOffer | null },
+  extra?: Record<string, unknown>,
+): Prisma.InputJsonValue {
   const base = existing && typeof existing === "object" && !Array.isArray(existing) ? { ...(existing as Record<string, unknown>) } : {};
   const prev = readDealMeta(existing);
+  const offer = patch.offer === undefined ? prev.offer : patch.offer;
   const deal = {
     private: true,
     meetupAgreed: patch.meetupAgreed ?? prev.meetupAgreed ?? false,
     confirmed: patch.confirmed ?? prev.confirmed ?? false,
     proofs: patch.proofs ?? prev.proofs,
+    ...(offer ? { offer: { by: offer.by, name: offer.name, amount: offer.amount, note: offer.note, status: offer.status } } : {}),
   };
   return { ...base, ...(extra ?? {}), deal };
+}
+
+async function postDealNote(
+  tx: Prisma.TransactionClient,
+  order: { buyerId: string; sellerId: string; items: { listingId: string }[] },
+  senderId: string,
+  body: string,
+) {
+  const listingId = order.items[0]?.listingId;
+  if (!listingId) return null;
+  const thread = await tx.messageThread.findFirst({
+    where: { listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+  });
+  if (!thread) return null;
+  await tx.message.create({ data: { threadId: thread.id, senderId, body } });
+  await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
+  return thread.id;
 }
 
 async function shareTargetFor(listingId: string, sellerId: string, postId: string | null, cover: string | null) {
@@ -240,45 +263,212 @@ export async function uploadProof(userId: string, orderId: string, imageUrl: str
   }
 }
 
-export async function confirmDeal(userId: string, orderId: string) {
+const OPEN_TALK = ["PENDING_PAYMENT", "AWAITING_SHIP"] as const;
+
+function askCents(listing: { price: number | null; currentBid: number | null; startPrice: number | null }) {
+  return listing.price ?? listing.currentBid ?? listing.startPrice ?? null;
+}
+
+async function softLock(tx: Prisma.TransactionClient, orderId: string, listingIds: string[]) {
+  await lockRows(tx, "Listing", listingIds);
+  const listings = await tx.listing.findMany({ where: { id: { in: listingIds } } });
+  if (listings.length !== listingIds.length) throw new Fail("state");
+  for (const listing of listings) {
+    if (listing.status !== "ACTIVE") throw new Fail("state");
+    if (listing.binLockOrderId === orderId) continue;
+    if (listing.binLockOrderId) throw new Fail("reserved");
+  }
+  // ponytail: one reserve per listing reuses binLockOrderId. Feed and bids already skip a locked row; a dedicated column is the upgrade if reserved cards should stay browsable.
+  const need = listings.filter((row) => row.binLockOrderId !== orderId).map((row) => row.id);
+  if (need.length) {
+    const locked = await tx.listing.updateMany({
+      where: { id: { in: need }, status: "ACTIVE", binLockOrderId: null },
+      data: { binLockOrderId: orderId },
+    });
+    if (locked.count !== need.length) throw new Fail("reserved");
+  }
+  return listings;
+}
+
+export async function proposeDealOffer(userId: string, threadId: string, listingId: string, amount: number, note: string) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) return { ok: false as const, error: "deal_price" };
+  const cleaned = cleanOfferNote(note);
+  if (!cleaned.ok) return { ok: false as const, error: "offer_note" };
+  const peeked = await prisma.messageThread.findUnique({ where: { id: threadId } });
+  if (!peeked || (peeked.buyerId !== userId && peeked.sellerId !== userId)) return { ok: false as const, error: "forbidden" };
+  const otherId = peeked.buyerId === userId ? peeked.sellerId : peeked.buyerId;
+  if (await isBlocked(userId, otherId)) return { ok: false as const, error: "blocked" };
   try {
-    const buyerId = await prisma.$transaction(async (tx) => {
-      await lockRows(tx, "Order", [orderId]);
-      const order = await tx.order.findUnique({
-        where: { id: orderId },
-        include: { items: true },
+    await prisma.$transaction(async (tx) => {
+      const thread = await tx.messageThread.findUnique({ where: { id: threadId } });
+      if (!thread || (thread.buyerId !== userId && thread.sellerId !== userId)) throw new Fail("forbidden");
+      const other = thread.buyerId === userId ? thread.sellerId : thread.buyerId;
+      const useId = thread.listingId || listingId;
+      if (!useId) throw new Fail("unavailable");
+      const sellerId = thread.listingId ? thread.sellerId : other;
+      const buyerId = thread.listingId ? thread.buyerId : userId;
+      const orderWhere = {
+        buyerId,
+        sellerId,
+        status: { in: [...OPEN_DEAL] },
+        items: { some: { listingId: useId } },
+      };
+      let order = await tx.order.findFirst({ where: orderWhere, include: { items: true }, orderBy: { createdAt: "desc" } });
+      if (order) {
+        await lockRows(tx, "Order", [order.id]);
+        await lockRows(tx, "Listing", [useId]);
+        order = await tx.order.findUnique({ where: { id: order.id }, include: { items: true } });
+      } else {
+        await lockRows(tx, "Listing", [useId]);
+        order = await tx.order.findFirst({ where: orderWhere, include: { items: true }, orderBy: { createdAt: "desc" } });
+        if (order) throw new Fail("state");
+      }
+      const listing = await tx.listing.findUnique({
+        where: { id: useId },
+        include: { photos: { orderBy: { position: "asc" }, take: 1 } },
       });
-      if (!order || order.sellerId !== userId) throw new Fail("forbidden");
-      const meta = readDealMeta(order.fulfillment);
-      if (meta.confirmed || meta.proofs.length > 0) throw new Fail("state");
-      if (!["PENDING_PAYMENT", "AWAITING_SHIP"].includes(order.status)) throw new Fail("state");
-      if (!order.items.length) throw new Fail("state");
-      const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
-      await lockRows(tx, "Listing", listingIds);
-      const listings = await tx.listing.findMany({ where: { id: { in: listingIds } } });
-      if (listings.length !== listingIds.length) throw new Fail("state");
-      for (const listing of listings) {
-        if (listing.status !== "ACTIVE") throw new Fail("state");
-        if (listing.binLockOrderId === order.id) continue;
-        if (listing.binLockOrderId) throw new Fail("reserved");
+      if (!listing || listing.status !== "ACTIVE" || listing.quantityAvailable < 1) throw new Fail("unavailable");
+      if (listing.binLockOrderId) throw new Fail("reserved");
+      if (thread.listingId) {
+        if (listing.id !== thread.listingId) throw new Fail("state");
+      } else if (listing.sellerId !== other) {
+        throw new Fail("forbidden");
       }
-      // ponytail: one reserve per listing reuses binLockOrderId. Feed and bids already skip a locked row; a dedicated column is the upgrade if reserved cards should stay browsable.
-      const need = listings.filter((row) => row.binLockOrderId !== order.id).map((row) => row.id);
-      if (need.length) {
-        const locked = await tx.listing.updateMany({
-          where: { id: { in: need }, status: "ACTIVE", binLockOrderId: null },
-          data: { binLockOrderId: order.id },
+      if (!thread.listingId) {
+        const bound = await tx.messageThread.updateMany({
+          where: { id: thread.id, listingId: null },
+          data: { listingId: listing.id, sellerId, buyerId },
         });
-        if (locked.count !== need.length) throw new Fail("reserved");
+        if (bound.count !== 1) {
+          const again = await tx.messageThread.findUnique({ where: { id: thread.id } });
+          if (!again || again.listingId !== listing.id) throw new Fail("state");
+        }
       }
+      const actor = await tx.user.findUnique({ where: { id: userId }, select: { nickname: true } });
+      const name = actor?.nickname?.trim() || "會員";
+      if (!order) {
+        const created = await insertOrder(tx, {
+          buyerId,
+          sellerId,
+          source: "BUY_NOW",
+          shipDays: listing.shippingDays,
+          address: null,
+          deal: true,
+          lines: [
+            {
+              listingId: listing.id,
+              title: listing.title,
+              unitPrice: askCents(listing) ?? 0,
+              quantity: 1,
+              shippingFee: 0,
+              imageUrl: listing.photos[0]?.url ?? null,
+              conditionLabel: conditionLabel(listing),
+              cardName: listing.cardName,
+              personName: listing.personName,
+            },
+          ],
+        });
+        order = await tx.order.findUnique({ where: { id: created.id }, include: { items: true } });
+      }
+      if (!order) throw new Fail("state");
+      const meta = readDealMeta(order.fulfillment);
+      const phase = dealPhase(order);
+      if (meta.offer?.status === "PENDING") throw new Fail("pending");
+      if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      const offer: DealOffer = { by: userId, name, amount, note: cleaned.note, status: "PENDING" };
       const changed = await tx.order.updateMany({
-        where: { id: order.id, status: { in: ["PENDING_PAYMENT", "AWAITING_SHIP"] } },
-        data: { fulfillment: withDeal(order.fulfillment, { confirmed: true }) },
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: { fulfillment: withDeal(order.fulfillment, { offer }) },
       });
       if (changed.count !== 1) throw new Fail("state");
-      return order.buyerId;
+      await tx.message.create({
+        data: { threadId: thread.id, senderId: userId, body: dealEventBody({ kind: "offer", name, amount, note: cleaned.note }) },
+      });
+      await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
     });
-    await notify(buyerId, "order", "賣家已確認交易", "件貨保留中。你可以上傳付款證明。", `/orders/${orderId}`);
+    await notify(otherId, "order", "收到要約", "對方提出咗要約。", `/messages/${threadId}`);
+    return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+export async function withdrawDealOffer(userId: string, orderId: string) {
+  return answerOffer(userId, orderId, "withdraw");
+}
+
+export async function declineDealOffer(userId: string, orderId: string) {
+  return answerOffer(userId, orderId, "decline");
+}
+
+async function answerOffer(userId: string, orderId: string, mode: "withdraw" | "decline") {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      await lockRows(tx, "Order", [orderId]);
+      const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      const offer = readDealMeta(order.fulfillment).offer;
+      if (!offer || offer.status !== "PENDING") throw new Fail("state");
+      if (mode === "withdraw" ? offer.by !== userId : offer.by === userId) throw new Fail("forbidden");
+      if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
+      const changed = await tx.order.updateMany({
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: { fulfillment: withDeal(order.fulfillment, { offer: null }) },
+      });
+      if (changed.count !== 1) throw new Fail("state");
+      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: mode }));
+      const other = order.buyerId === userId ? order.sellerId : order.buyerId;
+      return { notifyId: mode === "decline" ? offer.by : other, threadId };
+    });
+    const title = mode === "withdraw" ? "要約已撤回" : "要約已拒絕";
+    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
+    await notify(result.notifyId, "order", title, title, href);
+    return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+export async function acceptDealOffer(userId: string, orderId: string) {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      await lockRows(tx, "Order", [orderId]);
+      const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      const offer = readDealMeta(order.fulfillment).offer;
+      if (!offer || offer.status !== "PENDING") throw new Fail("state");
+      if (offer.by === userId) throw new Fail("forbidden");
+      const phase = dealPhase(order);
+      if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
+      const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
+      if (!listingIds.length) throw new Fail("state");
+      await softLock(tx, order.id, listingIds);
+      const accepted: DealOffer = { ...offer, status: "ACCEPTED" };
+      // ponytail: a handover is one card. A multi-qty line keeps its quantity; the order total becomes the offer.
+      if (order.items.length === 1 && order.items[0].quantity === 1) {
+        await tx.orderItem.update({ where: { id: order.items[0].id }, data: { unitPrice: offer.amount } });
+      }
+      const changed = await tx.order.updateMany({
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: {
+          subtotal: offer.amount,
+          total: offer.amount,
+          sellerProceeds: offer.amount,
+          commissionAmount: 0,
+          fulfillment: withDeal(order.fulfillment, { confirmed: true, offer: accepted }),
+        },
+      });
+      if (changed.count !== 1) throw new Fail("state");
+      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
+      return { notifyId: offer.by, threadId };
+    });
+    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
+    await notify(result.notifyId, "order", "要約已接受", "件貨保留中。買家可以上傳付款證明。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -289,31 +479,40 @@ export async function confirmDeal(userId: string, orderId: string) {
 
 export async function releaseReserve(userId: string, orderId: string) {
   try {
-    const buyerId = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       await lockRows(tx, "Order", [orderId]);
-      const order = await tx.order.findUnique({
-        where: { id: orderId },
-        include: { items: true },
-      });
-      if (!order || order.sellerId !== userId) throw new Fail("forbidden");
+      const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
       const meta = readDealMeta(order.fulfillment);
       if (!meta.confirmed || meta.proofs.length > 0) throw new Fail("state");
-      if (!["PENDING_PAYMENT", "AWAITING_SHIP"].includes(order.status)) throw new Fail("state");
+      if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
       const ids = [...new Set(order.items.map((item) => item.listingId))].sort();
       await lockRows(tx, "Listing", ids);
+      const listings = ids.length ? await tx.listing.findMany({ where: { id: { in: ids } } }) : [];
       const cleared = await tx.listing.updateMany({
         where: { id: { in: ids }, binLockOrderId: order.id },
         data: { binLockOrderId: null },
       });
       if (cleared.count !== ids.length) throw new Fail("state");
+      const line = order.items.length === 1 && order.items[0].quantity === 1 ? order.items[0] : null;
+      const ask = line && listings[0] ? askCents(listings[0]) : null;
+      if (line && ask != null) await tx.orderItem.update({ where: { id: line.id }, data: { unitPrice: ask } });
+      const actor = await tx.user.findUnique({ where: { id: userId }, select: { nickname: true } });
+      const name = actor?.nickname?.trim() || "會員";
       const changed = await tx.order.updateMany({
-        where: { id: order.id, status: { in: ["PENDING_PAYMENT", "AWAITING_SHIP"] } },
-        data: { fulfillment: withDeal(order.fulfillment, { confirmed: false }) },
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: {
+          ...(line && ask != null ? { subtotal: ask, total: ask, sellerProceeds: ask, commissionAmount: 0 } : {}),
+          fulfillment: withDeal(order.fulfillment, { confirmed: false, offer: null }),
+        },
       });
       if (changed.count !== 1) throw new Fail("state");
-      return order.buyerId;
+      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "release", name }));
+      const other = order.buyerId === userId ? order.sellerId : order.buyerId;
+      return { notifyId: other, threadId, name };
     });
-    await notify(buyerId, "order", "賣家已解除保留", "呢件貨可以再確認其他買家。", `/orders/${orderId}`);
+    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
+    await notify(result.notifyId, "order", `${result.name} 已解除保留`, "呢件貨可以再提出要約。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);

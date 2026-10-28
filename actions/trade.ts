@@ -3,19 +3,23 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
+import { cleanOfferNote } from "@/lib/deal-phase";
 import { hkdToCents } from "@/lib/format";
 import { importCsv, parseListingForm, relistListing, saveListing, unlistListing, deleteDraft } from "@/lib/listings";
 import { placeBid } from "@/lib/bids";
 import { respondOffer } from "@/lib/offers";
 import {
+  acceptDealOffer,
   arrangeMeetup,
   cancelDeal,
-  confirmDeal,
   confirmReceived,
   confirmSellerPaid,
+  declineDealOffer,
   markDealSold,
+  proposeDealOffer,
   releaseReserve,
   uploadProof,
+  withdrawDealOffer,
 } from "@/lib/deals";
 import {
   advanceShipment,
@@ -198,11 +202,38 @@ export async function confirmAction(formData: FormData) {
   settleDeal(formData, id, result, "done");
 }
 
-export async function confirmDealAction(formData: FormData) {
+export async function makeDealOfferAction(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const user = await viewer(`/messages/${threadId}`);
+  const amount = hkdToCents(String(formData.get("price") || ""));
+  const note = cleanOfferNote(String(formData.get("note") || ""));
+  if (amount == null || amount <= 0) redirect(`/messages/${threadId}?err=deal_price`);
+  if (!note.ok) redirect(`/messages/${threadId}?err=offer_note`);
+  const result = await proposeDealOffer(user.id, threadId, String(formData.get("listingId") || ""), amount, note.note);
+  if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
+  revalidatePath(`/messages/${threadId}`);
+  revalidatePath("/messages");
+}
+
+export async function acceptDealOfferAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
-  const result = await confirmDeal(user.id, id);
+  const result = await acceptDealOffer(user.id, id);
   settleDeal(formData, id, result, "reserved");
+}
+
+export async function declineDealOfferAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await declineDealOffer(user.id, id);
+  settleDeal(formData, id, result, "declined");
+}
+
+export async function withdrawDealOfferAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await withdrawDealOffer(user.id, id);
+  settleDeal(formData, id, result, "withdrawn");
 }
 
 export async function releaseReserveAction(formData: FormData) {
