@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs } from "@/lib/auth";
-import { newsDetailCopy, newsSourceLine } from "@/lib/news";
+import { newsDetailCopy, newsSortAt, newsSourceLine } from "@/lib/news";
 import { NewsCover } from "@/components/news-cover";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -22,7 +22,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
     <article className="mx-auto grid max-w-lg gap-3">
       <NewsCover source={row.source} coverUrl={row.coverUrl} className="aspect-[4/5] max-h-80 w-full rounded-2xl text-3xl" />
       <h1 className="text-xl font-semibold leading-snug">{row.title}</h1>
-      <p className="text-sm text-muted">{newsSourceLine(row.source, row.updatedAt, new Date(), locale)}</p>
+      <p className="text-sm text-muted">{newsSourceLine(row.source, newsSortAt(row), new Date(), locale)}</p>
       {copy || sourceUrl ? (
         <p className="whitespace-pre-wrap text-sm leading-6">
           {copy}

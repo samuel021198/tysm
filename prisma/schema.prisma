@@ -875,7 +875,7 @@ model NewsItem {
   linkUrl    String?
   tag        NewsTag   @default(RELEASE)
   eventAt    DateTime?
-  /// 入庫標記。公開列表按 createdAt 排序，唔再用呢個欄置頂。
+  /// 入庫標記。公開列表按 eventAt（冇就 createdAt）排，唔再用呢個欄置頂。
   hot        Boolean   @default(false)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
