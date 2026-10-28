@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RankPager } from "@/components/rank-pager";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { tx, type Locale } from "@/lib/i18n";
 import { formatRankChange, loadRank, rankMetricLabel, rankPath, rankTab, type RankRow, type RankTab } from "@/lib/rank";
@@ -15,25 +16,27 @@ export default async function RankPage({ searchParams }: { searchParams: Promise
   const locale = prefs.locale;
 
   return (
-    <div className="mx-auto max-w-lg">
-      <h1 className="sr-only">{tx(locale, "排行", "Ranking")}</h1>
-      <nav aria-label={tx(locale, "排行", "Ranking")} className="grid grid-cols-3 border-b border-line">
-        <Segment href={rankPath("shops")} on={tab === "shops"} label={tx(locale, "人氣商戶", "Popular shops")} />
-        <Segment href={rankPath("collectors")} on={tab === "collectors"} label={tx(locale, "人氣收藏家", "Popular collectors")} />
-        <Segment href={rankPath("posts")} on={tab === "posts"} label={tx(locale, "人氣貼文", "Popular posts")} />
-      </nav>
-      {rows.length === 0 ? (
-        <p className="py-10 text-center text-sm text-muted">{tx(locale, "暫時未有排行。", "No ranking yet.")}</p>
-      ) : (
-        <ul className="mt-3 grid gap-2.5">
-          {rows.map((row, index) => (
-            <li key={row.id}>
-              <RankLink locale={locale} tab={tab} row={row} rank={index + 1} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <RankPager tab={tab} loggedIn={Boolean(viewer)}>
+      <div className="mx-auto max-w-lg">
+        <h1 className="sr-only">{tx(locale, "排行", "Ranking")}</h1>
+        <nav aria-label={tx(locale, "排行", "Ranking")} className="grid grid-cols-3 border-b border-line">
+          <Segment href={rankPath("shops")} on={tab === "shops"} label={tx(locale, "人氣商戶", "Popular shops")} />
+          <Segment href={rankPath("collectors")} on={tab === "collectors"} label={tx(locale, "人氣收藏家", "Popular collectors")} />
+          <Segment href={rankPath("posts")} on={tab === "posts"} label={tx(locale, "人氣貼文", "Popular posts")} />
+        </nav>
+        {rows.length === 0 ? (
+          <p className="py-10 text-center text-sm text-muted">{tx(locale, "暫時未有排行。", "No ranking yet.")}</p>
+        ) : (
+          <ul className="mt-3 grid gap-2.5">
+            {rows.map((row, index) => (
+              <li key={row.id}>
+                <RankLink locale={locale} tab={tab} row={row} rank={index + 1} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </RankPager>
   );
 }
 

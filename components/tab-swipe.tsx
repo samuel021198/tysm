@@ -3,22 +3,39 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { EDGE_GUARD } from "@/lib/gesture";
-import { adjacentTab, setTabIntent, tabAxis, tabPagerIndex, tabSwipeDirection, type SwipeOwner } from "@/lib/tabs";
+import { adjacentTab, scrollerTakesSwipe, setTabIntent, swipeBlocked, tabAxis, tabPagerIndex, tabSwipeDirection, type SwipeOwner } from "@/lib/tabs";
 
-function swipeOwner(target: EventTarget | null): SwipeOwner {
-  if (!(target instanceof Element)) return null;
-  if (target.closest("input, textarea, select, [contenteditable='true']")) return "carousel";
-  if (target.closest("[data-gesture]")) return "carousel";
-  const card = target.closest("[data-card-swipe]");
+function scrollHost(target: Element): HTMLElement | null {
   let el: Element | null = target;
   while (el && el !== document.body && el !== document.documentElement) {
-    if (el !== card) {
+    if (el instanceof HTMLElement && !el.hasAttribute("data-profile-pager") && !el.hasAttribute("data-rank-pager")) {
       const ox = getComputedStyle(el).overflowX;
-      if ((ox === "auto" || ox === "scroll") && el.scrollWidth > el.clientWidth + 4) return "carousel";
+      if ((ox === "auto" || ox === "scroll") && el.scrollWidth > el.clientWidth + 4) return el;
     }
     el = el.parentElement;
   }
-  return card ? "card" : null;
+  return null;
+}
+
+function hostOf(target: EventTarget | null): HTMLElement | null {
+  if (!(target instanceof Element)) return null;
+  if (target.closest("[data-profile-pager], [data-rank-pager]")) return null;
+  return scrollHost(target);
+}
+
+/** Inner pagers always own the gesture. A photo strip owns it only while that strip can still move. */
+function swipeOwner(target: EventTarget | null, dx: number): SwipeOwner {
+  if (!(target instanceof Element)) return null;
+  if (target.closest("input, textarea, select, [contenteditable='true']")) return "carousel";
+  if (target.closest("[data-profile-pager], [data-rank-pager]")) return "carousel";
+  const host = scrollHost(target);
+  if (host) {
+    const max = host.scrollWidth - host.clientWidth;
+    if (scrollerTakesSwipe({ scrollLeft: host.scrollLeft, maxScroll: max, dx })) return "carousel";
+    return null;
+  }
+  if (target.closest("[data-gesture]")) return "carousel";
+  return target.closest("[data-card-swipe]") ? "card" : null;
 }
 
 /** Touch pager across the tab roots. Mouse and desktop stay as taps. */
@@ -57,7 +74,7 @@ export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: 
   useEffect(() => {
     const el = frame.current;
     if (!el) return;
-    let origin: { x: number; y: number; pointerId: number; owner: SwipeOwner } | null = null;
+    let origin: { x: number; y: number; pointerId: number; target: EventTarget | null; scrollLeft: number } | null = null;
     let axis: "x" | "y" | null = null;
     let suppress = false;
     let busy = false;
@@ -71,14 +88,20 @@ export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: 
     function onDown(event: PointerEvent) {
       if (event.pointerType !== "touch" || busy || window.innerWidth >= 768) return;
       if (tabPagerIndex(path.current) == null) return;
-      if (document.querySelector('[role="dialog"], [role="menu"]')) return;
+      if (swipeBlocked()) return;
       const main = document.getElementById("main");
       const header = document.querySelector("header");
       if (!(event.target instanceof Node)) return;
       const inMain = Boolean(main?.contains(event.target));
       const inHeader = Boolean(header?.contains(event.target));
       if (!inMain && !inHeader) return;
-      origin = { x: event.clientX, y: event.clientY, pointerId: event.pointerId, owner: swipeOwner(event.target) };
+      origin = {
+        x: event.clientX,
+        y: event.clientY,
+        pointerId: event.pointerId,
+        target: event.target,
+        scrollLeft: hostOf(event.target)?.scrollLeft ?? 0,
+      };
       axis = null;
       lockX.current = false;
     }
@@ -89,8 +112,15 @@ export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: 
       const dy = event.clientY - origin.y;
       if (!axis) axis = tabAxis(dx, dy);
       if (axis !== "x") return;
+      const host = hostOf(origin.target);
+      if (host && Math.abs(host.scrollLeft - origin.scrollLeft) > 4) {
+        lockX.current = false;
+        paint(0, true);
+        return;
+      }
+      const owner = swipeOwner(origin.target, dx);
       const edge = dx < 0 && origin.x > window.innerWidth - EDGE_GUARD;
-      if (origin.owner === "carousel" || (origin.owner === "card" && !edge)) {
+      if (owner === "carousel" || (owner === "card" && !edge)) {
         lockX.current = false;
         return;
       }
@@ -111,7 +141,10 @@ export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: 
       origin = null;
       axis = null;
       lockX.current = false;
-      if (start.owner !== "carousel" && Math.hypot(dx, dy) > 24) {
+      const host = hostOf(start.target);
+      const stripMoved = Boolean(host && Math.abs(host.scrollLeft - start.scrollLeft) > 4);
+      const owner: SwipeOwner = stripMoved ? "carousel" : swipeOwner(start.target, dx);
+      if (owner !== "carousel" && Math.hypot(dx, dy) > 24) {
         suppress = true;
         window.setTimeout(() => {
           suppress = false;
@@ -124,7 +157,7 @@ export function TabSwipe({ loggedIn, children }: { loggedIn: boolean; children: 
             startX: start.x,
             axis: locked,
             viewportWidth: window.innerWidth,
-            owner: start.owner,
+            owner,
           })
         : null;
       const href = dir ? adjacentTab(path.current, dir, signedIn.current) : null;

@@ -35,7 +35,8 @@ export type SwipeOwner = "carousel" | "card" | null;
 /**
  * 1 = next tab (swipe left), -1 = previous (swipe right).
  * ponytail: feed/collection cards keep #50 swipes; only the right 28px edge of a card changes tabs.
- * Carousels, stories, and photo strips never do. Left-edge swipe-right stays the browser back gesture.
+ * A photo strip is `carousel` only while it can still scroll that way. Profile and rank pagers always are.
+ * Left-edge swipe-right stays the browser back gesture.
  */
 export function tabSwipeDirection(input: {
   dx: number;
@@ -109,4 +110,26 @@ export function subscribeTabIntent(listener: (index: number | null) => void) {
   return () => {
     listeners.delete(listener);
   };
+}
+
+/** True while a horizontal scroller can still move in this direction. At either end it yields. */
+export function scrollerTakesSwipe(input: { scrollLeft: number; maxScroll: number; dx: number }): boolean {
+  if (input.maxScroll <= 4 || input.dx === 0) return false;
+  if (input.dx < 0) return input.scrollLeft < input.maxScroll - 2;
+  return input.scrollLeft > 2;
+}
+
+/**
+ * Open sheets block paging. A closed `<details>` menu stays in the DOM (the create picker)
+ * and must not. ponytail: visibility via layout rects, not a mutation observer.
+ */
+export function swipeBlocked(): boolean {
+  if (typeof document === "undefined") return false;
+  for (const node of document.querySelectorAll('[role="dialog"], [role="menu"]')) {
+    if (!(node instanceof HTMLElement)) continue;
+    if (node.closest("details:not([open])")) continue;
+    if (node.getClientRects().length === 0) continue;
+    return true;
+  }
+  return false;
 }

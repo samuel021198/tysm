@@ -22,6 +22,15 @@ export function rankPath(tab: RankTab): string {
   return `/rank?tab=${tab}`;
 }
 
+const RANK_ORDER: RankTab[] = ["shops", "collectors", "posts"];
+
+/** 1 = next segment (swipe left). Null at either end so the bottom pager can take over. */
+export function rankTabStep(tab: RankTab, dir: -1 | 1): RankTab | null {
+  const next = RANK_ORDER.indexOf(tab) + dir;
+  if (next < 0 || next >= RANK_ORDER.length) return null;
+  return RANK_ORDER[next];
+}
+
 export type RankEvent = { id: string; at: Date; weight: number; tags: string[] };
 
 export type RankScore = { id: string; current: number; prior: number; tags: string[] };

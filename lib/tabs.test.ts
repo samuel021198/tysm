@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { EDGE_GUARD, gestureEnd, SWIPE_X } from "./gesture";
 import { shareLabel, shareTarget } from "./share";
-import { adjacentTab, profileSwipeDirection, profileTabHref, profileTabStep, tabAxis, tabPagerIndex, tabSwipeDirection } from "./tabs";
+import { adjacentTab, profileSwipeDirection, profileTabHref, profileTabStep, scrollerTakesSwipe, tabAxis, tabPagerIndex, tabSwipeDirection } from "./tabs";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -44,6 +44,11 @@ assert(profileSwipeDirection({ ...page, dx: -SWIPE_X, startX: 180 }) === 1, "a p
 assert(profileSwipeDirection({ ...page, dx: SWIPE_X, startX: EDGE_GUARD - 1 }) === null, "the profile board leaves the left edge for back");
 assert(tabAxis(4, 3) === null && tabAxis(22, 4) === "x" && tabAxis(6, 20) === "y", "the pager waits for a clear axis");
 assert(tabAxis(20, 18) === null, "a diagonal flick is not yet a tab swipe");
+assert(scrollerTakesSwipe({ scrollLeft: 0, maxScroll: 300, dx: -80 }) === true, "a strip with another photo keeps the swipe");
+assert(scrollerTakesSwipe({ scrollLeft: 120, maxScroll: 300, dx: 80 }) === true, "a middle photo still scrolls");
+assert(scrollerTakesSwipe({ scrollLeft: 0, maxScroll: 300, dx: 80 }) === false, "the first photo yields a swipe right to the bottom pager");
+assert(scrollerTakesSwipe({ scrollLeft: 300, maxScroll: 300, dx: -80 }) === false, "the last photo yields a swipe left to the bottom pager");
+assert(scrollerTakesSwipe({ scrollLeft: 0, maxScroll: 0, dx: -80 }) === false, "a strip that does not overflow is not a carousel");
 
 assert(
   gestureEnd({ dx: -SWIPE_X, dy: 4, startX: 390 - 8, axis: "x", allowRight: true, allowDown: false, edgeGuard: true, viewportWidth: 390 }) === null,
@@ -65,12 +70,16 @@ const swipe = readFileSync(new URL("../components/tab-swipe.tsx", import.meta.ur
 const bar = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), "utf8");
 const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
 assert(layout.includes("<TabSwipe") && layout.includes("loggedIn={Boolean(viewer)}"), "the pager wraps the page");
-assert(swipe.includes("data-gesture") && swipe.includes("data-card-swipe") && swipe.includes('role="dialog"') && swipe.includes("pointerType"), "carousels, cards, and overlays keep their gestures");
+assert(swipe.includes("data-gesture") && swipe.includes("data-card-swipe") && swipe.includes("pointerType") && swipe.includes("swipeBlocked"), "carousels, cards, and real overlays keep their gestures");
+assert(swipe.includes("scrollerTakesSwipe") && swipe.includes("data-rank-pager") && swipe.includes("data-profile-pager"), "a photo strip yields at its ends; rank and profile pagers keep the swipe");
+assert(swipe.includes("scrollLeft") && swipe.includes("> 4"), "a strip that actually moved is not also a tab change");
+const tabsFile = readFileSync(new URL("./tabs.ts", import.meta.url), "utf8");
+assert(tabsFile.includes('role="dialog"') && tabsFile.includes("details:not([open])") && tabsFile.includes("getClientRects"), "a closed create menu does not block the pager");
 assert(swipe.includes("setTabIntent") && bar.includes("subscribeTabIntent"), "the tab highlight follows the swipe");
 const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const hold = readFileSync(new URL("../components/use-hold-swipe.ts", import.meta.url), "utf8");
 assert(profileBoard.includes("replaceState") && profileBoard.includes("data-profile-pager") && profileBoard.includes("data-gesture"), "profile tabs swap without a page load and keep the back gesture");
-assert(profileBoard.includes("profileSwipeDirection") && profileBoard.includes("bg-ink"), "the profile underline follows the swipe");
+assert(profileBoard.includes("profileSwipeDirection") && profileBoard.includes("swipeBlocked") && profileBoard.includes("bg-ink"), "the profile underline follows the swipe");
 assert(hold.includes("data-profile-pager") && hold.includes("data-gesture"), "profile tabs and photo carousels keep the post menu swipe");
 assert(swipe.includes('document.getElementById("main")'), "the swipe starts on the page, not the tab bar");
 
