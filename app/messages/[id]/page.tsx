@@ -3,7 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { DEAL_BANNER, dealPhase } from "@/lib/deal-phase";
-import { loadShareCards } from "@/lib/deals";
+import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { shareTarget } from "@/lib/share";
@@ -63,6 +63,7 @@ export default async function ThreadPage({
           viewerId={viewer.id}
           next={`/messages/${id}`}
           reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
+          payment={sellerPayment(thread.seller)}
           order={order}
         />
       ) : (

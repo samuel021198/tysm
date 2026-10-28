@@ -6,6 +6,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
+import { RESERVE_BADGE } from "@/lib/deal-phase";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, isBlocked } from "@/lib/social";
 import { sweep } from "@/lib/orders";
@@ -121,6 +122,7 @@ export default async function ListingPage({
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listingStatusLabel(locale, listing.status)}</span>
+          {listing.binLockOrderId ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{tx(locale, RESERVE_BADGE, "Reserved")}</span> : null}
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
         <h1 className="mt-2 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>

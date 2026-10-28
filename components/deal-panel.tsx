@@ -1,16 +1,22 @@
 import Link from "next/link";
-import { arrangeDealAction, cancelDealAction, confirmAction, markSoldAction, sellerPaidAction } from "@/actions/trade";
+import { arrangeDealAction, cancelDealAction, confirmAction, confirmDealAction, markSoldAction, releaseReserveAction, sellerPaidAction } from "@/actions/trade";
 import {
   canArrange,
   canBuyerReceive,
   canCancel,
   canMarkSold,
+  canReleaseReserve,
   canSellerConfirm,
+  canSellerLock,
   canUploadProof,
   DEAL_BANNER,
+  dealBlocked,
   dealPhase,
   phaseLabel,
+  PROOF_WAIT,
   readDealMeta,
+  RESERVE_BLOCKED,
+  showPaymentDetails,
 } from "@/lib/deal-phase";
 import { meetupNote } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
@@ -24,11 +30,14 @@ type Item = {
   unitPrice: number;
   listing: {
     status: string;
+    binLockOrderId: string | null;
     meetupDistrict: string | null;
     meetupWindow: string | null;
     meetupNotes: string | null;
   };
 };
+
+type PaymentInfo = { method: string; account: string; holder: string };
 
 export function DealPanel({
   locale,
@@ -36,11 +45,13 @@ export function DealPanel({
   next,
   order,
   reviewed,
+  payment,
 }: {
   locale: Locale;
   viewerId: string;
   next: string;
   reviewed: boolean;
+  payment: PaymentInfo | null;
   order: {
     id: string;
     status: string;
@@ -52,13 +63,16 @@ export function DealPanel({
   };
 }) {
   const phase = dealPhase(order);
-  const proofs = readDealMeta(order.fulfillment).proofs.length;
+  const meta = readDealMeta(order.fulfillment);
+  const proofs = meta.proofs.length;
   const buyer = viewerId === order.buyerId;
   const seller = viewerId === order.sellerId;
   const listing = order.items[0]?.listing ?? null;
   const sold = order.items.some((item) => item.listing.status === "SOLD");
+  const blocked = order.items.some((item) => dealBlocked(phase, item.listing.status, item.listing.binLockOrderId, order.id));
   const note = meetupNote(order.fulfillment, listing);
   const primary = "btn btn-primary w-full";
+  const showPayment = !blocked && payment && showPaymentDetails(phase, meta.confirmed === true, proofs) ? payment : null;
 
   return (
     <section className="sticky top-[calc(3rem+env(safe-area-inset-top))] z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur md:top-16">
@@ -77,7 +91,25 @@ export function DealPanel({
         <p className="mt-1 text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>
         {note ? <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
       </div>
-      {buyer && canUploadProof(phase, proofs) ? <ProofForm locale={locale} orderId={order.id} next={next} /> : null}
+      {blocked ? <p className="text-sm font-medium">{tx(locale, RESERVE_BLOCKED, "This item is already reserved")}</p> : null}
+      {buyer && !blocked && (phase === "CHATTING" || phase === "ARRANGED") ? (
+        <p className="text-sm text-muted">{tx(locale, PROOF_WAIT, "Wait for the seller to confirm the deal before uploading payment proof")}</p>
+      ) : null}
+      {seller && !blocked && listing?.status === "ACTIVE" && canSellerLock(phase) ? (
+        <form action={confirmDealAction}>
+          <input type="hidden" name="orderId" value={order.id} />
+          <input type="hidden" name="next" value={next} />
+          <button className={primary}>{tx(locale, "確認交易", "Confirm deal")}</button>
+        </form>
+      ) : null}
+      {showPayment ? (
+        <div className="rounded-xl bg-soft px-3 py-2 text-sm">
+          <p className="text-xs font-semibold">{tx(locale, "付款資料", "Payment details")}</p>
+          <p className="mt-1">{[showPayment.method, showPayment.holder, showPayment.account].filter(Boolean).join(" · ")}</p>
+          <p className="mt-1 text-xs text-muted">{tx(locale, "私下轉帳。平台唔會收款。", "Pay the seller directly. The platform does not take payment.")}</p>
+        </div>
+      ) : null}
+      {buyer && !blocked && canUploadProof(phase, proofs) ? <ProofForm locale={locale} orderId={order.id} next={next} /> : null}
       {seller && canSellerConfirm(phase, proofs) ? (
         <form action={sellerPaidAction}>
           <input type="hidden" name="orderId" value={order.id} />
@@ -102,7 +134,14 @@ export function DealPanel({
           <button className="btn btn-ghost w-full">{tx(locale, "標記已出售", "Mark sold")}</button>
         </form>
       ) : null}
-      {(buyer || seller) && canArrange(phase) ? (
+      {seller && !blocked && canReleaseReserve(phase) ? (
+        <form action={releaseReserveAction}>
+          <input type="hidden" name="orderId" value={order.id} />
+          <input type="hidden" name="next" value={next} />
+          <button className="btn btn-ghost w-full">{tx(locale, "解除保留", "Release reserve")}</button>
+        </form>
+      ) : null}
+      {(buyer || seller) && !blocked && canArrange(phase) ? (
         <form action={arrangeDealAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />

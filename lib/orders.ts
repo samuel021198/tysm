@@ -87,7 +87,7 @@ export async function insertOrder(
   const shippingTotal = 0;
   const quote = quoteSeller(subtotal, shippingTotal, bps);
   const fulfillment = args.deal
-    ? { ...(args.fulfillment ?? {}), deal: { private: true, meetupAgreed: false, proofs: [] } }
+    ? { ...(args.fulfillment ?? {}), deal: { private: true, meetupAgreed: false, confirmed: false, proofs: [] } }
     : args.fulfillment ?? undefined;
   return tx.order.create({
     data: {
