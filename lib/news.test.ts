@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNewsByCreatedAt, newsBrandLogo, newsSourceLine, newsUpdatedAgo } from "./news";
+import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNewsByCreatedAt, newsBrandLogo, newsDetailCopy, newsSourceLine, newsUpdatedAgo } from "./news";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -73,7 +73,19 @@ assert(!list.includes("color=") && !detail.includes("color="), "list and detail 
 assert(list.includes('orderBy: { createdAt: "desc" }') && !list.includes("compareNews") && !list.includes(".sort("), "the list query is newest ingest first");
 assert(list.includes("row.updatedAt") && detail.includes("row.updatedAt"), "list and detail format updatedAt");
 assert(!list.includes("row.createdAt") && !detail.includes("row.createdAt") && !list.includes("eventAt") && !detail.includes("eventAt"), "pages do not show createdAt or eventAt");
-assert(detail.includes("睇原文") && detail.includes("newsSourceLine"), "detail is cover, title, source, then the source link");
+const kit = newsDetailCopy("盒內有 Chrome。\nSource: https://www.topps.com/pages/topps-collector-kit", "https://www.topps.com/pages/topps-collector-kit");
+assert(kit.copy === "盒內有 Chrome。" && kit.sourceUrl === "https://www.topps.com/pages/topps-collector-kit", "a trailing source line is lifted out of the body");
+const spaced = newsDetailCopy("內文。\n\nSource: https://example.com/a\n", "https://other.example/b");
+assert(spaced.copy === "內文。" && spaced.sourceUrl === "https://example.com/a", "extra blank lines collapse, and the body url wins over linkUrl");
+const seeded = newsDetailCopy("Riftbound Radiance 已經開賣。", "https://riftbound.leagueoflegends.com/en-us/news/");
+assert(seeded.copy === "Riftbound Radiance 已經開賣。" && seeded.sourceUrl?.startsWith("https://"), "without a source line, https linkUrl is the outbound url");
+assert(newsDetailCopy("內文。", "http://example.com/a").sourceUrl === null, "a non-https linkUrl is not linked");
+assert(newsDetailCopy("見 Source: https://example.com/a 之後仲有字。", null).sourceUrl === null, "a source mention that is not the last line stays in the body");
+const only = newsDetailCopy("Source: https://example.com/a", null);
+assert(only.copy === "" && only.sourceUrl === "https://example.com/a", "a body that is only the source line has no copy");
+assert(!detail.includes("睇原文") && !detail.includes("Read the source"), "detail does not add a second read-source link");
+assert(detail.includes("newsDetailCopy(row.body, row.linkUrl)") && detail.includes("newsSourceLine") && detail.includes('"\\n\\n"'), "detail leaves one blank line above the source url");
+assert(detail.includes('target="_blank"') && detail.includes('rel="noreferrer"') && detail.includes("text-link"), "the source url is the outbound link");
 assert(tab.includes('href: "/news"') && tab.includes("新聞") && tab.includes('icon: "news"') && !tab.includes('href: "/dex"'), "bottom nav replaces the dex slot");
 assert(shell.includes('href="/news"') && !shell.includes('href="/dex"'), "desktop nav does not link the dex");
 assert(picker.includes("搵唔到？自己入卡名") && picker.includes("/api/catalog/suggest"), "the card picker can keep a typed name");

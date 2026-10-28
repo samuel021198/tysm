@@ -63,6 +63,29 @@ export function newsSourceLine(source: string, updatedAt: Date, now: Date, local
   return `${source} · ${newsUpdatedAgo(updatedAt, now, locale)}`;
 }
 
+const TRAILING_SOURCE = /(?:^|\n)Source:[ \t]*(https:\/\/\S+)\s*$/;
+
+function httpsUrl(value: string): boolean {
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Detail body, plus the one outbound URL.
+ * A trailing `Source: https://…` line is lifted out of the copy. If the body has no such line, an https `linkUrl` is that URL instead.
+ */
+export function newsDetailCopy(body: string, linkUrl?: string | null): { copy: string; sourceUrl: string | null } {
+  const match = TRAILING_SOURCE.exec(body);
+  if (match?.index !== undefined && httpsUrl(match[1])) {
+    return { copy: body.slice(0, match.index).replace(/\n+$/, ""), sourceUrl: match[1] };
+  }
+  const fallback = linkUrl && httpsUrl(linkUrl) ? linkUrl : null;
+  return { copy: fallback ? body.replace(/\n+$/, "") : body, sourceUrl: fallback };
+}
+
 /** Newest ingest first. Ignores hot, eventAt, and updatedAt. */
 export function compareNewsByCreatedAt(a: { createdAt: Date }, b: { createdAt: Date }): number {
   return b.createdAt.getTime() - a.createdAt.getTime();
