@@ -335,6 +335,25 @@ svg {
   }
 }
 
+/* A short thread keeps the composer on the tab bar instead of mid-page. */
+@media (max-width: 767px) {
+  body:has(.thread-fit) > footer {
+    display: none;
+  }
+}
+
+.thread-fit {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .thread-fit {
+    min-height: calc(100dvh - var(--header-h) - var(--tab-h) - 1.5rem);
+  }
+}
+
 /* Dex browse locks to the viewport: header and tab bar stay put, the grid and the set list scroll. */
 body:has(.dex-fit) {
   display: flex;

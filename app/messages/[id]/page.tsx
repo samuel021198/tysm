@@ -54,7 +54,7 @@ export default async function ThreadPage({
   });
   const order = open ?? orders.find((row) => dealPhase(row) === "DONE") ?? orders[0] ?? null;
   return (
-    <div className="grid gap-4">
+    <div className="thread-fit">
       <ReadPing id={id} />
       <Flash locale={prefs.locale} err={sp.err} />
       {order ? (
@@ -71,7 +71,7 @@ export default async function ThreadPage({
       )}
       <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
       {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
-      <ol className="grid gap-2.5">
+      <ol className="grid flex-1 content-start gap-2.5">
         {thread.messages.map((message) => {
           const mine = message.senderId === viewer.id;
           const linked = shareTarget(message.body);
