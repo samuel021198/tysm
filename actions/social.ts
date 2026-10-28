@@ -133,7 +133,9 @@ export async function sendMessage(formData: FormData) {
   });
   await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
   await notify(other, "message", "新訊息", body.slice(0, 80), `/messages/${threadId}`);
-  redirect(`/messages/${threadId}`);
+  // Same-path redirect() remounts the thread (Next 15). Refresh the list in place.
+  revalidatePath(`/messages/${threadId}`);
+  revalidatePath("/messages");
 }
 
 export async function shareIntoThread(formData: FormData) {
