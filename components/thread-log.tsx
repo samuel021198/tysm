@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
-/** Message scroller. The sticky bar's height is the scroll-padding, so the first bubble stays below the card at the top. */
+/** Sticky deal bar overlays the scroller. Content inset matches its height so the first bubble starts below the card. */
 export function ThreadLog({ sticky, children }: { sticky: ReactNode; children: ReactNode }) {
   const barRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
@@ -18,11 +18,13 @@ export function ThreadLog({ sticky, children }: { sticky: ReactNode; children: R
   }, []);
 
   return (
-    <div className="thread-log" style={{ scrollPaddingTop: height }}>
-      <div ref={barRef} className="sticky top-0 z-30 bg-[var(--bg)] pb-3">
+    <div className="thread-log">
+      <div className="thread-log-scroll" style={{ paddingTop: height, scrollPaddingTop: height }}>
+        {children}
+      </div>
+      <div ref={barRef} className="absolute inset-x-0 top-0 z-30 pb-3">
         {sticky}
       </div>
-      {children}
     </div>
   );
 }

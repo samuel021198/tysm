@@ -357,8 +357,13 @@ svg {
 }
 
 .thread-log {
+  position: relative;
   min-height: 0;
   flex: 1 1 auto;
+}
+
+.thread-log-scroll {
+  height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
