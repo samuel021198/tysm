@@ -1,14 +1,5 @@
 export const CREATE_MODES = [
   {
-    id: "story",
-    href: "/story/new",
-    zh: "動態",
-    en: "Story",
-    hintZh: "影張相，24 小時後消失",
-    hintEn: "A photo that disappears in 24 hours",
-    icon: "camera",
-  },
-  {
     id: "post",
     href: "/add?kind=post",
     zh: "貼文",

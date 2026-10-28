@@ -5,8 +5,9 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "動態|貼文|上架", "create modes are story, post, sell");
-assert(CREATE_MODES.map((mode) => mode.href).join("|") === "/story/new|/add?kind=post|/sell", "create mode routes");
+assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "貼文|上架", "create modes are post and sell");
+assert(CREATE_MODES.map((mode) => mode.href).join("|") === "/add?kind=post|/sell", "create mode routes");
+assert(!CREATE_MODES.map((mode) => `${mode.id} ${mode.href} ${mode.zh}`).join("|").includes("story") && !CREATE_MODES.map((mode) => mode.zh).join("|").includes("動態"), "story create stays off the picker");
 assert(!CREATE_MODES.some((mode) => mode.zh.includes("收藏")), "collect-only is not a create mode");
 assert(!CREATE_MODES.some((mode) => `${mode.zh}${mode.en}${mode.hintZh}${mode.hintEn}`.includes("貼子")), "post copy says 貼文, not 貼子");
 assert(!CREATE_MODES.some((mode) => "ctaZh" in mode || "ctaEn" in mode), "modes do not carry a second cta label");
@@ -29,6 +30,8 @@ const profile = tab.indexOf('icon: "me"');
 assert(home >= 0 && home < news && news < search && search < market && market < profile, "tab order Home, News, Search, Market, Profile");
 assert(tab.includes("新聞") && !tab.includes("圖鑑") && !tab.includes('href: "/dex"'), "the dex slot is news");
 assert(tab.includes("賣場") && tab.includes("搜尋") && tab.includes('icon: "search"') && tab.includes('icon: "bag"') && tab.includes('icon: "news"'), "news uses the paper icon, search is the glass, market uses the bag");
+assert(tab.includes("accent: true") && tab.includes('accent ? "text-accent"'), "search icon uses the accent green, including while active");
+assert(tab.indexOf("accent: true") > tab.indexOf('href: "/find"') && tab.indexOf("accent: true") < tab.indexOf('href: "/market"'), "only the search tab is accent");
 assert(!tab.includes('href: "/messages"'), "chat is not a tab");
 assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
@@ -70,7 +73,8 @@ assert(!picker.includes(" / {CREATE_MODES.length}") && !picker.includes("‹") &
 assert(picker.includes("bg-card") && picker.includes("border-line") && picker.includes("text-ink") && picker.includes("shadow-card"), "picker is a light card");
 assert(!picker.includes("bg-[#1E293B]") && !picker.includes('backgroundColor: "#0F172A"') && !picker.includes("h-16 w-16"), "dark sheet and oversized icon tile are gone");
 assert(picker.includes("md:hidden") && picker.includes('name="plus"'), "top-left control is a plus icon");
-assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("text-muted"), "mobile add matches header icon buttons");
+assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("text-accent active:bg-soft"), "corner plus uses accent green and stays that color while creating");
+assert(picker.includes("text-muted"), "picker rows stay muted");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is not a filled accent pill");
 assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "desktop add is a quiet accent control");
 assert(!picker.includes("rounded-full bg-accent text-white"), "add is not a solid brand circle");
