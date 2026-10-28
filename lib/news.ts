@@ -41,26 +41,38 @@ function hkDayNumber(date: Date): number {
 }
 
 /**
- * Relative clock for a news row. This reads `updatedAt` (upsert refreshes it).
- * List order is separate: `createdAt` descending, via `compareNewsByCreatedAt` / Prisma `orderBy`.
- * Under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日; older → M/D.
+ * Instant the list sorts and stamps by: source time when we have it, otherwise ingest time.
+ * `createdAt` is required, so this is never null — the same key as `COALESCE("eventAt", "createdAt")`.
+ * Accepts a Date or an ISO string so a raw list query can feed the stamp without a second parse step.
  */
-export function newsUpdatedAgo(updatedAt: Date, now: Date, locale: Locale): string {
-  const diff = now.getTime() - updatedAt.getTime();
+export function newsSortAt(row: { eventAt: Date | string | null; createdAt: Date | string }): Date {
+  return new Date(row.eventAt ?? row.createdAt);
+}
+
+/**
+ * Relative clock for a source instant (`newsSortAt`).
+ * Future → M/D; under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日; older → M/D.
+ */
+export function newsUpdatedAgo(at: Date, now: Date, locale: Locale): string {
+  const diff = now.getTime() - at.getTime();
+  if (diff < 0) {
+    const when = hkParts(at);
+    return `${when.m}/${when.d}`;
+  }
   if (diff < HOUR_MS) return locale === "en" ? "Just now" : "剛剛";
   const hours = Math.floor(diff / HOUR_MS);
   if (hours < 24) {
     if (locale === "en") return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
     return `${hours} 小時前`;
   }
-  if (hkDayNumber(now) - hkDayNumber(updatedAt) === 1) return locale === "en" ? "Yesterday" : "昨日";
-  const updated = hkParts(updatedAt);
-  return `${updated.m}/${updated.d}`;
+  if (hkDayNumber(now) - hkDayNumber(at) === 1) return locale === "en" ? "Yesterday" : "昨日";
+  const when = hkParts(at);
+  return `${when.m}/${when.d}`;
 }
 
-/** `source ·` last-write time. Pass `updatedAt`, not `createdAt`. */
-export function newsSourceLine(source: string, updatedAt: Date, now: Date, locale: Locale): string {
-  return `${source} · ${newsUpdatedAgo(updatedAt, now, locale)}`;
+/** `source ·` the sort instant. Pass `newsSortAt(row)`, not `updatedAt`. */
+export function newsSourceLine(source: string, at: Date, now: Date, locale: Locale): string {
+  return `${source} · ${newsUpdatedAgo(at, now, locale)}`;
 }
 
 const TRAILING_SOURCE = /(?:^|\n)Source:[ \t]*(https:\/\/\S+)\s*$/;
@@ -86,9 +98,9 @@ export function newsDetailCopy(body: string, linkUrl?: string | null): { copy: s
   return { copy: fallback ? body.replace(/\n+$/, "") : body, sourceUrl: fallback };
 }
 
-/** Newest ingest first. Ignores hot, eventAt, and updatedAt. */
-export function compareNewsByCreatedAt(a: { createdAt: Date }, b: { createdAt: Date }): number {
-  return b.createdAt.getTime() - a.createdAt.getTime();
+/** Newest source time first. Ignores hot and updatedAt. Null `eventAt` uses `createdAt`. */
+export function compareNewsByEventAt(a: { eventAt: Date | null; createdAt: Date }, b: { eventAt: Date | null; createdAt: Date }): number {
+  return newsSortAt(b).getTime() - newsSortAt(a).getTime();
 }
 
 const POKEMON = "https://www.pokemon.com/us/pokemon-news";

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNewsByCreatedAt, newsBrandLogo, newsDetailCopy, newsSourceLine, newsUpdatedAgo } from "./news";
+import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNewsByEventAt, newsBrandLogo, newsDetailCopy, newsSortAt, newsSourceLine, newsUpdatedAgo } from "./news";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -16,9 +16,11 @@ assert(newsUpdatedAgo(ago(23 * H), now, "zh-HK") === "23 小時前", "within a d
 assert(newsUpdatedAgo(new Date("2026-10-26T10:00:00+08:00"), now, "zh-HK") === "昨日", "the previous Hong Kong date is yesterday");
 assert(newsUpdatedAgo(new Date("2026-10-25T23:30:00+08:00"), now, "zh-HK") === "10/25", "older than yesterday is M/D");
 assert(newsUpdatedAgo(new Date("2026-10-20T10:00:00+08:00"), now, "zh-HK") === "10/20", "an older calendar day is M/D");
-assert(newsSourceLine("Topps", ago(3 * H), now, "zh-HK") === "Topps · 3 小時前", "the source line uses updatedAt wording");
+assert(newsSourceLine("Topps", ago(3 * H), now, "zh-HK") === "Topps · 3 小時前", "the source line stamps the instant it is given");
 assert(newsUpdatedAgo(ago(3 * H), now, "en") === "3 hours ago", "english hours");
 assert(newsUpdatedAgo(new Date("2026-10-26T10:00:00+08:00"), now, "en") === "Yesterday", "english yesterday");
+assert(newsUpdatedAgo(new Date("2026-11-06T00:00:00+08:00"), now, "zh-HK") === "11/6", "a future source time is M/D");
+assert(newsUpdatedAgo(new Date(now.getTime() + 60_000), now, "en") === "10/27", "a later clock today is M/D, not just now");
 
 assert(NEWS_SAMPLES.length >= 3 && NEWS_SAMPLES.length <= 12, "seed stays a short list");
 const seededSlugs = new Set(NEWS_SAMPLES.map((row) => row.slug));
@@ -62,8 +64,19 @@ const sorted = [
   { id: "plain-mid", createdAt: new Date("2026-10-20T00:00:00Z"), hot: false, eventAt: null },
   { id: "hot-same", createdAt: new Date("2026-10-20T00:00:00Z"), hot: true, eventAt: new Date("2026-12-01T00:00:00Z") },
   { id: "newest", createdAt: new Date("2026-10-27T08:00:00Z"), hot: false, eventAt: new Date("2026-11-01T00:00:00Z") },
-].sort(compareNewsByCreatedAt);
-assert(sorted.map((row) => row.id).join(",") === "newest,plain-mid,hot-same,hot-old", "newest createdAt first; hot and eventAt do not reorder");
+  { id: "ingested-latest", createdAt: new Date("2026-10-28T00:00:00Z"), hot: false, eventAt: new Date("2026-02-01T00:00:00Z") },
+  { id: "undated-new", createdAt: new Date("2026-10-27T00:00:00Z"), hot: true, eventAt: null },
+].sort(compareNewsByEventAt);
+assert(
+  sorted.map((row) => row.id).join(",") === "hot-same,newest,undated-new,plain-mid,ingested-latest,hot-old",
+  "source time first; null eventAt uses createdAt; hot does not pin",
+);
+assert(
+  newsSortAt({ eventAt: new Date("2026-12-01T00:00:00Z"), createdAt: new Date("2026-01-01T00:00:00Z") }).toISOString() === "2026-12-01T00:00:00.000Z",
+  "the stamp key prefers eventAt",
+);
+assert(newsSortAt({ eventAt: null, createdAt: new Date("2026-10-20T00:00:00Z") }).toISOString() === "2026-10-20T00:00:00.000Z", "the stamp key falls back to createdAt");
+assert(newsSortAt({ eventAt: "2026-11-01T00:00:00.000Z", createdAt: "2026-10-01T00:00:00.000Z" }).toISOString() === "2026-11-01T00:00:00.000Z", "an ISO eventAt from a raw row still stamps");
 
 const sql = readFileSync(new URL("../prisma/migrations/20261027160000_news_items/migration.sql", import.meta.url), "utf8");
 for (const row of NEWS_SAMPLES) {
@@ -88,9 +101,12 @@ assert(detail.includes("coverUrl={row.coverUrl}"), "detail still prefers the pro
 assert(cover.includes("bg-white") && cover.includes("object-contain"), "logo thumbs are white and contained");
 assert(!cover.includes("slice(0, 1)") && !cover.includes("backgroundColor") && !cover.includes("color"), "news covers are not letter blocks");
 assert(!list.includes("color=") && !detail.includes("color="), "list and detail do not pass a brand color");
-assert(list.includes('orderBy: { createdAt: "desc" }') && !list.includes("compareNews") && !list.includes(".sort("), "the list query is newest ingest first");
-assert(list.includes("row.updatedAt") && detail.includes("row.updatedAt"), "list and detail format updatedAt");
-assert(!list.includes("row.createdAt") && !detail.includes("row.createdAt") && !list.includes("eventAt") && !detail.includes("eventAt"), "pages do not show createdAt or eventAt");
+assert(
+  list.includes('COALESCE("eventAt", "createdAt") DESC') && !list.includes("compareNews") && !list.includes(".sort(") && !list.includes('orderBy: { createdAt: "desc" }'),
+  "the list query orders by source time, not ingest time",
+);
+assert(list.includes("newsSortAt(row)") && detail.includes("newsSortAt(row)"), "list and detail stamp eventAt, else createdAt");
+assert(!list.includes("row.updatedAt") && !detail.includes("row.updatedAt"), "the stamp is not last-write time");
 const kit = newsDetailCopy("盒內有 Chrome。\nSource: https://www.topps.com/pages/topps-collector-kit", "https://www.topps.com/pages/topps-collector-kit");
 assert(kit.copy === "盒內有 Chrome。" && kit.sourceUrl === "https://www.topps.com/pages/topps-collector-kit", "a trailing source line is lifted out of the body");
 const spaced = newsDetailCopy("內文。\n\nSource: https://example.com/a\n", "https://other.example/b");

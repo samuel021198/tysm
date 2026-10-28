@@ -1,16 +1,17 @@
+import type { NewsItem } from "@prisma/client";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs } from "@/lib/auth";
 import { tx } from "@/lib/i18n";
-import { newsSourceLine } from "@/lib/news";
+import { newsSortAt, newsSourceLine } from "@/lib/news";
 import { NewsCover } from "@/components/news-cover";
 
 export const metadata = { title: "新聞" };
 
 export default async function NewsPage() {
   const prefs = await getPrefs();
-  // Order is ingest time (`createdAt`). The subtitle clock is `updatedAt` (see newsSourceLine).
-  const rows = await prisma.newsItem.findMany({ orderBy: { createdAt: "desc" } });
+  // Source time, not ingest time. createdAt is required, so the key is never null.
+  const rows = await prisma.$queryRaw<NewsItem[]>`SELECT * FROM "NewsItem" ORDER BY COALESCE("eventAt", "createdAt") DESC`;
   const now = new Date();
   const locale = prefs.locale;
 
@@ -26,7 +27,7 @@ export default async function NewsPage() {
                 <NewsCover source={row.source} coverUrl={row.coverUrl} className="h-[72px] w-[72px] shrink-0 rounded-lg text-sm" />
                 <span className="min-w-0 flex-1">
                   <span className="line-clamp-2 text-[15px] font-semibold leading-snug">{row.title}</span>
-                  <span className="mt-0.5 block text-[13px] text-muted">{newsSourceLine(row.source, row.updatedAt, now, locale)}</span>
+                  <span className="mt-0.5 block text-[13px] text-muted">{newsSourceLine(row.source, newsSortAt(row), now, locale)}</span>
                   {row.teaser ? <span className="mt-0.5 block truncate text-[13px] text-muted">{row.teaser}</span> : null}
                 </span>
               </Link>
