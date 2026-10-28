@@ -25,14 +25,14 @@ const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), 
 const home = tab.indexOf('href: "/"');
 const news = tab.indexOf('href: "/news"');
 const search = tab.indexOf('href: "/find"');
+const rank = tab.indexOf('href: "/rank"');
 const profile = tab.indexOf('icon: "me"');
-assert(home >= 0 && home < news && news < search && search < profile, "tab order Home, News, Search, Profile");
-assert(tab.includes("grid-cols-4") && !tab.includes("grid-cols-5"), "four bottom tabs");
+assert(home >= 0 && home < news && news < search && search < rank && rank < profile, "tab order Home, News, Search, Rank, Profile");
+assert(tab.includes("grid-cols-5") && !tab.includes("grid-cols-4"), "five bottom tabs");
 assert(tab.includes("新聞") && !tab.includes("圖鑑") && !tab.includes('href: "/dex"'), "the dex slot is news");
-assert(!tab.includes("賣場") && !tab.includes('href: "/market"') && !tab.includes("排行") && !tab.includes('href: "/rank"'), "market and rank stay off the tab bar");
-assert(tab.includes("搜尋") && tab.includes('icon: "search"') && tab.includes('icon: "news"'), "news uses the paper icon, search is the glass");
+assert(tab.includes("排行") && tab.includes("搜尋") && tab.includes('icon: "search"') && tab.includes('icon: "rank"') && tab.includes('icon: "news"') && !tab.includes("賣場") && !tab.includes('href: "/market"'), "news uses the paper icon, search is the glass, rank is the fourth tab");
 assert(tab.includes("accent: true") && tab.includes("rounded-full bg-accent text-white") && !tab.includes('accent ? "text-accent"'), "search is a solid accent pill with a white icon");
-assert(tab.indexOf("accent: true") > tab.indexOf('href: "/find"') && tab.indexOf("accent: true") < tab.indexOf('icon: "me"'), "only the search tab is accent");
+assert(tab.indexOf("accent: true") > tab.indexOf('href: "/find"') && tab.indexOf("accent: true") < tab.indexOf('href: "/rank"'), "only the search tab is accent");
 assert(!tab.includes('href: "/messages"'), "chat is not a tab");
 assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
@@ -54,8 +54,8 @@ assert(
   "desktop header is one row: search, mark, nav, on the feed width",
 );
 assert(
-  desktop.includes('href="/find"') && desktop.includes('href="/news"') && !desktop.includes('href="/market"') && !desktop.includes('href="/dex"') && desktop.includes("whitespace-nowrap") && desktop.includes("shrink-0"),
-  "desktop search and news labels stay on one line",
+  desktop.includes('href="/find"') && desktop.includes('href="/news"') && desktop.includes('href="/rank"') && !desktop.includes('href="/market"') && !desktop.includes('href="/dex"') && desktop.includes("whitespace-nowrap") && desktop.includes("shrink-0"),
+  "desktop search, news, and rank labels stay on one line",
 );
 assert(!shell.includes("h-14 max-w-6xl"), "desktop tools are not a second full-width bar");
 assert(shell.includes('href="/cart"') && shell.includes('href="/orders"') && shell.includes('href="/messages"'), "compact menu keeps cart, orders, and chat");

@@ -3,7 +3,7 @@ export function Icon({
   className = "h-5 w-5",
   strokeWidth = 1.75,
 }: {
-  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news";
+  name: "home" | "search" | "plus" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank";
   className?: string;
   strokeWidth?: number;
 }) {
@@ -154,6 +154,16 @@ export function Icon({
         <path d="M6 5.2h9.2A1.6 1.6 0 0 1 16.8 6.8V18a1.6 1.6 0 0 1-1.6 1.6H7.4A1.4 1.4 0 0 1 6 18.2z" />
         <path d="M6 7.4A1.4 1.4 0 0 1 7.4 6H8" />
         <path d="M8.4 9.2h6M8.4 12h6M8.4 14.8h3.6" />
+      </svg>
+    );
+  }
+  if (name === "rank") {
+    return (
+      <svg {...props}>
+        <path d="M4.5 19.5h15" />
+        <path d="M6.2 19.5V13.2h3.1v6.3" />
+        <path d="M10.45 19.5V7.4h3.1v12.1" />
+        <path d="M14.7 19.5V10.4h3.1v9.1" />
       </svg>
     );
   }

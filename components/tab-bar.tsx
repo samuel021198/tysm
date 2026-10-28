@@ -28,6 +28,12 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
     },
     {
+      href: "/rank",
+      label: tx(locale, "排行", "Rank"),
+      icon: "rank" as const,
+      on: pathname === "/rank" || pathname.startsWith("/rank/"),
+    },
+    {
       href: meHref,
       label: tx(locale, "個人", "Profile"),
       icon: "me" as const,
@@ -40,7 +46,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       aria-label={tx(locale, "主要", "Main")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-4">
+      <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-5">
         {tabs.map((tab, index) => (
           <Tab key={tab.href} {...tab} on={intent == null ? tab.on : intent === index} />
         ))}
@@ -58,7 +64,7 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "news" | "search" | "me";
+  icon: "home" | "news" | "search" | "rank" | "me";
   on: boolean;
   accent?: boolean;
 }) {
