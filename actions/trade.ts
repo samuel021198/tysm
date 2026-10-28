@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
-import { cleanOfferNote } from "@/lib/deal-phase";
+import { cleanOfferNote, offerAckGate } from "@/lib/deal-phase";
 import { hkdToCents } from "@/lib/format";
 import { importCsv, parseListingForm, relistListing, saveListing, unlistListing, deleteDraft } from "@/lib/listings";
 import { placeBid } from "@/lib/bids";
@@ -202,9 +202,19 @@ export async function confirmAction(formData: FormData) {
   settleDeal(formData, id, result, "done");
 }
 
+/** Records the one-time private-handover ack. Signup terms are a different flag. */
+export async function ackP2pRisk() {
+  const user = await getViewer();
+  if (!user || user.p2pRiskAckAt) return;
+  await prisma.user.update({ where: { id: user.id }, data: { p2pRiskAckAt: new Date() } });
+}
+
 export async function makeDealOfferAction(formData: FormData) {
   const threadId = String(formData.get("threadId") || "");
   const user = await viewer(`/messages/${threadId}`);
+  const gate = offerAckGate(Boolean(user.p2pRiskAckAt), formData.get("ack"));
+  if (!gate.ok) redirect(`/messages/${threadId}?err=${gate.error}`);
+  if (gate.record) await prisma.user.update({ where: { id: user.id }, data: { p2pRiskAckAt: new Date() } });
   const amount = hkdToCents(String(formData.get("price") || ""));
   const note = cleanOfferNote(String(formData.get("note") || ""));
   if (amount == null || amount <= 0) redirect(`/messages/${threadId}?err=deal_price`);

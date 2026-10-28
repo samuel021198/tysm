@@ -56,6 +56,7 @@ const ERR: Record<string, [string, string]> = {
   state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
   reserved: ["呢件貨已有人確認，保留中", "This item is already reserved"],
   pending: ["已有一個要約，請先撤回或等對方回覆", "There is already an offer. Withdraw it or wait for a reply"],
+  deal_ack: ["請先剔選私下交收風險", "Confirm the private handover risk first"],
   deal_price: ["請填最終價錢（HK$）", "Enter the final price in HK$"],
   offer_note: ["交收備註只可以一行，最多 80 字", "The handover note is one line, up to 80 characters"],
   login: ["請先登入", "Log in first"],

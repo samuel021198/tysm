@@ -18,6 +18,7 @@ export function MessageComposer({
   canOffer = false,
   bound = null,
   choices = [],
+  riskAcked = false,
 }: {
   locale: Locale;
   threadId: string;
@@ -25,6 +26,8 @@ export function MessageComposer({
   canOffer?: boolean;
   bound?: OfferChoice | null;
   choices?: OfferChoice[];
+  /** Account already stored the private-handover ack. */
+  riskAcked?: boolean;
 }) {
   const [imageUrl, setImageUrl] = useState("");
   const [body, setBody] = useState("");
@@ -33,6 +36,8 @@ export function MessageComposer({
   const [tray, setTray] = useState(false);
   const [menu, setMenu] = useState(false);
   const [offer, setOffer] = useState(false);
+  const [acked, setAcked] = useState(riskAcked);
+  if (riskAcked && !acked) setAcked(true);
   const fileRef = useRef<HTMLInputElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const draft = useRef({ body: "", image: "" });
@@ -197,7 +202,18 @@ export function MessageComposer({
         </>
       ) : null}
     </form>
-    {offer ? <OfferSheet locale={locale} threadId={threadId} bound={bound} choices={choices} onClose={() => setOffer(false)} /> : null}
+    {offer ? (
+      <OfferSheet
+        locale={locale}
+        threadId={threadId}
+        bound={bound}
+        choices={choices}
+        acked={acked}
+        persisted={riskAcked}
+        onAcked={() => setAcked(true)}
+        onClose={() => setOffer(false)}
+      />
+    ) : null}
     </>
   );
 }
