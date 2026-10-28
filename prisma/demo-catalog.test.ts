@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "fs";
 import { authorizedBearer } from "../lib/bootstrap";
 import { DEMO_CARDS } from "../lib/demo-dex";
 import { DEMO_ACCOUNTS, DEMO_CODE, TRIAL_ACCOUNTS } from "../lib/demo-login";
+import { DISTRICTS } from "../lib/format";
+import { collectorEvents, merchantEvents, postEvents, tallyRanks } from "../lib/rank";
 import { resolveAuction } from "../lib/rules";
 import { isSeedCardFront } from "./demo-card-fronts";
 import {
@@ -13,10 +15,13 @@ import {
   demoMessages,
   demoNotifications,
   demoOffers,
+  demoRankLikes,
+  demoRankOrders,
   demoShowcaseCollections,
   demoShowcaseListings,
   demoShowcasePosts,
   demoShowcaseReviews,
+  demoStores,
   demoThreads,
   demoUsers,
   showcasePostPhotos,
@@ -303,6 +308,77 @@ assert(!seed.includes("catalogCard.deleteMany") && !seed.includes("catalogSet.de
 assert(!seed.includes("user_mei") && !seed.includes("user_showcase") && !seed.includes("卡桌阿傑"), "reseed does not recreate the old demo set");
 assert(seed.includes("demoThreads") && seed.includes("demoMessages") && seed.includes("demoNotifications") && seed.includes("demoFavorites"), "reseed writes chat, the bell, and favorites");
 assert(seed.includes("item.listingId") && seed.includes("attachShowcaseDex"), "reseed links collection rows to listings and the dex");
+assert(seed.includes("demoStores") && seed.includes("demoRankOrders") && seed.includes("demoRankLikes") && seed.includes("paidAt"), "reseed writes shop names, paid orders, and likes");
+
+const districts = new Set(DISTRICTS.map(([name]) => name));
+const shopIds = new Set(demoStores.map((row) => row.userId));
+assert(demoStores.length === DEMO_ACCOUNTS.length + TRIAL_ACCOUNTS.length, "every demo login has a shop name");
+unique(demoStores.map((row) => row.userId), "shop");
+for (const store of demoStores) {
+  const person = people.find((user) => user.id === store.userId);
+  const avatar = person && "avatarUrl" in person ? person.avatarUrl : "";
+  assert(person && avatar.startsWith("https://"), `${store.userId} shop needs an avatar`);
+  assert(store.storeName.trim().length >= 2 && store.storeName.length <= 40, store.storeName);
+  assert(districts.has(store.storeDistrict), store.storeDistrict);
+  assert(store.storeLine1.length >= 4 && store.storeLine1.length <= 120, store.storeLine1);
+}
+assert(DEMO_ACCOUNTS.every((row) => shopIds.has(row.id)) && TRIAL_ACCOUNTS.every((row) => shopIds.has(row.id)), "locked demos and traders are shops");
+
+const rankNow = new Date("2026-10-28T12:00:00+08:00");
+const rankAt = (hoursAgo: number) => new Date(rankNow.getTime() - hoursAgo * 60 * 60 * 1000);
+unique(demoRankOrders.map((row) => row.id), "rank order");
+unique(demoRankLikes.map((row) => row.id), "rank like");
+for (const review of demoShowcaseReviews) {
+  assert(review.ageDays + 3 >= 6, `${review.id} stays outside the rank window`);
+}
+for (const order of demoRankOrders) {
+  const listing = demoShowcaseListings.find((item) => item.id === order.listingId);
+  assert(listing && listing.ownerId === order.sellerId && order.buyerId !== order.sellerId && shopIds.has(order.sellerId), order.id);
+  assert(order.quantity >= 1 && order.hoursAgo > 0 && order.hoursAgo < 144, order.id);
+}
+const shopRank = tallyRanks(
+  merchantEvents(
+    demoRankOrders.map((order) => ({
+      sellerId: order.sellerId,
+      status: "AWAITING_SHIP",
+      paidAt: rankAt(order.hoursAgo),
+      completedAt: null,
+      createdAt: rankAt(order.hoursAgo),
+      items: [{ quantity: order.quantity, tag: "寶可夢" }],
+    })),
+  ),
+  rankNow,
+);
+assert(shopRank.map((row) => row.id).join() === "user_kai,user_hoi,user_suki,user_mars,user_yan,user_lok,user_bao,user_rafa", "eight shops, medals included");
+assert(shopRank.some((row) => row.prior === 0) && shopRank.some((row) => row.prior > row.current) && shopRank.some((row) => row.prior === row.current), "shop deltas include new, down, and flat");
+
+const postAuthor = new Map(demoShowcasePosts.map((post) => [post.id, post.ownerId]));
+for (const like of demoRankLikes) {
+  const post = demoShowcasePosts.find((row) => row.id === like.postId);
+  const item = demoShowcaseCollections.find((row) => row.id === post?.collectionId);
+  assert(post && item && item.visibility === "PUBLIC" && item.photos.length >= 1, like.id);
+  assert(post.ownerId !== like.userId, `${like.id} self-like`);
+  assert(post.ageDays * 24 > like.hoursAgo && like.hoursAgo > 0 && like.hoursAgo < 144, like.id);
+}
+const collectorRank = tallyRanks(
+  collectorEvents(
+    demoRankLikes.map((like) => ({
+      userId: like.userId,
+      createdAt: rankAt(like.hoursAgo),
+      authorId: postAuthor.get(like.postId) ?? like.userId,
+      tags: [],
+    })),
+  ),
+  rankNow,
+);
+const postRank = tallyRanks(
+  postEvents(demoRankLikes.map((like) => ({ postId: like.postId, at: rankAt(like.hoursAgo) }))),
+  rankNow,
+);
+assert(collectorRank.map((row) => row.id).join() === "user_kai,user_hoi,user_muel,user_suki,user_yan,user_mika,user_lok,user_bao", "eight collectors");
+assert(postRank.map((row) => row.id).join() === "kai_03_post,hoi_03_post,muel_post_03,suki_03_post,yan_02_post,mika_02_post,lok_02_post,bao_03_post", "eight posts");
+assert(collectorRank.every((row, index) => index === 0 || row.current < collectorRank[index - 1].current), "collector medals are not tied");
+assert(postRank.every((row, index) => index === 0 || row.current < postRank[index - 1].current), "post medals are not tied");
 
 console.log("demo catalog ok", {
   listings: demoListings.length,
