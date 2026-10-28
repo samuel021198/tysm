@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { composerCanSend, composerExpanded } from "./message-composer";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -25,12 +25,19 @@ assert(src.includes("autoFocus={focus}"), "compose=1 still focuses the field");
 const page = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta.url), "utf8");
 const deal = readFileSync(new URL("../components/deal-panel.tsx", import.meta.url), "utf8");
 const proof = readFileSync(new URL("../components/proof-form.tsx", import.meta.url), "utf8");
-const log = readFileSync(new URL("../components/thread-log.tsx", import.meta.url), "utf8");
-assert(page.includes("<DealPanel") && page.includes("<MessageComposer") && page.includes("<ThreadLog"), "the thread keeps the deal card, the log, and the composer");
-assert(page.includes("DEAL_BANNER") && page.includes("pin={false}"), "a thread with no order still shows the banner inside the same log");
-assert(log.includes("paddingTop: height") && log.includes("scrollPaddingTop: height") && log.includes("ResizeObserver"), "message inset tracks the sticky bar height");
-assert(deal.includes("ProofForm") && deal.includes("取消交收") && deal.includes("交收詳情"), "handover links stay on the deal card");
+const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+assert(!existsSync(new URL("../components/thread-log.tsx", import.meta.url)), "the sticky thread log overlay is gone");
+const scroll = readFileSync(new URL("../components/thread-scroll.tsx", import.meta.url), "utf8");
+assert(page.includes("<DealStream") && page.includes("<MessageComposer") && page.includes("<ThreadScroll"), "the thread shows an in-flow deal bubble and the composer");
+assert(!scroll.includes("paddingTop") && !scroll.includes("ResizeObserver") && !scroll.includes("sticky"), "the scroller does not reserve a deal-bar inset");
+assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
+assert(!page.includes("<DealPanel") && !page.includes("DEAL_BANNER") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card or banner");
+assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
+assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"') && deal.includes("canSellerLock(phase)"), "stream bubble uses the same confirm-deal lock");
+assert(deal.includes("確認交易") && deal.includes("已收款") && deal.includes("已收貨") && deal.includes("解除保留") && deal.includes("約定交收") && deal.includes("取消交收"), "primary handover actions stay on the bubble");
+assert(deal.includes("ProofForm") && deal.includes("交收詳情"), "proof upload and the detail link stay available");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
+assert(deal.includes("DEAL_BANNER") && deal.includes("{stream ? null : <p className=\"text-xs font-semibold\">{DEAL_BANNER}</p>}"), "the disclaimer banner stays on the detail card");
 assert(proof.includes("上傳付款證明"), "payment proof stays a deal action");
 
 console.log("message-composer.test.ts ok");
