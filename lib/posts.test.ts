@@ -301,7 +301,7 @@ assert(!postCard.includes("睇圖鑑") && !postCard.includes("/dex") && !postCar
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 const handoverButton = handover.slice(handover.indexOf("<button"), handover.indexOf("</button>"));
 assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("傾交收") && handoverButton.includes('aria-label={label}') && handoverButton.includes('title={label}') && handoverButton.includes('name="messages"') && !handoverButton.includes('name="check"') && !handoverButton.replaceAll("{label}", "").includes("{label}"), "detail shows one icon-only handover chat mark, not checkout");
-assert(!handover.includes("議價") && !handover.includes("bargain") && handover.split("<button").length === 2 && !handoverButton.includes("w-full"), "the handover control is a single chat mark");
+assert(!handover.includes("議價") && !handover.includes("bargain") && !handover.includes("DEAL_ACK") && !handover.includes("checkbox") && handover.split("<button").length === 2 && !handoverButton.includes("w-full"), "the handover control is a single chat mark, with no risk strip");
 assert(!postCard.includes("bargain") && !postCard.includes("議價"), "the price row has no bargain button");
 const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
 const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");

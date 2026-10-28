@@ -45,11 +45,11 @@ assert(scroll.includes("onScroll") && scroll.includes("scrollHeight - el.scrollT
 assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
 assert(!page.includes("<DealPanel") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card");
 const disclaimer = readFileSync(new URL("../components/deal-disclaimer.tsx", import.meta.url), "utf8");
-assert(page.includes("<DealDisclaimer") && page.indexOf("<DealDisclaimer") < page.indexOf("<ThreadScroll"), "the handover line sits above the message list");
-assert(!page.includes("sticky") && !disclaimer.includes("sticky") && !disclaimer.includes("fixed"), "the thread disclaimer is not sticky and does not cover the log");
-assert(disclaimer.includes("DEAL_BANNER") && disclaimer.includes("bg-soft"), "the disclaimer is the locked one-line gray banner");
+assert(!page.includes("DealDisclaimer") && !page.includes("DEAL_BANNER"), "the thread has no handover banner above the log");
+assert(!page.includes("sticky") && !disclaimer.includes("sticky") && !disclaimer.includes("fixed"), "the offer-form line is not a sticky thread banner");
+assert(disclaimer.includes("DEAL_BANNER") && disclaimer.includes("bg-soft"), "the offer form keeps the locked one-line risk copy");
 const orderPage = readFileSync(new URL("../app/orders/[id]/page.tsx", import.meta.url), "utf8");
-assert(orderPage.includes("<DealDisclaimer") && !orderPage.includes("sticky"), "the handover page shows the same line in normal flow");
+assert(!orderPage.includes("DealDisclaimer") && !orderPage.includes("sticky"), "the handover page does not repeat the gray banner");
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
 assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
 assert(!deal.includes("確認交易") && !deal.includes("提出要約") && !deal.includes("canSellerLock"), "make offer is not a deal-card button");
@@ -66,10 +66,15 @@ const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8"
 const login = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
 assert(!auth.includes("p2pRiskAckAt") && !login.includes("DEAL_ACK") && !login.includes("p2pRiskAck"), "registration does not record or require this ack");
 assert(login.includes("服務條款") && login.includes('name="accept"'), "signup keeps its own terms tick");
-assert(handover.includes("傾交收") && !handover.includes("提出要約"), "posts keep 傾交收 and do not grow an offer button");
+assert(handover.includes("傾交收") && !handover.includes("提出要約") && !handover.includes("DEAL_ACK") && !handover.includes("checkbox"), "posts keep 傾交收 and do not show a risk checkbox");
 assert(deal.includes("ProofForm") && deal.includes("交收詳情"), "proof upload and the detail link stay available");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
-assert(deal.includes("DEAL_BANNER") && deal.includes("{stream ? null : <p className=\"text-xs font-semibold\">{DEAL_BANNER}</p>}"), "the disclaimer banner stays on the detail card");
+assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
+const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openThread"));
+assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
+const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
+const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
+assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");
 assert(proof.includes("上傳付款證明"), "payment proof stays a deal action");
 
 console.log("message-composer.test.ts ok");

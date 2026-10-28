@@ -84,9 +84,8 @@ async function shareTargetFor(listingId: string, sellerId: string, postId: strin
 
 export async function openHandover(
   userId: string,
-  input: { listingId: string; postId?: string | null; ack: boolean },
+  input: { listingId: string; postId?: string | null },
 ) {
-  if (!input.ack) return { ok: false as const, error: "terms" };
   const listing = await prisma.listing.findUnique({
     where: { id: input.listingId },
     include: { photos: { orderBy: { position: "asc" }, take: 1 } },

@@ -6,7 +6,6 @@ import { dealPhase } from "@/lib/deal-phase";
 import { meetupNote, sellerPayment } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
-import { DealDisclaimer } from "@/components/deal-disclaimer";
 import { DealPanel } from "@/components/deal-panel";
 import { Flash } from "@/components/shell";
 import { replyReviewAction, reviewAction } from "@/actions/social";
@@ -47,7 +46,6 @@ export default async function OrderPage({
   return (
     <div className="grid gap-4">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <DealDisclaimer />
       <h1 className="page-title mb-0">{tx(locale, "交收", "Handover")}</h1>
       {(buyer || seller) ? (
         <DealPanel
