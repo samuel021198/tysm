@@ -1,29 +1,7 @@
 import { TRIAL_ACCOUNTS } from "../lib/demo-login";
+import { fronts } from "./demo-card-fronts";
 
-const shot = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
 const portrait = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&h=800&q=80`;
-
-const FRAMES = [
-  "photo-1613771404784-3a5686aa2be3",
-  "photo-1613771404721-1f92d799e49f",
-  "photo-1611931960487-4932667079f1",
-  "photo-1616196334218-caffdc9b2317",
-  "photo-1647892591880-58c55fd726d8",
-  "photo-1647892591717-28c7fd63bb3f",
-  "photo-1647893977173-59619da505d9",
-  "photo-1636391671086-6b4b776cd031",
-  "photo-1703023689733-6a4281149189",
-  "photo-1640271215810-ce65ba65ef0b",
-  "photo-1647892591703-4552c35a58e7",
-  "photo-1647893977168-6316f6c9ae44",
-  "photo-1672759043716-620e810abac8",
-  "photo-1742743032379-8dbd2c2fe9df",
-  "photo-1606503153255-59d8b8b82176",
-];
-
-function frames(start: number, count: number) {
-  return Array.from({ length: count }, (_, index) => shot(FRAMES[(start + index) % FRAMES.length]));
-}
 
 const PROFILES: Record<string, { phone: string; bio: string; avatarUrl: string }> = {
   kai: {
@@ -141,7 +119,7 @@ const rows: TraderRow[] = [
     title: "噴火龍 PSA10",
     body: "呢張噴火龍收咗兩年，殼面乾淨，標籤無花。四角同相片一樣尖，燈光下無大刮。而家放賣，可約油麻地交收。 #FS #Charizard #PSA10",
     tags: ["FS", "Charizard", "PSA10"],
-    photos: frames(0, 3),
+    photos: [fronts.charizardSar, fronts.charizard, fronts.pikachu],
     ageDays: 0,
     priceCents: 188000,
     categoryId: "cat_pokemon",
@@ -158,7 +136,7 @@ const rows: TraderRow[] = [
     title: "月亮伊布卡冊",
     body: "月亮伊布留喺卡冊第一頁，自己睇多過放。閃面保存得好好，套都未除。純粹分享收藏，暫時唔賣。 #PC #寶可夢",
     tags: ["PC", "寶可夢"],
-    photos: frames(3, 3),
+    photos: [fronts.umbreonSar, fronts.umbreon, fronts.glaceon],
     ageDays: 3,
   },
   {
@@ -167,7 +145,7 @@ const rows: TraderRow[] = [
     title: "求同系列皮卡丘",
     body: "仲差一張同系列的皮卡丘，有人放緊可以搵我。其餘卡都自己留喺冊入面。收藏為主，唔急著放。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(6, 2),
+    photos: [fronts.pikachu, fronts.pikachuEx],
     ageDays: 8,
   },
   {
@@ -176,7 +154,7 @@ const rows: TraderRow[] = [
     title: "路飛 OP09",
     body: "路飛呢張係 OP09，日版，卡角尖，白邊少。收的時候已經入套，狀態同相一樣。而家放賣，觀塘可以自取。 #FS #OP09",
     tags: ["FS", "OP09"],
-    photos: frames(2, 4),
+    photos: [fronts.luffy, fronts.luffyLeader, fronts.luffyOp01, fronts.zoro],
     ageDays: 1,
     priceCents: 128000,
     categoryId: "cat_onepiece",
@@ -193,7 +171,7 @@ const rows: TraderRow[] = [
     title: "索隆收藏",
     body: "索隆留喺收藏，未捨得放。卡面無花，我自己好鍾意呢張構圖。純粹打卡，唔賣。 #PC",
     tags: ["PC"],
-    photos: frames(5, 2),
+    photos: [fronts.zoro, fronts.nami],
     ageDays: 4,
   },
   {
@@ -202,7 +180,7 @@ const rows: TraderRow[] = [
     title: "盒同實卡",
     body: "盒同實卡一起影低，方便自己對編號。整套未齊，所以先收住。有同系列想交流可以留言。 #PC #海賊王",
     tags: ["PC", "海賊王"],
-    photos: frames(8, 3),
+    photos: [fronts.luffyLeader, fronts.zoro, fronts.nami],
     ageDays: 9,
   },
   {
@@ -211,7 +189,7 @@ const rows: TraderRow[] = [
     title: "布上皮卡丘",
     body: "皮卡丘放咗喺布上面影，白邊同卡角都清楚。收咗半年，狀態同相一樣。而家讓出，價錢係實價。 #賣 #寶可夢",
     tags: ["賣", "寶可夢"],
-    photos: frames(1, 3),
+    photos: [fronts.pikachu, fronts.pikachuEx, fronts.eevee],
     ageDays: 0,
     priceCents: 68000,
     categoryId: "cat_pokemon",
@@ -228,7 +206,7 @@ const rows: TraderRow[] = [
     title: "入坑噴火龍",
     body: "噴火龍係我入坑第一張，一直留喺卡冊。閃面保存得好好，幾乎無花。分享吓，唔放賣。 #PC #Charizard",
     tags: ["PC", "Charizard"],
-    photos: frames(4, 4),
+    photos: [fronts.charizard, fronts.charizardSar, fronts.mew, fronts.eevee],
     ageDays: 5,
   },
   {
@@ -237,7 +215,7 @@ const rows: TraderRow[] = [
     title: "求超夢",
     body: "想搵一張同系列的超夢，有放的話可以傳訊息。其餘自己留，唔賣。收藏先，交易其次。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(9, 2),
+    photos: [fronts.mewtwo, fronts.mew],
     ageDays: 11,
   },
   {
@@ -246,7 +224,7 @@ const rows: TraderRow[] = [
     title: "Riftbound 新卡",
     body: "Riftbound 呢張新收，卡面乾淨，四角尖。玩完一局就入套，狀態同相一樣。而家放賣，科學園可以交收。 #FS #Riftbound",
     tags: ["FS", "Riftbound"],
-    photos: frames(7, 3),
+    photos: [fronts.annie, fronts.scorcher, fronts.buccaneer],
     ageDays: 1,
     priceCents: 46000,
     categoryId: "cat_riftbound",
@@ -262,7 +240,7 @@ const rows: TraderRow[] = [
     title: "牌組以外",
     body: "另一張留喺牌組外面，自己先賞。反光同相片一樣，無大花。純粹收藏，唔放。 #PC #Riftbound",
     tags: ["PC", "Riftbound"],
-    photos: frames(10, 2),
+    photos: [fronts.scorcher, fronts.annie],
     ageDays: 6,
   },
   {
@@ -271,7 +249,7 @@ const rows: TraderRow[] = [
     title: "補同系列",
     body: "仲想補一張同系列，有人放緊可以搵我。而家呢張自己留喺套入面。收藏為主，唔急。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(12, 3),
+    photos: [fronts.buccaneer, fronts.scorcher, fronts.annie],
     ageDays: 12,
   },
   {
@@ -280,7 +258,7 @@ const rows: TraderRow[] = [
     title: "美斯球衣卡",
     body: "美斯球衣卡放喺檯面影，角位乾淨。收咗一季，狀態同相一樣。而家放賣，銅鑼灣可交收。 #賣",
     tags: ["賣"],
-    photos: frames(3, 4),
+    photos: [fronts.messi, fronts.salah],
     ageDays: 2,
     priceCents: 96000,
     categoryId: "cat_football",
@@ -295,7 +273,7 @@ const rows: TraderRow[] = [
     title: "沙拿卡冊",
     body: "另一張沙拿留喺卡冊，自己睇。居中同相片一樣，無白邊問題。分享收藏，唔賣。 #PC",
     tags: ["PC"],
-    photos: frames(8, 2),
+    photos: [fronts.salah, fronts.messi],
     ageDays: 7,
   },
   {
@@ -304,7 +282,7 @@ const rows: TraderRow[] = [
     title: "球星慢收",
     body: "球星卡我收得慢，每一張都入套。呢組暫時留低，未打算放。純粹打卡。 #PC",
     tags: ["PC"],
-    photos: frames(11, 3),
+    photos: [fronts.salah, fronts.messi],
     ageDays: 13,
   },
   {
@@ -313,7 +291,7 @@ const rows: TraderRow[] = [
     title: "舊噴火龍",
     body: "舊噴火龍收咗好耐，殼無大花，標籤清楚。四角同相片一樣。而家放賣，深水埗可以面交。 #FS #Charizard #PSA10",
     tags: ["FS", "Charizard", "PSA10"],
-    photos: frames(4, 3),
+    photos: [fronts.charizardBase, fronts.blastoiseBase, fronts.venusaurBase],
     ageDays: 0,
     priceCents: 248000,
     categoryId: "cat_pokemon",
@@ -330,7 +308,7 @@ const rows: TraderRow[] = [
     title: "鐵盒舊卡",
     body: "其餘舊卡留喺鐵盒，未決定放唔放。卡角有少少白，我都照收。分享吓收藏。 #PC #寶可夢",
     tags: ["PC", "寶可夢"],
-    photos: frames(7, 2),
+    photos: [fronts.venusaurBase, fronts.blastoiseBase],
     ageDays: 5,
   },
   {
@@ -339,7 +317,7 @@ const rows: TraderRow[] = [
     title: "換舊皮卡丘",
     body: "想換一張同年代的皮卡丘，有的話可以傾。呢張自己留，唔賣。收藏先。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(13, 4),
+    photos: [fronts.charizardBase, fronts.pikachu, fronts.venusaurBase, fronts.blastoiseBase],
     ageDays: 10,
   },
   {
@@ -348,7 +326,7 @@ const rows: TraderRow[] = [
     title: "路飛領袖卡",
     body: "路飛領袖卡卡面乾淨，閃位同相一樣。收的時候已經確認無花。而家放賣，尖沙咀可交收。 #FS #OP09",
     tags: ["FS", "OP09"],
-    photos: frames(6, 3),
+    photos: [fronts.luffyLeader, fronts.luffy, fronts.nami],
     ageDays: 1,
     priceCents: 168000,
     categoryId: "cat_onepiece",
@@ -365,7 +343,7 @@ const rows: TraderRow[] = [
     title: "寶可夢卡冊",
     body: "寶可夢呢疊留喺卡冊，自己先睇。閃面保存得好好，套都未除。純粹分享，唔放。 #PC #寶可夢",
     tags: ["PC", "寶可夢"],
-    photos: frames(9, 4),
+    photos: [fronts.umbreon, fronts.pikachu, fronts.gengar, fronts.eevee],
     ageDays: 6,
   },
   {
@@ -374,7 +352,7 @@ const rows: TraderRow[] = [
     title: "兩套對編號",
     body: "海賊王同寶可夢我都收，呢組未齊。先影低對編號，方便自己睇。暫時唔賣。 #PC #海賊王",
     tags: ["PC", "海賊王"],
-    photos: frames(1, 2),
+    photos: [fronts.luffy, fronts.charizard],
     ageDays: 12,
   },
   {
@@ -383,7 +361,7 @@ const rows: TraderRow[] = [
     title: "實價單卡",
     body: "呢張放賣，卡角尖，白邊少，同相片一樣。收貨之後檢查過，無大花。荃灣可以自取，價錢實。 #賣 #寶可夢",
     tags: ["賣", "寶可夢"],
-    photos: frames(5, 3),
+    photos: [fronts.gengar, fronts.mewtwo, fronts.pikachu],
     ageDays: 0,
     priceCents: 88000,
     categoryId: "cat_pokemon",
@@ -400,7 +378,7 @@ const rows: TraderRow[] = [
     title: "自己留的閃",
     body: "另一張自己留，唔連這張放。閃面我好鍾意，所以收住。分享吓近況。 #PC",
     tags: ["PC"],
-    photos: frames(11, 2),
+    photos: [fronts.umbreonSar, fronts.glaceon],
     ageDays: 4,
   },
   {
@@ -409,7 +387,7 @@ const rows: TraderRow[] = [
     title: "收藏同放賣分開",
     body: "仲收緊同系列，有人放可以傳訊息。而家呢張自己留喺冊入面。收藏同放賣我會分開寫。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(14, 3),
+    photos: [fronts.eevee, fronts.gengar, fronts.mew],
     ageDays: 9,
   },
   {
@@ -418,7 +396,7 @@ const rows: TraderRow[] = [
     title: "居里簽名卡",
     body: "居里簽名卡角位乾淨，簽名同相一樣清楚。收咗一年，殼面無花。而家放賣，紅磡可交收。 #FS",
     tags: ["FS"],
-    photos: frames(2, 3),
+    photos: [fronts.curry, fronts.curryOptic],
     ageDays: 2,
     priceCents: 128000,
     categoryId: "cat_basketball",
@@ -433,7 +411,7 @@ const rows: TraderRow[] = [
     title: "展示架球星",
     body: "另一張球星卡留喺展示架，自己睇。居中無白邊，狀態同相一樣。純粹收藏。 #PC",
     tags: ["PC"],
-    photos: frames(6, 2),
+    photos: [fronts.curryOptic, fronts.curry],
     ageDays: 7,
   },
   {
@@ -442,7 +420,7 @@ const rows: TraderRow[] = [
     title: "兩本冊",
     body: "足球同籃球我都收，呢張未捨得放。狀態同相一樣，角位乾淨。分享吓。 #PC",
     tags: ["PC"],
-    photos: frames(10, 4),
+    photos: [fronts.curry, fronts.messi, fronts.salah, fronts.curryOptic],
     ageDays: 14,
   },
   {
@@ -451,7 +429,7 @@ const rows: TraderRow[] = [
     title: "SEC 路飛",
     body: "SEC 路飛收咗即入套，卡面無花，四角尖。燈光下同相片一樣。而家放賣，將軍澳可交收。 #賣 #OP09",
     tags: ["賣", "OP09"],
-    photos: frames(8, 4),
+    photos: [fronts.luffy, fronts.luffyLeader, fronts.zoro, fronts.nami],
     ageDays: 1,
     priceCents: 210000,
     categoryId: "cat_onepiece",
@@ -468,7 +446,7 @@ const rows: TraderRow[] = [
     title: "Riftbound 留套",
     body: "Riftbound 留喺牌組旁邊，自己先玩。卡面乾淨，四角尖。暫時唔放。 #PC #Riftbound",
     tags: ["PC", "Riftbound"],
-    photos: frames(0, 2),
+    photos: [fronts.annie, fronts.buccaneer],
     ageDays: 6,
   },
   {
@@ -477,7 +455,7 @@ const rows: TraderRow[] = [
     title: "求同系列 SEC",
     body: "想補一張同系列 SEC，有放的話可以傾。其餘自己留喺冊入面。收藏為主。 #PC #ISO",
     tags: ["PC", "ISO"],
-    photos: frames(12, 3),
+    photos: [fronts.luffy, fronts.zoro, fronts.luffyLeader],
     ageDays: 11,
   },
 ];
