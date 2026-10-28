@@ -73,7 +73,7 @@ export type PostBuy =
   | { kind: "contact"; listingId: string };
 
 /**
- * A priced listing opens a seller thread with one 傾交收 check. Auction-only sales do the same.
+ * A priced listing opens a seller thread with one 傾交收 chat mark. Auction-only sales do the same.
  * A showcase post (#PC, no live ask) buys nothing.
  */
 export function postBuy(listing: (AskListing & { id: string }) | null | undefined): PostBuy | null {

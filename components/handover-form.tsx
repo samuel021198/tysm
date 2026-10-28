@@ -20,9 +20,8 @@ export function HandoverForm({
     <form id={row ? undefined : "handover-form"} action={startHandover} className={row ? "grid justify-items-end gap-1.5" : "grid gap-2"}>
       <input type="hidden" name="listingId" value={listingId} />
       {postId ? <input type="hidden" name="postId" value={postId} /> : null}
-      <button className={`btn btn-primary shrink-0 gap-1.5 ${row ? "px-3" : "w-full"}`} aria-label={label}>
-        <Icon name="check" className="h-4 w-4" strokeWidth={2.5} />
-        {label}
+      <button className="btn btn-primary shrink-0" aria-label={label} title={label}>
+        <Icon name="messages" className="h-4 w-4" strokeWidth={2.5} />
       </button>
       <label className={`flex items-start gap-2 text-left text-[11px] leading-4 text-muted ${row ? "max-w-xs" : ""}`}>
         <input className="mt-0.5" type="checkbox" name="ack" value="1" required />
