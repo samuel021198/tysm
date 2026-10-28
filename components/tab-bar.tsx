@@ -28,15 +28,10 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       on: pathname === "/find" || pathname.startsWith("/find/"),
     },
     {
-      href: "/market",
-      label: tx(locale, "賣場", "Market"),
-      icon: "bag" as const,
-      on:
-        pathname === "/market" ||
-        pathname.startsWith("/market/") ||
-        pathname.startsWith("/listing/") ||
-        pathname.startsWith("/search") ||
-        pathname.startsWith("/shop"),
+      href: "/rank",
+      label: tx(locale, "排行", "Rank"),
+      icon: "rank" as const,
+      on: pathname === "/rank" || pathname.startsWith("/rank/"),
     },
     {
       href: meHref,
@@ -69,7 +64,7 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "news" | "search" | "bag" | "me";
+  icon: "home" | "news" | "search" | "rank" | "me";
   on: boolean;
   accent?: boolean;
 }) {

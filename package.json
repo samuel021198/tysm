@@ -10,7 +10,7 @@
     "build": "prisma migrate deploy && prisma generate && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "tsx lib/rules.test.ts && tsx lib/search.test.ts && tsx lib/tags.test.ts && tsx lib/field-contrast.test.ts && tsx lib/format.test.ts && tsx lib/market.test.ts && tsx lib/sell-wizard.test.ts && tsx lib/posts.test.ts && tsx lib/stories.test.ts && tsx prisma/demo-catalog.test.ts && tsx lib/dex.test.ts && tsx lib/create-modes.test.ts && tsx lib/catalog-suggest.test.ts && tsx lib/game-catalog.test.ts && tsx lib/snkrdunk.test.ts && tsx lib/dex-browse.test.ts && tsx lib/tabs.test.ts && tsx lib/news.test.ts",
+    "test": "tsx lib/rules.test.ts && tsx lib/search.test.ts && tsx lib/tags.test.ts && tsx lib/field-contrast.test.ts && tsx lib/format.test.ts && tsx lib/market.test.ts && tsx lib/sell-wizard.test.ts && tsx lib/posts.test.ts && tsx lib/stories.test.ts && tsx prisma/demo-catalog.test.ts && tsx lib/dex.test.ts && tsx lib/create-modes.test.ts && tsx lib/catalog-suggest.test.ts && tsx lib/game-catalog.test.ts && tsx lib/snkrdunk.test.ts && tsx lib/dex-browse.test.ts && tsx lib/tabs.test.ts && tsx lib/news.test.ts && tsx lib/rank.test.ts",
     "dex:ingest": "tsx scripts/ingest-dex.ts",
     "smoke": "tsx scripts/smoke.ts",
     "db:migrate": "prisma migrate dev",
