@@ -1,14 +1,24 @@
 import { existsSync, readFileSync } from "fs";
-import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNews, hkMidnight, newsBrandLogo, newsSourceLine } from "./news";
+import { NEWS_BRAND_LOGOS, NEWS_SAMPLES, compareNewsByCreatedAt, newsBrandLogo, newsSourceLine, newsUpdatedAgo } from "./news";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-const now = new Date("2026-10-27T12:00:00+08:00");
-assert(newsSourceLine("Topps", hkMidnight("2026-10-27"), now, "zh-HK") === "Topps · 今日", "today reads Topps · 今日");
-assert(newsSourceLine("Topps", hkMidnight("2026-10-28"), now, "zh-HK") === "Topps · 10/28", "the next day stays a calendar date");
-assert(newsSourceLine("Panini", null, now, "zh-HK") === "Panini · 即將", "an undated row says soon");
+const now = new Date("2026-10-27T15:00:00+08:00");
+const H = 60 * 60 * 1000;
+const ago = (ms: number) => new Date(now.getTime() - ms);
+assert(newsUpdatedAgo(ago(30_000), now, "zh-HK") === "剛剛", "just now");
+assert(newsUpdatedAgo(ago(H - 1), now, "zh-HK") === "剛剛", "under an hour stays just now");
+assert(newsUpdatedAgo(ago(H), now, "zh-HK") === "1 小時前", "one hour");
+assert(newsUpdatedAgo(ago(3 * H), now, "zh-HK") === "3 小時前", "hours ago");
+assert(newsUpdatedAgo(ago(23 * H), now, "zh-HK") === "23 小時前", "within a day stays hours, even across midnight");
+assert(newsUpdatedAgo(new Date("2026-10-26T10:00:00+08:00"), now, "zh-HK") === "昨日", "the previous Hong Kong date is yesterday");
+assert(newsUpdatedAgo(new Date("2026-10-25T23:30:00+08:00"), now, "zh-HK") === "10/25", "older than yesterday is M/D");
+assert(newsUpdatedAgo(new Date("2026-10-20T10:00:00+08:00"), now, "zh-HK") === "10/20", "an older calendar day is M/D");
+assert(newsSourceLine("Topps", ago(3 * H), now, "zh-HK") === "Topps · 3 小時前", "the source line uses updatedAt wording");
+assert(newsUpdatedAgo(ago(3 * H), now, "en") === "3 hours ago", "english hours");
+assert(newsUpdatedAgo(new Date("2026-10-26T10:00:00+08:00"), now, "en") === "Yesterday", "english yesterday");
 
 assert(NEWS_SAMPLES.length >= 8 && NEWS_SAMPLES.length <= 12, "seed stays a short list");
 assert(new Set(NEWS_SAMPLES.map((row) => row.title)).size === NEWS_SAMPLES.length, "one news card per product");
@@ -29,10 +39,13 @@ assert(
   NEWS_SAMPLES.every((row) => row.coverUrl == null && newsBrandLogo(row.source)),
   "seeded rows keep cover empty so the brand logo is the thumb",
 );
-const sorted = [...NEWS_SAMPLES].sort(compareNews);
-assert(sorted.slice(0, 4).every((row) => row.hot) && sorted.slice(4).every((row) => !row.hot), "drops today sort ahead of the calendar");
-assert(sorted.at(-1)?.slug === "panini-prizm-wnba", "coming soon sits last");
-assert(sorted.filter((row) => !row.hot)[0]?.slug === "pokemon-30th-battle-deck", "the next calendar row is 10/30");
+const sorted = [
+  { id: "hot-old", createdAt: new Date("2026-10-01T00:00:00Z"), hot: true, eventAt: new Date("2026-01-01T00:00:00Z") },
+  { id: "plain-mid", createdAt: new Date("2026-10-20T00:00:00Z"), hot: false, eventAt: null },
+  { id: "hot-same", createdAt: new Date("2026-10-20T00:00:00Z"), hot: true, eventAt: new Date("2026-12-01T00:00:00Z") },
+  { id: "newest", createdAt: new Date("2026-10-27T08:00:00Z"), hot: false, eventAt: new Date("2026-11-01T00:00:00Z") },
+].sort(compareNewsByCreatedAt);
+assert(sorted.map((row) => row.id).join(",") === "newest,plain-mid,hot-same,hot-old", "newest createdAt first; hot and eventAt do not reorder");
 
 const sql = readFileSync(new URL("../prisma/migrations/20261027160000_news_items/migration.sql", import.meta.url), "utf8");
 for (const row of NEWS_SAMPLES) {
@@ -57,6 +70,9 @@ assert(detail.includes("coverUrl={row.coverUrl}"), "detail still prefers the pro
 assert(cover.includes("bg-white") && cover.includes("object-contain"), "logo thumbs are white and contained");
 assert(!cover.includes("slice(0, 1)") && !cover.includes("backgroundColor") && !cover.includes("color"), "news covers are not letter blocks");
 assert(!list.includes("color=") && !detail.includes("color="), "list and detail do not pass a brand color");
+assert(list.includes('orderBy: { createdAt: "desc" }') && !list.includes("compareNews") && !list.includes(".sort("), "the list query is newest ingest first");
+assert(list.includes("row.updatedAt") && detail.includes("row.updatedAt"), "list and detail format updatedAt");
+assert(!list.includes("row.createdAt") && !detail.includes("row.createdAt") && !list.includes("eventAt") && !detail.includes("eventAt"), "pages do not show createdAt or eventAt");
 assert(detail.includes("睇原文") && detail.includes("newsSourceLine"), "detail is cover, title, source, then the source link");
 assert(tab.includes('href: "/news"') && tab.includes("新聞") && tab.includes('icon: "news"') && !tab.includes('href: "/dex"'), "bottom nav replaces the dex slot");
 assert(shell.includes('href="/news"') && !shell.includes('href="/dex"'), "desktop nav does not link the dex");
