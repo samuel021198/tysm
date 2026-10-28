@@ -21,7 +21,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <article className="mx-auto grid max-w-lg gap-3">
-      <NewsCover source={row.source} color={row.brandColor} coverUrl={row.coverUrl} className="aspect-[4/5] max-h-80 w-full rounded-2xl text-3xl" />
+      <NewsCover source={row.source} coverUrl={row.coverUrl} className="aspect-[4/5] max-h-80 w-full rounded-2xl text-3xl" />
       <h1 className="text-xl font-semibold leading-snug">{row.title}</h1>
       <p className="text-sm text-muted">{newsSourceLine(row.source, row.eventAt, new Date(), locale)}</p>
       {row.body ? <p className="whitespace-pre-wrap text-sm leading-6">{row.body}</p> : null}
