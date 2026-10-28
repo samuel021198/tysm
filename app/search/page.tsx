@@ -210,8 +210,8 @@ export default async function SearchPage({
   return (
     <div>
       <Flash locale={prefs.locale} ok={one(sp.ok)} err={one(sp.err)} />
-      <Link href="/market" className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
-        {tx(prefs.locale, "返回賣場", "Back to market")}
+      <Link href="/find" className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
+        {tx(prefs.locale, "返回搜尋", "Back to search")}
       </Link>
       <h1 className="page-title">{tx(prefs.locale, "搜尋", "Search")}</h1>
       <SearchBox

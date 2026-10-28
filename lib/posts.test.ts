@@ -320,10 +320,7 @@ assert(!actionRow.includes("{price}") && !actionRow.includes("formatHkd") && !ac
 assert(postCard.includes("ml-auto") && !postCard.includes("mt-1 flex h-9 items-center"), "bookmark stays on the action row; price is not the old strip");
 assert(!postCard.includes(">讚<") && !postCard.includes(">留言<") && !postCard.includes(">分享<"), "action icons do not grow text labels");
 const market = readFileSync(new URL("../app/market/page.tsx", import.meta.url), "utf8");
-assert(!market.includes("篩選可以睇上架") && market.includes('href="/search"'), "the market blurb is gone; filter stays one link");
-assert(market.includes("chips") && market.includes("!flex-nowrap"), "categories are one scrolling chip row");
-assert(!market.includes("parent?.name") && !market.includes("min-h-14"), "chips drop the parent subtitle and the large tiles");
-assert(market.includes("熱門／最新"), "the featured listing grid stays");
+assert(market.includes('permanentRedirect("/find")') && !market.includes("熱門／最新"), "the market route opens search");
 const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
 assert(!shop.includes("返回主頁") && !shop.includes('href="/faq"') && !shop.includes('href="/terms"'), "profile content does not repeat home or the site footer");
 assert(!postCard.includes("justify-center"), "actions sit with the content");

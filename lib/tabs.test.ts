@@ -10,15 +10,14 @@ function assert(cond: unknown, msg: string): asserts cond {
 assert(adjacentTab("/", 1, true) === "/news", "home swipe left opens news");
 assert(adjacentTab("/news", -1, true) === "/", "news swipe right opens home");
 assert(adjacentTab("/news", 1, true) === "/find", "news swipe left opens search");
-assert(adjacentTab("/find", 1, true) === "/market", "search swipe left opens the market");
-assert(adjacentTab("/market", -1, true) === "/find", "market swipe right opens search");
-assert(adjacentTab("/market", 1, true) === "/me", "market swipe left opens profile");
-assert(adjacentTab("/market", 1, false) === "/login", "logged-out profile tab is login");
-assert(adjacentTab("/me", -1, true) === "/market", "profile swipe right opens the market");
-assert(adjacentTab("/login", -1, false) === "/market", "login swipe right opens the market");
+assert(adjacentTab("/find", 1, true) === "/me", "search swipe left opens profile");
+assert(adjacentTab("/find", 1, false) === "/login", "logged-out profile tab is login");
+assert(adjacentTab("/me", -1, true) === "/find", "profile swipe right opens search");
+assert(adjacentTab("/login", -1, false) === "/find", "login swipe right opens search");
 assert(adjacentTab("/", -1, true) === null && adjacentTab("/me", 1, true) === null, "the pager stops at the ends");
 assert(tabPagerIndex("/listing/abc") === null && adjacentTab("/dex/card", 1, true) === null, "nested pages are not the pager");
-assert(tabPagerIndex("/find") === 2 && tabPagerIndex("/me") === 4, "roots map onto the five tabs");
+assert(tabPagerIndex("/market") === null && adjacentTab("/market", 1, true) === null, "market is not a tab");
+assert(tabPagerIndex("/find") === 2 && tabPagerIndex("/me") === 3, "roots map onto the four tabs");
 
 const page = { dy: 4, axis: "x" as const, viewportWidth: 390, owner: null };
 assert(tabSwipeDirection({ ...page, dx: -SWIPE_X, startX: 180 }) === 1, "a horizontal swipe left moves forward");
