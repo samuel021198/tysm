@@ -25,8 +25,12 @@ assert(src.includes("autoFocus={focus}"), "compose=1 still focuses the field");
 const page = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta.url), "utf8");
 const deal = readFileSync(new URL("../components/deal-panel.tsx", import.meta.url), "utf8");
 const proof = readFileSync(new URL("../components/proof-form.tsx", import.meta.url), "utf8");
-assert(page.includes("<DealPanel") && page.includes("<MessageComposer"), "the thread keeps the deal card and the composer");
+const log = readFileSync(new URL("../components/thread-log.tsx", import.meta.url), "utf8");
+assert(page.includes("<DealPanel") && page.includes("<MessageComposer") && page.includes("<ThreadLog"), "the thread keeps the deal card, the log, and the composer");
+assert(page.includes("DEAL_BANNER") && page.includes("pin={false}"), "a thread with no order still shows the banner inside the same log");
+assert(log.includes("scrollPaddingTop") && log.includes("ResizeObserver"), "scroll-padding tracks the sticky bar height");
 assert(deal.includes("ProofForm") && deal.includes("取消交收") && deal.includes("交收詳情"), "handover links stay on the deal card");
+assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
 assert(proof.includes("上傳付款證明"), "payment proof stays a deal action");
 
 console.log("message-composer.test.ts ok");

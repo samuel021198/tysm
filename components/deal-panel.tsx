@@ -46,12 +46,15 @@ export function DealPanel({
   order,
   reviewed,
   payment,
+  pin = true,
 }: {
   locale: Locale;
   viewerId: string;
   next: string;
   reviewed: boolean;
   payment: PaymentInfo | null;
+  /** Window-sticky on the order page. The thread pins the measured bar instead. */
+  pin?: boolean;
   order: {
     id: string;
     status: string;
@@ -75,7 +78,7 @@ export function DealPanel({
   const showPayment = !blocked && payment && showPaymentDetails(phase, meta.confirmed === true, proofs) ? payment : null;
 
   return (
-    <section className="sticky top-[calc(3rem+env(safe-area-inset-top))] z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur md:top-16">
+    <section className={`${pin ? "sticky top-[calc(3rem+env(safe-area-inset-top))] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`}>
       <p className="text-xs font-semibold">{DEAL_BANNER}</p>
       <div className="flex flex-wrap items-center gap-2">
         <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{phaseLabel(locale, phase)}</span>

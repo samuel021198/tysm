@@ -12,6 +12,7 @@ import { DealPanel } from "@/components/deal-panel";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
 import { MessageComposer } from "@/components/message-composer";
+import { ThreadLog } from "@/components/thread-log";
 
 export default async function ThreadPage({
   params,
@@ -57,21 +58,26 @@ export default async function ThreadPage({
     <div className="thread-fit">
       <ReadPing id={id} />
       <Flash locale={prefs.locale} err={sp.err} />
-      {order ? (
-        <DealPanel
-          locale={prefs.locale}
-          viewerId={viewer.id}
-          next={`/messages/${id}`}
-          reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
-          payment={sellerPayment(thread.seller)}
-          order={order}
-        />
-      ) : (
-        <p className="sticky top-[calc(3rem+env(safe-area-inset-top))] z-30 rounded-2xl bg-soft px-3 py-2 text-xs font-semibold md:top-16">{DEAL_BANNER}</p>
-      )}
+      <ThreadLog
+        sticky={
+          order ? (
+            <DealPanel
+              locale={prefs.locale}
+              viewerId={viewer.id}
+              next={`/messages/${id}`}
+              reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
+              payment={sellerPayment(thread.seller)}
+              order={order}
+              pin={false}
+            />
+          ) : (
+            <p className="rounded-2xl bg-soft px-3 py-2 text-xs font-semibold">{DEAL_BANNER}</p>
+          )
+        }
+      >
       <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
       {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
-      <ol className="grid flex-1 content-start gap-2.5">
+      <ol className="grid content-start gap-2.5">
         {thread.messages.map((message) => {
           const mine = message.senderId === viewer.id;
           const linked = shareTarget(message.body);
@@ -98,6 +104,7 @@ export default async function ThreadPage({
           );
         })}
       </ol>
+      </ThreadLog>
       <MessageComposer locale={prefs.locale} threadId={id} focus={sp.compose === "1"} />
     </div>
   );
