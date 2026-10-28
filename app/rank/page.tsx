@@ -45,6 +45,7 @@ function Segment({ href, on, label }: { href: string; on: boolean; label: string
   return (
     <Link
       href={href}
+      prefetch={true}
       aria-current={on ? "page" : undefined}
       className={`relative flex h-11 items-center justify-center whitespace-nowrap text-sm font-semibold ${on ? "text-ink" : "text-muted"}`}
     >

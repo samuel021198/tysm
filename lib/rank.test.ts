@@ -169,5 +169,11 @@ assert(shell.includes('href="/rank"'), "desktop nav includes rank");
 const pager = readFileSync(new URL("../components/rank-pager.tsx", import.meta.url), "utf8");
 assert(page.includes("<RankPager") && pager.includes("rankTabStep") && pager.includes("data-rank-pager") && pager.includes("adjacentTab"), "rank content swipes segments, then the neighbouring root");
 assert(pager.includes("tabAxis") && pager.includes("swipeBlocked"), "rank swipe waits for a horizontal axis and an open sheet");
+assert(pager.includes("stopPropagation") && pager.includes("EDGE_GUARD") && pager.includes("setPointerCapture"), "rank owns the drag and leaves the left edge for back");
+assert(
+  pager.includes("style.transform") && pager.includes("translate3d") && !pager.includes("useState") && pager.includes("router.prefetch"),
+  "rank drag paints on the node and prefetches the next segment",
+);
+assert(page.includes("prefetch={true}"), "segment links prefetch the full route instead of the loading shell");
 
 console.log("rank.test.ts ok");
