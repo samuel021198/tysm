@@ -69,7 +69,7 @@ npm run dev
 | `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料或同步圖鑑時必須 | 保護 `POST /api/internal/reseed` 同 `POST /api/internal/ingest-dex`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑或發布卡聞時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/ingest-dex` 同 `POST /api/internal/news`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 | `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。五個 `R2_*` 要齊先會用。未齊時圖鑑留來源網址，上傳相片留 data URL，圖檔唔寫入 Postgres。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
@@ -252,6 +252,19 @@ curl -sS -X POST "https://tysm-livid.vercel.app/api/internal/reseed" \
 ```
 
 本地如果資料庫已經指住 `.env` 的 `DATABASE_URL`，用 `npm run db:seed` 就得，不必打呢條路由。
+
+## 發布卡聞
+
+`POST /api/internal/news` 按 `slug` upsert 一則卡聞。寫入之後 `/news` 同 `/news/<slug>` 會即時讀到，唔使 reseed，亦唔會清用戶。這版沒有草稿：成功即上架。審核／草稿留待之後。而家同 reseed 共用 `BOOTSTRAP_SECRET`；之後可以再拆一條 `NEWS_INGEST_SECRET`。
+
+請求要帶 `Authorization: Bearer <BOOTSTRAP_SECRET>` 同 JSON。必填 `slug`、`title`、`source`。可選 `teaser`、`body`、`coverUrl`、`linkUrl`、`tag`（`RELEASE`、`RESTOCK` 或 `DATE`）、`eventAt`（ISO 字串或 `null`）、`hot`、`brandColor`、`id`。略過 `id` 時新行用 `news_<slug>`；更新已有 slug 時略過 `id` 就得，帶了另一個 id 會回 `400`。`tag` 唔係枚舉，或者 body 唔合法，回 `400`。密鑰不對回 `401`。未設定 `BOOTSTRAP_SECRET` 回 `503`。
+
+```bash
+curl -sS -X POST "https://tysm-livid.vercel.app/api/internal/news" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"slug":"op-eb05-heroines","title":"EXTRA BOOSTER Heroines Edition vol.2（EB-05）","source":"One Piece","teaser":"EB-05","tag":"RELEASE","eventAt":"2026-10-31T00:00:00+08:00","hot":false}'
+```
 
 ## 之後要接上的東西
 
