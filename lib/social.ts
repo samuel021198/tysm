@@ -62,6 +62,29 @@ export async function followedSellerIds(userId: string | null): Promise<Set<stri
   return new Set(rows.map((row) => row.sellerId));
 }
 
+export type FollowRailPerson = { id: string; nickname: string; avatarUrl: string | null };
+
+/** Home discovery strip: people and shops you follow, newest follow first. Not stories.
+ * ponytail: 24 rows in memory. Upgrade path: keyset on Follow.createdAt.
+ */
+export async function loadFollowRail(viewerId: string | null, hidden: string[]): Promise<FollowRailPerson[]> {
+  if (!viewerId) return [];
+  const rows = await prisma.follow.findMany({
+    where: {
+      followerId: viewerId,
+      ...(hidden.length ? { sellerId: { notIn: hidden } } : {}),
+    },
+    orderBy: { createdAt: "desc" },
+    take: 24,
+    select: { seller: { select: { id: true, nickname: true, avatarUrl: true, storeName: true } } },
+  });
+  return rows.map((row) => ({
+    id: row.seller.id,
+    nickname: row.seller.storeName?.trim() || row.seller.nickname,
+    avatarUrl: row.seller.avatarUrl,
+  }));
+}
+
 export async function hiddenUserIds(userId: string | null): Promise<string[]> {
   if (!userId) return [];
   const rows = await prisma.block.findMany({
