@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
+import { RANK_WINDOW_MS } from "./rank";
 import { NEWS_SAMPLES } from "./news";
 import { courierFor, mockTracking } from "./shipping";
 import {
@@ -10,16 +11,20 @@ import {
   demoFollows,
   demoMessages,
   demoNotifications,
+  demoRankLikes,
+  demoRankOrders,
   demoSearches,
   demoShowcaseCollections,
   demoShowcaseListings,
   demoShowcasePosts,
   demoShowcaseReviews,
+  demoStores,
   demoThreads,
   demoUsers,
 } from "../prisma/demo-catalog";
 
 const daysAgo = (value: number) => new Date(Date.now() - value * 86400000);
+const hoursAgo = (value: number) => new Date(Date.now() - value * 60 * 60 * 1000);
 
 /** Clears accounts and their content. Catalog sets, catalog cards, categories, and site settings stay. */
 export async function wipeUserContent() {
@@ -270,6 +275,80 @@ async function seedShowcase() {
   }
 }
 
+async function seedRank() {
+  const listings = new Map(demoShowcaseListings.map((item) => [item.id, item]));
+  for (const row of demoRankOrders) {
+    const listing = listings.get(row.listingId);
+    if (!listing || listing.ownerId !== row.sellerId || row.buyerId === row.sellerId) throw new Error(row.id);
+    const paidAt = hoursAgo(row.hoursAgo);
+    const recent = row.hoursAgo * 60 * 60 * 1000 < RANK_WINDOW_MS;
+    const subtotal = listing.priceCents * row.quantity;
+    const commissionAmount = Math.round((subtotal * 800) / 10000);
+    const order = {
+      buyerId: row.buyerId,
+      sellerId: row.sellerId,
+      status: recent ? ("AWAITING_SHIP" as const) : ("COMPLETED" as const),
+      source: "BUY_NOW" as const,
+      subtotal,
+      shippingTotal: 0,
+      total: subtotal,
+      commissionBps: 800,
+      commissionAmount,
+      sellerProceeds: subtotal - commissionAmount,
+      paymentOutcome: "SUCCESS" as const,
+      shipDays: 3,
+      paidAt,
+      shippedAt: recent ? null : new Date(paidAt.getTime() + 12 * 60 * 60 * 1000),
+      completedAt: recent ? null : new Date(paidAt.getTime() + 24 * 60 * 60 * 1000),
+      escrowReleasedAt: recent ? null : new Date(paidAt.getTime() + 24 * 60 * 60 * 1000),
+      shipBy: new Date(paidAt.getTime() + 3 * 86400000),
+      autoReleaseAt: null,
+      shippingMethod: "SF_COD",
+      courierName: courierFor("SF_COD"),
+      trackingNumber: recent ? null : mockTracking(row.id, "SF_COD"),
+      paymentBrand: "FPS",
+      payBy: null,
+      addressSnapshot: { recipient: "示範買家", phone: "+85290000000", line1: "彌敦道 1 號", district: "油尖旺" },
+      createdAt: paidAt,
+    };
+    await prisma.order.upsert({
+      where: { id: row.id },
+      update: order,
+      create: { id: row.id, ...order },
+    });
+    const item = {
+      listingId: listing.id,
+      title: listing.title,
+      unitPrice: listing.priceCents,
+      quantity: row.quantity,
+      shippingFee: 0,
+      imageUrl: listing.photos[0] ?? null,
+      conditionLabel: "Raw A",
+      cardName: listing.cardName ?? null,
+      personName: listing.personName ?? listing.title,
+    };
+    const itemId = `${row.id}_item`;
+    await prisma.orderItem.deleteMany({ where: { orderId: row.id, NOT: { id: itemId } } });
+    await prisma.orderItem.upsert({
+      where: { id: itemId },
+      update: item,
+      create: { id: itemId, orderId: row.id, ...item },
+    });
+  }
+
+  const posts = new Map(demoShowcasePosts.map((post) => [post.id, post]));
+  for (const like of demoRankLikes) {
+    const post = posts.get(like.postId);
+    if (!post || post.ownerId === like.userId) throw new Error(like.id);
+    const createdAt = hoursAgo(like.hoursAgo);
+    await prisma.postLike.upsert({
+      where: { postId_userId: { postId: like.postId, userId: like.userId } },
+      update: { createdAt },
+      create: { id: like.id, postId: like.postId, userId: like.userId, createdAt },
+    });
+  }
+}
+
 async function attachShowcaseDex() {
   for (const item of demoShowcaseCollections) {
     await prisma.collectionItem.update({
@@ -401,9 +480,11 @@ export async function seedDemo() {
     });
   }
 
+  const stores = new Map(demoStores.map((row) => [row.userId, row]));
   for (const user of demoUsers) {
     const email = "email" in user ? user.email : adminEmail;
     const phone = "phone" in user ? user.phone : adminPhone;
+    const store = stores.get(user.id);
     const data = {
       email,
       phone,
@@ -416,10 +497,10 @@ export async function seedDemo() {
       payoutMethod: user.phoneVerified ? "FPS" : null,
       payoutHolder: user.phoneVerified ? user.nickname : null,
       payoutAccount: user.phoneVerified ? phone : null,
-      storeName: null,
-      storeDistrict: null,
-      storeLine1: null,
-      storeHours: null,
+      storeName: store?.storeName ?? null,
+      storeDistrict: store?.storeDistrict ?? null,
+      storeLine1: store?.storeLine1 ?? null,
+      storeHours: store?.storeHours ?? null,
       consecutiveUnpaid: 0,
       bidBanned: false,
       avatarUrl: "avatarUrl" in user ? user.avatarUrl : null,
@@ -449,6 +530,7 @@ export async function seedDemo() {
   }
 
   await seedShowcase();
+  await seedRank();
   await ensureDemoCatalog();
   await attachShowcaseDex();
   await seedSocial();
@@ -471,6 +553,9 @@ export async function seedDemo() {
     notifications: demoNotifications.length,
     favorites: demoFavorites.length,
     addresses: demoAddresses.length,
+    shops: demoStores.length,
+    rankOrders: demoRankOrders.length,
+    rankLikes: demoRankLikes.length,
     stories: demoUsers.filter((user) => user.role === "USER").length,
     catalogCardsBefore,
     catalogCardsAfter,

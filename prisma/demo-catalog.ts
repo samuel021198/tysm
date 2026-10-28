@@ -831,7 +831,21 @@ export const demoUsers = [
   ...traderUsers,
 ];
 
-export const demoStores: { userId: string; storeName: string; storeDistrict: string; storeLine1: string; storeHours: string }[] = [];
+export const demoStores: { userId: string; storeName: string; storeDistrict: string; storeLine1: string; storeHours: string }[] = [
+  { userId: "user_mars", storeName: "旺角實拍卡", storeDistrict: "油尖旺", storeLine1: "西洋菜南街 1 號", storeHours: "週末 14:00–18:00" },
+  { userId: "user_tyu", storeName: "灣仔閃卡舖", storeDistrict: "灣仔", storeLine1: "軒尼詩道 20 號", storeHours: "平日 19:00–22:00" },
+  { userId: "user_muel", storeName: "油麻地運動卡", storeDistrict: "油尖旺", storeLine1: "廣東道 8 號", storeHours: "週末 15:00–20:00" },
+  { userId: "user_kai", storeName: "油麻地噴火龍", storeDistrict: "油尖旺", storeLine1: "碧街 18 號地下", storeHours: "週末 14:00–19:00" },
+  { userId: "user_hoi", storeName: "觀塘海賊王", storeDistrict: "觀塘", storeLine1: "開源道 68 號", storeHours: "平日 18:00–21:00" },
+  { userId: "user_suki", storeName: "沙田月伊布", storeDistrict: "沙田", storeLine1: "沙田正街 8 號", storeHours: "週日 13:00–18:00" },
+  { userId: "user_lok", storeName: "科學園卡鋪", storeDistrict: "沙田", storeLine1: "科技大道西 5 號", storeHours: "平日 12:00–20:00" },
+  { userId: "user_yan", storeName: "銅鑼灣球星", storeDistrict: "灣仔", storeLine1: "軒尼詩道 88 號", storeHours: "週末 15:00–20:00" },
+  { userId: "user_jun", storeName: "深水埗舊卡", storeDistrict: "深水埗", storeLine1: "福華街 42 號", storeHours: "每日 13:00–19:00" },
+  { userId: "user_mika", storeName: "尖沙咀卡冊", storeDistrict: "油尖旺", storeLine1: "加拿分道 20 號", storeHours: "週末 14:00–19:00" },
+  { userId: "user_bao", storeName: "荃灣實價卡", storeDistrict: "荃灣", storeLine1: "川龍街 9 號", storeHours: "平日 16:00–21:00" },
+  { userId: "user_rafa", storeName: "紅磡球星卡", storeDistrict: "九龍城", storeLine1: "黃埔新邨 3 號", storeHours: "週末 13:00–18:00" },
+  { userId: "user_ace", storeName: "將軍澳 SEC", storeDistrict: "西貢", storeLine1: "唐俊街 11 號", storeHours: "週六 14:00–19:00" },
+];
 
 export const demoAddresses = [
   { id: "addr_mars", userId: "user_mars", recipient: "Mars", phone: "+85291000001", line1: "彌敦道 100 號", district: "油尖旺" },
@@ -1067,6 +1081,111 @@ export const demoShowcaseReviews: ShowcaseReview[] = [
   { id: "muel_review_mars", orderId: "muel_order_mars", itemId: "muel_oi_mars", listingId: "muel_list_01", authorId: MARS, stars: 5, comment: "疊卡實拍，描述老實。", reply: "多謝支持。", ageDays: 12 },
   { id: "muel_review_tyu", orderId: "muel_order_tyu", itemId: "muel_oi_tyu", listingId: "muel_list_02", authorId: TYU, stars: 4, comment: "卡盒同特寫都對得上，推薦。", reply: null, ageDays: 14 },
 ];
+
+const RANK_USERS = [
+  "user_mars",
+  "user_tyu",
+  "user_muel",
+  "user_kai",
+  "user_hoi",
+  "user_suki",
+  "user_lok",
+  "user_yan",
+  "user_jun",
+  "user_mika",
+  "user_bao",
+  "user_rafa",
+  "user_ace",
+] as const;
+
+/**
+ * Paid volume for 人氣商戶. `current` / `prior` are units in the rolling 3-day window and the 3 days before it.
+ * ponytail: one order per shop per window, quantity is the volume. Upgrade path: split into qty-1 orders if order history should look like foot traffic.
+ */
+const rankShops: { sellerId: string; listingId: string; current: number; prior: number }[] = [
+  { sellerId: "user_kai", listingId: "kai_01_list", current: 12, prior: 4 },
+  { sellerId: "user_hoi", listingId: "hoi_01_list", current: 9, prior: 6 },
+  { sellerId: "user_suki", listingId: "suki_01_list", current: 7, prior: 7 },
+  { sellerId: "user_mars", listingId: "mars_list_01", current: 6, prior: 8 },
+  { sellerId: "user_yan", listingId: "yan_01_list", current: 5, prior: 2 },
+  { sellerId: "user_lok", listingId: "lok_01_list", current: 4, prior: 1 },
+  { sellerId: "user_bao", listingId: "bao_01_list", current: 3, prior: 5 },
+  { sellerId: "user_rafa", listingId: "rafa_01_list", current: 2, prior: 0 },
+];
+
+function rankBuyer(sellerId: string, offset: number): string {
+  const others = RANK_USERS.filter((id) => id !== sellerId);
+  return others[offset % others.length];
+}
+
+export type DemoRankOrder = {
+  id: string;
+  sellerId: string;
+  buyerId: string;
+  listingId: string;
+  quantity: number;
+  hoursAgo: number;
+};
+
+export const demoRankOrders: DemoRankOrder[] = rankShops.flatMap((shop, index) => {
+  const rows: DemoRankOrder[] = [
+    {
+      id: `rank_order_${shop.sellerId}_now`,
+      sellerId: shop.sellerId,
+      buyerId: rankBuyer(shop.sellerId, 0),
+      listingId: shop.listingId,
+      quantity: shop.current,
+      hoursAgo: 6 + index * 7,
+    },
+  ];
+  if (shop.prior > 0) {
+    rows.push({
+      id: `rank_order_${shop.sellerId}_prev`,
+      sellerId: shop.sellerId,
+      buyerId: rankBuyer(shop.sellerId, 1),
+      listingId: shop.listingId,
+      quantity: shop.prior,
+      hoursAgo: 80 + index * 7,
+    });
+  }
+  return rows;
+});
+
+/** Likes for 人氣收藏家 and 人氣貼文. Posts are older than 6 days so every like lands after the post. No self-likes. */
+const rankPosts: { postId: string; authorId: string; current: number; prior: number }[] = [
+  { postId: "kai_03_post", authorId: "user_kai", current: 9, prior: 3 },
+  { postId: "hoi_03_post", authorId: "user_hoi", current: 8, prior: 3 },
+  { postId: "muel_post_03", authorId: "user_muel", current: 7, prior: 2 },
+  { postId: "suki_03_post", authorId: "user_suki", current: 6, prior: 6 },
+  { postId: "yan_02_post", authorId: "user_yan", current: 5, prior: 2 },
+  { postId: "mika_02_post", authorId: "user_mika", current: 4, prior: 5 },
+  { postId: "lok_02_post", authorId: "user_lok", current: 3, prior: 1 },
+  { postId: "bao_03_post", authorId: "user_bao", current: 2, prior: 0 },
+];
+
+export type DemoRankLike = {
+  id: string;
+  postId: string;
+  userId: string;
+  hoursAgo: number;
+};
+
+export const demoRankLikes: DemoRankLike[] = rankPosts.flatMap((post) => {
+  const likers = RANK_USERS.filter((id) => id !== post.authorId);
+  const current = likers.slice(0, post.current).map((userId, index) => ({
+    id: `like_${post.postId}_${userId}`,
+    postId: post.postId,
+    userId,
+    hoursAgo: 4 + index * 6,
+  }));
+  const prior = likers.slice(post.current, post.current + post.prior).map((userId, index) => ({
+    id: `like_${post.postId}_${userId}`,
+    postId: post.postId,
+    userId,
+    hoursAgo: 78 + index * 8,
+  }));
+  return [...current, ...prior];
+});
 
 export function showcasePostPhotos(post: ShowcasePost): string[] {
   return demoShowcaseCollections.find((item) => item.id === post.collectionId)?.photos ?? [];
