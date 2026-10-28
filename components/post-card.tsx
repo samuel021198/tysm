@@ -45,7 +45,7 @@ export function PostCard({
   const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
   const price =
     post.priceCents == null ? null : (
-      <div className="mt-1 flex items-start justify-between gap-2">
+      <div className="mt-1 flex items-center justify-between gap-2">
         {buy?.kind === "contact" && post.priceHref ? (
           <Link href={post.priceHref} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
         ) : (
@@ -209,10 +209,10 @@ function BuyBar({
 }) {
   return (
     <>
-      <div className="h-36" aria-hidden />
+      <div className="h-20" aria-hidden />
       <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur md:bottom-0">
-        <div className="mx-auto flex max-w-lg items-start gap-3">
-          <p className="price min-w-0 flex-1 truncate pt-2 text-lg leading-none">{price}</p>
+        <div className="mx-auto flex max-w-lg items-center gap-3">
+          <p className="price min-w-0 flex-1 truncate text-lg leading-none">{price}</p>
           <HandoverForm locale={locale} listingId={listingId} postId={postId} layout="row" />
         </div>
       </div>

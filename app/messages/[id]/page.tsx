@@ -8,7 +8,6 @@ import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { shareTarget } from "@/lib/share";
 import { isBlocked } from "@/lib/social";
-import { DealDisclaimer } from "@/components/deal-disclaimer";
 import { DealStream } from "@/components/deal-panel";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
@@ -84,7 +83,6 @@ export default async function ThreadPage({
     <div className="thread-fit">
       <ReadPing id={id} />
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <DealDisclaimer />
       <ThreadScroll>
         <div className="grid gap-2.5">
         <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>

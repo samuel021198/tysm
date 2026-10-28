@@ -94,7 +94,6 @@ function DealView({
           : `${pin ? "sticky top-[calc(3rem+env(safe-area-inset-top))] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`
       }
     >
-      {stream ? null : <p className="text-xs font-semibold">{DEAL_BANNER}</p>}
       <div className={`flex flex-wrap items-center gap-2 ${stream ? "justify-center" : ""}`}>
         <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{phaseLabel(locale, phase)}</span>
         {sold ? <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{tx(locale, "已售出", "Sold")}</span> : null}
@@ -198,6 +197,7 @@ function DealView({
       {next.startsWith("/messages/") ? (
         <Link className={stream ? "text-center text-xs font-semibold text-link" : "text-xs font-semibold text-link"} href={`/orders/${order.id}`}>{tx(locale, "交收詳情", "Handover details")}</Link>
       ) : null}
+      {stream ? null : <p className="text-xs text-muted">{DEAL_BANNER}</p>}
     </section>
   );
 }
