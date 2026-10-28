@@ -21,6 +21,17 @@ assert(src.includes("composerExpanded") && src.includes("setTray(false)"), "the 
 assert(!src.includes("btn btn-primary w-full"), "send is not a full-width block");
 assert(src.includes('name="body"') && src.includes('name="imageUrl"') && src.includes("sendMessage"), "submit still posts body and image");
 assert(src.includes("autoFocus={focus}"), "compose=1 still focuses the field");
+assert(src.includes("pinThreadToEnd") && src.includes('setBody("")') && src.includes('setImageUrl("")'), "a sent draft clears and the log follows the new bubble");
+
+const social = readFileSync(new URL("../actions/social.ts", import.meta.url), "utf8");
+const send = social.slice(social.indexOf("export async function sendMessage"), social.indexOf("export async function shareIntoThread"));
+assert(send.includes("revalidatePath(`/messages/${threadId}`)") && send.includes('revalidatePath("/messages")'), "a sent message refreshes the thread and the inbox");
+assert(!send.includes("redirect(`/messages/${threadId}`)"), "a sent message does not navigate the thread");
+assert(send.includes("?err="), "a rejected send still explains itself");
+
+const trade = readFileSync(new URL("../actions/trade.ts", import.meta.url), "utf8");
+assert(trade.includes('next.startsWith("/messages/")') && trade.includes("revalidatePath(next)"), "deal actions on a thread refresh in place");
+assert(trade.includes("redirect(`${next}?"), "deal actions on an order page still report with a redirect");
 
 const page = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta.url), "utf8");
 const deal = readFileSync(new URL("../components/deal-panel.tsx", import.meta.url), "utf8");
@@ -30,6 +41,7 @@ assert(!existsSync(new URL("../components/thread-log.tsx", import.meta.url)), "t
 const scroll = readFileSync(new URL("../components/thread-scroll.tsx", import.meta.url), "utf8");
 assert(page.includes("<DealStream") && page.includes("<MessageComposer") && page.includes("<ThreadScroll"), "the thread shows an in-flow deal bubble and the composer");
 assert(!scroll.includes("paddingTop") && !scroll.includes("ResizeObserver") && !scroll.includes("sticky"), "the scroller does not reserve a deal-bar inset");
+assert(scroll.includes("onScroll") && scroll.includes("scrollHeight - el.scrollTop") && scroll.includes("pinThreadToEnd"), "a reader at the bottom stays with the newest row; scrolling up is left alone");
 assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
 assert(!page.includes("<DealPanel") && !page.includes("DEAL_BANNER") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card or banner");
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");

@@ -6,6 +6,7 @@ import { composerCanSend, composerExpanded } from "@/lib/message-composer";
 import { tx, type Locale } from "@/lib/i18n";
 import { Icon } from "./icons";
 import { fileToDataUrl } from "./photo-file";
+import { pinThreadToEnd } from "./thread-scroll";
 
 const MAX_H = 144;
 
@@ -17,6 +18,10 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
   const [tray, setTray] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
+  const draft = useRef({ body: "", image: "" });
+  const busy = useRef(false);
+  const [pending, setPending] = useState(false);
+  draft.current = { body, image: imageUrl };
   const expanded = composerExpanded({ focused, tray, body, image: imageUrl });
   const canSend = composerCanSend({ body, image: imageUrl });
 
@@ -41,7 +46,25 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
 
   return (
     <form
-      action={sendMessage}
+      action={async (formData) => {
+        if (busy.current) return;
+        busy.current = true;
+        setPending(true);
+        const sent = { body: draft.current.body, image: draft.current.image };
+        pinThreadToEnd();
+        try {
+          await sendMessage(formData);
+          if (draft.current.body === sent.body) setBody("");
+          if (draft.current.image === sent.image) setImageUrl("");
+          if (draft.current.body === sent.body && draft.current.image === sent.image) {
+            setNote("");
+            setTray(false);
+          }
+        } finally {
+          busy.current = false;
+          setPending(false);
+        }
+      }}
       className={`sticky z-20 bg-card/95 px-1.5 py-1 shadow-card backdrop-blur md:static ${expanded ? "rounded-2xl" : "rounded-full"}`}
       style={{ bottom: "calc(var(--tab-h) + 0.35rem)" }}
       onFocus={() => setFocused(true)}
@@ -100,7 +123,7 @@ export function MessageComposer({ locale, threadId, focus = false }: { locale: L
           <button
             type="submit"
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent text-white disabled:opacity-40"
-            disabled={!canSend}
+            disabled={!canSend || pending}
             aria-label={tx(locale, "送出", "Send")}
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

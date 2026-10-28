@@ -187,46 +187,59 @@ function dealNext(formData: FormData, orderId: string) {
   return `/orders/${orderId}`;
 }
 
+type DealOutcome = { ok: true } | { ok: false; error: string };
+
+/** Thread CTAs stay on the open chat. Order pages still redirect so the flash banner can show. */
+function settleDeal(formData: FormData, orderId: string, result: DealOutcome, okCode: string) {
+  const next = dealNext(formData, orderId);
+  if (result.ok && next.startsWith("/messages/")) {
+    revalidatePath(next);
+    revalidatePath(`/orders/${orderId}`);
+    return;
+  }
+  redirect(`${next}?${result.ok ? `ok=${okCode}` : `err=${result.error}`}`);
+}
+
 export async function confirmAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await confirmReceived(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=done" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "done");
 }
 
 export async function confirmDealAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await confirmDeal(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=reserved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "reserved");
 }
 
 export async function releaseReserveAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await releaseReserve(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=released" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "released");
 }
 
 export async function arrangeDealAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await arrangeMeetup(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "saved");
 }
 
 export async function proofAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await uploadProof(user.id, id, String(formData.get("imageUrl") || ""));
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "saved");
 }
 
 export async function sellerPaidAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await confirmSellerPaid(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "saved");
 }
 
 export async function markSoldAction(formData: FormData) {
@@ -234,14 +247,14 @@ export async function markSoldAction(formData: FormData) {
   const user = await viewer(dealNext(formData, id));
   const result = await markDealSold(user.id, id);
   revalidatePath("/");
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "saved");
 }
 
 export async function cancelDealAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await cancelDeal(user.id, id);
-  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+  settleDeal(formData, id, result, "saved");
 }
 
 export async function disputeAction(formData: FormData) {
