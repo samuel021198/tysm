@@ -48,7 +48,7 @@ export function Header({
             <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-10 w-auto bg-transparent" />
           </Link>
           <nav className="flex flex-1 items-center justify-end gap-2 pl-2 text-sm font-medium text-ink">
-            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/market">{nav.search}</Link>
+            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/find">{tx(locale, "搜尋", "Search")}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/news">{nav.news}</Link>
             <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
             <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap hover:text-link">

@@ -25,18 +25,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       label: tx(locale, "搜尋", "Search"),
       icon: "search" as const,
       accent: true,
-      on: pathname === "/find" || pathname.startsWith("/find/"),
-    },
-    {
-      href: "/market",
-      label: tx(locale, "賣場", "Market"),
-      icon: "bag" as const,
-      on:
-        pathname === "/market" ||
-        pathname.startsWith("/market/") ||
-        pathname.startsWith("/listing/") ||
-        pathname.startsWith("/search") ||
-        pathname.startsWith("/shop"),
+      on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
     },
     {
       href: meHref,
@@ -51,7 +40,7 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       aria-label={tx(locale, "主要", "Main")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
-      <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-5">
+      <ul className="mx-auto grid h-[3.25rem] max-w-lg grid-cols-4">
         {tabs.map((tab, index) => (
           <Tab key={tab.href} {...tab} on={intent == null ? tab.on : intent === index} />
         ))}
@@ -69,7 +58,7 @@ function Tab({
 }: {
   href: string;
   label: string;
-  icon: "home" | "news" | "search" | "bag" | "me";
+  icon: "home" | "news" | "search" | "me";
   on: boolean;
   accent?: boolean;
 }) {

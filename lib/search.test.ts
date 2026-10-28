@@ -145,10 +145,16 @@ assert(marketSearchHref({ q: "皮卡丘", cat: "pokemon", sort: "relevance" }, "
 assert(marketSearchHref({ q: "皮卡丘", sort: "new" }) === `/search?q=${encodeURIComponent("皮卡丘")}&sort=new`, "all is the default chip and stays off the URL");
 assert(marketSearchHref({}) === "/search", "an empty market search has no query string");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
+const explore = readFileSync(new URL("../components/find-explore.tsx", import.meta.url), "utf8");
 assert(find.includes("用戶") && find.includes("貼文") && find.includes("上架") && find.includes("全部") && find.includes("收藏"), "search hub chips are 全部, 上架, 貼文, plus people who saved the card");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
-assert(find.includes("searchHistory.create") && find.includes("SearchBox"), "find records a query and keeps the search box");
+assert(find.includes("searchHistory.create") && explore.includes("SearchBox"), "find records a query and keeps the search box");
+assert(find.includes("!drafting") && find.includes("searchHistory.create"), "partial typing does not write search history");
 assert(find.includes("cardHubListingWhere") && find.includes("cardHubPostWhere"), "a card name search loads listings and posts");
+assert(explore.includes("grid-cols-3") && explore.includes(': "grid"') && explore.includes('"history"') && explore.includes('"results"'), "idle search is a 3-column explore grid; focus and typing are separate");
+assert(explore.includes("最近搜尋") && explore.includes("clearRecent") && explore.includes("SearchFilters"), "focus shows recent searches and collapsed filters");
+assert(explore.includes('placeholder={tx(locale, "搜尋", "Search")}') && explore.includes("pinned"), "the explore field says 搜尋 and stays on the page");
+assert(!explore.includes("bookmark"), "the explore bar has no bookmark");
 const box = readFileSync(new URL("../components/search-box.tsx", import.meta.url), "utf8");
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
 assert(box.includes('to = "find"') && box.includes('"/find"'), "the header search box submits to find");
