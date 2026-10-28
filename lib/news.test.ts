@@ -20,7 +20,25 @@ assert(newsSourceLine("Topps", ago(3 * H), now, "zh-HK") === "Topps · 3 小時�
 assert(newsUpdatedAgo(ago(3 * H), now, "en") === "3 hours ago", "english hours");
 assert(newsUpdatedAgo(new Date("2026-10-26T10:00:00+08:00"), now, "en") === "Yesterday", "english yesterday");
 
-assert(NEWS_SAMPLES.length >= 8 && NEWS_SAMPLES.length <= 12, "seed stays a short list");
+assert(NEWS_SAMPLES.length >= 3 && NEWS_SAMPLES.length <= 12, "seed stays a short list");
+const seededSlugs = new Set(NEWS_SAMPLES.map((row) => row.slug));
+for (const slug of [
+  "tysm-api-smoke-20261028",
+  "topps-five-star-2026",
+  "riftbound-radiance",
+  "riftbound-kda-couture",
+  "riftbound-gift-of-the-rift",
+  "panini-prizm-wnba",
+  "op-heroines-precious-box",
+  "pokemon-delta-reign",
+  "pokemon-mega-special-deck",
+  "op-18-dominance",
+]) {
+  assert(!seededSlugs.has(slug), `${slug} is not revived by reseed`);
+}
+for (const slug of ["chrome-tennis-sapphire", "pokemon-30th-battle-deck", "op-eb05-heroines"]) {
+  assert(seededSlugs.has(slug), `${slug} stays in the reseed list`);
+}
 assert(new Set(NEWS_SAMPLES.map((row) => row.title)).size === NEWS_SAMPLES.length, "one news card per product");
 assert(NEWS_SAMPLES.every((row) => !row.title.includes("快訊") && !row.body.includes("快訊")), "titles are product names");
 assert(
