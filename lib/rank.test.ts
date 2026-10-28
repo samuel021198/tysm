@@ -154,6 +154,12 @@ const postsAt = page.indexOf("人氣貼文");
 assert(page.includes("暫時未有排行。") && shopsAt >= 0 && shopsAt < collectorsAt && collectorsAt < postsAt, "three segments, shops then collectors then posts");
 assert(page.includes("grid-cols-3"), "the switcher is one row of three tabs");
 assert(page.includes("href={row.href}") && src.includes("`/shop/${user.id}`") && src.includes("`/post/${post.id}`"), "shops open a profile and posts open the post");
+assert(src.includes("avatarUrl: post.author.avatarUrl") && src.includes("coverUrl: postCover(post)"), "a post row keeps the author avatar and puts the cover beside it");
+assert(src.includes("coverUrl: null") && !src.includes("/u/") && !page.includes("/u/"), "collectors stay on the shop profile");
+assert(page.includes("row.coverUrl") && page.includes('name="bag"') && page.includes("M12 19.2"), "posts show the cover, shops a bag, likes a heart");
+assert(!page.includes("成交") && !page.includes("likes") && !page.includes("Likes") && !page.includes("讚好"), "the row shows the icon and number, not a metric label");
+assert(page.includes("#E0B53A") && page.includes("#B7C0C8") && page.includes("#C9844A"), "the first three ranks keep gold, silver, and bronze medals");
+assert(page.includes("change.text"), "the percent change stays on the row");
 assert(tab.includes('href: "/rank"') && tab.includes("排行") && tab.includes('icon: "rank"') && !tab.includes('href: "/market"'), "bottom nav fourth tab is rank");
 assert(shell.includes('href="/rank"'), "desktop nav includes rank");
 

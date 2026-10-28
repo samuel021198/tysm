@@ -3,6 +3,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { tx, type Locale } from "@/lib/i18n";
 import { formatRankChange, loadRank, rankMetricLabel, rankPath, rankTab, type RankRow, type RankTab } from "@/lib/rank";
 import { hiddenUserIds } from "@/lib/social";
+import { Icon } from "@/components/icons";
 
 export const metadata = { title: "排行" };
 
@@ -59,27 +60,18 @@ function RankLink({ locale, tab, row, rank }: { locale: Locale; tab: RankTab; ro
     <Link
       href={row.href}
       aria-label={`${tx(locale, `第 ${rank} 名`, `Rank ${rank}`)} ${row.name} ${metric} ${change.text}`}
-      className="flex items-center gap-3 rounded-2xl border border-line bg-card px-3 py-3 shadow-card"
+      className="flex items-center gap-2.5 rounded-2xl border border-line bg-card px-3 py-2.5 shadow-card"
     >
-      <span className="relative h-14 w-14 shrink-0">
-        <RankMark rank={rank} />
-        {row.avatarUrl ? (
-          <img src={row.avatarUrl} alt="" className="h-14 w-14 rounded-xl object-cover ring-1 ring-line" />
-        ) : (
-          <span className="grid h-14 w-14 place-items-center rounded-xl bg-soft text-base font-semibold text-ink ring-1 ring-line">{row.name.slice(0, 1)}</span>
-        )}
-      </span>
+      <RankMark rank={rank} />
+      {row.avatarUrl ? (
+        <img src={row.avatarUrl} alt="" className="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-line" />
+      ) : (
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{row.name.slice(0, 1)}</span>
+      )}
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[15px] font-semibold leading-tight">{row.name}</span>
-        <span className="mt-0.5 block text-[13px] leading-5 text-muted">
-          {metric}
-          <span className={`ml-1.5 font-semibold ${tone}`}>
-            {change.text}
-            {arrow ? <span aria-hidden> {arrow}</span> : null}
-          </span>
-        </span>
         {row.tags.length ? (
-          <span className="mt-1.5 flex flex-wrap gap-1.5">
+          <span className="mt-1 flex flex-wrap gap-1">
             {row.tags.map((tag) => (
               <span key={tag} className="rounded-full bg-soft px-2 py-0.5 text-[11px] leading-4 text-muted">
                 #{tag}
@@ -88,7 +80,44 @@ function RankLink({ locale, tab, row, rank }: { locale: Locale; tab: RankTab; ro
           </span>
         ) : null}
       </span>
+      {tab === "posts" ? (
+        <span className="flex shrink-0 flex-col items-end gap-1">
+          <span className="relative block h-[72px] w-[52px] overflow-hidden rounded-lg bg-soft ring-1 ring-line">
+            {row.coverUrl ? <img src={row.coverUrl} alt="" className="h-full w-full object-cover" /> : null}
+            <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-0.5 bg-black/60 py-0.5 text-[11px] font-semibold leading-none text-white">
+              <Heart />
+              <span className="tabular-nums">{row.current}</span>
+            </span>
+          </span>
+          <Delta text={change.text} arrow={arrow} tone={tone} />
+        </span>
+      ) : (
+        <span className="flex w-16 shrink-0 flex-col items-end">
+          <span className={`flex items-center gap-1 font-semibold tabular-nums leading-none ${tab === "shops" ? "text-xl" : "text-[15px]"}`}>
+            {tab === "shops" ? <Icon name="bag" className="h-5 w-5" /> : <Heart className="h-4 w-4 text-danger" />}
+            {row.current}
+          </span>
+          <Delta text={change.text} arrow={arrow} tone={tone} />
+        </span>
+      )}
     </Link>
+  );
+}
+
+function Delta({ text, arrow, tone }: { text: string; arrow: string; tone: string }) {
+  return (
+    <span className={`text-[11px] font-semibold leading-4 ${tone}`}>
+      {text}
+      {arrow ? <span aria-hidden> {arrow}</span> : null}
+    </span>
+  );
+}
+
+function Heart({ className = "h-3 w-3" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M12 19.2s-6.2-3.9-6.2-8.1A3.4 3.4 0 0 1 12 8.6a3.4 3.4 0 0 1 6.2 2.5c0 4.2-6.2 8.1-6.2 8.1z" />
+    </svg>
   );
 }
 
@@ -96,7 +125,7 @@ function RankMark({ rank }: { rank: number }) {
   if (rank <= 3) {
     const fill = rank === 1 ? "#E0B53A" : rank === 2 ? "#B7C0C8" : "#C9844A";
     return (
-      <span className="absolute -left-1.5 -top-2 z-10" aria-hidden>
+      <span className="grid w-7 shrink-0 place-items-center" aria-hidden>
         <svg width="26" height="32" viewBox="0 0 26 32">
           <path d="M8 16.5h10v8.2L13 29l-5-4.3z" fill={fill} />
           <circle cx="13" cy="12" r="10" fill={fill} />
@@ -109,7 +138,7 @@ function RankMark({ rank }: { rank: number }) {
     );
   }
   return (
-    <span aria-hidden className="absolute -left-1 -top-1 z-10 grid h-5 min-w-5 place-items-center rounded-full bg-soft px-1 text-[11px] font-semibold leading-none text-muted ring-1 ring-line">
+    <span aria-hidden className="grid w-7 shrink-0 place-items-center text-sm font-semibold tabular-nums text-muted">
       {rank}
     </span>
   );
