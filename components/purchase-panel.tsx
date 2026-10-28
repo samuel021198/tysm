@@ -48,6 +48,7 @@ export function PurchasePanel({
 }) {
   const publicBid = currentBid ?? startPrice ?? 0;
   const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
+  const handoverLabel = tx(locale, "傾交收", "Arrange handover");
 
   return (
     <>
@@ -127,8 +128,8 @@ export function PurchasePanel({
           }
         >
           {showHandover ? (
-            <button form="handover-form" className="btn btn-primary shrink-0" aria-label={tx(locale, "傾交收", "Arrange handover")}>
-              <Icon name="check" className="h-4 w-4" strokeWidth={2.5} />
+            <button form="handover-form" className="btn btn-primary shrink-0" aria-label={handoverLabel} title={handoverLabel}>
+              <Icon name="messages" className="h-4 w-4" strokeWidth={2.5} />
             </button>
           ) : null}
           {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
