@@ -24,7 +24,7 @@ const ERR: Record<string, [string, string]> = {
   meetup: ["面交要揀香港地區，時段同備註請保持簡短", "Meet-up needs a Hong Kong district. Keep the time and note short"],
   store: ["店舖自取要用帳戶入面的固定店舖地址。請先到帳戶設定。", "Store pickup needs a shop address on your profile. Set it in your account."],
   store_unavailable: ["賣家的店舖地址暫時未能使用，請改選其他方式。", "That shop address is not available. Choose another method."],
-  ship_mix: ["同一賣家的貨品沒有共同運送方式，請分開結帳。", "These items from the same seller have no shipping method in common. Check out separately."],
+  ship_mix: ["同一賣家的貨品沒有共同交收方式。", "These items from the same seller have no handover method in common."],
   ship_method: ["請選擇賣家有提供的運送方式", "Choose a shipping method this seller offers"],
   tcg: ["請填寫遊戲、系列、卡名同語言", "Game, set, card name, and language are required"],
   person: ["請填寫人物、賽季／年份同品牌系列", "Person, season/year, and brand/series are required"],
@@ -40,7 +40,7 @@ const ERR: Record<string, [string, string]> = {
   below_start: ["出價低於起標價", "Bid is below the start price"],
   raise_max: ["最高出價必須高於你目前的最高價", "Raise your maximum above the current one"],
   ended: ["拍賣已結束", "The auction has ended"],
-  locked: ["貨品正在結帳，暫時不能出價", "This listing is locked during checkout"],
+  locked: ["貨品暫時不能出價", "Bidding is paused on this listing"],
   rounds: ["每位買家對同一貨品最多議價 3 輪", "Maximum 3 offer rounds per buyer"],
   expired: ["議價已過期", "The offer has expired"],
   address: ["請先新增香港收貨地址", "Add a Hong Kong shipping address first"],
@@ -53,7 +53,7 @@ const ERR: Record<string, [string, string]> = {
   rate: ["請 30 秒後再索取驗證碼", "Wait 30 seconds before requesting another code"],
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],
-  state: ["訂單狀態不允許這個操作", "That action is not available for this order"],
+  state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
   login: ["請先登入", "Log in first"],
   blocked: ["你同對方已互相隱藏", "You and this member have blocked each other"],
   review: ["而家不能評價", "A review is not available"],
@@ -62,7 +62,7 @@ const ERR: Record<string, [string, string]> = {
   post: ["寫幾隻字或者加一張相", "Add a few words or a photo"],
   story_photo: ["請先影相或由相簿揀一張相", "Take a photo or choose one from your album"],
   comment: ["留言要 1–300 字，或加相／GIF", "Comment needs 1–300 characters, or a photo or GIF"],
-  payfail: ["模擬付款失敗，訂單仍是待付款", "Mock payment failed. The order is still awaiting payment"],
+  payfail: ["平台唔會代收款。", "The platform does not take payment."],
 };
 
 export function errText(locale: Locale, code: string): string {
@@ -80,7 +80,7 @@ export function navLabels(locale: Locale) {
     rank: en ? "Rank" : "排行",
     sell: en ? "Add" : "新增",
     cart: en ? "Cart" : "購物車",
-    orders: en ? "Orders" : "訂單",
+    orders: en ? "Handovers" : "交收",
     messages: en ? "Chat" : "聊天",
     login: en ? "Log in" : "登入",
     logout: en ? "Log out" : "登出",
@@ -115,24 +115,24 @@ export function offerStatusLabel(locale: Locale, status: string): string {
 
 export function orderStatusLabel(locale: Locale, status: string): string {
   const zh: Record<string, string> = {
-    PENDING_PAYMENT: "待付款",
-    IN_ESCROW: "已託管",
-    AWAITING_SHIP: "待寄出",
-    SHIPPED: "已寄出",
+    PENDING_PAYMENT: "洽談中",
+    IN_ESCROW: "待確認收款",
+    AWAITING_SHIP: "約定中",
+    SHIPPED: "已收款",
     COMPLETED: "已完成",
-    DISPUTED: "爭議中",
+    DISPUTED: "已取消",
     CANCELLED: "已取消",
-    REFUNDED: "已退款",
+    REFUNDED: "已取消",
   };
   const en: Record<string, string> = {
-    PENDING_PAYMENT: "Awaiting payment",
-    IN_ESCROW: "In escrow",
-    AWAITING_SHIP: "Awaiting shipment",
-    SHIPPED: "Shipped",
+    PENDING_PAYMENT: "Talking",
+    IN_ESCROW: "Proof sent",
+    AWAITING_SHIP: "Meetup set",
+    SHIPPED: "Seller confirmed payment",
     COMPLETED: "Completed",
-    DISPUTED: "In dispute",
+    DISPUTED: "Cancelled",
     CANCELLED: "Cancelled",
-    REFUNDED: "Refunded",
+    REFUNDED: "Cancelled",
   };
   return (locale === "en" ? en : zh)[status] ?? status;
 }

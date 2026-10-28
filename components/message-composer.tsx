@@ -5,7 +5,7 @@ import { sendMessage } from "@/actions/social";
 import { tx, type Locale } from "@/lib/i18n";
 import { fileToDataUrl } from "./photo-file";
 
-export function MessageComposer({ locale, threadId }: { locale: Locale; threadId: string }) {
+export function MessageComposer({ locale, threadId, focus = false }: { locale: Locale; threadId: string; focus?: boolean }) {
   const [imageUrl, setImageUrl] = useState("");
   const [note, setNote] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -29,7 +29,7 @@ export function MessageComposer({ locale, threadId }: { locale: Locale; threadId
     >
       <input type="hidden" name="threadId" value={threadId} />
       <input type="hidden" name="imageUrl" value={imageUrl} />
-      <textarea className="field min-h-12" name="body" placeholder={tx(locale, "訊息", "Message")} rows={2} />
+      <textarea className="field min-h-12" name="body" placeholder={tx(locale, "訊息", "Message")} rows={2} autoFocus={focus} />
       <div className="flex flex-wrap items-center gap-2">
         <label className="btn btn-ghost cursor-pointer">
           {tx(locale, "加入相片", "Add photo")}

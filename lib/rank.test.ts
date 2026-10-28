@@ -38,15 +38,14 @@ assert(rankBucket(hours(24 * 3), now) === "prior", "the 3-day mark starts the pr
 assert(rankBucket(hours(24 * 6 - 1), now) === "prior", "just inside 6 days is the prior window");
 assert(rankBucket(hours(24 * 6), now) === null && rankBucket(hours(-1), now) === null, "older and future events are outside both windows");
 
-const paid = { paidAt: hours(5), completedAt: hours(1), createdAt: hours(8) };
-assert(dealAt(paid).getTime() === paid.paidAt.getTime(), "a paid order counts from payment, not completion");
-assert(dealAt({ paidAt: null, completedAt: hours(2), createdAt: hours(9) }).getTime() === hours(2).getTime(), "a completed unpaid row uses completion");
+const done = { completedAt: hours(1), createdAt: hours(8) };
+assert(dealAt(done).getTime() === done.completedAt.getTime(), "a finished handover counts from completion");
+assert(dealAt({ completedAt: null, createdAt: hours(9) }).getTime() === hours(9).getTime(), "a row without completion uses created time");
 
 const orders: VolumeRow[] = [
   {
     sellerId: "mars",
     status: "COMPLETED",
-    paidAt: hours(10),
     completedAt: hours(8),
     createdAt: hours(12),
     items: [
@@ -57,7 +56,6 @@ const orders: VolumeRow[] = [
   {
     sellerId: "mars",
     status: "PENDING_PAYMENT",
-    paidAt: hours(1),
     completedAt: null,
     createdAt: hours(1),
     items: [{ quantity: 9, tag: "寶可夢" }],
@@ -65,7 +63,6 @@ const orders: VolumeRow[] = [
   {
     sellerId: "tyu",
     status: "CANCELLED",
-    paidAt: hours(2),
     completedAt: null,
     createdAt: hours(2),
     items: [{ quantity: 4, tag: "航海王" }],
@@ -73,24 +70,21 @@ const orders: VolumeRow[] = [
   {
     sellerId: "tyu",
     status: "REFUNDED",
-    paidAt: hours(3),
     completedAt: null,
     createdAt: hours(3),
     items: [{ quantity: 4, tag: "航海王" }],
   },
   {
     sellerId: "muel",
-    status: "IN_ESCROW",
-    paidAt: hours(24 * 4),
-    completedAt: null,
+    status: "COMPLETED",
+    completedAt: hours(24 * 4),
     createdAt: hours(24 * 4),
     items: [{ quantity: 5, tag: "寶可夢" }],
   },
   {
     sellerId: "muel",
-    status: "SHIPPED",
-    paidAt: hours(20),
-    completedAt: null,
+    status: "COMPLETED",
+    completedAt: hours(20),
     createdAt: hours(22),
     items: [{ quantity: 1, tag: null }],
   },
@@ -158,7 +152,7 @@ const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), 
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
 assert(src.includes("postLike.findMany") && src.includes("order.findMany") && src.includes("Not saves, comments"), "post rank is likes, not binder size");
 assert(!src.includes("collectionItem.count"), "binder size is not a score");
-assert(src.includes("COUNTED_ORDER_STATUSES") && src.includes("paidAt"), "shop rank uses paid deal time");
+assert(src.includes("COUNTED_ORDER_STATUSES") && src.includes('"COMPLETED"') && src.includes("completedAt"), "shop rank counts completed handovers");
 const shopsAt = page.indexOf("人氣商戶");
 const collectorsAt = page.indexOf("人氣收藏家");
 const postsAt = page.indexOf("人氣貼文");

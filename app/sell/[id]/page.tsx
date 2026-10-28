@@ -1,8 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
+import { getPrefs, getViewer } from "@/lib/auth";
 import { centsToInput, toHkDate, toHkInput } from "@/lib/format";
-import { bpsToPercentLabel, formatGradeValue } from "@/lib/rules";
+import { formatGradeValue } from "@/lib/rules";
 import { SellForm } from "@/components/sell-form";
 
 export default async function EditListingPage({ params }: { params: Promise<{ id: string }> }) {
@@ -14,9 +14,8 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
     include: { photos: { orderBy: { position: "asc" } }, items: { orderBy: { position: "asc" } }, category: true },
   });
   if (!listing || listing.sellerId !== viewer.id) notFound();
-  const [categories, bps, bids] = await Promise.all([
+  const [categories, bids] = await Promise.all([
     prisma.category.findMany({ where: { level: "LEAF" }, orderBy: { sort: "asc" } }),
-    getCommissionBps(),
     prisma.proxyBid.count({ where: { listingId: id } }),
   ]);
   return (
@@ -24,7 +23,6 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
       <h1 className="page-title">{prefs.locale === "en" ? "Edit listing" : "編輯刊登"}</h1>
       <SellForm
         locale={prefs.locale}
-        percent={bpsToPercentLabel(bps)}
         categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
         initial={{
           listingId: listing.id,

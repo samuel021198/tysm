@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getCommissionBps, getPrefs, getViewer } from "@/lib/auth";
+import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
@@ -10,7 +10,7 @@ import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, isBlocked } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
-import { bpsToPercentLabel, conditionLabel, minimumNextBid } from "@/lib/rules";
+import { conditionLabel, minimumNextBid } from "@/lib/rules";
 import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
 import { Gallery } from "@/components/gallery";
@@ -20,7 +20,7 @@ import { PurchasePanel } from "@/components/purchase-panel";
 import { Sparkline } from "@/components/sparkline";
 import { ViewPing } from "@/components/pings";
 import { offerRespondAction, deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
-import { openThread, reportAction, toggleFavorite, toggleFollow } from "@/actions/social";
+import { reportAction, toggleFavorite, toggleFollow } from "@/actions/social";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -68,7 +68,7 @@ export default async function ListingPage({
 
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
-  const [mine, bidCount, offers, similar, sales, comps, favored, following, bps, follows] = await Promise.all([
+  const [mine, bidCount, offers, similar, sales, comps, favored, following, follows] = await Promise.all([
     viewer ? prisma.proxyBid.findUnique({ where: { listingId_bidderId: { listingId: id, bidderId: viewer.id } } }) : null,
     prisma.proxyBid.count({ where: { listingId: id } }),
     viewer
@@ -96,11 +96,9 @@ export default async function ListingPage({
     loadComps(listing),
     viewer ? prisma.favorite.findUnique({ where: { userId_listingId: { userId: viewer.id, listingId: id } } }) : null,
     viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: listing.sellerId } } }) : null,
-    getCommissionBps(),
     followedSellerIds(viewer?.id ?? null),
   ]);
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
-  const quote = listing.price != null ? Math.round((listing.price * bps) / 10000) : 0;
   const locale = prefs.locale;
   const [sellerReviews, sellerShipped, sellerSales] = await Promise.all([
     prisma.review.aggregate({ where: { subjectId: listing.sellerId }, _avg: { stars: true }, _count: true }),
@@ -111,11 +109,11 @@ export default async function ListingPage({
   const sellerOnTime = onTimePercent(sellerShipped);
   const sellerRating = sellerReviews._count ? sellerReviews._avg.stars : null;
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
-  const showCart = listing.status === "ACTIVE" && listing.saleType !== "AUCTION" && listing.price != null && listing.quantityAvailable > 0 && !listing.binLockOrderId && !owner;
+  const showHandover = !owner && listing.status === "ACTIVE" && listing.quantityAvailable > 0;
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
 
   return (
-    <div className={`grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 ${!owner && (live || showCart) ? "max-md:pb-36" : ""}`}>
+    <div className={`grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 ${!owner && (live || showHandover) ? "max-md:pb-36" : ""}`}>
       <ViewPing id={id} />
       <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
         <Flash locale={locale} ok={sp.ok} err={sp.err} />
@@ -170,17 +168,16 @@ export default async function ListingPage({
           {listing.rarity ? <div><dt className="text-muted">{tx(locale, "稀有度", "Rarity")}</dt><dd>{listing.rarity}</dd></div> : null}
           {methods.length === 0 ? (
             <div>
-              <dt className="text-muted">{tx(locale, "運送", "Shipping")}</dt>
-              <dd>{tx(locale, "賣家未有可用的運送方式", "No shipping method is available")}</dd>
+              <dt className="text-muted">{tx(locale, "交收", "Handover")}</dt>
+              <dd>{tx(locale, "賣家未填交收方式", "No handover method yet")}</dd>
             </div>
           ) : methods.map((method) => (
             <div key={method}>
               <dt className="text-muted">{shipMethodLabel(method, locale)}</dt>
               <dd>
-                {formatHkd(0, locale)}
-                {method === "SF_COD" ? ` · ${tx(locale, "到付，買家付順豐", "Buyer pays SF on delivery")}` : null}
-                {method === "MEET" ? ` · ${[listing.meetupDistrict, listing.meetupWindow, listing.meetupNotes].filter(Boolean).join(" · ")}` : null}
-                {method === "PICKUP" ? ` · ${[listing.seller.storeName, listing.seller.storeDistrict, listing.seller.storeLine1, listing.seller.storeHours].filter(Boolean).join(" ")}` : null}
+                {method === "SF_COD" ? tx(locale, "到付，買家付順豐", "Buyer pays SF on delivery") : null}
+                {method === "MEET" ? [listing.meetupDistrict, listing.meetupWindow, listing.meetupNotes].filter(Boolean).join(" · ") : null}
+                {method === "PICKUP" ? [listing.seller.storeName, listing.seller.storeDistrict, listing.seller.storeLine1, listing.seller.storeHours].filter(Boolean).join(" ") : null}
               </dd>
             </div>
           ))}
@@ -319,28 +316,18 @@ export default async function ListingPage({
           endsText={hasAuction && listing.auctionEndsAt ? formatHKT(listing.auctionEndsAt, locale) : null}
           showBid={showBid}
           bidBanned={Boolean(viewer?.bidBanned)}
-          showBuy={showCart}
-          quantityMax={listing.quantityAvailable}
+          showHandover={showHandover}
           showOffer={Boolean(listing.offersEnabled && listing.minOffer && viewer && !owner)}
           minOffer={listing.minOffer}
           loggedIn={Boolean(viewer)}
-          binLocked={Boolean(listing.binLockOrderId)}
           bidsVoided={listing.bidsVoided}
-          ownerNote={owner ? `${tx(locale, listing.saleType === "AUCTION" ? "估計拍賣佣金" : "估計佣金", listing.saleType === "AUCTION" ? "Estimated auction commission" : "Estimated commission")} ${bpsToPercentLabel(bps)}%${listing.price != null && listing.saleType !== "AUCTION" ? ` · ${formatHkd(quote, locale)}` : ""}` : null}
+          ownerNote={null}
         />
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <form action={toggleFavorite}>
-            <input type="hidden" name="listingId" value={id} />
-            <input type="hidden" name="next" value={`/listing/${id}`} />
-            <button className="btn btn-ghost w-full">{favored ? "♥" : "♡"} {tx(locale, "收藏", "Favorite")}</button>
-          </form>
-          {!owner ? (
-            <form action={openThread}>
-              <input type="hidden" name="listingId" value={id} />
-              <button className="btn btn-ghost w-full">{tx(locale, "聯絡賣家", "Contact seller")}</button>
-            </form>
-          ) : null}
-        </div>
+        <form action={toggleFavorite} className="text-sm">
+          <input type="hidden" name="listingId" value={id} />
+          <input type="hidden" name="next" value={`/listing/${id}`} />
+          <button className="btn btn-ghost w-full">{favored ? "♥" : "♡"} {tx(locale, "收藏", "Favorite")}</button>
+        </form>
         <div className="text-sm">
           <Link href={`/shop/${listing.sellerId}`} className="flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-full bg-accent text-sm font-bold text-white">

@@ -8,15 +8,19 @@ import { importCsv, parseListingForm, relistListing, saveListing, unlistListing,
 import { placeBid } from "@/lib/bids";
 import { makeOffer, respondOffer } from "@/lib/offers";
 import {
+  arrangeMeetup,
+  cancelDeal,
+  confirmReceived,
+  confirmSellerPaid,
+  markDealSold,
+  uploadProof,
+} from "@/lib/deals";
+import {
   advanceShipment,
   appealDispute,
-  attachAddress,
   cancelUnpaidOrder,
-  checkoutLines,
   chooseOrderShip,
-  confirmReceipt,
   openDispute,
-  payOrder,
 } from "@/lib/orders";
 import { prisma } from "@/lib/db";
 
@@ -103,6 +107,7 @@ export async function offerRespondAction(formData: FormData) {
   const user = await viewer(`/listing/${listingId}`);
   const counter = hkdToCents(String(formData.get("counter") || ""));
   const result = await respondOffer(user.id, String(formData.get("offerId") || ""), String(formData.get("act") || ""), counter);
+  if (result.ok && result.threadId) redirect(`/messages/${result.threadId}`);
   if (result.ok && result.orderId) redirect(`/orders/${result.orderId}?ok=offer`);
   redirect(`/listing/${listingId}?${result.ok ? "ok=offer" : `err=${result.error}`}`);
 }
@@ -137,37 +142,10 @@ export async function cartUpdate(formData: FormData) {
   redirect("/cart");
 }
 
-function shipMethodsFrom(formData: FormData): Record<string, string> {
-  try {
-    const raw = JSON.parse(String(formData.get("shipMethods") || "{}")) as unknown;
-    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
-    const methods: Record<string, string> = {};
-    for (const [key, value] of Object.entries(raw)) {
-      if (typeof value === "string") methods[key] = value;
-    }
-    return methods;
-  } catch {
-    return {};
-  }
-}
-
 export async function checkoutAction(formData: FormData) {
-  const user = await viewer("/checkout");
-  const addressId = String(formData.get("addressId") || "");
-  const mode = String(formData.get("mode") || "cart");
-  const requests =
-    mode === "buy"
-      ? [{ listingId: String(formData.get("listingId") || ""), quantity: Number(formData.get("quantity") || 1) }]
-      : (await prisma.cartItem.findMany({ where: { userId: user.id } })).map((item) => ({
-          listingId: item.listingId,
-          quantity: item.quantity,
-        }));
-  const result = await checkoutLines(user.id, requests, addressId || null, mode !== "buy", {
-    methods: shipMethodsFrom(formData),
-    paymentBrand: String(formData.get("paymentBrand") || "FPS"),
-  });
-  if (!result.ok) redirect(`/checkout?err=${result.error}${mode === "buy" ? `&buy=${formData.get("listingId")}` : ""}`);
-  redirect(`/checkout/pay?orders=${result.ids.join(",")}`);
+  const listingId = String(formData.get("listingId") || "");
+  if (listingId) redirect(`/listing/${listingId}`);
+  redirect("/checkout");
 }
 
 export async function chooseShipAction(formData: FormData) {
@@ -179,14 +157,8 @@ export async function chooseShipAction(formData: FormData) {
 
 export async function payAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
-  const user = await viewer(`/orders/${id}`);
-  if (formData.get("addressId")) {
-    const attached = await attachAddress(user.id, id, String(formData.get("addressId")));
-    if (!attached.ok) redirect(`/orders/${id}?err=${attached.error}`);
-  }
-  if (!formData.get("outcome")) redirect(`/orders/${id}?ok=saved`);
-  const result = await payOrder(user.id, id, String(formData.get("outcome")));
-  redirect(`/orders/${id}?${result.ok ? (result.kind === "fail" ? "err=payfail" : "ok=paid") : `err=${result.error}`}`);
+  await viewer(`/orders/${id}`);
+  redirect(`/orders/${id}`);
 }
 
 export async function cancelOrderAction(formData: FormData) {
@@ -207,11 +179,53 @@ export async function shipAction(formData: FormData) {
   redirect(`/orders/${id}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
 }
 
+function dealNext(formData: FormData, orderId: string) {
+  const next = String(formData.get("next") || "").split("?")[0];
+  if (next.startsWith("/messages/") || next === `/orders/${orderId}`) return next;
+  return `/orders/${orderId}`;
+}
+
 export async function confirmAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
-  const user = await viewer(`/orders/${id}`);
-  const result = await confirmReceipt(user.id, id);
-  redirect(`/orders/${id}?${result.ok ? "ok=done" : `err=${result.error}`}`);
+  const user = await viewer(dealNext(formData, id));
+  const result = await confirmReceived(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=done" : `err=${result.error}`}`);
+}
+
+export async function arrangeDealAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await arrangeMeetup(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+}
+
+export async function proofAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await uploadProof(user.id, id, String(formData.get("imageUrl") || ""));
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+}
+
+export async function sellerPaidAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await confirmSellerPaid(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+}
+
+export async function markSoldAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await markDealSold(user.id, id);
+  revalidatePath("/");
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
+}
+
+export async function cancelDealAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await cancelDeal(user.id, id);
+  redirect(`${dealNext(formData, id)}?${result.ok ? "ok=saved" : `err=${result.error}`}`);
 }
 
 export async function disputeAction(formData: FormData) {

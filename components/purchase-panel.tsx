@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { bidAction, cartAdd, offerAction } from "@/actions/trade";
+import { bidAction, offerAction } from "@/actions/trade";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { BuyDock } from "./buy-dock";
 import { Countdown } from "./countdown";
+import { HandoverForm } from "./handover-form";
 import { Submit } from "./submit";
 
 export function PurchasePanel({
@@ -23,12 +23,10 @@ export function PurchasePanel({
   endsText,
   showBid,
   bidBanned,
-  showBuy,
-  quantityMax,
+  showHandover,
   showOffer,
   minOffer,
   loggedIn,
-  binLocked,
   bidsVoided,
   ownerNote,
 }: {
@@ -45,23 +43,19 @@ export function PurchasePanel({
   endsText: string | null;
   showBid: boolean;
   bidBanned: boolean;
-  showBuy: boolean;
-  quantityMax: number;
+  showHandover: boolean;
   showOffer: boolean;
   minOffer: number | null;
   loggedIn: boolean;
-  binLocked: boolean;
   bidsVoided: boolean;
   ownerNote: string | null;
 }) {
-  const [qty, setQty] = useState(1);
   const publicBid = currentBid ?? startPrice ?? 0;
   const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
-  const buyHref = `/checkout?buy=${id}&qty=${qty}`;
 
   return (
     <>
-      {showBuy && price != null ? (
+      {showHandover && price != null ? (
         <div>
           <p className="text-xs font-medium text-muted">{tx(locale, "直購價", "Buy It Now")}</p>
           <p className="price text-2xl leading-none">{formatHkd(price, locale)}</p>
@@ -92,36 +86,17 @@ export function PurchasePanel({
         </div>
       ) : null}
       {bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
-      {binLocked ? <p className="text-sm">{tx(locale, "有買家正在結帳。", "A buyer is checking out.")}</p> : null}
 
-      {showBuy ? (
-        <label className="grid gap-1 text-sm">
-          {tx(locale, "數量", "Quantity")}
-          <input className="field" type="number" min={1} max={quantityMax} value={qty} onChange={(event) => setQty(Math.max(1, Math.min(quantityMax, Number(event.target.value) || 1)))} />
-        </label>
-      ) : null}
-
+      {showHandover ? <HandoverForm locale={locale} listingId={id} bargain={false} layout="stack" /> : null}
       <div className="grid gap-2">
-        {showBuy ? (
-          <Link className="btn btn-primary w-full" href={buyHref}>{tx(locale, "立即購買", "Buy now")}</Link>
-        ) : null}
         {showBid ? (
-          <button form="bid-form" className={`btn w-full ${showBuy ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Place bid")}</button>
-        ) : null}
-        {showBuy ? (
-          <button form="cart-form" className="btn btn-ghost w-full">{tx(locale, "加入購物車", "Add to cart")}</button>
+          <button form="bid-form" className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Place bid")}</button>
         ) : null}
         {!loggedIn && live ? (
-          <Link className={`btn w-full ${showBuy ? "btn-ghost" : "btn-primary"}`} href={`/login?next=/listing/${id}`}>{tx(locale, "登入後出價", "Log in to bid")}</Link>
+          <Link className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`} href={`/login?next=/listing/${id}`}>{tx(locale, "登入後出價", "Log in to bid")}</Link>
         ) : null}
       </div>
 
-      {showBuy ? (
-        <form id="cart-form" action={cartAdd}>
-          <input type="hidden" name="listingId" value={id} />
-          <input type="hidden" name="quantity" value={qty} />
-        </form>
-      ) : null}
       {showBid ? (
         <form id="bid-form" action={bidAction} className="grid gap-2">
           <input type="hidden" name="listingId" value={id} />
@@ -151,25 +126,24 @@ export function PurchasePanel({
       ) : null}
       {ownerNote ? <p className="text-sm text-muted">{ownerNote}</p> : null}
 
-      {live || showBuy ? (
+      {live || showHandover ? (
         <BuyDock
           watchId="purchase"
-          label={showBuy ? tx(locale, "直購價", "Buy now") : tx(locale, "目前出價", "Current bid")}
-          price={showBuy && price != null ? formatHkd(price, locale) : formatHkd(publicBid, locale)}
+          label={showHandover && price != null ? tx(locale, "直購價", "Price") : tx(locale, "目前出價", "Current bid")}
+          price={showHandover && price != null ? formatHkd(price, locale) : formatHkd(publicBid, locale)}
           note={
             live && endsAt ? (
               <>
-                {showBuy ? <span>{tx(locale, "目前出價", "Bid")} {formatHkd(publicBid, locale)} · </span> : null}
+                {showHandover ? <span>{tx(locale, "目前出價", "Bid")} {formatHkd(publicBid, locale)} · </span> : null}
                 <span>{tx(locale, "剩餘", "Left")} </span>
                 <Countdown endsAt={endsAt} locale={locale} />
               </>
             ) : null
           }
         >
-          {showBuy ? <Link href={buyHref} className="btn btn-primary shrink-0 px-3">{tx(locale, "立即購買", "Buy now")}</Link> : null}
-          {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showBuy ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
-          {!loggedIn && live && !showBuy ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}
-          {showBuy ? <button form="cart-form" className="btn btn-ghost shrink-0 px-3">{tx(locale, "購物車", "Cart")}</button> : null}
+          {showHandover ? <button form="handover-form" className="btn btn-primary shrink-0 px-3">{tx(locale, "傾交收", "Arrange")}</button> : null}
+          {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
+          {!loggedIn && live && !showHandover ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}
         </BuyDock>
       ) : null}
     </>

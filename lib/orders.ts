@@ -76,14 +76,19 @@ export async function insertOrder(
     shippingMethod?: ShipMethod | null;
     fulfillment?: FulfillmentSnap | null;
     paymentBrand?: string | null;
+    /** Private handover. No platform fee, no pay-by clock, no stock lock. */
+    deal?: boolean;
   },
 ) {
-  const bps = await bpsOf(tx);
+  const bps = args.deal ? 0 : await bpsOf(tx);
   const subtotal = args.lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
   // 順豐到付, 面交, and 店舖自取 are HK$0 on the platform.
   // The old rule that summed a prepaid fee per listing is retired.
   const shippingTotal = 0;
   const quote = quoteSeller(subtotal, shippingTotal, bps);
+  const fulfillment = args.deal
+    ? { ...(args.fulfillment ?? {}), deal: { private: true, meetupAgreed: false, proofs: [] } }
+    : args.fulfillment ?? undefined;
   return tx.order.create({
     data: {
       buyerId: args.buyerId,
@@ -98,9 +103,9 @@ export async function insertOrder(
       sellerProceeds: quote.proceeds,
       shipDays: args.shipDays,
       shippingMethod: args.shippingMethod ?? null,
-      fulfillment: args.fulfillment ?? undefined,
+      fulfillment,
       paymentBrand: args.paymentBrand ?? null,
-      payBy: new Date(Date.now() + PAY_TTL_MS),
+      payBy: args.deal ? null : new Date(Date.now() + PAY_TTL_MS),
       addressSnapshot: args.address ?? undefined,
       items: { create: args.lines.map((line) => ({ ...line, shippingFee: 0 })) },
     },
@@ -234,7 +239,7 @@ export async function checkoutLines(
     for (const id of ids) {
       const order = await prisma.order.findUnique({ where: { id } });
       if (order) {
-        await notify(order.sellerId, "order", "新訂單待付款", "買家已落單，款項未入託管。", `/orders/${order.id}`);
+        await notify(order.sellerId, "order", "新交收", "買家已開始傾交收。", `/orders/${order.id}`);
       }
     }
     return { ok: true as const, ids };
@@ -243,6 +248,14 @@ export async function checkoutLines(
     if (code) return { ok: false as const, error: code };
     throw error;
   }
+}
+
+export async function releaseReservedStock(orderId: string) {
+  await prisma.$transaction(async (tx) => {
+    const order = await tx.order.findUnique({ where: { id: orderId } });
+    if (!order) return;
+    await restoreBuyNowStock(tx, orderId, order.source);
+  });
 }
 
 async function restoreBuyNowStock(tx: Tx, orderId: string, source: string) {
@@ -291,15 +304,15 @@ export async function cancelUnpaidOrder(orderId: string, reason: "timeout" | "bu
       return { buyerId: order.buyerId, sellerId: order.sellerId, banned, source: order.source };
     });
     if (!result) return { ok: false as const, error: "state" };
-    await notify(result.sellerId, "order", "訂單已取消", "待付款訂單已取消，未收運的存貨已還原。", `/orders/${orderId}`);
+    await notify(result.sellerId, "order", "交收已取消", "未完成的交收已取消。", `/orders/${orderId}`);
     if (result.source === "AUCTION") {
       await notify(
         result.buyerId,
         "bid",
-        result.banned ? "出價功能已停用" : "未付款警告",
+        result.banned ? "出價功能已停用" : "交收未完成",
         result.banned
-          ? "連續 3 次拍賣得標未付款，你已被禁止出價，直至管理員解除。"
-          : "拍賣得標未在 24 小時內付款。再有未付款可能會被禁止出價。",
+          ? "連續 3 次拍賣得標未完成交收，你已被禁止出價，直至管理員解除。"
+          : "拍賣得標未有完成交收。",
         `/orders/${orderId}`,
       );
     }
@@ -444,7 +457,7 @@ export async function payOrder(userId: string, orderId: string, outcome: string)
       return { kind: "success" as const, sellerId: order.sellerId };
     });
     if (result.kind === "success") {
-      await notify(result.sellerId, "order", "款項已入託管", "買家已付款。請安排寄出。", `/orders/${orderId}`);
+      await notify(result.sellerId, "order", "交收有更新", "請喺聊天睇這張交收。", `/orders/${orderId}`);
     }
     if (result.kind === "dispute") {
       await notify(result.sellerId, "order", "付款標記為爭議", "這張模擬付款被標成爭議，等待管理員處理。", `/orders/${orderId}`);
@@ -489,7 +502,7 @@ export async function advanceShipment(
     order.buyerId,
     "order",
     step === "pack" ? "賣家準備寄出" : "賣家已寄出",
-    step === "pack" ? "訂單進入待寄出。" : "請收貨後確認。7 日內未確認會自動完成託管。",
+    step === "pack" ? "交收狀態有更新。" : "請喺聊天確認收貨。",
     `/orders/${orderId}`,
   );
   return { ok: true as const };
@@ -509,8 +522,8 @@ export async function confirmReceipt(buyerId: string, orderId: string) {
   if (!order || order.buyerId !== buyerId) return { ok: false as const, error: "forbidden" };
   const did = await completeOrder(orderId);
   if (!did) return { ok: false as const, error: "state" };
-  await notify(order.sellerId, "order", "買家已確認收貨", "託管款項已撥出（模擬），佣金已扣除。", `/orders/${orderId}`);
-  await notify(buyerId, "order", "訂單已完成", "你可以在 30 日內評價。", `/orders/${orderId}`);
+  await notify(order.sellerId, "order", "買家已確認收貨", "交收已完成，可以評價。", `/orders/${orderId}`);
+  await notify(buyerId, "order", "交收已完成", "你可以在 30 日內評價。", `/orders/${orderId}`);
   return { ok: true as const };
 }
 
@@ -609,7 +622,7 @@ export async function decideDispute(disputeId: string, winner: "buyer" | "seller
     }
   });
   const href = `/orders/${dispute.orderId}`;
-  const summary = buyerWins ? "爭議裁定買家勝訴，賣家須支付退回運費。" : "爭議裁定賣家勝訴，託管已撥出（模擬）。";
+  const summary = buyerWins ? "爭議紀錄已更新。" : "爭議紀錄已更新。";
   await notify(dispute.order.buyerId, "order", "爭議有裁定", summary, href);
   await notify(dispute.order.sellerId, "order", "爭議有裁定", summary, href);
   return { ok: true as const };
@@ -673,6 +686,7 @@ export async function settleAuction(listingId: string) {
           personName: listing.personName,
         },
       ],
+      deal: true,
     });
     await tx.listing.update({
       where: { id: listingId },
@@ -681,8 +695,11 @@ export async function settleAuction(listingId: string) {
     return { orderId: order.id, buyerId: resolved.leaderId, sellerId: listing.sellerId };
   });
   if (!created) return;
-  await notify(created.buyerId, "order", "你贏得拍賣", "請在 24 小時內付款，否則會記一次未付款。", `/orders/${created.orderId}`);
-  await notify(created.sellerId, "order", "拍賣已結束", "得標者需要在 24 小時內付款。", `/orders/${created.orderId}`);
+  const { attachDealThread } = await import("./deals");
+  const threadId = await attachDealThread(created.orderId);
+  const href = threadId ? `/messages/${threadId}` : `/orders/${created.orderId}`;
+  await notify(created.buyerId, "order", "你贏得拍賣", "請喺聊天傾交收。平台唔代收款。", href);
+  await notify(created.sellerId, "order", "拍賣已結束", "得標者會喺聊天傾交收。", href);
   } catch (error) {
     if (asFail(error)) return;
     throw error;
@@ -710,15 +727,6 @@ export async function sweep() {
     select: { id: true },
   });
   for (const order of unpaid) await cancelUnpaidOrder(order.id, "timeout");
-  const due = await prisma.order.findMany({
-    where: { status: "SHIPPED", autoReleaseAt: { lte: now } },
-  });
-  for (const order of due) {
-    const did = await completeOrder(order.id);
-    if (!did) continue;
-    await notify(order.buyerId, "order", "託管已自動完成", "寄出 7 日未確認收貨，款項已撥出（模擬）。", `/orders/${order.id}`);
-    await notify(order.sellerId, "order", "託管已自動完成", "買家未有在 7 日內確認，款項已撥出（模擬）。", `/orders/${order.id}`);
-  }
   const auctions = await prisma.listing.findMany({
     where: {
       status: "ACTIVE",

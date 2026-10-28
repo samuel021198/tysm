@@ -106,7 +106,7 @@ function catalogSlug(slug: string | undefined): string {
 const STEPS = [
   ["基本資料", "Basics"],
   ["卡片詳情", "Cards"],
-  ["運送", "Shipping"],
+  ["交收", "Handover"],
   ["預覽", "Preview"],
 ] as const;
 
@@ -166,7 +166,6 @@ function orderedCategories(categories: Cat[]) {
 export function SellForm({
   locale,
   categories,
-  percent,
   initial,
   hints = [],
   storeReady = false,
@@ -175,7 +174,6 @@ export function SellForm({
 }: {
   locale: Locale;
   categories: Cat[];
-  percent: string;
   initial?: SellInitial;
   hints?: { title: string; price: string }[];
   storeReady?: boolean;
@@ -221,11 +219,6 @@ export function SellForm({
   const scheduling = publishMode === "later";
   const onPublishAt = useCallback((value: string) => setPublishAt(value), []);
   const first = cards[0];
-
-  const fee = useMemo(() => {
-    const n = Number(multi ? cards.reduce((sum, card) => sum + (Number(card.price) || 0), 0) : price);
-    return Number.isFinite(n) ? ((n * Number(percent)) / 100).toFixed(2) : "0.00";
-  }, [cards, multi, percent, price]);
 
   useEffect(() => {
     const form = formRef.current;
@@ -511,9 +504,6 @@ export function SellForm({
               onChange={(event) => setPrice(event.target.value)}
             />
             <FieldError locale={locale} codes={shown} code="price" />
-            <span className="text-sm font-normal text-muted">
-              {tx(locale, `佣金約 HK$${fee}（${percent}%）。`, `Commission about HK$${fee} (${percent}%).`)}
-            </span>
           </label>
         )}
 
@@ -755,7 +745,7 @@ export function SellForm({
             )}
             <FieldError locale={locale} codes={shown} code="ship_within" anchor="shipWithin" />
           </fieldset>
-          <p className="text-muted">{tx(locale, "至少選一種。平台唔會收運費。", "Pick at least one. The platform does not charge shipping.")}</p>
+          <p className="text-muted">{tx(locale, "至少選一種交收方式。雙方自行交收，平台唔代收款。", "Pick at least one handover method. You settle it yourselves. The platform does not take payment.")}</p>
           <label className="grid gap-1 rounded-2xl bg-soft p-3">
             <span className="flex min-h-12 items-center gap-2 font-medium">
               <input type="checkbox" name="shipSfCod" data-wizard-jump checked={sfCod} aria-invalid={shown.includes("shipping")} onChange={(event) => setSfCod(event.target.checked)} />
@@ -834,8 +824,8 @@ export function SellForm({
               ? tx(locale, `預訂 · 出貨 ${preorderDate || "未選日期"}`, `Preorder · ships ${preorderDate || "no date"}`)
               : tx(locale, `現貨 · ${shipWithin} 日內出貨`, `In stock · ships within ${shipWithin} days`)}
           </p>
-          <p className="text-muted">{shipSummary.join(" · ") || tx(locale, "未選運送方式", "No shipping method")}</p>
-          <p className="text-muted">{tx(locale, `佣金約 HK$${fee}（${percent}%）。`, `Commission about HK$${fee} (${percent}%).`)}</p>
+          <p className="text-muted">{shipSummary.join(" · ") || tx(locale, "未選交收方式", "No handover method")}</p>
+          <p className="text-muted">{tx(locale, "買家會喺貨品頁按傾交收。平台唔代收、唔擔保。", "Buyers arrange a handover from the listing. The platform does not take payment.")}</p>
           {hints.length ? (
             <ul className="text-muted">
               {hints.map((hint) => (

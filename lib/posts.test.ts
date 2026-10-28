@@ -89,8 +89,7 @@ const card = toPostCard({
 assert(card.postId === "p1" && card.listingId === "seed_charizard", "selling post keeps both ids");
 assert(card.savePostId === "p1" && card.saved && card.saveListingId === null, "a post saves into the wishlist");
 assert(card.priceCents === 128000, "selling post keeps the price");
-assert(card.priceHref === "/checkout?buy=seed_charizard&qty=1", "the price opens checkout");
-assert(card.buy?.kind === "checkout" && card.buy.href === card.priceHref, "a cart listing buys in one step");
+assert(card.priceHref === null && card.buy?.kind === "deal" && card.buy.listingId === "seed_charizard", "a priced post hands over in chat, not checkout");
 assert(card.condition === "Raw A", "condition is on the card");
 assert(card.commentHref === "/post/p1#comments", "a post keeps its comment thread");
 assert(cleanComment("  你好  ") === "你好", "a comment trims");
@@ -125,7 +124,7 @@ assert(replyDraft("阿明", "hello") === "@阿明 hello", "reply prefixes the ni
 assert(replyDraft("阿明", "@舊 hello") === "@阿明 hello", "a new reply replaces the previous mention");
 assert(COMMENT_REACTS.includes("❤️") && COMMENT_REACTS.length === 8, "quick reacts stay a short row");
 assert(!card.href.includes("checkout"), "the photo still opens the post");
-assert(!("dexHref" in card) && !card.priceHref.includes("/dex") && !card.href.includes("/dex"), "a post does not link into the dex");
+assert(!("dexHref" in card) && card.priceHref == null && !card.href.includes("/dex"), "a post does not link into the dex");
 
 const held = toPostCard({
   ...{
@@ -191,8 +190,8 @@ assert(
 );
 assert(suggestion.caption === "", "a listing suggestion has no post caption");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
-assert(suggestion.priceHref === "/checkout?buy=seed_luffy&qty=1" && suggestion.buy?.kind === "checkout", "suggestion price opens checkout");
-assert(!suggestion.priceHref.includes("/dex"), "a suggested listing does not open the dex");
+assert(suggestion.priceHref === null && suggestion.buy?.kind === "deal" && suggestion.buy.listingId === "seed_luffy", "suggestion price does not open checkout");
+assert(suggestion.href === "/listing/seed_luffy", "a suggested listing opens the listing");
 
 const auction = toPostCard({
   postId: "p3",
@@ -299,7 +298,9 @@ assert(!postPage.includes("addComment"), "the post page does not submit comments
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
 assert(!postCard.includes("睇圖鑑") && !postCard.includes("/dex") && !postCard.includes('name="book"') && !postCard.includes("dexHref"), "posts do not offer the dex");
-assert(postCard.includes('tx(locale, "買", "Buy")') && postCard.includes("聯絡賣家") && postCard.includes("gallery && buy"), "detail shows a buy bar, or contact when it is not a cart");
+const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
+assert(postCard.includes("HandoverForm") && postCard.includes("gallery && buy") && handover.includes("議價") && handover.includes("傾交收"), "detail shows handover buttons, not checkout");
+assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");

@@ -3,13 +3,11 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT } from "@/lib/format";
-import { bpsToPercentLabel } from "@/lib/rules";
 import { listingStatusLabel, orderStatusLabel, tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
-import { addCategory, adminDecide, adminUnlist, liftBan, resolveReport, setCommission } from "@/actions/admin";
-import { getCommissionBps } from "@/lib/auth";
+import { addCategory, adminDecide, adminUnlist, liftBan, resolveReport } from "@/actions/admin";
 
-const tabs = ["overview", "users", "listings", "orders", "disputes", "reports", "categories", "commission"] as const;
+const tabs = ["overview", "users", "listings", "orders", "disputes", "reports", "categories"] as const;
 
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ tab?: string; ok?: string; err?: string }> }) {
   const sp = await searchParams;
@@ -18,14 +16,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   if (viewer.role !== "ADMIN") redirect("/?err=forbidden");
   const tab = tabs.includes(sp.tab as (typeof tabs)[number]) ? (sp.tab as (typeof tabs)[number]) : "overview";
   const locale = prefs.locale;
-  const [users, listings, orders, disputes, reports, groups, bps] = await Promise.all([
+  const [users, listings, orders, disputes, reports, groups] = await Promise.all([
     prisma.user.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.listing.findMany({ orderBy: { createdAt: "desc" }, take: 40, include: { seller: true } }),
     prisma.order.findMany({ orderBy: { createdAt: "desc" }, take: 40, include: { buyer: true, seller: true } }),
     prisma.dispute.findMany({ orderBy: { createdAt: "desc" }, include: { order: true }, take: 30 }),
     prisma.report.findMany({ where: { status: "OPEN" }, orderBy: { createdAt: "desc" }, take: 40 }),
     prisma.category.findMany({ where: { level: "GROUP" }, orderBy: { sort: "asc" } }),
-    getCommissionBps(),
   ]);
 
   return (
@@ -41,7 +38,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       </nav>
       {tab === "overview" ? (
         <p className="text-sm">
-          {tx(locale, "用戶", "Users")} {users.length} · {tx(locale, "刊登", "Listings")} {listings.length} · {tx(locale, "訂單", "Orders")} {orders.length} · {tx(locale, "未處理檢舉", "Open reports")} {reports.length} · {tx(locale, "佣金", "Commission")} {bpsToPercentLabel(bps)}%
+          {tx(locale, "用戶", "Users")} {users.length} · {tx(locale, "刊登", "Listings")} {listings.length} · {tx(locale, "交收", "Handovers")} {orders.length} · {tx(locale, "未處理檢舉", "Open reports")} {reports.length}
         </p>
       ) : null}
       {tab === "users" ? (
@@ -91,7 +88,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   <textarea className="field" name="note" placeholder={tx(locale, "裁定備註", "Decision note")} />
                   <div className="flex gap-2">
                     <button className="btn btn-primary" name="winner" value="buyer">{tx(locale, "買家勝（賣家付退運）", "Buyer wins")}</button>
-                    <button className="btn-ghost btn" name="winner" value="seller">{tx(locale, "賣家勝（撥出託管）", "Seller wins")}</button>
+                    <button className="btn-ghost btn" name="winner" value="seller">{tx(locale, "賣家勝", "Seller wins")}</button>
                   </div>
                 </form>
               ) : null}
@@ -122,14 +119,6 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           <input className="field" name="nameEn" placeholder={tx(locale, "英文名", "English name")} required />
           <input className="field" name="slug" placeholder="slug" required />
           <button className="btn btn-primary w-fit">{tx(locale, "新增子分類", "Add leaf category")}</button>
-        </form>
-      ) : null}
-      {tab === "commission" ? (
-        <form action={setCommission} className="grid max-w-xs gap-2">
-          <p className="text-sm">{tx(locale, "現時", "Current")} {bpsToPercentLabel(bps)}%</p>
-          <input className="field" name="percent" defaultValue={bpsToPercentLabel(bps)} inputMode="decimal" />
-          <p className="text-sm text-muted">{tx(locale, "0–30，最多一位小數。只影響新訂單。", "0–30, one decimal. Applies to new orders only.")}</p>
-          <button className="btn btn-primary w-fit">{tx(locale, "更新佣金", "Update commission")}</button>
         </form>
       ) : null}
     </div>

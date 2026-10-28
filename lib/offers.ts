@@ -1,13 +1,10 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
+import { attachDealThread } from "./deals";
 import { insertOrder } from "./orders";
 import { notify } from "./social";
 import { MAX_OFFER_ROUNDS, OFFER_TTL_MS, conditionLabel } from "./rules";
-
-function live(listing: { saleType: string; auctionSettled: boolean; auctionEndsAt: Date | null; status: string }) {
-  return listing.status === "ACTIVE" && listing.saleType !== "BUY_NOW" && !listing.auctionSettled && !!listing.auctionEndsAt && listing.auctionEndsAt > new Date();
-}
 
 export async function makeOffer(userId: string, listingId: string, amount: number) {
   try {
@@ -48,22 +45,13 @@ async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amoun
   if (offer.expiresAt <= new Date()) throw new Fail("expired");
   const listing = offer.listing;
   if (listing.status !== "ACTIVE" || listing.quantityAvailable < 1 || listing.binLockOrderId) throw new Fail("stock");
-  const address =
-    (await tx.address.findFirst({ where: { userId: offer.buyerId, isDefault: true } })) ??
-    (await tx.address.findFirst({ where: { userId: offer.buyerId } }));
   const order = await insertOrder(tx, {
     buyerId: offer.buyerId,
     sellerId: listing.sellerId,
     source: "OFFER",
     shipDays: listing.shippingDays,
-    address: address
-      ? {
-          recipient: address.recipient,
-          phone: address.phone,
-          line1: address.line1,
-          district: address.district,
-        }
-      : null,
+    address: null,
+    deal: true,
     lines: [
       {
         listingId: listing.id,
@@ -78,14 +66,6 @@ async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amoun
       },
     ],
   });
-  const reserved = await tx.listing.updateMany({
-    where: { id: listing.id, status: "ACTIVE", binLockOrderId: null, quantityAvailable: { gte: 1 } },
-    data: {
-      quantityAvailable: { decrement: 1 },
-      ...(live(listing) ? { binLockOrderId: order.id } : {}),
-    },
-  });
-  if (reserved.count !== 1) throw new Fail("stock");
   await tx.offer.update({ where: { id: offer.id }, data: { status: "ACCEPTED", orderId: order.id } });
   return order.id;
 }
@@ -150,9 +130,11 @@ export async function respondOffer(userId: string, offerId: string, action: stri
       }
       throw new Fail("state");
     });
+    const threadId = result.orderId ? await attachDealThread(result.orderId) : null;
     const title = result.kind === "accepted" ? "議價已接受" : result.kind === "declined" ? "議價已被拒絕" : "議價有回覆";
-    await notify(result.buyerId, "offer", title, "打開貨品頁查看。", result.orderId ? `/orders/${result.orderId}` : `/listing/${result.listingId}`);
-    return { ok: true as const, orderId: result.orderId };
+    const href = threadId ? `/messages/${threadId}` : result.orderId ? `/orders/${result.orderId}` : `/listing/${result.listingId}`;
+    await notify(result.buyerId, "offer", title, result.kind === "accepted" ? "去聊天傾交收。" : "打開貨品頁查看。", href);
+    return { ok: true as const, orderId: result.orderId, threadId };
   } catch (error) {
     const code = asFail(error);
     if (code) return { ok: false as const, error: code };
