@@ -335,7 +335,7 @@ svg {
   }
 }
 
-/* Thread fills the viewport: the deal bar stays put, messages scroll beneath it. */
+/* Thread fills the viewport: messages scroll, the composer stays at the bottom. */
 @media (max-width: 767px) {
   body:has(.thread-fit) > footer {
     display: none;
@@ -357,13 +357,8 @@ svg {
 }
 
 .thread-log {
-  position: relative;
   min-height: 0;
   flex: 1 1 auto;
-}
-
-.thread-log-scroll {
-  height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
 }

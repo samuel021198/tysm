@@ -39,22 +39,12 @@ type Item = {
 
 type PaymentInfo = { method: string; account: string; holder: string };
 
-export function DealPanel({
-  locale,
-  viewerId,
-  next,
-  order,
-  reviewed,
-  payment,
-  pin = true,
-}: {
+type DealProps = {
   locale: Locale;
   viewerId: string;
   next: string;
   reviewed: boolean;
   payment: PaymentInfo | null;
-  /** Window-sticky on the order page. The thread pins the measured bar instead. */
-  pin?: boolean;
   order: {
     id: string;
     status: string;
@@ -64,7 +54,23 @@ export function DealPanel({
     fulfillment: unknown;
     items: Item[];
   };
+};
+
+function DealView({
+  locale,
+  viewerId,
+  next,
+  order,
+  reviewed,
+  payment,
+  pin = true,
+  variant,
+}: DealProps & {
+  /** Window-sticky on the order page. Ignored for the in-flow stream bubble. */
+  pin?: boolean;
+  variant: "card" | "stream";
 }) {
+  const stream = variant === "stream";
   const phase = dealPhase(order);
   const meta = readDealMeta(order.fulfillment);
   const proofs = meta.proofs.length;
@@ -78,20 +84,27 @@ export function DealPanel({
   const showPayment = !blocked && payment && showPaymentDetails(phase, meta.confirmed === true, proofs) ? payment : null;
 
   return (
-    <section className={`${pin ? "sticky top-[calc(3rem+env(safe-area-inset-top))] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`}>
-      <p className="text-xs font-semibold">{DEAL_BANNER}</p>
-      <div className="flex flex-wrap items-center gap-2">
+    <section
+      aria-label={phaseLabel(locale, phase)}
+      className={
+        stream
+          ? "mx-auto grid w-full max-w-[18rem] gap-2 rounded-2xl border border-line bg-card px-3 py-2.5"
+          : `${pin ? "sticky top-[calc(3rem+env(safe-area-inset-top))] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`
+      }
+    >
+      {stream ? null : <p className="text-xs font-semibold">{DEAL_BANNER}</p>}
+      <div className={`flex flex-wrap items-center gap-2 ${stream ? "justify-center" : ""}`}>
         <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{phaseLabel(locale, phase)}</span>
         {sold ? <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{tx(locale, "已售出", "Sold")}</span> : null}
       </div>
-      <div className="text-sm">
+      <div className={`text-sm ${stream ? "text-center" : ""}`}>
         {order.items.map((item) => (
           <p key={item.id}>
             <Link href={`/listing/${item.listingId}`} className="font-medium">{item.title}</Link>
           </p>
         ))}
-        <p className="price mt-1 text-lg leading-none">{formatHkd(order.total, locale)}</p>
-        <p className="mt-1 text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>
+        <p className={`price mt-1 leading-none ${stream ? "text-sm" : "text-lg"}`}>{formatHkd(order.total, locale)}</p>
+        {stream ? null : <p className="mt-1 text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>}
         {note ? <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
       </div>
       {blocked ? <p className="text-sm font-medium">{tx(locale, RESERVE_BLOCKED, "This item is already reserved")}</p> : null}
@@ -155,12 +168,22 @@ export function DealPanel({
         <form action={cancelDealAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
-          <button className="text-left text-xs text-muted underline">{tx(locale, "取消交收", "Cancel handover")}</button>
+          <button className={stream ? "w-full text-center text-xs text-muted underline" : "text-left text-xs text-muted underline"}>{tx(locale, "取消交收", "Cancel handover")}</button>
         </form>
       ) : null}
       {next.startsWith("/messages/") ? (
-        <Link className="text-xs font-semibold text-link" href={`/orders/${order.id}`}>{tx(locale, "交收詳情", "Handover details")}</Link>
+        <Link className={stream ? "text-center text-xs font-semibold text-link" : "text-xs font-semibold text-link"} href={`/orders/${order.id}`}>{tx(locale, "交收詳情", "Handover details")}</Link>
       ) : null}
     </section>
   );
+}
+
+/** Order / 交收詳情 card. Stays pinned on that page. */
+export function DealPanel(props: DealProps & { pin?: boolean }) {
+  return <DealView {...props} variant="card" />;
+}
+
+/** In-flow system bubble on the thread. Same phase gates as the detail card, no sticky bar. */
+export function DealStream(props: DealProps) {
+  return <DealView {...props} variant="stream" pin={false} />;
 }
