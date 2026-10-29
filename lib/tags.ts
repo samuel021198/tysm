@@ -1,4 +1,4 @@
-/** Topic labels. Stored without `#`. UI copy is 話題. */
+/** Topic labels. Stored without `#`. The composer asks for one `#`, it does not offer a topic list. */
 
 const TAG_RE = /(^|[^\p{L}\p{N}_])#([\p{L}\p{N}_]{1,24})/gu;
 
@@ -11,13 +11,6 @@ const ALIAS: Record<string, string> = {
   psa10: "PSA10",
   riftbound: "Riftbound",
 };
-
-/** Priority chips. Shown before the user types `#`. */
-export const TOPIC_DEFAULTS = ["PC", "FS", "賣", "ISO", "OP09", "Charizard"] as const;
-
-const TOPIC_MORE = ["寶可夢", "PSA10", "放賣", "海賊王", "Riftbound"] as const;
-
-const TOPIC_POOL = [...TOPIC_DEFAULTS, ...TOPIC_MORE];
 
 export function normalizeTag(raw: string): string | null {
   const cleaned = raw.trim().replace(/^#+/u, "").replace(/\s+/g, "");
@@ -65,11 +58,14 @@ export function hashPartial(text: string, cursor: number): string | null {
   return match ? match[2] : null;
 }
 
-export function topicSuggestions(partial: string | null): string[] {
-  if (partial == null) return [...TOPIC_DEFAULTS];
-  const q = partial.toLowerCase();
-  const hits = TOPIC_POOL.filter((tag) => tag.toLowerCase().startsWith(q) || (q.length >= 1 && tag.toLowerCase().includes(q)));
-  return hits.length ? hits : [...TOPIC_DEFAULTS];
+/** Put the caret on a fresh `#` so the user types their own topic. */
+export function startHashtag(text: string, cursor: number): { text: string; cursor: number } {
+  const at = Math.max(0, Math.min(cursor, text.length));
+  const upto = text.slice(0, at);
+  if (/(^|[^\p{L}\p{N}_])#[\p{L}\p{N}_]*$/u.test(upto)) return { text, cursor: at };
+  const spacer = upto.length && !/\s$/u.test(upto) ? " " : "";
+  const next = `${upto}${spacer}#${text.slice(at)}`;
+  return { text: next, cursor: upto.length + spacer.length + 1 };
 }
 
 export function insertTag(text: string, cursor: number, tag: string): { text: string; cursor: number } {

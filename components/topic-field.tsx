@@ -2,38 +2,13 @@
 
 import { useRef, useState } from "react";
 import { tx, type Locale } from "@/lib/i18n";
-import { hashPartial, insertTag, tagsFromCaption, topicSuggestions } from "@/lib/tags";
+import { startHashtag } from "@/lib/tags";
 
-export function TopicSuggest({
-  locale,
-  tags,
-  partial,
-  onPick,
-}: {
-  locale: Locale;
-  tags: string[];
-  partial: string | null;
-  onPick: (tag: string) => void;
-}) {
-  const chosen = new Set(tags.map((tag) => tag.toLowerCase()));
-  const rows = topicSuggestions(partial).filter((tag) => !chosen.has(tag.toLowerCase()));
-  if (!rows.length) return null;
+export function HashtagHint({ locale, onAdd }: { locale: Locale; onAdd: () => void }) {
   return (
-    <div className="grid gap-1">
-      <p className="text-[11px] leading-4 text-muted">{tx(locale, "話題", "Topics")}</p>
-      <div className="flex flex-wrap gap-1.5">
-        {rows.map((tag) => (
-          <button
-            key={tag}
-            type="button"
-            className="h-8 rounded-full bg-soft px-2.5 text-[11px] leading-4 text-muted"
-            onClick={() => onPick(tag)}
-          >
-            #{tag}
-          </button>
-        ))}
-      </div>
-    </div>
+    <button type="button" className="min-h-11 w-fit text-left text-sm text-link" onClick={onAdd}>
+      {tx(locale, "建議加 #hashtag", "Add a #hashtag")}
+    </button>
   );
 }
 
@@ -63,8 +38,6 @@ export function TopicField({
     if (onChange) onChange(next);
     else setInner(next);
   }
-  const tags = tagsFromCaption(body);
-  const partial = hashPartial(body, cursor);
 
   function sync(next: string, caret: number) {
     setBody(next);
@@ -85,7 +58,7 @@ export function TopicField({
         name={name}
         maxLength={maxLength}
         value={body}
-        placeholder={placeholder ?? tx(locale, "寫幾隻字，可以加 #PC #FS #ISO", "Write a few lines. #PC #FS #ISO work too.")}
+        placeholder={placeholder ?? tx(locale, "寫幾隻字", "Write a few lines.")}
         aria-label={tx(locale, "內文", "Caption")}
         onChange={(event) => {
           setBody(event.target.value);
@@ -93,12 +66,10 @@ export function TopicField({
         }}
         onSelect={(event) => setCursor(event.currentTarget.selectionStart ?? body.length)}
       />
-      <TopicSuggest
+      <HashtagHint
         locale={locale}
-        tags={tags}
-        partial={partial}
-        onPick={(tag) => {
-          const next = insertTag(body, cursor, tag);
+        onAdd={() => {
+          const next = startHashtag(body, cursor);
           sync(next.text, next.cursor);
         }}
       />

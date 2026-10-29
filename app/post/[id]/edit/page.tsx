@@ -27,7 +27,7 @@ export default async function EditPostPage({
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <form action={updatePost} className="grid gap-2">
         <input type="hidden" name="postId" value={post.id} />
-        <TopicField locale={prefs.locale} defaultValue={post.body} placeholder={tx(prefs.locale, "寫幾隻字，可以加 #PC #FS #ISO", "Write a caption. #PC #FS #ISO work too.")} />
+        <TopicField locale={prefs.locale} defaultValue={post.body} placeholder={tx(prefs.locale, "寫幾隻字", "Write a few lines.")} />
         <button className="btn btn-primary w-fit">{tx(prefs.locale, "儲存", "Save")}</button>
       </form>
     </div>
