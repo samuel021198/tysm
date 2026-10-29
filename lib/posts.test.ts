@@ -281,13 +281,13 @@ const hidePost = collect.slice(hideStart, collect.indexOf("export async function
 assert(hidePost.includes("feedHide"), "hide stores a viewer-only row");
 assert(!hidePost.includes("post.delete"), "hide does not delete");
 
-assert(POST_MENU_ORDER.join() === "delete,share,hide,report,edit", "menu order");
-const own = postMenuFlags({ own: true, loggedIn: true, postId: "p", listingId: null });
-const other = postMenuFlags({ own: false, loggedIn: true, postId: "p", listingId: "l" });
+assert(POST_MENU_ORDER.join() === "delete,share,hide,report,block,edit", "menu order");
+const own = postMenuFlags({ own: true, loggedIn: true, postId: "p", listingId: null, userId: "u" });
+const other = postMenuFlags({ own: false, loggedIn: true, postId: "p", listingId: "l", userId: "u" });
 const guest = postMenuFlags({ own: false, loggedIn: false, postId: "p", listingId: null });
-assert(own.delete && own.edit && own.hide && !own.report, "author gets delete, edit, hide");
-assert(!other.delete && !other.edit && other.report && other.hide && other.share, "others get report, hide, share");
-assert(!guest.hide && !guest.report && guest.share, "guests can share");
+assert(own.delete && own.edit && own.hide && !own.report && !own.block, "author gets delete, edit, hide");
+assert(!other.delete && !other.edit && other.report && other.block && other.hide && other.share, "others get report, block, hide, share");
+assert(!guest.hide && !guest.report && !guest.block && guest.share, "guests can share");
 assert(postEditHref("p", "l") === "/sell/l", "a listed post edits the listing");
 assert(postEditHref("p", null) === "/post/p/edit", "a caption post edits the caption");
 assert(postEditHref(null, null) === null, "nothing to edit");
@@ -295,8 +295,8 @@ assert(reportTarget("p", "l")?.type === "POST", "a post is reported as a post");
 assert(hideTarget(null, "l")?.type === "LISTING", "a listing card hides the listing");
 
 const menu = readFileSync(new URL("../components/post-menu.tsx", import.meta.url), "utf8");
-assert(["剷除", "分享", "隱藏", "舉報", "編輯"].every((label) => menu.includes(label)), "menu labels");
-assert(menu.includes("deletePost") && menu.includes("hideFromFeed") && menu.includes("reportAction"), "menu reuses delete, hide, and report");
+assert(["剷除", "分享", "隱藏", "舉報", "封鎖", "編輯"].every((label) => menu.includes(label)), "menu labels");
+assert(menu.includes("deletePost") && menu.includes("hideFromFeed") && menu.includes("ReportSheet") && menu.includes("BlockButton"), "menu reuses delete, hide, report, and block");
 assert(menu.includes("ShareSheet") && menu.includes("內部分享"), "menu share opens the in-app sheet");
 assert(menu.includes("button = true") && menu.includes("useHoldSwipe") && menu.includes("onLongPress") && menu.includes("onSwipeLeft") && menu.includes("onContextMenu"), "the ellipsis can be omitted; long-press, swipe-left, and the context menu stay");
 assert(menu.includes("swipeRightFormId") && menu.includes("requestSubmit"), "swipe right submits the existing like form");

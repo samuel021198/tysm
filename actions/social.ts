@@ -9,6 +9,7 @@ import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { openHandover } from "@/lib/deals";
 import { notificationTarget } from "@/lib/notify";
+import { composeReportReason } from "@/lib/safety";
 import { isBlocked, notify, notifyKind } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
 
@@ -50,34 +51,73 @@ export async function toggleFollow(formData: FormData) {
   redirect(`/shop/${sellerId}?ok=saved`);
 }
 
-export async function toggleBlock(formData: FormData) {
+export async function blockUser(formData: FormData) {
   const blockedId = String(formData.get("userId") || "");
-  const user = await viewer(`/shop/${blockedId}`);
-  if (blockedId === user.id) redirect(`/shop/${blockedId}?err=own`);
-  const existing = await prisma.block.findUnique({
+  const away = safeNext(formData.get("away")).split("?")[0].split("#")[0] || "/";
+  const user = await viewer(away);
+  if (!blockedId || blockedId === user.id) redirect(`${away}?err=own`);
+  const target = await prisma.user.findUnique({ where: { id: blockedId }, select: { id: true } });
+  if (!target) redirect(`${away}?err=forbidden`);
+  await prisma.block.upsert({
     where: { blockerId_blockedId: { blockerId: user.id, blockedId } },
+    create: { blockerId: user.id, blockedId },
+    update: {},
   });
-  if (existing) await prisma.block.delete({ where: { id: existing.id } });
-  else await prisma.block.create({ data: { blockerId: user.id, blockedId } });
-  redirect(`/shop/${blockedId}?ok=saved`);
+  revalidatePath("/");
+  revalidatePath("/find");
+  revalidatePath("/search");
+  revalidatePath("/messages");
+  revalidatePath("/me/settings/privacy");
+  redirect(away);
+}
+
+export async function unblockUser(formData: FormData) {
+  const blockedId = String(formData.get("userId") || "");
+  const user = await viewer("/me/settings/privacy");
+  if (blockedId) await prisma.block.deleteMany({ where: { blockerId: user.id, blockedId } });
+  revalidatePath("/");
+  revalidatePath("/find");
+  revalidatePath("/search");
+  revalidatePath("/messages");
+  revalidatePath("/me/settings/privacy");
+  redirect("/me/settings/privacy?ok=saved");
 }
 
 export async function reportAction(formData: FormData) {
   const targetId = String(formData.get("targetId") || "");
   const raw = String(formData.get("targetType") || "");
-  const targetType = raw === "USER" ? "USER" : raw === "POST" ? "POST" : "LISTING";
-  const fallback = targetType === "USER" ? `/shop/${targetId}` : targetType === "POST" ? `/post/${targetId}` : `/listing/${targetId}`;
+  const targetType = raw === "USER" || raw === "POST" || raw === "LISTING" || raw === "THREAD" ? raw : null;
+  const fallback =
+    targetType === "USER"
+      ? `/shop/${targetId}`
+      : targetType === "POST"
+        ? `/post/${targetId}`
+        : targetType === "THREAD"
+          ? `/messages/${targetId}`
+          : `/listing/${targetId}`;
   const requested = String(formData.get("next") || "");
   const next = (requested ? safeNext(requested) : fallback).split("?")[0].split("#")[0] || "/";
   const user = await viewer(next);
-  const reason = String(formData.get("reason") || "").trim();
-  if (reason.length < 4) redirect(`${next}?err=dispute`);
-  if (targetType === "USER" && targetId === user.id) redirect(`${next}?err=own`);
-  if (targetType === "POST") {
+  const reason = composeReportReason(String(formData.get("reason") || ""), String(formData.get("note") || ""));
+  if (!targetType || !targetId || !reason) redirect(`${next}?err=report`);
+  if (targetType === "USER") {
+    if (targetId === user.id) redirect(`${next}?err=own`);
+    const row = await prisma.user.findUnique({ where: { id: targetId }, select: { id: true } });
+    if (!row) redirect(`${next}?err=forbidden`);
+  } else if (targetType === "POST") {
     const post = await prisma.post.findUnique({ where: { id: targetId }, select: { authorId: true } });
     if (!post || post.authorId === user.id) redirect(`${next}?err=forbidden`);
+  } else if (targetType === "LISTING") {
+    const listing = await prisma.listing.findUnique({ where: { id: targetId }, select: { sellerId: true } });
+    if (!listing || listing.sellerId === user.id) redirect(`${next}?err=forbidden`);
+  } else {
+    const thread = await prisma.messageThread.findUnique({
+      where: { id: targetId },
+      select: { buyerId: true, sellerId: true },
+    });
+    if (!thread || (thread.buyerId !== user.id && thread.sellerId !== user.id)) redirect(`${next}?err=forbidden`);
   }
-  await prisma.report.create({ data: { reporterId: user.id, targetType, targetId, reason: reason.slice(0, 1000) } });
+  await prisma.report.create({ data: { reporterId: user.id, targetType, targetId, reason } });
   redirect(`${next}?ok=report`);
 }
 
