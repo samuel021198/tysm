@@ -25,7 +25,7 @@ import { ViewPing } from "@/components/pings";
 import { deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
 import { toggleFavorite, toggleFollow } from "@/actions/social";
 import { PersonMenu } from "@/components/safety-menu";
-import { RatingPill } from "@/components/profile-header";
+import { NameLine } from "@/components/profile-header";
 import { ratingFromAggregate } from "@/lib/ratings";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -318,22 +318,25 @@ export default async function ListingPage({
         </form>
         <div className="text-sm">
           <div className="flex items-start justify-between gap-2">
-          <Link href={`/shop/${listing.sellerId}`} className="flex min-w-0 items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-accent text-sm font-bold text-white">
+          <div className="flex min-w-0 items-center gap-3">
+            <Link href={`/shop/${listing.sellerId}`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-bold text-white">
               {listing.seller.nickname.slice(0, 1)}
-            </span>
+            </Link>
             <span className="min-w-0">
-              <span className="flex min-w-0 items-center gap-1">
-                <span className="truncate font-medium">{listing.seller.nickname}</span>
-                {sellerRating ? <RatingPill locale={locale} average={sellerRating.average} count={sellerRating.count} /> : null}
-              </span>
-              <span className="text-xs text-muted">
+              <NameLine
+                name={<Link href={`/shop/${listing.sellerId}`} className="font-medium">{listing.seller.nickname}</Link>}
+                nameClassName="truncate"
+                tier={listing.seller.verificationTier}
+                locale={locale}
+                rating={sellerRating}
+              />
+              <Link href={`/shop/${listing.sellerId}`} className="mt-0.5 block text-xs text-muted">
                 {tx(locale, "賣家", "Seller")}
                 {` · ${tx(locale, "完成", "Sold")} ${sellerSales}`}
                 {sellerOnTime != null ? ` · ${tx(locale, "準時寄出", "On time")} ${sellerOnTime}%` : ""}
-              </span>
+              </Link>
             </span>
-          </Link>
+          </div>
           {viewer && !owner ? (
             <PersonMenu
               locale={locale}

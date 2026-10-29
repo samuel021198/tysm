@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { verificationPill } from "../components/profile-header";
+import { verificationPill, verificationTip } from "../components/profile-header";
 import {
   BIO_MAX,
   INTEREST_TAG_MAX,
@@ -79,6 +79,10 @@ const trusted = verificationPill("TRUSTED");
 const merchant = verificationPill("MERCHANT");
 assert(trusted?.label === "誠信用戶" && [...trusted.label].length === 4 && trusted.className.includes("#E8F5E9") && trusted.className.includes("#1B5E20"), "trusted is a light-green four-character pill");
 assert(merchant?.label === "專業商戶" && [...merchant.label].length === 4 && merchant.className.includes("#FFF3E0") && merchant.className.includes("#E65100"), "merchant is a light-gold four-character pill");
+assert(verificationTip("NORMAL") === null && verificationTip("TRUSTED") === "已通過身份驗證" && verificationTip("MERCHANT") === "已通過商戶驗證", "the pill tip is the locked written line, and normal has none");
+assert(header.includes("<VerificationPill tier={tier} />") && header.indexOf("{name}") < header.indexOf("<VerificationPill") && header.indexOf("<VerificationPill") < header.indexOf("<RatingPill"), "the shared row is name, pill, then score");
+assert(header.includes("verificationTip(tier)") && header.includes("aria-expanded") && header.includes('type="button"') && header.includes("stopPropagation") && header.includes('role="status"') && !header.includes('href="/me/settings/verify"'), "tapping the pill toggles an inline tip and does not open a page");
+assert(header.includes("<NameLine name={nickname} tier={verificationTier}"), "the profile name row is display name, pill, then score");
 const me = readFileSync(new URL("../app/me/page.tsx", import.meta.url), "utf8");
 const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
 assert(me.includes("verificationTier={viewer.verificationTier}") && shop.includes("verificationTier={seller.verificationTier}"), "own profile and public shop pass the stored tier");

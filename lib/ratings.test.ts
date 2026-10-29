@@ -57,11 +57,18 @@ const ratingForm = readFileSync(new URL("../components/deal-rating-form.tsx", im
 assert(ratingForm.includes("評分") && ratingForm.includes("一句評語") && !ratingForm.includes("送出評分"), "the submit label is 評分 and the note asks for one written line");
 const header = readFileSync(new URL("../components/profile-header.tsx", import.meta.url), "utf8");
 const listing = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
-assert(header.includes("<RatingPill") && listing.includes("<RatingPill") && listing.includes("listing.seller.nickname"), "the score sits beside the profile name and the listing seller");
+assert(header.includes("<RatingPill") && header.includes("<NameLine"), "the score sits beside the profile name");
+assert(listing.includes("<NameLine") && listing.includes("rating={sellerRating}") && listing.includes("listing.seller.verificationTier") && listing.includes("listing.seller.nickname"), "the listing seller row is name, tier, then score");
+const feedCard = readFileSync(new URL("../components/listing-card.tsx", import.meta.url), "utf8");
+const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
+assert(!feedCard.includes("NameLine") && !feedCard.includes("VerificationPill") && !postCard.includes("NameLine") && !postCard.includes("VerificationPill"), "feed cards do not show the pill");
 assert(!header.includes("—"), "a profile with no ratings does not show a dash");
 const route = readFileSync(new URL("../app/api/orders/[id]/rating/route.ts", import.meta.url), "utf8");
 assert(route.includes("rateDeal") && route.includes('error.code === "P2002"') && route.includes('"once"'), "the route uses the gate and the once-only key");
 const thread = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta.url), "utf8");
 assert(thread.includes("ratings:") && thread.includes("rating={order.ratings.find"), "the thread loads this viewer's rating");
+assert(thread.includes("rating={otherRating}") && thread.includes("tier={other.verificationTier}") && thread.includes("thread.seller.verificationTier") && thread.includes("rating: sellerRating") && !thread.includes("other.username") && !thread.includes("@{"), "chat top and the pin-card seller use the stored tier and average, with no handle");
+const pin = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
+assert(pin.includes("<NameLine") && pin.includes("seller.tier") && pin.includes("seller.rating") && pin.includes("/shop/${seller.id}") && pin.indexOf("/shop/${seller.id}") > pin.indexOf("/listing/${listingId}"), "the pinned card seller line sits outside the product link");
 
 console.log("ratings.test.ts ok");
