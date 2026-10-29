@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { toggleFavorite } from "@/actions/social";
-import { dexPath } from "@/lib/dex";
 import { conditionLabel } from "@/lib/rules";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
@@ -22,7 +21,6 @@ type CardListing = {
   grader: string | null;
   gradeValue: number | null;
   sellerId: string;
-  catalogCardId?: string | null;
   photos: { url: string }[];
   seller: { nickname: string };
 };
@@ -45,7 +43,6 @@ export function ListingCard({
   const live =
     listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
   const amount = live ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
-  const dexHref = dexPath(listing.catalogCardId);
   const sale =
     listing.saleType === "AUCTION" ? tx(locale, "拍賣", "Auction") : listing.saleType === "BOTH" ? tx(locale, "直購 + 拍賣", "BIN + auction") : tx(locale, "直購", "Buy Now");
   return (
@@ -82,11 +79,6 @@ export function ListingCard({
             {live && listing.auctionEndsAt ? ` · ${formatHKT(listing.auctionEndsAt, locale, false)}` : ` · ${listing.seller.nickname}`}
           </p>
         </Link>
-        {dexHref ? (
-          <Link href={dexHref} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
-            {tx(locale, "睇圖鑑", "View in the dex")}
-          </Link>
-        ) : null}
       </div>
     </article>
   );
