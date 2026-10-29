@@ -15,6 +15,7 @@ export function ListingChatBar({
   priceCents,
   cover,
   openOffer = false,
+  offerClosed = false,
   riskAcked = false,
 }: {
   locale: Locale;
@@ -25,6 +26,8 @@ export function ListingChatBar({
   cover: string | null;
   /** Landed from the listing 議價 button. */
   openOffer?: boolean;
+  /** 已保留 or sold: the button stays, and does not open a new offer. */
+  offerClosed?: boolean;
   riskAcked?: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -32,14 +35,14 @@ export function ListingChatBar({
   if (riskAcked && !acked) setAcked(true);
 
   useEffect(() => {
-    if (!openOffer) return;
+    if (!openOffer || offerClosed) return;
     const params = new URLSearchParams(window.location.search);
     if (params.get("offer") !== "1") return;
     setOpen(true);
     params.delete("offer");
     const q = params.toString();
     window.history.replaceState(null, "", `${window.location.pathname}${q ? `?${q}` : ""}`);
-  }, [openOffer]);
+  }, [openOffer, offerClosed]);
 
   return (
     <>
@@ -52,7 +55,7 @@ export function ListingChatBar({
               {priceCents != null ? <span className="price mt-0.5 block text-sm">{formatHkd(priceCents, locale)}</span> : null}
             </span>
           </Link>
-          <button type="button" className="btn btn-primary shrink-0 px-3" onClick={() => setOpen(true)}>
+          <button type="button" className="btn btn-primary shrink-0 px-3 disabled:opacity-40" disabled={offerClosed} onClick={() => setOpen(true)}>
             議價
           </button>
         </div>

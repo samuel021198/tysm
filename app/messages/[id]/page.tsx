@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, latestOpenOfferMessage, readDealEvent, readDealMeta } from "@/lib/deal-phase";
+import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, latestOpenOfferMessage, offersClosed, readDealEvent, readDealMeta } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -81,7 +81,7 @@ export default async function ThreadPage({
   const choices = !thread.listingId && canOffer
     ? (
         await prisma.listing.findMany({
-          where: { sellerId: otherId, status: "ACTIVE", quantityAvailable: { gte: 1 } },
+          where: { sellerId: otherId, status: "ACTIVE", quantityAvailable: { gte: 1 }, binLockOrderId: null },
           include: { photos: { take: 1, orderBy: { position: "asc" } } },
           orderBy: { updatedAt: "desc" },
           take: 30,
@@ -118,6 +118,7 @@ export default async function ThreadPage({
             priceCents={listPrice}
             cover={thread.listing.photos[0]?.url ?? null}
             openOffer={sp.offer === "1"}
+            offerClosed={offersClosed(thread.listing.status, thread.listing.binLockOrderId)}
             riskAcked={Boolean(viewer.p2pRiskAckAt)}
           />
         ) : null}

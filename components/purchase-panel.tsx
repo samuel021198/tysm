@@ -23,6 +23,7 @@ export function PurchasePanel({
   showBid,
   bidBanned,
   showHandover,
+  offerClosed = false,
   loggedIn,
   bidsVoided,
   ownerNote,
@@ -43,6 +44,8 @@ export function PurchasePanel({
   showBid: boolean;
   bidBanned: boolean;
   showHandover: boolean;
+  /** Grey 議價 while the listing is 已保留 or sold. 聯絡賣家 stays on. */
+  offerClosed?: boolean;
   loggedIn: boolean;
   bidsVoided: boolean;
   ownerNote: string | null;
@@ -64,7 +67,7 @@ export function PurchasePanel({
         <input type="hidden" name="focus" value="compose" />
       </form>
       <div className="grid grid-cols-2 items-stretch gap-2">
-        <button form="listing-offer" className="btn btn-primary h-full w-full" type="submit">議價</button>
+        <button form="listing-offer" className="btn btn-primary h-full w-full disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
         <button form="listing-chat" className="btn btn-primary h-full w-full" type="submit">聯絡賣家</button>
       </div>
     </div>
@@ -157,7 +160,7 @@ export function PurchasePanel({
         >
           {showHandover ? (
             <div className="grid shrink-0 grid-cols-2 gap-1.5">
-              <button form="listing-offer" className="btn btn-primary h-full px-3" type="submit">議價</button>
+              <button form="listing-offer" className="btn btn-primary h-full px-3 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
               <button form="listing-chat" className="btn btn-primary h-full px-3" type="submit">聯絡賣家</button>
             </div>
           ) : null}
