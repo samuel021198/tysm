@@ -20,6 +20,7 @@ import {
 import { meetupNote } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { ReviseOfferButton, type OfferChoice } from "./offer-sheet";
 import { ProofForm } from "./proof-form";
 
 type Item = {
@@ -44,6 +45,15 @@ type DealProps = {
   next: string;
   reviewed: boolean;
   payment: PaymentInfo | null;
+  names?: { buyer: string; seller: string };
+  /** Counterparty 改價回覆. Same make-offer form, prefilled. */
+  revise?: {
+    threadId: string;
+    riskAcked: boolean;
+    listing: OfferChoice;
+    priceCents: number;
+    note: string;
+  } | null;
   order: {
     id: string;
     status: string;
@@ -62,6 +72,8 @@ function DealView({
   order,
   reviewed,
   payment,
+  names,
+  revise = null,
   pin = true,
   variant,
 }: DealProps & {
@@ -84,6 +96,9 @@ function DealView({
   const pending = meta.offer?.status === "PENDING" ? meta.offer : null;
   const accepted = meta.offer?.status === "ACCEPTED" ? meta.offer : null;
   const offerLine = pending ? dealEventCopy(locale, { kind: "offer", name: pending.name, amount: pending.amount, note: pending.note }) : null;
+  const shownCents = stream && pending ? pending.amount : order.total;
+  const waitingRaw = pending ? (pending.by === order.buyerId ? names?.seller : pending.by === order.sellerId ? names?.buyer : "") : "";
+  const waitingLabel = waitingRaw?.trim() || tx(locale, "對方", "them");
 
   return (
     <section
@@ -104,32 +119,55 @@ function DealView({
             <Link href={`/listing/${item.listingId}`} className="font-medium">{item.title}</Link>
           </p>
         ))}
-        <p className={`price mt-1 leading-none ${stream ? "text-sm" : "text-lg"}`}>{formatHkd(order.total, locale)}</p>
+        <p className={`price mt-1 leading-none ${stream ? "text-sm" : "text-lg"}`}>{formatHkd(shownCents, locale)}</p>
         {stream ? null : <p className="mt-1 text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>}
-        {note ? <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
+        {stream && pending ? (
+          pending.note ? <p className="mt-1 text-xs">{pending.note}</p> : null
+        ) : note ? (
+          <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p>
+        ) : null}
       </div>
       {blocked ? <p className="text-sm font-medium">{tx(locale, RESERVE_BLOCKED, "This item is already reserved")}</p> : null}
       {pending && offerLine && (buyer || seller) ? (
         <div className={`grid gap-2 ${stream ? "justify-items-center text-center" : ""}`}>
-          <p className="text-sm font-medium">{offerLine.text}</p>
-          {offerLine.note ? <p className="text-xs text-muted">{offerLine.note}</p> : null}
+          {stream ? (
+            <>
+              <p className="text-xs">{tx(locale, `提出：${pending.name}`, `Proposed by ${pending.name}`)}</p>
+              <p className="text-xs">{tx(locale, `等待：${waitingLabel}`, `Waiting on ${waitingLabel}`)}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm font-medium">{offerLine.text}</p>
+              {offerLine.note ? <p className="text-xs text-muted">{offerLine.note}</p> : null}
+            </>
+          )}
           {viewerId === pending.by ? (
             <>
-              <p className="text-xs text-muted">{tx(locale, "等待對方回應", "Waiting for a reply")}</p>
+              {stream ? null : <p className="text-xs text-muted">{tx(locale, "等待對方回應", "Waiting for a reply")}</p>}
               <form action={withdrawDealOfferAction} className="w-full">
                 <input type="hidden" name="orderId" value={order.id} />
                 <input type="hidden" name="next" value={next} />
-                <button className="btn btn-ghost w-full">{tx(locale, "撤回要約", "Withdraw")}</button>
+                <button className="btn btn-ghost w-full">{tx(locale, stream ? "撤回" : "撤回要約", "Withdraw")}</button>
               </form>
             </>
           ) : (
-            <div className="grid w-full grid-cols-2 gap-2">
-              <form action={acceptDealOfferAction}>
+            <div className={stream ? "grid w-full gap-2" : "grid w-full grid-cols-2 gap-2"}>
+              <form action={acceptDealOfferAction} className="w-full">
                 <input type="hidden" name="orderId" value={order.id} />
                 <input type="hidden" name="next" value={next} />
                 <button className={primary}>{tx(locale, "接受要約", "Accept")}</button>
               </form>
-              <form action={declineDealOfferAction}>
+              {stream && revise ? (
+                <ReviseOfferButton
+                  locale={locale}
+                  threadId={revise.threadId}
+                  listing={revise.listing}
+                  priceCents={revise.priceCents}
+                  note={revise.note}
+                  riskAcked={revise.riskAcked}
+                />
+              ) : null}
+              <form action={declineDealOfferAction} className="w-full">
                 <input type="hidden" name="orderId" value={order.id} />
                 <input type="hidden" name="next" value={next} />
                 <button className="btn btn-ghost w-full">{tx(locale, "拒絕", "Decline")}</button>
@@ -139,7 +177,10 @@ function DealView({
         </div>
       ) : null}
       {phase === "CONFIRMED" && accepted ? (
-        <p className={`text-sm font-medium ${stream ? "text-center" : ""}`}>{dealEventCopy(locale, { kind: "accept" }).text}</p>
+        <div className={stream ? "text-center" : ""}>
+          <p className="text-sm font-medium">{dealEventCopy(locale, { kind: "accept" }).text}</p>
+          {accepted.note ? <p className="mt-1 text-xs">{accepted.note}</p> : null}
+        </div>
       ) : null}
       {showPayment ? (
         <div className="rounded-xl bg-soft px-3 py-2 text-sm">

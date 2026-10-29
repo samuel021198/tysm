@@ -19,6 +19,7 @@ export function MessageComposer({
   bound = null,
   choices = [],
   riskAcked = false,
+  offerPrefill = null,
 }: {
   locale: Locale;
   threadId: string;
@@ -28,6 +29,8 @@ export function MessageComposer({
   choices?: OfferChoice[];
   /** Account already stored the private-handover ack. */
   riskAcked?: boolean;
+  /** Live offer the proposer is replacing from +. */
+  offerPrefill?: { priceCents: number; note: string } | null;
 }) {
   const [imageUrl, setImageUrl] = useState("");
   const [body, setBody] = useState("");
@@ -210,6 +213,7 @@ export function MessageComposer({
         choices={choices}
         acked={acked}
         persisted={riskAcked}
+        prefill={offerPrefill}
         onAcked={() => setAcked(true)}
         onClose={() => setOffer(false)}
       />

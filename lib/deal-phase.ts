@@ -97,9 +97,10 @@ export function offerAckGate(
   return { ok: false, error: "deal_ack" };
 }
 
-/** Omit「提出要約」from the + menu. No greyed-out row. */
-export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false): boolean {
-  if (pending || blocked) return false;
+/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. */
+export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false, proposer = false): boolean {
+  if (blocked) return false;
+  if (pending && !proposer) return false;
   if (phase == null) return true;
   return phase === "CHATTING" || phase === "ARRANGED";
 }
@@ -195,7 +196,7 @@ export function canArrange(phase: DealPhase): boolean {
 const DEAL_MARK = "\u2063";
 
 export type DealEvent =
-  | { kind: "offer"; name: string; amount: number; note: string }
+  | { kind: "offer"; name: string; amount: number; note: string; superseded?: boolean }
   | { kind: "accept" }
   | { kind: "decline" }
   | { kind: "withdraw" }
@@ -228,7 +229,24 @@ export function readDealEvent(body: string): DealEvent | null {
   if (typeof name !== "string" || !name.trim()) return null;
   if (typeof amount !== "number" || !Number.isSafeInteger(amount) || amount <= 0) return null;
   if (typeof note !== "string" || note.length > OFFER_NOTE_MAX) return null;
-  return { kind, name: name.trim(), amount, note };
+  const superseded = (row as { superseded?: unknown }).superseded === true;
+  return { kind, name: name.trim(), amount, note, ...(superseded ? { superseded: true } : {}) };
+}
+
+/** Stamp the previous offer bubble. Null when the body is not a live offer. */
+export function supersededOfferBody(body: string): string | null {
+  const event = readDealEvent(body);
+  if (!event || event.kind !== "offer" || event.superseded) return null;
+  return dealEventBody({ kind: "offer", name: event.name, amount: event.amount, note: event.note, superseded: true });
+}
+
+/** The newest live offer bubble. Messages must already be oldest-first. */
+export function latestOpenOfferMessage<T extends { id: string; body: string }>(messages: readonly T[]): T | null {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const event = readDealEvent(messages[i].body);
+    if (event?.kind === "offer" && !event.superseded) return messages[i];
+  }
+  return null;
 }
 
 export function dealEventCopy(locale: Locale, event: DealEvent): { text: string; note: string } {

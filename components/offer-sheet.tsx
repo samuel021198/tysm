@@ -21,6 +21,7 @@ export function OfferSheet({
   choices,
   acked,
   persisted,
+  prefill = null,
   onAcked,
   onClose,
 }: {
@@ -32,6 +33,8 @@ export function OfferSheet({
   acked: boolean;
   /** Already stored on the account when the thread loaded. */
   persisted: boolean;
+  /** 改價回覆 opens this same form with the live price and note. */
+  prefill?: { priceCents: number; note: string } | null;
   onAcked: () => void;
   onClose: () => void;
 }) {
@@ -104,7 +107,7 @@ export function OfferSheet({
                 inputMode="decimal"
                 required
                 disabled={locked}
-                defaultValue={listing.priceCents != null ? centsToInput(listing.priceCents) : ""}
+                defaultValue={prefill ? centsToInput(prefill.priceCents) : listing.priceCents != null ? centsToInput(listing.priceCents) : ""}
                 placeholder="HK$"
                 aria-label={tx(locale, "最終價錢", "Final price")}
               />
@@ -116,6 +119,7 @@ export function OfferSheet({
                 name="note"
                 maxLength={80}
                 disabled={locked}
+                defaultValue={prefill?.note ?? ""}
                 placeholder={tx(locale, "時間／地點／方式", "Time, place, or method")}
                 aria-label={tx(locale, "交收備註", "Handover note")}
               />
@@ -125,5 +129,46 @@ export function OfferSheet({
         ) : null}
       </div>
     </div>
+  );
+}
+
+/** Counterparty entry into the same make-offer form. Submit replaces the live offer. */
+export function ReviseOfferButton({
+  locale,
+  threadId,
+  listing,
+  priceCents,
+  note,
+  riskAcked,
+}: {
+  locale: Locale;
+  threadId: string;
+  listing: OfferChoice;
+  priceCents: number;
+  note: string;
+  riskAcked: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [acked, setAcked] = useState(riskAcked);
+  if (riskAcked && !acked) setAcked(true);
+  return (
+    <>
+      <button type="button" className="btn btn-ghost w-full" onClick={() => setOpen(true)}>
+        {tx(locale, "改價回覆", "Revise price")}
+      </button>
+      {open ? (
+        <OfferSheet
+          locale={locale}
+          threadId={threadId}
+          bound={listing}
+          choices={[]}
+          acked={acked}
+          persisted={riskAcked}
+          prefill={{ priceCents, note }}
+          onAcked={() => setAcked(true)}
+          onClose={() => setOpen(false)}
+        />
+      ) : null}
+    </>
   );
 }
