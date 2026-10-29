@@ -8,6 +8,20 @@ import { TopicChips } from "./topic-chips";
 
 export type VerificationTierName = "NORMAL" | "TRUSTED" | "MERCHANT";
 
+/** Small score beside the display name. Hidden when there are no ratings. */
+export function RatingPill({ locale, average, count }: { locale: Locale; average: number; count: number }) {
+  if (count < 1) return null;
+  const label = `★ ${average.toFixed(1)}`;
+  return (
+    <span
+      className="inline-flex items-center whitespace-nowrap rounded-full bg-soft px-1.5 py-0.5 text-[11px] font-semibold leading-none text-ink"
+      aria-label={tx(locale, `評分 ${label}，${count} 個`, `Rating ${label}, ${count} ratings`)}
+    >
+      {label}
+    </span>
+  );
+}
+
 /** Four-character pill beside the display name. NORMAL is no badge. */
 export function verificationPill(tier: VerificationTierName): { label: string; className: string } | null {
   if (tier === "TRUSTED") {
@@ -30,9 +44,8 @@ export function ProfileHeader({
   links,
   interestTags,
   handoverPlace,
-  reviews,
+  rating = null,
   followers,
-  completed,
   postCount,
   listingCount,
   verificationTier = "NORMAL",
@@ -49,9 +62,8 @@ export function ProfileHeader({
   links: string[];
   interestTags: string[];
   handoverPlace: string | null;
-  reviews: { stars: number }[];
+  rating?: { average: number; count: number } | null;
   followers: number;
-  completed: number;
   postCount: number;
   listingCount: number;
   verificationTier?: VerificationTierName;
@@ -62,8 +74,6 @@ export function ProfileHeader({
   const place = handoverPlace?.trim();
   const pill = verificationPill(verificationTier);
   const action = "inline-flex h-8 flex-1 items-center justify-center rounded-full border border-line bg-card px-2 text-xs font-medium text-ink";
-  const score = reviews.length ? (reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(1) : null;
-  const rating = `★ ${score ?? "—"} (${completed})`;
   const stats = [
     { href: `${base}?tab=posts#profile-posts`, value: postCount, label: tx(locale, "則貼文", "Posts"), tab: null },
     { href: `${base}?tab=selling#profile-posts`, value: listingCount, label: tx(locale, "商品", "Listings"), tab: "selling" },
@@ -113,6 +123,7 @@ export function ProfileHeader({
                 {pill.label}
               </span>
             ) : null}
+            {rating ? <RatingPill locale={locale} average={rating.average} count={rating.count} /> : null}
           </span>
           {username ? <span className="ml-1.5 font-normal text-muted">@{username}</span> : null}
           {!username && self ? (
@@ -120,9 +131,6 @@ export function ProfileHeader({
               @{tx(locale, "用戶名稱", "username")}
             </Link>
           ) : null}
-          <span className="ml-1.5 font-semibold" aria-label={tx(locale, `評分 ${rating}，完成交易 ${completed}`, `Rating ${rating}, ${completed} completed`)}>
-            {rating}
-          </span>
         </h1>
         {blurb ? <BioText text={blurb} /> : null}
         <TopicChips tags={interestTags.slice(0, 8)} className="mt-1" />

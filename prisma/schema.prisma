@@ -192,6 +192,8 @@ model User {
   ordersSold      Order[]         @relation("SellerOrders")
   reviewsWritten  Review[]        @relation("ReviewsWritten")
   reviewsReceived Review[]        @relation("ReviewsReceived")
+  ratingsWritten  DealRating[]    @relation("RatingsWritten")
+  ratingsReceived DealRating[]    @relation("RatingsReceived")
   messages        Message[]
   cartItems       CartItem[]
   favorites       Favorite[]
@@ -550,6 +552,7 @@ model Order {
   dispute  Dispute?
   offer    Offer?
   reviews  Review[]
+  ratings  DealRating[]
 
   @@index([buyerId, createdAt])
   @@index([sellerId, createdAt])
@@ -636,6 +639,24 @@ model Review {
   order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   author    User      @relation("ReviewsWritten", fields: [authorId], references: [id])
   subject   User      @relation("ReviewsReceived", fields: [subjectId], references: [id])
+
+  @@unique([orderId, authorId])
+  @@index([subjectId])
+}
+
+/// One score per party after the handover is COMPLETED. No edits.
+model DealRating {
+  id        String   @id @default(cuid())
+  orderId   String
+  authorId  String
+  subjectId String
+  stars     Int
+  /// Optional one line. Blank when the rater sends stars only.
+  comment   String   @default("")
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  author    User     @relation("RatingsWritten", fields: [authorId], references: [id], onDelete: Cascade)
+  subject   User     @relation("RatingsReceived", fields: [subjectId], references: [id], onDelete: Cascade)
 
   @@unique([orderId, authorId])
   @@index([subjectId])

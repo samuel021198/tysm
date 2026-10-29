@@ -46,9 +46,8 @@ export default async function ShopPage({
           links={seller.profileLinks}
           interestTags={seller.interestTags}
           handoverPlace={seller.handoverPlace}
-          reviews={board.reviews}
+          rating={board.rating}
           followers={board.followers}
-          completed={board.completed}
           postCount={board.postCount}
           listingCount={board.listingCount}
           verificationTier={seller.verificationTier}

@@ -25,9 +25,8 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         links={viewer.profileLinks}
         interestTags={viewer.interestTags}
         handoverPlace={viewer.handoverPlace}
-        reviews={board.reviews}
+        rating={board.rating}
         followers={board.followers}
-        completed={board.completed}
         postCount={board.postCount}
         listingCount={board.listingCount}
         verificationTier={viewer.verificationTier}
