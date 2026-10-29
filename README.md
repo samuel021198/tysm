@@ -69,7 +69,7 @@ npm run dev
 | `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑或發布卡聞時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/ingest-dex` 同 `POST /api/internal/news`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑、發布卡聞或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 | `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。五個 `R2_*` 要齊先會用。未齊時圖鑑留來源網址，上傳相片留 data URL，圖檔唔寫入 Postgres。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
@@ -265,6 +265,22 @@ curl -sS -X POST "https://tysm-livid.vercel.app/api/internal/news" \
   -H "Content-Type: application/json" \
   -d '{"slug":"op-eb05-heroines","title":"EXTRA BOOSTER Heroines Edition vol.2（EB-05）","source":"One Piece","teaser":"EB-05","tag":"RELEASE","eventAt":"2026-10-31T00:00:00+08:00","hot":false}'
 ```
+
+## 審核認證
+
+申請喺設定 → 帳號與安全 → 申請認證。兩條路：誠信（香港身份證）同商戶（商業登記），加一段短原因。申請人見到審核中、已通過、唔過。審核中唔可以再交。已通過先把 `User.verificationTier` 寫成 `TRUSTED` 或 `MERCHANT`，名字旁用現有色條。唔過唔改 tier。
+
+```bash
+curl -sS "https://你的網域/api/internal/verification" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+
+curl -sS -X POST "https://你的網域/api/internal/verification" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"applicationId":"<id>","decision":"APPROVED"}'
+```
+
+`decision` 可以係 `REJECTED`。未設定 `BOOTSTRAP_SECRET` 回 `503`。密鑰不對回 `401`。文件唔會出喺公開頁。
 
 ## 之後要接上的東西
 

@@ -159,6 +159,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     report: ["已收到", "Received"],
     review: ["評價已送出", "Review posted"],
     imported: ["CSV 已全部匯入", "CSV imported"],
+    verify: ["已提交，審核中", "Submitted. In review"],
   };
   if (ok && success[ok]) {
     return <p role="status" className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-ok">{tx(locale, success[ok][0], success[ok][1])}</p>;

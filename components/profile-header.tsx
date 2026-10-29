@@ -33,6 +33,16 @@ export function verificationPill(tier: VerificationTierName): { label: string; c
   return null;
 }
 
+export function VerificationPill({ tier }: { tier: VerificationTierName }) {
+  const pill = verificationPill(tier);
+  if (!pill) return null;
+  return (
+    <span className={`inline-flex items-center whitespace-nowrap rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none ${pill.className}`}>
+      {pill.label}
+    </span>
+  );
+}
+
 export function ProfileHeader({
   locale,
   userId,
@@ -72,7 +82,6 @@ export function ProfileHeader({
 }) {
   const blurb = bio?.trim();
   const place = handoverPlace?.trim();
-  const pill = verificationPill(verificationTier);
   const action = "inline-flex h-8 flex-1 items-center justify-center rounded-full border border-line bg-card px-2 text-xs font-medium text-ink";
   const stats = [
     { href: `${base}?tab=posts#profile-posts`, value: postCount, label: tx(locale, "則貼文", "Posts"), tab: null },
@@ -118,11 +127,7 @@ export function ProfileHeader({
         <h1 className="text-[15px] font-semibold leading-snug">
           <span className="inline-flex items-center gap-1 align-middle">
             {nickname}
-            {pill ? (
-              <span className={`inline-flex items-center whitespace-nowrap rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none ${pill.className}`}>
-                {pill.label}
-              </span>
-            ) : null}
+            <VerificationPill tier={verificationTier} />
             {rating ? <RatingPill locale={locale} average={rating.average} count={rating.count} /> : null}
           </span>
           {username ? <span className="ml-1.5 font-normal text-muted">@{username}</span> : null}
