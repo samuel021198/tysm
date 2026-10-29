@@ -73,7 +73,13 @@ export function OfferSheet({
           </div>
         ) : null}
         {listing ? (
-          <form action={makeDealOfferAction} className="grid gap-3">
+          <form
+            action={async (formData) => {
+              await makeDealOfferAction(formData);
+              onClose();
+            }}
+            className="grid gap-3"
+          >
             <input type="hidden" name="threadId" value={threadId} />
             <input type="hidden" name="listingId" value={listing.id} />
             {acked && !persisted ? <input type="hidden" name="ack" value="1" /> : null}

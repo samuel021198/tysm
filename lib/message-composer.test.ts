@@ -67,6 +67,7 @@ const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
 assert(sheet.includes("改價回覆") && sheet.includes("prefill") && sheet.includes("makeDealOfferAction"), "改價回覆 reuses the make-offer form with the current price and note");
+assert(/await makeDealOfferAction\(formData\);\s*onClose\(\)/.test(sheet), "a successful offer closes the sheet the same way as 關閉");
 assert(sheet.includes("DealDisclaimer") && sheet.includes("DEAL_ACK") && sheet.includes("offerFormLocked") && sheet.includes("disabled={locked}"), "the offer form keeps a risk line and locks price until the first checkbox");
 assert(sheet.includes("ackP2pRisk") && src.includes("riskAcked") && src.includes("persisted={riskAcked}"), "the checkbox is once per account, then the form opens straight away");
 assert(!src.includes("localStorage"), "the ack is not stored only in the browser");
