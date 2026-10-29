@@ -273,6 +273,7 @@ export async function saveNotifications(formData: FormData) {
       notifyOffers: formData.get("notifyOffers") === "on",
       notifyOrders: formData.get("notifyOrders") === "on",
       notifyMessages: formData.get("notifyMessages") === "on",
+      notifyEmail: formData.get("notifyEmail") === "on",
     },
   });
   revalidatePath(next);

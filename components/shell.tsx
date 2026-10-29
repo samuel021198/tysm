@@ -52,9 +52,9 @@ export function Header({
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/news">{nav.news}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/rank">{nav.rank}</Link>
             <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
-            <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap hover:text-link">
-              {nav.notifications}
-              {unread ? <Pill n={unread} /> : null}
+            <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center hover:text-link">
+              <Icon name="bell" className="h-[18px] w-[18px]" />
+              {unread ? <Count n={unread} /> : null}
             </Link>
             <HeaderMenu label={user ? user.nickname : nav.profile} badge={cartCount}>
               {user ? (

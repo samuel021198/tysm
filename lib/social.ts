@@ -1,12 +1,8 @@
 import { prisma } from "./db";
+import { noticeCopy, noticeHref, type NoticeKind, type NoticeType } from "./notify";
+import { deliverOutbound } from "./push";
 
-export async function notify(
-  userId: string,
-  type: "bid" | "offer" | "order" | "message" | "review",
-  title: string,
-  body: string,
-  href?: string,
-) {
+export async function notify(userId: string, type: NoticeType, title: string, body: string, href?: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return;
   const allowed =
@@ -19,13 +15,24 @@ export async function notify(
           : user.notifyOrders;
   if (!allowed) return;
   await prisma.notification.create({ data: { userId, type, title, body, href } });
-  const payload = JSON.stringify({ title, body, href });
-  await prisma.outboundStub.createMany({
-    data: [
-      { channel: "EMAIL", userId, payload },
-      { channel: "PUSH", userId, payload },
-    ],
+  try {
+    await deliverOutbound(user, { title, body, href });
+  } catch {
+    /* inbox row already saved */
+  }
+}
+
+export async function notifyKind(userId: string, kind: NoticeKind, href: string, detail?: string) {
+  const copy = noticeCopy(kind, detail);
+  await notify(userId, copy.type, copy.title, copy.body, href);
+}
+
+export async function dealThreadHref(listingId: string, buyerId: string, sellerId: string) {
+  const thread = await prisma.messageThread.findFirst({
+    where: { listingId, buyerId, sellerId },
+    select: { id: true },
   });
+  return noticeHref(thread?.id);
 }
 
 export async function isBlocked(a: string, b: string): Promise<boolean> {

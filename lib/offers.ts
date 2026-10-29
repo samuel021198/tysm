@@ -3,7 +3,8 @@ import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
 import { attachDealThread } from "./deals";
 import { insertOrder } from "./orders";
-import { notify } from "./social";
+import { noticeHref } from "./notify";
+import { dealThreadHref, notifyKind } from "./social";
 import { MAX_OFFER_ROUNDS, OFFER_TTL_MS, conditionLabel } from "./rules";
 
 async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amount: number) {
@@ -47,14 +48,19 @@ export async function respondOffer(userId: string, offerId: string, action: stri
       const buyer = offer.buyerId === userId;
       if (!seller && !buyer) throw new Fail("forbidden");
 
+      const buyerId = offer.buyerId;
+      const sellerId = offer.listing.sellerId;
+      const listingId = offer.listingId;
+      const title = offer.listing.title;
+
       if (seller && offer.status === "PENDING") {
         if (action === "decline") {
           await tx.offer.update({ where: { id: offer.id }, data: { status: "DECLINED" } });
-          return { kind: "declined" as const, buyerId: offer.buyerId, listingId: offer.listingId, orderId: null };
+          return { kind: "declined" as const, notifyId: buyerId, buyerId, sellerId, listingId, title, orderId: null as string | null };
         }
         if (action === "accept") {
           const orderId = await acceptAmount(tx, offer.id, offer.amount);
-          return { kind: "accepted" as const, buyerId: offer.buyerId, listingId: offer.listingId, orderId };
+          return { kind: "accepted" as const, notifyId: buyerId, buyerId, sellerId, listingId, title, orderId };
         }
         if (action === "counter") {
           if (counterRaw == null || offer.listing.price == null || counterRaw <= offer.amount || counterRaw >= offer.listing.price) {
@@ -64,19 +70,19 @@ export async function respondOffer(userId: string, offerId: string, action: stri
             where: { id: offer.id },
             data: { status: "COUNTERED", counterAmount: counterRaw, expiresAt: new Date(Date.now() + OFFER_TTL_MS) },
           });
-          return { kind: "counter" as const, buyerId: offer.buyerId, listingId: offer.listingId, orderId: null };
+          return { kind: "counter" as const, notifyId: buyerId, buyerId, sellerId, listingId, title, orderId: null as string | null };
         }
       }
 
       if (buyer && offer.status === "COUNTERED") {
         if (action === "decline") {
           await tx.offer.update({ where: { id: offer.id }, data: { status: "DECLINED" } });
-          return { kind: "declined" as const, buyerId: offer.listing.sellerId, listingId: offer.listingId, orderId: null };
+          return { kind: "declined" as const, notifyId: sellerId, buyerId, sellerId, listingId, title, orderId: null as string | null };
         }
         if (action === "accept") {
           if (offer.counterAmount == null) throw new Fail("state");
           const orderId = await acceptAmount(tx, offer.id, offer.counterAmount);
-          return { kind: "accepted" as const, buyerId: offer.listing.sellerId, listingId: offer.listingId, orderId };
+          return { kind: "accepted" as const, notifyId: sellerId, buyerId, sellerId, listingId, title, orderId };
         }
         if (action === "counter") {
           if (!canRound(offer.round)) throw new Fail("rounds");
@@ -92,15 +98,19 @@ export async function respondOffer(userId: string, offerId: string, action: stri
               expiresAt: new Date(Date.now() + OFFER_TTL_MS),
             },
           });
-          return { kind: "counter" as const, buyerId: offer.listing.sellerId, listingId: offer.listingId, orderId: null };
+          return { kind: "counter" as const, notifyId: sellerId, buyerId, sellerId, listingId, title, orderId: null as string | null };
         }
       }
       throw new Fail("state");
     });
     const threadId = result.orderId ? await attachDealThread(result.orderId) : null;
-    const title = result.kind === "accepted" ? "已接受" : result.kind === "declined" ? "已被拒絕" : "有回覆";
-    const href = threadId ? `/messages/${threadId}` : result.orderId ? `/orders/${result.orderId}` : `/listing/${result.listingId}`;
-    await notify(result.buyerId, "offer", title, result.kind === "accepted" ? "去聊天傾交收。" : "打開貨品頁查看。", href);
+    const href = threadId ? noticeHref(threadId) : await dealThreadHref(result.listingId, result.buyerId, result.sellerId);
+    const kind = result.kind === "accepted" ? "offer-accept" : result.kind === "declined" ? "offer-decline" : "offer-supersede";
+    await notifyKind(result.notifyId, kind, href, result.title);
+    if (result.kind === "accepted") {
+      await notifyKind(result.buyerId, "handover", href, result.title);
+      await notifyKind(result.sellerId, "handover", href, result.title);
+    }
     return { ok: true as const, orderId: result.orderId, threadId };
   } catch (error) {
     const code = asFail(error);
