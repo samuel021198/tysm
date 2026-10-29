@@ -16,6 +16,7 @@ import { conditionLabel, minimumNextBid } from "@/lib/rules";
 import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
 import { Gallery } from "@/components/gallery";
+import { Icon } from "@/components/icons";
 import { RichText } from "@/components/rich-text";
 import { ListingCard } from "@/components/listing-card";
 import { PurchasePanel } from "@/components/purchase-panel";
@@ -324,7 +325,10 @@ export default async function ListingPage({
         <form action={toggleFavorite} className="text-sm">
           <input type="hidden" name="listingId" value={id} />
           <input type="hidden" name="next" value={`/listing/${id}`} />
-          <button className="btn btn-ghost w-full">{favored ? "♥" : "♡"} {tx(locale, "收藏", "Favorite")}</button>
+          <button className="btn btn-ghost w-full gap-1.5" aria-pressed={Boolean(favored)}>
+            <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={Boolean(favored)} />
+            {tx(locale, "收藏", "Favorite")}
+          </button>
         </form>
         <div className="text-sm">
           <Link href={`/shop/${listing.sellerId}`} className="flex items-center gap-3">

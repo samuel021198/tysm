@@ -317,7 +317,14 @@ assert(lockAxis(4, 3) === null && lockAxis(20, 4) === "x" && lockAxis(4, 20) ===
 assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy stay on the collection menu");
 assert(!profileBoard.includes("<CollectionMenu") && !profileBoard.includes("sellHref") && !profileBoard.includes("collectionItemId"), "the profile does not show the owned-card grid");
 assert(profileBoard.includes("savedListings") && profileBoard.includes("savedPosts") && profileBoard.includes("貨品") && profileBoard.includes("貼文"), "收藏 tab shows saved products and posts");
-assert(!profileBoard.includes('sr-only">{label}'), "the 收藏 tab label is on screen");
+assert(
+  profileBoard.includes("aria-label={label}") &&
+    profileBoard.includes("title={label}") &&
+    !profileBoard.includes(">{label}</span>") &&
+    profileBoard.includes("strokeWidth={on ? 2.15 : 1.6}") &&
+    profileBoard.includes("h-0.5 w-1/4 bg-ink"),
+  "profile content tabs are icon-only; the selected tab keeps a deeper stroke and underline",
+);
 assert(profileBoard.includes("貨品同貼文的收藏會喺呢度"), "empty 收藏 says products and posts land here");
 assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
 assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not render the privacy form itself");
@@ -345,6 +352,12 @@ assert(postCard.includes("post.author.id"), "the author does not get a buy bar")
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
 assert(postCard.includes("togglePostSave") && postCard.includes("toggleFavorite") && postCard.includes('tx(locale, "收藏", "Favorite")'), "posts and listing cards can be saved to 收藏");
+const listingCard = readFileSync(new URL("../components/listing-card.tsx", import.meta.url), "utf8");
+const bookmark = 'name="bookmark"';
+assert(postCard.includes(bookmark) && postCard.includes("filled={post.saved}") && !postCard.includes("M7.2 5h9.6"), "post save uses the shared bookmark");
+assert(listingCard.includes(bookmark) && listingCard.includes("filled={favorited}") && !listingCard.includes("♥") && !listingCard.includes("♡"), "listing favorite uses the shared bookmark");
+assert(listingPage.includes(bookmark) && listingPage.includes("filled={Boolean(favored)}") && !listingPage.includes("♥") && !listingPage.includes("♡"), "listing page favorite uses the shared bookmark");
+assert(profileBoard.includes('icon: "bookmark"') && !profileBoard.includes("♥") && !profileBoard.includes("♡"), "profile 收藏 tab uses the same bookmark");
 assert(postCard.includes("post.postId ? null : post.priceHref"), "a post price does not open the listing");
 const favPage = readFileSync(new URL("../app/me/favorites/page.tsx", import.meta.url), "utf8");
 assert(favPage.includes('redirect("/me?tab=saved")') && !favPage.includes("prisma.postSave") && !favPage.includes("<PostCard") && !favPage.includes("<ListingCard"), "/me/favorites redirects to the profile 收藏 tab");
