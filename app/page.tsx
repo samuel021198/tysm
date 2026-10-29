@@ -59,7 +59,28 @@ export default async function HomePage({
       })
     : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
-  const listingCards = extras.map((listing) => listingSuggestionCard({ listing, saved: favIds.has(listing.id) }));
+  const postLinks = extras.length
+    ? await prisma.collectionItem.findMany({
+        where: { listingId: { in: extras.map((listing) => listing.id) } },
+        select: { listingId: true, post: { select: { id: true } } },
+      })
+    : [];
+  const hiddenPosts = new Set(hides.postIds);
+  const postByListing = new Map(
+    postLinks.flatMap((row) => (row.listingId && row.post ? [[row.listingId, row.post.id] as const] : [])),
+  );
+  const listingCards = extras
+    .filter((listing) => {
+      const postId = postByListing.get(listing.id);
+      return !postId || !hiddenPosts.has(postId);
+    })
+    .map((listing) =>
+      listingSuggestionCard({
+        listing,
+        saved: favIds.has(listing.id),
+        postId: postByListing.get(listing.id) ?? null,
+      }),
+    );
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">

@@ -30,6 +30,7 @@ export async function toggleFavorite(formData: FormData) {
   }
   // Same as post likes: redirect(next) reloads whatever page the heart was on.
   revalidatePath(`/listing/${id}`);
+  revalidatePath("/me");
   revalidatePath("/me/favorites");
   const nextPath = String(formData.get("next") || "").split("?")[0];
   if (nextPath.startsWith("/") && nextPath !== `/listing/${id}` && nextPath !== "/me/favorites") revalidatePath(nextPath);

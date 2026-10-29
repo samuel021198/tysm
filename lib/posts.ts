@@ -84,6 +84,21 @@ export function postBuy(listing: (AskListing & { id: string }) | null | undefine
   return { kind: "contact", listingId: listing.id };
 }
 
+const OPEN_LISTING_STATUS = new Set(["ACTIVE", "ENDED", "SOLD"]);
+
+/**
+ * Specs, 收藏, and the seller card stay on the listing page.
+ * Drafts and unlisted sales stay hidden unless the viewer can already open that page.
+ */
+export function listingPageHref(
+  listing: { id: string; status: string } | null | undefined,
+  canOpenHidden = false,
+): string | null {
+  if (!listing) return null;
+  if (!canOpenHidden && !OPEN_LISTING_STATUS.has(listing.status)) return null;
+  return `/listing/${listing.id}`;
+}
+
 function postPrice(listing: (AskListing & { id: string }) | null): {
   cents: number | null;
   href: string | null;
@@ -224,7 +239,8 @@ export function toPostCard(input: {
     cardName,
     condition: input.item ? conditionLabel(input.item) : null,
     priceCents: price.cents,
-    priceHref: price.href,
+    // Feed taps stay on the post. The listing opens from 睇貨頁.
+    priceHref: null,
     likeCount: input.likeCount,
     commentCount: input.commentCount,
     liked: input.liked,
@@ -241,8 +257,9 @@ export function toPostCard(input: {
   };
 }
 
-/** Active listings that do not have a post yet. Same card chrome. Comment is not wired. The price still buys. */
+/** Active listings that do not have a post yet. Same card chrome. Pass postId when the sale already has a post so the feed opens that post. */
 export function listingSuggestionCard(input: {
+  postId?: string | null;
   listing: AskListing & {
     id: string;
     title: string;
@@ -259,12 +276,14 @@ export function listingSuggestionCard(input: {
   saved: boolean;
 }): PostCardModel {
   const listing = input.listing;
+  const postId = input.postId || null;
   const price = postPrice(listing);
+  const href = postId ? `/post/${postId}` : `/listing/${listing.id}`;
   return {
     id: `listing-${listing.id}`,
-    postId: null,
+    postId,
     listingId: listing.id,
-    href: `/listing/${listing.id}`,
+    href,
     author: {
       id: listing.seller.id,
       nickname: listing.seller.nickname,
@@ -274,7 +293,7 @@ export function listingSuggestionCard(input: {
     cardName: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
     condition: conditionLabel(listing),
     priceCents: price.cents,
-    priceHref: price.href,
+    priceHref: postId ? null : price.href,
     likeCount: 0,
     commentCount: 0,
     liked: false,
@@ -283,8 +302,8 @@ export function listingSuggestionCard(input: {
     saved: input.saved,
     savePostId: null,
     saveListingId: listing.id,
-    sharePath: `/listing/${listing.id}`,
-    commentHref: null,
+    sharePath: href,
+    commentHref: postId ? `/post/${postId}#comments` : null,
     buy: price.buy,
     tags: [],
     caption: "",

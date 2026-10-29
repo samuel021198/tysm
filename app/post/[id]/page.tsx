@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { toPostCard } from "@/lib/posts";
+import { listingPageHref, toPostCard } from "@/lib/posts";
 import { isBlocked } from "@/lib/social";
 import { displayCaption } from "@/lib/tags";
 import { tx } from "@/lib/i18n";
@@ -71,12 +71,22 @@ export default async function PostPage({
     saved: viewer ? post.saves.some((save) => save.userId === viewer.id) : false,
   });
   const caption = displayCaption(post.body);
+  const listingHref = listingPageHref(
+    post.collectionItem?.listing,
+    viewer?.id === post.authorId || viewer?.role === "ADMIN",
+  );
+  const buyBar = viewer?.id !== post.authorId && card.buy != null && card.priceCents != null;
   return (
-    <div className="mx-auto grid max-w-lg gap-4">
+    <div className={`mx-auto grid max-w-lg gap-4 ${buyBar ? "pb-24" : ""}`}>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <PostCard post={card} locale={locale} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
       {caption ? <p className="px-1 text-sm leading-6 text-muted">{caption}</p> : null}
       <TopicChips tags={card.tags} className="px-1" />
+      {listingHref ? (
+        <Link href={listingHref} className="inline-flex h-9 items-center self-start px-1 text-sm font-semibold text-link">
+          {tx(locale, "睇貨頁", "View listing")}
+        </Link>
+      ) : null}
       {viewer?.id === post.authorId && post.collectionItem && !post.collectionItem.listingId ? (
         <Link
           href={`/sell?collectionItemId=${encodeURIComponent(post.collectionItem.id)}${post.collectionItem.catalogCardId ? `&catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}` : ""}`}
