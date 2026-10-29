@@ -79,7 +79,7 @@ assert(handover.includes("傾交收") && !handover.includes("提出要約") && !
 assert(!existsSync(new URL("../components/proof-form.tsx", import.meta.url)) && deal.includes("交收詳情") && deal.includes("DealRatingForm") && !deal.includes("imageUrl") && !deal.includes("h-10 w-10"), "proof upload is gone; the detail link and the rating form stay, without a second listing card");
 assert(/\{stream \? \([\s\S]*pending\.amount[\s\S]*\) : \(/.test(deal) && deal.includes("order.items.map"), "the chat bubble can show the offer amount; the listing name and price stay on the order card");
 assert(!orderPage.includes("送出評價") && !orderPage.includes("confirmAction") && orderPage.includes("打開聊天"), "the handover page is a status mirror back into the chat");
-assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
+assert(deal.includes("sticky top-[var(--header-h)]"), "the order page can still pin the card to the window");
 assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
 const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openDirectThread"));
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
