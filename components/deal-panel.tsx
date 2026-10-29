@@ -100,7 +100,7 @@ function DealView({
       className={
         stream
           ? "mx-auto grid w-full max-w-[18rem] gap-2 rounded-2xl border border-line bg-card px-3 py-2.5"
-          : `${pin ? "sticky top-[calc(3rem+env(safe-area-inset-top))] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`
+          : `${pin ? "sticky top-[var(--header-h)] md:top-16" : ""} z-30 grid gap-2 rounded-2xl border border-line bg-card/95 p-3 shadow-card backdrop-blur`
       }
     >
       <div className={`flex flex-wrap items-center gap-2 ${stream ? "justify-center" : ""}`}>

@@ -21,7 +21,7 @@
   --field-placeholder: #64748b;
   --field-focus: #0f766e;
   --tab-h: calc(3.25rem + env(safe-area-inset-bottom));
-  --header-h: calc(3rem + env(safe-area-inset-top));
+  --header-h: calc(3.25rem + env(safe-area-inset-top));
 }
 
 .dark {

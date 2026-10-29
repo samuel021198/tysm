@@ -38,12 +38,20 @@ assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
-const corner = shell.indexOf('variant="corner"');
-const logo = shell.indexOf('alt="TSM"');
-assert(corner >= 0 && logo >= 0 && corner < logo, "mobile add control sits at the top left of the header");
-assert(shell.includes('src="/brand/tsm-monogram.png"'), "header uses the TSM monogram");
-assert(shell.includes("flex h-12 max-w-6xl items-center justify-center"), "brand mark is centered in the header");
-assert(shell.includes("md:hidden"), "the centered mark row is the mobile header");
+const top = readFileSync(new URL("../components/top-bar.tsx", import.meta.url), "utf8");
+assert(shell.includes("<TopBar") && !shell.includes('variant="corner"') && !shell.includes("absolute inset-y-0 right-1"), "mobile header is the top bar; the corner add is gone");
+assert(top.includes("md:hidden") && top.includes("grid-cols-5") && top.includes("h-[3.25rem]") && top.includes("max-w-lg"), "top bar matches the bottom 5-column grid and height");
+const homeSlot = top.indexOf('href="/"');
+const auctionSlot = top.indexOf('href="/find"');
+const createSlot = top.indexOf('variant="top"');
+const notesSlot = top.indexOf('href="/notifications"');
+const inboxSlot = top.indexOf('href="/messages"');
+assert(homeSlot >= 0 && homeSlot < auctionSlot && auctionSlot < createSlot && createSlot < notesSlot && notesSlot < inboxSlot, "top order is home, auction, create, notifications, messages");
+assert(top.includes("tsm-monogram.png") && top.includes("主頁") && !top.includes("tysm-wordmark"), "home slot is the monogram");
+assert(top.includes("拍賣") && top.includes('icon="tag"') && top.includes("h-[22px]") && !top.includes("gavel"), "auction uses the tag stroke at 22px and links to find");
+assert(top.includes("通知") && top.includes("訊息") && top.includes("aria-label") && !top.includes("<span>{label}</span>"), "top items are icon-only with Chinese names");
+assert(top.includes("strokeWidth={on ? 2 : 1.6}"), "top strokes match the bottom bar");
+assert(shell.includes('src="/brand/tsm-monogram.png"'), "desktop header keeps the TSM monogram");
 assert(!shell.includes("tysm-wordmark"), "old wordmark is not referenced");
 assert(shell.includes('variant="header"'), "desktop header still opens create");
 assert(!shell.includes("add-sheet"), "shell no longer uses the bottom sheet");
@@ -62,6 +70,7 @@ assert(shell.includes('href="/cart"') && shell.includes('href="/orders"') && she
 assert(shell.includes("bg-accent/15"), "notification and cart counts use a small pill");
 const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 assert(!css.includes("6.5rem") && css.includes("3.5rem"), "desktop header height is a single row");
+assert(css.includes("--header-h: calc(3.25rem + env(safe-area-inset-top))"), "mobile header matches the tab bar height");
 
 const picker = readFileSync(new URL("../components/create-picker.tsx", import.meta.url), "utf8");
 assert(picker.includes("CREATE_MODES.map") && picker.includes("createDest") && picker.includes('role="menu"'), "each mode is one row in a menu");
@@ -73,8 +82,8 @@ assert(!picker.includes("左右滑動揀") && !picker.includes("Swipe to choose"
 assert(!picker.includes(" / {CREATE_MODES.length}") && !picker.includes("‹") && !picker.includes("›"), "page counter and desktop arrows are gone");
 assert(picker.includes("bg-card") && picker.includes("border-line") && picker.includes("text-ink") && picker.includes("shadow-card"), "picker is a light card");
 assert(!picker.includes("bg-[#1E293B]") && !picker.includes('backgroundColor: "#0F172A"') && !picker.includes("h-16 w-16"), "dark sheet and oversized icon tile are gone");
-assert(picker.includes("md:hidden") && picker.includes('name="plus"'), "top-left control is a plus icon");
-assert(picker.includes("absolute left-1") && picker.includes("h-10 w-10") && picker.includes("rounded-full bg-accent text-white"), "mobile add is a solid accent circle with a white icon");
+assert(picker.includes('name="plus"') && picker.includes("h-[22px] w-[22px] text-white") && picker.includes("strokeWidth={variant === \"header\" ? 2.25 : 2}"), "mobile add is a 22px white plus");
+assert(picker.includes("h-10 w-10") && picker.includes("rounded-full bg-accent text-white") && picker.includes('variant === "top"') && !picker.includes("absolute left-1") && !picker.includes('variant === "corner"'), "mobile add is the center green circle; the corner FAB is retired");
 assert(picker.includes("text-muted"), "picker rows stay muted");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is a circle, not the old header pill");
 assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "desktop add is a quiet accent control");

@@ -6,6 +6,7 @@ import { CreatePicker } from "./create-picker";
 import { HeaderMenu } from "./header-menu";
 import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
+import { TopBar } from "./top-bar";
 
 export function Header({
   locale,
@@ -24,21 +25,7 @@ export function Header({
   const item = "flex h-10 items-center justify-between gap-2 rounded-lg px-2.5 text-sm font-medium text-ink hover:bg-soft";
   return (
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
-      <div className="relative mx-auto flex h-12 max-w-6xl items-center justify-center md:hidden">
-        <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="corner" />
-        <Link href="/" className="relative z-10">
-          <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-7 w-auto bg-transparent" />
-        </Link>
-        <div className="absolute inset-y-0 right-1 flex items-center">
-          <Link href="/notifications" aria-label={nav.notifications} className="relative grid h-10 w-10 place-items-center rounded-full text-muted active:bg-soft">
-            <Icon name="bell" className="h-[18px] w-[18px]" />
-            {unread ? <Count n={unread} /> : null}
-          </Link>
-          <Link href="/messages" aria-label={nav.messages} className="grid h-10 w-10 place-items-center rounded-full text-muted active:bg-soft">
-            <Icon name="messages" className="h-[18px] w-[18px]" />
-          </Link>
-        </div>
-      </div>
+      <TopBar locale={locale} loggedIn={Boolean(user)} unread={unread} />
       <div className="mx-auto hidden h-14 w-full max-w-6xl px-4 md:flex">
         <div className="mx-auto flex h-full w-full max-w-lg items-center">
           <div className="min-w-0 flex-1 pr-3">
