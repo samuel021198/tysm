@@ -3,10 +3,21 @@
 import { randomInt } from "crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
 import { DEMO_CODE, demoAccountByHandle, demoAccountById } from "@/lib/demo-login";
-import { DISTRICTS, parseTarget, safeNext } from "@/lib/format";
+import { DISTRICTS, isAllowedMediaUrl, parseTarget, safeNext } from "@/lib/format";
+import {
+  USERNAME_CHANGE_LIMIT,
+  USERNAME_CHANGE_WINDOW_MS,
+  cleanBio,
+  cleanHandoverPlace,
+  normalizeUsername,
+  parseInterestTags,
+  parseProfileLinks,
+} from "@/lib/profile-edit";
+import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { headers } from "next/headers";
 
 async function bounce() {
@@ -167,16 +178,111 @@ export async function confirmPhone(_prev: { error?: string } | null, formData: F
 }
 
 const settings = "/me/settings";
+const editPath = "/me/edit";
 
-export async function updateProfile(formData: FormData) {
+class UsernameRateError extends Error {}
+class UsernameTakenError extends Error {}
+
+async function readAvatar(formData: FormData, current: string | null): Promise<{ ok: true; url: string | null } | { ok: false }> {
+  const file = formData.get("avatar");
+  if (file instanceof File && file.size > 0) {
+    if (file.size > 120_000 || !/^image\/(jpeg|png|webp)$/.test(file.type)) return { ok: false };
+    const data = `data:${file.type};base64,${Buffer.from(await file.arrayBuffer()).toString("base64")}`;
+    try {
+      const stored = await storeUploadedImage(data, "uploads/avatars");
+      if (!isAllowedMediaUrl(stored)) return { ok: false };
+      return { ok: true, url: stored };
+    } catch (error) {
+      if (error instanceof PhotoStoreError) return { ok: false };
+      throw error;
+    }
+  }
+  const typed = String(formData.get("avatarUrl") || "").trim();
+  if (!typed) return { ok: true, url: current };
+  if (!isAllowedMediaUrl(typed)) return { ok: false };
+  return { ok: true, url: typed };
+}
+
+export async function saveProfile(formData: FormData) {
   const viewer = await getViewer();
-  if (!viewer) redirect(`/login?next=${settings}`);
+  if (!viewer) redirect(`/login?next=${editPath}`);
   const nickname = String(formData.get("nickname") || "").trim();
-  const bio = String(formData.get("bio") || "").trim();
-  const avatarUrl = String(formData.get("avatarUrl") || "").trim();
-  if (nickname.length < 2 || nickname.length > 24) redirect(`${settings}?err=nickname`);
-  if (bio.length > 500) redirect(`${settings}?err=description`);
-  if (avatarUrl && !avatarUrl.startsWith("https://")) redirect(`${settings}?err=photo_url`);
+  if (nickname.length < 2 || nickname.length > 24) redirect(`${editPath}?err=nickname`);
+  const bio = cleanBio(String(formData.get("bio") || ""));
+  if (!bio.ok) redirect(`${editPath}?err=bio`);
+  const place = cleanHandoverPlace(String(formData.get("handoverPlace") || ""));
+  if (!place.ok) redirect(`${editPath}?err=place`);
+  const links = parseProfileLinks(formData.getAll("link").map((value) => String(value)));
+  if (!links.ok) redirect(`${editPath}?err=${links.error}`);
+  const tags = parseInterestTags(String(formData.get("interestTags") || ""));
+  if (!tags.ok) redirect(`${editPath}?err=tags`);
+  const avatar = await readAvatar(formData, viewer.avatarUrl);
+  if (!avatar.ok) redirect(`${editPath}?err=photo_url`);
+
+  const rawName = String(formData.get("username") || "");
+  const nextName = rawName.trim() ? normalizeUsername(rawName) : null;
+  if (rawName.trim() && !nextName) redirect(`${editPath}?err=username`);
+  if (!nextName && viewer.username) redirect(`${editPath}?err=username`);
+  const usernameChanged = Boolean(nextName && nextName !== viewer.username);
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      if (usernameChanged && nextName) {
+        const since = new Date(Date.now() - USERNAME_CHANGE_WINDOW_MS);
+        const used = await tx.usernameChange.count({ where: { userId: viewer.id, createdAt: { gte: since } } });
+        if (used >= USERNAME_CHANGE_LIMIT) throw new UsernameRateError();
+        const taken = await tx.user.findFirst({ where: { username: nextName, NOT: { id: viewer.id } }, select: { id: true } });
+        if (taken) throw new UsernameTakenError();
+      }
+      await tx.user.update({
+        where: { id: viewer.id },
+        data: {
+          nickname,
+          bio: bio.bio,
+          avatarUrl: avatar.url,
+          handoverPlace: place.place,
+          profileLinks: links.links,
+          interestTags: tags.tags,
+          ...(usernameChanged && nextName ? { username: nextName } : {}),
+        },
+      });
+      if (usernameChanged && nextName) {
+        await tx.usernameChange.create({ data: { userId: viewer.id, username: nextName } });
+      }
+    });
+  } catch (error) {
+    if (error instanceof UsernameRateError) redirect(`${editPath}?err=username_rate`);
+    if (error instanceof UsernameTakenError) redirect(`${editPath}?err=username_taken`);
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") redirect(`${editPath}?err=username_taken`);
+    throw error;
+  }
+  revalidatePath("/me");
+  revalidatePath(editPath);
+  revalidatePath(`/shop/${viewer.id}`);
+  redirect(`${editPath}?ok=saved`);
+}
+
+export async function saveNotifications(formData: FormData) {
+  const viewer = await getViewer();
+  const next = `${settings}/notifications`;
+  if (!viewer) redirect(`/login?next=${next}`);
+  await prisma.user.update({
+    where: { id: viewer.id },
+    data: {
+      notifyBids: formData.get("notifyBids") === "on",
+      notifyOffers: formData.get("notifyOffers") === "on",
+      notifyOrders: formData.get("notifyOrders") === "on",
+      notifyMessages: formData.get("notifyMessages") === "on",
+    },
+  });
+  revalidatePath(next);
+  redirect(`${next}?ok=saved`);
+}
+
+export async function saveShop(formData: FormData) {
+  const viewer = await getViewer();
+  const next = `${settings}/account`;
+  if (!viewer) redirect(`/login?next=${next}`);
   const storeName = String(formData.get("storeName") || "").trim();
   const storeDistrict = String(formData.get("storeDistrict") || "").trim();
   const storeLine1 = String(formData.get("storeLine1") || "").trim();
@@ -184,27 +290,19 @@ export async function updateProfile(formData: FormData) {
   const storeTouched = Boolean(storeName || storeDistrict || storeLine1 || storeHours);
   const districtOk = DISTRICTS.some(([name]) => name === storeDistrict);
   if (storeTouched && (!districtOk || storeLine1.length < 4 || storeLine1.length > 120 || storeName.length > 40 || storeHours.length > 80)) {
-    redirect(`${settings}?err=store`);
+    redirect(`${next}?err=store`);
   }
   await prisma.user.update({
     where: { id: viewer.id },
     data: {
-      nickname,
-      bio,
-      avatarUrl: avatarUrl || null,
       storeName: storeTouched ? storeName || null : null,
       storeDistrict: storeTouched ? storeDistrict : null,
       storeLine1: storeTouched ? storeLine1 : null,
       storeHours: storeTouched ? storeHours || null : null,
-      notifyBids: formData.get("notifyBids") === "on",
-      notifyOffers: formData.get("notifyOffers") === "on",
-      notifyOrders: formData.get("notifyOrders") === "on",
-      notifyMessages: formData.get("notifyMessages") === "on",
     },
   });
-  revalidatePath("/me");
-  revalidatePath(settings);
-  redirect(`${settings}?ok=saved`);
+  revalidatePath(next);
+  redirect(`${next}?ok=saved`);
 }
 
 export async function saveAddress(formData: FormData) {
@@ -214,7 +312,7 @@ export async function saveAddress(formData: FormData) {
   const phone = String(formData.get("phone") || "").trim();
   const line1 = String(formData.get("line1") || "").trim();
   const district = String(formData.get("district") || "").trim();
-  if (recipient.length < 2 || phone.length < 8 || line1.length < 4 || !district) redirect(`${settings}?err=address`);
+  if (recipient.length < 2 || phone.length < 8 || line1.length < 4 || !district) redirect(`${settings}/account?err=address`);
   const count = await prisma.address.count({ where: { userId: viewer.id } });
   if (formData.get("isDefault") === "on" || count === 0) {
     await prisma.address.updateMany({ where: { userId: viewer.id }, data: { isDefault: false } });
@@ -229,19 +327,19 @@ export async function saveAddress(formData: FormData) {
       isDefault: formData.get("isDefault") === "on" || count === 0,
     },
   });
-  redirect(`${settings}?ok=saved`);
+  redirect(`${settings}/account?ok=saved`);
 }
 
 export async function deleteAddress(formData: FormData) {
   const viewer = await getViewer();
   if (!viewer) redirect(`/login?next=${settings}`);
   await prisma.address.deleteMany({ where: { id: String(formData.get("id") || ""), userId: viewer.id } });
-  redirect(`${settings}?ok=saved`);
+  redirect(`${settings}/account?ok=saved`);
 }
 
 export async function clearHistory() {
   const viewer = await getViewer();
-  if (!viewer) redirect(`/login?next=${settings}`);
+  if (!viewer) redirect(`/login?next=${settings}/privacy`);
   await prisma.viewHistory.deleteMany({ where: { userId: viewer.id } });
-  redirect(`${settings}?ok=saved`);
+  redirect(`${settings}/privacy?ok=saved`);
 }

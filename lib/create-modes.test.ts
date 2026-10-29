@@ -98,7 +98,7 @@ const settings = readFileSync(new URL("../app/me/settings/page.tsx", import.meta
 const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
 assert(tab.includes('loggedIn ? "/me" : "/login"'), "profile tab stays on the public profile");
-assert(me.includes('href="/me/settings"') && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles") && !me.includes("logout"), "/me is header plus board");
+assert(me.includes("<ProfileHeader") && me.includes("self") && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles") && !me.includes("logout"), "/me is header plus board");
 assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
 assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
 assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");
@@ -116,7 +116,9 @@ assert(
 );
 assert(board.includes('icon: "binder"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
 assert(!board.includes("chips") && !board.includes("rounded-full") && !board.includes("<PostCard") && !board.includes("<ListingCard"), "profile tabs are not pills and image tabs are thumbnails");
-assert(settings.includes("updateProfile") && settings.includes("saveAddress") && settings.includes("deleteAddress") && settings.includes("clearHistory") && settings.includes("logout") && settings.includes('"/orders"') && settings.includes("/me?tab=drafts") && settings.includes('id="store"') && settings.includes("PrefToggles"), "settings holds the account tools");
-assert(auth.includes('const settings = "/me/settings"') && auth.includes("${settings}?ok=saved") && auth.includes("${settings}?err=nickname") && auth.includes("${settings}?err=address"), "profile saves flash back on settings");
+assert(!settings.includes("updateProfile") && !settings.includes("saveAddress") && !settings.includes('"/orders"') && !settings.includes("/me?tab=drafts") && !settings.includes('id="store"') && !settings.includes("/me/edit") && !settings.includes("/me/footprint"), "settings is a list, not the old account form");
+assert(auth.includes('const editPath = "/me/edit"') && auth.includes("${editPath}?ok=saved") && auth.includes("${editPath}?err=nickname") && auth.includes("saveShop") && auth.includes('id="store"') === false, "profile saves flash on the edit page");
+const account = readFileSync(new URL("../app/me/settings/[section]/page.tsx", import.meta.url), "utf8");
+assert(account.includes('id="store"') && account.includes("logout") && account.includes("clearHistory") && account.includes("saveNotifications"), "account tools moved under the settings rows");
 
 console.log("create modes ok");

@@ -788,7 +788,7 @@ export function SellForm({
               <p className="text-muted">{storeLabel}</p>
             ) : (
               <p className="text-muted">
-                <a className="text-link" href="/me/settings#store" data-focus="store" data-wizard-jump>{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a>
+                <a className="text-link" href="/me/settings/account#store" data-focus="store" data-wizard-jump>{tx(locale, "去帳戶設定店舖地址", "Set the shop address")}</a>
               </p>
             )}
           </div>

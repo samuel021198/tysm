@@ -144,8 +144,16 @@ model User {
   phoneVerified      Boolean   @default(false)
   emailVerified      Boolean   @default(false)
   nickname           String
+  /// Public @handle. Null until the member sets one. Changes are capped in UsernameChange.
+  username           String?   @unique
   avatarUrl          String?
   bio                String?
+  /// District or mall name shown on the public profile. Never a street or door number.
+  handoverPlace      String?
+  /// Up to 3 https URLs. A place name is stored as a Google Maps search link.
+  profileLinks       String[]  @default([])
+  /// Interest topics without a leading #. Not parsed from bio. At most 8.
+  interestTags       String[]  @default([])
   role               UserRole  @default(USER)
   termsAcceptedAt    DateTime?
   /// Private-handover checkbox on 提出要約. Not the signup terms tick.
@@ -197,6 +205,18 @@ model User {
   stories         Story[]
   storyViews      StoryView[]
   feedHides       FeedHide[]
+  usernameChanges UsernameChange[]
+}
+
+/// One row per successful @username change. The edit form allows 2 in 30 days.
+model UsernameChange {
+  id        String   @id @default(cuid())
+  userId    String
+  username  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model OtpChallenge {

@@ -1,3 +1,4 @@
+import { DEMO_ACCOUNTS, TRIAL_ACCOUNTS } from "./demo-login";
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
 import { NEWS_SAMPLES } from "./news";
@@ -59,6 +60,7 @@ export async function wipeUserContent() {
   await prisma.listingItem.deleteMany();
   await prisma.listing.deleteMany();
   await prisma.otpChallenge.deleteMany();
+  await prisma.usernameChange.deleteMany();
   await prisma.user.deleteMany();
 }
 
@@ -478,6 +480,7 @@ export async function seedDemo() {
   }
 
   const stores = new Map(demoStores.map((row) => [row.userId, row]));
+  const handles = new Map<string, string>([...DEMO_ACCOUNTS, ...TRIAL_ACCOUNTS].map((row) => [row.id, row.handle]));
   for (const user of demoUsers) {
     const email = "email" in user ? user.email : adminEmail;
     const phone = "phone" in user ? user.phone : adminPhone;
@@ -498,6 +501,8 @@ export async function seedDemo() {
       storeDistrict: store?.storeDistrict ?? null,
       storeLine1: store?.storeLine1 ?? null,
       storeHours: store?.storeHours ?? null,
+      handoverPlace: store?.storeDistrict ?? null,
+      ...(handles.get(user.id) ? { username: handles.get(user.id) } : {}),
       consecutiveUnpaid: 0,
       bidBanned: false,
       avatarUrl: "avatarUrl" in user ? user.avatarUrl : null,
