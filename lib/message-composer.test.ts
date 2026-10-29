@@ -83,6 +83,7 @@ const start = social.slice(social.indexOf("export async function startHandover")
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
 const openedThread = social.slice(social.indexOf("export async function openThread"), social.indexOf("export async function sendMessage"));
 assert(openedThread.includes('focus === "offer"') && openedThread.includes("?offer=1") && openedThread.includes('focus === "compose"') && openedThread.includes("?compose=1"), "議價 and 聯絡賣家 open the same listing thread");
+assert(!openedThread.includes("message.create"), "議價 and 聯絡賣家 do not post a listing message on open");
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
 assert(page.includes('href="/messages"') && page.includes("thread-bar") && page.includes("返回訊息"), "the thread bar goes back to the inbox");
@@ -117,6 +118,10 @@ assert(!sheet.includes("還價") && !deal.includes("瀏覽賣家"), "this wave d
 const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
 const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
 assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");
+assert(!opened.includes("message.create") && !opened.includes("shareTargetFor"), "opening a handover does not post a listing card");
+const attached = deals.slice(deals.indexOf("export async function attachDealThread"), deals.indexOf("async function loadOrder"));
+assert(!attached.includes("message.create") && !attached.includes("share.path"), "attaching a deal thread does not post a listing card");
+assert(!deals.includes("function shareTargetFor"), "nothing auto-builds a listing message when a thread opens");
 assert(deals.includes("markLiveOfferSuperseded") && !deals.includes('Fail("pending")'), "submitting another offer replaces the live one");
 const reserveFn = deals.slice(deals.indexOf("async function acceptAndReserve"), deals.indexOf("export async function acceptDealOffer"));
 const acceptFn = deals.slice(deals.indexOf("export async function acceptDealOffer"), deals.indexOf("export async function confirmDeal"));

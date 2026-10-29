@@ -126,7 +126,7 @@ export async function startHandover(formData: FormData) {
   const postId = String(formData.get("postId") || "") || null;
   const back = postId ? `/post/${postId}` : `/listing/${listingId}`;
   const user = await viewer(back);
-  const result = await openHandover(user.id, { listingId, postId });
+  const result = await openHandover(user.id, { listingId });
   if (!result.ok) redirect(`${back}?err=${result.error}`);
   revalidatePath(`/listing/${listingId}`);
   redirect(`/messages/${result.threadId}`);
