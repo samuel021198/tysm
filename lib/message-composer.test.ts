@@ -106,6 +106,10 @@ assert(page.includes('href="/messages"') && page.includes("thread-bar") && page.
 assert(!page.includes('href="/"'), "the thread bar does not send people home");
 const inbox = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
 assert(!inbox.includes("thread-fit") && !inbox.includes("thread-bar"), "the inbox keeps the normal shell");
+assert(inbox.includes("other.avatarUrl") && inbox.includes("other.nickname.slice(0, 1)") && inbox.includes("<NameLine") && inbox.includes("tier={other.verificationTier}") && !inbox.includes("rating="), "an inbox row shows the photo or initial and the verify pill, not the score");
+const threadBar = page.slice(page.indexOf('className="thread-bar'), page.indexOf("</header>"));
+assert(threadBar.includes("other.avatarUrl") && threadBar.includes("other.nickname.slice(0, 1)") && threadBar.includes("<NameLine") && threadBar.includes("rating={otherRating}"), "the thread bar shows the avatar beside NameLine");
+assert(!page.slice(page.indexOf("{thread.messages.map")).includes("avatarUrl"), "message bubbles do not show avatars");
 assert(
   css.includes("body:has(.thread-fit) > .site-header") && css.includes("body:has(.thread-fit) > .tab-bar") && css.includes("body:has(.thread-fit) > footer") && css.includes("--tab-h: 0px"),
   "a thread hides the site header, footer, and tab bar",

@@ -129,15 +129,20 @@ export default async function ThreadPage({
             <path d="M14.5 6.5 8 12l6.5 5.5" />
           </svg>
         </Link>
-        <h1 className="min-w-0 text-base font-semibold leading-tight">
-          <NameLine
-            className="w-full justify-center"
-            name={other.nickname}
-            nameClassName="truncate"
-            tier={other.verificationTier}
-            locale={prefs.locale}
-            rating={otherRating}
-          />
+        <h1 className="flex min-w-0 items-center justify-center text-base font-semibold leading-tight">
+          <span className="flex min-w-0 items-center gap-1.5">
+            <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
+              {other.avatarUrl ? <img src={other.avatarUrl} alt="" className="h-full w-full object-cover" /> : other.nickname.slice(0, 1)}
+            </span>
+            <NameLine
+              className="min-w-0"
+              name={other.nickname}
+              nameClassName="truncate"
+              tier={other.verificationTier}
+              locale={prefs.locale}
+              rating={otherRating}
+            />
+          </span>
         </h1>
         <div className="grid h-12 place-items-center">
           <PersonMenu

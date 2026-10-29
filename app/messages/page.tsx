@@ -8,6 +8,7 @@ import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { shareLabel, shareTarget } from "@/lib/share";
 import { hiddenUserIds } from "@/lib/social";
+import { NameLine } from "@/components/profile-header";
 
 export default async function MessagesPage({ searchParams }: { searchParams: Promise<{ share?: string }> }) {
   const sp = await searchParams;
@@ -46,12 +47,12 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
               : tx(prefs.locale, "未有訊息", "No messages yet");
           const row = (
             <>
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent text-base font-bold text-white">
-                {other.nickname.slice(0, 1)}
+              <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-base font-bold text-white">
+                {other.avatarUrl ? <img src={other.avatarUrl} alt="" className="h-full w-full object-cover" /> : other.nickname.slice(0, 1)}
               </span>
               <span className="min-w-0 flex-1 text-left">
-                <span className="flex items-baseline justify-between gap-2">
-                  <span className="truncate font-medium">{other.nickname}</span>
+                <span className="flex items-center justify-between gap-2">
+                  <NameLine className="min-w-0" name={other.nickname} nameClassName="truncate font-medium" tier={other.verificationTier} locale={prefs.locale} />
                   {last ? <span className="shrink-0 text-[11px] text-muted">{formatHKT(last.createdAt, prefs.locale, false)}</span> : null}
                 </span>
                 {thread.listing ? <span className="block truncate text-xs text-muted">{thread.listing.title}</span> : null}
