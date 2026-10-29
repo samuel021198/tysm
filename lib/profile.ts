@@ -1,6 +1,7 @@
 import { prisma } from "./db";
 import { cardInclude } from "./feed";
 import { cardDisplayName, toPostCard, wishlistPostVisible, type PostCardModel } from "./posts";
+import { SHOP_INVENTORY_STATUSES } from "./shop-inventory";
 import { feedHideIds, hiddenUserIds } from "./social";
 
 export type ProfileThumb = { id: string; href: string; photo: string | null; label: string };
@@ -112,16 +113,42 @@ export async function profilePostsPage(ownerId: string, viewerId: string | null,
 export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
   const hides = viewerId && !isSelf ? await feedHideIds(viewerId) : { postIds: [] as string[] };
-  const [postPage, postCount, listingCount, listings, reviewRows, drafts, followers, completed, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
+  const publicShop = { sellerId: ownerId, status: "ACTIVE" as const, quantityAvailable: { gt: 0 } };
+  const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, completed, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
     profilePostsPage(ownerId, viewerId, null, hides.postIds),
     prisma.post.count({ where: profilePostWhere(ownerId, isSelf, hides.postIds, null) }),
-    prisma.listing.count({ where: { sellerId: ownerId, status: "ACTIVE", quantityAvailable: { gt: 0 } } }),
-    prisma.listing.findMany({
-      where: { sellerId: ownerId, status: "ACTIVE", quantityAvailable: { gt: 0 } },
-      include: cardInclude,
-      orderBy: { publishedAt: "desc" },
-      take: 24,
+    prisma.listing.count({
+      where: isSelf ? { sellerId: ownerId, status: { in: [...SHOP_INVENTORY_STATUSES] } } : publicShop,
     }),
+    isSelf
+      ? Promise.resolve([])
+      : prisma.listing.findMany({
+          where: publicShop,
+          include: cardInclude,
+          orderBy: { publishedAt: "desc" },
+          take: 24,
+        }),
+    isSelf
+      ? prisma.listing.findMany({
+          where: { sellerId: ownerId, status: { in: [...SHOP_INVENTORY_STATUSES] } },
+          orderBy: { updatedAt: "desc" },
+          // ponytail: 48 newest shop rows. Upgrade path: cursor on the 商店 tab.
+          take: 48,
+          select: {
+            id: true,
+            title: true,
+            saleType: true,
+            price: true,
+            startPrice: true,
+            currentBid: true,
+            auctionSettled: true,
+            status: true,
+            binLockOrderId: true,
+            photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+            _count: { select: { items: true } },
+          },
+        })
+      : Promise.resolve([]),
     prisma.review.findMany({
       where: { subjectId: ownerId },
       include: { author: { select: { nickname: true } } },
@@ -214,6 +241,19 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       currentBid: row.currentBid,
       auctionSettled: row.auctionSettled,
       photos: row.photos.map((photo) => ({ url: photo.url })),
+    })),
+    inventory: inventoryRows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      saleType: row.saleType,
+      price: row.price,
+      startPrice: row.startPrice,
+      currentBid: row.currentBid,
+      auctionSettled: row.auctionSettled,
+      status: row.status,
+      reserved: Boolean(row.binLockOrderId),
+      photo: row.photos[0]?.url ?? null,
+      itemCount: row._count.items,
     })),
     reviews: reviewRows.map((review) => ({
       id: review.id,

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { tx, type Locale } from "@/lib/i18n";
 import { mapsSearchUrl, profileLinkLabel } from "@/lib/profile-edit";
 import { BioText } from "./bio-text";
+import { ProfileTabLink } from "./profile-tab-link";
 import { TopicChips } from "./topic-chips";
 
 export type VerificationTierName = "NORMAL" | "TRUSTED" | "MERCHANT";
@@ -64,9 +65,9 @@ export function ProfileHeader({
   const score = reviews.length ? (reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(1) : null;
   const rating = `★ ${score ?? "—"} (${completed})`;
   const stats = [
-    { href: `${base}?tab=posts#profile-posts`, value: postCount, label: tx(locale, "則貼文", "Posts") },
-    { href: `${base}?tab=selling`, value: listingCount, label: tx(locale, "商品", "Listings") },
-    { href: `/shop/${userId}/followers`, value: followers, label: tx(locale, "粉絲", "Followers") },
+    { href: `${base}?tab=posts#profile-posts`, value: postCount, label: tx(locale, "則貼文", "Posts"), tab: null },
+    { href: `${base}?tab=selling#profile-posts`, value: listingCount, label: tx(locale, "商品", "Listings"), tab: "selling" },
+    { href: `/shop/${userId}/followers`, value: followers, label: tx(locale, "粉絲", "Followers"), tab: null },
   ];
   return (
     <header className="grid gap-3">
@@ -79,14 +80,28 @@ export function ProfileHeader({
           </span>
         )}
         <dl className="grid min-w-0 flex-1 grid-cols-3 text-center">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <Link href={stat.href} className="block rounded-xl px-1 py-1 active:bg-soft">
+          {stats.map((stat) => {
+            const figure = (
+              <>
                 <span className="block text-lg font-semibold leading-none">{stat.value}</span>
                 <span className="mt-1 block text-[11px] leading-tight text-muted">{stat.label}</span>
-              </Link>
-            </div>
-          ))}
+              </>
+            );
+            const className = "block rounded-xl px-1 py-1 active:bg-soft";
+            return (
+              <div key={stat.label}>
+                {stat.tab === "selling" ? (
+                  <ProfileTabLink href={stat.href} tab="selling" className={className}>
+                    {figure}
+                  </ProfileTabLink>
+                ) : (
+                  <Link href={stat.href} className={className}>
+                    {figure}
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </dl>
       </div>
       <div>

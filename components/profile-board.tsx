@@ -7,9 +7,12 @@ import { EDGE_GUARD } from "@/lib/gesture";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
+import { shopDisplayCents } from "@/lib/shop-inventory";
 import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
+import { PROFILE_TAB_EVENT } from "./profile-tab-link";
+import { ShopInventory, type ShopInventoryRow } from "./shop-inventory";
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
 type Draft = { id: string; title: string; status: string };
@@ -48,6 +51,7 @@ export function ProfileBoard({
   savedListings,
   savedPosts,
   listings,
+  inventory,
   reviews,
   drafts,
   viewerId,
@@ -62,6 +66,7 @@ export function ProfileBoard({
   savedListings: ProfileThumb[];
   savedPosts: ProfileThumb[];
   listings: Sale[];
+  inventory: ShopInventoryRow[];
   reviews: Review[];
   drafts: Draft[];
   favIds: string[];
@@ -93,6 +98,23 @@ export function ProfileBoard({
     },
     [],
   );
+
+  useEffect(() => {
+    setTab(shownTab(initial, isSelf));
+    setOffset(0);
+  }, [initial, isSelf]);
+
+  useEffect(() => {
+    function onSelect(event: Event) {
+      const next = (event as CustomEvent<string>).detail;
+      if (typeof next !== "string") return;
+      setAnimate(false);
+      setOffset(0);
+      setTab(shownTab(next, isSelf));
+    }
+    window.addEventListener(PROFILE_TAB_EVENT, onSelect);
+    return () => window.removeEventListener(PROFILE_TAB_EVENT, onSelect);
+  }, [isSelf]);
 
   useEffect(() => {
     const el = frame.current;
@@ -232,6 +254,18 @@ export function ProfileBoard({
       );
     }
     if (id === "selling") {
+      if (isSelf) {
+        return inventory.length ? (
+          <ShopInventory locale={locale} rows={inventory} next={`${base.split("?")[0]}?tab=selling`} />
+        ) : (
+          <p className="empty mx-3 sm:mx-0">
+            <span className="block">{tx(locale, "未有上架。", "Nothing listed.")}</span>
+            <Link href="/sell" className="block font-semibold text-ink underline underline-offset-2">
+              {tx(locale, "上架第一件", "List the first item")}
+            </Link>
+          </p>
+        );
+      }
       return listings.length ? (
         <ul className="grid grid-cols-3 gap-px">
           {listings.map((listing) => {
@@ -464,9 +498,7 @@ function ThumbGrid({ rows, emptyLabel }: { rows: ProfileThumb[]; emptyLabel: str
 }
 
 function shopAsk(listing: Sale): number | null {
-  const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
-  if (auction) return listing.currentBid ?? listing.startPrice;
-  return listing.price;
+  return shopDisplayCents(listing);
 }
 
 function StackMark() {

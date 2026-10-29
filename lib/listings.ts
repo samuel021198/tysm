@@ -6,6 +6,7 @@ import { PhotoStoreError, storeUploadedImages } from "./r2";
 import { parseGrade } from "./rules";
 import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
+import { shopMenu, shopPill, shopPriceEditable } from "./shop-inventory";
 import { hasStoreAddress } from "./shipping";
 import { GRADERS, PHOTO_MAX, RAW, listingCatalogId, parseListingForm, validateListing, type CardItemInput, type ListingInput, type PhotoInput } from "./sell-wizard";
 
@@ -328,7 +329,8 @@ export async function unlistListing(userId: string, listingId: string, asAdmin =
     if (bids > 0 || started) return { ok: false as const, error: "state" };
   }
   if (!["DRAFT", "SCHEDULED", "ACTIVE"].includes(listing.status)) return { ok: false as const, error: "state" };
-  await prisma.listing.update({ where: { id: listingId }, data: { status: "UNLISTED" } });
+  // Clear the hold so a relist does not come back 已保留.
+  await prisma.listing.update({ where: { id: listingId }, data: { status: "UNLISTED", binLockOrderId: null } });
   return { ok: true as const };
 }
 
@@ -342,6 +344,44 @@ export async function relistListing(userId: string, listingId: string) {
   await prisma.listing.update({
     where: { id: listingId },
     data: { status: "ACTIVE", publishedAt: listing.publishedAt ?? new Date() },
+  });
+  return { ok: true as const };
+}
+
+export async function updateListingPrice(userId: string, listingId: string, priceCents: number) {
+  if (!Number.isSafeInteger(priceCents) || priceCents <= 0 || priceCents > 1_000_000_000) {
+    return { ok: false as const, error: "price" };
+  }
+  const listing = await prisma.listing.findUnique({
+    where: { id: listingId },
+    include: { items: { select: { id: true }, orderBy: { position: "asc" } } },
+  });
+  if (!listing || listing.sellerId !== userId) return { ok: false as const, error: "forbidden" };
+  if (!shopPriceEditable(shopPill(listing), { saleType: listing.saleType, itemCount: listing.items.length })) {
+    return { ok: false as const, error: "state" };
+  }
+  if (listing.offersEnabled && listing.minOffer != null && priceCents <= listing.minOffer) {
+    return { ok: false as const, error: "offer" };
+  }
+  if (listing.saleType === "BOTH" && listing.startPrice != null && priceCents <= listing.startPrice) {
+    return { ok: false as const, error: "both_price" };
+  }
+  const item = listing.items.length === 1 ? listing.items[0] : null;
+  await prisma.$transaction([
+    prisma.listing.update({ where: { id: listing.id }, data: { price: priceCents } }),
+    ...(item ? [prisma.listingItem.update({ where: { id: item.id }, data: { price: priceCents } })] : []),
+  ]);
+  return { ok: true as const };
+}
+
+export async function markListingSold(userId: string, listingId: string) {
+  const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+  if (!listing || listing.sellerId !== userId) return { ok: false as const, error: "forbidden" };
+  if (!shopMenu(shopPill(listing)).sold) return { ok: false as const, error: "state" };
+  // ponytail: manual 已售 does not close the handover. The pill follows listing status. Upgrade: cancel the locking order in this write.
+  await prisma.listing.update({
+    where: { id: listing.id },
+    data: { status: "SOLD", quantityAvailable: 0, binLockOrderId: null },
   });
   return { ok: true as const };
 }
