@@ -47,6 +47,7 @@ export default async function PostPage({
                 personName: true,
                 title: true,
                 catalogCardId: true,
+                updatedAt: true,
               },
             },
           },
@@ -69,7 +70,9 @@ export default async function PostPage({
     commentCount: post._count.comments,
     liked: viewer ? post.likes.some((like) => like.userId === viewer.id) : false,
     saved: viewer ? post.saves.some((save) => save.userId === viewer.id) : false,
+    createdAt: post.createdAt,
   });
+  const now = new Date().toISOString();
   const caption = displayCaption(post.body);
   const listingHref = listingPageHref(
     post.collectionItem?.listing,
@@ -79,7 +82,7 @@ export default async function PostPage({
   return (
     <div className={`mx-auto grid max-w-lg gap-4 ${buyBar ? "pb-24" : ""}`}>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <PostCard post={card} locale={locale} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
+      <PostCard post={card} locale={locale} now={now} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
       {caption ? <p className="px-1 text-sm leading-6 text-muted">{caption}</p> : null}
       <TopicChips tags={card.tags} className="px-1" />
       {listingHref ? (

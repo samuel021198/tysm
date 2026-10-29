@@ -147,7 +147,17 @@ export type PostCardModel = {
   tags: string[];
   /** Body with topic tokens removed. Empty when the post has no sentence to preview. */
   caption: string;
+  /** ISO publish time. Null when the caller did not load it. */
+  createdAt: string | null;
+  /** ISO listing updatedAt when the card has a sale. The line decides if that write is meaningful. */
+  updatedAt: string | null;
 };
+
+function isoStamp(value: Date | string | null | undefined): string | null {
+  if (value == null || value === "") return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
 
 export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "edit"] as const;
 export type PostMenuAction = (typeof POST_MENU_ORDER)[number];
@@ -211,6 +221,7 @@ export function toPostCard(input: {
       personName: string | null;
       title: string;
       catalogCardId?: string | null;
+      updatedAt?: Date | string | null;
     });
   });
   likeCount: number;
@@ -218,6 +229,7 @@ export function toPostCard(input: {
   liked: boolean;
   saved: boolean;
   tags?: string[];
+  createdAt?: Date | string | null;
 }): PostCardModel {
   const listing = input.item?.listing ?? null;
   const photos = (input.item?.photos.length ? input.item.photos : input.photos).map((photo) => photo.url);
@@ -254,6 +266,8 @@ export function toPostCard(input: {
     buy: price.buy,
     tags: mergeTags(input.tags ?? [], tagsFromCaption(input.body)),
     caption: displayCaption(input.body),
+    createdAt: isoStamp(input.createdAt),
+    updatedAt: isoStamp(input.item?.listing?.updatedAt),
   };
 }
 
@@ -272,6 +286,8 @@ export function listingSuggestionCard(input: {
     catalogCardId?: string | null;
     photos: { url: string }[];
     seller: { id: string; nickname: string; avatarUrl?: string | null };
+    createdAt?: Date | string | null;
+    updatedAt?: Date | string | null;
   };
   saved: boolean;
 }): PostCardModel {
@@ -307,5 +323,7 @@ export function listingSuggestionCard(input: {
     buy: price.buy,
     tags: [],
     caption: "",
+    createdAt: isoStamp(listing.createdAt),
+    updatedAt: isoStamp(listing.updatedAt),
   };
 }

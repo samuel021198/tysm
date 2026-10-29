@@ -7,6 +7,7 @@ import { toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { activityLine } from "@/lib/time";
 import { HandoverForm } from "./handover-form";
 import { CommentSheet } from "./comment-sheet";
 import { Icon } from "./icons";
@@ -18,12 +19,15 @@ import { TopicChips } from "./topic-chips";
 export function PostCard({
   post,
   locale,
+  now,
   next = "/",
   gallery = false,
   viewerId = null,
 }: {
   post: PostCardModel;
   locale: Locale;
+  /** ISO instant from the server so the relative line matches the render. */
+  now: string;
   next?: string;
   gallery?: boolean;
   viewerId?: string | null;
@@ -57,6 +61,7 @@ export function PostCard({
         ) : null}
       </div>
     );
+  const stamp = post.createdAt ? activityLine(post.createdAt, post.updatedAt, new Date(now), locale) : null;
   const photoClass = gallery
     ? "block max-h-[70vh] w-full bg-soft object-contain"
     : "block aspect-[4/5] w-full bg-soft object-cover";
@@ -78,9 +83,16 @@ export function PostCard({
         <Link href={`/shop/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
         </Link>
-        <Link href={`/shop/${post.author.id}`} className="min-w-0 truncate font-semibold">
-          {post.author.nickname}
-        </Link>
+        <div className="flex min-w-0 flex-1 items-baseline gap-1.5">
+          <Link href={`/shop/${post.author.id}`} className="min-w-0 truncate font-semibold">
+            {post.author.nickname}
+          </Link>
+          {stamp ? (
+            <time dateTime={stamp.at.toISOString()} className="shrink-0 text-xs font-normal leading-none text-muted">
+              {stamp.text}
+            </time>
+          ) : null}
+        </div>
       </div>
       {photos.length > 1 ? (
         <PhotoStrip photos={photos} href={post.href} imageClass={photoClass} />

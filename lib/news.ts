@@ -1,4 +1,5 @@
 import type { Locale } from "./i18n";
+import { relativeTime } from "./time";
 
 export type NewsTag = "RELEASE" | "RESTOCK" | "DATE";
 
@@ -22,24 +23,6 @@ export function hkMidnight(ymd: string): Date {
   return new Date(`${ymd}T00:00:00+08:00`);
 }
 
-function hkParts(date: Date) {
-  const parts = new Intl.DateTimeFormat("en-HK", {
-    timeZone: "Asia/Hong_Kong",
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  }).formatToParts(date);
-  const n = (type: string) => Number(parts.find((part) => part.type === type)?.value);
-  return { y: n("year"), m: n("month"), d: n("day") };
-}
-
-const HOUR_MS = 60 * 60 * 1000;
-
-function hkDayNumber(date: Date): number {
-  const { y, m, d } = hkParts(date);
-  return Date.UTC(y, m - 1, d) / 86_400_000;
-}
-
 /**
  * Instant the list sorts and stamps by: source time when we have it, otherwise ingest time.
  * `createdAt` is required, so this is never null — the same key as `COALESCE("eventAt", "createdAt")`.
@@ -49,25 +32,9 @@ export function newsSortAt(row: { eventAt: Date | string | null; createdAt: Date
   return new Date(row.eventAt ?? row.createdAt);
 }
 
-/**
- * Relative clock for a source instant (`newsSortAt`).
- * Future → M/D; under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日; older → M/D.
- */
+/** Relative clock for a source instant (`newsSortAt`). Same buckets as posts and listings. */
 export function newsUpdatedAgo(at: Date, now: Date, locale: Locale): string {
-  const diff = now.getTime() - at.getTime();
-  if (diff < 0) {
-    const when = hkParts(at);
-    return `${when.m}/${when.d}`;
-  }
-  if (diff < HOUR_MS) return locale === "en" ? "Just now" : "剛剛";
-  const hours = Math.floor(diff / HOUR_MS);
-  if (hours < 24) {
-    if (locale === "en") return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
-    return `${hours} 小時前`;
-  }
-  if (hkDayNumber(now) - hkDayNumber(at) === 1) return locale === "en" ? "Yesterday" : "昨日";
-  const when = hkParts(at);
-  return `${when.m}/${when.d}`;
+  return relativeTime(at, now, locale);
 }
 
 /** `source ·` the sort instant. Pass `newsSortAt(row)`, not `updatedAt`. */

@@ -131,6 +131,7 @@ export default async function SearchPage({
                     auctionSettled: true,
                     publishedAt: true,
                     catalogCardId: true,
+                    updatedAt: true,
                     category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } },
                   },
                 },
@@ -190,8 +191,10 @@ export default async function SearchPage({
       commentCount: row._count.comments,
       liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
       saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
+      createdAt: row.createdAt,
     }),
   );
+  const now = new Date().toISOString();
   const resultCount = shown.length + postCards.length;
   const split = show === "all" && shown.length > 0 && postCards.length > 0;
   const history = viewer
@@ -269,7 +272,7 @@ export default async function SearchPage({
           {split ? <h2 className="mb-1 text-xs font-medium text-muted">{tx(prefs.locale, "貼文", "Posts")}</h2> : null}
           <div className="mx-auto grid w-full max-w-lg gap-3">
             {postCards.map((post) => (
-              <PostCard key={post.id} post={post} locale={prefs.locale} next="/search" viewerId={viewerId} />
+              <PostCard key={post.id} post={post} locale={prefs.locale} now={now} next="/search" viewerId={viewerId} />
             ))}
           </div>
         </section>
