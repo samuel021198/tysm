@@ -251,7 +251,7 @@ model VerificationApplication {
   id          String                        @id @default(cuid())
   userId      String
   track       VerificationTrack
-  /// ponytail: public image store, random key. Move to a private bucket if the file must leave the public base URL.
+  /// Object ref `private:verification/…` in R2_PRIVATE_BUCKET. Not a public URL.
   documentUrl String
   reason      String
   status      VerificationApplicationStatus @default(PENDING)

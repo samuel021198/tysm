@@ -70,16 +70,17 @@ npm run dev
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
 | `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑、發布卡聞或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
-| `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。五個 `R2_*` 要齊先會用。未齊時圖鑑留來源網址，上傳相片留 data URL，圖檔唔寫入 Postgres。 |
+| `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。公開圖要齊 account、access key、secret、`R2_BUCKET`、`R2_PUBLIC_BASE_URL`。未齊時圖鑑留來源網址，上傳相片留 data URL。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
 | `R2_BUCKET` | 否 | R2 bucket 名稱。 |
 | `R2_PUBLIC_BASE_URL` | 否 | 公開讀取網址，https，不要結尾斜線。例如 `https://cards.example.com`。 |
+| `R2_PRIVATE_BUCKET` | 認證上傳必須 | 身份證／商業登記的私人 bucket。唔開 r2.dev、唔綁公開網域，名稱唔可以同 `R2_BUCKET` 一樣。未設定時申請失敗，唔會寫入公開 bucket。 |
 | `TENOR_API_KEY` | 否 | 留言 sheet 的 GIF 搜尋（Tenor）。未設定時搜尋關閉，仍可貼上 tenor.com、giphy.com 或 klipy.com 的 https GIF 連結。 |
 
 不要提交 `.env`。
 
-R2 係可選。五個 `R2_*` 要齊，而且 `R2_PUBLIC_BASE_URL` 必須係 https、冇結尾斜線。未齊就唔會打 R2：圖鑑繼續存來源網址，上架、限時動態、訊息、貼文、留言同收藏的上傳相片繼續存 data URL。齊咗之後，呢啲 data URL 會經 `putR2Object` 寫入 `uploads/`（留言相片在 `uploads/comments`），資料庫只存公開網址。GIF 連結唔會再下載，直接存 tenor／giphy／klipy 的 https。圖鑑同步（寶可夢、海賊王、Riftbound）會在每次請求剩餘時間內把遠端卡圖鏡像到 `dex/`。Topps 冇卡圖，唔會下載。每日 cron 仍然只掃訂單，唔會搬圖。
+R2 係可選。五個公開 `R2_*`（唔計 `R2_PRIVATE_BUCKET`）要齊，而且 `R2_PUBLIC_BASE_URL` 必須係 https、冇結尾斜線。未齊就唔會打公開 bucket：圖鑑繼續存來源網址，上架、限時動態、訊息、貼文、留言同收藏的上傳相片繼續存 data URL。齊咗之後，呢啲 data URL 會經 `putR2Object` 寫入 `uploads/`（留言相片在 `uploads/comments`），資料庫只存公開網址。認證文件唔走呢條路，見下面「審核認證」。GIF 連結唔會再下載，直接存 tenor／giphy／klipy 的 https。圖鑑同步（寶可夢、海賊王、Riftbound）會在每次請求剩餘時間內把遠端卡圖鏡像到 `dex/`。Topps 冇卡圖，唔會下載。每日 cron 仍然只掃訂單，唔會搬圖。
 
 ## 圖鑑
 
@@ -270,15 +271,25 @@ curl -sS -X POST "https://tysm-livid.vercel.app/api/internal/news" \
 
 申請喺設定 → 帳號與安全 → 申請認證。兩條路：誠信（香港身份證）同商戶（商業登記），加一段短原因。申請人見到審核中、已通過、唔過。審核中唔可以再交。已通過先把 `User.verificationTier` 寫成 `TRUSTED` 或 `MERCHANT`，名字旁用現有色條。唔過唔改 tier。
 
+身份證同商業登記只寫入 `R2_PRIVATE_BUCKET`。呢個 bucket 唔開公開網址，access key 要有佢的讀寫權。資料庫存 `private:verification/…`，唔存永久公開網址。未設定私人 bucket，或者同公開 bucket 同名，申請人見到「文件暫時上傳唔到，請稍後再試。」上架、貼文同其他相片仍然用公開 bucket。
+
+佇列 JSON 有 `documentPath`，冇文件內容，亦冇公開網址。用同一條 bearer 打 `documentPath` 先攞到圖片 bytes（`cache-control: private, no-store`）。
+
 ```bash
 curl -sS "https://你的網域/api/internal/verification" \
   -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+
+curl -sS "https://你的網域/api/internal/verification?document=<id>" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
+  -o document.jpg
 
 curl -sS -X POST "https://你的網域/api/internal/verification" \
   -H "Authorization: Bearer $BOOTSTRAP_SECRET" \
   -H "Content-Type: application/json" \
   -d '{"applicationId":"<id>","decision":"APPROVED"}'
 ```
+
+`relocated` 係今次由公開 bucket 搬去私人 bucket 的數量（每次最多 5 個，包括已經審完的舊申請）。重覆打列表直到 `relocated` 係 0。搬完如果公開 bucket 仲有 `uploads/verification/`，係刪除失敗留下的檔，要手動清走。私人 bucket 未設定之前，舊的公開網址唔會出現喺審核 JSON；設好之後再打列表或 `?document=` 就會搬（舊網址要仲係而家的 `R2_PUBLIC_BASE_URL` 下面）。搬唔到就 `REJECTED`，等申請人再交。舊列如果仲係 data URL（當時未有 R2，寫喺資料庫），同一條 `documentPath` 會回傳圖片，唔會變成公開網址。
 
 `decision` 可以係 `REJECTED`。未設定 `BOOTSTRAP_SECRET` 回 `503`。密鑰不對回 `401`。文件唔會出喺公開頁。
 
