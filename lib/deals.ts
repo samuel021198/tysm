@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
-import { canConfirmHandover, cleanOfferNote, dealEventBody, dealPhase, handoverFlags, latestOpenOfferMessage, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
+import { canConfirmHandover, cleanOfferNote, dealEventBody, dealPhase, handoverFlags, intentBlocked, latestOpenOfferMessage, offersClosed, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
 import { Fail, asFail } from "./fail";
 import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
@@ -389,6 +389,159 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
     });
     await notifyKind(otherId, outcome.superseded ? "offer-supersede" : "offer-new", `/messages/${threadId}`, outcome.title);
     return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+function offerStatusOf(fulfillment: unknown): "PENDING" | "ACCEPTED" | null {
+  const status = readDealMeta(fulfillment).offer?.status;
+  return status === "PENDING" || status === "ACCEPTED" ? status : null;
+}
+
+/** Buyer 直接購買. One system line. Does not open a deal, so there is no 議價中 pill yet. */
+export async function recordDirectBuy(userId: string, threadId: string) {
+  const peeked = await prisma.messageThread.findUnique({
+    where: { id: threadId },
+    include: { listing: { select: { id: true, price: true, status: true, binLockOrderId: true, title: true } } },
+  });
+  if (!peeked || peeked.buyerId !== userId) return { ok: false as const, error: "forbidden" };
+  if (await isBlocked(userId, peeked.sellerId)) return { ok: false as const, error: "blocked" };
+  if (peeked.intent === "DIRECT") return { ok: true as const, listingId: peeked.listingId };
+  const listing = peeked.listing;
+  const amount = listing?.price ?? null;
+  if (!listing || amount == null || amount <= 0) return { ok: false as const, error: "unavailable" };
+  if (offersClosed(listing.status, listing.binLockOrderId)) return { ok: false as const, error: "reserved" };
+  try {
+    const posted = await prisma.$transaction(async (tx) => {
+      // ponytail: last 8 orders on this pair. A status index is the upgrade if one listing collects more.
+      const orders = await tx.order.findMany({
+        where: { buyerId: peeked.buyerId, sellerId: peeked.sellerId, items: { some: { listingId: listing.id } } },
+        orderBy: { createdAt: "desc" },
+        take: 8,
+      });
+      if (orders.some((order) => intentBlocked(dealPhase(order), offerStatusOf(order.fulfillment)))) throw new Fail("state");
+      const changed = await tx.messageThread.updateMany({
+        where: { id: threadId, OR: [{ intent: null }, { intent: "INQUIRY" }] },
+        data: { intent: "DIRECT" },
+      });
+      if (changed.count !== 1) return false;
+      await tx.message.create({
+        data: { threadId, senderId: userId, body: dealEventBody({ kind: "direct", amount }) },
+      });
+      return true;
+    });
+    if (posted) await notify(peeked.sellerId, "message", "直接購買", "希望以標價購買。", `/messages/${threadId}`);
+    return { ok: true as const, listingId: listing.id };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+/** Seller 確認 on a direct buy. That accept reserves the listing. */
+export async function confirmDirectBuy(userId: string, threadId: string) {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      const thread = await tx.messageThread.findUnique({ where: { id: threadId } });
+      if (!thread || thread.sellerId !== userId || !thread.listingId || thread.intent !== "DIRECT") throw new Fail("forbidden");
+      await lockRows(tx, "Listing", [thread.listingId]);
+      const listing = await tx.listing.findUnique({
+        where: { id: thread.listingId },
+        include: { photos: { orderBy: { position: "asc" }, take: 1 } },
+      });
+      if (!listing || listing.status !== "ACTIVE" || listing.price == null || listing.price <= 0) throw new Fail("state");
+      if (listing.binLockOrderId) throw new Fail("reserved");
+      const orderWhere = {
+        buyerId: thread.buyerId,
+        sellerId: thread.sellerId,
+        status: { in: [...OPEN_TALK] },
+        items: { some: { listingId: listing.id } },
+      };
+      let order = await tx.order.findFirst({ where: orderWhere, include: { items: true }, orderBy: { createdAt: "desc" } });
+      if (order) {
+        await lockRows(tx, "Order", [order.id]);
+        order = await tx.order.findUnique({ where: { id: order.id }, include: { items: true } });
+      }
+      if (!order) {
+        const created = await insertOrder(tx, {
+          buyerId: thread.buyerId,
+          sellerId: thread.sellerId,
+          source: "BUY_NOW",
+          shipDays: listing.shippingDays,
+          address: null,
+          deal: true,
+          lines: [
+            {
+              listingId: listing.id,
+              title: listing.title,
+              unitPrice: listing.price,
+              quantity: 1,
+              shippingFee: 0,
+              imageUrl: listing.photos[0]?.url ?? null,
+              conditionLabel: conditionLabel(listing),
+              cardName: listing.cardName,
+              personName: listing.personName,
+            },
+          ],
+        });
+        order = await tx.order.findUnique({ where: { id: created.id }, include: { items: true } });
+      }
+      if (!order) throw new Fail("state");
+      const meta = readDealMeta(order.fulfillment);
+      if (meta.confirmed || meta.offer) throw new Fail("state");
+      const phase = dealPhase(order);
+      if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      const buyer = await tx.user.findUnique({ where: { id: thread.buyerId }, select: { nickname: true } });
+      const offer: DealOffer = {
+        by: thread.buyerId,
+        name: buyer?.nickname?.trim() || "會員",
+        amount: listing.price,
+        note: "",
+        status: "PENDING",
+      };
+      const staged = await tx.order.updateMany({
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: { fulfillment: withDeal(order.fulfillment, { offer }) },
+      });
+      if (staged.count !== 1) throw new Fail("state");
+      const fresh = await tx.order.findUnique({ where: { id: order.id }, include: { items: true } });
+      if (!fresh) throw new Fail("state");
+      const posted = await acceptAndReserve(tx, fresh, userId, offer);
+      return { notifyId: thread.buyerId, threadId: posted, listingId: listing.id };
+    });
+    await notify(result.notifyId, "order", "已保留", "賣家已確認。", noticeHref(result.threadId));
+    return { ok: true as const, listingId: result.listingId };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+/** Seller 已售. Closes the listing. Does not reserve it for this buyer. */
+export async function replyDirectSold(userId: string, threadId: string) {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      const thread = await tx.messageThread.findUnique({ where: { id: threadId } });
+      if (!thread || thread.sellerId !== userId || !thread.listingId || thread.intent !== "DIRECT") throw new Fail("forbidden");
+      const sold = await tx.listing.updateMany({
+        where: { id: thread.listingId, sellerId: userId, status: "ACTIVE", binLockOrderId: null },
+        data: { status: "SOLD", quantityAvailable: 0 },
+      });
+      if (sold.count !== 1) throw new Fail("state");
+      await tx.message.create({
+        data: { threadId, senderId: userId, body: dealEventBody({ kind: "sold" }) },
+      });
+      await tx.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
+      const listing = await tx.listing.findUnique({ where: { id: thread.listingId }, select: { title: true } });
+      return { notifyId: thread.buyerId, listingId: thread.listingId, title: listing?.title ?? "" };
+    });
+    await notify(result.notifyId, "order", "已售", result.title, `/messages/${threadId}`);
+    return { ok: true as const, listingId: result.listingId };
   } catch (error) {
     const code = asFail(error);
     if (code) return { ok: false as const, error: code };

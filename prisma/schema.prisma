@@ -124,6 +124,12 @@ enum OfferStatus {
   CANCELLED
 }
 
+/// Buyer entry on a thread. Null until they choose. A price offer stays on the order.
+enum ThreadIntent {
+  INQUIRY
+  DIRECT
+}
+
 enum DisputeStatus {
   OPEN
   BUYER_WINS
@@ -626,12 +632,14 @@ model Dispute {
 }
 
 model MessageThread {
-  id        String    @id @default(cuid())
+  id        String        @id @default(cuid())
   listingId String?
   buyerId   String
   sellerId  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  /// 查詢 or 直接購買. Null means the buyer has not chosen. 議價 is an order offer, not this column.
+  intent    ThreadIntent?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
   listing   Listing?  @relation(fields: [listingId], references: [id], onDelete: SetNull)
   buyer     User      @relation("ThreadBuyer", fields: [buyerId], references: [id])
   seller    User      @relation("ThreadSeller", fields: [sellerId], references: [id])

@@ -7,7 +7,8 @@ import { prisma } from "@/lib/db";
 import { isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
-import { openHandover } from "@/lib/deals";
+import { openHandover, recordDirectBuy } from "@/lib/deals";
+import { dealPhase, intentBlocked, nextThreadIntent, offersClosed, readDealMeta, threadEntryQuery } from "@/lib/deal-phase";
 import { notificationTarget } from "@/lib/notify";
 import { composeReportReason } from "@/lib/safety";
 import { isBlocked, notify, notifyKind } from "@/lib/social";
@@ -154,8 +155,11 @@ export async function openDirectThread(formData: FormData) {
   const thread =
     existing ??
     (await prisma.messageThread.create({
-      data: { buyerId: user.id, sellerId: otherId },
+      data: { buyerId: user.id, sellerId: otherId, intent: "INQUIRY" },
     }));
+  if (existing && existing.intent == null) {
+    await prisma.messageThread.updateMany({ where: { id: existing.id, intent: null }, data: { intent: "INQUIRY" } });
+  }
   redirect(`/messages/${thread.id}`);
 }
 
@@ -174,8 +178,56 @@ export async function openThread(formData: FormData) {
       data: { listingId, buyerId: user.id, sellerId: listing.sellerId },
     }));
   const focus = String(formData.get("focus") || "");
-  const query = focus === "offer" ? "?offer=1" : focus === "compose" ? "?compose=1" : "";
+  const entry = focus === "offer" || focus === "buy" || focus === "compose" ? focus : "";
+  // ponytail: last 8 orders. Same ceiling as the thread page.
+  const orders = await prisma.order.findMany({
+    where: { buyerId: user.id, sellerId: listing.sellerId, items: { some: { listingId } } },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+  });
+  const pending = orders.some((order) => readDealMeta(order.fulfillment).offer?.status === "PENDING" && dealPhase(order) !== "CANCELLED");
+  const blocked = orders.some((order) => intentBlocked(dealPhase(order), offerStatus(order.fulfillment)));
+  const closed = offersClosed(listing.status, listing.binLockOrderId);
+  const next = nextThreadIntent(thread.intent, entry, {
+    priced: listing.price != null && listing.price > 0,
+    closed,
+    blocked,
+  });
+  if (next === "DIRECT" && thread.intent !== "DIRECT") {
+    const recorded = await recordDirectBuy(user.id, thread.id);
+    if (!recorded.ok) redirect(`/listing/${listingId}?err=${recorded.error}`);
+  } else if (next === "INQUIRY" && thread.intent == null) {
+    await prisma.messageThread.updateMany({ where: { id: thread.id, intent: null }, data: { intent: "INQUIRY" } });
+  }
+  const query = threadEntryQuery(entry, next, { closed, pending });
   redirect(`/messages/${thread.id}${query}`);
+}
+
+function offerStatus(fulfillment: unknown): "PENDING" | "ACCEPTED" | null {
+  const status = readDealMeta(fulfillment).offer?.status;
+  return status === "PENDING" || status === "ACCEPTED" ? status : null;
+}
+
+/** In-thread 查詢. Does not wipe 直接購買 or an offer already on the order. */
+export async function chooseInquiry(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const user = await viewer(`/messages/${threadId}`);
+  const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+  if (!thread || thread.buyerId !== user.id) redirect(`/messages/${threadId}?err=forbidden`);
+  if (thread.intent == null) {
+    await prisma.messageThread.updateMany({ where: { id: threadId, intent: null }, data: { intent: "INQUIRY" } });
+  }
+  revalidatePath(`/messages/${threadId}`);
+}
+
+/** In-thread 直接購買. Same write as the listing button. */
+export async function chooseDirectBuy(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const user = await viewer(`/messages/${threadId}`);
+  const result = await recordDirectBuy(user.id, threadId);
+  if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
+  revalidatePath(`/messages/${threadId}`);
+  revalidatePath("/messages");
 }
 
 export async function sendMessage(formData: FormData) {

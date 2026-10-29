@@ -27,6 +27,12 @@ import {
   offerEntry,
   offerFormLocked,
   offersClosed,
+  DIRECT_WAIT,
+  intentBlocked,
+  nextThreadIntent,
+  pinAction,
+  showDealStream,
+  threadEntryQuery,
   readDealEvent,
   dealBlocked,
   dealPhase,
@@ -111,7 +117,23 @@ assert(dealEventCopy("zh-HK", { kind: "lock" }).text === "已保留。", "reserv
 assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "已拒絕。" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "已撤回。", "decline and withdraw copy is one sentence");
 assert(dealEventCopy("zh-HK", { kind: "handover" }).text === "已確認交收。", "each handover confirm is one sentence");
 assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已取消保留。", "release names who cancelled the reservation");
-assert(![offered.text, dealEventCopy("zh-HK", { kind: "accept" }).text, dealEventCopy("zh-HK", { kind: "decline" }).text, dealEventCopy("zh-HK", { kind: "withdraw" }).text, dealEventCopy("zh-HK", { kind: "lock" }).text, dealEventCopy("zh-HK", { kind: "handover" }).text].some((text) => text.includes("要約")), "bubbles do not say 要約");
+const directCopy = dealEventCopy("zh-HK", { kind: "direct", amount: 10000 });
+assert(directCopy.text.includes("希望以標價") && directCopy.text.includes("HK$") && !directCopy.text.includes("議價中"), "direct buy names the listed price and is not 議價中");
+assert(dealEventCopy("zh-HK", { kind: "sold" }).text === "已售。", "seller 已售 is one sentence");
+assert(DIRECT_WAIT === "待賣家回覆。", "the buyer waits without a status pill");
+assert(![offered.text, directCopy.text, dealEventCopy("zh-HK", { kind: "sold" }).text, dealEventCopy("zh-HK", { kind: "accept" }).text, dealEventCopy("zh-HK", { kind: "decline" }).text, dealEventCopy("zh-HK", { kind: "withdraw" }).text, dealEventCopy("zh-HK", { kind: "lock" }).text, dealEventCopy("zh-HK", { kind: "handover" }).text].some((text) => text.includes("要約")), "bubbles do not say 要約");
+assert(readDealEvent(dealEventBody({ kind: "direct", amount: 10000 }))?.kind === "direct" && readDealEvent(dealEventBody({ kind: "sold" }))?.kind === "sold", "direct buy and 已售 are system lines");
+assert(!showDealStream("CHATTING", null) && showDealStream("CHATTING", "PENDING") && showDealStream("CONFIRMED", "ACCEPTED") && showDealStream("DONE", null), "議價中 waits for a submitted offer; later phases still show");
+assert(!intentBlocked(null, null) && !intentBlocked("CANCELLED", null) && !intentBlocked("CHATTING", null) && intentBlocked("CHATTING", "PENDING") && intentBlocked("CONFIRMED", null), "a deal blocks a new entry once there is an offer or the talk phase is over");
+const openOpts = { priced: true, closed: false, blocked: false };
+assert(nextThreadIntent(null, "offer", openOpts) === null && nextThreadIntent(null, "compose", openOpts) === "INQUIRY" && nextThreadIntent(null, "buy", openOpts) === "DIRECT", "議價 does not store intent; 聯絡賣家 is 查詢; 直接購買 is direct");
+assert(nextThreadIntent(null, "buy", { priced: false, closed: false, blocked: false }) === null && nextThreadIntent("DIRECT", "compose", openOpts) === "DIRECT" && nextThreadIntent("INQUIRY", "buy", openOpts) === "DIRECT" && nextThreadIntent(null, "buy", { ...openOpts, blocked: true }) === null, "direct buy needs a price, sticks, and does not overwrite a deal");
+assert(threadEntryQuery("offer", null, { closed: false, pending: false }) === "?offer=1" && threadEntryQuery("compose", "INQUIRY", { closed: false, pending: false }) === "?compose=1" && threadEntryQuery("buy", "DIRECT", { closed: false, pending: false }) === "" && threadEntryQuery("offer", "DIRECT", { closed: false, pending: false }) === "" && threadEntryQuery("offer", null, { closed: true, pending: false }) === "", "entry opens the sheet or the composer and does not re-ask");
+const pin = { closed: false, blocked: false, started: false, entry: false };
+assert(pinAction({ ...pin, role: "buyer", intent: null }) === "ask", "reopening a pinned thread with no intent asks 議價｜直接購買｜查詢");
+assert(pinAction({ ...pin, role: "buyer", intent: null, entry: true }) === "switch" && pinAction({ ...pin, role: "buyer", intent: "INQUIRY" }) === "switch" && pinAction({ ...pin, role: "buyer", intent: null, started: true }) === "switch", "an entry, 查詢, or an existing deal keeps 議價｜直接購買 and does not re-ask");
+assert(pinAction({ ...pin, role: "buyer", intent: "DIRECT" }) === "direct-buyer" && pinAction({ ...pin, role: "seller", intent: "DIRECT" }) === "direct-seller", "direct buy waits on the seller");
+assert(pinAction({ ...pin, role: "seller", intent: null }) === "seller-offer" && pinAction({ ...pin, role: "buyer", intent: null, closed: true }) === "closed" && pinAction({ ...pin, role: "buyer", intent: "INQUIRY", blocked: true }) === "none", "sellers can still offer; a hold disables 議價; a live deal hides the pin actions");
 const body = dealEventBody({ kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
 assert(readDealEvent(body)?.kind === "offer" && readDealEvent(dealEventBody({ kind: "lock" }))?.kind === "lock" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
 const replaced = supersededOfferBody(body);

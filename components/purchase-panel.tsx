@@ -56,19 +56,27 @@ export function PurchasePanel({
   const publicBid = currentBid ?? startPrice ?? 0;
   const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
   const bin = showHandover && price != null ? price : null;
+  const priced = price != null;
   const talk = showHandover ? (
     <div>
       <form id="listing-offer" action={openThread} hidden>
         <input type="hidden" name="listingId" value={id} />
         <input type="hidden" name="focus" value="offer" />
       </form>
+      {priced ? (
+        <form id="listing-buy" action={openThread} hidden>
+          <input type="hidden" name="listingId" value={id} />
+          <input type="hidden" name="focus" value="buy" />
+        </form>
+      ) : null}
       <form id="listing-chat" action={openThread} hidden>
         <input type="hidden" name="listingId" value={id} />
         <input type="hidden" name="focus" value="compose" />
       </form>
-      <div className="grid grid-cols-2 items-stretch gap-2">
-        <button form="listing-offer" className="btn btn-primary h-full w-full disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
-        <button form="listing-chat" className="btn btn-primary h-full w-full" type="submit">聯絡賣家</button>
+      <div className={`grid items-stretch gap-2 ${priced ? "grid-cols-3" : "grid-cols-2"}`}>
+        <button form="listing-offer" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
+        {priced ? <button form="listing-buy" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
+        <button form="listing-chat" className="btn btn-primary h-full w-full px-2" type="submit">聯絡賣家</button>
       </div>
     </div>
   ) : null;
@@ -159,9 +167,10 @@ export function PurchasePanel({
           }
         >
           {showHandover ? (
-            <div className="grid shrink-0 grid-cols-2 gap-1.5">
-              <button form="listing-offer" className="btn btn-primary h-full px-3 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
-              <button form="listing-chat" className="btn btn-primary h-full px-3" type="submit">聯絡賣家</button>
+            <div className={`grid shrink-0 gap-1.5 ${priced ? "grid-cols-3" : "grid-cols-2"}`}>
+              <button form="listing-offer" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
+              {priced ? <button form="listing-buy" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
+              <button form="listing-chat" className="btn btn-primary h-full px-2" type="submit">聯絡賣家</button>
             </div>
           ) : null}
           {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}

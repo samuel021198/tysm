@@ -13,6 +13,7 @@ import {
   arrangeMeetup,
   cancelDeal,
   confirmDeal,
+  confirmDirectBuy,
   confirmHandover,
   confirmReceived,
   confirmSellerPaid,
@@ -20,6 +21,7 @@ import {
   markDealSold,
   proposeDealOffer,
   releaseReserve,
+  replyDirectSold,
   uploadProof,
   withdrawDealOffer,
 } from "@/lib/deals";
@@ -277,6 +279,28 @@ export async function makeDealOfferAction(formData: FormData) {
   if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
   revalidatePath(`/messages/${threadId}`);
   revalidatePath("/messages");
+}
+
+export async function confirmDirectBuyAction(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const user = await viewer(`/messages/${threadId}`);
+  const result = await confirmDirectBuy(user.id, threadId);
+  if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
+  revalidatePath(`/messages/${threadId}`);
+  revalidatePath("/messages");
+  revalidatePath(`/listing/${result.listingId}`);
+  revalidatePath("/me/footprint");
+}
+
+export async function markDirectSoldAction(formData: FormData) {
+  const threadId = String(formData.get("threadId") || "");
+  const user = await viewer(`/messages/${threadId}`);
+  const result = await replyDirectSold(user.id, threadId);
+  if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
+  revalidatePath(`/messages/${threadId}`);
+  revalidatePath("/messages");
+  revalidatePath(`/listing/${result.listingId}`);
+  revalidatePath("/");
 }
 
 export async function acceptDealOfferAction(formData: FormData) {

@@ -119,6 +119,68 @@ export function offersClosed(status: string, lockOrderId: string | null | undefi
   return status === "SOLD" || Boolean(lockOrderId);
 }
 
+/** Stored on MessageThread.intent. An offer is not an intent; it lives on the order. */
+export type ThreadIntent = "INQUIRY" | "DIRECT";
+
+export type EntryFocus = "offer" | "buy" | "compose" | "";
+
+/** A live offer, an accepted offer, or any phase past talking. Cancelled does not block a new entry. */
+export function intentBlocked(phase: DealPhase | null, offer: "PENDING" | "ACCEPTED" | null): boolean {
+  if (!phase || phase === "CANCELLED") return false;
+  if (offer === "PENDING" || offer === "ACCEPTED") return true;
+  return phase !== "CHATTING";
+}
+
+/** Entry writes intent only for 查詢 and 直接購買. 議價 waits until the offer is submitted. DIRECT sticks. */
+export function nextThreadIntent(
+  current: ThreadIntent | null,
+  focus: EntryFocus,
+  opts: { priced: boolean; closed: boolean; blocked: boolean },
+): ThreadIntent | null {
+  if (opts.blocked || opts.closed || current === "DIRECT") return current;
+  if (focus === "buy" && opts.priced) return "DIRECT";
+  if (focus === "compose" && current == null) return "INQUIRY";
+  return current;
+}
+
+/** Listing buttons skip the 3-pick. 議價 opens the price sheet. 聯絡賣家 focuses the composer. */
+export function threadEntryQuery(focus: EntryFocus, intent: ThreadIntent | null, opts: { closed: boolean; pending: boolean }): string {
+  if (focus === "offer" && !opts.closed && !opts.pending && intent !== "DIRECT") return "?offer=1";
+  if (focus === "compose") return "?compose=1";
+  return "";
+}
+
+export type PinAction = "ask" | "switch" | "seller-offer" | "direct-seller" | "direct-buyer" | "closed" | "none";
+
+/**
+ * Pin row under the product.
+ * ask: 議價｜直接購買｜查詢, only when reopening with no intent and no deal.
+ * switch: 議價｜直接購買 while 查詢 or before an offer. 查詢 does not lock those out.
+ */
+export function pinAction(input: {
+  role: "buyer" | "seller";
+  intent: ThreadIntent | null;
+  closed: boolean;
+  blocked: boolean;
+  started: boolean;
+  entry: boolean;
+}): PinAction {
+  if (input.closed) return "closed";
+  if (input.blocked) return "none";
+  if (input.intent === "DIRECT") return input.role === "seller" ? "direct-seller" : "direct-buyer";
+  if (input.role === "seller") return "seller-offer";
+  if (input.intent == null && !input.entry && !input.started) return "ask";
+  return "switch";
+}
+
+/** 議價中 appears only after an offer is submitted. Direct buy has no status pill until 確認 reserves. */
+export function showDealStream(phase: DealPhase, offer: "PENDING" | "ACCEPTED" | null): boolean {
+  if (phase === "CHATTING" && offer !== "PENDING") return false;
+  return true;
+}
+
+export const DIRECT_WAIT = "待賣家回覆。";
+
 /** Who has already tapped 確認交收. A legacy shipped row counts as the seller side. */
 export function handoverFlags(order: { status: string; fulfillment?: unknown }): { buyer: boolean; seller: boolean } {
   const meta = readDealMeta(order.fulfillment);
@@ -233,7 +295,9 @@ export type DealEvent =
   | { kind: "withdraw" }
   | { kind: "lock" }
   | { kind: "handover" }
-  | { kind: "release"; name: string };
+  | { kind: "release"; name: string }
+  | { kind: "direct"; amount: number }
+  | { kind: "sold" };
 
 export function dealEventBody(event: DealEvent): string {
   return DEAL_MARK + JSON.stringify(event);
@@ -249,7 +313,12 @@ export function readDealEvent(body: string): DealEvent | null {
   }
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
   const kind = (row as { kind?: unknown }).kind;
-  if (kind === "accept" || kind === "decline" || kind === "withdraw" || kind === "lock" || kind === "handover") return { kind };
+  if (kind === "accept" || kind === "decline" || kind === "withdraw" || kind === "lock" || kind === "handover" || kind === "sold") return { kind };
+  if (kind === "direct") {
+    const amount = (row as { amount?: unknown }).amount;
+    if (typeof amount !== "number" || !Number.isSafeInteger(amount) || amount <= 0) return null;
+    return { kind, amount };
+  }
   if (kind === "release") {
     const name = (row as { name?: unknown }).name;
     if (typeof name !== "string" || !name.trim()) return null;
@@ -293,5 +362,10 @@ export function dealEventCopy(locale: Locale, event: DealEvent): { text: string;
   if (event.kind === "withdraw") return { text: en ? "Withdrawn." : "已撤回。", note: "" };
   if (event.kind === "lock") return { text: en ? "Reserved." : "已保留。", note: "" };
   if (event.kind === "handover") return { text: en ? "Handover confirmed." : "已確認交收。", note: "" };
+  if (event.kind === "direct") {
+    const price = formatHkd(event.amount, locale);
+    return { text: en ? `Asked to buy at the listed price ${price}.` : `希望以標價 ${price} 購買。`, note: "" };
+  }
+  if (event.kind === "sold") return { text: en ? "Sold." : "已售。", note: "" };
   return { text: en ? `${event.name} cancelled the reservation.` : `${event.name} 已取消保留。`, note: "" };
 }
