@@ -387,6 +387,22 @@ const bookmark = 'name="bookmark"';
 assert(postCard.includes(bookmark) && postCard.includes("filled={post.saved}") && !postCard.includes("M7.2 5h9.6"), "post save uses the shared bookmark");
 assert(listingCard.includes(bookmark) && listingCard.includes("filled={favorited}") && !listingCard.includes("♥") && !listingCard.includes("♡"), "listing favorite uses the shared bookmark");
 assert(listingPage.includes(bookmark) && listingPage.includes("filled={Boolean(favored)}") && !listingPage.includes("♥") && !listingPage.includes("♡"), "listing page favorite uses the shared bookmark");
+const titleRowStart = listingPage.indexOf('className="mt-2 flex items-center justify-between gap-3"');
+const titleRow = listingPage.slice(titleRowStart, listingPage.indexOf("</form>", titleRowStart));
+assert(
+  titleRowStart >= 0 &&
+    titleRow.includes("<h1") &&
+    titleRow.includes(bookmark) &&
+    titleRow.includes('aria-label={tx(locale, "收藏", "Favorite")}') &&
+    titleRow.includes("justify-between") &&
+    listingPage.indexOf("<PurchasePanel") > titleRowStart &&
+    listingPage.split(bookmark).length === 2 &&
+    listingPage.split('tx(locale, "收藏", "Favorite")').length === 3 &&
+    !titleRow.includes("btn "),
+  "收藏 is a bookmark icon on the title row, to the right of the title",
+);
+assert(!listingPage.includes("toggleFollow") && !listingPage.includes("關注賣家") && !listingPage.includes("取消關注"), "the listing seller row has no follow control");
+assert(readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8").includes("toggleFollow"), "follow stays on the shop page");
 assert(profileBoard.includes('icon: "bookmark"') && !profileBoard.includes("♥") && !profileBoard.includes("♡"), "profile 收藏 tab uses the same bookmark");
 assert(postCard.includes("post.postId ? null : post.priceHref"), "a post price does not open the listing");
 const favPage = readFileSync(new URL("../app/me/favorites/page.tsx", import.meta.url), "utf8");
