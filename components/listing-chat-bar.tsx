@@ -7,6 +7,7 @@ import { confirmDirectBuyAction, markDirectSoldAction } from "@/actions/trade";
 import { DIRECT_WAIT, type PinAction } from "@/lib/deal-phase";
 import { formatHkd } from "@/lib/format";
 import type { Locale } from "@/lib/i18n";
+import { NameLine, type VerificationTierName } from "./profile-header";
 import { OfferSheet } from "./offer-sheet";
 
 /** Pinned listing row. Sticks to the top of the message list while it scrolls. */
@@ -22,6 +23,7 @@ export function ListingChatBar({
   riskAcked = false,
   mode,
   priced = false,
+  seller = null,
 }: {
   locale: Locale;
   threadId: string;
@@ -37,6 +39,13 @@ export function ListingChatBar({
   mode: PinAction;
   /** Listing has a buy-now price. Direct buy stays off auctions. */
   priced?: boolean;
+  /** Name, verification pill, and ★ under the price. The pill sits outside the product link. */
+  seller?: {
+    id: string;
+    nickname: string;
+    tier: VerificationTierName;
+    rating: { average: number; count: number } | null;
+  } | null;
 }) {
   const [open, setOpen] = useState(false);
   const [acked, setAcked] = useState(riskAcked);
@@ -61,13 +70,27 @@ export function ListingChatBar({
       <div className="sticky top-0 z-20 bg-bg pb-2 pt-2">
         <div className="rounded-2xl border border-line bg-card p-2">
           <div className="flex items-center gap-2">
-            <Link href={`/listing/${listingId}`} className="flex min-w-0 flex-1 items-center gap-2">
-              <img src={cover || "/demo/back.svg"} alt="" className="h-14 w-14 shrink-0 rounded-lg bg-soft object-cover" />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-semibold">{title}</span>
-                {priceCents != null ? <span className="price mt-0.5 block text-sm">{formatHkd(priceCents, locale)}</span> : null}
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <Link href={`/listing/${listingId}`} className="shrink-0">
+                <img src={cover || "/demo/back.svg"} alt="" className="h-14 w-14 shrink-0 rounded-lg bg-soft object-cover" />
+              </Link>
+              <span className="min-w-0 flex-1">
+                <Link href={`/listing/${listingId}`} className="block min-w-0">
+                  <span className="block truncate text-sm font-semibold">{title}</span>
+                  {priceCents != null ? <span className="price mt-0.5 block text-sm">{formatHkd(priceCents, locale)}</span> : null}
+                </Link>
+                {seller ? (
+                  <NameLine
+                    className="mt-0.5 text-xs"
+                    name={<Link href={`/shop/${seller.id}`} className="font-medium">{seller.nickname}</Link>}
+                    nameClassName="truncate"
+                    tier={seller.tier}
+                    locale={locale}
+                    rating={seller.rating}
+                  />
+                ) : null}
               </span>
-            </Link>
+            </div>
             {bargain && !row ? (
               <button type="button" className="btn btn-primary shrink-0 px-3 disabled:opacity-40" disabled={offerClosed} onClick={() => setOpen(true)}>
                 議價

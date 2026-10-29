@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { tx, type Locale } from "@/lib/i18n";
 import { mapsSearchUrl, profileLinkLabel } from "@/lib/profile-edit";
@@ -33,12 +35,62 @@ export function verificationPill(tier: VerificationTierName): { label: string; c
   return null;
 }
 
+/** Tap copy under the pill. NORMAL has nothing to explain. */
+export function verificationTip(tier: VerificationTierName): string | null {
+  if (tier === "TRUSTED") return "已通過身份驗證";
+  if (tier === "MERCHANT") return "已通過商戶驗證";
+  return null;
+}
+
 export function VerificationPill({ tier }: { tier: VerificationTierName }) {
   const pill = verificationPill(tier);
-  if (!pill) return null;
+  const tip = verificationTip(tier);
+  const [open, setOpen] = useState(false);
+  if (!pill || !tip) return null;
   return (
-    <span className={`inline-flex items-center whitespace-nowrap rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none ${pill.className}`}>
-      {pill.label}
+    <span className="inline-flex shrink-0 flex-col items-center">
+      <button
+        type="button"
+        className={`inline-flex cursor-pointer items-center whitespace-nowrap rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none ${pill.className}`}
+        aria-expanded={open}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setOpen((value) => !value);
+        }}
+      >
+        {pill.label}
+      </button>
+      {open ? (
+        <span role="status" className="mt-1 max-w-[8.5rem] whitespace-normal text-center text-[11px] font-medium leading-snug text-ink">
+          {tip}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+/** Display name, then the verification pill, then the score. The pill tip stays on this row. */
+export function NameLine({
+  name,
+  tier,
+  locale,
+  rating = null,
+  nameClassName = "",
+  className = "",
+}: {
+  name: ReactNode;
+  tier: VerificationTierName;
+  locale: Locale;
+  rating?: { average: number; count: number } | null;
+  nameClassName?: string;
+  className?: string;
+}) {
+  return (
+    <span className={`inline-flex min-w-0 max-w-full flex-wrap items-center gap-1 align-middle ${className}`}>
+      <span className={`min-w-0 max-w-full ${nameClassName}`}>{name}</span>
+      <VerificationPill tier={tier} />
+      {rating ? <RatingPill locale={locale} average={rating.average} count={rating.count} /> : null}
     </span>
   );
 }
@@ -123,11 +175,7 @@ export function ProfileHeader({
       </div>
       <div>
         <h1 className="text-[15px] font-semibold leading-snug">
-          <span className="inline-flex items-center gap-1 align-middle">
-            {nickname}
-            <VerificationPill tier={verificationTier} />
-            {rating ? <RatingPill locale={locale} average={rating.average} count={rating.count} /> : null}
-          </span>
+          <NameLine name={nickname} tier={verificationTier} locale={locale} rating={rating} />
         </h1>
         {blurb ? <BioText text={blurb} /> : null}
         <TopicChips tags={interestTags.slice(0, 8)} className="mt-1" />

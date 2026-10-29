@@ -78,7 +78,7 @@ assert(!settings.includes("/me/settings/verify"), "verify is not a new settings 
 assert(page.includes("審核中") && page.includes("已通過") && page.includes("唔過"), "applicant sees the three statuses");
 assert(page.includes("viewer.nickname") && page.includes("<VerificationPill tier={viewer.verificationTier} />"), "approved state shows the existing pill beside the name");
 assert(!page.includes("#E8F5E9") && !page.includes("#FFF3E0"), "the apply page does not invent badge colors");
-assert(header.includes("<VerificationPill tier={verificationTier} />") && header.includes("function verificationPill"), "the profile name uses the same pill");
+assert(header.includes("<NameLine name={nickname} tier={verificationTier}") && header.includes("<VerificationPill tier={tier} />") && header.includes("function verificationPill"), "the profile name uses the same pill");
 assert(form.includes("誠信（香港身份證）") && form.includes("商戶（商業登記）") && form.includes('name="reason"') && form.includes('type="file"') && form.includes("VERIFY_REASON_MAX"), "form is two tracks, a file, and a short reason");
 assert(page.includes('latest?.status === "PENDING"') && page.includes("<VerifyForm"), "the form hides while pending");
 assert(action.includes("submitApplication") && action.includes("status: parsed.draft.status") && action.includes("storeVerificationDocument") && action.includes("privateDocKey"), "apply stores a private ref on a PENDING row");

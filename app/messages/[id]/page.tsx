@@ -6,6 +6,7 @@ import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, intentBlocked,
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
+import { ratingFromAggregate } from "@/lib/ratings";
 import { shareTarget } from "@/lib/share";
 import { isBlocked } from "@/lib/social";
 import { DealStream } from "@/components/deal-panel";
@@ -13,6 +14,7 @@ import { ListingChatBar } from "@/components/listing-chat-bar";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
 import { MessageComposer } from "@/components/message-composer";
+import { NameLine } from "@/components/profile-header";
 import { PersonMenu } from "@/components/safety-menu";
 import { ThreadScroll } from "@/components/thread-scroll";
 import { ThreadViewport } from "@/components/thread-viewport";
@@ -42,7 +44,8 @@ export default async function ThreadPage({
   if (await isBlocked(viewer.id, otherId)) notFound();
   const other = thread.buyerId === viewer.id ? thread.seller : thread.buyer;
   const paths = thread.messages.map((message) => shareTarget(message.body)).filter((path): path is string => Boolean(path));
-  const [cards, orders] = await Promise.all([
+  const otherRatingQuery = prisma.dealRating.aggregate({ where: { subjectId: otherId }, _avg: { stars: true }, _count: true });
+  const [cards, orders, otherRatingRow, sellerRatingRow] = await Promise.all([
     loadShareCards(paths),
     thread.listingId
       ? prisma.order.findMany({
@@ -59,7 +62,13 @@ export default async function ThreadPage({
           take: 8,
         })
       : Promise.resolve([]),
+    otherRatingQuery,
+    otherId === thread.sellerId
+      ? otherRatingQuery
+      : prisma.dealRating.aggregate({ where: { subjectId: thread.sellerId }, _avg: { stars: true }, _count: true }),
   ]);
+  const otherRating = ratingFromAggregate(otherRatingRow._avg.stars, otherRatingRow._count);
+  const sellerRating = ratingFromAggregate(sellerRatingRow._avg.stars, sellerRatingRow._count);
   const open = orders.find((order) => {
     const phase = dealPhase(order);
     return phase !== "CANCELLED" && phase !== "DONE";
@@ -109,7 +118,16 @@ export default async function ThreadPage({
             <path d="M14.5 6.5 8 12l6.5 5.5" />
           </svg>
         </Link>
-        <h1 className="truncate text-center text-base font-semibold leading-tight">{other.nickname}</h1>
+        <h1 className="min-w-0 text-base font-semibold leading-tight">
+          <NameLine
+            className="w-full justify-center"
+            name={other.nickname}
+            nameClassName="truncate"
+            tier={other.verificationTier}
+            locale={prefs.locale}
+            rating={otherRating}
+          />
+        </h1>
         <div className="grid h-12 place-items-center">
           <PersonMenu
             locale={prefs.locale}
@@ -143,6 +161,12 @@ export default async function ThreadPage({
               started: orders.some((row) => dealPhase(row) !== "CANCELLED"),
               entry: sp.offer === "1",
             })}
+            seller={{
+              id: thread.sellerId,
+              nickname: thread.seller.nickname,
+              tier: thread.seller.verificationTier,
+              rating: sellerRating,
+            }}
           />
         ) : null}
         <div className={thread.listing ? "grid gap-2.5" : "grid gap-2.5 pt-2"}>
