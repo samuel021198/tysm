@@ -1,0 +1,80 @@
+import { readFileSync } from "fs";
+import { shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
+
+function assert(cond: unknown, msg: string): asserts cond {
+  if (!cond) throw new Error(msg);
+}
+
+const buy = { saleType: "BUY_NOW", itemCount: 1 };
+assert(shopPill({ status: "ACTIVE", binLockOrderId: null }) === "ACTIVE", "在售 is ACTIVE with no hold");
+assert(shopPill({ status: "ACTIVE", binLockOrderId: "order_1" }) === "RESERVED", "已保留 follows the existing hold");
+assert(shopPill({ status: "ACTIVE", reserved: true }) === "RESERVED", "the profile row can pass a reserved flag");
+assert(shopPill({ status: "SOLD", binLockOrderId: null }) === "SOLD", "已售 is SOLD");
+assert(shopPill({ status: "UNLISTED", binLockOrderId: "order_1" }) === "UNLISTED", "已下架 wins over a leftover hold");
+assert(shopPill({ status: "ENDED", binLockOrderId: null }) === "ENDED", "an ended auction stays on the shop list");
+assert(shopPill({ status: "DRAFT", binLockOrderId: null }) === null, "drafts stay off the shop list");
+assert(
+  shopPillLabel("zh-HK", "ACTIVE") === "在售" &&
+    shopPillLabel("zh-HK", "RESERVED") === "已保留" &&
+    shopPillLabel("zh-HK", "SOLD") === "已售" &&
+    shopPillLabel("zh-HK", "UNLISTED") === "已下架",
+  "pills use the locked copy",
+);
+
+assert(shopPriceEditable("ACTIVE", buy) && shopPriceEditable("RESERVED", buy), "price edits while 在售 or 已保留");
+assert(
+  !shopPriceEditable("SOLD", buy) && !shopPriceEditable("UNLISTED", buy) && !shopPriceEditable("ENDED", buy),
+  "sold, unlisted, and ended prices stay fixed",
+);
+assert(!shopPriceEditable("ACTIVE", { saleType: "AUCTION", itemCount: 1 }), "an auction ask is not a buy-now price");
+assert(!shopPriceEditable("ACTIVE", { saleType: "BUY_NOW", itemCount: 2 }), "a multi-card total is edited in the listing form");
+
+assert(
+  shopMenu("ACTIVE").edit && shopMenu("ACTIVE").unlist && shopMenu("ACTIVE").sold && shopMenu("RESERVED").unlist && shopMenu("RESERVED").sold,
+  "在售 and 已保留 can be edited, unlisted, or marked sold",
+);
+assert(!shopMenu("SOLD").sold && !shopMenu("SOLD").unlist && shopMenu("SOLD").edit, "a sold row can still open edit, not sell itself again");
+assert(!shopMenu("UNLISTED").unlist && !shopMenu("ENDED").sold, "下架 and 已售 are not offered again");
+
+assert(shopDisplayCents({ saleType: "BUY_NOW", price: 100, startPrice: null, currentBid: null, auctionSettled: false }) === 100, "buy now shows the price");
+assert(
+  shopDisplayCents({ saleType: "AUCTION", price: null, startPrice: 50, currentBid: 80, auctionSettled: false }) === 80,
+  "a live auction shows the bid",
+);
+
+const schema = readFileSync(new URL("../prisma/schema.prisma", import.meta.url), "utf8");
+assert(schema.includes("enum ListingStatus") && !schema.includes("RESERVED") && schema.includes("binLockOrderId"), "no new status; a hold is the existing lock");
+
+const header = readFileSync(new URL("../components/profile-header.tsx", import.meta.url), "utf8");
+assert(
+  header.includes("?tab=selling#profile-posts") && header.includes("ProfileTabLink") && header.includes('tab="selling"') && header.includes("商品"),
+  "the 商品 count selects the bag tab on this profile",
+);
+assert(!header.includes("/inventory") && !header.includes("/products") && !header.includes('href="/listings"'), "商品 does not open another inventory page");
+
+const link = readFileSync(new URL("../components/profile-tab-link.tsx", import.meta.url), "utf8");
+assert(
+  link.includes("preventDefault") && link.includes("replaceState") && link.includes("PROFILE_TAB_EVENT") && link.includes("profile-posts"),
+  "the count switches the open profile tab without leaving the page",
+)
+
+const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
+assert(board.includes("PROFILE_TAB_EVENT") && board.includes("<ShopInventory") && board.includes("isSelf"), "own shop tab is the management list");
+assert(board.includes("未有上架。") && board.includes("上架第一件") && board.includes('href="/sell"'), "empty own shop uses the existing create flow");
+assert(board.includes("未有賣緊的卡。") && board.includes("grid-cols-3"), "visitors keep the public sale grid");
+assert(!board.includes("⋯"), "the thumbnail grid does not grow an ellipsis");
+
+const list = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");
+assert(list.includes("我的上架") && list.includes("shopPillLabel") && list.includes('href={`/sell/${row.id}`}') && list.includes("下架") && list.includes("已售"), "each row can edit, unlist, or mark sold");
+assert(list.includes("updateShopPrice") && list.includes("shopPriceEditable"), "the price field is the inline editor");
+
+const listings = readFileSync(new URL("./listings.ts", import.meta.url), "utf8");
+const unlist = listings.slice(listings.indexOf("export async function unlistListing"), listings.indexOf("export async function relistListing"));
+assert(unlist.includes('status: "UNLISTED"') && unlist.includes("binLockOrderId: null"), "下架 clears a hold");
+assert(listings.includes("export async function updateListingPrice") && listings.includes("export async function markListingSold"), "price and sold are listing writes");
+
+const profile = readFileSync(new URL("./profile.ts", import.meta.url), "utf8");
+assert(profile.includes("SHOP_INVENTORY_STATUSES") && profile.includes("reserved: Boolean(row.binLockOrderId)"), "own 商品 count is the shop list; 已保留 is the hold");
+assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }'), "visitors still load public 在售");
+
+console.log("shop-inventory.test.ts ok");

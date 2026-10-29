@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { cleanOfferNote, offerAckGate } from "@/lib/deal-phase";
-import { hkdToCents } from "@/lib/format";
-import { importCsv, parseListingForm, relistListing, saveListing, unlistListing, deleteDraft } from "@/lib/listings";
+import { hkdToCents, safeNext } from "@/lib/format";
+import { importCsv, markListingSold, parseListingForm, relistListing, saveListing, unlistListing, updateListingPrice, deleteDraft } from "@/lib/listings";
 import { placeBid } from "@/lib/bids";
 import { respondOffer } from "@/lib/offers";
 import {
@@ -60,6 +60,57 @@ export async function unlistAction(formData: FormData) {
   if (!result.ok) redirect(`/listing/${id}?err=${result.error}`);
   revalidatePath("/");
   redirect(`/listing/${id}?ok=saved`);
+}
+
+function shopFlash(formData: FormData, key: "ok" | "err", value: string) {
+  const url = new URL(safeNext(formData.get("next")), "http://local");
+  if (url.pathname !== "/me" && !/^\/shop\/[^/]+$/.test(url.pathname)) {
+    url.pathname = "/me";
+    url.search = "";
+  }
+  url.searchParams.set("tab", "selling");
+  url.searchParams.delete("ok");
+  url.searchParams.delete("err");
+  url.searchParams.set(key, value);
+  return `${url.pathname}${url.search}`;
+}
+
+export async function updateShopPrice(formData: FormData) {
+  const back = shopFlash(formData, "ok", "saved");
+  const user = await viewer(back);
+  const cents = hkdToCents(String(formData.get("price") || ""));
+  const id = String(formData.get("listingId") || "");
+  if (cents == null || cents <= 0) redirect(shopFlash(formData, "err", "price"));
+  const result = await updateListingPrice(user.id, id, cents);
+  if (!result.ok) redirect(shopFlash(formData, "err", result.error));
+  revalidatePath("/me");
+  revalidatePath(new URL(back, "http://local").pathname);
+  revalidatePath(`/listing/${id}`);
+  redirect(back);
+}
+
+export async function unlistShopListing(formData: FormData) {
+  const back = shopFlash(formData, "ok", "saved");
+  const user = await viewer(back);
+  const id = String(formData.get("listingId") || "");
+  const result = await unlistListing(user.id, id);
+  if (!result.ok) redirect(shopFlash(formData, "err", result.error));
+  revalidatePath("/me");
+  revalidatePath(new URL(back, "http://local").pathname);
+  revalidatePath(`/listing/${id}`);
+  redirect(back);
+}
+
+export async function markShopSold(formData: FormData) {
+  const back = shopFlash(formData, "ok", "saved");
+  const user = await viewer(back);
+  const id = String(formData.get("listingId") || "");
+  const result = await markListingSold(user.id, id);
+  if (!result.ok) redirect(shopFlash(formData, "err", result.error));
+  revalidatePath("/me");
+  revalidatePath(new URL(back, "http://local").pathname);
+  revalidatePath(`/listing/${id}`);
+  redirect(back);
 }
 
 export async function relistAction(formData: FormData) {

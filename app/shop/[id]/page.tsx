@@ -84,6 +84,7 @@ export default async function ShopPage({
           savedListings={board.savedListings}
           savedPosts={board.savedPosts}
           listings={board.listings}
+          inventory={board.inventory}
           reviews={board.reviews}
           drafts={board.drafts}
           favIds={board.favIds}
