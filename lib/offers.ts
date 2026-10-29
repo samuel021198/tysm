@@ -4,7 +4,7 @@ import { Fail, asFail } from "./fail";
 import { attachDealThread } from "./deals";
 import { insertOrder } from "./orders";
 import { noticeHref } from "./notify";
-import { dealThreadHref, notifyKind } from "./social";
+import { dealThreadHref, isBlocked, notifyKind } from "./social";
 import { MAX_OFFER_ROUNDS, OFFER_TTL_MS, conditionLabel } from "./rules";
 
 async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amount: number) {
@@ -40,6 +40,13 @@ async function acceptAmount(tx: Prisma.TransactionClient, offerId: string, amoun
 
 export async function respondOffer(userId: string, offerId: string, action: string, counterRaw: number | null) {
   try {
+    const peeked = await prisma.offer.findUnique({
+      where: { id: offerId },
+      select: { buyerId: true, listing: { select: { sellerId: true } } },
+    });
+    if (peeked && (await isBlocked(userId, peeked.buyerId === userId ? peeked.listing.sellerId : peeked.buyerId))) {
+      return { ok: false as const, error: "blocked" };
+    }
     const result = await prisma.$transaction(async (tx) => {
       const offer = await tx.offer.findUnique({ where: { id: offerId }, include: { listing: true } });
       if (!offer) throw new Fail("unavailable");

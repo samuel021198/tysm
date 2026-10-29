@@ -5,10 +5,12 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd } from "@/lib/format";
 import { offerStatusLabel, orderStatusLabel, tx } from "@/lib/i18n";
 import { resolveAuction } from "@/lib/rules";
+import { hiddenUserIds } from "@/lib/social";
 
 export default async function BidsPage() {
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) redirect("/login?next=/me/bids");
+  const hidden = new Set(await hiddenUserIds(viewer.id));
   const proxies = await prisma.proxyBid.findMany({
     where: { bidderId: viewer.id },
     include: { listing: true },
@@ -16,7 +18,7 @@ export default async function BidsPage() {
   });
   const active = [];
   for (const proxy of proxies) {
-    if (proxy.listing.auctionSettled || proxy.listing.status !== "ACTIVE") continue;
+    if (proxy.listing.auctionSettled || proxy.listing.status !== "ACTIVE" || hidden.has(proxy.listing.sellerId)) continue;
     const all = await prisma.proxyBid.findMany({ where: { listingId: proxy.listingId } });
     const resolved = resolveAuction(proxy.listing.startPrice ?? 0, all);
     active.push({ proxy, leading: resolved.leaderId === viewer.id, price: resolved.price });
@@ -26,12 +28,14 @@ export default async function BidsPage() {
     include: { items: true },
     orderBy: { createdAt: "desc" },
   });
-  const offers = await prisma.offer.findMany({
-    where: { buyerId: viewer.id },
-    include: { listing: true },
-    orderBy: { updatedAt: "desc" },
-    take: 20,
-  });
+  const offers = (
+    await prisma.offer.findMany({
+      where: { buyerId: viewer.id },
+      include: { listing: true },
+      orderBy: { updatedAt: "desc" },
+      take: 20,
+    })
+  ).filter((offer) => !hidden.has(offer.listing.sellerId));
   const locale = prefs.locale;
   return (
     <div className="grid gap-8">

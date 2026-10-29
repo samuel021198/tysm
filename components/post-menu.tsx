@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { deletePost, hideFromFeed } from "@/actions/collect";
-import { reportAction } from "@/actions/social";
 import { tx, type Locale } from "@/lib/i18n";
 import { hideTarget, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, type PostMenuAction } from "@/lib/posts";
+import { blockAway } from "@/lib/safety";
+import { BlockButton, ReportSheet } from "./safety-menu";
 import { ShareSheet } from "./share-button";
 import { useHoldSwipe } from "./use-hold-swipe";
 
@@ -15,6 +16,7 @@ export function PostMenu({
   listingId,
   own,
   loggedIn,
+  userId = null,
   sharePath,
   next,
   corner = "right",
@@ -27,6 +29,8 @@ export function PostMenu({
   listingId: string | null;
   own: boolean;
   loggedIn: boolean;
+  /** Author to block. Omitted on a card that has no person. */
+  userId?: string | null;
   sharePath: string;
   next: string;
   corner?: "left" | "right";
@@ -37,7 +41,8 @@ export function PostMenu({
 }) {
   const [open, setOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const flags = postMenuFlags({ own, loggedIn, postId, listingId });
+  const [reportOpen, setReportOpen] = useState(false);
+  const flags = postMenuFlags({ own, loggedIn, postId, listingId, userId });
   const editHref = postEditHref(postId, listingId);
   const report = reportTarget(postId, listingId);
   const hide = hideTarget(postId, listingId);
@@ -46,6 +51,7 @@ export function PostMenu({
     share: tx(locale, "分享", "Share"),
     hide: tx(locale, "隱藏", "Hide"),
     report: tx(locale, "舉報", "Report"),
+    block: tx(locale, "封鎖", "Block"),
     edit: tx(locale, "編輯", "Edit"),
   };
   const confirmLabel = tx(
@@ -127,20 +133,29 @@ export function PostMenu({
         </form>
       );
     }
-    if (action === "report") {
+    if (action === "report" || action === "block") {
       if (own) return null;
+    }
+    if (action === "report") {
       if (!flags.report || !report) return <button key={action} type="button" role="menuitem" className={row} disabled>{labels.report}</button>;
       return (
-        <form key={action} action={reportAction} className="grid px-3">
-          <input type="hidden" name="targetType" value={report.type} />
-          <input type="hidden" name="targetId" value={report.id} />
-          <input type="hidden" name="next" value={next} />
-          <button type="submit" role="menuitem" className={`${row} -mx-3`}>
-            {labels.report}
-          </button>
-          <input name="reason" required minLength={4} maxLength={1000} placeholder={tx(locale, "原因", "Reason")} className="field mb-2" aria-label={tx(locale, "原因", "Reason")} />
-        </form>
+        <button
+          key={action}
+          type="button"
+          role="menuitem"
+          className={row}
+          onClick={() => {
+            setOpen(false);
+            setReportOpen(true);
+          }}
+        >
+          {labels.report}
+        </button>
       );
+    }
+    if (action === "block") {
+      if (!flags.block || !userId) return <button key={action} type="button" role="menuitem" className={row} disabled>{labels.block}</button>;
+      return <BlockButton key={action} locale={locale} userId={userId} away={blockAway(next, userId)} className={row} />;
     }
     if (!flags.edit || !editHref) return <button key={action} type="button" role="menuitem" className={row} disabled>{labels.edit}</button>;
     return (
@@ -193,6 +208,9 @@ export function PostMenu({
             {POST_MENU_ORDER.map(item)}
           </div>
         </div>
+      ) : null}
+      {reportOpen && report ? (
+        <ReportSheet locale={locale} targetType={report.type} targetId={report.id} next={next} onClose={() => setReportOpen(false)} />
       ) : null}
       {shareOpen ? (
         <ShareSheet

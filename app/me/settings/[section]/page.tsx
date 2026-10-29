@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { clearHistory, logout, saveNotifications, saveShop, setPrefs } from "@/actions/auth";
+import { unblockUser } from "@/actions/social";
 import { PushToggle } from "@/components/push-toggle";
 import { PhoneForm } from "@/components/phone-form";
 import { Flash } from "@/components/shell";
@@ -41,6 +42,14 @@ export default async function SettingsSectionPage({
     key === "notifications" && vapidPublic
       ? (await prisma.pushSubscription.count({ where: { userId: viewer.id } })) > 0
       : false;
+  const blocked =
+    key === "privacy"
+      ? await prisma.block.findMany({
+          where: { blockerId: viewer.id },
+          orderBy: { createdAt: "desc" },
+          select: { id: true, blocked: { select: { id: true, nickname: true } } },
+        })
+      : [];
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Link href="/me/settings" className="text-xs font-semibold text-link">{tx(locale, "返回設定", "Back to settings")}</Link>
@@ -48,7 +57,7 @@ export default async function SettingsSectionPage({
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       {key === "notifications" ? <Notifications locale={locale} viewer={viewer} vapidPublic={vapidPublic} pushOn={pushOn} /> : null}
       {key === "account" ? <Account locale={locale} viewer={viewer} /> : null}
-      {key === "privacy" ? <Privacy locale={locale} /> : null}
+      {key === "privacy" ? <Privacy locale={locale} blocked={blocked} /> : null}
       {key === "language" ? <Language locale={locale} /> : null}
       {key === "theme" ? <Theme locale={locale} theme={prefs.theme} /> : null}
       {key === "about" ? <About locale={locale} /> : null}
@@ -130,10 +139,31 @@ function Account({
   );
 }
 
-function Privacy({ locale }: { locale: "zh-HK" | "en" }) {
+function Privacy({
+  locale,
+  blocked,
+}: {
+  locale: "zh-HK" | "en";
+  blocked: { id: string; blocked: { id: string; nickname: string } }[];
+}) {
   return (
     <div className="grid gap-3">
       <p className="text-sm leading-6 text-muted">{tx(locale, "公開個人檔案只顯示地區或商場。街號同門牌唔會放上個人頁。", "Your public profile shows a district or mall. Street and door numbers stay off the profile.")}</p>
+      <section className="surface overflow-hidden">
+        <h2 className="px-3 pt-3 text-sm font-semibold">{tx(locale, "已封鎖", "Blocked")}</h2>
+        {blocked.length === 0 ? <p className="px-3 py-3 text-sm text-muted">{tx(locale, "未有封鎖。", "No blocked members.")}</p> : null}
+        <ul className="divide-y divide-line">
+          {blocked.map((row) => (
+            <li key={row.id} className="flex h-11 items-center justify-between gap-3 px-3">
+              <span className="truncate text-sm">{row.blocked.nickname}</span>
+              <form action={unblockUser}>
+                <input type="hidden" name="userId" value={row.blocked.id} />
+                <button className="text-sm font-semibold text-link">{tx(locale, "解除封鎖", "Unblock")}</button>
+              </form>
+            </li>
+          ))}
+        </ul>
+      </section>
       <form action={clearHistory}>
         <button className="text-sm font-semibold text-link">{tx(locale, "清除瀏覽紀錄", "Clear browse history")}</button>
       </form>

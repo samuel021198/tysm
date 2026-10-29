@@ -156,12 +156,12 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     dispute: ["爭議已提交", "Dispute submitted"],
     cart: ["已加入購物車", "Added to cart"],
     phone: ["電話已驗證", "Phone verified"],
-    report: ["已送出檢舉", "Report sent"],
+    report: ["已收到", "Received"],
     review: ["評價已送出", "Review posted"],
     imported: ["CSV 已全部匯入", "CSV imported"],
   };
   if (ok && success[ok]) {
-    return <p className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-ok">{tx(locale, success[ok][0], success[ok][1])}</p>;
+    return <p role="status" className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-ok">{tx(locale, success[ok][0], success[ok][1])}</p>;
   }
   if (err) {
     return <p className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-danger">{errText(locale, err)}</p>;

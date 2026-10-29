@@ -1,6 +1,7 @@
 import { prisma } from "./db";
 import { dealPhase, type DealPhase } from "./deal-phase";
 import type { Locale } from "./i18n";
+import { hiddenUserIds } from "./social";
 
 /** Open-deal groups on 我的足跡. Done deals leave this strip. */
 export type OpenGroup = "offering" | "handover" | "finishing" | "ended";
@@ -93,7 +94,7 @@ function threadKey(listingId: string, buyerId: string, sellerId: string) {
  * ponytail: last 80 orders, 40 offers, 200 threads. Upgrade path: keyset per tab.
  */
 export async function loadFootprint(userId: string): Promise<FootprintBoard> {
-  const [orders, offers, threads] = await Promise.all([
+  const [orders, offers, threads, hiddenIds] = await Promise.all([
     prisma.order.findMany({
       where: { OR: [{ buyerId: userId }, { sellerId: userId }], status: { in: [...OPEN_ORDER] } },
       include: { items: true },
@@ -115,7 +116,9 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
       orderBy: { updatedAt: "desc" },
       take: 200,
     }),
+    hiddenUserIds(userId),
   ]);
+  const hidden = new Set(hiddenIds);
 
   const threadsByDeal = new Map<string, string>();
   for (const thread of threads) {
@@ -134,7 +137,9 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
     const item = order.items[0];
     const listingId = item?.listingId;
     if (listingId && phase !== "DONE" && phase !== "CANCELLED") openDeals.add(`${order.buyerId}:${listingId}`);
-    const href = listingId
+    const otherId = order.buyerId === userId ? order.sellerId : order.buyerId;
+    if (hidden.has(otherId) && kind === "offering") continue;
+    const href = listingId && !hidden.has(otherId)
       ? threadsByDeal.get(threadKey(listingId, order.buyerId, order.sellerId))
       : undefined;
     const row: FootprintRow = {
@@ -160,6 +165,8 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
   for (const offer of offers) {
     const kind = offerKind(offer.status);
     if (!kind || offer.orderId) continue;
+    const otherId = offer.buyerId === userId ? offer.listing.sellerId : offer.buyerId;
+    if (hidden.has(otherId)) continue;
     if (openDeals.has(`${offer.buyerId}:${offer.listingId}`)) continue;
     const href = threadsByDeal.get(threadKey(offer.listingId, offer.buyerId, offer.listing.sellerId));
     const row: FootprintRow = {

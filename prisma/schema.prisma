@@ -137,6 +137,7 @@ enum ReportTarget {
   LISTING
   USER
   POST
+  THREAD
 }
 
 enum ReportStatus {

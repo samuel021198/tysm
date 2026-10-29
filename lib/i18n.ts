@@ -68,6 +68,7 @@ const ERR: Record<string, [string, string]> = {
   offer_note: ["交收備註只可以一行，最多 80 字", "The handover note is one line, up to 80 characters"],
   login: ["請先登入", "Log in first"],
   blocked: ["你同對方已互相隱藏", "You and this member have blocked each other"],
+  report: ["請揀一個原因", "Pick a reason"],
   review: ["而家不能評價", "A review is not available"],
   csv: ["CSV 有錯誤，整批都未匯入", "The CSV has errors. Nothing was imported"],
   empty: ["沒有可匯入的資料列", "The CSV has no data rows"],

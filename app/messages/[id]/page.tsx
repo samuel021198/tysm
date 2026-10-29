@@ -12,6 +12,7 @@ import { DealStream } from "@/components/deal-panel";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
 import { MessageComposer } from "@/components/message-composer";
+import { PersonMenu } from "@/components/safety-menu";
 import { ThreadScroll } from "@/components/thread-scroll";
 
 export default async function ThreadPage({
@@ -89,7 +90,17 @@ export default async function ThreadPage({
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       <ThreadScroll>
         <div className="grid gap-2.5">
-        <h1 className="text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="min-w-0 truncate text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
+          <PersonMenu
+            locale={prefs.locale}
+            userId={otherId}
+            reportType="THREAD"
+            reportId={id}
+            next={`/messages/${id}`}
+            away="/messages"
+          />
+        </div>
         {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
         <ol className="grid content-start gap-2.5">
           {thread.messages.map((message) => {

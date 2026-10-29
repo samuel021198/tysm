@@ -7,7 +7,8 @@ import { ProfileBoard } from "@/components/profile-board";
 import { ProfileHeader } from "@/components/profile-header";
 import { Flash } from "@/components/shell";
 import { profileContent } from "@/lib/profile";
-import { reportAction, toggleBlock, toggleFollow } from "@/actions/social";
+import { toggleFollow } from "@/actions/social";
+import { PersonMenu } from "@/components/safety-menu";
 
 export default async function ShopPage({
   params,
@@ -25,9 +26,8 @@ export default async function ShopPage({
   ]);
   if (!seller) notFound();
   if (viewer && viewer.id !== seller.id && (await isBlocked(viewer.id, seller.id))) notFound();
-  const [following, blocked, board] = await Promise.all([
+  const [following, board] = await Promise.all([
     viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: seller.id } } }) : null,
-    viewer ? prisma.block.findUnique({ where: { blockerId_blockedId: { blockerId: viewer.id, blockedId: seller.id } } }) : null,
     profileContent(seller.id, viewer?.id ?? null),
   ]);
   const locale = prefs.locale;
@@ -55,12 +55,19 @@ export default async function ShopPage({
           self={viewer?.id === seller.id}
         >
           {viewer && viewer.id !== seller.id ? (
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
-              <form action={toggleFollow}><input type="hidden" name="sellerId" value={seller.id} /><button className="btn btn-ghost">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注", "Follow")}</button></form>
-              <details>
-                <summary className="cursor-pointer text-muted">{tx(locale, "更多", "More")}</summary>
-                <form action={toggleBlock} className="mt-2"><input type="hidden" name="userId" value={seller.id} /><button className="underline">{blocked ? tx(locale, "解除隱藏", "Unblock") : tx(locale, "隱藏這位賣家", "Hide this seller")}</button></form>
-              </details>
+            <div className="mt-3 flex items-center gap-2">
+              <form action={toggleFollow} className="min-w-0 flex-1">
+                <input type="hidden" name="sellerId" value={seller.id} />
+                <button className="btn btn-ghost w-full">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注", "Follow")}</button>
+              </form>
+              <PersonMenu
+                locale={locale}
+                userId={seller.id}
+                reportType="USER"
+                reportId={seller.id}
+                next={`/shop/${seller.id}`}
+                away="/"
+              />
             </div>
           ) : null}
         </ProfileHeader>
@@ -84,17 +91,6 @@ export default async function ShopPage({
           viewerId={viewer?.id ?? null}
         />
       </div>
-      {viewer && viewer.id !== seller.id ? (
-        <details className="mt-6 max-w-lg text-sm">
-          <summary className="cursor-pointer text-muted">{tx(locale, "檢舉這位會員", "Report this member")}</summary>
-          <form action={reportAction} className="mt-2 grid gap-2">
-            <input type="hidden" name="targetType" value="USER" />
-            <input type="hidden" name="targetId" value={seller.id} />
-            <textarea className="field" name="reason" placeholder={tx(locale, "原因", "Reason")} />
-            <button className="w-fit underline">{tx(locale, "送出檢舉", "Send report")}</button>
-          </form>
-        </details>
-      ) : null}
     </div>
   );
 }
