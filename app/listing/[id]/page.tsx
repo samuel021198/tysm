@@ -6,7 +6,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { activityLine } from "@/lib/time";
 import { activeWhere, cardInclude } from "@/lib/feed";
-import { offersClosed } from "@/lib/deal-phase";
+import { dealPhase, directBuyBlocked, offersClosed, readDealMeta } from "@/lib/deal-phase";
 import { shopPill, shopPillLabel } from "@/lib/shop-inventory";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, hiddenUserIds } from "@/lib/social";
@@ -48,7 +48,7 @@ export default async function ListingPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ok?: string; err?: string }>;
+  searchParams: Promise<{ ok?: string; err?: string; min?: string }>;
 }) {
   await sweep();
   const { id } = await params;
@@ -63,7 +63,7 @@ export default async function ListingPage({
         items: { orderBy: { position: "asc" } },
         seller: true,
         category: { include: { parent: true } },
-        bidEvents: { orderBy: { createdAt: "desc" }, take: 20 },
+        bidEvents: { orderBy: { createdAt: "desc" }, take: 20, include: { bidder: { select: { nickname: true, verificationTier: true } } } },
       },
     }),
   ]);
@@ -77,7 +77,7 @@ export default async function ListingPage({
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
   const hasBids = listing.currentBid != null && listing.leaderId != null;
-  const [offers, similar, sales, comps, favored, follows] = await Promise.all([
+  const [offers, similar, sales, comps, favored, follows, buyerOrders] = await Promise.all([
     viewer
       ? prisma.offer.findMany({
           where: {
@@ -103,6 +103,14 @@ export default async function ListingPage({
     loadComps(listing),
     viewer ? prisma.favorite.findUnique({ where: { userId_listingId: { userId: viewer.id, listingId: id } } }) : null,
     followedSellerIds(viewer?.id ?? null),
+    viewer
+      ? prisma.order.findMany({
+          where: { buyerId: viewer.id, items: { some: { listingId: id } } },
+          orderBy: { createdAt: "desc" },
+          take: 8,
+          select: { status: true, fulfillment: true },
+        })
+      : Promise.resolve([]),
   ]);
   const minBid = publicMinimumBid(listing.startPrice ?? 0, listing.currentBid, hasBids);
   const locale = prefs.locale;
@@ -125,6 +133,12 @@ export default async function ListingPage({
   const offerClosed = offersClosed(listing.status, listing.binLockOrderId);
   const fixed = listing.saleType === "BUY_NOW";
   const showHandover = !owner && fixed && ((listing.status === "ACTIVE" && listing.quantityAvailable > 0) || offerClosed);
+  const buyClosed = buyerOrders.some((order) => {
+    const offer = readDealMeta(order.fulfillment).offer?.status;
+    return directBuyBlocked(dealPhase(order), offer === "PENDING" || offer === "ACCEPTED" ? offer : null);
+  });
+  const minRaw = Number(sp.min);
+  const minCents = Number.isSafeInteger(minRaw) && minRaw > 0 ? minRaw : null;
   const showBin = Boolean(!owner && !fixed && listing.price != null && live && !listing.binLockOrderId);
   const reserved = shopPill(listing) === "RESERVED";
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
@@ -133,7 +147,7 @@ export default async function ListingPage({
     <div className={`grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 ${!owner && (live || showHandover) ? "max-md:pb-36" : ""}`}>
       <ViewPing id={id} />
       <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
-        <Flash locale={locale} ok={sp.ok} err={sp.err} />
+        <Flash locale={locale} ok={sp.ok} err={sp.err} minCents={minCents} />
         <Gallery photos={listing.photos.map((photo) => ({ url: photo.url, role: photo.role }))} alt={listing.title} locale={locale} />
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
@@ -271,7 +285,11 @@ export default async function ListingPage({
               {listing.bidEvents.map((event) => (
                 <li key={event.id} className="flex items-center justify-between gap-3 border-b border-black/5 py-2 last:border-0">
                   <span>
-                    <span className="font-medium">{anonBidder(event.bidderId, locale)}</span>
+                    <NameLine
+                      name={<span className="font-medium">{event.bidder.nickname.trim() || anonBidder(event.bidderId, locale)}</span>}
+                      tier={event.bidder.verificationTier}
+                      locale={locale}
+                    />
                     {event.id === listing.bidEvents[0]?.id ? <span className="ml-2 rounded-full bg-soft px-2 py-0.5 text-xs">{tx(locale, "目前領先", "Leading")}</span> : null}
                   </span>
                   <span className="text-right">
@@ -317,6 +335,8 @@ export default async function ListingPage({
           bidBanned={Boolean(viewer?.bidBanned)}
           showHandover={showHandover}
           offerClosed={offerClosed}
+          buyClosed={buyClosed}
+          hasBids={hasBids}
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={

@@ -21,6 +21,7 @@ import {
   markDealSold,
   proposeDealOffer,
   releaseReserve,
+  reserveAuctionBin,
   replyDirectSold,
   uploadProof,
   withdrawDealOffer,
@@ -154,6 +155,17 @@ export async function importCsvAction(_prev: { error?: string; rows?: { row: num
   redirect(`/?ok=imported`);
 }
 
+export async function buyItNowAction(formData: FormData) {
+  const id = String(formData.get("listingId") || "");
+  const user = await viewer(`/listing/${id}`);
+  const result = await reserveAuctionBin(user.id, id);
+  if (!result.ok) redirect(`/listing/${id}?err=${result.error}`);
+  revalidatePath(`/listing/${id}`);
+  revalidatePath("/me/footprint");
+  revalidatePath("/me");
+  redirect(`/messages/${result.threadId}`);
+}
+
 export async function bidAction(formData: FormData) {
   const id = String(formData.get("listingId") || "");
   const user = await viewer(`/listing/${id}`);
@@ -161,7 +173,11 @@ export async function bidAction(formData: FormData) {
   if (amount == null || amount <= 0) redirect(`/listing/${id}?err=below_min`);
   const result = await placePublicBid(user.id, id, amount);
   revalidatePath(`/listing/${id}`);
-  redirect(`/listing/${id}?${result.ok ? "ok=bid" : `err=${result.error}`}`);
+  if (!result.ok) {
+    const min = "min" in result && result.min ? `&min=${result.min}` : "";
+    redirect(`/listing/${id}?err=${result.error}${min}`);
+  }
+  redirect(`/listing/${id}?ok=bid`);
 }
 
 export async function offerRespondAction(formData: FormData) {
@@ -288,7 +304,9 @@ export async function makeDealOfferAction(formData: FormData) {
   const result = await proposeDealOffer(user.id, threadId, String(formData.get("listingId") || ""), amount, note.note);
   if (!result.ok) redirect(`/messages/${threadId}?err=${result.error}`);
   revalidatePath(`/messages/${threadId}`);
+  revalidatePath(`/messages/${result.threadId}`);
   revalidatePath("/messages");
+  if (result.threadId !== threadId) redirect(`/messages/${result.threadId}`);
 }
 
 export async function confirmDirectBuyAction(formData: FormData) {

@@ -2,7 +2,7 @@ import { publicMinimumBid } from "./auction";
 import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
 import { notify } from "./social";
-import { extendedEnd, resolveAuction, validateMaxBid } from "./rules";
+import { extendedEnd, minimumNextBid, resolveAuction, validateMaxBid } from "./rules";
 
 /** Public bid. The amount is the bid. No proxy ceiling and no anti-snipe extension. */
 export async function placePublicBid(userId: string, listingId: string, amount: number) {
@@ -33,8 +33,8 @@ export async function placePublicBid(userId: string, listingId: string, amount: 
 
         const hasBids = listing.currentBid != null && listing.leaderId != null;
         const min = publicMinimumBid(listing.startPrice, listing.currentBid, hasBids);
-        if (!hasBids && amount < listing.startPrice) throw new Fail("below_start");
-        if (amount < min) throw new Fail("below_min");
+        if (!hasBids && amount < listing.startPrice) return { ok: false as const, error: "below_start" as const, min: listing.startPrice };
+        if (amount < min) return { ok: false as const, error: "below_min" as const, min };
 
         const updated = await tx.listing.updateMany({
           where: { id: listingId, bidVersion: listing.bidVersion, status: "ACTIVE", binLockOrderId: null, auctionSettled: false },
@@ -47,12 +47,14 @@ export async function placePublicBid(userId: string, listingId: string, amount: 
         if (updated.count !== 1) throw new Fail("retry");
         await tx.bidEvent.create({ data: { listingId, bidderId: userId, publicAmount: amount } });
         return {
+          ok: true as const,
           previousLeader: listing.leaderId,
           sellerId: listing.sellerId,
           title: listing.title,
         };
       });
 
+      if (!outcome.ok) return outcome;
       await notify(outcome.sellerId, "bid", "拍賣有新出價", outcome.title, `/listing/${listingId}`);
       if (outcome.previousLeader && outcome.previousLeader !== userId) {
         await notify(outcome.previousLeader, "bid", "你已被超價", outcome.title, `/listing/${listingId}`);
@@ -105,7 +107,10 @@ export async function placeBid(userId: string, listingId: string, maxAmount: num
           maxAmount,
           existingMax: mine?.maxAmount ?? null,
         });
-        if (!verdict.ok) throw new Fail(verdict.reason);
+        if (!verdict.ok) {
+          const min = minimumNextBid(listing.startPrice, proxies.length ? before.price : null, proxies.length > 0);
+          return { ok: false as const, error: verdict.reason, min };
+        }
 
         if (mine) await tx.proxyBid.update({ where: { id: mine.id }, data: { maxAmount } });
         else await tx.proxyBid.create({ data: { listingId, bidderId: userId, maxAmount } });
@@ -142,6 +147,8 @@ export async function placeBid(userId: string, listingId: string, maxAmount: num
           title: listing.title,
         };
       });
+
+      if ("ok" in outcome) return outcome;
 
       if (outcome.price !== outcome.previousPrice) {
         await notify(outcome.sellerId, "bid", "拍賣有新出價", outcome.title, `/listing/${listingId}`);

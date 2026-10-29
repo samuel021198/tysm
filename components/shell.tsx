@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logout, setPrefs } from "@/actions/auth";
 import type { User } from "@prisma/client";
+import { bidFloorText } from "@/lib/format";
 import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
 import { CreatePicker } from "./create-picker";
 import { HeaderMenu } from "./header-menu";
@@ -121,7 +122,7 @@ export function Footer({ locale }: { locale: Locale }) {
   );
 }
 
-export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: string }) {
+export function Flash({ locale, ok, err, minCents = null }: { locale: Locale; ok?: string; err?: string; minCents?: number | null }) {
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
     accepted: ["已接受。", "Accepted."],
@@ -155,7 +156,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     return <p role="status" className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-ok">{tx(locale, success[ok][0], success[ok][1])}</p>;
   }
   if (err) {
-    return <p className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-danger">{errText(locale, err)}</p>;
+    return <p className="mb-4 rounded-2xl bg-soft px-4 py-3 text-sm text-danger">{bidFloorText(locale, err, minCents) ?? errText(locale, err)}</p>;
   }
   return null;
 }

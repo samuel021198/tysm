@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { openThread } from "@/actions/social";
-import { bidAction } from "@/actions/trade";
+import { bidAction, buyItNowAction } from "@/actions/trade";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { BuyDock } from "./buy-dock";
 import { Countdown } from "./countdown";
+import { Icon } from "./icons";
 
 export function PurchasePanel({
   locale,
@@ -24,6 +25,9 @@ export function PurchasePanel({
   bidBanned,
   showHandover,
   offerClosed = false,
+  /** This buyer already has an open deal, so 直接購買 / 即買 would come back 交收狀態不允許. */
+  buyClosed = false,
+  hasBids = false,
   loggedIn,
   bidsVoided,
   ownerNote,
@@ -46,6 +50,8 @@ export function PurchasePanel({
   showHandover: boolean;
   /** Grey 議價 while the listing is 已保留 or sold. 聯絡賣家 stays on. */
   offerClosed?: boolean;
+  buyClosed?: boolean;
+  hasBids?: boolean;
   loggedIn: boolean;
   bidsVoided: boolean;
   ownerNote: string | null;
@@ -54,17 +60,22 @@ export function PurchasePanel({
   timeAt?: string | null;
 }) {
   const [bidOpen, setBidOpen] = useState(false);
-  const publicBid = currentBid ?? startPrice ?? 0;
+  const [confirmBin, setConfirmBin] = useState(false);
+  const publicBid = hasBids ? (currentBid ?? startPrice ?? 0) : (startPrice ?? currentBid ?? 0);
+  const bidLabel = hasBids ? tx(locale, "目前出價", "Current bid") : tx(locale, "起標價", "Starting price");
   const bidFloor = minBid;
-  const bin = (showHandover || showBin) && price != null ? price : null;
-  const priced = showHandover && price != null;
+  const showBuy = showHandover && price != null && !buyClosed;
+  const binVisible = showBin && price != null;
+  const canBin = binVisible && !buyClosed;
+  const binLabel = `${tx(locale, "即買", "Buy now")} ${formatHkd(price ?? 0, locale)}`;
+  const contactLabel = tx(locale, "聯絡賣家", "Message the seller");
   const talk = showHandover ? (
     <div>
       <form id="listing-offer" action={openThread} hidden>
         <input type="hidden" name="listingId" value={id} />
         <input type="hidden" name="focus" value="offer" />
       </form>
-      {priced ? (
+      {showBuy ? (
         <form id="listing-buy" action={openThread} hidden>
           <input type="hidden" name="listingId" value={id} />
           <input type="hidden" name="focus" value="buy" />
@@ -74,10 +85,12 @@ export function PurchasePanel({
         <input type="hidden" name="listingId" value={id} />
         <input type="hidden" name="focus" value="compose" />
       </form>
-      <div className={`grid items-stretch gap-2 ${priced ? "grid-cols-3" : "grid-cols-2"}`}>
-        <button form="listing-offer" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
-        {priced ? <button form="listing-buy" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
-        <button form="listing-chat" className="btn btn-primary h-full w-full px-2" type="submit">聯絡賣家</button>
+      <div className="grid gap-2">
+        <div className={`grid items-stretch gap-2 ${showBuy ? "grid-cols-2" : "grid-cols-1"}`}>
+          <button form="listing-offer" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
+          {showBuy ? <button form="listing-buy" className="btn btn-primary h-full w-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
+        </div>
+        <button form="listing-chat" className="btn btn-ghost w-full" type="submit">聯絡賣家</button>
       </div>
     </div>
   ) : null;
@@ -89,26 +102,31 @@ export function PurchasePanel({
 
   return (
     <>
-      {bin != null && showHandover ? (
+      {showHandover && price != null ? (
         <div>
           <p className="text-xs font-medium text-muted">{tx(locale, "直購價", "Buy It Now")}</p>
-          <p className="price text-2xl leading-none">{formatHkd(bin, locale)}</p>
+          <p className="price text-2xl leading-none">{formatHkd(price, locale)}</p>
           {listedAt}
         </div>
       ) : null}
       {showHandover ? talk : null}
-      {showBin ? (
-        <form id="listing-buy" action={openThread} hidden>
+      {canBin ? (
+        <form id="listing-bin" action={buyItNowAction} hidden>
           <input type="hidden" name="listingId" value={id} />
-          <input type="hidden" name="focus" value="buy" />
         </form>
       ) : null}
       {live || endsAt ? (
         <div className="grid gap-2">
+          {binVisible ? (
+            <div>
+              <p className="text-xs font-medium text-muted">{tx(locale, "即買", "Buy now")}</p>
+              <p className="price text-2xl leading-none">{formatHkd(price ?? 0, locale)}</p>
+            </div>
+          ) : null}
           <div>
-            <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
+            <p className="text-xs font-medium text-muted">{bidLabel}</p>
             <p className="price text-2xl leading-none">{formatHkd(publicBid, locale)}</p>
-            {showHandover ? null : listedAt}
+            {showHandover || binVisible ? null : listedAt}
           </div>
           {live && endsAt ? (
             <p className="text-sm" title={endsText ?? undefined}>
@@ -118,15 +136,16 @@ export function PurchasePanel({
           ) : (
             <p className="text-sm">{tx(locale, "拍賣已結束", "Auction ended")}</p>
           )}
-          <div className={`grid gap-2 ${showBin ? "grid-cols-2" : "grid-cols-1"}`}>
+          {live ? <p className="text-sm">{tx(locale, "下一口最低", "Next minimum")} {formatHkd(minBid, locale)}</p> : null}
+          <div className={`grid gap-2 ${canBin ? "grid-cols-2" : "grid-cols-1"}`}>
             {showBid ? (
               <button type="button" className="btn btn-primary h-11" onClick={() => setBidOpen(true)}>{tx(locale, "出價", "Bid")}</button>
             ) : null}
             {!loggedIn && live ? (
               <Link className="btn btn-primary h-11" href={`/login?next=/listing/${id}`}>{tx(locale, "登入後出價", "Log in to bid")}</Link>
             ) : null}
-            {showBin && price != null ? (
-              <button form="listing-buy" className="btn btn-primary h-11" type="submit">{tx(locale, "即買", "Buy It Now")}</button>
+            {canBin ? (
+              <button type="button" className="btn btn-primary h-11" onClick={() => setConfirmBin(true)}>{binLabel}</button>
             ) : null}
           </div>
         </div>
@@ -141,12 +160,12 @@ export function PurchasePanel({
       {live || showHandover ? (
         <BuyDock
           watchId="purchase"
-          label={showHandover && price != null ? tx(locale, "直購價", "Price") : tx(locale, "目前出價", "Current bid")}
-          price={showHandover && price != null ? formatHkd(price, locale) : formatHkd(publicBid, locale)}
+          label={live ? bidLabel : showHandover && price != null ? tx(locale, "直購價", "Price") : bidLabel}
+          price={live ? formatHkd(publicBid, locale) : showHandover && price != null ? formatHkd(price, locale) : formatHkd(publicBid, locale)}
           note={
             live && endsAt ? (
               <>
-                {showHandover ? <span>{tx(locale, "目前出價", "Bid")} {formatHkd(publicBid, locale)} · </span> : null}
+                {binVisible ? <span>{binLabel} · </span> : null}
                 <span>{tx(locale, "剩餘", "Left")} </span>
                 <Countdown endsAt={endsAt} locale={locale} />
               </>
@@ -154,20 +173,38 @@ export function PurchasePanel({
           }
         >
           {showHandover ? (
-            <div className={`grid shrink-0 gap-1.5 ${priced ? "grid-cols-3" : "grid-cols-2"}`}>
-              <button form="listing-offer" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
-              {priced ? <button form="listing-buy" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
-              <button form="listing-chat" className="btn btn-primary h-full px-2" type="submit">聯絡賣家</button>
+            <div className="grid shrink-0 grid-cols-[1fr_auto] items-stretch gap-1.5">
+              <div className={`grid gap-1.5 ${showBuy ? "grid-cols-2" : "grid-cols-1"}`}>
+                <button form="listing-offer" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>議價</button>
+                {showBuy ? <button form="listing-buy" className="btn btn-primary h-full px-2 disabled:opacity-40" type="submit" disabled={offerClosed}>直接購買</button> : null}
+              </div>
+              <button form="listing-chat" className="btn btn-ghost h-full px-2" type="submit" aria-label={contactLabel} title={contactLabel}>
+                <Icon name="messages" className="h-4 w-4" strokeWidth={2.5} />
+              </button>
             </div>
           ) : null}
-          {showBin ? (
-            <button form="listing-buy" className="btn btn-primary h-full shrink-0 px-3" type="submit">{tx(locale, "即買", "Buy It Now")}</button>
+          {canBin ? (
+            <button type="button" className="btn btn-primary h-full shrink-0 px-3" onClick={() => setConfirmBin(true)}>{binLabel}</button>
           ) : null}
           {showBid ? (
             <button type="button" className="btn btn-primary shrink-0 px-3" onClick={() => setBidOpen(true)}>{tx(locale, "出價", "Bid")}</button>
           ) : null}
           {!loggedIn && live && !showHandover ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}
         </BuyDock>
+      ) : null}
+      {confirmBin && price != null ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={tx(locale, "即買", "Buy now")}>
+          <button type="button" className="absolute inset-0 cursor-default" aria-label={tx(locale, "取消", "Cancel")} onClick={() => setConfirmBin(false)} />
+          <div className="relative z-10 w-full max-w-lg rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
+            <p className="text-sm font-semibold">{tx(locale, "即買", "Buy now")}</p>
+            <p className="price mt-1 text-2xl leading-none">{formatHkd(price, locale)}</p>
+            <p className="mt-2 text-sm text-muted">{tx(locale, "確認後拍賣結束，貨品會保留俾你傾交收。", "Confirming ends the auction and reserves the card for handover.")}</p>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button type="button" className="btn btn-ghost w-full" onClick={() => setConfirmBin(false)}>取消</button>
+              <button type="submit" form="listing-bin" className="btn btn-primary w-full">確認</button>
+            </div>
+          </div>
+        </div>
       ) : null}
     </>
   );

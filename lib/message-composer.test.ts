@@ -151,5 +151,9 @@ assert(reserveFn.includes("softLock") && reserveFn.includes("confirmed: true") &
 assert(acceptFn.includes("acceptAndReserve") && acceptFn.includes('if (offer.by === userId) throw new Fail("forbidden")') && acceptFn.includes("order.sellerId !== userId") && acceptFn.includes("order.buyerId !== userId"), "either party accepts the other's offer, and that accept is the hold");
 assert(confirmFn.includes("acceptAndReserve") && confirmFn.includes("softLock") && confirmFn.includes("order.sellerId !== userId") && confirmFn.includes('kind: "lock"'), "the unused no-offer hold still uses the same lock");
 assert(deals.includes("export async function confirmHandover") && deals.includes('kind: "handover"') && deals.includes('status: "COMPLETED"') && deals.includes('status: "SOLD"'), "the second confirm completes the order and marks the listing sold");
+assert(deals.includes("export async function reserveAuctionBin") && deals.includes("auctionSettled: true") && deals.includes("bidsVoided: true") && deals.includes("confirmed: true"), "即買 ends the auction and reserves the handover");
+assert(deals.includes("offerThreadChoice"), "議價 after DONE does not stay on the finished thread");
+const directBuy = deals.slice(deals.indexOf("export async function recordDirectBuy"), deals.indexOf("export async function confirmDirectBuy"));
+assert(directBuy.includes("directBuyBlocked"), "直接購買 does not fail on a finished deal");
 
 console.log("message-composer.test.ts ok");

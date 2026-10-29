@@ -24,8 +24,9 @@ import { PriceChart } from "./price-chart";
 const RANGES: TrendRange[] = ["1w", "1m", "3m", "all"];
 
 function ask(listing: { saleType: string; auctionSettled: boolean; auctionEndsAt: Date | null; currentBid: number | null; startPrice: number | null; price: number | null }) {
-  const live = listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt != null && listing.auctionEndsAt > new Date();
-  return live ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
+  const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
+  if (auction) return listing.currentBid ?? listing.startPrice ?? 0;
+  return listing.price ?? listing.currentBid ?? 0;
 }
 
 const GAME_MARKET_ZH = "呢個遊戲暫時未有行情。價格、走勢同最近成交稍後先會有。";
@@ -254,7 +255,12 @@ export async function DexSales({
                   {conditionLabel(listing)} · {listing.seller.nickname}
                 </span>
               </span>
-              <span className="price shrink-0 text-lg">{formatHkd(ask(listing), locale)}</span>
+              <span className="price shrink-0 text-right text-lg">
+                {formatHkd(ask(listing), locale)}
+                {listing.saleType !== "BUY_NOW" && !listing.auctionSettled ? (
+                  <span className="mt-1 block text-[11px] font-semibold">{tx(locale, "拍賣", "Auction")}</span>
+                ) : null}
+              </span>
             </Link>
           </li>
         ))}
