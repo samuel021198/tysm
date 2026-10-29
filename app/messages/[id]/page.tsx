@@ -9,6 +9,7 @@ import { tx } from "@/lib/i18n";
 import { shareTarget } from "@/lib/share";
 import { isBlocked } from "@/lib/social";
 import { DealStream } from "@/components/deal-panel";
+import { ListingChatBar } from "@/components/listing-chat-bar";
 import { ReadPing } from "@/components/pings";
 import { Flash } from "@/components/shell";
 import { MessageComposer } from "@/components/message-composer";
@@ -20,7 +21,7 @@ export default async function ThreadPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ err?: string; ok?: string; compose?: string }>;
+  searchParams: Promise<{ err?: string; ok?: string; compose?: string; offer?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
@@ -28,7 +29,12 @@ export default async function ThreadPage({
   if (!viewer) redirect(`/login?next=/messages/${id}`);
   const thread = await prisma.messageThread.findUnique({
     where: { id },
-    include: { messages: { orderBy: { createdAt: "asc" }, include: { sender: true } }, buyer: true, seller: true, listing: true },
+    include: {
+      messages: { orderBy: { createdAt: "asc" }, include: { sender: true } },
+      buyer: true,
+      seller: true,
+      listing: { include: { photos: { orderBy: { position: "asc" }, take: 1 } } },
+    },
   });
   if (!thread || (thread.buyerId !== viewer.id && thread.sellerId !== viewer.id)) notFound();
   const otherId = thread.buyerId === viewer.id ? thread.sellerId : thread.buyerId;
@@ -91,20 +97,31 @@ export default async function ThreadPage({
     <div className="thread-fit">
       <ReadPing id={id} />
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
+      <div className="flex shrink-0 items-center justify-between gap-2">
+        <h1 className="min-w-0 truncate text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
+        <PersonMenu
+          locale={prefs.locale}
+          userId={otherId}
+          reportType="THREAD"
+          reportId={id}
+          next={`/messages/${id}`}
+          away="/messages"
+        />
+      </div>
       <ThreadScroll>
-        <div className="grid gap-2.5">
-        <div className="flex items-center justify-between gap-2">
-          <h1 className="min-w-0 truncate text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
-          <PersonMenu
+        {thread.listing ? (
+          <ListingChatBar
             locale={prefs.locale}
-            userId={otherId}
-            reportType="THREAD"
-            reportId={id}
-            next={`/messages/${id}`}
-            away="/messages"
+            threadId={id}
+            listingId={thread.listing.id}
+            title={thread.listing.title}
+            priceCents={listPrice}
+            cover={thread.listing.photos[0]?.url ?? null}
+            openOffer={sp.offer === "1"}
+            riskAcked={Boolean(viewer.p2pRiskAckAt)}
           />
-        </div>
-        {thread.listing ? <p className="text-sm text-muted">{thread.listing.title}</p> : null}
+        ) : null}
+        <div className="grid gap-2.5">
         <ol className="grid content-start gap-2.5">
           {thread.messages.map((message) => {
             const event = readDealEvent(message.body);
