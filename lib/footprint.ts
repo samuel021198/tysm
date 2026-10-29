@@ -69,11 +69,26 @@ export type FootprintRow = {
   id: string;
   href: string;
   title: string;
+  /** The other person on this deal. Buyer sees the seller, and the seller sees the buyer. */
+  who: string;
   priceCents: number;
   photo: string | null;
   at: Date;
   kind: FootprintKind;
 };
+
+/** Buyer sees the seller. Seller sees the buyer. A blank name is a dash. */
+export function counterpartyName(viewerId: string, buyerId: string, sellerId: string, buyerName: string, sellerName: string): string {
+  const name = (viewerId === buyerId ? sellerName : viewerId === sellerId ? buyerName : "").trim();
+  return name || "—";
+}
+
+/** 交易中 list: 議價中, 已保留, 待交收. Done and cancelled stay out. Newest first. */
+export function openDealRows(board: FootprintBoard): FootprintRow[] {
+  return [...board.offering, ...board.locked, ...board.handover]
+    .filter((row) => row.kind === "offering" || row.kind === "locked" || row.kind === "handover")
+    .sort((a, b) => b.at.getTime() - a.at.getTime() || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+}
 
 export type FootprintBoard = {
   offering: FootprintRow[];
@@ -98,7 +113,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
   const [orders, offers, threads, hiddenIds] = await Promise.all([
     prisma.order.findMany({
       where: { OR: [{ buyerId: userId }, { sellerId: userId }], status: { in: [...OPEN_ORDER] } },
-      include: { items: true },
+      include: { items: true, buyer: { select: { nickname: true } }, seller: { select: { nickname: true } } },
       orderBy: { updatedAt: "desc" },
       take: 80,
     }),
@@ -107,7 +122,18 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
         OR: [{ buyerId: userId }, { listing: { sellerId: userId } }],
         status: { in: ["PENDING", "COUNTERED", "DECLINED", "EXPIRED", "CANCELLED"] },
       },
-      include: { listing: { select: { id: true, title: true, sellerId: true, photos: { take: 1, orderBy: { position: "asc" } } } } },
+      include: {
+        buyer: { select: { nickname: true } },
+        listing: {
+          select: {
+            id: true,
+            title: true,
+            sellerId: true,
+            photos: { take: 1, orderBy: { position: "asc" } },
+            seller: { select: { nickname: true } },
+          },
+        },
+      },
       orderBy: { updatedAt: "desc" },
       take: 40,
     }),
@@ -147,6 +173,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
       id: `order:${order.id}`,
       href: href ? `/messages/${href}` : `/orders/${order.id}/chat`,
       title: order.items.map((line) => line.title).filter(Boolean).join("、") || "—",
+      who: counterpartyName(userId, order.buyerId, order.sellerId, order.buyer.nickname, order.seller.nickname),
       priceCents: order.total,
       photo: item?.imageUrl ?? null,
       at: order.updatedAt,
@@ -174,6 +201,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
       id: `offer:${offer.id}`,
       href: href ? `/messages/${href}` : `/listing/${offer.listingId}`,
       title: offer.listing.title,
+      who: counterpartyName(userId, offer.buyerId, offer.listing.sellerId, offer.buyer.nickname, offer.listing.seller.nickname),
       priceCents: offer.status === "COUNTERED" && offer.counterAmount != null ? offer.counterAmount : offer.amount,
       photo: offer.listing.photos[0]?.url ?? null,
       at: offer.updatedAt,

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { loadFootprint, footprintStatusLabel, type FootprintRow } from "@/lib/footprint";
+import { footprintStatusLabel, loadFootprint, openDealRows, type FootprintRow } from "@/lib/footprint";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 
@@ -18,6 +18,7 @@ export default async function FootprintPage({ searchParams }: { searchParams: Pr
   const tab = TABS.some((item) => item.id === sp.tab) ? sp.tab! : "open";
   const board = await loadFootprint(viewer.id);
   const locale = prefs.locale;
+  const trading = openDealRows(board);
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Link href="/me" className="text-xs font-semibold text-link">{tx(locale, "返回個人頁", "Back to profile")}</Link>
@@ -36,13 +37,7 @@ export default async function FootprintPage({ searchParams }: { searchParams: Pr
       {tab === "bought" ? <DealList locale={locale} rows={board.bought} empty={tx(locale, "未有紀錄。", "No records.")} /> : null}
       {tab === "open" ? (
         <div className="grid gap-4">
-          {board.offering.length || board.locked.length || board.handover.length ? (
-            <>
-              <Phase locale={locale} title={tx(locale, "議價中", "Negotiating")} rows={board.offering} empty={tx(locale, "未有議價。", "No negotiations.")} />
-              <Phase locale={locale} title={tx(locale, "已保留", "Reserved")} rows={board.locked} empty={tx(locale, "未有已保留。", "Nothing reserved.")} />
-              <Phase locale={locale} title={tx(locale, "待交收", "To hand over")} rows={board.handover} empty={tx(locale, "未有待交收。", "Nothing to hand over.")} />
-            </>
-          ) : (
+          {trading.length ? <TradingList locale={locale} rows={trading} /> : (
             <p className="empty">
               <span className="block">{tx(locale, "未有進行中交易", "No deals in progress")}</span>
               <Link href="/find" className="block font-semibold text-ink underline underline-offset-2">
@@ -62,12 +57,25 @@ export default async function FootprintPage({ searchParams }: { searchParams: Pr
   );
 }
 
-function Phase({ locale, title, rows, empty }: { locale: Locale; title: string; rows: FootprintRow[]; empty: string }) {
+function TradingList({ locale, rows }: { locale: Locale; rows: FootprintRow[] }) {
   return (
-    <section className="grid gap-2">
-      <h2 className="text-xs font-semibold text-muted">{title}</h2>
-      <DealList locale={locale} rows={rows} empty={empty} />
-    </section>
+    <ul className="grid gap-2">
+      {rows.map((row) => (
+        <li key={row.id}>
+          <Link href={row.href} className="surface flex items-center gap-3 px-3 py-2">
+            <img src={row.photo || "/demo/back.svg"} alt="" className="h-12 w-12 shrink-0 rounded-lg bg-soft object-cover" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium">{row.title}</span>
+              <span className="mt-0.5 block truncate text-xs text-muted">{row.who}</span>
+            </span>
+            <span className="grid shrink-0 justify-items-end gap-1">
+              <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{footprintStatusLabel(locale, row.kind)}</span>
+              <span className="price text-sm">{formatHkd(row.priceCents, locale)}</span>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
