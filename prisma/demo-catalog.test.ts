@@ -140,6 +140,12 @@ assert(cron.includes("0 16 * * *") && cron.includes("/api/cron/sweep") && !cron.
 
 const people = demoUsers.filter((user) => user.role === "USER");
 assert(people.slice(0, 3).map((user) => user.nickname).join() === "Mars,Tyu,MueL", "locked display names stay exact");
+const tierOf = (id: string) => {
+  const row = demoUsers.find((user) => user.id === id);
+  return row && "verificationTier" in row ? row.verificationTier : "NORMAL";
+};
+assert(tierOf("user_mars") === "MERCHANT" && tierOf("user_tyu") === "TRUSTED" && tierOf("user_muel") === "NORMAL", "demo badges: Mars merchant, Tyu trusted, MueL plain");
+assert(demoUsers.filter((user) => "verificationTier" in user).length === 2, "only two seeded badges; everyone else stays NORMAL");
 assert(people.slice(0, 3).every((user, index) => user.id === DEMO_ACCOUNTS[index].id && user.nickname === DEMO_ACCOUNTS[index].nickname), "seed users match the login accounts");
 assert(people.slice(3).every((user, index) => user.id === TRIAL_ACCOUNTS[index].id && user.nickname === TRIAL_ACCOUNTS[index].nickname), "trial traders keep their handles");
 const admin = demoUsers.find((user) => user.role === "ADMIN");

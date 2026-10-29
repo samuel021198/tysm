@@ -807,6 +807,7 @@ export const demoUsers = [
     phoneVerified: true,
     bio: "旺角收卡。手持、平鋪同卡冊都係實拍。",
     avatarUrl: portrait("photo-1507003211169-0a1dd7228f2d"),
+    verificationTier: "MERCHANT" as const,
   },
   {
     id: DEMO_ACCOUNTS[1].id,
@@ -817,6 +818,7 @@ export const demoUsers = [
     phoneVerified: true,
     bio: "主攻閃卡同卡冊，每週更新桌面實拍。",
     avatarUrl: portrait("photo-1494790108377-be9c29b29330"),
+    verificationTier: "TRUSTED" as const,
   },
   {
     id: DEMO_ACCOUNTS[2].id,
