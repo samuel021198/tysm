@@ -1,16 +1,16 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { markNotifications, openNotification } from "@/actions/social";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
-import { markNotifications } from "@/actions/social";
+import { relativeTime } from "@/lib/time";
 
 export default async function NotificationsPage() {
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) redirect("/login?next=/notifications");
   const rows = await prisma.notification.findMany({ where: { userId: viewer.id }, orderBy: { createdAt: "desc" }, take: 50 });
   const locale = prefs.locale;
+  const now = new Date();
   return (
     <div>
       <div className="mb-3 flex items-center gap-1">
@@ -21,29 +21,24 @@ export default async function NotificationsPage() {
       </div>
       {rows.length === 0 ? <p className="empty">{tx(locale, "未有通知。", "No notifications.")}</p> : null}
       <ul className="grid gap-2">
-        {rows.map((row) => {
-          const body = (
-            <>
-              <p className="font-medium">{row.title}</p>
-              <p>{row.body}</p>
-              <p className="text-xs text-muted">
-                {formatHKT(row.createdAt, locale)}
-                {row.readAt ? null : <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-accent align-middle" aria-hidden />}
-              </p>
-            </>
-          );
-          return (
-            <li key={row.id}>
-              {row.href ? (
-                <Link href={row.href} className="surface block p-3 text-sm">
-                  {body}
-                </Link>
-              ) : (
-                <div className="surface p-3 text-sm">{body}</div>
-              )}
-            </li>
-          );
-        })}
+        {rows.map((row) => (
+          <li key={row.id}>
+            <form action={openNotification}>
+              <input type="hidden" name="id" value={row.id} />
+              <button className="surface block w-full p-3 text-left text-sm">
+                <p className="font-medium">{row.title}</p>
+                <p>{row.body}</p>
+                <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
+                  {row.readAt ? null : (
+                    <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
+                  )}
+                  {row.readAt ? null : <span className="sr-only">{tx(locale, "未讀", "Unread")}</span>}
+                  <span>{relativeTime(row.createdAt, now, locale)}</span>
+                </p>
+              </button>
+            </form>
+          </li>
+        ))}
       </ul>
     </div>
   );

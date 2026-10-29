@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { clearHistory, logout, saveNotifications, saveShop, setPrefs } from "@/actions/auth";
+import { PushToggle } from "@/components/push-toggle";
+import { PhoneForm } from "@/components/phone-form";
+import { Flash } from "@/components/shell";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import { DEAL_RISK } from "@/lib/deal-phase";
 import { DISTRICTS } from "@/lib/format";
 import { tx } from "@/lib/i18n";
-import { PhoneForm } from "@/components/phone-form";
-import { Flash } from "@/components/shell";
 
 const SECTIONS = ["notifications", "account", "privacy", "language", "theme", "about", "delete"] as const;
 type Section = (typeof SECTIONS)[number];
@@ -34,12 +36,17 @@ export default async function SettingsSectionPage({
     delete: ["刪除帳號", "Delete account"],
   };
   const key = section as Section;
+  const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || process.env.VAPID_PUBLIC_KEY || "";
+  const pushOn =
+    key === "notifications" && vapidPublic
+      ? (await prisma.pushSubscription.count({ where: { userId: viewer.id } })) > 0
+      : false;
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Link href="/me/settings" className="text-xs font-semibold text-link">{tx(locale, "返回設定", "Back to settings")}</Link>
       <h1 className="text-lg font-semibold">{tx(locale, titles[key][0], titles[key][1])}</h1>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      {key === "notifications" ? <Notifications locale={locale} viewer={viewer} /> : null}
+      {key === "notifications" ? <Notifications locale={locale} viewer={viewer} vapidPublic={vapidPublic} pushOn={pushOn} /> : null}
       {key === "account" ? <Account locale={locale} viewer={viewer} /> : null}
       {key === "privacy" ? <Privacy locale={locale} /> : null}
       {key === "language" ? <Language locale={locale} /> : null}
@@ -53,19 +60,27 @@ export default async function SettingsSectionPage({
 function Notifications({
   locale,
   viewer,
+  vapidPublic,
+  pushOn,
 }: {
   locale: "zh-HK" | "en";
-  viewer: { notifyBids: boolean; notifyOffers: boolean; notifyOrders: boolean; notifyMessages: boolean };
+  viewer: { notifyBids: boolean; notifyOffers: boolean; notifyOrders: boolean; notifyMessages: boolean; notifyEmail: boolean };
+  vapidPublic: string;
+  pushOn: boolean;
 }) {
   return (
-    <form action={saveNotifications} className="surface grid gap-2 p-3 text-sm">
-      <Link href="/notifications" className="text-sm font-semibold text-link">{tx(locale, "開啟通知清單", "Open notifications")}</Link>
-      <label className="text-xs"><input type="checkbox" name="notifyBids" defaultChecked={viewer.notifyBids} /> {tx(locale, "出價通知", "Bid alerts")}</label>
-      <label className="text-xs"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "傾交收通知", "Offer alerts")}</label>
-      <label className="text-xs"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "交收通知", "Handover alerts")}</label>
-      <label className="text-xs"><input type="checkbox" name="notifyMessages" defaultChecked={viewer.notifyMessages} /> {tx(locale, "訊息通知", "Message alerts")}</label>
-      <button className="btn btn-primary w-fit">{tx(locale, "儲存", "Save")}</button>
-    </form>
+    <div className="surface grid gap-2 p-3 text-sm">
+      <form action={saveNotifications} className="grid gap-2">
+        <Link href="/notifications" className="text-sm font-semibold text-link">{tx(locale, "開啟通知清單", "Open notifications")}</Link>
+        <label className="text-xs"><input type="checkbox" name="notifyBids" defaultChecked={viewer.notifyBids} /> {tx(locale, "出價通知", "Bid alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyOffers" defaultChecked={viewer.notifyOffers} /> {tx(locale, "傾交收通知", "Offer alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyOrders" defaultChecked={viewer.notifyOrders} /> {tx(locale, "交收通知", "Handover alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyMessages" defaultChecked={viewer.notifyMessages} /> {tx(locale, "訊息通知", "Message alerts")}</label>
+        <label className="text-xs"><input type="checkbox" name="notifyEmail" defaultChecked={viewer.notifyEmail} /> {tx(locale, "電郵通知", "Email alerts")}</label>
+        <button className="btn btn-primary w-fit">{tx(locale, "儲存", "Save")}</button>
+      </form>
+      {vapidPublic ? <PushToggle locale={locale} vapidPublic={vapidPublic} on={pushOn} /> : null}
+    </div>
   );
 }
 

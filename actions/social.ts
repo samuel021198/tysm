@@ -8,7 +8,8 @@ import { isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { openHandover } from "@/lib/deals";
-import { isBlocked, notify } from "@/lib/social";
+import { notificationTarget } from "@/lib/notify";
+import { isBlocked, notify, notifyKind } from "@/lib/social";
 import { REVIEW_WINDOW_MS } from "@/lib/rules";
 
 async function viewer(next: string) {
@@ -130,7 +131,7 @@ export async function sendMessage(formData: FormData) {
     data: { threadId, senderId: user.id, body, imageUrl: stored || null },
   });
   await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
-  await notify(other, "message", "新訊息", body.slice(0, 80), `/messages/${threadId}`);
+  await notifyKind(other, "message", `/messages/${threadId}`, body);
   // Same-path redirect() remounts the thread (Next 15). Refresh the list in place.
   revalidatePath(`/messages/${threadId}`);
   revalidatePath("/messages");
@@ -148,7 +149,7 @@ export async function shareIntoThread(formData: FormData) {
   if (await isBlocked(user.id, other)) redirect(`${back}&err=blocked`);
   await prisma.message.create({ data: { threadId, senderId: user.id, body: path } });
   await prisma.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
-  await notify(other, "message", "新訊息", path, `/messages/${threadId}`);
+  await notifyKind(other, "message", `/messages/${threadId}`, path);
   redirect(`/messages/${threadId}`);
 }
 
@@ -223,4 +224,15 @@ export async function markNotifications() {
   const user = await viewer("/notifications");
   await prisma.notification.updateMany({ where: { userId: user.id, readAt: null }, data: { readAt: new Date() } });
   redirect("/notifications");
+}
+
+export async function openNotification(formData: FormData) {
+  const user = await viewer("/notifications");
+  const id = String(formData.get("id") || "");
+  const row = await prisma.notification.findFirst({ where: { id, userId: user.id } });
+  if (!row) redirect("/notifications");
+  if (!row.readAt) {
+    await prisma.notification.update({ where: { id: row.id }, data: { readAt: new Date() } });
+  }
+  redirect(notificationTarget(row.href));
 }

@@ -180,6 +180,8 @@ model User {
   notifyOffers       Boolean   @default(true)
   notifyOrders       Boolean   @default(true)
   notifyMessages     Boolean   @default(true)
+  /// Opt-in. Category toggles still apply; this only queues the email channel.
+  notifyEmail        Boolean   @default(false)
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 
@@ -196,7 +198,8 @@ model User {
   following       Follow[]        @relation("UserFollows")
   blocksMade      Block[]         @relation("BlocksMade")
   blocksReceived  Block[]         @relation("BlocksReceived")
-  notifications   Notification[]
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
   proxyBids       ProxyBid[]
   bidEvents       BidEvent[]
   offers          Offer[]         @relation("BuyerOffers")
@@ -695,6 +698,19 @@ model Notification {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+/// Browser Web Push subscription. Absent keys skip send; a 404/410 drops the row.
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model SearchHistory {

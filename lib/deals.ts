@@ -6,7 +6,8 @@ import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
 import { PhotoStoreError, storeUploadedImage } from "./r2";
 import { conditionLabel } from "./rules";
-import { notify, isBlocked } from "./social";
+import { noticeHref } from "./notify";
+import { notify, notifyKind, dealThreadHref, isBlocked } from "./social";
 import { displayCaption } from "./tags";
 import { buildFulfillment, readFulfillment } from "./shipping";
 
@@ -122,7 +123,7 @@ export async function openHandover(
     const imageUrl = share.image && isAllowedMediaUrl(share.image) ? share.image : null;
     await prisma.message.create({ data: { threadId: thread.id, senderId: userId, body: share.path, imageUrl } });
     await prisma.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
-    await notify(listing.sellerId, "message", "想傾交收", listing.title, `/messages/${thread.id}`);
+    await notifyKind(listing.sellerId, "message", `/messages/${thread.id}`, listing.title);
   }
 
   if (listing.status === "ACTIVE") {
@@ -223,6 +224,10 @@ export async function arrangeMeetup(userId: string, orderId: string) {
       fulfillment: withDeal(order.fulfillment, { meetupAgreed: true }, snap ?? undefined),
     },
   });
+  const other = order.buyerId === userId ? order.sellerId : order.buyerId;
+  const listingId = order.items[0]?.listingId;
+  const href = listingId ? await dealThreadHref(listingId, order.buyerId, order.sellerId) : "/me/footprint";
+  await notifyKind(other, "handover", href, order.items[0]?.title ?? "");
   return { ok: true as const };
 }
 
@@ -312,7 +317,7 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
   const otherId = peeked.buyerId === userId ? peeked.sellerId : peeked.buyerId;
   if (await isBlocked(userId, otherId)) return { ok: false as const, error: "blocked" };
   try {
-    await prisma.$transaction(async (tx) => {
+    const outcome = await prisma.$transaction(async (tx) => {
       const thread = await tx.messageThread.findUnique({ where: { id: threadId } });
       if (!thread || (thread.buyerId !== userId && thread.sellerId !== userId)) throw new Fail("forbidden");
       const other = thread.buyerId === userId ? thread.sellerId : thread.buyerId;
@@ -387,7 +392,8 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
       const meta = readDealMeta(order.fulfillment);
       const phase = dealPhase(order);
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
-      if (meta.offer?.status === "PENDING") await markLiveOfferSuperseded(tx, thread.id);
+      const superseded = meta.offer?.status === "PENDING";
+      if (superseded) await markLiveOfferSuperseded(tx, thread.id);
       const offer: DealOffer = { by: userId, name, amount, note: cleaned.note, status: "PENDING" };
       const changed = await tx.order.updateMany({
         where: { id: order.id, status: { in: [...OPEN_TALK] } },
@@ -398,8 +404,9 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
         data: { threadId: thread.id, senderId: userId, body: dealEventBody({ kind: "offer", name, amount, note: cleaned.note }) },
       });
       await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
+      return { superseded, title: listing.title };
     });
-    await notify(otherId, "order", "收到要約", "對方提出咗要約。", `/messages/${threadId}`);
+    await notifyKind(otherId, outcome.superseded ? "offer-supersede" : "offer-new", `/messages/${threadId}`, outcome.title);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -433,11 +440,10 @@ async function answerOffer(userId: string, orderId: string, mode: "withdraw" | "
       if (changed.count !== 1) throw new Fail("state");
       const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: mode }));
       const other = order.buyerId === userId ? order.sellerId : order.buyerId;
-      return { notifyId: mode === "decline" ? offer.by : other, threadId };
+      return { notifyId: mode === "decline" ? offer.by : other, threadId, title: order.items[0]?.title ?? "" };
     });
-    const title = mode === "withdraw" ? "要約已撤回" : "要約已拒絕";
-    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
-    await notify(result.notifyId, "order", title, title, href);
+    const href = noticeHref(result.threadId);
+    await notifyKind(result.notifyId, mode === "withdraw" ? "offer-withdraw" : "offer-decline", href, result.title);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -478,10 +484,12 @@ export async function acceptDealOffer(userId: string, orderId: string) {
       });
       if (changed.count !== 1) throw new Fail("state");
       const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
-      return { notifyId: offer.by, threadId };
+      return { notifyId: offer.by, threadId, title: order.items[0]?.title ?? "" };
     });
-    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
-    await notify(result.notifyId, "order", "要約已接受", "件貨保留中。買家可以上傳付款證明。", href);
+    const href = noticeHref(result.threadId);
+    await notifyKind(result.notifyId, "offer-accept", href, result.title);
+    await notifyKind(result.notifyId, "handover", href, result.title);
+    await notifyKind(userId, "handover", href, result.title);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
