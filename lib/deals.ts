@@ -196,6 +196,12 @@ async function loadOrder(orderId: string) {
   });
 }
 
+async function orderChatHref(order: { id: string; buyerId: string; sellerId: string; items: { listingId: string }[] }) {
+  const listingId = order.items[0]?.listingId;
+  if (!listingId) return `/orders/${order.id}`;
+  return dealThreadHref(listingId, order.buyerId, order.sellerId);
+}
+
 export async function arrangeMeetup(userId: string, orderId: string) {
   const order = await loadOrder(orderId);
   if (!order || (order.buyerId !== userId && order.sellerId !== userId)) return { ok: false as const, error: "forbidden" };
@@ -242,7 +248,7 @@ export async function uploadProof(userId: string, orderId: string, imageUrl: str
     return { ok: false as const, error: "photo_url" };
   }
   try {
-    const sellerId = await prisma.$transaction(async (tx) => {
+    const order = await prisma.$transaction(async (tx) => {
       await lockRows(tx, "Order", [orderId]);
       const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
       if (!order || order.buyerId !== userId) throw new Fail("forbidden");
@@ -266,13 +272,14 @@ export async function uploadProof(userId: string, orderId: string, imageUrl: str
           where: { listingId, buyerId: order.buyerId, sellerId: order.sellerId },
         });
         if (thread) {
-          await tx.message.create({ data: { threadId: thread.id, senderId: userId, body: "付款證明", imageUrl: stored } });
+          await tx.message.create({ data: { threadId: thread.id, senderId: userId, body: "已上載付款證明。", imageUrl: stored } });
           await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
         }
       }
-      return order.sellerId;
+      return order;
     });
-    await notify(sellerId, "order", "買家上傳了付款證明", "請確認是咪收到錢，再按已收款。", `/orders/${orderId}`);
+    const href = await orderChatHref(order);
+    await notify(order.sellerId, "order", "買家已上載付款證明", "請確認已交收。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -392,6 +399,7 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
       const meta = readDealMeta(order.fulfillment);
       const phase = dealPhase(order);
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      if (meta.offer?.status === "ACCEPTED") throw new Fail("state");
       const superseded = meta.offer?.status === "PENDING";
       if (superseded) await markLiveOfferSuperseded(tx, thread.id);
       const offer: DealOffer = { by: userId, name, amount, note: cleaned.note, status: "PENDING" };
@@ -457,16 +465,13 @@ export async function acceptDealOffer(userId: string, orderId: string) {
     const result = await prisma.$transaction(async (tx) => {
       await lockRows(tx, "Order", [orderId]);
       const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
-      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      if (!order || order.buyerId !== userId) throw new Fail("forbidden");
       const offer = readDealMeta(order.fulfillment).offer;
       if (!offer || offer.status !== "PENDING") throw new Fail("state");
       if (offer.by === userId) throw new Fail("forbidden");
       const phase = dealPhase(order);
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
       if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
-      const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
-      if (!listingIds.length) throw new Fail("state");
-      await softLock(tx, order.id, listingIds);
       const accepted: DealOffer = { ...offer, status: "ACCEPTED" };
       // ponytail: a handover is one card. A multi-qty line keeps its quantity; the order total becomes the offer.
       if (order.items.length === 1 && order.items[0].quantity === 1) {
@@ -479,7 +484,7 @@ export async function acceptDealOffer(userId: string, orderId: string) {
           total: offer.amount,
           sellerProceeds: offer.amount,
           commissionAmount: 0,
-          fulfillment: withDeal(order.fulfillment, { confirmed: true, offer: accepted }),
+          fulfillment: withDeal(order.fulfillment, { offer: accepted }),
         },
       });
       if (changed.count !== 1) throw new Fail("state");
@@ -488,8 +493,52 @@ export async function acceptDealOffer(userId: string, orderId: string) {
     });
     const href = noticeHref(result.threadId);
     await notifyKind(result.notifyId, "offer-accept", href, result.title);
-    await notifyKind(result.notifyId, "handover", href, result.title);
-    await notifyKind(userId, "handover", href, result.title);
+    return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+/** Seller soft-lock. A pending buyer offer is accepted in the same step. */
+export async function confirmDeal(userId: string, orderId: string) {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      await lockRows(tx, "Order", [orderId]);
+      const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (!order || order.sellerId !== userId) throw new Fail("forbidden");
+      const meta = readDealMeta(order.fulfillment);
+      if (meta.confirmed || meta.proofs.length > 0) throw new Fail("state");
+      const phase = dealPhase(order);
+      if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
+      const offer = meta.offer;
+      if (offer?.status === "PENDING" && offer.by === userId) throw new Fail("forbidden");
+      const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
+      if (!listingIds.length) throw new Fail("state");
+      await softLock(tx, order.id, listingIds);
+      const accepting = offer?.status === "PENDING" ? offer : null;
+      const accepted: DealOffer | null = accepting ? { ...accepting, status: "ACCEPTED" } : offer?.status === "ACCEPTED" ? offer : null;
+      if (accepting && order.items.length === 1 && order.items[0].quantity === 1) {
+        await tx.orderItem.update({ where: { id: order.items[0].id }, data: { unitPrice: accepting.amount } });
+      }
+      const changed = await tx.order.updateMany({
+        where: { id: order.id, status: { in: [...OPEN_TALK] } },
+        data: {
+          ...(accepting
+            ? { subtotal: accepting.amount, total: accepting.amount, sellerProceeds: accepting.amount, commissionAmount: 0 }
+            : {}),
+          fulfillment: withDeal(order.fulfillment, accepted ? { confirmed: true, offer: accepted } : { confirmed: true }),
+        },
+      });
+      if (changed.count !== 1) throw new Fail("state");
+      if (accepting) await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
+      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "lock" }));
+      return { notifyId: order.buyerId, threadId };
+    });
+    const href = noticeHref(result.threadId);
+    await notify(result.notifyId, "order", "賣家已確認交易", "貨品已鎖定。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -532,8 +581,8 @@ export async function releaseReserve(userId: string, orderId: string) {
       const other = order.buyerId === userId ? order.sellerId : order.buyerId;
       return { notifyId: other, threadId, name };
     });
-    const href = result.threadId ? `/messages/${result.threadId}` : `/orders/${orderId}`;
-    await notify(result.notifyId, "order", `${result.name} 已解除保留`, "呢件貨可以再提出要約。", href);
+    const href = noticeHref(result.threadId);
+    await notify(result.notifyId, "order", `${result.name} 已解除鎖定`, "可以再提出要約。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -551,12 +600,12 @@ export async function confirmSellerPaid(userId: string, orderId: string) {
     data: { status: "SHIPPED", shippedAt: new Date(), autoReleaseAt: null },
   });
   if (changed.count !== 1) return { ok: false as const, error: "state" };
-  await notify(order.buyerId, "order", "賣家已確認收款", "請收貨後按已收貨。", `/orders/${orderId}`);
+  await notify(order.buyerId, "order", "賣家已確認交收", "請確認收貨。", await orderChatHref(order));
   return { ok: true as const };
 }
 
 export async function confirmReceived(userId: string, orderId: string) {
-  const order = await prisma.order.findUnique({ where: { id: orderId } });
+  const order = await loadOrder(orderId);
   if (!order || order.buyerId !== userId) return { ok: false as const, error: "forbidden" };
   if (order.status !== "SHIPPED") return { ok: false as const, error: "state" };
   const changed = await prisma.order.updateMany({
@@ -564,8 +613,9 @@ export async function confirmReceived(userId: string, orderId: string) {
     data: { status: "COMPLETED", completedAt: new Date() },
   });
   if (changed.count !== 1) return { ok: false as const, error: "state" };
-  await notify(order.sellerId, "order", "買家已確認收貨", "交收已完成，可以評價。", `/orders/${orderId}`);
-  await notify(userId, "order", "交收已完成", "你可以評價對方。", `/orders/${orderId}`);
+  const href = await orderChatHref(order);
+  await notify(order.sellerId, "order", "買家已確認收貨", "交易已完成，可以評分。", href);
+  await notify(userId, "order", "交易已完成", "可以評分。", href);
   return { ok: true as const };
 }
 
@@ -579,7 +629,7 @@ export async function markDealSold(userId: string, orderId: string) {
     where: { id: { in: ids }, sellerId: userId, status: { not: "SOLD" } },
     data: { status: "SOLD", quantityAvailable: 0, binLockOrderId: null },
   });
-  await notify(order.buyerId, "order", "賣家標記已出售", order.items[0]?.title ?? "", `/orders/${orderId}`);
+  await notify(order.buyerId, "order", "賣家已標記出售", order.items[0]?.title ?? "", await orderChatHref(order));
   return { ok: true as const };
 }
 
@@ -610,7 +660,7 @@ export async function cancelDeal(userId: string, orderId: string) {
   }
   if (!readDealMeta(order.fulfillment).private) await releaseReservedStock(orderId);
   const other = order.buyerId === userId ? order.sellerId : order.buyerId;
-  await notify(other, "order", "交收已取消", order.items[0]?.title ?? "", `/orders/${orderId}`);
+  await notify(other, "order", "交收已取消", order.items[0]?.title ?? "", await orderChatHref(order));
   return { ok: true as const };
 }
 

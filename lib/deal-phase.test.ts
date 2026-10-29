@@ -12,6 +12,7 @@ import {
   canOfferFromMenu,
   canReleaseReserve,
   canSeePayment,
+  canSellerLock,
   showPaymentDetails,
   canSellerConfirm,
   canUploadProof,
@@ -42,25 +43,26 @@ assert(DEAL_RISK === "平台只提供配對同聊天紀錄；付款方式、交�
 assert(dealPhase({ status: "PENDING_PAYMENT" }) === "CHATTING", "a new deal is talking");
 assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { meetupAgreed: true, proofs: [] } } }) === "ARRANGED", "meetup agreement is optional and stays before proof");
 assert(dealPhase({ status: "AWAITING_SHIP" }) === "ARRANGED", "legacy awaiting-ship reads as meetup set");
-assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [] } } }) === "CONFIRMED", "seller lock is 保留中 before proof");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [] } } }) === "CONFIRMED", "seller lock is 已鎖貨 before proof");
 assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, meetupAgreed: true, proofs: [] } } }) === "CONFIRMED", "a meetup stays locked once the seller confirms");
 assert(dealPhase({ status: "IN_ESCROW" }) === "PROOF", "legacy escrow reads as waiting on the seller, without that word");
 assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [{ url: "https://cdn.example/a.jpg" }] } } }) === "PROOF", "a bound proof image is 待確認收款");
-assert(dealPhase({ status: "SHIPPED" }) === "SELLER_PAID", "seller confirm is 已收款");
+assert(dealPhase({ status: "SHIPPED" }) === "SELLER_PAID", "seller handover confirm stays 待交收 until receipt");
 assert(dealPhase({ status: "COMPLETED" }) === "DONE", "both confirms finish the deal");
 assert(dealPhase({ status: "CANCELLED" }) === "CANCELLED" && dealPhase({ status: "REFUNDED" }) === "CANCELLED", "stopped deals are cancelled");
 
 const labels = (["CHATTING", "ARRANGED", "CONFIRMED", "PROOF", "SELLER_PAID", "DONE", "CANCELLED"] as const).map((phase) => phaseLabel("zh-HK", phase));
-assert(labels.join() === "洽談中,約定中,保留中,待確認收款,已收款,已完成,已取消", "zh labels are the handover states");
-assert(phaseLabel("zh-HK", "CONFIRMED") === RESERVE_BADGE, "the lock badge is 保留中");
-assert(RESERVE_BLOCKED === "呢件貨已有人確認，保留中", "other threads use the reserved copy");
+assert(labels.join() === "要約中,待交收,已鎖貨,待交收,待交收,已完成,已取消", "zh labels stay inside the locked status words");
+assert(phaseLabel("zh-HK", "CONFIRMED") === RESERVE_BADGE && RESERVE_BADGE === "已鎖貨", "the lock badge is 已鎖貨");
+assert(RESERVE_BLOCKED === "此貨品已鎖定。", "other threads use the locked copy");
 assert(OFFER_EMPTY === "對方而家冇可要約嘅貨", "an unbound chat with nothing to offer says so");
 assert(!labels.some((label) => label.includes("待付款") || label.includes("托管") || label.includes("託管") || label.includes("放款") || label.includes("已確認")), "payment chips stay off the labels");
 
 assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUploadProof("CONFIRMED", 0) && !canUploadProof("CONFIRMED", 1), "proof opens only after the offer is accepted, and only once");
 assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && canOfferFromMenu("ARRANGED", false), "either party can offer while talking");
 assert(!canOfferFromMenu("CHATTING", true) && canOfferFromMenu("CHATTING", true, false, true) && canOfferFromMenu("ARRANGED", true, false, true), "only the proposer keeps + while an offer is live, so they can replace it");
-assert(!canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true) && !canOfferFromMenu("CONFIRMED", true, false, true), "the + item is omitted once reserved, finished, or blocked");
+assert(!canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true) && !canOfferFromMenu("CONFIRMED", true, false, true) && !canOfferFromMenu("CHATTING", false, false, false, true), "the + item is omitted once accepted, locked, finished, or blocked");
+assert(canSellerLock("CHATTING") && canSellerLock("ARRANGED") && !canSellerLock("CONFIRMED") && !canSellerLock("PROOF") && !canSellerLock("DONE"), "seller 確認交易 is only before the lock");
 assert(offerEntry(true, 4) === "bound" && offerEntry(false, 0) === "empty" && offerEntry(false, 1) === "auto" && offerEntry(false, 2) === "pick", "a bound thread skips the picker; an unbound thread follows the active count");
 assert(offerFormLocked(false, false) && !offerFormLocked(false, true) && !offerFormLocked(true, false), "price and note unlock after the checkbox or a stored ack");
 const missingAck = offerAckGate(false, null);
@@ -75,8 +77,8 @@ assert(showPaymentDetails("CONFIRMED", true, 0) && showPaymentDetails("PROOF", t
 assert(reservedByOther("order_a", "order_b") && !reservedByOther("order_a", "order_a") && !reservedByOther(null, "order_b"), "another deal's lock blocks this thread");
 assert(dealBlocked("CHATTING", "ACTIVE", "order_a", "order_b") && !dealBlocked("CONFIRMED", "ACTIVE", "order_a", "order_a"), "only the locked deal continues");
 assert(dealBlocked("ARRANGED", "SOLD", null, "order_b") && !dealBlocked("PROOF", "SOLD", null, "order_a"), "a sold listing keeps other threads out of payment");
-assert(!canSellerConfirm("CHATTING", 0) && !canSellerConfirm("CONFIRMED", 0) && !canSellerConfirm("PROOF", 0) && canSellerConfirm("PROOF", 1), "seller 已收款 waits for proof");
-assert(!canBuyerReceive("PROOF") && canBuyerReceive("SELLER_PAID"), "buyer 已收貨 follows seller confirm");
+assert(!canSellerConfirm("CHATTING", 0) && !canSellerConfirm("CONFIRMED", 0) && !canSellerConfirm("PROOF", 0) && canSellerConfirm("PROOF", 1), "seller 確認已交收 waits for proof");
+assert(!canBuyerReceive("PROOF") && canBuyerReceive("SELLER_PAID"), "buyer 確認收貨 follows seller handover confirm");
 assert(!canMarkSold("CHATTING", 0, "ACTIVE") && !canMarkSold("ARRANGED", 0, "ACTIVE") && !canMarkSold("CONFIRMED", 0, "ACTIVE"), "sold is not available before proof");
 assert(canMarkSold("PROOF", 1, "ACTIVE") && canMarkSold("SELLER_PAID", 0, "ACTIVE") && canMarkSold("DONE", 0, "ACTIVE"), "sold opens from proof onward");
 assert(!canMarkSold("PROOF", 1, "SOLD") && !canCancel("CHATTING", "SOLD") && !canCancel("DONE", "ACTIVE"), "sold and finished deals do not cancel");
@@ -93,12 +95,13 @@ assert(note.ok && note.note === "旺角 7pm", "a handover note is one line");
 assert(!cleanOfferNote("x".repeat(81)).ok && cleanOfferNote("").ok, "an empty note is allowed and a long one is not");
 assert(offerEntry(true, 0) === "bound", "a bound thread does not care that the counterparty has no other listings");
 const offered = dealEventCopy("zh-HK", { kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
-assert(offered.text === "Alex 提出要約 HK$123.00" && offered.note === "旺角", "the offer bubble names the price");
-assert(dealEventCopy("zh-HK", { kind: "accept" }).text === "要約已接受 · 保留中", "accept copy is locked");
-assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "要約已拒絕" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "要約已撤回", "decline and withdraw copy is locked");
-assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已解除保留", "release names who unlocked");
+assert(offered.text === "Alex 提出要約 HK$123.00。" && offered.note === "旺角", "the offer bubble names the price");
+assert(dealEventCopy("zh-HK", { kind: "accept" }).text === "要約已接受。", "accept copy does not lock the item");
+assert(dealEventCopy("zh-HK", { kind: "lock" }).text === "貨品已鎖定。", "seller confirm copy is one sentence");
+assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "要約已拒絕。" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "要約已撤回。", "decline and withdraw copy is one sentence");
+assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已解除鎖定。", "release names who unlocked");
 const body = dealEventBody({ kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
-assert(readDealEvent(body)?.kind === "offer" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
+assert(readDealEvent(body)?.kind === "offer" && readDealEvent(dealEventBody({ kind: "lock" }))?.kind === "lock" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
 const replaced = supersededOfferBody(body);
 const replacedEvent = replaced ? readDealEvent(replaced) : null;
 assert(replacedEvent?.kind === "offer" && replacedEvent.superseded === true && replacedEvent.amount === 12300 && replacedEvent.note === "旺角", "replacing an offer keeps the old terms and marks 已取代");

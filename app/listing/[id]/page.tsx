@@ -21,7 +21,7 @@ import { ListingCard } from "@/components/listing-card";
 import { PurchasePanel } from "@/components/purchase-panel";
 import { Sparkline } from "@/components/sparkline";
 import { ViewPing } from "@/components/pings";
-import { offerRespondAction, deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
+import { deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
 import { toggleFavorite, toggleFollow } from "@/actions/social";
 import { PersonMenu } from "@/components/safety-menu";
 import { RatingPill } from "@/components/profile-header";
@@ -114,6 +114,13 @@ export default async function ListingPage({
   ]);
   const sellerOnTime = onTimePercent(sellerShipped);
   const sellerRating = ratingFromAggregate(sellerRatingRow._avg.stars, sellerRatingRow._count);
+  const offerThreads = offers.length
+    ? await prisma.messageThread.findMany({
+        where: { listingId: id, sellerId: listing.sellerId, buyerId: { in: offers.map((offer) => offer.buyerId) } },
+        select: { id: true, buyerId: true },
+      })
+    : [];
+  const threadByBuyer = new Map(offerThreads.map((thread) => [thread.buyerId, thread.id]));
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
   const showHandover = !owner && listing.status === "ACTIVE" && listing.quantityAvailable > 0;
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
@@ -127,7 +134,7 @@ export default async function ListingPage({
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listingStatusLabel(locale, listing.status)}</span>
-          {listing.binLockOrderId ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{tx(locale, RESERVE_BADGE, "Reserved")}</span> : null}
+          {listing.binLockOrderId ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{tx(locale, RESERVE_BADGE, "Locked")}</span> : null}
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
         <h1 className="mt-2 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>
@@ -268,23 +275,8 @@ export default async function ListingPage({
                 </p>
                 <p>{formatHkd(offer.amount, locale)}{offer.counterAmount ? ` → ${formatHkd(offer.counterAmount, locale)}` : ""}</p>
                 <p className="text-muted">{tx(locale, "到期", "Expires")} {formatHKT(offer.expiresAt, locale)}</p>
-                {offer.status === "PENDING" && owner ? (
-                  <form action={offerRespondAction} className="mt-2 flex flex-wrap gap-2">
-                    <input type="hidden" name="offerId" value={offer.id} />
-                    <input type="hidden" name="listingId" value={id} />
-                    <button className="btn btn-primary" name="act" value="accept">{tx(locale, "接受", "Accept")}</button>
-                    <button className="btn-ghost btn" name="act" value="decline">{tx(locale, "拒絕", "Decline")}</button>
-                    <input className="field w-full sm:max-w-40" name="counter" placeholder="HKD" />
-                    <button className="btn-ghost btn" name="act" value="counter">{tx(locale, "還價", "Counter")}</button>
-                  </form>
-                ) : null}
-                {offer.status === "COUNTERED" && viewer?.id === offer.buyerId ? (
-                  <form action={offerRespondAction} className="mt-2 flex flex-wrap gap-2">
-                    <input type="hidden" name="offerId" value={offer.id} />
-                    <input type="hidden" name="listingId" value={id} />
-                    <button className="btn btn-primary" name="act" value="accept">{tx(locale, "接受還價", "Accept counter")}</button>
-                    <button className="btn-ghost btn" name="act" value="decline">{tx(locale, "拒絕", "Decline")}</button>
-                  </form>
+                {threadByBuyer.get(offer.buyerId) ? (
+                  <Link className="mt-2 inline-flex text-sm font-semibold text-link" href={`/messages/${threadByBuyer.get(offer.buyerId)}`}>{tx(locale, "打開聊天", "Open chat")}</Link>
                 ) : null}
               </div>
             ))}

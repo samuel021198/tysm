@@ -8,7 +8,7 @@ import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { DealPanel } from "@/components/deal-panel";
 import { Flash } from "@/components/shell";
-import { replyReviewAction, reviewAction } from "@/actions/social";
+import { replyReviewAction } from "@/actions/social";
 
 export default async function OrderPage({
   params,
@@ -52,7 +52,6 @@ export default async function OrderPage({
           locale={locale}
           viewerId={viewer.id}
           next={`/orders/${id}`}
-          reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
           payment={sellerPayment(order.seller)}
           order={order}
         />
@@ -72,8 +71,8 @@ export default async function OrderPage({
         {tx(locale, "買家", "Buyer")} {order.buyer.nickname} · {tx(locale, "賣家", "Seller")} {order.seller.nickname}
       </p>
       {thread ? <Link className="text-sm font-semibold text-link" href={`/messages/${thread.id}`}>{tx(locale, "打開聊天", "Open chat")}</Link> : null}
-      {phase === "DONE" ? (
-        <section id="review" className="grid gap-3">
+      {phase === "DONE" && order.reviews.length ? (
+        <section className="grid gap-3">
           <h2 className="font-semibold">{tx(locale, "評價", "Reviews")}</h2>
           {order.reviews.map((review) => (
             <article key={review.id} className="text-sm">
@@ -90,18 +89,6 @@ export default async function OrderPage({
               ) : null}
             </article>
           ))}
-          {order.completedAt && order.completedAt.getTime() + 30 * 24 * 60 * 60 * 1000 > Date.now() && !order.reviews.some((review) => review.authorId === viewer.id) && (buyer || seller) ? (
-            <form action={reviewAction} className="grid max-w-lg gap-2">
-              <input type="hidden" name="orderId" value={order.id} />
-              <select className="field" name="stars" defaultValue="5">
-                {[5, 4, 3, 2, 1].map((stars) => (
-                  <option key={stars} value={stars}>{stars}</option>
-                ))}
-              </select>
-              <textarea className="field" name="comment" required />
-              <button className="btn btn-primary w-fit">{tx(locale, "送出評價", "Post review")}</button>
-            </form>
-          ) : null}
         </section>
       ) : null}
     </div>

@@ -61,7 +61,7 @@ const ERR: Record<string, [string, string]> = {
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],
   state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
-  reserved: ["呢件貨已有人確認，保留中", "This item is already reserved"],
+  reserved: ["此貨品已鎖定。", "This item is locked."],
   pending: ["已有一個要約，請先撤回或等對方回覆", "There is already an offer. Withdraw it or wait for a reply"],
   deal_ack: ["請先剔選私下交收風險", "Confirm the private handover risk first"],
   deal_price: ["請填最終價錢（HK$）", "Enter the final price in HK$"],
@@ -137,20 +137,20 @@ export function offerStatusLabel(locale: Locale, status: string): string {
 
 export function orderStatusLabel(locale: Locale, status: string): string {
   const zh: Record<string, string> = {
-    PENDING_PAYMENT: "洽談中",
-    IN_ESCROW: "待確認收款",
-    AWAITING_SHIP: "約定中",
-    SHIPPED: "已收款",
+    PENDING_PAYMENT: "要約中",
+    IN_ESCROW: "待交收",
+    AWAITING_SHIP: "待交收",
+    SHIPPED: "待交收",
     COMPLETED: "已完成",
     DISPUTED: "已取消",
     CANCELLED: "已取消",
     REFUNDED: "已取消",
   };
   const en: Record<string, string> = {
-    PENDING_PAYMENT: "Talking",
-    IN_ESCROW: "Proof sent",
-    AWAITING_SHIP: "Meetup set",
-    SHIPPED: "Seller confirmed payment",
+    PENDING_PAYMENT: "Offer",
+    IN_ESCROW: "To hand over",
+    AWAITING_SHIP: "To hand over",
+    SHIPPED: "To hand over",
     COMPLETED: "Completed",
     DISPUTED: "Cancelled",
     CANCELLED: "Cancelled",

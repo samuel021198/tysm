@@ -12,6 +12,7 @@ import {
   acceptDealOffer,
   arrangeMeetup,
   cancelDeal,
+  confirmDeal,
   confirmReceived,
   confirmSellerPaid,
   declineDealOffer,
@@ -241,6 +242,7 @@ function settleDeal(formData: FormData, orderId: string, result: DealOutcome, ok
   if (result.ok && next.startsWith("/messages/")) {
     revalidatePath(next);
     revalidatePath(`/orders/${orderId}`);
+    revalidatePath("/me/footprint");
     return;
   }
   redirect(`${next}?${result.ok ? `ok=${okCode}` : `err=${result.error}`}`);
@@ -280,7 +282,14 @@ export async function acceptDealOfferAction(formData: FormData) {
   const id = String(formData.get("orderId") || "");
   const user = await viewer(dealNext(formData, id));
   const result = await acceptDealOffer(user.id, id);
-  settleDeal(formData, id, result, "reserved");
+  settleDeal(formData, id, result, "accepted");
+}
+
+export async function confirmDealAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await confirmDeal(user.id, id);
+  settleDeal(formData, id, result, "locked");
 }
 
 export async function declineDealOfferAction(formData: FormData) {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { acceptDealOfferAction, arrangeDealAction, cancelDealAction, confirmAction, declineDealOfferAction, markSoldAction, releaseReserveAction, sellerPaidAction, withdrawDealOfferAction } from "@/actions/trade";
+import { acceptDealOfferAction, arrangeDealAction, cancelDealAction, confirmAction, confirmDealAction, declineDealOfferAction, markSoldAction, releaseReserveAction, sellerPaidAction, withdrawDealOfferAction } from "@/actions/trade";
 import {
   canArrange,
   canBuyerReceive,
@@ -7,6 +7,7 @@ import {
   canMarkSold,
   canReleaseReserve,
   canSellerConfirm,
+  canSellerLock,
   canUploadProof,
   DEAL_BANNER,
   dealBlocked,
@@ -44,7 +45,6 @@ type DealProps = {
   locale: Locale;
   viewerId: string;
   next: string;
-  reviewed: boolean;
   /** This viewer's post-deal rating. Null means not yet. Omit outside the chat bubble. */
   rating?: { stars: number; comment?: string } | null;
   payment: PaymentInfo | null;
@@ -73,7 +73,6 @@ function DealView({
   viewerId,
   next,
   order,
-  reviewed,
   rating,
   payment,
   names,
@@ -124,14 +123,14 @@ function DealView({
           </p>
         ))}
         <p className={`price mt-1 leading-none ${stream ? "text-sm" : "text-lg"}`}>{formatHkd(shownCents, locale)}</p>
-        {stream ? null : <p className="mt-1 text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>}
+        {stream ? null : <p className="mt-1 text-xs text-muted">{tx(locale, "金額僅供顯示，平台不經手收款。", "The amount is shown only. The platform does not take payment.")}</p>}
         {stream && pending ? (
           pending.note ? <p className="mt-1 text-xs">{pending.note}</p> : null
         ) : note ? (
           <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p>
         ) : null}
       </div>
-      {blocked ? <p className="text-sm font-medium">{tx(locale, RESERVE_BLOCKED, "This item is already reserved")}</p> : null}
+      {blocked ? <p className={`text-sm font-medium ${stream ? "text-center" : ""}`}>{tx(locale, RESERVE_BLOCKED, "This item is locked.")}</p> : null}
       {pending && offerLine && (buyer || seller) ? (
         <div className={`grid gap-2 ${stream ? "justify-items-center text-center" : ""}`}>
           {stream ? (
@@ -145,23 +144,29 @@ function DealView({
               {offerLine.note ? <p className="text-xs text-muted">{offerLine.note}</p> : null}
             </>
           )}
-          {viewerId === pending.by ? (
-            <>
-              {stream ? null : <p className="text-xs text-muted">{tx(locale, "等待對方回應", "Waiting for a reply")}</p>}
-              <form action={withdrawDealOfferAction} className="w-full">
-                <input type="hidden" name="orderId" value={order.id} />
-                <input type="hidden" name="next" value={next} />
-                <button className="btn btn-ghost w-full">{tx(locale, stream ? "撤回" : "撤回要約", "Withdraw")}</button>
-              </form>
-            </>
-          ) : (
-            <div className={stream ? "grid w-full gap-2" : "grid w-full grid-cols-2 gap-2"}>
-              <form action={acceptDealOfferAction} className="w-full">
-                <input type="hidden" name="orderId" value={order.id} />
-                <input type="hidden" name="next" value={next} />
-                <button className={primary}>{tx(locale, "接受要約", "Accept")}</button>
-              </form>
-              {stream && revise ? (
+          {stream && viewerId === pending.by ? (
+            <form action={withdrawDealOfferAction} className="w-full">
+              <input type="hidden" name="orderId" value={order.id} />
+              <input type="hidden" name="next" value={next} />
+              <button className="btn btn-ghost w-full">{tx(locale, "撤回", "Withdraw")}</button>
+            </form>
+          ) : null}
+          {stream && !blocked && viewerId !== pending.by ? (
+            <div className="grid w-full gap-2">
+              {seller ? (
+                <form action={confirmDealAction} className="w-full">
+                  <input type="hidden" name="orderId" value={order.id} />
+                  <input type="hidden" name="next" value={next} />
+                  <button className={primary}>{tx(locale, "確認交易", "Confirm deal")}</button>
+                </form>
+              ) : (
+                <form action={acceptDealOfferAction} className="w-full">
+                  <input type="hidden" name="orderId" value={order.id} />
+                  <input type="hidden" name="next" value={next} />
+                  <button className={primary}>{tx(locale, "接受要約", "Accept offer")}</button>
+                </form>
+              )}
+              {revise ? (
                 <ReviseOfferButton
                   locale={locale}
                   threadId={revise.threadId}
@@ -177,7 +182,7 @@ function DealView({
                 <button className="btn btn-ghost w-full">{tx(locale, "拒絕", "Decline")}</button>
               </form>
             </div>
-          )}
+          ) : null}
         </div>
       ) : null}
       {phase === "CONFIRMED" && accepted ? (
@@ -190,24 +195,42 @@ function DealView({
         <div className="rounded-xl bg-soft px-3 py-2 text-sm">
           <p className="text-xs font-semibold">{tx(locale, "付款資料", "Payment details")}</p>
           <p className="mt-1">{[showPayment.method, showPayment.holder, showPayment.account].filter(Boolean).join(" · ")}</p>
-          <p className="mt-1 text-xs text-muted">{tx(locale, "私下轉帳。平台唔會收款。", "Pay the seller directly. The platform does not take payment.")}</p>
+          <p className="mt-1 text-xs text-muted">{tx(locale, "請直接付款予賣家。", "Pay the seller directly.")}</p>
         </div>
       ) : null}
-      {buyer && !blocked && canUploadProof(phase, proofs) ? <ProofForm locale={locale} orderId={order.id} next={next} /> : null}
-      {seller && canSellerConfirm(phase, proofs) ? (
+      {proofs > 0 ? (
+        <div className="flex flex-wrap justify-center gap-2">
+          {meta.proofs.map((proof) => (
+            <img key={proof.url} src={proof.url} alt={tx(locale, "付款證明", "Payment proof")} className="h-24 w-20 rounded-xl bg-soft object-contain" />
+          ))}
+        </div>
+      ) : null}
+      {stream && !blocked && accepted && !meta.confirmed && buyer ? <p className="text-center text-sm">{tx(locale, "待賣家確認交易。", "Waiting for the seller to confirm.")}</p> : null}
+      {stream && seller && !blocked && !sold && canSellerLock(phase) && !pending ? (
+        <form action={confirmDealAction}>
+          <input type="hidden" name="orderId" value={order.id} />
+          <input type="hidden" name="next" value={next} />
+          <button className={primary}>{tx(locale, "確認交易", "Confirm deal")}</button>
+        </form>
+      ) : null}
+      {stream && phase === "CONFIRMED" && proofs === 0 && seller && !blocked ? <p className="text-center text-sm">{tx(locale, "待買家上載付款證明。", "Waiting for payment proof.")}</p> : null}
+      {stream && buyer && !blocked && canUploadProof(phase, proofs) ? <ProofForm locale={locale} orderId={order.id} next={next} /> : null}
+      {stream && seller && canSellerConfirm(phase, proofs) ? (
         <form action={sellerPaidAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
-          <button className={primary}>{tx(locale, "已收款", "Payment received")}</button>
+          <button className={primary}>{tx(locale, "確認已交收", "Confirm handover")}</button>
         </form>
       ) : null}
-      {buyer && canBuyerReceive(phase) ? (
+      {stream && phase === "PROOF" && buyer ? <p className="text-center text-sm">{tx(locale, "待賣家確認已交收。", "Waiting for the seller to confirm handover.")}</p> : null}
+      {stream && buyer && canBuyerReceive(phase) ? (
         <form action={confirmAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
-          <button className={primary}>{tx(locale, "已收貨", "Item received")}</button>
+          <button className={primary}>{tx(locale, "確認收貨", "Confirm receipt")}</button>
         </form>
       ) : null}
+      {stream && phase === "SELLER_PAID" && seller ? <p className="text-center text-sm">{tx(locale, "待買家確認收貨。", "Waiting for the buyer to confirm receipt.")}</p> : null}
       {stream && phase === "DONE" && (buyer || seller) ? (
         rating ? (
           <div className="text-center text-xs text-muted">
@@ -218,31 +241,28 @@ function DealView({
           <DealRatingForm locale={locale} orderId={order.id} />
         )
       ) : null}
-      {!stream && phase === "DONE" && (buyer || seller) && !reviewed ? (
-        <Link className={primary} href={`/orders/${order.id}#review`}>{tx(locale, "去評價", "Review")}</Link>
-      ) : null}
-      {seller && canMarkSold(phase, proofs, sold ? "SOLD" : "ACTIVE") ? (
+      {stream && seller && canMarkSold(phase, proofs, sold ? "SOLD" : "ACTIVE") ? (
         <form action={markSoldAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
           <button className="btn btn-ghost w-full">{tx(locale, "標記已出售", "Mark sold")}</button>
         </form>
       ) : null}
-      {(buyer || seller) && !blocked && canReleaseReserve(phase) ? (
+      {stream && (buyer || seller) && !blocked && canReleaseReserve(phase) ? (
         <form action={releaseReserveAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
-          <button className="btn btn-ghost w-full">{tx(locale, "解除保留", "Release hold")}</button>
+          <button className="btn btn-ghost w-full">{tx(locale, "解除鎖定", "Release lock")}</button>
         </form>
       ) : null}
-      {(buyer || seller) && !blocked && canArrange(phase) ? (
+      {stream && (buyer || seller) && !blocked && canArrange(phase) ? (
         <form action={arrangeDealAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
           <button className="btn btn-ghost w-full">{tx(locale, "約定交收", "Set meetup")}</button>
         </form>
       ) : null}
-      {(buyer || seller) && canCancel(phase, sold ? "SOLD" : "ACTIVE") ? (
+      {stream && (buyer || seller) && canCancel(phase, sold ? "SOLD" : "ACTIVE") ? (
         <form action={cancelDealAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
