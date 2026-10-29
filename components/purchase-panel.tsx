@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { openThread } from "@/actions/social";
 import { bidAction } from "@/actions/trade";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { BuyDock } from "./buy-dock";
 import { Countdown } from "./countdown";
-import { HandoverForm } from "./handover-form";
-import { Icon } from "./icons";
 
 export function PurchasePanel({
   locale,
@@ -53,8 +52,23 @@ export function PurchasePanel({
 }) {
   const publicBid = currentBid ?? startPrice ?? 0;
   const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
-  const handoverLabel = tx(locale, "傾交收", "Arrange handover");
   const bin = showHandover && price != null ? price : null;
+  const talk = showHandover ? (
+    <div>
+      <form id="listing-offer" action={openThread} hidden>
+        <input type="hidden" name="listingId" value={id} />
+        <input type="hidden" name="focus" value="offer" />
+      </form>
+      <form id="listing-chat" action={openThread} hidden>
+        <input type="hidden" name="listingId" value={id} />
+        <input type="hidden" name="focus" value="compose" />
+      </form>
+      <div className="grid grid-cols-2 items-stretch gap-2">
+        <button form="listing-offer" className="btn btn-primary h-full w-full" type="submit">議價</button>
+        <button form="listing-chat" className="btn btn-primary h-full w-full" type="submit">聯絡賣家</button>
+      </div>
+    </div>
+  ) : null;
   const listedAt = timeLabel ? (
     <time dateTime={timeAt || undefined} className="mt-1 block text-xs font-normal leading-4 text-muted">
       {timeLabel}
@@ -70,6 +84,7 @@ export function PurchasePanel({
           {listedAt}
         </div>
       ) : null}
+      {bin != null ? talk : null}
       {live || endsAt ? (
         <div className="grid gap-1 rounded-2xl bg-soft p-3">
           <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
@@ -95,9 +110,9 @@ export function PurchasePanel({
           {isLeader ? <p className="text-xs text-muted">{tx(locale, "你目前領先。加價要高過你自己的最高出價。", "You are leading. A new bid must be above your own maximum.")}</p> : null}
         </div>
       ) : null}
+      {bin == null ? talk : null}
       {bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
 
-      {showHandover ? <HandoverForm locale={locale} listingId={id} layout="stack" /> : null}
       <div className="grid gap-2">
         {showBid ? (
           <button form="bid-form" className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Place bid")}</button>
@@ -141,9 +156,10 @@ export function PurchasePanel({
           }
         >
           {showHandover ? (
-            <button form="handover-form" className="btn btn-primary shrink-0" aria-label={handoverLabel} title={handoverLabel}>
-              <Icon name="messages" className="h-4 w-4" strokeWidth={2.5} />
-            </button>
+            <div className="grid shrink-0 grid-cols-2 gap-1.5">
+              <button form="listing-offer" className="btn btn-primary h-full px-3" type="submit">議價</button>
+              <button form="listing-chat" className="btn btn-primary h-full px-3" type="submit">聯絡賣家</button>
+            </div>
           ) : null}
           {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
           {!loggedIn && live && !showHandover ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}

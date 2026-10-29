@@ -308,7 +308,7 @@ export default async function ListingPage({
         <form action={toggleFavorite} className="text-sm">
           <input type="hidden" name="listingId" value={id} />
           <input type="hidden" name="next" value={`/listing/${id}`} />
-          <button className="btn btn-ghost w-full gap-1.5" aria-pressed={Boolean(favored)}>
+          <button className="btn btn-ghost gap-1.5" aria-pressed={Boolean(favored)}>
             <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={Boolean(favored)} />
             {tx(locale, "收藏", "Favorite")}
           </button>

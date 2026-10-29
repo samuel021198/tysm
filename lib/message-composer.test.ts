@@ -79,6 +79,14 @@ assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the o
 assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
 const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openThread"));
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
+const openedThread = social.slice(social.indexOf("export async function openThread"), social.indexOf("export async function sendMessage"));
+assert(openedThread.includes('focus === "offer"') && openedThread.includes("?offer=1") && openedThread.includes('focus === "compose"') && openedThread.includes("?compose=1"), "議價 and 聯絡賣家 open the same listing thread");
+const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
+assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
+assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價"), "the pinned card links to the listing and offers 議價");
+assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("binLock") && !bar.includes("還價"), "the pinned card does not rename the button, add a shop tab, or hide 議價 when reserved");
+assert(sheet.includes('priceOnly ? "議價"') && sheet.includes("priceOnly ? null") && sheet.includes("價錢"), "the 議價 sheet asks for a price and skips the note");
+assert(!sheet.includes("還價") && !deal.includes("瀏覽賣家"), "this wave does not add a counter-offer or a seller tab");
 const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
 const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
 assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");

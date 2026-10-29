@@ -146,7 +146,9 @@ export async function openThread(formData: FormData) {
     (await prisma.messageThread.create({
       data: { listingId, buyerId: user.id, sellerId: listing.sellerId },
     }));
-  redirect(`/messages/${thread.id}`);
+  const focus = String(formData.get("focus") || "");
+  const query = focus === "offer" ? "?offer=1" : focus === "compose" ? "?compose=1" : "";
+  redirect(`/messages/${thread.id}${query}`);
 }
 
 export async function sendMessage(formData: FormData) {

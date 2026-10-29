@@ -344,9 +344,20 @@ assert(!handover.includes("議價") && !handover.includes("bargain") && !handove
 assert(!postCard.includes("bargain") && !postCard.includes("議價"), "the price row has no bargain button");
 const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
 const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
-const dockButton = purchase.slice(purchase.indexOf('form="handover-form"'), purchase.indexOf("</button>", purchase.indexOf('form="handover-form"')));
-assert(!purchase.includes("議價") && !purchase.includes("送出議價") && purchase.includes('const handoverLabel = tx(locale, "傾交收", "Arrange handover")') && dockButton.includes("aria-label={handoverLabel}") && dockButton.includes("title={handoverLabel}") && dockButton.includes('name="messages"') && !dockButton.includes('name="check"') && !dockButton.includes("傾交收"), "listing buy bar uses the same icon-only chat mark");
-assert(!listingPage.includes("議價") && !listingPage.includes("再議價"), "listing copy does not say 議價");
+assert(
+  purchase.includes(">議價</button>") &&
+    purchase.includes(">聯絡賣家</button>") &&
+    purchase.split("grid-cols-2").length === 3 &&
+    purchase.includes('value="offer"') &&
+    purchase.includes('value="compose"') &&
+    purchase.includes("openThread") &&
+    !purchase.includes("HandoverForm") &&
+    !purchase.includes("聯絡買家") &&
+    !purchase.includes("瀏覽賣家") &&
+    !purchase.includes("送出議價"),
+  "listing price row is 議價 and 聯絡賣家, on the page and in the mobile dock",
+);
+assert(!listingPage.includes("再議價") && !listingPage.includes("聯絡買家") && !listingPage.includes("btn btn-ghost w-full"), "listing bookmark is not the wide primary");
 assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");

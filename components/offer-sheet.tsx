@@ -22,6 +22,7 @@ export function OfferSheet({
   acked,
   persisted,
   prefill = null,
+  priceOnly = false,
   onAcked,
   onClose,
 }: {
@@ -35,6 +36,8 @@ export function OfferSheet({
   persisted: boolean;
   /** 改價回覆 opens this same form with the live price and note. */
   prefill?: { priceCents: number; note: string } | null;
+  /** Listing and chat 議價. Price only; the + menu keeps the note. */
+  priceOnly?: boolean;
   onAcked: () => void;
   onClose: () => void;
 }) {
@@ -44,7 +47,7 @@ export function OfferSheet({
   const locked = offerFormLocked(acked, false);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={tx(locale, "提出要約", "Make offer")}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={priceOnly ? "議價" : tx(locale, "提出要約", "Make offer")}>
       <button type="button" className="absolute inset-0 cursor-default" aria-label={tx(locale, "關閉", "Close")} onClick={onClose} />
       <div className="relative z-10 max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
         <DealDisclaimer className="mb-3" />
@@ -100,31 +103,34 @@ export function OfferSheet({
               {listing.priceCents != null ? <p className="price mt-1 text-sm">{formatHkd(listing.priceCents, locale)}</p> : null}
             </div>
             <label className="grid gap-1 text-xs font-semibold">
-              {tx(locale, "最終價錢", "Final price")}
+              {priceOnly ? "價錢" : tx(locale, "最終價錢", "Final price")}
               <input
                 className="field disabled:opacity-40"
                 name="price"
                 inputMode="decimal"
                 required
                 disabled={locked}
+                autoFocus={priceOnly}
                 defaultValue={prefill ? centsToInput(prefill.priceCents) : listing.priceCents != null ? centsToInput(listing.priceCents) : ""}
                 placeholder="HK$"
-                aria-label={tx(locale, "最終價錢", "Final price")}
+                aria-label={priceOnly ? "價錢" : tx(locale, "最終價錢", "Final price")}
               />
             </label>
-            <label className="grid gap-1 text-xs font-semibold">
-              {tx(locale, "交收備註", "Handover note")}
-              <input
-                className="field disabled:opacity-40"
-                name="note"
-                maxLength={80}
-                disabled={locked}
-                defaultValue={prefill?.note ?? ""}
-                placeholder={tx(locale, "時間／地點／方式", "Time, place, or method")}
-                aria-label={tx(locale, "交收備註", "Handover note")}
-              />
-            </label>
-            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{tx(locale, "提出要約", "Make offer")}</button>
+            {priceOnly ? null : (
+              <label className="grid gap-1 text-xs font-semibold">
+                {tx(locale, "交收備註", "Handover note")}
+                <input
+                  className="field disabled:opacity-40"
+                  name="note"
+                  maxLength={80}
+                  disabled={locked}
+                  defaultValue={prefill?.note ?? ""}
+                  placeholder={tx(locale, "時間／地點／方式", "Time, place, or method")}
+                  aria-label={tx(locale, "交收備註", "Handover note")}
+                />
+              </label>
+            )}
+            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{priceOnly ? "議價" : tx(locale, "提出要約", "Make offer")}</button>
           </form>
         ) : null}
       </div>
