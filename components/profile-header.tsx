@@ -10,10 +10,10 @@ export type VerificationTierName = "NORMAL" | "TRUSTED" | "MERCHANT";
 /** Four-character pill beside the display name. NORMAL is no badge. */
 export function verificationPill(tier: VerificationTierName): { label: string; className: string } | null {
   if (tier === "TRUSTED") {
-    return { label: "誠信用戶", className: "bg-[#d1fae5] text-[#065f46]" };
+    return { label: "誠信用戶", className: "bg-[#E8F5E9] text-[#1B5E20]" };
   }
   if (tier === "MERCHANT") {
-    return { label: "專業商戶", className: "bg-[#f6e2b3] text-[#9a3412]" };
+    return { label: "專業商戶", className: "bg-[#FFF3E0] text-[#E65100]" };
   }
   return null;
 }
