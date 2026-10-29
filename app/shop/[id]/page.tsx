@@ -37,12 +37,21 @@ export default async function ShopPage({
       <div className="mb-3">
         <ProfileHeader
           locale={locale}
+          userId={seller.id}
+          base={`/shop/${seller.id}`}
           nickname={seller.nickname}
+          username={seller.username}
           avatarUrl={seller.avatarUrl}
           bio={seller.bio}
+          links={seller.profileLinks}
+          interestTags={seller.interestTags}
+          handoverPlace={seller.handoverPlace}
           reviews={board.reviews}
           followers={board.followers}
           completed={board.completed}
+          postCount={board.postCount}
+          listingCount={board.listingCount}
+          self={viewer?.id === seller.id}
         >
           {viewer && viewer.id !== seller.id ? (
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
@@ -55,20 +64,24 @@ export default async function ShopPage({
           ) : null}
         </ProfileHeader>
       </div>
-      <ProfileBoard
-        locale={locale}
-        base={`/shop/${seller.id}`}
-        tab={sp.tab || "posts"}
-        isSelf={viewer?.id === seller.id}
-        posts={board.posts}
-        savedListings={board.savedListings}
-        savedPosts={board.savedPosts}
-        listings={board.listings}
-        reviews={board.reviews}
-        drafts={board.drafts}
-        favIds={board.favIds}
-        viewerId={viewer?.id ?? null}
-      />
+      <div id="profile-posts">
+        <ProfileBoard
+          locale={locale}
+          base={`/shop/${seller.id}`}
+          tab={sp.tab || "posts"}
+          isSelf={viewer?.id === seller.id}
+          posts={board.posts}
+          postsNext={board.postsNext}
+          ownerId={seller.id}
+          savedListings={board.savedListings}
+          savedPosts={board.savedPosts}
+          listings={board.listings}
+          reviews={board.reviews}
+          drafts={board.drafts}
+          favIds={board.favIds}
+          viewerId={viewer?.id ?? null}
+        />
+      </div>
       {viewer && viewer.id !== seller.id ? (
         <details className="mt-6 max-w-lg text-sm">
           <summary className="cursor-pointer text-muted">{tx(locale, "檢舉這位會員", "Report this member")}</summary>

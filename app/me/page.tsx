@@ -1,7 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { tx } from "@/lib/i18n";
 import { profileContent } from "@/lib/profile";
 import { ProfileBoard } from "@/components/profile-board";
 import { ProfileHeader } from "@/components/profile-header";
@@ -18,31 +16,40 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <ProfileHeader
         locale={locale}
+        userId={viewer.id}
+        base="/me"
         nickname={viewer.nickname}
+        username={viewer.username}
         avatarUrl={viewer.avatarUrl}
         bio={viewer.bio}
+        links={viewer.profileLinks}
+        interestTags={viewer.interestTags}
+        handoverPlace={viewer.handoverPlace}
         reviews={board.reviews}
         followers={board.followers}
         completed={board.completed}
-      >
-        <Link href="/me/settings" className="mt-1.5 inline-flex h-8 items-center rounded-full border border-line bg-card px-2.5 text-xs font-semibold">
-          {tx(locale, "編輯個人檔案", "Edit profile")}
-        </Link>
-      </ProfileHeader>
-      <ProfileBoard
-        locale={locale}
-        base="/me"
-        tab={sp.tab || "posts"}
-        isSelf
-        posts={board.posts}
-        savedListings={board.savedListings}
-        savedPosts={board.savedPosts}
-        listings={board.listings}
-        reviews={board.reviews}
-        drafts={board.drafts}
-        favIds={board.favIds}
-        viewerId={viewer.id}
+        postCount={board.postCount}
+        listingCount={board.listingCount}
+        self
       />
+      <div id="profile-posts">
+        <ProfileBoard
+          locale={locale}
+          base="/me"
+          tab={sp.tab || "posts"}
+          isSelf
+          posts={board.posts}
+          postsNext={board.postsNext}
+          ownerId={viewer.id}
+          savedListings={board.savedListings}
+          savedPosts={board.savedPosts}
+          listings={board.listings}
+          reviews={board.reviews}
+          drafts={board.drafts}
+          favIds={board.favIds}
+          viewerId={viewer.id}
+        />
+      </div>
     </div>
   );
 }

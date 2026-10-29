@@ -35,18 +35,87 @@ const postInclude = {
   },
 } as const;
 
+export const PROFILE_POST_PAGE = 12;
+
+export function encodePostCursor(createdAt: Date, id: string): string {
+  return `${createdAt.toISOString()}|${id}`;
+}
+
+export function decodePostCursor(raw: string | null | undefined): { createdAt: Date; id: string } | null {
+  if (!raw) return null;
+  const cut = raw.indexOf("|");
+  if (cut <= 0) return null;
+  const createdAt = new Date(raw.slice(0, cut));
+  const id = raw.slice(cut + 1);
+  if (!id || id.length > 40 || !/^[\w-]+$/.test(id) || Number.isNaN(createdAt.getTime())) return null;
+  return { createdAt, id };
+}
+
+function profilePostWhere(ownerId: string, isSelf: boolean, hideIds: string[], cursor: { createdAt: Date; id: string } | null) {
+  const visibility = isSelf
+    ? { authorId: ownerId }
+    : {
+        authorId: ownerId,
+        OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" as const } }],
+      };
+  const older = cursor
+    ? {
+        OR: [
+          { createdAt: { lt: cursor.createdAt } },
+          { AND: [{ createdAt: cursor.createdAt }, { id: { lt: cursor.id } }] },
+        ],
+      }
+    : null;
+  const hidden = hideIds.length ? { id: { notIn: hideIds } } : null;
+  return { AND: [visibility, ...(older ? [older] : []), ...(hidden ? [hidden] : [])] };
+}
+
+type ProfilePostRow = Awaited<ReturnType<typeof prisma.post.findMany<{ include: typeof postInclude }>>>[number];
+
+function toProfileCards(rows: ProfilePostRow[], viewerId: string | null): PostCardModel[] {
+  return rows.map((row) =>
+    toPostCard({
+      postId: row.id,
+      body: row.body,
+      tags: row.tags,
+      author: row.author,
+      photos: row.photos,
+      item: row.collectionItem,
+      likeCount: row._count.likes,
+      commentCount: row._count.comments,
+      liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
+      saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
+    }),
+  );
+}
+
+/** One page of the profile grid. ponytail: 12 posts; the client follows `next`. */
+export async function profilePostsPage(ownerId: string, viewerId: string | null, cursorRaw: string | null, hidePostIds?: string[]) {
+  const isSelf = viewerId === ownerId;
+  const hideIds = hidePostIds ?? (viewerId && !isSelf ? (await feedHideIds(viewerId)).postIds : []);
+  const where = profilePostWhere(ownerId, isSelf, hideIds, decodePostCursor(cursorRaw));
+  const rows = await prisma.post.findMany({
+    where,
+    include: postInclude,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: PROFILE_POST_PAGE + 1,
+  });
+  const hasMore = rows.length > PROFILE_POST_PAGE;
+  const page = hasMore ? rows.slice(0, PROFILE_POST_PAGE) : rows;
+  const last = page[page.length - 1];
+  return {
+    posts: toProfileCards(page, viewerId),
+    next: hasMore && last ? encodePostCursor(last.createdAt, last.id) : null,
+  };
+}
+
 export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
-  const [postRows, listings, reviewRows, drafts, followers, completed, favs, hides, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
-    prisma.post.findMany({
-      where: {
-        authorId: ownerId,
-        ...(isSelf ? {} : { OR: [{ collectionItemId: null }, { collectionItem: { visibility: "PUBLIC" } }] }),
-      },
-      include: postInclude,
-      orderBy: { createdAt: "desc" },
-      take: 24,
-    }),
+  const hides = viewerId && !isSelf ? await feedHideIds(viewerId) : { postIds: [] as string[] };
+  const [postPage, postCount, listingCount, listings, reviewRows, drafts, followers, completed, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
+    profilePostsPage(ownerId, viewerId, null, hides.postIds),
+    prisma.post.count({ where: profilePostWhere(ownerId, isSelf, hides.postIds, null) }),
+    prisma.listing.count({ where: { sellerId: ownerId, status: "ACTIVE", quantityAvailable: { gt: 0 } } }),
     prisma.listing.findMany({
       where: { sellerId: ownerId, status: "ACTIVE", quantityAvailable: { gt: 0 } },
       include: cardInclude,
@@ -70,7 +139,6 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     prisma.follow.count({ where: { sellerId: ownerId } }),
     prisma.order.count({ where: { sellerId: ownerId, status: "COMPLETED" } }),
     viewerId ? prisma.favorite.findMany({ where: { userId: viewerId, listing: { sellerId: ownerId } }, select: { listingId: true } }) : Promise.resolve([]),
-    feedHideIds(viewerId),
     isSelf
       ? prisma.favorite.findMany({
           where: { userId: ownerId },
@@ -112,24 +180,6 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     isSelf ? hiddenUserIds(ownerId) : Promise.resolve([]),
   ]);
 
-  const hiddenPosts = new Set(hides.postIds);
-  const posts: PostCardModel[] = postRows
-    .filter((row) => row.authorId === viewerId || !hiddenPosts.has(row.id))
-    .map((row) =>
-    toPostCard({
-      postId: row.id,
-      body: row.body,
-      tags: row.tags,
-      author: row.author,
-      photos: row.photos,
-      item: row.collectionItem,
-      likeCount: row._count.likes,
-      commentCount: row._count.comments,
-      liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
-      saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
-    }),
-  );
-
   const blocked = new Set(blockedIds);
   const savedListings: ProfileThumb[] = savedListingRows.map((row) => ({
     id: row.id,
@@ -148,7 +198,10 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     }));
 
   return {
-    posts,
+    posts: postPage.posts,
+    postsNext: postPage.next,
+    postCount,
+    listingCount,
     savedListings,
     savedPosts,
     // Dates on the Prisma row cannot cross into the client profile board.

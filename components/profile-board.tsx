@@ -51,6 +51,8 @@ export function ProfileBoard({
   reviews,
   drafts,
   viewerId,
+  ownerId,
+  postsNext,
 }: {
   locale: Locale;
   base: string;
@@ -64,6 +66,8 @@ export function ProfileBoard({
   drafts: Draft[];
   favIds: string[];
   viewerId: string | null;
+  ownerId: string;
+  postsNext: string | null;
 }) {
   // Legacy ?tab=box was the owned-card grid. It now opens My Binder (own posts).
   const [tab, setTab] = useState(() => shownTab(initial, isSelf));
@@ -192,27 +196,7 @@ export function ProfileBoard({
   function panel(id: string) {
     if (id === "posts") {
       return posts.length ? (
-        <ul className="grid grid-cols-3 gap-px">
-          {posts.map((post) => (
-            <li key={post.id} className="min-w-0">
-              <PostMenu
-                locale={locale}
-                postId={post.postId}
-                listingId={post.listingId}
-                own={viewerId != null && viewerId === post.author.id}
-                loggedIn={viewerId != null}
-                sharePath={post.sharePath}
-                next={base}
-                button={false}
-              >
-                <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
-                  <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                  {post.photos.length > 1 ? <StackMark /> : null}
-                </Link>
-              </PostMenu>
-            </li>
-          ))}
-        </ul>
+        <LazyPostGrid locale={locale} base={base} posts={posts} viewerId={viewerId} ownerId={ownerId} next={id === tab ? postsNext : null} />
       ) : (
         <p className="empty mx-3 sm:mx-0">
           {isSelf ? (
@@ -367,6 +351,104 @@ export function ProfileBoard({
         </div>
       )}
     </div>
+  );
+}
+
+function LazyPostGrid({
+  locale,
+  base,
+  posts,
+  viewerId,
+  ownerId,
+  next,
+}: {
+  locale: Locale;
+  base: string;
+  posts: PostCardModel[];
+  viewerId: string | null;
+  ownerId: string;
+  next: string | null;
+}) {
+  const [rows, setRows] = useState(posts);
+  const [cursor, setCursor] = useState(next);
+  const lock = useRef(false);
+  const sentinel = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setRows(posts);
+    setCursor(next);
+  }, [posts, next]);
+
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!el || !cursor) return;
+    const token = cursor;
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting) || lock.current) return;
+      lock.current = true;
+      fetch(`/api/profile/${ownerId}/posts?cursor=${encodeURIComponent(token)}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: { posts?: PostCardModel[]; next?: string | null } | null) => {
+          if (!data?.posts) {
+            setCursor(null);
+            return;
+          }
+          setRows((prev) => {
+            const seen = new Set(prev.map((row) => row.id));
+            return [...prev, ...data.posts!.filter((row) => !seen.has(row.id))];
+          });
+          setCursor(data.next ?? null);
+        })
+        .catch(() => setCursor(null))
+        .finally(() => {
+          lock.current = false;
+        });
+    }, { rootMargin: "240px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [cursor, ownerId]);
+
+  return (
+    <>
+      <PostTiles locale={locale} base={base} posts={rows} viewerId={viewerId} />
+      {cursor ? <div ref={sentinel} className="h-8" /> : null}
+    </>
+  );
+}
+
+function PostTiles({
+  locale,
+  base,
+  posts,
+  viewerId,
+}: {
+  locale: Locale;
+  base: string;
+  posts: PostCardModel[];
+  viewerId: string | null;
+}) {
+  return (
+    <ul className="grid grid-cols-3 gap-px">
+      {posts.map((post) => (
+        <li key={post.id} className="min-w-0">
+          <PostMenu
+            locale={locale}
+            postId={post.postId}
+            listingId={post.listingId}
+            own={viewerId != null && viewerId === post.author.id}
+            loggedIn={viewerId != null}
+            sharePath={post.sharePath}
+            next={base}
+            button={false}
+          >
+            <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
+              <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+              {post.photos.length > 1 ? <StackMark /> : null}
+            </Link>
+          </PostMenu>
+        </li>
+      ))}
+    </ul>
   );
 }
 
