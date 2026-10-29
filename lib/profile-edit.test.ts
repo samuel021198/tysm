@@ -84,6 +84,20 @@ const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url),
 assert(me.includes("verificationTier={viewer.verificationTier}") && shop.includes("verificationTier={seller.verificationTier}"), "own profile and public shop pass the stored tier");
 assert(!editForm.includes("verificationTier") && !editForm.includes("誠信用戶") && !edit.includes("HKID"), "profile edit does not collect verification");
 assert(header.includes("TopicChips") && header.includes("mapsSearchUrl") && header.includes("bio"), "tags, handover place, and bio sit on the header");
+assert(!header.includes("@{username}") && !header.includes("用戶名稱") && !header.includes("username"), "the profile name is the display name, with no handle");
+const followers = readFileSync(new URL("../app/shop/[id]/followers/page.tsx", import.meta.url), "utf8");
+assert(!followers.includes("@{") && !followers.includes("username"), "follower rows show the display name only");
+const shopActions = shop.slice(shop.indexOf('className="mt-3 flex items-center gap-2"'));
+assert(
+  shopActions.includes('aria-label={tx(locale, "訊息", "Message")}') &&
+    shopActions.includes("openDirectThread") &&
+    shopActions.includes('name="messages"') &&
+    shopActions.includes("已關注") &&
+    shopActions.indexOf("PersonMenu") > shopActions.indexOf("openDirectThread") &&
+    shopActions.indexOf("openDirectThread") > shopActions.indexOf("toggleFollow"),
+  "another profile puts a speech-bubble 訊息 between 關注 and the ellipsis",
+);
+assert(shop.includes("viewer.id !== seller.id") && !me.includes("openDirectThread") && !me.includes('aria-label={tx(locale, "訊息"'), "your own profile has no message button");
 assert(editForm.includes("name=\"nickname\"") && editForm.includes("name=\"username\"") && editForm.includes("name=\"bio\"") && editForm.includes("name=\"link\"") && editForm.includes("name=\"handoverPlace\"") && editForm.includes("name=\"interestTags\""), "edit profile is a field form");
 assert(edit.includes("BIO_MAX") && edit.includes("usernameChangesRemaining"), "the form shows the bio ceiling and the handle allowance");
 assert(!settings.includes("/me/edit") && !settings.includes("/me/footprint") && !settings.includes('"/orders"') && !settings.includes("saveAddress") && !settings.includes("/me/favorites"), "settings does not hold edit, footprint, orders, addresses, or favorites");

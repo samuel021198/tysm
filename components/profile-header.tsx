@@ -48,7 +48,6 @@ export function ProfileHeader({
   userId,
   base,
   nickname,
-  username,
   avatarUrl,
   bio,
   links,
@@ -66,7 +65,6 @@ export function ProfileHeader({
   userId: string;
   base: string;
   nickname: string;
-  username: string | null;
   avatarUrl: string | null;
   bio: string | null;
   links: string[];
@@ -130,12 +128,6 @@ export function ProfileHeader({
             <VerificationPill tier={verificationTier} />
             {rating ? <RatingPill locale={locale} average={rating.average} count={rating.count} /> : null}
           </span>
-          {username ? <span className="ml-1.5 font-normal text-muted">@{username}</span> : null}
-          {!username && self ? (
-            <Link href="/me/edit" className="ml-1.5 font-normal text-link">
-              @{tx(locale, "用戶名稱", "username")}
-            </Link>
-          ) : null}
         </h1>
         {blurb ? <BioText text={blurb} /> : null}
         <TopicChips tags={interestTags.slice(0, 8)} className="mt-1" />

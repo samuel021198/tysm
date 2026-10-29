@@ -79,11 +79,20 @@ assert(/\{stream \? \([\s\S]*pending\.amount[\s\S]*\) : \(/.test(deal) && deal.i
 assert(!orderPage.includes("送出評價") && !orderPage.includes("confirmAction") && orderPage.includes("打開聊天"), "the handover page is a status mirror back into the chat");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
 assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
-const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openThread"));
+const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openDirectThread"));
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
 const openedThread = social.slice(social.indexOf("export async function openThread"), social.indexOf("export async function sendMessage"));
 assert(openedThread.includes('focus === "offer"') && openedThread.includes("?offer=1") && openedThread.includes('focus === "compose"') && openedThread.includes("?compose=1"), "議價 and 聯絡賣家 open the same listing thread");
 assert(!openedThread.includes("message.create"), "議價 and 聯絡賣家 do not post a listing message on open");
+const direct = social.slice(social.indexOf("export async function openDirectThread"), social.indexOf("export async function openThread"));
+assert(
+  direct.includes("listingId: null") &&
+    direct.includes("buyerId: user.id, sellerId: otherId") &&
+    direct.includes("buyerId: otherId, sellerId: user.id") &&
+    direct.includes("redirect(`/messages/${thread.id}`)") &&
+    !direct.includes("listingId,"),
+  "a profile message opens or creates a thread with no listing pin",
+);
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
 assert(page.includes('href="/messages"') && page.includes("thread-bar") && page.includes("返回訊息"), "the thread bar goes back to the inbox");

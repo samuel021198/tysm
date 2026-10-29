@@ -132,6 +132,33 @@ export async function startHandover(formData: FormData) {
   redirect(`/messages/${result.threadId}`);
 }
 
+/** Profile 「訊息」. Reuses the newest listing-free thread, either direction. A product thread stays pinned. */
+export async function openDirectThread(formData: FormData) {
+  const otherId = String(formData.get("userId") || "");
+  const user = await viewer(otherId ? `/shop/${otherId}` : "/");
+  if (!otherId || otherId === user.id) redirect(`/shop/${user.id}?err=own`);
+  const other = await prisma.user.findUnique({ where: { id: otherId }, select: { id: true } });
+  if (!other) redirect("/?err=forbidden");
+  if (await isBlocked(user.id, otherId)) redirect(`/shop/${otherId}?err=blocked`);
+  // ponytail: two taps at once can open two listing-free threads. Upgrade path: a partial unique on the pair where listingId is null.
+  const existing = await prisma.messageThread.findFirst({
+    where: {
+      listingId: null,
+      OR: [
+        { buyerId: user.id, sellerId: otherId },
+        { buyerId: otherId, sellerId: user.id },
+      ],
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  const thread =
+    existing ??
+    (await prisma.messageThread.create({
+      data: { buyerId: user.id, sellerId: otherId },
+    }));
+  redirect(`/messages/${thread.id}`);
+}
+
 export async function openThread(formData: FormData) {
   const listingId = String(formData.get("listingId") || "");
   const user = await viewer(`/listing/${listingId}`);

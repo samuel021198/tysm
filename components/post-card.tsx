@@ -23,6 +23,7 @@ export function PostCard({
   next = "/",
   gallery = false,
   viewerId = null,
+  sellHref = null,
 }: {
   post: PostCardModel;
   locale: Locale;
@@ -31,6 +32,8 @@ export function PostCard({
   next?: string;
   gallery?: boolean;
   viewerId?: string | null;
+  /** Author 「放賣」. Sits on the price row when this card already shows a price. */
+  sellHref?: string | null;
 }) {
   const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
   const likeFormId = post.likePostId ? `like-${post.id}` : undefined;
@@ -56,7 +59,9 @@ export function PostCard({
         ) : (
           <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
         )}
-        {buy && post.listingId ? (
+        {sellHref ? (
+          <Link href={sellHref} className="btn btn-primary shrink-0">{tx(locale, "放賣", "List for sale")}</Link>
+        ) : buy && post.listingId ? (
           <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} layout="row" />
         ) : null}
       </div>

@@ -7,7 +7,8 @@ import { ProfileBoard } from "@/components/profile-board";
 import { ProfileHeader } from "@/components/profile-header";
 import { Flash } from "@/components/shell";
 import { profileContent } from "@/lib/profile";
-import { toggleFollow } from "@/actions/social";
+import { openDirectThread, toggleFollow } from "@/actions/social";
+import { Icon } from "@/components/icons";
 import { PersonMenu } from "@/components/safety-menu";
 
 export default async function ShopPage({
@@ -40,7 +41,6 @@ export default async function ShopPage({
           userId={seller.id}
           base={`/shop/${seller.id}`}
           nickname={seller.nickname}
-          username={seller.username}
           avatarUrl={seller.avatarUrl}
           bio={seller.bio}
           links={seller.profileLinks}
@@ -57,7 +57,13 @@ export default async function ShopPage({
             <div className="mt-3 flex items-center gap-2">
               <form action={toggleFollow} className="min-w-0 flex-1">
                 <input type="hidden" name="sellerId" value={seller.id} />
-                <button className="btn btn-ghost w-full">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注", "Follow")}</button>
+                <button className="btn btn-ghost w-full">{following ? tx(locale, "已關注", "Following") : tx(locale, "關注", "Follow")}</button>
+              </form>
+              <form action={openDirectThread}>
+                <input type="hidden" name="userId" value={seller.id} />
+                <button type="submit" className="btn btn-ghost w-11 shrink-0 px-0" aria-label={tx(locale, "訊息", "Message")}>
+                  <Icon name="messages" className="h-5 w-5" strokeWidth={2.25} />
+                </button>
               </form>
               <PersonMenu
                 locale={locale}

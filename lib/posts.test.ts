@@ -333,6 +333,15 @@ const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.u
 assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
 assert(!postPage.includes("睇圖鑑") && !postPage.includes("/dex") && !postPage.includes("喺賣場查看"), "post detail does not send people to the dex or back through the market");
 assert(postPage.includes("睇貨頁") && postPage.includes("listingPageHref"), "a post with a listing offers 睇貨頁");
+assert(
+  postPage.includes("btn btn-primary w-full") &&
+    postPage.includes('card.priceCents == null') &&
+    postPage.includes("!post.collectionItem.listingId") &&
+    !postPage.includes("w-fit") &&
+    postCard.includes("sellHref") &&
+    postCard.includes('className="btn btn-primary shrink-0">{tx(locale, "放賣", "List for sale")}'),
+  "an unpriced post uses a full-width 放賣 pill; a priced post row keeps the price and puts 放賣 on the right",
+);
 assert(!postPage.includes("addComment"), "the post page does not submit comments through a navigation");
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
@@ -360,6 +369,7 @@ assert(
   "listing price row is 議價 and 聯絡賣家, on the page and in the mobile dock",
 );
 assert(!listingPage.includes("再議價") && !listingPage.includes("聯絡買家") && !listingPage.includes("btn btn-ghost w-full"), "listing bookmark is not the wide primary");
+assert(!listingPage.includes("放賣") && !purchase.includes("放賣"), "listing pages keep 議價 and 聯絡賣家, with no 放賣");
 assert(listingPage.includes("offersClosed") && listingPage.includes('shopPillLabel(locale, "RESERVED")') && listingPage.includes("offerClosed={offerClosed}"), "a held listing shows 已保留 and disables 議價");
 assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");
