@@ -6,6 +6,9 @@ export type AuctionDays = (typeof AUCTION_DAYS)[number];
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/** 新上架 is listings published inside this window. 全部 is every live listing. */
+export const NEW_LISTING_MS = 7 * DAY_MS;
+
 export function isAuctionDays(value: number | null | undefined): value is AuctionDays {
   return value === 1 || value === 3 || value === 5 || value === 7;
 }

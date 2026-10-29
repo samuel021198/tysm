@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { shopTab, type ShopTab } from "@/lib/auction";
+import { NEW_LISTING_MS, shopTab, type ShopTab } from "@/lib/auction";
 import { activeWhere } from "@/lib/feed";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
+import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
 export const metadata = { title: "商店" };
 
@@ -25,10 +26,12 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
   const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
   const locale = prefs.locale;
   const showListings = tab !== "shops";
+  const recentSince = new Date(Date.now() - NEW_LISTING_MS);
   const listings = showListings
     ? await prisma.listing.findMany({
         where: {
           ...activeWhere(hidden),
+          ...(tab === "new" ? { publishedAt: { gte: recentSince } } : {}),
           ...(tab === "auction" ? { saleType: { in: ["AUCTION", "BOTH"] as const } } : {}),
           ...(hides.listingIds.length ? { id: { notIn: hides.listingIds } } : {}),
         },
@@ -48,26 +51,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
         },
       })
     : [];
-  const stores = tab === "shops"
-    ? await prisma.user.findMany({
-        where: { storeName: { not: null }, ...(hidden.length ? { id: { notIn: hidden } } : {}) },
-        orderBy: { updatedAt: "desc" },
-        take: 24,
-        select: {
-          id: true,
-          nickname: true,
-          storeName: true,
-          storeDistrict: true,
-          avatarUrl: true,
-          listings: {
-            where: activeWhere([]),
-            orderBy: { publishedAt: "desc" },
-            take: 1,
-            select: { photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } } },
-          },
-        },
-      })
-    : [];
+  const storeRows = tab === "shops" ? await loadStores(hidden, recentSince) : [];
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -85,28 +69,16 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
         ))}
       </nav>
       {tab === "shops" ? (
-        stores.length === 0 ? (
+        storeRows.length === 0 ? (
           <Empty locale={locale} text={["暫時未有商店。", "No shops yet."]} />
         ) : (
-          <div className="feed">
-            {stores.map((store) => {
-              const name = store.storeName || store.nickname;
-              const cover = store.listings[0]?.photos[0]?.url || store.avatarUrl;
-              return (
-                <Link key={store.id} href={`/shop/${store.id}`} className="surface flex h-full flex-col overflow-hidden">
-                  {cover ? (
-                    <img src={cover} alt="" className="block aspect-[4/5] w-full bg-soft object-cover" />
-                  ) : (
-                    <span className="grid aspect-[4/5] w-full place-items-center bg-accent text-3xl font-semibold text-white">{name.slice(0, 1)}</span>
-                  )}
-                  <span className="grid gap-0.5 px-2.5 py-2">
-                    <span className="truncate text-sm font-semibold">{name}</span>
-                    {store.storeDistrict ? <span className="truncate text-xs text-muted">{store.storeDistrict}</span> : null}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+          <ul className="grid gap-2">
+            {storeRows.map((store) => (
+              <li key={store.id}>
+                <StoreRow locale={locale} store={store} />
+              </li>
+            ))}
+          </ul>
         )
       ) : listings.length === 0 ? (
         <Empty locale={locale} text={tab === "auction" ? ["暫時未有拍賣。", "No auctions yet."] : ["暫時未有貨品。", "Nothing listed yet."]} />
@@ -155,6 +127,82 @@ function MallCard({
   );
 }
 
+function StoreRow({
+  locale,
+  store,
+}: {
+  locale: Locale;
+  store: {
+    id: string;
+    nickname: string;
+    storeName: string | null;
+    avatarUrl: string | null;
+    verificationTier: VerificationTierName;
+    listings: number;
+    recent: number;
+  };
+}) {
+  const name = store.storeName?.trim() || store.nickname;
+  const counts = tx(locale, `${store.listings} 件 · ${store.recent} 新上架`, `${store.listings} listings · ${store.recent} new`);
+  return (
+    <Link href={`/shop/${store.id}`} className="flex items-center gap-3 rounded-2xl border border-line bg-card px-3 py-2.5">
+      {store.avatarUrl ? (
+        <img src={store.avatarUrl} alt="" className="h-11 w-11 shrink-0 rounded-full object-cover" />
+      ) : (
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{name.slice(0, 1)}</span>
+      )}
+      <span className="min-w-0 flex-1">
+        <span className="flex min-w-0 items-center gap-1.5">
+          <span className="truncate text-[15px] font-semibold">{name}</span>
+          <VerificationPill tier={store.verificationTier} />
+        </span>
+        <span className="mt-0.5 block truncate text-xs text-muted">{counts}</span>
+      </span>
+    </Link>
+  );
+}
+
+async function loadStores(hidden: string[], recentSince: Date) {
+  const rows = await prisma.user.findMany({
+    where: { storeName: { not: null }, ...(hidden.length ? { id: { notIn: hidden } } : {}) },
+    select: {
+      id: true,
+      nickname: true,
+      storeName: true,
+      avatarUrl: true,
+      verificationTier: true,
+      _count: { select: { listings: { where: activeWhere(hidden) } } },
+    },
+  });
+  const ids = rows.map((row) => row.id);
+  const fresh = ids.length
+    ? await prisma.listing.groupBy({
+        by: ["sellerId"],
+        where: { ...activeWhere(hidden), sellerId: { in: ids }, publishedAt: { gte: recentSince } },
+        _count: { _all: true },
+      })
+    : [];
+  const recent = new Map(fresh.map((row) => [row.sellerId, row._count._all]));
+  return rows
+    .map((row) => ({
+      id: row.id,
+      nickname: row.nickname,
+      storeName: row.storeName,
+      avatarUrl: row.avatarUrl,
+      verificationTier: row.verificationTier,
+      listings: row._count.listings,
+      recent: recent.get(row.id) ?? 0,
+    }))
+    .sort((a, b) => b.listings - a.listings || a.nickname.localeCompare(b.nickname, "zh-HK"))
+    // ponytail: 48 shops, counted in memory. Upgrade: SQL order by the active listing count.
+    .slice(0, 48);
+}
+
 function Empty({ locale, text }: { locale: Locale; text: [string, string] }) {
-  return <p className="py-10 text-center text-sm text-muted">{tx(locale, text[0], text[1])}</p>;
+  return (
+    <div className="grid justify-items-center gap-3 py-10">
+      <p className="text-center text-sm text-muted">{tx(locale, text[0], text[1])}</p>
+      <Link href="/sell" className="btn btn-primary">{tx(locale, "去放賣", "List something")}</Link>
+    </div>
+  );
 }

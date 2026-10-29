@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import {
+  NEW_LISTING_MS,
   auctionOutcome,
   auctionSchedule,
   isAuctionDays,
@@ -47,10 +48,12 @@ assert(moved.auctionEndsAt?.getTime() === now.getTime() + 86400000, "a new lengt
 assert(auctionSchedule({ saleType: "BUY_NOW", auctionDays: 3, fallbackEnd: keptEnd, publishAt: null, now, existing: null }).auctionEndsAt === null, "fixed price clears the auction clock");
 assert(isAuctionDays(1) && isAuctionDays(7) && !isAuctionDays(2), "only 1, 3, 5, 7");
 assert(shopTab(undefined) === "all" && shopTab("new") === "new" && shopTab("auction") === "auction" && shopTab("shops") === "shops" && shopTab("nope") === "all", "mall chips");
+assert(NEW_LISTING_MS === 7 * 86400000, "新上架 is the last 7 days");
 
 const shop = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
 assert(shop.includes("全部") && shop.includes("新上架") && shop.includes("拍賣") && shop.includes("商店"), "mall chips are 全部, 新上架, 拍賣, 商店");
-assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("/shop/${store.id}"), "listing cards show the bid and the store; store cards open the shop");
+assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("/shop/${store.id}") && shop.includes("NEW_LISTING_MS"), "listing cards show the bid and the store; 新上架 uses the recent window");
+assert(shop.includes("VerificationPill") && shop.includes("avatarUrl") && shop.includes("去放賣") && shop.includes('href="/sell"') && !shop.includes("listings[0]"), "store rows are avatar, name, pill, and counts; empty states offer 去放賣");
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
 assert(sell.includes("固定價") && sell.includes("起標價") && sell.includes("買家唔見") && sell.includes("[1, 3, 5, 7]"), "create listing offers fixed or auction with the locked fields");
 const panel = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
