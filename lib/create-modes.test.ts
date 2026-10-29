@@ -42,13 +42,13 @@ const top = readFileSync(new URL("../components/top-bar.tsx", import.meta.url), 
 assert(shell.includes("<TopBar") && !shell.includes('variant="corner"') && !shell.includes("absolute inset-y-0 right-1"), "mobile header is the top bar; the corner add is gone");
 assert(top.includes("md:hidden") && top.includes("grid-cols-5") && top.includes("h-[3.25rem]") && top.includes("max-w-lg"), "top bar matches the bottom 5-column grid and height");
 const homeSlot = top.indexOf('href="/"');
-const auctionSlot = top.indexOf('href="/find"');
+const rankSlot = top.indexOf('href="/rank"');
 const createSlot = top.indexOf('variant="top"');
 const notesSlot = top.indexOf('href="/notifications"');
 const inboxSlot = top.indexOf('href="/messages"');
-assert(homeSlot >= 0 && homeSlot < auctionSlot && auctionSlot < createSlot && createSlot < notesSlot && notesSlot < inboxSlot, "top order is home, auction, create, notifications, messages");
+assert(homeSlot >= 0 && homeSlot < rankSlot && rankSlot < createSlot && createSlot < notesSlot && notesSlot < inboxSlot, "top order is home, rankings, create, notifications, messages");
 assert(top.includes("tsm-monogram.png") && top.includes("主頁") && !top.includes("tysm-wordmark"), "home slot is the monogram");
-assert(top.includes("拍賣") && top.includes('icon="tag"') && top.includes("h-[22px]") && !top.includes("gavel"), "auction uses the tag stroke at 22px and links to find");
+assert(top.includes("排行榜") && top.includes('icon="rank"') && top.includes("h-[22px]") && !top.includes('href="/find"') && !top.includes("拍賣") && !top.includes('icon="tag"'), "rankings uses the rank stroke at 22px; auction is off the top bar");
 assert(top.includes("通知") && top.includes("訊息") && top.includes("aria-label") && !top.includes("<span>{label}</span>"), "top items are icon-only with Chinese names");
 assert(top.includes("strokeWidth={on ? 2 : 1.6}"), "top strokes match the bottom bar");
 assert(shell.includes('src="/brand/tsm-monogram.png"'), "desktop header keeps the TSM monogram");

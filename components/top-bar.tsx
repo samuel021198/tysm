@@ -10,8 +10,7 @@ import { Icon } from "./icons";
 export function TopBar({ locale, loggedIn, unread }: { locale: Locale; loggedIn: boolean; unread: number }) {
   const pathname = usePathname();
   const homeOn = pathname === "/";
-  // ponytail: no auction page yet — this slot is /find until Trader adds an auction filter.
-  const auctionOn = pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search");
+  const rankOn = pathname === "/rank" || pathname.startsWith("/rank/");
   const notesOn = pathname === "/notifications" || pathname.startsWith("/notifications/");
   const messagesOn = pathname === "/messages" || pathname.startsWith("/messages/");
 
@@ -28,7 +27,7 @@ export function TopBar({ locale, loggedIn, unread }: { locale: Locale; loggedIn:
             <img src="/brand/tsm-monogram.png" alt="" className="block h-7 w-auto bg-transparent" />
           </Link>
         </li>
-        <Slot href="/find" label={tx(locale, "拍賣", "Auction")} icon="tag" on={auctionOn} />
+        <Slot href="/rank" label={tx(locale, "排行榜", "Rankings")} icon="rank" on={rankOn} />
         <li className="grid h-full place-items-center">
           <CreatePicker locale={locale} loggedIn={loggedIn} variant="top" />
         </li>
@@ -48,7 +47,7 @@ function Slot({
 }: {
   href: string;
   label: string;
-  icon: "tag" | "bell" | "messages";
+  icon: "rank" | "bell" | "messages";
   on: boolean;
   badge?: number;
 }) {
