@@ -51,6 +51,8 @@ assert(
   "the star form sits on the chat bubble only after DONE",
 );
 assert(deal.includes("已評分") && !deal.includes("rating.update") && !deal.includes("再評"), "a sent rating is shown and there is no re-rate control");
+const ratingForm = readFileSync(new URL("../components/deal-rating-form.tsx", import.meta.url), "utf8");
+assert(ratingForm.includes("評分") && !ratingForm.includes("送出評分"), "the submit label is 評分");
 const header = readFileSync(new URL("../components/profile-header.tsx", import.meta.url), "utf8");
 const listing = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
 assert(header.includes("<RatingPill") && listing.includes("<RatingPill") && listing.includes("listing.seller.nickname"), "the score sits beside the profile name and the listing seller");

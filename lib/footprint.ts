@@ -4,17 +4,18 @@ import type { Locale } from "./i18n";
 import { hiddenUserIds } from "./social";
 
 /** Open-deal groups on 我的足跡. Done deals leave this strip. */
-export type OpenGroup = "offering" | "handover" | "finishing" | "ended";
+export type OpenGroup = "offering" | "locked" | "handover" | "ended";
 
-export type FootprintKind = "offering" | "handover" | "finishing" | "cancelled" | "declined" | "expired" | "withdrawn" | "done";
+export type FootprintKind = "offering" | "locked" | "handover" | "cancelled" | "declined" | "expired" | "withdrawn" | "done";
 
-/** 交易中 phases: 要約中, 待交收, 待完成. Cancelled deals fold into 已結束. */
+/** 交易中: 要約中, 已鎖貨, 待交收. Cancelled deals fold into 已結束. */
 export function openDealGroup(phase: DealPhase): OpenGroup | null {
   if (phase === "DONE") return null;
   if (phase === "CANCELLED") return "ended";
   if (phase === "CHATTING") return "offering";
-  if (phase === "ARRANGED" || phase === "CONFIRMED") return "handover";
-  return "finishing";
+  if (phase === "CONFIRMED") return "locked";
+  if (phase === "ARRANGED" || phase === "PROOF" || phase === "SELLER_PAID") return "handover";
+  return null;
 }
 
 /** Seller inbox and the buyer's open offer. Accepted offers are the order, not a second row. */
@@ -43,8 +44,8 @@ export function dealKind(phase: DealPhase): FootprintKind | null {
 export function footprintStatusLabel(locale: Locale, kind: FootprintKind): string {
   const zh: Record<FootprintKind, string> = {
     offering: "要約中",
+    locked: "已鎖貨",
     handover: "待交收",
-    finishing: "待完成",
     cancelled: "已取消",
     declined: "已拒絕",
     expired: "已過期",
@@ -53,8 +54,8 @@ export function footprintStatusLabel(locale: Locale, kind: FootprintKind): strin
   };
   const en: Record<FootprintKind, string> = {
     offering: "Offer",
+    locked: "Locked",
     handover: "To hand over",
-    finishing: "To finish",
     cancelled: "Cancelled",
     declined: "Declined",
     expired: "Expired",
@@ -76,8 +77,8 @@ export type FootprintRow = {
 
 export type FootprintBoard = {
   offering: FootprintRow[];
+  locked: FootprintRow[];
   handover: FootprintRow[];
-  finishing: FootprintRow[];
   ended: FootprintRow[];
   sold: FootprintRow[];
   bought: FootprintRow[];
@@ -127,7 +128,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
     if (!threadsByDeal.has(key)) threadsByDeal.set(key, thread.id);
   }
 
-  const board: FootprintBoard = { offering: [], handover: [], finishing: [], ended: [], sold: [], bought: [] };
+  const board: FootprintBoard = { offering: [], locked: [], handover: [], ended: [], sold: [], bought: [] };
   const openDeals = new Set<string>();
 
   for (const order of orders) {
@@ -144,7 +145,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
       : undefined;
     const row: FootprintRow = {
       id: `order:${order.id}`,
-      href: href ? `/messages/${href}` : `/orders/${order.id}`,
+      href: href ? `/messages/${href}` : `/orders/${order.id}/chat`,
       title: order.items.map((line) => line.title).filter(Boolean).join("、") || "—",
       priceCents: order.total,
       photo: item?.imageUrl ?? null,
@@ -157,8 +158,8 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
       continue;
     }
     if (kind === "offering") board.offering.push(row);
+    else if (kind === "locked") board.locked.push(row);
     else if (kind === "handover") board.handover.push(row);
-    else if (kind === "finishing") board.finishing.push(row);
     else board.ended.push(row);
   }
 

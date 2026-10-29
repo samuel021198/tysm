@@ -137,8 +137,10 @@ export function Footer({ locale }: { locale: Locale }) {
 export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: string }) {
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
-    reserved: ["要約已接受，件貨保留中", "Offer accepted. The item is reserved"],
-    released: ["已解除保留", "Hold released"],
+    accepted: ["要約已接受。", "Offer accepted."],
+    locked: ["貨品已鎖定。", "The item is locked."],
+    reserved: ["貨品已鎖定。", "The item is locked."],
+    released: ["已解除鎖定。", "Lock released."],
     offered: ["已提出要約", "Offer sent"],
     withdrawn: ["已撤回要約", "Offer withdrawn"],
     declined: ["已拒絕要約", "Offer declined"],
@@ -152,7 +154,7 @@ export function Flash({ locale, ok, err }: { locale: Locale; ok?: string; err?: 
     bid: ["出價已記錄", "Bid placed"],
     offer: ["傾交收已更新", "Handover updated"],
     paid: ["付款狀態已更新", "Payment updated"],
-    done: ["交收已完成，可以評價", "Handover finished. You can leave a review"],
+    done: ["交易已完成，可以評分。", "The handover is complete. You can rate."],
     dispute: ["爭議已提交", "Dispute submitted"],
     cart: ["已加入購物車", "Added to cart"],
     phone: ["電話已驗證", "Phone verified"],

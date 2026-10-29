@@ -27,13 +27,13 @@ export function ProofForm({ locale, orderId, next }: { locale: Locale; orderId: 
       <input type="hidden" name="next" value={next} />
       <input type="hidden" name="imageUrl" value={imageUrl} />
       <label className={`btn w-full cursor-pointer ${imageUrl ? "btn-ghost" : "btn-primary"}`}>
-        {imageUrl ? tx(locale, "更換證明圖", "Change proof") : tx(locale, "上傳付款證明", "Upload payment proof")}
+        {imageUrl ? tx(locale, "更換圖片", "Change photo") : tx(locale, "上載付款證明", "Upload payment proof")}
         <input ref={fileRef} className="sr-only" type="file" accept="image/*" required={!imageUrl} onChange={(event) => void onFile(event.target.files?.[0])} />
       </label>
       {imageUrl ? <img src={imageUrl} alt="" className="h-24 w-20 rounded-xl bg-soft object-contain" /> : null}
       {note ? <p className="text-sm text-danger">{note}</p> : null}
       {imageUrl ? (
-        <button className="btn btn-primary w-full">{tx(locale, "上傳付款證明", "Upload payment proof")}</button>
+        <button className="btn btn-primary w-full">{tx(locale, "上載付款證明", "Upload payment proof")}</button>
       ) : null}
     </form>
   );

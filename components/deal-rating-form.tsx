@@ -61,7 +61,7 @@ export function DealRatingForm({ locale, orderId }: { locale: Locale; orderId: s
       />
       {error ? <p className="text-center text-xs text-danger">{error}</p> : null}
       <button className="btn btn-primary w-full" disabled={pending || stars < 1}>
-        {tx(locale, "送出評分", "Send rating")}
+        {tx(locale, "評分", "Rate")}
       </button>
     </form>
   );

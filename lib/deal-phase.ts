@@ -6,8 +6,8 @@ import type { Locale } from "./i18n";
 export const DEAL_BANNER = "私下交收・平台唔代收、唔擔保";
 export const DEAL_ACK = "我明白：雙方自行交收，錢貨風險自負；TSM 唔處理付款、爭議或退款。";
 export const DEAL_RISK = "平台只提供配對同聊天紀錄；付款方式、交收、真偽同爭議由買賣雙方自行負責。";
-export const RESERVE_BADGE = "保留中";
-export const RESERVE_BLOCKED = "呢件貨已有人確認，保留中";
+export const RESERVE_BADGE = "已鎖貨";
+export const RESERVE_BLOCKED = "此貨品已鎖定。";
 export const OFFER_EMPTY = "對方而家冇可要約嘅貨";
 export const OFFER_NOTE_MAX = 80;
 
@@ -97,11 +97,16 @@ export function offerAckGate(
   return { ok: false, error: "deal_ack" };
 }
 
-/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. */
-export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false, proposer = false): boolean {
-  if (blocked) return false;
+/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. An accepted offer waits for the seller lock. */
+export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false, proposer = false, accepted = false): boolean {
+  if (blocked || accepted) return false;
   if (pending && !proposer) return false;
   if (phase == null) return true;
+  return phase === "CHATTING" || phase === "ARRANGED";
+}
+
+/** Seller soft-lock. Proof stays closed until this deal is 已鎖貨. */
+export function canSellerLock(phase: DealPhase): boolean {
   return phase === "CHATTING" || phase === "ARRANGED";
 }
 
@@ -119,20 +124,20 @@ export function dealPhase(order: { status: string; fulfillment?: unknown }): Dea
 
 export function phaseLabel(locale: "zh-HK" | "en", phase: DealPhase): string {
   const zh: Record<DealPhase, string> = {
-    CHATTING: "洽談中",
-    ARRANGED: "約定中",
+    CHATTING: "要約中",
+    ARRANGED: "待交收",
     CONFIRMED: RESERVE_BADGE,
-    PROOF: "待確認收款",
-    SELLER_PAID: "已收款",
+    PROOF: "待交收",
+    SELLER_PAID: "待交收",
     DONE: "已完成",
     CANCELLED: "已取消",
   };
   const en: Record<DealPhase, string> = {
-    CHATTING: "Talking",
-    ARRANGED: "Meetup set",
-    CONFIRMED: "Reserved",
-    PROOF: "Proof sent",
-    SELLER_PAID: "Seller confirmed payment",
+    CHATTING: "Offer",
+    ARRANGED: "To hand over",
+    CONFIRMED: "Locked",
+    PROOF: "To hand over",
+    SELLER_PAID: "To hand over",
     DONE: "Completed",
     CANCELLED: "Cancelled",
   };
@@ -200,6 +205,7 @@ export type DealEvent =
   | { kind: "accept" }
   | { kind: "decline" }
   | { kind: "withdraw" }
+  | { kind: "lock" }
   | { kind: "release"; name: string };
 
 export function dealEventBody(event: DealEvent): string {
@@ -216,7 +222,7 @@ export function readDealEvent(body: string): DealEvent | null {
   }
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
   const kind = (row as { kind?: unknown }).kind;
-  if (kind === "accept" || kind === "decline" || kind === "withdraw") return { kind };
+  if (kind === "accept" || kind === "decline" || kind === "withdraw" || kind === "lock") return { kind };
   if (kind === "release") {
     const name = (row as { name?: unknown }).name;
     if (typeof name !== "string" || !name.trim()) return null;
@@ -253,10 +259,11 @@ export function dealEventCopy(locale: Locale, event: DealEvent): { text: string;
   const en = locale === "en";
   if (event.kind === "offer") {
     const price = formatHkd(event.amount, locale);
-    return { text: en ? `${event.name} made an offer ${price}` : `${event.name} 提出要約 ${price}`, note: event.note };
+    return { text: en ? `${event.name} made an offer of ${price}.` : `${event.name} 提出要約 ${price}。`, note: event.note };
   }
-  if (event.kind === "accept") return { text: en ? "Offer accepted · Reserved" : "要約已接受 · 保留中", note: "" };
-  if (event.kind === "decline") return { text: en ? "Offer declined" : "要約已拒絕", note: "" };
-  if (event.kind === "withdraw") return { text: en ? "Offer withdrawn" : "要約已撤回", note: "" };
-  return { text: en ? `${event.name} released the hold` : `${event.name} 已解除保留`, note: "" };
+  if (event.kind === "accept") return { text: en ? "Offer accepted." : "要約已接受。", note: "" };
+  if (event.kind === "decline") return { text: en ? "Offer declined." : "要約已拒絕。", note: "" };
+  if (event.kind === "withdraw") return { text: en ? "Offer withdrawn." : "要約已撤回。", note: "" };
+  if (event.kind === "lock") return { text: en ? "The item is locked." : "貨品已鎖定。", note: "" };
+  return { text: en ? `${event.name} released the lock.` : `${event.name} 已解除鎖定。`, note: "" };
 }

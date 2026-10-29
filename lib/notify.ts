@@ -23,13 +23,13 @@ export function noticeCopy(kind: NoticeKind, detail?: string): { type: NoticeTyp
     case "offer-supersede":
       return { type: "offer", title: "改價覆蓋", body: line(detail, "對方改咗要約。") };
     case "offer-accept":
-      return { type: "offer", title: "對方已接受", body: line(detail, "要約已接受，可以傾交收。") };
+      return { type: "offer", title: "對方已接受", body: line(detail, "要約已接受。") };
     case "offer-decline":
       return { type: "offer", title: "對方已拒絕", body: line(detail, "要約已被拒絕。") };
     case "offer-withdraw":
       return { type: "offer", title: "對方已撤回", body: line(detail, "要約已撤回。") };
     case "handover":
-      return { type: "order", title: "待交收提醒", body: line(detail, "呢單可以約交收。") };
+      return { type: "order", title: "待交收提醒", body: line(detail, "可以安排交收。") };
     case "message":
       return { type: "message", title: "新訊息", body: line(detail, "新訊息") };
   }

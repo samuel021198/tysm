@@ -46,7 +46,6 @@ export default async function ThreadPage({
           },
           include: {
             items: { include: { listing: true } },
-            reviews: { select: { authorId: true } },
             ratings: { select: { authorId: true, stars: true, comment: true } },
           },
           orderBy: { createdAt: "desc" },
@@ -67,7 +66,7 @@ export default async function ThreadPage({
     ? order.items.some((item) => dealBlocked(dealPhase(order), item.listing.status, item.listing.binLockOrderId, order.id))
     : Boolean(thread.listing?.binLockOrderId);
   const listingClosed = Boolean(thread.listing && thread.listing.status !== "ACTIVE");
-  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed, pendingOffer?.by === viewer.id);
+  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed, pendingOffer?.by === viewer.id, offer?.status === "ACCEPTED");
   const liveOfferId = pending ? latestOpenOfferMessage(thread.messages)?.id ?? null : null;
   const reviseItem = order?.items[0];
   const listPrice = thread.listing ? (thread.listing.price ?? thread.listing.currentBid ?? thread.listing.startPrice) : null;
@@ -159,7 +158,6 @@ export default async function ThreadPage({
                 locale={prefs.locale}
                 viewerId={viewer.id}
                 next={`/messages/${id}`}
-                reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
                 rating={order.ratings.find((row) => row.authorId === viewer.id) ?? null}
                 payment={sellerPayment(thread.seller)}
                 names={{ buyer: thread.buyer.nickname, seller: thread.seller.nickname }}
