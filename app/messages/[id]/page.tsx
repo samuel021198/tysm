@@ -94,20 +94,31 @@ export default async function ThreadPage({
       }))
     : [];
   return (
-    <div className="thread-fit">
+    <div className="thread-fit px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
       <ReadPing id={id} />
+      <header className="thread-bar -mx-3 grid shrink-0 grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center border-b border-line bg-card px-1 pt-[env(safe-area-inset-top)]">
+        <Link
+          href="/messages"
+          aria-label={tx(prefs.locale, "返回訊息", "Back to messages")}
+          className="grid h-12 w-10 place-items-center text-ink"
+        >
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M14.5 6.5 8 12l6.5 5.5" />
+          </svg>
+        </Link>
+        <h1 className="truncate text-center text-base font-semibold leading-tight">{other.nickname}</h1>
+        <div className="grid h-12 place-items-center">
+          <PersonMenu
+            locale={prefs.locale}
+            userId={otherId}
+            reportType="THREAD"
+            reportId={id}
+            next={`/messages/${id}`}
+            away="/messages"
+          />
+        </div>
+      </header>
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
-      <div className="flex shrink-0 items-center justify-between gap-2">
-        <h1 className="min-w-0 truncate text-[1.3rem] font-bold leading-tight">{other.nickname}</h1>
-        <PersonMenu
-          locale={prefs.locale}
-          userId={otherId}
-          reportType="THREAD"
-          reportId={id}
-          next={`/messages/${id}`}
-          away="/messages"
-        />
-      </div>
       <ThreadScroll>
         {thread.listing ? (
           <ListingChatBar
@@ -122,7 +133,7 @@ export default async function ThreadPage({
             riskAcked={Boolean(viewer.p2pRiskAckAt)}
           />
         ) : null}
-        <div className="grid gap-2.5">
+        <div className={thread.listing ? "grid gap-2.5" : "grid gap-2.5 pt-2"}>
         <ol className="grid content-start gap-2.5">
           {thread.messages.map((message) => {
             const event = readDealEvent(message.body);

@@ -46,7 +46,7 @@ export function ListingChatBar({
 
   return (
     <>
-      <div className="sticky top-0 z-20 bg-bg pb-2">
+      <div className="sticky top-0 z-20 bg-bg pb-2 pt-2">
         <div className="flex items-center gap-2 rounded-2xl border border-line bg-card p-2">
           <Link href={`/listing/${listingId}`} className="flex min-w-0 flex-1 items-center gap-2">
             <img src={cover || "/demo/back.svg"} alt="" className="h-14 w-14 shrink-0 rounded-lg bg-soft object-cover" />
