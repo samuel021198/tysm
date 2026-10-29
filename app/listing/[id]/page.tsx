@@ -24,6 +24,8 @@ import { ViewPing } from "@/components/pings";
 import { offerRespondAction, deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
 import { toggleFavorite, toggleFollow } from "@/actions/social";
 import { PersonMenu } from "@/components/safety-menu";
+import { RatingPill } from "@/components/profile-header";
+import { ratingFromAggregate } from "@/lib/ratings";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -105,13 +107,13 @@ export default async function ListingPage({
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
   const locale = prefs.locale;
   const listed = activityLine(listing.createdAt, listing.updatedAt, new Date(), locale);
-  const [sellerReviews, sellerShipped, sellerSales] = await Promise.all([
-    prisma.review.aggregate({ where: { subjectId: listing.sellerId }, _avg: { stars: true }, _count: true }),
+  const [sellerRatingRow, sellerShipped, sellerSales] = await Promise.all([
+    prisma.dealRating.aggregate({ where: { subjectId: listing.sellerId }, _avg: { stars: true }, _count: true }),
     prisma.order.findMany({ where: { sellerId: listing.sellerId, shippedAt: { not: null } }, select: { shippedAt: true, shipBy: true } }),
     prisma.order.count({ where: { sellerId: listing.sellerId, status: "COMPLETED" } }),
   ]);
   const sellerOnTime = onTimePercent(sellerShipped);
-  const sellerRating = sellerReviews._count ? sellerReviews._avg.stars : null;
+  const sellerRating = ratingFromAggregate(sellerRatingRow._avg.stars, sellerRatingRow._count);
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
   const showHandover = !owner && listing.status === "ACTIVE" && listing.quantityAvailable > 0;
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
@@ -325,10 +327,13 @@ export default async function ListingPage({
             <span className="grid h-11 w-11 place-items-center rounded-full bg-accent text-sm font-bold text-white">
               {listing.seller.nickname.slice(0, 1)}
             </span>
-            <span>
-              <span className="block font-medium">{listing.seller.nickname}</span>
+            <span className="min-w-0">
+              <span className="flex min-w-0 items-center gap-1">
+                <span className="truncate font-medium">{listing.seller.nickname}</span>
+                {sellerRating ? <RatingPill locale={locale} average={sellerRating.average} count={sellerRating.count} /> : null}
+              </span>
               <span className="text-xs text-muted">
-                {sellerRating != null ? `${tx(locale, "評分", "Rating")} ${sellerRating.toFixed(1)} (${sellerReviews._count})` : tx(locale, "賣家", "Seller")}
+                {tx(locale, "賣家", "Seller")}
                 {` · ${tx(locale, "完成", "Sold")} ${sellerSales}`}
                 {sellerOnTime != null ? ` · ${tx(locale, "準時寄出", "On time")} ${sellerOnTime}%` : ""}
               </span>

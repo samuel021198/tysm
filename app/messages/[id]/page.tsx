@@ -44,7 +44,11 @@ export default async function ThreadPage({
             sellerId: thread.sellerId,
             items: { some: { listingId: thread.listingId } },
           },
-          include: { items: { include: { listing: true } }, reviews: { select: { authorId: true } } },
+          include: {
+            items: { include: { listing: true } },
+            reviews: { select: { authorId: true } },
+            ratings: { select: { authorId: true, stars: true, comment: true } },
+          },
           orderBy: { createdAt: "desc" },
           take: 8,
         })
@@ -156,6 +160,7 @@ export default async function ThreadPage({
                 viewerId={viewer.id}
                 next={`/messages/${id}`}
                 reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
+                rating={order.ratings.find((row) => row.authorId === viewer.id) ?? null}
                 payment={sellerPayment(thread.seller)}
                 names={{ buyer: thread.buyer.nickname, seller: thread.seller.nickname }}
                 revise={

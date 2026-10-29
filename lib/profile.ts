@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { ratingFromAggregate } from "./ratings";
 import { cardInclude } from "./feed";
 import { cardDisplayName, toPostCard, wishlistPostVisible, type PostCardModel } from "./posts";
 import { SHOP_INVENTORY_STATUSES } from "./shop-inventory";
@@ -114,7 +115,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
   const hides = viewerId && !isSelf ? await feedHideIds(viewerId) : { postIds: [] as string[] };
   const publicShop = { sellerId: ownerId, status: "ACTIVE" as const, quantityAvailable: { gt: 0 } };
-  const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, completed, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
+  const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, ratingRow, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
     profilePostsPage(ownerId, viewerId, null, hides.postIds),
     prisma.post.count({ where: profilePostWhere(ownerId, isSelf, hides.postIds, null) }),
     prisma.listing.count({
@@ -164,7 +165,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
         })
       : Promise.resolve([]),
     prisma.follow.count({ where: { sellerId: ownerId } }),
-    prisma.order.count({ where: { sellerId: ownerId, status: "COMPLETED" } }),
+    prisma.dealRating.aggregate({ where: { subjectId: ownerId }, _avg: { stars: true }, _count: true }),
     viewerId ? prisma.favorite.findMany({ where: { userId: viewerId, listing: { sellerId: ownerId } }, select: { listingId: true } }) : Promise.resolve([]),
     isSelf
       ? prisma.favorite.findMany({
@@ -264,7 +265,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     })),
     drafts,
     followers,
-    completed,
+    rating: ratingFromAggregate(ratingRow._avg.stars, ratingRow._count),
     favIds: favs.map((row) => row.listingId),
   };
 }

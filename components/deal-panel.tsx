@@ -20,6 +20,7 @@ import {
 import { meetupNote } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { DealRatingForm } from "./deal-rating-form";
 import { ReviseOfferButton, type OfferChoice } from "./offer-sheet";
 import { ProofForm } from "./proof-form";
 
@@ -44,6 +45,8 @@ type DealProps = {
   viewerId: string;
   next: string;
   reviewed: boolean;
+  /** This viewer's post-deal rating. Null means not yet. Omit outside the chat bubble. */
+  rating?: { stars: number; comment?: string } | null;
   payment: PaymentInfo | null;
   names?: { buyer: string; seller: string };
   /** Counterparty 改價回覆. Same make-offer form, prefilled. */
@@ -71,6 +74,7 @@ function DealView({
   next,
   order,
   reviewed,
+  rating,
   payment,
   names,
   revise = null,
@@ -204,7 +208,17 @@ function DealView({
           <button className={primary}>{tx(locale, "已收貨", "Item received")}</button>
         </form>
       ) : null}
-      {phase === "DONE" && (buyer || seller) && !reviewed ? (
+      {stream && phase === "DONE" && (buyer || seller) ? (
+        rating ? (
+          <div className="text-center text-xs text-muted">
+            <p>{tx(locale, `已評分 ${"★".repeat(rating.stars)}`, `Rated ${"★".repeat(rating.stars)}`)}</p>
+            {rating.comment ? <p>{rating.comment}</p> : null}
+          </div>
+        ) : (
+          <DealRatingForm locale={locale} orderId={order.id} />
+        )
+      ) : null}
+      {!stream && phase === "DONE" && (buyer || seller) && !reviewed ? (
         <Link className={primary} href={`/orders/${order.id}#review`}>{tx(locale, "去評價", "Review")}</Link>
       ) : null}
       {seller && canMarkSold(phase, proofs, sold ? "SOLD" : "ACTIVE") ? (
