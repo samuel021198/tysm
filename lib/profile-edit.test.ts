@@ -89,14 +89,14 @@ assert(edit.includes("BIO_MAX") && edit.includes("usernameChangesRemaining"), "t
 assert(!settings.includes("/me/edit") && !settings.includes("/me/footprint") && !settings.includes('"/orders"') && !settings.includes("saveAddress") && !settings.includes("/me/favorites"), "settings does not hold edit, footprint, orders, addresses, or favorites");
 assert(settings.includes("/me/settings/notifications") && settings.includes("/me/settings/account") && settings.includes("/me/settings/privacy") && settings.includes("/me/settings/language") && settings.includes("/me/settings/theme") && settings.includes("/me/settings/about") && settings.includes("/me/settings/delete"), "settings lists the locked rows");
 assert(settings.indexOf("刪除帳號") > settings.indexOf("關於") && settings.lastIndexOf("刪除帳號") > settings.lastIndexOf("/me/settings/about"), "delete account is last");
-assert(footprint.includes("交易中") && footprint.includes("已出售") && footprint.includes("已購買") && footprint.includes("要約中") && footprint.includes("已鎖貨") && footprint.includes("待交收") && footprint.includes("已結束"), "footprint tabs and the ended fold");
+assert(footprint.includes("交易中") && footprint.includes("已出售") && footprint.includes("已購買") && footprint.includes("議價中") && footprint.includes("已保留") && footprint.includes("待交收") && footprint.includes("已結束") && !footprint.includes("要約"), "footprint tabs and the ended fold");
 assert(
   footprint.includes("未有進行中交易") &&
     footprint.includes("去逛逛") &&
     footprint.includes('href="/find"') &&
     footprint.split("未有紀錄。").length === 3 &&
     !footprint.includes("去訊息") &&
-    !footprint.includes("議價"),
+    !footprint.includes("要約"),
   "empty 交易中 offers browse; sold and bought say 未有紀錄 with no CTA",
 );
 const notes = readFileSync(new URL("../app/notifications/page.tsx", import.meta.url), "utf8");

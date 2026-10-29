@@ -5,7 +5,8 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(noticeCopy("offer-new").title === "新要約" && noticeCopy("offer-new").type === "offer", "a new offer uses the offer toggle");
+assert(noticeCopy("offer-new").title === "新議價" && noticeCopy("offer-new").body === "對方提出議價。" && noticeCopy("offer-new").type === "offer", "a new offer uses the offer toggle");
+assert(noticeCopy("offer-supersede").body === "對方已改價。" && noticeCopy("offer-accept").body === "已接受。" && noticeCopy("offer-decline").body === "已拒絕。" && noticeCopy("offer-withdraw").body === "已撤回。", "offer notices do not say 要約");
 assert(noticeCopy("offer-supersede").title === "改價覆蓋" && noticeCopy("offer-supersede").type === "offer", "a replaced price is 改價覆蓋");
 assert(noticeCopy("offer-accept").title === "對方已接受" && noticeCopy("offer-decline").title === "對方已拒絕", "accept and decline name the other party");
 assert(noticeCopy("offer-withdraw").type === "offer" && noticeCopy("handover").title === "待交收提醒" && noticeCopy("handover").type === "order", "withdraw stays an offer; handover uses the order toggle");

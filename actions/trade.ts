@@ -13,6 +13,7 @@ import {
   arrangeMeetup,
   cancelDeal,
   confirmDeal,
+  confirmHandover,
   confirmReceived,
   confirmSellerPaid,
   declineDealOffer,
@@ -325,6 +326,14 @@ export async function proofAction(formData: FormData) {
   const user = await viewer(dealNext(formData, id));
   const result = await uploadProof(user.id, id, String(formData.get("imageUrl") || ""));
   settleDeal(formData, id, result, "saved");
+}
+
+export async function confirmHandoverAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(dealNext(formData, id));
+  const result = await confirmHandover(user.id, id);
+  if (result.ok && result.done) revalidatePath("/");
+  settleDeal(formData, id, result, result.ok && result.done ? "done" : "handover");
 }
 
 export async function sellerPaidAction(formData: FormData) {

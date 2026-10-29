@@ -56,7 +56,7 @@ export function DealRatingForm({ locale, orderId }: { locale: Locale; orderId: s
         name="comment"
         value={comment}
         maxLength={RATING_COMMENT_MAX}
-        placeholder={tx(locale, "一句（可留空）", "One line (optional)")}
+        placeholder={tx(locale, "一句評語", "One short line")}
         onChange={(event) => setComment(event.target.value)}
       />
       {error ? <p className="text-center text-xs text-danger">{error}</p> : null}

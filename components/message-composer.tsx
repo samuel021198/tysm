@@ -185,7 +185,7 @@ export function MessageComposer({
                   setOffer(true);
                 }}
               >
-                {tx(locale, "提出要約", "Make offer")}
+                {tx(locale, "議價", "Offer")}
               </button>
             ) : null}
             <button

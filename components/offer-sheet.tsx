@@ -47,7 +47,7 @@ export function OfferSheet({
   const locked = offerFormLocked(acked, false);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={priceOnly ? "議價" : tx(locale, "提出要約", "Make offer")}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={priceOnly ? "議價" : tx(locale, "議價", "Offer")}>
       <button type="button" className="absolute inset-0 cursor-default" aria-label={tx(locale, "關閉", "Close")} onClick={onClose} />
       <div className="relative z-10 max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
         <DealDisclaimer className="mb-3" />
@@ -130,7 +130,7 @@ export function OfferSheet({
                 />
               </label>
             )}
-            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{priceOnly ? "議價" : tx(locale, "提出要約", "Make offer")}</button>
+            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{priceOnly ? "議價" : tx(locale, "議價", "Offer")}</button>
           </form>
         ) : null}
       </div>
