@@ -19,7 +19,7 @@ export default async function FollowersPage({ params }: { params: Promise<{ id: 
     where: { sellerId: seller.id },
     orderBy: { createdAt: "desc" },
     take: 80,
-    select: { id: true, follower: { select: { id: true, nickname: true, avatarUrl: true, username: true } } },
+    select: { id: true, follower: { select: { id: true, nickname: true, avatarUrl: true } } },
   });
   const locale = prefs.locale;
   const back = viewer?.id === seller.id ? "/me" : `/shop/${seller.id}`;
@@ -37,10 +37,7 @@ export default async function FollowersPage({ params }: { params: Promise<{ id: 
                 ) : (
                   <span className="grid h-9 w-9 place-items-center rounded-full bg-accent text-sm font-semibold text-white">{row.follower.nickname.slice(0, 1)}</span>
                 )}
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold">{row.follower.nickname}</span>
-                  {row.follower.username ? <span className="block truncate text-xs text-muted">@{row.follower.username}</span> : null}
-                </span>
+                <span className="min-w-0 truncate text-sm font-semibold">{row.follower.nickname}</span>
               </Link>
             </li>
           ))}

@@ -19,7 +19,6 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         userId={viewer.id}
         base="/me"
         nickname={viewer.nickname}
-        username={viewer.username}
         avatarUrl={viewer.avatarUrl}
         bio={viewer.bio}
         links={viewer.profileLinks}

@@ -79,10 +79,14 @@ export default async function PostPage({
     viewer?.id === post.authorId || viewer?.role === "ADMIN",
   );
   const buyBar = viewer?.id !== post.authorId && card.buy != null && card.priceCents != null;
+  const sellHref =
+    viewer?.id === post.authorId && post.collectionItem && !post.collectionItem.listingId
+      ? `/sell?collectionItemId=${encodeURIComponent(post.collectionItem.id)}${post.collectionItem.catalogCardId ? `&catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}` : ""}`
+      : null;
   return (
     <div className={`mx-auto grid max-w-lg gap-4 ${buyBar ? "pb-24" : ""}`}>
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
-      <PostCard post={card} locale={locale} now={now} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} />
+      <PostCard post={card} locale={locale} now={now} next={`/post/${post.id}`} gallery viewerId={viewer?.id ?? null} sellHref={sellHref} />
       {caption ? <p className="px-1 text-sm leading-6 text-muted">{caption}</p> : null}
       <TopicChips tags={card.tags} className="px-1" />
       {listingHref ? (
@@ -90,11 +94,8 @@ export default async function PostPage({
           {tx(locale, "睇貨頁", "View listing")}
         </Link>
       ) : null}
-      {viewer?.id === post.authorId && post.collectionItem && !post.collectionItem.listingId ? (
-        <Link
-          href={`/sell?collectionItemId=${encodeURIComponent(post.collectionItem.id)}${post.collectionItem.catalogCardId ? `&catalogCardId=${encodeURIComponent(post.collectionItem.catalogCardId)}` : ""}`}
-          className="btn btn-primary w-fit"
-        >
+      {sellHref && card.priceCents == null ? (
+        <Link href={sellHref} className="btn btn-primary w-full">
           {tx(locale, "放賣", "List for sale")}
         </Link>
       ) : null}
