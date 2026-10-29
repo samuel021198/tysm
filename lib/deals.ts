@@ -89,29 +89,7 @@ async function postDealNote(
   return thread.id;
 }
 
-async function shareTargetFor(listingId: string, sellerId: string, postId: string | null, cover: string | null) {
-  let path = `/listing/${listingId}`;
-  let image = cover;
-  const post = postId
-    ? await prisma.post.findUnique({
-        where: { id: postId },
-        include: { photos: { orderBy: { position: "asc" }, take: 1 }, collectionItem: { select: { listingId: true } } },
-      })
-    : await prisma.post.findFirst({
-        where: { authorId: sellerId, collectionItem: { listingId } },
-        include: { photos: { orderBy: { position: "asc" }, take: 1 }, collectionItem: { select: { listingId: true } } },
-      });
-  if (post && post.authorId === sellerId && (!post.collectionItem?.listingId || post.collectionItem.listingId === listingId)) {
-    path = `/post/${post.id}`;
-    image = post.photos[0]?.url ?? image;
-  }
-  return { path, image };
-}
-
-export async function openHandover(
-  userId: string,
-  input: { listingId: string; postId?: string | null },
-) {
+export async function openHandover(userId: string, input: { listingId: string }) {
   const listing = await prisma.listing.findUnique({
     where: { id: input.listingId },
     include: { photos: { orderBy: { position: "asc" }, take: 1 } },
@@ -127,15 +105,6 @@ export async function openHandover(
     (await prisma.messageThread.create({
       data: { listingId: listing.id, buyerId: userId, sellerId: listing.sellerId },
     }));
-
-  const share = await shareTargetFor(listing.id, listing.sellerId, input.postId ?? null, listing.photos[0]?.url ?? null);
-  const sent = await prisma.message.findFirst({ where: { threadId: thread.id, body: share.path } });
-  if (!sent) {
-    const imageUrl = share.image && isAllowedMediaUrl(share.image) ? share.image : null;
-    await prisma.message.create({ data: { threadId: thread.id, senderId: userId, body: share.path, imageUrl } });
-    await prisma.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
-    await notifyKind(listing.sellerId, "message", `/messages/${thread.id}`, listing.title);
-  }
 
   if (listing.status === "ACTIVE") {
     const amount = listing.price ?? listing.currentBid ?? listing.startPrice ?? 0;
@@ -179,7 +148,7 @@ export async function openHandover(
 export async function attachDealThread(orderId: string): Promise<string | null> {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
-    include: { items: { include: { listing: { include: { photos: { take: 1, orderBy: { position: "asc" } } } } }, take: 1 } },
+    include: { items: { take: 1 } },
   });
   const item = order?.items[0];
   if (!order || !item) return null;
@@ -190,13 +159,6 @@ export async function attachDealThread(orderId: string): Promise<string | null> 
     (await prisma.messageThread.create({
       data: { listingId: item.listingId, buyerId: order.buyerId, sellerId: order.sellerId },
     }));
-  const share = await shareTargetFor(item.listingId, order.sellerId, null, item.listing.photos[0]?.url ?? item.imageUrl);
-  const sent = await prisma.message.findFirst({ where: { threadId: thread.id, body: share.path } });
-  if (!sent) {
-    const imageUrl = share.image && isAllowedMediaUrl(share.image) ? share.image : null;
-    await prisma.message.create({ data: { threadId: thread.id, senderId: order.buyerId, body: share.path, imageUrl } });
-    await prisma.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
-  }
   return thread.id;
 }
 
