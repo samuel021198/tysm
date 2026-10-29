@@ -391,6 +391,12 @@ model Listing {
   offersEnabled     Boolean        @default(false)
   minOffer          Int?
   startPrice        Int?
+  /// Hidden from buyers. Unmet at the end is 流標.
+  reservePrice      Int?
+  /// 1, 3, 5, or 7. Null on older rows that stored only auctionEndsAt.
+  auctionDays       Int?
+  /// Auction ended below the reserve, or with no bid. Seller may relist as a fixed price.
+  auctionPassed     Boolean        @default(false)
   auctionEndsAt     DateTime?
   currentBid        Int?
   leaderId          String?

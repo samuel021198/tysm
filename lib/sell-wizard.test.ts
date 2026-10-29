@@ -170,6 +170,18 @@ assert(
   "buy now must be above the start price",
 );
 assert(
+  wizardPublishIssues(card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 3, auctionEndsAt: null }), "tcg", now).length === 0,
+  "a 3-day auction does not need a custom end",
+);
+assert(
+  wizardStepIssues(0, card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 2, auctionEndsAt: null }), "tcg", now).includes("auction_days"),
+  "duration is only 1, 3, 5, or 7 days",
+);
+assert(
+  wizardStepIssues(0, card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 3, reserveCents: 1000, auctionEndsAt: null }), "tcg", now).includes("reserve"),
+  "reserve cannot sit under the start price",
+);
+assert(
   wizardStepIssues(0, card({ offersEnabled: true, minOfferCents: 10000 }), "tcg", now).includes("offer"),
   "minimum offer must be below buy now",
 );

@@ -1,7 +1,72 @@
+import { publicMinimumBid } from "./auction";
 import { prisma } from "./db";
 import { Fail, asFail } from "./fail";
 import { notify } from "./social";
 import { extendedEnd, resolveAuction, validateMaxBid } from "./rules";
+
+/** Public bid. The amount is the bid. No proxy ceiling and no anti-snipe extension. */
+export async function placePublicBid(userId: string, listingId: string, amount: number) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) return { ok: false as const, error: "below_min" };
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return { ok: false as const, error: "login" };
+  if (user.bidBanned) return { ok: false as const, error: "banned" };
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const outcome = await prisma.$transaction(async (tx) => {
+        const listing = await tx.listing.findUnique({ where: { id: listingId } });
+        if (!listing || listing.status !== "ACTIVE") throw new Fail("unavailable");
+        if (listing.sellerId === userId) throw new Fail("own");
+        if (listing.saleType === "BUY_NOW" || listing.auctionSettled || listing.bidsVoided || listing.auctionPassed) throw new Fail("unavailable");
+        if (!listing.startPrice || !listing.auctionEndsAt) throw new Fail("unavailable");
+        if (listing.auctionEndsAt <= new Date()) throw new Fail("ended");
+        if (listing.binLockOrderId) throw new Fail("locked");
+        const block = await tx.block.findFirst({
+          where: {
+            OR: [
+              { blockerId: userId, blockedId: listing.sellerId },
+              { blockerId: listing.sellerId, blockedId: userId },
+            ],
+          },
+        });
+        if (block) throw new Fail("blocked");
+
+        const hasBids = listing.currentBid != null && listing.leaderId != null;
+        const min = publicMinimumBid(listing.startPrice, listing.currentBid, hasBids);
+        if (!hasBids && amount < listing.startPrice) throw new Fail("below_start");
+        if (amount < min) throw new Fail("below_min");
+
+        const updated = await tx.listing.updateMany({
+          where: { id: listingId, bidVersion: listing.bidVersion, status: "ACTIVE", binLockOrderId: null, auctionSettled: false },
+          data: {
+            currentBid: amount,
+            leaderId: userId,
+            bidVersion: { increment: 1 },
+          },
+        });
+        if (updated.count !== 1) throw new Fail("retry");
+        await tx.bidEvent.create({ data: { listingId, bidderId: userId, publicAmount: amount } });
+        return {
+          previousLeader: listing.leaderId,
+          sellerId: listing.sellerId,
+          title: listing.title,
+        };
+      });
+
+      await notify(outcome.sellerId, "bid", "拍賣有新出價", outcome.title, `/listing/${listingId}`);
+      if (outcome.previousLeader && outcome.previousLeader !== userId) {
+        await notify(outcome.previousLeader, "bid", "你已被超價", outcome.title, `/listing/${listingId}`);
+      }
+      return { ok: true as const, price: amount, leading: true };
+    } catch (error) {
+      const code = asFail(error);
+      if (code === "retry") continue;
+      if (code) return { ok: false as const, error: code };
+      throw error;
+    }
+  }
+  return { ok: false as const, error: "unavailable" };
+}
 
 export async function placeBid(userId: string, listingId: string, maxAmount: number) {
   const user = await prisma.user.findUnique({ where: { id: userId } });

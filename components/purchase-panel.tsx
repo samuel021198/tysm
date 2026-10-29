@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { openThread } from "@/actions/social";
 import { bidAction } from "@/actions/trade";
@@ -15,8 +16,7 @@ export function PurchasePanel({
   currentBid,
   startPrice,
   minBid,
-  yourMax,
-  isLeader,
+  showBin = false,
   live,
   endsAt,
   endsText,
@@ -36,8 +36,8 @@ export function PurchasePanel({
   currentBid: number | null;
   startPrice: number | null;
   minBid: number;
-  yourMax: number | null;
-  isLeader: boolean;
+  /** Auction Buy It Now. Fixed-price listings keep 直接購買 on showHandover. */
+  showBin?: boolean;
   live: boolean;
   endsAt: string | null;
   endsText: string | null;
@@ -53,10 +53,11 @@ export function PurchasePanel({
   timeLabel?: string | null;
   timeAt?: string | null;
 }) {
+  const [bidOpen, setBidOpen] = useState(false);
   const publicBid = currentBid ?? startPrice ?? 0;
-  const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
-  const bin = showHandover && price != null ? price : null;
-  const priced = price != null;
+  const bidFloor = minBid;
+  const bin = (showHandover || showBin) && price != null ? price : null;
+  const priced = showHandover && price != null;
   const talk = showHandover ? (
     <div>
       <form id="listing-offer" action={openThread} hidden>
@@ -88,66 +89,52 @@ export function PurchasePanel({
 
   return (
     <>
-      {bin != null ? (
+      {bin != null && showHandover ? (
         <div>
           <p className="text-xs font-medium text-muted">{tx(locale, "直購價", "Buy It Now")}</p>
           <p className="price text-2xl leading-none">{formatHkd(bin, locale)}</p>
           {listedAt}
         </div>
       ) : null}
-      {bin != null ? talk : null}
+      {showHandover ? talk : null}
+      {showBin ? (
+        <form id="listing-buy" action={openThread} hidden>
+          <input type="hidden" name="listingId" value={id} />
+          <input type="hidden" name="focus" value="buy" />
+        </form>
+      ) : null}
       {live || endsAt ? (
-        <div className="grid gap-1 rounded-2xl bg-soft p-3">
-          <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
-          <p className="price text-xl leading-none">{formatHkd(publicBid, locale)}</p>
-          {bin != null ? null : listedAt}
-          {live ? (
-            <p className="text-sm">
-              {tx(locale, "下一口最低", "Next minimum")} {formatHkd(minBid, locale)}
+        <div className="grid gap-2">
+          <div>
+            <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
+            <p className="price text-2xl leading-none">{formatHkd(publicBid, locale)}</p>
+            {showHandover ? null : listedAt}
+          </div>
+          {live && endsAt ? (
+            <p className="text-sm" title={endsText ?? undefined}>
+              <span className="text-muted">{tx(locale, "剩餘時間", "Time left")} </span>
+              <Countdown endsAt={endsAt} locale={locale} />
             </p>
           ) : (
             <p className="text-sm">{tx(locale, "拍賣已結束", "Auction ended")}</p>
           )}
-          {live && endsAt ? (
-            <p className="text-sm">
-              <span className="text-muted">{tx(locale, "剩餘時間", "Time left")} </span>
-              <Countdown endsAt={endsAt} locale={locale} />
-            </p>
-          ) : null}
-          {endsText ? <p className="text-xs text-muted">{tx(locale, "結束時間", "Ends")} {endsText}</p> : null}
-          {yourMax != null ? (
-            <p className="text-sm">{tx(locale, "你的最高出價（只有你睇到）", "Your maximum (private)")} {formatHkd(yourMax, locale)}</p>
-          ) : null}
-          {isLeader ? <p className="text-xs text-muted">{tx(locale, "你目前領先。加價要高過你自己的最高出價。", "You are leading. A new bid must be above your own maximum.")}</p> : null}
+          <div className={`grid gap-2 ${showBin ? "grid-cols-2" : "grid-cols-1"}`}>
+            {showBid ? (
+              <button type="button" className="btn btn-primary h-11" onClick={() => setBidOpen(true)}>{tx(locale, "出價", "Bid")}</button>
+            ) : null}
+            {!loggedIn && live ? (
+              <Link className="btn btn-primary h-11" href={`/login?next=/listing/${id}`}>{tx(locale, "登入後出價", "Log in to bid")}</Link>
+            ) : null}
+            {showBin && price != null ? (
+              <button form="listing-buy" className="btn btn-primary h-11" type="submit">{tx(locale, "即買", "Buy It Now")}</button>
+            ) : null}
+          </div>
         </div>
       ) : null}
-      {bin == null ? talk : null}
       {bidsVoided ? <p className="text-sm">{tx(locale, "直購已成交，所有出價作廢。", "Buy It Now ended the auction. Bids are void.")}</p> : null}
 
-      <div className="grid gap-2">
-        {showBid ? (
-          <button form="bid-form" className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Place bid")}</button>
-        ) : null}
-        {!loggedIn && live ? (
-          <Link className={`btn w-full ${showHandover ? "btn-ghost" : "btn-primary"}`} href={`/login?next=/listing/${id}`}>{tx(locale, "登入後出價", "Log in to bid")}</Link>
-        ) : null}
-      </div>
-
-      {showBid ? (
-        <form id="bid-form" action={bidAction} className="grid gap-2">
-          <input type="hidden" name="listingId" value={id} />
-          <label className="grid gap-1 text-sm">
-            {tx(locale, "你的最高出價 HKD", "Your maximum bid HKD")}
-            <input className="field" name="max" inputMode="decimal" placeholder={String(Math.ceil(bidFloor / 100))} required />
-          </label>
-          <p className="text-xs text-muted">
-            {isLeader
-              ? tx(locale, "公開下一口仍然係上面嘅最低價。呢度只係你私下嘅上限。", "The public next bid stays the minimum above. This field is only your private ceiling.")
-              : tx(locale, "系統會代你出到呢個上限，唔會一次過公開全數。", "We bid up to this ceiling for you. The full amount stays private.")}
-          </p>
-        </form>
-      ) : null}
       {bidBanned ? <p className="text-sm text-danger">{tx(locale, "你已被禁止出價。", "Bidding is disabled on your account.")}</p> : null}
+      {bidOpen ? <BidSheet locale={locale} id={id} placeholder={String(Math.ceil(bidFloor / 100))} onClose={() => setBidOpen(false)} /> : null}
 
       {ownerNote ? <p className="text-sm text-muted">{ownerNote}</p> : null}
 
@@ -173,10 +160,28 @@ export function PurchasePanel({
               <button form="listing-chat" className="btn btn-primary h-full px-2" type="submit">聯絡賣家</button>
             </div>
           ) : null}
-          {showBid ? <button form="bid-form" className={`btn shrink-0 px-3 ${showHandover ? "btn-ghost" : "btn-primary"}`}>{tx(locale, "出價", "Bid")}</button> : null}
+          {showBin ? (
+            <button form="listing-buy" className="btn btn-primary h-full shrink-0 px-3" type="submit">{tx(locale, "即買", "Buy It Now")}</button>
+          ) : null}
+          {showBid ? (
+            <button type="button" className="btn btn-primary shrink-0 px-3" onClick={() => setBidOpen(true)}>{tx(locale, "出價", "Bid")}</button>
+          ) : null}
           {!loggedIn && live && !showHandover ? <Link href={`/login?next=/listing/${id}`} className="btn btn-primary shrink-0 px-3">{tx(locale, "登入出價", "Log in")}</Link> : null}
         </BuyDock>
       ) : null}
     </>
+  );
+}
+
+function BidSheet({ locale, id, placeholder, onClose }: { locale: Locale; id: string; placeholder: string; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40" role="dialog" aria-modal="true" aria-label={tx(locale, "出價", "Bid")}>
+      <button type="button" className="absolute inset-0 cursor-default" aria-label={tx(locale, "關閉", "Close")} onClick={onClose} />
+      <form action={bidAction} className="relative z-10 grid w-full max-w-lg gap-3 rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
+        <input type="hidden" name="listingId" value={id} />
+        <input className="field" name="amount" inputMode="decimal" required autoFocus aria-label={tx(locale, "出價", "Bid")} placeholder={placeholder} />
+        <button className="btn btn-primary w-full" type="submit">{tx(locale, "出價", "Bid")}</button>
+      </form>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { ConditionTrack, Grader, PhotoRole, RawGrade, SaleType } from "@prisma/client";
 import { DISTRICTS, fromHkDate, fromHkInput, hkdToCents, isAllowedMediaUrl } from "./format";
+import { isAuctionDays } from "./auction";
 import { parseGrade } from "./rules";
 
 export const PHOTO_MAX = 10;
@@ -32,6 +33,10 @@ export type ListingInput = {
   saleType: SaleType;
   priceCents: number | null;
   startPriceCents: number | null;
+  /** Hidden reserve. Null when the seller left it blank. */
+  reserveCents?: number | null;
+  /** 1, 3, 5, or 7. Absent on CSV and older callers, which still send auctionEndsAt. */
+  auctionDays?: number | null;
   auctionEndsAt: Date | null;
   offersEnabled: boolean;
   minOfferCents: number | null;
@@ -129,11 +134,16 @@ export function validateListing(input: ListingInput, groupKey: string, now = new
   ) {
     errors.push("both_price");
   }
+  if (auction && input.reserveCents != null && (input.reserveCents <= 0 || (input.startPriceCents != null && input.reserveCents < input.startPriceCents))) {
+    errors.push("reserve");
+  }
 
   const goLive = input.intent === "schedule" && input.publishAt ? input.publishAt : now;
   if (input.intent === "schedule" && (!input.publishAt || input.publishAt.getTime() <= now.getTime())) errors.push("schedule");
   if (auction) {
-    if (!input.auctionEndsAt) errors.push("auction_end");
+    if (input.auctionDays != null) {
+      if (!isAuctionDays(input.auctionDays)) errors.push("auction_days");
+    } else if (!input.auctionEndsAt) errors.push("auction_end");
     else {
       const delta = input.auctionEndsAt.getTime() - goLive.getTime();
       if (delta < 30 * 60 * 1000 || delta > 14 * 24 * 60 * 60 * 1000) errors.push("auction_end");
@@ -175,7 +185,7 @@ export function validateListing(input: ListingInput, groupKey: string, now = new
 }
 
 const STEP_CODES = [
-  ["title", "description", "photos", "photo_url", "price", "video", "start", "both_price", "offer", "qty"],
+  ["title", "description", "photos", "photo_url", "price", "video", "start", "both_price", "offer", "qty", "reserve", "auction_days"],
   ["card_price", "grade", "category", "tcg", "person"],
   ["shipping", "meetup", "store", "preorder", "ship_within"],
   ["schedule", "auction_end"],
@@ -189,6 +199,8 @@ const STEP_OF: Record<string, number> = {
   price: 0,
   video: 0,
   start: 0,
+  reserve: 0,
+  auction_days: 0,
   both_price: 0,
   offer: 0,
   qty: 0,
@@ -250,7 +262,9 @@ export function wizardFocusField(code: string, input?: ListingInput | null): str
   if (code === "price" || code === "both_price") return "price";
   if (code === "card_price") return "cardPrice";
   if (code === "start") return "startPrice";
-  if (code === "auction_end") return "auctionEndsAt";
+  if (code === "reserve") return "reserve";
+  if (code === "auction_days") return "auctionDays";
+  if (code === "auction_end") return input?.auctionDays ? "auctionDays" : "auctionEndsAt";
   if (code === "offer") return "minOffer";
   if (code === "qty") return "quantity";
   if (code === "schedule") return "publishAt";
@@ -339,6 +353,12 @@ function parseCards(raw: string): CardItemInput[] | null {
   }
 }
 
+function auctionDaysFrom(raw: string): number | null {
+  if (!raw.trim()) return null;
+  const days = Number(raw);
+  return Number.isInteger(days) ? days : null;
+}
+
 export function parseListingForm(formData: FormData): ListingInput | null {
   let photos: PhotoInput[] = [];
   try {
@@ -375,6 +395,8 @@ export function parseListingForm(formData: FormData): ListingInput | null {
     saleType: sale,
     priceCents: hkdToCents(String(formData.get("price") || "")),
     startPriceCents: hkdToCents(String(formData.get("startPrice") || "")),
+    reserveCents: hkdToCents(String(formData.get("reserve") || "")),
+    auctionDays: auctionDaysFrom(String(formData.get("auctionDays") || "")),
     auctionEndsAt: fromHkInput(String(formData.get("auctionEndsAt") || "")),
     offersEnabled: formData.get("offersEnabled") === "on",
     minOfferCents: hkdToCents(String(formData.get("minOffer") || "")),

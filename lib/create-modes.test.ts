@@ -35,7 +35,10 @@ assert(!tab.includes("accent: true") && !tab.includes("rounded-full bg-accent") 
 assert(tab.includes("h-[22px]") && tab.includes("strokeWidth={on ? 2 : 1.6}"), "bottom icons stay 22px");
 assert(!tab.includes('href: "/messages"'), "chat is not a tab");
 const shopPage = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
-assert(shopPage.includes("商店") && shopPage.includes("Shop") && !shopPage.includes("currentBid"), "the shop tab is a stub, not a bidding page");
+assert(
+  shopPage.includes("全部") && shopPage.includes("新上架") && shopPage.includes("拍賣") && shopPage.includes("商店") && shopPage.includes("/shop/${store.id}"),
+  "the shop tab is the mall: chips and store cards",
+);
 assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 

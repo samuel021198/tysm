@@ -12,7 +12,8 @@ import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
-import { conditionLabel, minimumNextBid } from "@/lib/rules";
+import { publicMinimumBid } from "@/lib/auction";
+import { conditionLabel } from "@/lib/rules";
 import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
 import { Gallery } from "@/components/gallery";
@@ -22,7 +23,7 @@ import { ListingCard } from "@/components/listing-card";
 import { PurchasePanel } from "@/components/purchase-panel";
 import { Sparkline } from "@/components/sparkline";
 import { ViewPing } from "@/components/pings";
-import { deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
+import { deleteDraftAction, relistAction, relistFixedAction, unlistAction } from "@/actions/trade";
 import { toggleFavorite } from "@/actions/social";
 import { PersonMenu } from "@/components/safety-menu";
 import { NameLine } from "@/components/profile-header";
@@ -75,9 +76,8 @@ export default async function ListingPage({
 
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
-  const [mine, bidCount, offers, similar, sales, comps, favored, follows] = await Promise.all([
-    viewer ? prisma.proxyBid.findUnique({ where: { listingId_bidderId: { listingId: id, bidderId: viewer.id } } }) : null,
-    prisma.proxyBid.count({ where: { listingId: id } }),
+  const hasBids = listing.currentBid != null && listing.leaderId != null;
+  const [offers, similar, sales, comps, favored, follows] = await Promise.all([
     viewer
       ? prisma.offer.findMany({
           where: {
@@ -104,7 +104,7 @@ export default async function ListingPage({
     viewer ? prisma.favorite.findUnique({ where: { userId_listingId: { userId: viewer.id, listingId: id } } }) : null,
     followedSellerIds(viewer?.id ?? null),
   ]);
-  const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
+  const minBid = publicMinimumBid(listing.startPrice ?? 0, listing.currentBid, hasBids);
   const locale = prefs.locale;
   const listed = activityLine(listing.createdAt, listing.updatedAt, new Date(), locale);
   const [sellerRatingRow, sellerShipped, sellerSales] = await Promise.all([
@@ -123,7 +123,9 @@ export default async function ListingPage({
   const threadByBuyer = new Map(offerThreads.map((thread) => [thread.buyerId, thread.id]));
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
   const offerClosed = offersClosed(listing.status, listing.binLockOrderId);
-  const showHandover = !owner && ((listing.status === "ACTIVE" && listing.quantityAvailable > 0) || offerClosed);
+  const fixed = listing.saleType === "BUY_NOW";
+  const showHandover = !owner && fixed && ((listing.status === "ACTIVE" && listing.quantityAvailable > 0) || offerClosed);
+  const showBin = Boolean(!owner && !fixed && listing.price != null && live && !listing.binLockOrderId);
   const reserved = shopPill(listing) === "RESERVED";
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
 
@@ -135,7 +137,7 @@ export default async function ListingPage({
         <Gallery photos={listing.photos.map((photo) => ({ url: photo.url, role: photo.role }))} alt={listing.title} locale={locale} />
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
-          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{reserved ? shopPillLabel(locale, "RESERVED") : listingStatusLabel(locale, listing.status)}</span>
+          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listing.auctionPassed ? tx(locale, "流標", "Passed") : reserved ? shopPillLabel(locale, "RESERVED") : listingStatusLabel(locale, listing.status)}</span>
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
         <div className="mt-2 flex items-center justify-between gap-3">
@@ -263,7 +265,7 @@ export default async function ListingPage({
         {hasAuction ? (
           <section className="mt-6">
             <h2 className="font-semibold">{tx(locale, "出價紀錄", "Bid history")}</h2>
-            <p className="text-sm text-muted">{tx(locale, "最高出價只有出價者自己可見。最後 2 分鐘出價會延長 2 分鐘。", "Maximum bids stay private. A bid in the final 2 minutes extends the auction by 2 minutes.")}</p>
+            <p className="text-sm text-muted">{tx(locale, "出價係公開金額。加價係 HK$10 或目前出價的 5%，以較高者為準。", "Bids are public. The raise is HK$10 or 5% of the current bid, whichever is higher.")}</p>
             {listing.bidEvents.length === 0 ? <p className="text-sm">{tx(locale, "未有出價。", "No bids yet.")}</p> : null}
             <ul className="mt-2 text-sm">
               {listing.bidEvents.map((event) => (
@@ -307,8 +309,7 @@ export default async function ListingPage({
           currentBid={listing.currentBid}
           startPrice={listing.startPrice}
           minBid={minBid}
-          yourMax={mine?.maxAmount ?? null}
-          isLeader={Boolean(mine && viewer?.id === listing.leaderId)}
+          showBin={showBin}
           live={live}
           endsAt={hasAuction && listing.auctionEndsAt ? listing.auctionEndsAt.toISOString() : null}
           endsText={hasAuction && listing.auctionEndsAt ? formatHKT(listing.auctionEndsAt, locale) : null}
@@ -318,7 +319,13 @@ export default async function ListingPage({
           offerClosed={offerClosed}
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
-          ownerNote={null}
+          ownerNote={
+            owner && listing.reservePrice != null
+              ? tx(locale, `底價 ${formatHkd(listing.reservePrice, locale)}（買家睇唔到）`, `Reserve ${formatHkd(listing.reservePrice, locale)} (hidden from buyers)`)
+              : owner && listing.auctionPassed
+                ? tx(locale, "未達底價或無人出價。可以改做固定價再賣。", "Reserve was not met, or there were no bids. Relist at a fixed price.")
+                : null
+          }
           timeLabel={listed.text}
           timeAt={listed.at.toISOString()}
         />
@@ -360,6 +367,16 @@ export default async function ListingPage({
             <Link className="btn-ghost btn" href={`/sell/${id}`}>{tx(locale, "編輯", "Edit")}</Link>
             <form action={unlistAction}><input type="hidden" name="listingId" value={id} /><button className="btn-ghost btn">{tx(locale, "下架", "Unlist")}</button></form>
             {listing.status === "UNLISTED" ? <form action={relistAction}><input type="hidden" name="listingId" value={id} /><button className="btn-ghost btn">{tx(locale, "重新上架", "Relist")}</button></form> : null}
+            {listing.auctionPassed ? (
+              <form action={relistFixedAction} className="flex w-full items-center gap-2">
+                <input type="hidden" name="listingId" value={id} />
+                <label className="grid min-w-0 flex-1 gap-1 text-sm">
+                  {tx(locale, "固定價 HKD", "Fixed price HKD")}
+                  <input className="field" name="price" inputMode="decimal" required placeholder="280" />
+                </label>
+                <button className="btn btn-primary shrink-0">{tx(locale, "改固定價", "Relist fixed")}</button>
+              </form>
+            ) : null}
             {listing.status === "DRAFT" ? <form action={deleteDraftAction}><input type="hidden" name="listingId" value={id} /><button className="btn-ghost btn">{tx(locale, "刪除草稿", "Delete draft")}</button></form> : null}
           </div>
         ) : null}

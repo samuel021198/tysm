@@ -68,6 +68,109 @@ export async function wipeUserContent() {
   await prisma.user.deleteMany();
 }
 
+async function seedAuctionDemos() {
+  const cover = (id: string) => demoShowcaseListings.find((row) => row.id === id)?.photos[0] ?? "/demo/back.svg";
+  const rows = [
+    {
+      id: "demo_auction_zard",
+      sellerId: "user_kai",
+      title: "拍賣示範 · 噴火龍",
+      description: "拍賣示範。起標公開，底價只有賣家睇到。",
+      saleType: "AUCTION" as const,
+      price: null as number | null,
+      startPrice: 80000,
+      reservePrice: 150000,
+      auctionDays: 3,
+      currentBid: 80000,
+      leaderId: "user_mars" as string | null,
+      photo: cover("mars_list_01"),
+      cardName: "噴火龍",
+    },
+    {
+      id: "demo_auction_bin",
+      sellerId: "user_hoi",
+      title: "拍賣示範 · 即買",
+      description: "拍賣示範，可以即買。",
+      saleType: "BOTH" as const,
+      price: 50000 as number | null,
+      startPrice: 20000,
+      reservePrice: null as number | null,
+      auctionDays: 1,
+      currentBid: null as number | null,
+      leaderId: null as string | null,
+      photo: cover("tyu_list_02"),
+      cardName: "皮卡丘",
+    },
+  ];
+  for (const row of rows) {
+    const data = {
+      sellerId: row.sellerId,
+      categoryId: "cat_pokemon",
+      status: "ACTIVE" as const,
+      saleType: row.saleType,
+      title: row.title,
+      description: row.description,
+      quantity: 1,
+      quantityAvailable: 1,
+      shippingFee: 0,
+      shippingDays: 3,
+      shipLockerFee: 0,
+      shipMeetFee: 0,
+      shipSfCod: true,
+      shipMeetup: true,
+      shipPickup: false,
+      meetupDistrict: "油尖旺",
+      meetupWindow: "週末下午",
+      meetupNotes: "請先傳訊息。",
+      price: row.price,
+      offersEnabled: false,
+      minOffer: null,
+      startPrice: row.startPrice,
+      reservePrice: row.reservePrice,
+      auctionDays: row.auctionDays,
+      auctionEndsAt: new Date(Date.now() + row.auctionDays * 86400000),
+      currentBid: row.currentBid,
+      leaderId: row.leaderId,
+      auctionSettled: false,
+      auctionPassed: false,
+      bidsVoided: false,
+      binLockOrderId: null,
+      cardKind: "TCG" as const,
+      game: "Pokémon",
+      setName: "151",
+      cardName: row.cardName,
+      language: "日文",
+      personName: null,
+      seasonYear: "2026",
+      brandSeries: null,
+      conditionTrack: "RAW" as const,
+      rawGrade: "A" as const,
+      grader: null,
+      gradeValue: null,
+      certNumber: null,
+      videoUrl: null,
+      publishedAt: new Date(),
+      viewCount: 12,
+    };
+    await prisma.listing.upsert({
+      where: { id: row.id },
+      update: data,
+      create: { id: row.id, ...data },
+    });
+    const photoId = `${row.id}_p0`;
+    await prisma.listingPhoto.upsert({
+      where: { id: photoId },
+      update: { url: row.photo, role: "FRONT", position: 0 },
+      create: { id: photoId, listingId: row.id, url: row.photo, role: "FRONT", position: 0 },
+    });
+  }
+  await prisma.bidEvent.upsert({
+    where: { id: "demo_auction_zard_bid" },
+    update: { publicAmount: 80000, bidderId: "user_mars" },
+    create: { id: "demo_auction_zard_bid", listingId: "demo_auction_zard", bidderId: "user_mars", publicAmount: 80000 },
+  });
+}
+
 async function seedShowcase() {
   for (const [index, item] of demoShowcaseListings.entries()) {
     const data = {
@@ -537,6 +640,7 @@ export async function seedDemo() {
   }
 
   await seedShowcase();
+  await seedAuctionDemos();
   await seedRank();
   await ensureDemoCatalog();
   await attachShowcaseDex();

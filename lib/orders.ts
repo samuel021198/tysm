@@ -4,6 +4,8 @@ import { Fail, asFail } from "./fail";
 import { syncListingInventory } from "./inventory";
 import { purgeExpiredStories } from "./story-feed";
 import { notify } from "./social";
+import { auctionOutcome } from "./auction";
+import { dealEventBody } from "./deal-phase";
 import {
   AUTO_RELEASE_MS,
   PAY_TTL_MS,
@@ -641,27 +643,27 @@ export async function settleAuction(listingId: string) {
       throw new Fail("state");
     }
     const proxies = await tx.proxyBid.findMany({ where: { listingId } });
-    if (proxies.length === 0 || listing.bidsVoided) {
-      await tx.listing.update({
-        where: { id: listingId },
-        data: { status: listing.saleType === "AUCTION" ? "ENDED" : "ACTIVE" },
-      });
-      return null;
+    let high = listing.currentBid;
+    let leader = listing.leaderId;
+    if (proxies.length && !listing.bidsVoided) {
+      const resolved = resolveAuction(listing.startPrice, proxies);
+      high = resolved.price;
+      leader = resolved.leaderId;
     }
-    const resolved = resolveAuction(listing.startPrice, proxies);
-    if (!resolved.leaderId) {
+    const outcome = auctionOutcome({ high, leaderId: leader, reserve: listing.reservePrice, voided: listing.bidsVoided });
+    if (outcome === "passed" || high == null || !leader) {
       await tx.listing.update({
         where: { id: listingId },
-        data: { status: listing.saleType === "AUCTION" ? "ENDED" : "ACTIVE" },
+        data: { status: "ENDED", auctionPassed: true, auctionSettled: true },
       });
-      return null;
+      return { passed: true as const, sellerId: listing.sellerId, title: listing.title };
     }
     const address =
-      (await tx.address.findFirst({ where: { userId: resolved.leaderId, isDefault: true } })) ??
-      (await tx.address.findFirst({ where: { userId: resolved.leaderId } }));
+      (await tx.address.findFirst({ where: { userId: leader, isDefault: true } })) ??
+      (await tx.address.findFirst({ where: { userId: leader } }));
     const photo = await tx.listingPhoto.findFirst({ where: { listingId }, orderBy: { position: "asc" } });
     const order = await insertOrder(tx, {
-      buyerId: resolved.leaderId,
+      buyerId: leader,
       sellerId: listing.sellerId,
       source: "AUCTION",
       shipDays: listing.shippingDays,
@@ -677,7 +679,7 @@ export async function settleAuction(listingId: string) {
         {
           listingId,
           title: listing.title,
-          unitPrice: resolved.price,
+          unitPrice: high,
           quantity: 1,
           shippingFee: 0,
           imageUrl: photo?.url ?? null,
@@ -688,18 +690,40 @@ export async function settleAuction(listingId: string) {
       ],
       deal: true,
     });
+    await tx.order.update({
+      where: { id: order.id },
+      data: {
+        fulfillment: { deal: { private: true, meetupAgreed: false, confirmed: true, proofs: [] } },
+      },
+    });
     await tx.listing.update({
       where: { id: listingId },
-      data: { status: "ENDED", quantityAvailable: 0, currentBid: resolved.price, leaderId: resolved.leaderId },
+      data: {
+        status: "ACTIVE",
+        auctionSettled: true,
+        auctionPassed: false,
+        binLockOrderId: order.id,
+        currentBid: high,
+        leaderId: leader,
+      },
     });
-    return { orderId: order.id, buyerId: resolved.leaderId, sellerId: listing.sellerId };
+    return { passed: false as const, orderId: order.id, buyerId: leader, sellerId: listing.sellerId, title: listing.title };
   });
   if (!created) return;
+  if (created.passed) {
+    await notify(created.sellerId, "order", "流標", created.title, `/listing/${listingId}`);
+    return;
+  }
   const { attachDealThread } = await import("./deals");
   const threadId = await attachDealThread(created.orderId);
+  if (threadId) {
+    await prisma.message.create({
+      data: { threadId, senderId: created.sellerId, body: dealEventBody({ kind: "lock" }) },
+    });
+  }
   const href = threadId ? `/messages/${threadId}` : `/orders/${created.orderId}`;
-  await notify(created.buyerId, "order", "你贏得拍賣", "請喺聊天傾交收。平台唔代收款。", href);
-  await notify(created.sellerId, "order", "拍賣已結束", "得標者會喺聊天傾交收。", href);
+  await notify(created.buyerId, "order", "已保留", "拍賣結束，貨品已保留。請喺聊天傾交收。", href);
+  await notify(created.sellerId, "order", "已保留", "拍賣已結束，得標貨品已保留。", href);
   } catch (error) {
     if (asFail(error)) return;
     throw error;

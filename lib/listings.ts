@@ -3,6 +3,7 @@ import { prisma } from "./db";
 import { headerIndex, parseCsv, PERSON_HEADERS, TCG_HEADERS } from "./csv";
 import { hkdToCents, isAllowedMediaUrl } from "./format";
 import { PhotoStoreError, storeUploadedImages } from "./r2";
+import { auctionSchedule } from "./auction";
 import { parseGrade } from "./rules";
 import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
@@ -75,6 +76,8 @@ function dataFor(input: ListingInput, groupKey: string, now: Date) {
     offersEnabled: input.offersEnabled && input.saleType !== "AUCTION",
     minOffer: input.offersEnabled ? input.minOfferCents : null,
     startPrice: input.saleType === "BUY_NOW" ? null : input.startPriceCents,
+    reservePrice: input.saleType === "BUY_NOW" ? null : input.reserveCents ?? null,
+    auctionDays: input.saleType === "BUY_NOW" ? null : input.auctionDays ?? null,
     auctionEndsAt: input.saleType === "BUY_NOW" ? null : input.auctionEndsAt,
     cardKind: kindFor(groupKey),
     game: first?.game || (groupKey === "tcg" ? input.game?.trim() || null : null),
@@ -227,7 +230,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   if (listing && !["DRAFT", "SCHEDULED", "ACTIVE"].includes(listing.status)) return { ok: false as const, error: "state" };
   if (listing?.binLockOrderId) return { ok: false as const, error: "locked" };
   if (listing) {
-    const bidCount = await prisma.proxyBid.count({ where: { listingId: listing.id } });
+    const bidCount = await bidRows(listing.id);
     if (bidCount > 0) {
       const description = input.description.trim();
       if (description.length > 5000) return { ok: false as const, error: "description" };
@@ -259,7 +262,15 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   if (errors.length) return { ok: false as const, error: errors[0] };
   const now = new Date();
   const data = dataFor(filled, found.groupKey, now);
-  const { photos: sourcePhotos, items, ...rest } = data;
+  const clock = auctionSchedule({
+    saleType: data.saleType,
+    auctionDays: data.auctionDays,
+    fallbackEnd: data.auctionEndsAt,
+    publishAt: data.publishAt,
+    now,
+    existing: listing,
+  });
+  const { photos: sourcePhotos, items, ...rest } = { ...data, ...clock };
   let photos: PhotoInput[];
   try {
     photos = await storeUploadedImages(sourcePhotos, "uploads/listings");
@@ -324,13 +335,53 @@ export async function unlistListing(userId: string, listingId: string, asAdmin =
   if (!listing) return { ok: false as const, error: "unavailable" };
   if (!asAdmin && listing.sellerId !== userId) return { ok: false as const, error: "forbidden" };
   if (!asAdmin && listing.saleType !== "BUY_NOW") {
-    const bids = await prisma.proxyBid.count({ where: { listingId } });
+    const bids = await bidRows(listingId);
     const started = listing.status === "ACTIVE" && listing.publishedAt != null && listing.publishedAt <= new Date();
     if (bids > 0 || started) return { ok: false as const, error: "state" };
   }
   if (!["DRAFT", "SCHEDULED", "ACTIVE"].includes(listing.status)) return { ok: false as const, error: "state" };
   // Clear the hold so a relist does not come back 已保留.
   await prisma.listing.update({ where: { id: listingId }, data: { status: "UNLISTED", binLockOrderId: null } });
+  return { ok: true as const };
+}
+
+async function bidRows(listingId: string) {
+  const [proxies, events] = await Promise.all([
+    prisma.proxyBid.count({ where: { listingId } }),
+    prisma.bidEvent.count({ where: { listingId } }),
+  ]);
+  return proxies + events;
+}
+
+/** 流標 → fixed price. Clears the auction clock so the card sells like any other listing. */
+export async function relistAuctionFixed(userId: string, listingId: string, priceCents: number) {
+  if (!Number.isSafeInteger(priceCents) || priceCents <= 0 || priceCents > 1_000_000_000) {
+    return { ok: false as const, error: "price" };
+  }
+  const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+  if (!listing || listing.sellerId !== userId) return { ok: false as const, error: "forbidden" };
+  if (!listing.auctionPassed || listing.status !== "ENDED" || listing.binLockOrderId) {
+    return { ok: false as const, error: "state" };
+  }
+  await prisma.listing.update({
+    where: { id: listing.id },
+    data: {
+      saleType: "BUY_NOW",
+      status: "ACTIVE",
+      price: priceCents,
+      startPrice: null,
+      reservePrice: null,
+      auctionDays: null,
+      auctionEndsAt: null,
+      currentBid: null,
+      leaderId: null,
+      auctionSettled: false,
+      auctionPassed: false,
+      bidsVoided: false,
+      quantityAvailable: Math.max(1, listing.quantity),
+      publishedAt: new Date(),
+    },
+  });
   return { ok: true as const };
 }
 

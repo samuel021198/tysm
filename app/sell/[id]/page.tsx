@@ -14,9 +14,10 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
     include: { photos: { orderBy: { position: "asc" } }, items: { orderBy: { position: "asc" } }, category: true },
   });
   if (!listing || listing.sellerId !== viewer.id) notFound();
-  const [categories, bids] = await Promise.all([
+  const [categories, proxies, events] = await Promise.all([
     prisma.category.findMany({ where: { level: "LEAF" }, orderBy: { sort: "asc" } }),
     prisma.proxyBid.count({ where: { listingId: id } }),
+    prisma.bidEvent.count({ where: { listingId: id } }),
   ]);
   return (
     <div className="mx-auto max-w-3xl">
@@ -32,6 +33,8 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           saleType: listing.saleType,
           price: centsToInput(listing.price),
           startPrice: centsToInput(listing.startPrice),
+          reserve: centsToInput(listing.reservePrice),
+          auctionDays: listing.auctionDays ? String(listing.auctionDays) : "",
           auctionEndsAt: listing.auctionEndsAt ? toHkInput(listing.auctionEndsAt) : "",
           offersEnabled: listing.offersEnabled,
           minOffer: centsToInput(listing.minOffer),
@@ -60,7 +63,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           videoUrl: listing.videoUrl || "",
           publishAt: listing.publishAt ? toHkInput(listing.publishAt) : "",
           photos: listing.photos.map((photo) => ({ url: photo.url, role: photo.role })),
-          locked: bids > 0,
+          locked: proxies + events > 0,
           catalogCardId: listing.catalogCardId || "",
           stockType: listing.stockType,
           shipWithinDays: listing.shipWithinDays,
