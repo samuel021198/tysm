@@ -4,6 +4,7 @@ import { dexPath } from "@/lib/dex";
 import { conditionLabel } from "@/lib/rules";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { Icon } from "./icons";
 import { Sparkline } from "./sparkline";
 
 type CardListing = {
@@ -61,9 +62,11 @@ export function ListingCard({
           <input type="hidden" name="next" value={next} />
           <button
             aria-label={tx(locale, "收藏", "Favorite")}
-            className={`grid h-8 w-8 place-items-center rounded-full text-base leading-none shadow-sm ${favorited ? "bg-card text-accent" : "bg-card text-muted"}`}
+            title={tx(locale, "收藏", "Favorite")}
+            aria-pressed={favorited}
+            className={`grid h-8 w-8 place-items-center rounded-full shadow-sm ${favorited ? "bg-card text-accent" : "bg-card text-muted"}`}
           >
-            {favorited ? "♥" : "♡"}
+            <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={favorited} />
             <span className="sr-only">{listing.favoriteCount}</span>
           </button>
         </form>

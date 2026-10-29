@@ -249,18 +249,10 @@ function SavePost({
     <form action={post.savePostId ? togglePostSave : toggleFavorite}>
       {post.savePostId ? <input type="hidden" name="postId" value={post.savePostId} /> : <input type="hidden" name="listingId" value={post.saveListingId || ""} />}
       <input type="hidden" name="next" value={next} />
-      <button type="submit" className={action} aria-label={label} aria-pressed={post.saved}>
-        <Bookmark on={post.saved} />
+      <button type="submit" className={action} aria-label={label} title={label} aria-pressed={post.saved}>
+        <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={post.saved} />
       </button>
     </form>
-  );
-}
-
-function Bookmark({ on }: { on: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill={on ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M7.2 5h9.6a1 1 0 0 1 1 1V20l-5.8-3.3L6.2 20V6a1 1 0 0 1 1-1z" />
-    </svg>
   );
 }
 

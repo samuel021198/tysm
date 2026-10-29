@@ -2,15 +2,17 @@ export function Icon({
   name,
   className = "h-5 w-5",
   strokeWidth = 1.75,
+  filled = false,
 }: {
   name: "home" | "search" | "plus" | "check" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank";
   className?: string;
   strokeWidth?: number;
+  filled?: boolean;
 }) {
   const props = {
     className,
     viewBox: "0 0 24 24",
-    fill: "none",
+    fill: filled ? "currentColor" : "none",
     stroke: "currentColor",
     strokeWidth,
     strokeLinecap: "round" as const,

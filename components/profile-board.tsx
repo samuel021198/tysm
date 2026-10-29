@@ -298,8 +298,10 @@ export function ProfileBoard({
             <button
               key={item.id}
               type="button"
+              aria-label={label}
+              title={label}
               aria-current={on ? "page" : undefined}
-              className={`relative flex h-12 flex-col items-center justify-center gap-0.5 ${on ? "text-ink" : "text-muted"}`}
+              className={`relative grid h-12 place-items-center ${on ? "text-ink" : "text-muted"}`}
               onClick={() => {
                 if (item.id === tab && !busy.current) return;
                 window.clearTimeout(timer.current);
@@ -311,7 +313,6 @@ export function ProfileBoard({
               }}
             >
               <Icon name={item.icon} className="h-6 w-6" strokeWidth={on ? 2.15 : 1.6} />
-              <span className="max-w-full truncate px-1 text-[11px] font-medium leading-none">{label}</span>
             </button>
           );
         })}
