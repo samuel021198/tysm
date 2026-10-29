@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, latestOpenOfferMessage, offersClosed, readDealEvent, readDealMeta } from "@/lib/deal-phase";
+import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, intentBlocked, latestOpenOfferMessage, offersClosed, pinAction, readDealEvent, readDealMeta, showDealStream } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -67,13 +67,14 @@ export default async function ThreadPage({
   const order = open ?? orders.find((row) => dealPhase(row) === "DONE") ?? orders[0] ?? null;
   const phase = order ? dealPhase(order) : null;
   const offer = order ? readDealMeta(order.fulfillment).offer : null;
+  const offerStatus = offer?.status === "PENDING" || offer?.status === "ACCEPTED" ? offer.status : null;
   const pendingOffer = offer?.status === "PENDING" ? offer : null;
   const pending = Boolean(pendingOffer);
   const blocked = order
     ? order.items.some((item) => dealBlocked(dealPhase(order), item.listing.status, item.listing.binLockOrderId, order.id))
     : Boolean(thread.listing?.binLockOrderId);
   const listingClosed = Boolean(thread.listing && thread.listing.status !== "ACTIVE");
-  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed, pendingOffer?.by === viewer.id, offer?.status === "ACCEPTED");
+  const canOffer = thread.intent !== "DIRECT" && canOfferFromMenu(phase, pending, blocked || listingClosed, pendingOffer?.by === viewer.id, offer?.status === "ACCEPTED");
   const liveOfferId = pending ? latestOpenOfferMessage(thread.messages)?.id ?? null : null;
   const reviseItem = order?.items[0];
   const listPrice = thread.listing ? (thread.listing.price ?? thread.listing.currentBid ?? thread.listing.startPrice) : null;
@@ -133,6 +134,15 @@ export default async function ThreadPage({
             openOffer={sp.offer === "1"}
             offerClosed={offersClosed(thread.listing.status, thread.listing.binLockOrderId)}
             riskAcked={Boolean(viewer.p2pRiskAckAt)}
+            priced={thread.listing.price != null && thread.listing.price > 0}
+            mode={pinAction({
+              role: thread.buyerId === viewer.id ? "buyer" : "seller",
+              intent: thread.intent,
+              closed: offersClosed(thread.listing.status, thread.listing.binLockOrderId),
+              blocked: order ? intentBlocked(phase, offerStatus) : false,
+              started: orders.some((row) => dealPhase(row) !== "CANCELLED"),
+              entry: sp.offer === "1",
+            })}
           />
         ) : null}
         <div className={thread.listing ? "grid gap-2.5" : "grid gap-2.5 pt-2"}>
@@ -183,7 +193,7 @@ export default async function ThreadPage({
               </li>
             );
           })}
-          {order ? (
+          {order && phase && showDealStream(phase, offerStatus) ? (
             <li>
               <DealStream
                 locale={prefs.locale}

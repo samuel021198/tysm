@@ -93,6 +93,8 @@ assert(
     shopActions.includes("openDirectThread") &&
     shopActions.includes('name="messages"') &&
     shopActions.includes("已關注") &&
+    !shopActions.includes("傳送訊息") &&
+    !shopActions.includes("取消關注") &&
     shopActions.indexOf("PersonMenu") > shopActions.indexOf("openDirectThread") &&
     shopActions.indexOf("openDirectThread") > shopActions.indexOf("toggleFollow"),
   "another profile puts a speech-bubble 訊息 between 關注 and the ellipsis",

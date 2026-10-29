@@ -355,18 +355,24 @@ const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import
 const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
 assert(
     purchase.includes(">議價</button>") &&
+    purchase.includes(">直接購買</button>") &&
     purchase.includes("disabled={offerClosed}") &&
     purchase.includes(">聯絡賣家</button>") &&
     !purchase.includes("disabled={offerClosed}>聯絡賣家") &&
-    purchase.split("grid-cols-2").length === 3 &&
+    purchase.includes("price != null") &&
+    purchase.split(">直接購買</button>").length === 3 &&
     purchase.includes('value="offer"') &&
+    purchase.includes('value="buy"') &&
     purchase.includes('value="compose"') &&
     purchase.includes("openThread") &&
     !purchase.includes("HandoverForm") &&
+    !purchase.includes("查詢") &&
     !purchase.includes("聯絡買家") &&
     !purchase.includes("瀏覽賣家") &&
-    !purchase.includes("送出議價"),
-  "listing price row is 議價 and 聯絡賣家, on the page and in the mobile dock",
+    !purchase.includes("送出議價") &&
+    !purchase.includes("要約") &&
+    !purchase.includes("議價中"),
+  "listing price row is 議價, 直接購買 when priced, and 聯絡賣家, on the page and in the mobile dock",
 );
 assert(!listingPage.includes("再議價") && !listingPage.includes("聯絡買家") && !listingPage.includes("btn btn-ghost w-full"), "listing bookmark is not the wide primary");
 assert(!listingPage.includes("放賣") && !purchase.includes("放賣"), "listing pages keep 議價 and 聯絡賣家, with no 放賣");

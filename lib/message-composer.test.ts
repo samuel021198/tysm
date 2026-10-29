@@ -39,10 +39,10 @@ const deal = readFileSync(new URL("../components/deal-panel.tsx", import.meta.ur
 const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 assert(!existsSync(new URL("../components/thread-log.tsx", import.meta.url)), "the sticky thread log overlay is gone");
 const scroll = readFileSync(new URL("../components/thread-scroll.tsx", import.meta.url), "utf8");
-assert(page.includes("<DealStream") && page.includes("<MessageComposer") && page.includes("<ThreadScroll"), "the thread shows an in-flow deal bubble and the composer");
+assert(page.includes("<DealStream") && page.includes("showDealStream") && page.includes("<MessageComposer") && page.includes("<ThreadScroll"), "the thread shows an in-flow deal bubble and the composer");
 assert(!scroll.includes("paddingTop") && !scroll.includes("ResizeObserver") && !scroll.includes("sticky"), "the scroller does not reserve a deal-bar inset");
 assert(scroll.includes("onScroll") && scroll.includes("scrollHeight - el.scrollTop") && scroll.includes("pinThreadToEnd"), "a reader at the bottom stays with the newest row; scrolling up is left alone");
-assert(/\{order \? \([\s\S]*<DealStream[\s\S]*\) : null\}/.test(page), "the deal bubble renders only when the thread has an order");
+assert(page.includes("showDealStream(phase, offerStatus)"), "the deal bubble stays off until an offer is submitted or the deal is past talking");
 assert(!page.includes("<DealPanel") && !page.includes("<ThreadLog") && !page.includes("pin={false}"), "the thread has no sticky deal card");
 const disclaimer = readFileSync(new URL("../components/deal-disclaimer.tsx", import.meta.url), "utf8");
 assert(!page.includes("DealDisclaimer") && !page.includes("DEAL_BANNER"), "the thread has no handover banner above the log");
@@ -59,6 +59,7 @@ assert(deal.includes('tx(locale, "接受", "Accept")') && deal.includes("ReviseO
 assert(!deal.includes("撤回要約") && !deal.includes("解除鎖定") && !deal.includes("約定交收") && !deal.includes("取消交收") && !deal.includes("標記已出售"), "retired handover buttons stay off the bubble");
 assert(page.includes("已取代") && page.includes("event.superseded") && page.includes("liveOfferId"), "a replaced offer stays in the log as 已取代, and the live one is only the deal card");
 assert(page.includes("pendingOffer?.by === viewer.id") && page.includes("offerPrefill"), "the proposer can open + while their offer is live, with the current price and note");
+assert(page.includes('thread.intent !== "DIRECT"'), "a direct buy waits on 確認 or 已售 instead of opening another offer");
 assert(src.includes("prefill={offerPrefill}"), "the + menu opens the same make-offer form");
 assert(deal.includes("canConfirmHandover") && deal.includes("stream && (buyer || seller)") && deal.includes("待對方確認交收。"), "both sides share one confirm, and the side that already tapped waits");
 assert(src.includes('name="plus"') && src.includes('tx(locale, "議價", "Offer")') && src.includes("canOffer") && !src.includes("提出要約") && !src.includes('name="camera"'), "the left control is + and 議價 is a menu item");
@@ -82,16 +83,19 @@ assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL
 const start = social.slice(social.indexOf("export async function startHandover"), social.indexOf("export async function openDirectThread"));
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
 const openedThread = social.slice(social.indexOf("export async function openThread"), social.indexOf("export async function sendMessage"));
-assert(openedThread.includes('focus === "offer"') && openedThread.includes("?offer=1") && openedThread.includes('focus === "compose"') && openedThread.includes("?compose=1"), "議價 and 聯絡賣家 open the same listing thread");
+assert(openedThread.includes('focus === "offer"') && openedThread.includes('focus === "buy"') && openedThread.includes('focus === "compose"') && openedThread.includes("nextThreadIntent") && openedThread.includes("threadEntryQuery") && openedThread.includes("recordDirectBuy"), "議價, 直接購買, and 聯絡賣家 open the same listing thread");
 assert(!openedThread.includes("message.create"), "議價 and 聯絡賣家 do not post a listing message on open");
+const phaseLib = readFileSync(new URL("../lib/deal-phase.ts", import.meta.url), "utf8");
+assert(phaseLib.includes('return "?offer=1"') && phaseLib.includes('return "?compose=1"') && !phaseLib.includes("要約"), "議價 opens the price sheet and 聯絡賣家 focuses the composer");
 const direct = social.slice(social.indexOf("export async function openDirectThread"), social.indexOf("export async function openThread"));
 assert(
   direct.includes("listingId: null") &&
     direct.includes("buyerId: user.id, sellerId: otherId") &&
     direct.includes("buyerId: otherId, sellerId: user.id") &&
     direct.includes("redirect(`/messages/${thread.id}`)") &&
+    direct.includes('intent: "INQUIRY"') &&
     !direct.includes("listingId,"),
-  "a profile message opens or creates a thread with no listing pin",
+  "a profile message opens or creates a listing-free 查詢 thread",
 );
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
@@ -118,7 +122,8 @@ const toolbar = threadFrameBox({ innerHeight: 800, height: 750, offsetTop: 0 });
 assert(toolbar?.keyboard === false && toolbar.height === 750, "the Safari toolbar is not a keyboard");
 const keys = threadFrameBox({ innerHeight: 844, height: 420.4, offsetTop: 80.2 });
 assert(keys?.keyboard === true && keys.height === 420 && keys.top === 80, "the frame tracks the visible band above the keyboard");
-assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價"), "the pinned card links to the listing and offers 議價");
+assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價") && bar.includes("直接購買") && bar.includes(">查詢</button>") && bar.includes(">確認</button>") && bar.includes(">已售</button>"), "the pinned card links to the listing and keeps 議價, 直接購買, 查詢, and the seller replies");
+assert(!bar.includes("議價中") && !bar.includes("要約"), "the pin has no 議價中 pill and does not say 要約");
 assert(bar.includes("offerClosed") && bar.includes("disabled={offerClosed}") && bar.includes("if (!openOffer || offerClosed)"), "the pinned 議價 stays labelled 議價 and does not open when reserved or sold");
 assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("還價"), "the pinned card does not rename the button or add a shop tab");
 assert(page.includes("offerClosed={offersClosed"), "the thread greys 議價 from the listing hold");
