@@ -6,7 +6,8 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { activityLine } from "@/lib/time";
 import { activeWhere, cardInclude } from "@/lib/feed";
-import { RESERVE_BADGE } from "@/lib/deal-phase";
+import { offersClosed } from "@/lib/deal-phase";
+import { shopPill, shopPillLabel } from "@/lib/shop-inventory";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
@@ -122,7 +123,9 @@ export default async function ListingPage({
     : [];
   const threadByBuyer = new Map(offerThreads.map((thread) => [thread.buyerId, thread.id]));
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
-  const showHandover = !owner && listing.status === "ACTIVE" && listing.quantityAvailable > 0;
+  const offerClosed = offersClosed(listing.status, listing.binLockOrderId);
+  const showHandover = !owner && ((listing.status === "ACTIVE" && listing.quantityAvailable > 0) || offerClosed);
+  const reserved = shopPill(listing) === "RESERVED";
   const showBid = Boolean(live && viewer && !owner && !viewer.bidBanned);
 
   return (
@@ -133,8 +136,7 @@ export default async function ListingPage({
         <Gallery photos={listing.photos.map((photo) => ({ url: photo.url, role: photo.role }))} alt={listing.title} locale={locale} />
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
-          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listingStatusLabel(locale, listing.status)}</span>
-          {listing.binLockOrderId ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{tx(locale, RESERVE_BADGE, "Locked")}</span> : null}
+          <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{reserved ? shopPillLabel(locale, "RESERVED") : listingStatusLabel(locale, listing.status)}</span>
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
         <h1 className="mt-2 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>
@@ -299,6 +301,7 @@ export default async function ListingPage({
           showBid={showBid}
           bidBanned={Boolean(viewer?.bidBanned)}
           showHandover={showHandover}
+          offerClosed={offerClosed}
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={null}

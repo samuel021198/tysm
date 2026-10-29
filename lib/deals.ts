@@ -460,35 +460,55 @@ async function answerOffer(userId: string, orderId: string, mode: "withdraw" | "
   }
 }
 
+type ReserveOrder = {
+  id: string;
+  buyerId: string;
+  sellerId: string;
+  fulfillment: unknown;
+  items: { id: string; quantity: number; listingId: string }[];
+};
+
+/** Accept the live offer and hold the listing. Same binLockOrderId + confirmed path as 確認交易. */
+async function acceptAndReserve(tx: Prisma.TransactionClient, order: ReserveOrder, userId: string, offer: DealOffer) {
+  const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
+  if (!listingIds.length) throw new Fail("state");
+  await softLock(tx, order.id, listingIds);
+  const accepted: DealOffer = { ...offer, status: "ACCEPTED" };
+  // ponytail: a handover is one card. A multi-qty line keeps its quantity; the order total becomes the offer.
+  if (order.items.length === 1 && order.items[0].quantity === 1) {
+    await tx.orderItem.update({ where: { id: order.items[0].id }, data: { unitPrice: offer.amount } });
+  }
+  const changed = await tx.order.updateMany({
+    where: { id: order.id, status: { in: [...OPEN_TALK] } },
+    data: {
+      subtotal: offer.amount,
+      total: offer.amount,
+      sellerProceeds: offer.amount,
+      commissionAmount: 0,
+      fulfillment: withDeal(order.fulfillment, { confirmed: true, offer: accepted }),
+    },
+  });
+  if (changed.count !== 1) throw new Fail("state");
+  await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
+  return postDealNote(tx, order, userId, dealEventBody({ kind: "lock" }));
+}
+
+/** Counterparty accepts. Seller「接受要約」is the hold; a buyer accepting the seller's price holds too, so there is no second 確認交易. */
 export async function acceptDealOffer(userId: string, orderId: string) {
   try {
     const result = await prisma.$transaction(async (tx) => {
       await lockRows(tx, "Order", [orderId]);
       const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
-      if (!order || order.buyerId !== userId) throw new Fail("forbidden");
-      const offer = readDealMeta(order.fulfillment).offer;
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      const meta = readDealMeta(order.fulfillment);
+      if (meta.confirmed || meta.proofs.length > 0) throw new Fail("state");
+      const offer = meta.offer;
       if (!offer || offer.status !== "PENDING") throw new Fail("state");
       if (offer.by === userId) throw new Fail("forbidden");
       const phase = dealPhase(order);
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
       if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
-      const accepted: DealOffer = { ...offer, status: "ACCEPTED" };
-      // ponytail: a handover is one card. A multi-qty line keeps its quantity; the order total becomes the offer.
-      if (order.items.length === 1 && order.items[0].quantity === 1) {
-        await tx.orderItem.update({ where: { id: order.items[0].id }, data: { unitPrice: offer.amount } });
-      }
-      const changed = await tx.order.updateMany({
-        where: { id: order.id, status: { in: [...OPEN_TALK] } },
-        data: {
-          subtotal: offer.amount,
-          total: offer.amount,
-          sellerProceeds: offer.amount,
-          commissionAmount: 0,
-          fulfillment: withDeal(order.fulfillment, { offer: accepted }),
-        },
-      });
-      if (changed.count !== 1) throw new Fail("state");
-      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
+      const threadId = await acceptAndReserve(tx, order, userId, offer);
       return { notifyId: offer.by, threadId, title: order.items[0]?.title ?? "" };
     });
     const href = noticeHref(result.threadId);
@@ -514,31 +534,26 @@ export async function confirmDeal(userId: string, orderId: string) {
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
       if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
       const offer = meta.offer;
-      if (offer?.status === "PENDING" && offer.by === userId) throw new Fail("forbidden");
+      if (offer?.status === "PENDING") {
+        if (offer.by === userId) throw new Fail("forbidden");
+        const threadId = await acceptAndReserve(tx, order, userId, offer);
+        return { notifyId: offer.by, threadId, accepted: true as const, title: order.items[0]?.title ?? "" };
+      }
       const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
       if (!listingIds.length) throw new Fail("state");
       await softLock(tx, order.id, listingIds);
-      const accepting = offer?.status === "PENDING" ? offer : null;
-      const accepted: DealOffer | null = accepting ? { ...accepting, status: "ACCEPTED" } : offer?.status === "ACCEPTED" ? offer : null;
-      if (accepting && order.items.length === 1 && order.items[0].quantity === 1) {
-        await tx.orderItem.update({ where: { id: order.items[0].id }, data: { unitPrice: accepting.amount } });
-      }
+      const accepted: DealOffer | null = offer?.status === "ACCEPTED" ? offer : null;
       const changed = await tx.order.updateMany({
         where: { id: order.id, status: { in: [...OPEN_TALK] } },
-        data: {
-          ...(accepting
-            ? { subtotal: accepting.amount, total: accepting.amount, sellerProceeds: accepting.amount, commissionAmount: 0 }
-            : {}),
-          fulfillment: withDeal(order.fulfillment, accepted ? { confirmed: true, offer: accepted } : { confirmed: true }),
-        },
+        data: { fulfillment: withDeal(order.fulfillment, accepted ? { confirmed: true, offer: accepted } : { confirmed: true }) },
       });
       if (changed.count !== 1) throw new Fail("state");
-      if (accepting) await postDealNote(tx, order, userId, dealEventBody({ kind: "accept" }));
       const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "lock" }));
-      return { notifyId: order.buyerId, threadId };
+      return { notifyId: order.buyerId, threadId, accepted: false as const, title: order.items[0]?.title ?? "" };
     });
     const href = noticeHref(result.threadId);
-    await notify(result.notifyId, "order", "賣家已確認交易", "貨品已鎖定。", href);
+    if (result.accepted) await notifyKind(result.notifyId, "offer-accept", href, result.title);
+    else await notify(result.notifyId, "order", "賣家已確認交易", "貨品已鎖定。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);

@@ -345,8 +345,10 @@ assert(!postCard.includes("bargain") && !postCard.includes("議價"), "the price
 const purchase = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
 const listingPage = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
 assert(
-  purchase.includes(">議價</button>") &&
+    purchase.includes(">議價</button>") &&
+    purchase.includes("disabled={offerClosed}") &&
     purchase.includes(">聯絡賣家</button>") &&
+    !purchase.includes("disabled={offerClosed}>聯絡賣家") &&
     purchase.split("grid-cols-2").length === 3 &&
     purchase.includes('value="offer"') &&
     purchase.includes('value="compose"') &&
@@ -358,6 +360,7 @@ assert(
   "listing price row is 議價 and 聯絡賣家, on the page and in the mobile dock",
 );
 assert(!listingPage.includes("再議價") && !listingPage.includes("聯絡買家") && !listingPage.includes("btn btn-ghost w-full"), "listing bookmark is not the wide primary");
+assert(listingPage.includes("offersClosed") && listingPage.includes('shopPillLabel(locale, "RESERVED")') && listingPage.includes("offerClosed={offerClosed}"), "a held listing shows 已保留 and disables 議價");
 assert(!postCard.includes("/checkout") && !handover.includes("/checkout") && !postCard.includes("立即購買"), "posts do not open platform checkout");
 assert(postCard.includes("post.author.id"), "the author does not get a buy bar");
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");

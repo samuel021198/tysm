@@ -53,7 +53,9 @@ assert(!orderPage.includes("DealDisclaimer") && !orderPage.includes("sticky"), "
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
 assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
 assert(!deal.includes("提出要約") && deal.includes("確認交易") && deal.includes("canSellerLock"), "seller 確認交易 is a stream action; make offer stays in the + menu");
-assert(deal.includes("接受要約") && deal.includes("ReviseOfferButton") && deal.includes("拒絕") && deal.includes("撤回") && deal.includes("提出：") && deal.includes("等待："), "the live card names who proposed and who is waiting; the buyer accepts, the seller confirms, either revises or declines");
+const pendingAnswer = deal.slice(deal.indexOf("viewerId !== pending.by"), deal.indexOf('phase === "CONFIRMED"'));
+assert(pendingAnswer.includes("接受要約") && pendingAnswer.includes("acceptDealOfferAction") && !pendingAnswer.includes("確認交易") && !pendingAnswer.includes("confirmDealAction"), "answering a live offer is 接受要約, which is the lock");
+assert(deal.includes("接受要約") && deal.includes("ReviseOfferButton") && deal.includes("拒絕") && deal.includes("撤回") && deal.includes("提出：") && deal.includes("等待："), "the live card names who proposed and who is waiting; either person accepts, revises, or declines");
 assert(!deal.includes("撤回要約"), "withdraw uses the locked label 撤回");
 assert(page.includes("已取代") && page.includes("event.superseded") && page.includes("liveOfferId"), "a replaced offer stays in the log as 已取代, and the live one is only the deal card");
 assert(page.includes("pendingOffer?.by === viewer.id") && page.includes("offerPrefill"), "the proposer can open + while their offer is live, with the current price and note");
@@ -84,17 +86,21 @@ assert(openedThread.includes('focus === "offer"') && openedThread.includes("?off
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
 assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價"), "the pinned card links to the listing and offers 議價");
-assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("binLock") && !bar.includes("還價"), "the pinned card does not rename the button, add a shop tab, or hide 議價 when reserved");
+assert(bar.includes("offerClosed") && bar.includes("disabled={offerClosed}") && bar.includes("if (!openOffer || offerClosed)"), "the pinned 議價 stays labelled 議價 and does not open when reserved or sold");
+assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("還價"), "the pinned card does not rename the button or add a shop tab");
+assert(page.includes("offerClosed={offersClosed"), "the thread greys 議價 from the listing hold");
 assert(sheet.includes('priceOnly ? "議價"') && sheet.includes("priceOnly ? null") && sheet.includes("價錢"), "the 議價 sheet asks for a price and skips the note");
 assert(!sheet.includes("還價") && !deal.includes("瀏覽賣家"), "this wave does not add a counter-offer or a seller tab");
 const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
 const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
 assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");
 assert(deals.includes("markLiveOfferSuperseded") && !deals.includes('Fail("pending")'), "submitting another offer replaces the live one");
+const reserveFn = deals.slice(deals.indexOf("async function acceptAndReserve"), deals.indexOf("export async function acceptDealOffer"));
 const acceptFn = deals.slice(deals.indexOf("export async function acceptDealOffer"), deals.indexOf("export async function confirmDeal"));
 const confirmFn = deals.slice(deals.indexOf("export async function confirmDeal"), deals.indexOf("export async function releaseReserve"));
-assert(acceptFn.includes('if (offer.by === userId) throw new Fail("forbidden")') && acceptFn.includes("order.buyerId !== userId") && !acceptFn.includes("softLock"), "the buyer accepts; the proposer does not press a second agree, and accept does not lock");
-assert(confirmFn.includes("softLock") && confirmFn.includes("order.sellerId !== userId") && confirmFn.includes('kind: "lock"'), "seller 確認交易 soft-locks the listing");
+assert(reserveFn.includes("softLock") && reserveFn.includes("confirmed: true") && reserveFn.includes('kind: "lock"'), "accepting holds the listing on the existing confirmed lock");
+assert(acceptFn.includes("acceptAndReserve") && acceptFn.includes('if (offer.by === userId) throw new Fail("forbidden")') && acceptFn.includes("order.sellerId !== userId") && acceptFn.includes("order.buyerId !== userId"), "either party accepts the other's offer, and that accept is the hold");
+assert(confirmFn.includes("acceptAndReserve") && confirmFn.includes("softLock") && confirmFn.includes("order.sellerId !== userId") && confirmFn.includes('kind: "lock"'), "a no-offer 確認交易 still uses the same hold");
 assert(proof.includes("上載付款證明") && !proof.includes("上傳付款證明"), "payment proof uses the locked label");
 
 console.log("message-composer.test.ts ok");

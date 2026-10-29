@@ -97,7 +97,7 @@ export function offerAckGate(
   return { ok: false, error: "deal_ack" };
 }
 
-/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. An accepted offer waits for the seller lock. */
+/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. Accepting locks the listing. */
 export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false, proposer = false, accepted = false): boolean {
   if (blocked || accepted) return false;
   if (pending && !proposer) return false;
@@ -105,9 +105,14 @@ export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, bloc
   return phase === "CHATTING" || phase === "ARRANGED";
 }
 
-/** Seller soft-lock. Proof stays closed until this deal is 已鎖貨. */
+/** Seller soft-lock at the listed price, when nobody has a live offer. Proof stays closed until this deal is 已鎖貨. */
 export function canSellerLock(phase: DealPhase): boolean {
   return phase === "CHATTING" || phase === "ARRANGED";
+}
+
+/** 議價 stays on screen and does nothing once the listing is 已保留 or sold. */
+export function offersClosed(status: string, lockOrderId: string | null | undefined): boolean {
+  return status === "SOLD" || Boolean(lockOrderId);
 }
 
 /** Map a stored order onto the handover the buyer and seller actually see. */

@@ -24,6 +24,7 @@ import {
   offerAckGate,
   offerEntry,
   offerFormLocked,
+  offersClosed,
   readDealEvent,
   dealBlocked,
   dealPhase,
@@ -63,6 +64,7 @@ assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && c
 assert(!canOfferFromMenu("CHATTING", true) && canOfferFromMenu("CHATTING", true, false, true) && canOfferFromMenu("ARRANGED", true, false, true), "only the proposer keeps + while an offer is live, so they can replace it");
 assert(!canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true) && !canOfferFromMenu("CONFIRMED", true, false, true) && !canOfferFromMenu("CHATTING", false, false, false, true), "the + item is omitted once accepted, locked, finished, or blocked");
 assert(canSellerLock("CHATTING") && canSellerLock("ARRANGED") && !canSellerLock("CONFIRMED") && !canSellerLock("PROOF") && !canSellerLock("DONE"), "seller 確認交易 is only before the lock");
+assert(offersClosed("SOLD", null) && offersClosed("ACTIVE", "order_1") && !offersClosed("ACTIVE", null) && !offersClosed("ACTIVE", ""), "議價 closes when the listing is 已保留 or sold");
 assert(offerEntry(true, 4) === "bound" && offerEntry(false, 0) === "empty" && offerEntry(false, 1) === "auto" && offerEntry(false, 2) === "pick", "a bound thread skips the picker; an unbound thread follows the active count");
 assert(offerFormLocked(false, false) && !offerFormLocked(false, true) && !offerFormLocked(true, false), "price and note unlock after the checkbox or a stored ack");
 const missingAck = offerAckGate(false, null);

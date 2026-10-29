@@ -153,19 +153,11 @@ function DealView({
           ) : null}
           {stream && !blocked && viewerId !== pending.by ? (
             <div className="grid w-full gap-2">
-              {seller ? (
-                <form action={confirmDealAction} className="w-full">
-                  <input type="hidden" name="orderId" value={order.id} />
-                  <input type="hidden" name="next" value={next} />
-                  <button className={primary}>{tx(locale, "確認交易", "Confirm deal")}</button>
-                </form>
-              ) : (
-                <form action={acceptDealOfferAction} className="w-full">
-                  <input type="hidden" name="orderId" value={order.id} />
-                  <input type="hidden" name="next" value={next} />
-                  <button className={primary}>{tx(locale, "接受要約", "Accept offer")}</button>
-                </form>
-              )}
+              <form action={acceptDealOfferAction} className="w-full">
+                <input type="hidden" name="orderId" value={order.id} />
+                <input type="hidden" name="next" value={next} />
+                <button className={primary}>{tx(locale, "接受要約", "Accept offer")}</button>
+              </form>
               {revise ? (
                 <ReviseOfferButton
                   locale={locale}
