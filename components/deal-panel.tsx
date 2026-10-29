@@ -22,7 +22,6 @@ type Item = {
   title: string;
   listingId: string;
   unitPrice: number;
-  imageUrl?: string | null;
   listing: {
     status: string;
     binLockOrderId: string | null;
@@ -92,7 +91,6 @@ function DealView({
   const pending = meta.offer?.status === "PENDING" ? meta.offer : null;
   const accepted = meta.offer?.status === "ACCEPTED" ? meta.offer : null;
   const offerLine = pending ? dealEventCopy(locale, { kind: "offer", name: pending.name, amount: pending.amount, note: pending.note }) : null;
-  const shownCents = stream && pending ? pending.amount : order.total;
   const waitingRaw = pending ? (pending.by === order.buyerId ? names?.seller : pending.by === order.sellerId ? names?.buyer : "") : "";
   const waitingLabel = waitingRaw?.trim() || tx(locale, "對方", "them");
 
@@ -109,20 +107,26 @@ function DealView({
         <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{phaseLabel(locale, phase)}</span>
         {sold ? <span className="inline-flex h-7 items-center rounded-full bg-soft px-2.5 text-xs font-semibold">{tx(locale, "已售出", "Sold")}</span> : null}
       </div>
-      <div className={`text-sm ${stream ? "text-center" : ""}`}>
-        {order.items.map((item) => (
-          <p key={item.id}>
-            <Link href={`/listing/${item.listingId}`} className="font-medium">{item.title}</Link>
-          </p>
-        ))}
-        <p className={`price mt-1 leading-none ${stream ? "text-sm" : "text-lg"}`}>{formatHkd(shownCents, locale)}</p>
-        {stream ? null : <p className="mt-1 text-xs text-muted">{tx(locale, "金額僅供顯示，平台不經手收款。", "The amount is shown only. The platform does not take payment.")}</p>}
-        {stream && pending ? (
-          pending.note ? <p className="mt-1 text-xs">{pending.note}</p> : null
-        ) : note ? (
-          <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p>
-        ) : null}
-      </div>
+      {stream ? (
+        pending || note ? (
+          <div className="text-center text-sm">
+            {pending ? <p className="text-sm font-semibold leading-none">{formatHkd(pending.amount, locale)}</p> : null}
+            {pending?.note ? <p className="mt-1 text-xs">{pending.note}</p> : null}
+            {!pending && note ? <p className="text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
+          </div>
+        ) : null
+      ) : (
+        <div className="text-sm">
+          {order.items.map((item) => (
+            <p key={item.id}>
+              <Link href={`/listing/${item.listingId}`} className="font-medium">{item.title}</Link>
+            </p>
+          ))}
+          <p className="price mt-1 text-lg leading-none">{formatHkd(order.total, locale)}</p>
+          <p className="mt-1 text-xs text-muted">{tx(locale, "金額僅供顯示，平台不經手收款。", "The amount is shown only. The platform does not take payment.")}</p>
+          {note ? <p className="mt-1 text-xs">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
+        </div>
+      )}
       {blocked ? <p className={`text-sm font-medium ${stream ? "text-center" : ""}`}>{tx(locale, RESERVE_BLOCKED, "This item is locked.")}</p> : null}
       {pending && offerLine && (buyer || seller) ? (
         <div className={`grid gap-2 ${stream ? "justify-items-center text-center" : ""}`}>
@@ -186,15 +190,6 @@ function DealView({
       {stream && (buyer || seller) && mine && !peer ? <p className="text-center text-sm">{tx(locale, "待對方確認交收。", "Waiting for the other person to confirm.")}</p> : null}
       {stream && phase === "DONE" && (buyer || seller) ? (
         <div className="grid gap-2">
-          {order.items[0] ? (
-            <Link href={`/listing/${order.items[0].listingId}`} className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-2 text-left">
-              <img src={order.items[0].imageUrl || "/demo/back.svg"} alt="" className="h-10 w-10 rounded-lg bg-soft object-cover" />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium">{order.items[0].title}</span>
-                <span className="price block text-sm">{formatHkd(order.total, locale)}</span>
-              </span>
-            </Link>
-          ) : null}
           {rating ? (
             <div className="text-center text-xs text-muted">
               <p>{tx(locale, `已評分 ${"★".repeat(rating.stars)}`, `Rated ${"★".repeat(rating.stars)}`)}</p>
