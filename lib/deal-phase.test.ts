@@ -33,6 +33,9 @@ import {
   pinAction,
   showDealStream,
   threadEntryQuery,
+  contactThreadId,
+  ordersOnThread,
+  threadIdForOrder,
   readDealEvent,
   dealBlocked,
   dealPhase,
@@ -129,6 +132,17 @@ const openOpts = { priced: true, closed: false, blocked: false };
 assert(nextThreadIntent(null, "offer", openOpts) === null && nextThreadIntent(null, "compose", openOpts) === "INQUIRY" && nextThreadIntent(null, "buy", openOpts) === "DIRECT", "議價 does not store intent; 聯絡賣家 is 查詢; 直接購買 is direct");
 assert(nextThreadIntent(null, "buy", { priced: false, closed: false, blocked: false }) === null && nextThreadIntent("DIRECT", "compose", openOpts) === "DIRECT" && nextThreadIntent("INQUIRY", "buy", openOpts) === "DIRECT" && nextThreadIntent(null, "buy", { ...openOpts, blocked: true }) === null, "direct buy needs a price, sticks, and does not overwrite a deal");
 assert(threadEntryQuery("offer", null, { closed: false, pending: false }) === "?offer=1" && threadEntryQuery("compose", "INQUIRY", { closed: false, pending: false }) === "?compose=1" && threadEntryQuery("buy", "DIRECT", { closed: false, pending: false }) === "" && threadEntryQuery("offer", "DIRECT", { closed: false, pending: false }) === "" && threadEntryQuery("offer", null, { closed: true, pending: false }) === "", "entry opens the sheet or the composer and does not re-ask");
+const doneThread = { id: "old", createdAt: 10 };
+const freshThread = { id: "new", createdAt: 30 };
+const doneOrder = { createdAt: 20, phase: "DONE" as const };
+assert(contactThreadId([doneThread], [doneOrder]) === null, "a DONE deal is not reopened");
+assert(contactThreadId([doneThread, freshThread], [doneOrder]) === "new", "聯絡 after DONE opens the later thread");
+assert(contactThreadId([doneThread], [{ createdAt: 20, phase: "CANCELLED" }]) === "old", "a cancelled deal does not start a new thread");
+assert(contactThreadId([doneThread], [doneOrder, { createdAt: 25, phase: "CHATTING" }]) === "old", "an open deal stays on its thread");
+assert(contactThreadId([], [doneOrder]) === null, "no thread yet means create one");
+assert(threadIdForOrder(20, [doneThread, freshThread]) === "old" && threadIdForOrder(40, [doneThread, freshThread]) === "new", "an order stays on the thread that was open when it started");
+assert(threadIdForOrder(5, [doneThread]) === "old", "an order older than the thread still belongs to it");
+assert(ordersOnThread("new", [doneThread, freshThread], [doneOrder]).length === 0 && ordersOnThread("old", [doneThread, freshThread], [doneOrder]).length === 1, "a new 聯絡 does not inherit the finished order");
 const pin = { closed: false, blocked: false, started: false, entry: false };
 assert(pinAction({ ...pin, role: "buyer", intent: null }) === "ask", "reopening a pinned thread with no intent asks 議價｜直接購買｜查詢");
 assert(pinAction({ ...pin, role: "buyer", intent: null, entry: true }) === "switch" && pinAction({ ...pin, role: "buyer", intent: "INQUIRY" }) === "switch" && pinAction({ ...pin, role: "buyer", intent: null, started: true }) === "switch", "an entry, 查詢, or an existing deal keeps 議價｜直接購買 and does not re-ask");

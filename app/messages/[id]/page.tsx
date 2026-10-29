@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, intentBlocked, latestOpenOfferMessage, offersClosed, pinAction, readDealEvent, readDealMeta, showDealStream } from "@/lib/deal-phase";
+import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, intentBlocked, latestOpenOfferMessage, offersClosed, pinAction, readDealEvent, readDealMeta, showDealStream, threadIdForOrder } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -45,7 +45,7 @@ export default async function ThreadPage({
   const other = thread.buyerId === viewer.id ? thread.seller : thread.buyer;
   const paths = thread.messages.map((message) => shareTarget(message.body)).filter((path): path is string => Boolean(path));
   const otherRatingQuery = prisma.dealRating.aggregate({ where: { subjectId: otherId }, _avg: { stars: true }, _count: true });
-  const [cards, orders, otherRatingRow, sellerRatingRow] = await Promise.all([
+  const [cards, orders, siblingThreads, otherRatingRow, sellerRatingRow] = await Promise.all([
     loadShareCards(paths),
     thread.listingId
       ? prisma.order.findMany({
@@ -62,6 +62,12 @@ export default async function ThreadPage({
           take: 8,
         })
       : Promise.resolve([]),
+    thread.listingId
+      ? prisma.messageThread.findMany({
+          where: { listingId: thread.listingId, buyerId: thread.buyerId, sellerId: thread.sellerId },
+          select: { id: true, createdAt: true },
+        })
+      : Promise.resolve([]),
     otherRatingQuery,
     otherId === thread.sellerId
       ? otherRatingQuery
@@ -69,11 +75,16 @@ export default async function ThreadPage({
   ]);
   const otherRating = ratingFromAggregate(otherRatingRow._avg.stars, otherRatingRow._count);
   const sellerRating = ratingFromAggregate(sellerRatingRow._avg.stars, sellerRatingRow._count);
-  const open = orders.find((order) => {
+  const threadStamps = (siblingThreads.length ? siblingThreads : [{ id: thread.id, createdAt: thread.createdAt }]).map((row) => ({
+    id: row.id,
+    createdAt: row.createdAt.getTime(),
+  }));
+  const scoped = orders.filter((row) => threadIdForOrder(row.createdAt.getTime(), threadStamps) === thread.id);
+  const open = scoped.find((order) => {
     const phase = dealPhase(order);
     return phase !== "CANCELLED" && phase !== "DONE";
   });
-  const order = open ?? orders.find((row) => dealPhase(row) === "DONE") ?? orders[0] ?? null;
+  const order = open ?? scoped.find((row) => dealPhase(row) === "DONE") ?? scoped[0] ?? null;
   const phase = order ? dealPhase(order) : null;
   const offer = order ? readDealMeta(order.fulfillment).offer : null;
   const offerStatus = offer?.status === "PENDING" || offer?.status === "ACCEPTED" ? offer.status : null;
@@ -158,7 +169,7 @@ export default async function ThreadPage({
               intent: thread.intent,
               closed: offersClosed(thread.listing.status, thread.listing.binLockOrderId),
               blocked: order ? intentBlocked(phase, offerStatus) : false,
-              started: orders.some((row) => dealPhase(row) !== "CANCELLED"),
+              started: scoped.some((row) => dealPhase(row) !== "CANCELLED"),
               entry: sp.offer === "1",
             })}
             seller={{

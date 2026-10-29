@@ -1,5 +1,5 @@
 import { prisma } from "./db";
-import { dealPhase, type DealPhase } from "./deal-phase";
+import { dealPhase, threadIdForOrder, type DealPhase, type ThreadStamp } from "./deal-phase";
 import type { Locale } from "./i18n";
 import { hiddenUserIds } from "./social";
 
@@ -139,7 +139,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
     }),
     prisma.messageThread.findMany({
       where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
-      select: { id: true, listingId: true, buyerId: true, sellerId: true },
+      select: { id: true, listingId: true, buyerId: true, sellerId: true, createdAt: true },
       orderBy: { updatedAt: "desc" },
       take: 200,
     }),
@@ -147,11 +147,13 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
   ]);
   const hidden = new Set(hiddenIds);
 
-  const threadsByDeal = new Map<string, string>();
+  const threadsByDeal = new Map<string, ThreadStamp[]>();
   for (const thread of threads) {
     if (!thread.listingId) continue;
     const key = threadKey(thread.listingId, thread.buyerId, thread.sellerId);
-    if (!threadsByDeal.has(key)) threadsByDeal.set(key, thread.id);
+    const list = threadsByDeal.get(key) ?? [];
+    list.push({ id: thread.id, createdAt: thread.createdAt.getTime() });
+    threadsByDeal.set(key, list);
   }
 
   const board: FootprintBoard = { offering: [], locked: [], handover: [], ended: [], sold: [], bought: [] };
@@ -166,9 +168,8 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
     if (listingId && phase !== "DONE" && phase !== "CANCELLED") openDeals.add(`${order.buyerId}:${listingId}`);
     const otherId = order.buyerId === userId ? order.sellerId : order.buyerId;
     if (hidden.has(otherId) && kind === "offering") continue;
-    const href = listingId && !hidden.has(otherId)
-      ? threadsByDeal.get(threadKey(listingId, order.buyerId, order.sellerId))
-      : undefined;
+    const dealThreads = listingId ? threadsByDeal.get(threadKey(listingId, order.buyerId, order.sellerId)) : undefined;
+    const href = dealThreads && !hidden.has(otherId) ? threadIdForOrder(order.createdAt.getTime(), dealThreads) : undefined;
     const row: FootprintRow = {
       id: `order:${order.id}`,
       href: href ? `/messages/${href}` : `/orders/${order.id}/chat`,
@@ -196,7 +197,7 @@ export async function loadFootprint(userId: string): Promise<FootprintBoard> {
     const otherId = offer.buyerId === userId ? offer.listing.sellerId : offer.buyerId;
     if (hidden.has(otherId)) continue;
     if (openDeals.has(`${offer.buyerId}:${offer.listingId}`)) continue;
-    const href = threadsByDeal.get(threadKey(offer.listingId, offer.buyerId, offer.listing.sellerId));
+    const href = threadsByDeal.get(threadKey(offer.listingId, offer.buyerId, offer.listing.sellerId))?.[0]?.id;
     const row: FootprintRow = {
       id: `offer:${offer.id}`,
       href: href ? `/messages/${href}` : `/listing/${offer.listingId}`,

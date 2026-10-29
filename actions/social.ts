@@ -8,7 +8,7 @@ import { isAllowedMediaUrl, safeNext } from "@/lib/format";
 import { shareTarget } from "@/lib/share";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { openHandover, recordDirectBuy } from "@/lib/deals";
-import { dealPhase, intentBlocked, nextThreadIntent, offersClosed, readDealMeta, threadEntryQuery } from "@/lib/deal-phase";
+import { contactThreadId, dealPhase, intentBlocked, nextThreadIntent, offersClosed, ordersOnThread, readDealMeta, threadEntryQuery } from "@/lib/deal-phase";
 import { notificationTarget } from "@/lib/notify";
 import { composeReportReason } from "@/lib/safety";
 import { isBlocked, notify, notifyKind } from "@/lib/social";
@@ -169,24 +169,33 @@ export async function openThread(formData: FormData) {
   const listing = await prisma.listing.findUnique({ where: { id: listingId } });
   if (!listing || listing.sellerId === user.id) redirect(`/listing/${listingId}?err=own`);
   if (await isBlocked(user.id, listing.sellerId)) redirect(`/listing/${listingId}?err=blocked`);
-  const existing = await prisma.messageThread.findFirst({
-    where: { listingId, buyerId: user.id, sellerId: listing.sellerId },
-  });
+  const focus = String(formData.get("focus") || "");
+  const entry = focus === "offer" || focus === "buy" || focus === "compose" ? focus : "";
+  // ponytail: last 8 orders. Same ceiling as the thread page.
+  const [threads, orders] = await Promise.all([
+    prisma.messageThread.findMany({
+      where: { listingId, buyerId: user.id, sellerId: listing.sellerId },
+      select: { id: true, createdAt: true, intent: true },
+    }),
+    prisma.order.findMany({
+      where: { buyerId: user.id, sellerId: listing.sellerId, items: { some: { listingId } } },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+    }),
+  ]);
+  const stamps = threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() }));
+  const contactOrders = orders.map((order) => ({ createdAt: order.createdAt.getTime(), phase: dealPhase(order) }));
+  const reuseId = contactThreadId(stamps, contactOrders);
+  const existing = threads.find((row) => row.id === reuseId);
   const thread =
     existing ??
     (await prisma.messageThread.create({
       data: { listingId, buyerId: user.id, sellerId: listing.sellerId },
     }));
-  const focus = String(formData.get("focus") || "");
-  const entry = focus === "offer" || focus === "buy" || focus === "compose" ? focus : "";
-  // ponytail: last 8 orders. Same ceiling as the thread page.
-  const orders = await prisma.order.findMany({
-    where: { buyerId: user.id, sellerId: listing.sellerId, items: { some: { listingId } } },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-  });
-  const pending = orders.some((order) => readDealMeta(order.fulfillment).offer?.status === "PENDING" && dealPhase(order) !== "CANCELLED");
-  const blocked = orders.some((order) => intentBlocked(dealPhase(order), offerStatus(order.fulfillment)));
+  const mineStamps = stamps.some((row) => row.id === thread.id) ? stamps : [...stamps, { id: thread.id, createdAt: thread.createdAt.getTime() }];
+  const mine = ordersOnThread(thread.id, mineStamps, orders.map((order) => ({ order, createdAt: order.createdAt.getTime(), phase: dealPhase(order) }))).map((row) => row.order);
+  const pending = mine.some((order) => readDealMeta(order.fulfillment).offer?.status === "PENDING" && dealPhase(order) !== "CANCELLED");
+  const blocked = mine.some((order) => intentBlocked(dealPhase(order), offerStatus(order.fulfillment)));
   const closed = offersClosed(listing.status, listing.binLockOrderId);
   const next = nextThreadIntent(thread.intent, entry, {
     priced: listing.price != null && listing.price > 0,

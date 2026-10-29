@@ -1,3 +1,4 @@
+import { contactThreadId, threadIdForOrder } from "./deal-phase";
 import { prisma } from "./db";
 import { noticeCopy, noticeHref, type NoticeKind, type NoticeType } from "./notify";
 import { deliverOutbound } from "./push";
@@ -27,12 +28,15 @@ export async function notifyKind(userId: string, kind: NoticeKind, href: string,
   await notify(userId, copy.type, copy.title, copy.body, href);
 }
 
-export async function dealThreadHref(listingId: string, buyerId: string, sellerId: string) {
-  const thread = await prisma.messageThread.findFirst({
+/** Chat for one order (`at`). Without it, the newest thread. */
+export async function dealThreadHref(listingId: string, buyerId: string, sellerId: string, at?: Date) {
+  const threads = await prisma.messageThread.findMany({
     where: { listingId, buyerId, sellerId },
-    select: { id: true },
+    select: { id: true, createdAt: true },
   });
-  return noticeHref(thread?.id);
+  const stamps = threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() }));
+  const id = at ? threadIdForOrder(at.getTime(), stamps) : contactThreadId(stamps, []);
+  return noticeHref(id);
 }
 
 export async function isBlocked(a: string, b: string): Promise<boolean> {
