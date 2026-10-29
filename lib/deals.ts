@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
-import { canConfirmHandover, cleanOfferNote, dealEventBody, dealPhase, handoverFlags, intentBlocked, latestOpenOfferMessage, offersClosed, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
+import { canConfirmHandover, cleanOfferNote, contactThreadId, dealEventBody, dealPhase, handoverFlags, intentBlocked, latestOpenOfferMessage, offersClosed, readDealMeta, supersededOfferBody, threadIdForOrder, type DealOffer } from "./deal-phase";
 import { Fail, asFail } from "./fail";
 import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
@@ -74,19 +74,21 @@ async function markLiveOfferSuperseded(tx: Prisma.TransactionClient, threadId: s
 
 async function postDealNote(
   tx: Prisma.TransactionClient,
-  order: { buyerId: string; sellerId: string; items: { listingId: string }[] },
+  order: { buyerId: string; sellerId: string; createdAt: Date; items: { listingId: string }[] },
   senderId: string,
   body: string,
 ) {
   const listingId = order.items[0]?.listingId;
   if (!listingId) return null;
-  const thread = await tx.messageThread.findFirst({
+  const threads = await tx.messageThread.findMany({
     where: { listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+    select: { id: true, createdAt: true },
   });
-  if (!thread) return null;
-  await tx.message.create({ data: { threadId: thread.id, senderId, body } });
-  await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
-  return thread.id;
+  const threadId = threadIdForOrder(order.createdAt.getTime(), threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })));
+  if (!threadId) return null;
+  await tx.message.create({ data: { threadId, senderId, body } });
+  await tx.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
+  return threadId;
 }
 
 export async function openHandover(userId: string, input: { listingId: string }) {
@@ -98,13 +100,27 @@ export async function openHandover(userId: string, input: { listingId: string })
   if (listing.sellerId === userId) return { ok: false as const, error: "own" };
   if (await isBlocked(userId, listing.sellerId)) return { ok: false as const, error: "blocked" };
 
-  const thread =
-    (await prisma.messageThread.findFirst({
+  const [priorThreads, priorOrders] = await Promise.all([
+    prisma.messageThread.findMany({
       where: { listingId: listing.id, buyerId: userId, sellerId: listing.sellerId },
-    })) ??
-    (await prisma.messageThread.create({
-      data: { listingId: listing.id, buyerId: userId, sellerId: listing.sellerId },
-    }));
+      select: { id: true, createdAt: true },
+    }),
+    prisma.order.findMany({
+      where: { buyerId: userId, sellerId: listing.sellerId, items: { some: { listingId: listing.id } } },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      select: { createdAt: true, status: true, fulfillment: true },
+    }),
+  ]);
+  const reuseId = contactThreadId(
+    priorThreads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })),
+    priorOrders.map((order) => ({ createdAt: order.createdAt.getTime(), phase: dealPhase(order) })),
+  );
+  const thread = reuseId
+    ? { id: reuseId }
+    : await prisma.messageThread.create({
+        data: { listingId: listing.id, buyerId: userId, sellerId: listing.sellerId },
+      });
 
   if (listing.status === "ACTIVE") {
     const amount = listing.price ?? listing.currentBid ?? listing.startPrice ?? 0;
@@ -152,13 +168,18 @@ export async function attachDealThread(orderId: string): Promise<string | null> 
   });
   const item = order?.items[0];
   if (!order || !item) return null;
-  const thread =
-    (await prisma.messageThread.findFirst({
-      where: { listingId: item.listingId, buyerId: order.buyerId, sellerId: order.sellerId },
-    })) ??
-    (await prisma.messageThread.create({
-      data: { listingId: item.listingId, buyerId: order.buyerId, sellerId: order.sellerId },
-    }));
+  const threads = await prisma.messageThread.findMany({
+    where: { listingId: item.listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+    select: { id: true, createdAt: true },
+  });
+  const existing = threadIdForOrder(
+    order.createdAt.getTime(),
+    threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })),
+  );
+  if (existing) return existing;
+  const thread = await prisma.messageThread.create({
+    data: { listingId: item.listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+  });
   return thread.id;
 }
 
@@ -169,10 +190,10 @@ async function loadOrder(orderId: string) {
   });
 }
 
-async function orderChatHref(order: { id: string; buyerId: string; sellerId: string; items: { listingId: string }[] }) {
+async function orderChatHref(order: { id: string; buyerId: string; sellerId: string; createdAt: Date; items: { listingId: string }[] }) {
   const listingId = order.items[0]?.listingId;
   if (!listingId) return `/orders/${order.id}`;
-  return dealThreadHref(listingId, order.buyerId, order.sellerId);
+  return dealThreadHref(listingId, order.buyerId, order.sellerId, order.createdAt);
 }
 
 export async function arrangeMeetup(userId: string, orderId: string) {
@@ -205,7 +226,7 @@ export async function arrangeMeetup(userId: string, orderId: string) {
   });
   const other = order.buyerId === userId ? order.sellerId : order.buyerId;
   const listingId = order.items[0]?.listingId;
-  const href = listingId ? await dealThreadHref(listingId, order.buyerId, order.sellerId) : "/me/footprint";
+  const href = listingId ? await dealThreadHref(listingId, order.buyerId, order.sellerId, order.createdAt) : "/me/footprint";
   await notifyKind(other, "handover", href, order.items[0]?.title ?? "");
   return { ok: true as const };
 }
@@ -241,12 +262,14 @@ export async function uploadProof(userId: string, orderId: string, imageUrl: str
       });
       const listingId = order.items[0]?.listingId;
       if (listingId) {
-        const thread = await tx.messageThread.findFirst({
+        const threads = await tx.messageThread.findMany({
           where: { listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+          select: { id: true, createdAt: true },
         });
-        if (thread) {
-          await tx.message.create({ data: { threadId: thread.id, senderId: userId, body: "已上載付款證明。", imageUrl: stored } });
-          await tx.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
+        const threadId = threadIdForOrder(order.createdAt.getTime(), threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })));
+        if (threadId) {
+          await tx.message.create({ data: { threadId, senderId: userId, body: "已上載付款證明。", imageUrl: stored } });
+          await tx.messageThread.update({ where: { id: threadId }, data: { updatedAt: new Date() } });
         }
       }
       return order;
@@ -590,6 +613,7 @@ type ReserveOrder = {
   id: string;
   buyerId: string;
   sellerId: string;
+  createdAt: Date;
   fulfillment: unknown;
   items: { id: string; quantity: number; listingId: string }[];
 };

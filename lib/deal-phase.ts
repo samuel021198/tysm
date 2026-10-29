@@ -143,6 +143,41 @@ export function nextThreadIntent(
   return current;
 }
 
+export type ThreadStamp = { id: string; createdAt: number };
+
+/** Listing thread that was already open when the order was created. Older than every thread stays on the earliest. */
+export function threadIdForOrder(orderCreatedAt: number, threads: ThreadStamp[]): string | null {
+  if (!threads.length) return null;
+  const sorted = [...threads].sort((a, b) => a.createdAt - b.createdAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  let owner: ThreadStamp | null = null;
+  for (const thread of sorted) {
+    if (thread.createdAt <= orderCreatedAt) owner = thread;
+  }
+  return (owner ?? sorted[0]).id;
+}
+
+export type ContactOrder = { createdAt: number; phase: DealPhase };
+
+/**
+ * Thread a new 聯絡 / 查詢 may open. Null means create one.
+ * A thread that already holds a DONE order stays history. Cancelled does not seal it.
+ */
+export function contactThreadId(threads: ThreadStamp[], orders: ContactOrder[]): string | null {
+  if (!threads.length) return null;
+  const reusable = threads.filter((thread) => {
+    const mine = orders.filter((order) => threadIdForOrder(order.createdAt, threads) === thread.id);
+    if (mine.some((order) => order.phase !== "DONE" && order.phase !== "CANCELLED")) return true;
+    return !mine.some((order) => order.phase === "DONE");
+  });
+  if (!reusable.length) return null;
+  return [...reusable].sort((a, b) => b.createdAt - a.createdAt || (a.id < b.id ? 1 : a.id > b.id ? -1 : 0))[0].id;
+}
+
+/** Orders whose chat is this thread. A later 聯絡 does not inherit a finished deal. */
+export function ordersOnThread<T extends ContactOrder>(threadId: string, threads: ThreadStamp[], orders: T[]): T[] {
+  return orders.filter((order) => threadIdForOrder(order.createdAt, threads) === threadId);
+}
+
 /** Listing buttons skip the 3-pick. 議價 opens the price sheet. 聯絡賣家 focuses the composer. */
 export function threadEntryQuery(focus: EntryFocus, intent: ThreadIntent | null, opts: { closed: boolean; pending: boolean }): string {
   if (focus === "offer" && !opts.closed && !opts.pending && intent !== "DIRECT") return "?offer=1";

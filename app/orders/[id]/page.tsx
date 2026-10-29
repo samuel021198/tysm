@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { dealPhase } from "@/lib/deal-phase";
+import { dealPhase, threadIdForOrder } from "@/lib/deal-phase";
 import { meetupNote, sellerPayment } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -36,11 +36,16 @@ export default async function OrderPage({
   const seller = viewer.id === order.sellerId;
   const phase = dealPhase(order);
   const listingId = order.items[0]?.listingId;
-  const thread = listingId
-    ? await prisma.messageThread.findFirst({
+  const threads = listingId
+    ? await prisma.messageThread.findMany({
         where: { listingId, buyerId: order.buyerId, sellerId: order.sellerId },
+        select: { id: true, createdAt: true },
       })
-    : null;
+    : [];
+  const threadId = threadIdForOrder(
+    order.createdAt.getTime(),
+    threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })),
+  );
   const note = meetupNote(order.fulfillment, order.items[0]?.listing ?? null);
 
   return (
@@ -70,7 +75,7 @@ export default async function OrderPage({
       <p className="text-sm text-muted">
         {tx(locale, "買家", "Buyer")} {order.buyer.nickname} · {tx(locale, "賣家", "Seller")} {order.seller.nickname}
       </p>
-      {thread ? <Link className="text-sm font-semibold text-link" href={`/messages/${thread.id}`}>{tx(locale, "打開聊天", "Open chat")}</Link> : null}
+      {threadId ? <Link className="text-sm font-semibold text-link" href={`/messages/${threadId}`}>{tx(locale, "打開聊天", "Open chat")}</Link> : null}
       {phase === "DONE" && order.reviews.length ? (
         <section className="grid gap-3">
           <h2 className="font-semibold">{tx(locale, "評價", "Reviews")}</h2>

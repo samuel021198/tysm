@@ -67,6 +67,7 @@ const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
 assert(sheet.includes("改價回覆") && sheet.includes("prefill") && sheet.includes("makeDealOfferAction"), "改價回覆 reuses the make-offer form with the current price and note");
+assert(/await makeDealOfferAction\(formData\);\s*onClose\(\)/.test(sheet), "a successful offer closes the sheet the same way as 關閉");
 assert(sheet.includes("DealDisclaimer") && sheet.includes("DEAL_ACK") && sheet.includes("offerFormLocked") && sheet.includes("disabled={locked}"), "the offer form keeps a risk line and locks price until the first checkbox");
 assert(sheet.includes("ackP2pRisk") && src.includes("riskAcked") && src.includes("persisted={riskAcked}"), "the checkbox is once per account, then the form opens straight away");
 assert(!src.includes("localStorage"), "the ack is not stored only in the browser");
@@ -84,6 +85,7 @@ const start = social.slice(social.indexOf("export async function startHandover")
 assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting a handover does not post the risk checkbox");
 const openedThread = social.slice(social.indexOf("export async function openThread"), social.indexOf("export async function sendMessage"));
 assert(openedThread.includes('focus === "offer"') && openedThread.includes('focus === "buy"') && openedThread.includes('focus === "compose"') && openedThread.includes("nextThreadIntent") && openedThread.includes("threadEntryQuery") && openedThread.includes("recordDirectBuy"), "議價, 直接購買, and 聯絡賣家 open the same listing thread");
+assert(openedThread.includes("contactThreadId") && openedThread.includes("ordersOnThread"), "a DONE deal is not reopened; 聯絡 and 查詢 use the later thread");
 assert(!openedThread.includes("message.create"), "議價 and 聯絡賣家 do not post a listing message on open");
 const phaseLib = readFileSync(new URL("../lib/deal-phase.ts", import.meta.url), "utf8");
 assert(phaseLib.includes('return "?offer=1"') && phaseLib.includes('return "?compose=1"') && !phaseLib.includes("要約"), "議價 opens the price sheet and 聯絡賣家 focuses the composer");
@@ -99,6 +101,7 @@ assert(
 );
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
+assert(page.includes("threadIdForOrder") && page.includes("siblingThreads"), "a later thread does not show the finished order");
 assert(page.includes('href="/messages"') && page.includes("thread-bar") && page.includes("返回訊息"), "the thread bar goes back to the inbox");
 assert(!page.includes('href="/"'), "the thread bar does not send people home");
 const inbox = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
