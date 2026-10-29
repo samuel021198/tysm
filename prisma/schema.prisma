@@ -862,7 +862,7 @@ enum NewsTag {
   DATE
 }
 
-/// One card-news row. Tag is stored for later filters; the list does not show pills.
+/// One card-news row. `tag` is the list chip (發售／重販／抽選). Goldin, or a body with 成交價, shows 成交.
 model NewsItem {
   id         String    @id
   slug       String    @unique

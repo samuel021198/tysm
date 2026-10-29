@@ -28,17 +28,20 @@ function asDate(value: Date | string): Date {
   return value instanceof Date ? value : new Date(value);
 }
 
+/** Calendar day. zh-HK is D/M so it matches news copy (`30/10`); en stays M/D. */
+function calendarStamp(when: { m: number; d: number }, locale: Locale): string {
+  return locale === "en" ? `${when.m}/${when.d}` : `${when.d}/${when.m}`;
+}
+
 /**
  * Relative clock shared with news.
- * Future → M/D; under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日; older → M/D.
+ * Future and older dates are D/M in zh-HK and M/D in en.
+ * Under an hour → 剛剛; under a day →「N 小時前」; the previous Hong Kong date → 昨日.
  */
 export function relativeTime(at: Date | string, now: Date, locale: Locale): string {
   const whenAt = asDate(at);
   const diff = now.getTime() - whenAt.getTime();
-  if (diff < 0) {
-    const when = hkParts(whenAt);
-    return `${when.m}/${when.d}`;
-  }
+  if (diff < 0) return calendarStamp(hkParts(whenAt), locale);
   if (diff < HOUR_MS) return locale === "en" ? "Just now" : "剛剛";
   const hours = Math.floor(diff / HOUR_MS);
   if (hours < 24) {
@@ -46,8 +49,7 @@ export function relativeTime(at: Date | string, now: Date, locale: Locale): stri
     return `${hours} 小時前`;
   }
   if (hkDayNumber(now) - hkDayNumber(whenAt) === 1) return locale === "en" ? "Yesterday" : "昨日";
-  const when = hkParts(whenAt);
-  return `${when.m}/${when.d}`;
+  return calendarStamp(hkParts(whenAt), locale);
 }
 
 export type ActivityLine = { text: string; at: Date };
