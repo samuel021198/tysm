@@ -199,16 +199,12 @@ export function ProfileBoard({
         <LazyPostGrid locale={locale} base={base} posts={posts} viewerId={viewerId} ownerId={ownerId} next={id === tab ? postsNext : null} />
       ) : (
         <p className="empty mx-3 sm:mx-0">
+          <span className="block">{tx(locale, "未有貼文", "No posts yet")}</span>
           {isSelf ? (
-            <>
-              <span className="block">{tx(locale, "未有卡片。", "No cards yet.")}</span>
-              <Link href="/add" className="block font-semibold text-ink underline underline-offset-2">
-                {tx(locale, "開始放第一張", "Add the first card")}
-              </Link>
-            </>
-          ) : (
-            tx(locale, "未有卡片", "No cards yet")
-          )}
+            <Link href="/add?kind=post" className="block font-semibold text-ink underline underline-offset-2">
+              {tx(locale, "發佈第一則", "Post the first one")}
+            </Link>
+          ) : null}
         </p>
       );
     }

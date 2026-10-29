@@ -19,7 +19,7 @@ export default async function NotificationsPage() {
           <button className="px-1 text-sm font-medium">{tx(locale, "全部已讀", "Mark all read")}</button>
         </form>
       </div>
-      {rows.length === 0 ? <p className="empty">{tx(locale, "未有通知。", "No notifications.")}</p> : null}
+      {rows.length === 0 ? <p className="empty">{tx(locale, "暫時未有通知", "No notifications yet")}</p> : null}
       <ul className="grid gap-2">
         {rows.map((row) => (
           <li key={row.id}>
