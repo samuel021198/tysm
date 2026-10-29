@@ -5,7 +5,6 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { activityLine } from "@/lib/time";
-import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { RESERVE_BADGE } from "@/lib/deal-phase";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
@@ -111,7 +110,6 @@ export default async function ListingPage({
     prisma.order.findMany({ where: { sellerId: listing.sellerId, shippedAt: { not: null } }, select: { shippedAt: true, shipBy: true } }),
     prisma.order.count({ where: { sellerId: listing.sellerId, status: "COMPLETED" } }),
   ]);
-  const dexLinks = listingDexLinks(listing);
   const sellerOnTime = onTimePercent(sellerShipped);
   const sellerRating = sellerReviews._count ? sellerReviews._avg.stars : null;
   const methods = offeredMethods(listing, hasStoreAddress(listing.seller));
@@ -143,17 +141,6 @@ export default async function ListingPage({
           </ul>
         ) : listing.cardName ? (
           <p className="mt-1 text-sm text-muted">{listing.cardName}</p>
-        ) : null}
-        {dexLinks.length ? (
-          <p className="mt-1 flex flex-wrap gap-x-3">
-            {dexLinks.map((link) => (
-              <Link key={link.id} href={`/dex/${link.id}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-link">
-                {dexLinks.length > 1 && link.label
-                  ? tx(locale, `睇圖鑑 · ${link.label}`, `Dex · ${link.label}`)
-                  : tx(locale, "睇圖鑑", "View in the dex")}
-              </Link>
-            ))}
-          </p>
         ) : null}
         <p className="mt-1 text-sm text-muted">
           {locale === "en" ? listing.category.nameEn : listing.category.nameZh}
