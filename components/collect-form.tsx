@@ -5,8 +5,10 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { saveCollection, savePost } from "@/actions/collect";
 import { errText, tx, type Locale } from "@/lib/i18n";
+import { POST_CROP_ASPECT } from "@/lib/photo-crop";
 import { displayCaption } from "@/lib/tags";
 import { CatalogTitleField } from "./catalog-title-field";
+import { usePhotoCropQueue } from "./photo-crop";
 import { fileToDataUrl } from "./photo-file";
 import { SellForm, type SellInitial } from "./sell-form";
 import { TopicField } from "./topic-field";
@@ -79,8 +81,32 @@ export function CollectForm({
     });
   }
 
+  const { enqueue: enqueuePostPhotos, editor: cropEditor } = usePhotoCropQueue({
+    aspect: POST_CROP_ASPECT,
+    locale,
+    onUrl: (url) => {
+      setPhotoNote("");
+      addPhoto(url);
+    },
+    onFail: () => setPhotoNote(tx(locale, "這張相片讀不到或太大。", "Could not read that photo.")),
+  });
+
   async function onFiles(list: FileList | null) {
     if (!list) return;
+    if (mode === "post") {
+      const files: File[] = [];
+      let failed = 0;
+      for (const file of Array.from(list)) {
+        if (!file.type.startsWith("image/")) {
+          failed += 1;
+          continue;
+        }
+        files.push(file);
+      }
+      enqueuePostPhotos(files, 12 - photos.length);
+      if (failed) setPhotoNote(tx(locale, "這張相片讀不到或太大。", "Could not read that photo."));
+      return;
+    }
     for (const file of [...list].slice(0, 12)) {
       try {
         addPhoto(await fileToDataUrl(file));
@@ -140,6 +166,7 @@ export function CollectForm({
         </label>
         {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
         <SellForm key={listToken} locale={locale} categories={categories} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} />
+        {cropEditor}
       </div>
     );
   }
@@ -164,7 +191,7 @@ export function CollectForm({
         </div>
         <label className="btn btn-ghost w-fit cursor-pointer">
           {tx(locale, "加相片", "Add photos")}
-          <input className="sr-only" type="file" accept="image/*" multiple onChange={(event) => void onFiles(event.target.files)} />
+          <input className="sr-only" type="file" accept="image/*" multiple onChange={(event) => { void onFiles(event.target.files); event.target.value = ""; }} />
         </label>
         {photoNote ? <p className="text-sm text-danger">{photoNote}</p> : null}
         {mode === "collection" ? (
@@ -300,6 +327,7 @@ export function CollectForm({
           <Submit label={forSale ? tx(locale, "加入 My Binder 並放賣", "Add to My Binder and list") : tx(locale, "加入 My Binder", "Add to My Binder")} />
         </>
       )}
+      {cropEditor}
     </form>
   );
 }
