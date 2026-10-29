@@ -5,8 +5,9 @@ import { useFormStatus } from "react-dom";
 import { saveListingAction } from "@/actions/trade";
 import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
+import { LISTING_CROP_ASPECT } from "@/lib/photo-crop";
 import { PHOTO_MAX, parseListingForm, wizardFocusField, wizardPublishIssues, wizardStepForIssue, type ListingInput } from "@/lib/sell-wizard";
-import { enhanceDataUrl, fileToDataUrl } from "./photo-file";
+import { usePhotoCropQueue } from "./photo-crop";
 import { startHashtag } from "@/lib/tags";
 import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
 import { HashtagHint } from "./topic-field";
@@ -197,6 +198,15 @@ export function SellForm({
   const [photos, setPhotos] = useState<Photo[]>(() => (initial?.photos || []).filter((photo) => photo.url).slice(0, PHOTO_MAX));
   const [cards, setCards] = useState<CardDraft[]>(() => cardsFromInitial(initial));
   const [photoNote, setPhotoNote] = useState("");
+  const { enqueue: enqueuePhotos, editor: cropEditor } = usePhotoCropQueue({
+    aspect: LISTING_CROP_ASPECT,
+    locale,
+    onUrl: (url) => {
+      setPhotos((current) => (current.length >= PHOTO_MAX ? current : [...current, { url, role: "GALLERY" }]));
+      setPhotoNote("");
+    },
+    onFail: () => setPhotoNote(tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG.")),
+  });
   const [block, setBlock] = useState<string[]>([]);
   const [blockKind, setBlockKind] = useState<BlockKind>("publish");
   const [note, setNote] = useState("");
@@ -346,24 +356,19 @@ export function SellForm({
     setCards((current) => current.map((card, i) => (i === index ? { ...card, ...partial } : card)));
   }
 
-  async function onFiles(list: FileList | null) {
+  function onFiles(list: FileList | null) {
     if (!list?.length) return;
-    const urls: string[] = [];
+    const files: File[] = [];
     let failed = 0;
     for (const file of Array.from(list)) {
-      if (photos.length + urls.length >= PHOTO_MAX) break;
       if (!file.type.startsWith("image/")) {
         failed += 1;
         continue;
       }
-      try {
-        urls.push(await fileToDataUrl(file));
-      } catch {
-        failed += 1;
-      }
+      files.push(file);
     }
-    if (urls.length) setPhotos((current) => [...current, ...urls.map((url) => ({ url, role: "GALLERY" as const }))].slice(0, PHOTO_MAX));
-    setPhotoNote(failed ? tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG.") : "");
+    enqueuePhotos(files, PHOTO_MAX - photos.length);
+    if (failed) setPhotoNote(tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG."));
     if (fileRef.current) fileRef.current.value = "";
   }
 
@@ -387,16 +392,6 @@ export function SellForm({
       next.splice(to, 0, row);
       return next;
     });
-  }
-
-  async function enhance(index: number) {
-    try {
-      const next = await enhanceDataUrl(photos[index].url);
-      setPhotos((current) => current.map((photo, i) => (i === index ? { ...photo, url: next } : photo)));
-      setPhotoNote("");
-    } catch {
-      setPhotoNote(tx(locale, "這張相強化唔到。", "Could not enhance that photo."));
-    }
   }
 
   const shown = block;
@@ -554,9 +549,6 @@ export function SellForm({
                 <div className="absolute inset-x-1 bottom-1 flex gap-1">
                   <button type="button" className="h-10 flex-1 rounded-full bg-card/95 text-xs font-semibold" disabled={index === 0} onClick={() => movePhoto(index, index - 1)}>
                     {tx(locale, "前", "Up")}
-                  </button>
-                  <button type="button" className="h-10 flex-1 rounded-full bg-card/95 text-xs font-semibold" disabled={locked} onClick={() => void enhance(index)}>
-                    {tx(locale, "強化", "Enhance")}
                   </button>
                   <button type="button" className="h-10 flex-1 rounded-full bg-card/95 text-xs font-semibold" disabled={index === photos.length - 1} onClick={() => movePhoto(index, index + 1)}>
                     {tx(locale, "後", "Down")}
@@ -857,6 +849,7 @@ export function SellForm({
         ) : null}
         {!locked && step < 3 ? <DraftButton locale={locale} /> : null}
       </div>
+      {cropEditor}
     </form>
   );
 }
