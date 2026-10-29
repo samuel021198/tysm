@@ -245,7 +245,10 @@ export function ProfileBoard({
           ) : null}
         </>
       ) : (
-        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有收藏。", "No favorites yet.")}</p>
+        <p className="empty mx-3 sm:mx-0">
+          <span className="block">{tx(locale, "未有收藏。", "No favorites yet.")}</span>
+          {isSelf ? <span className="mt-1 block">{tx(locale, "貨品同貼文的收藏會喺呢度。", "Saved products and posts show up here.")}</span> : null}
+        </p>
       );
     }
     if (id === "selling") {
@@ -312,7 +315,7 @@ export function ProfileBoard({
               key={item.id}
               type="button"
               aria-current={on ? "page" : undefined}
-              className={`relative flex h-11 items-center justify-center ${on ? "text-ink" : "text-muted"}`}
+              className={`relative flex h-12 flex-col items-center justify-center gap-0.5 ${on ? "text-ink" : "text-muted"}`}
               onClick={() => {
                 if (item.id === tab && !busy.current) return;
                 window.clearTimeout(timer.current);
@@ -323,8 +326,8 @@ export function ProfileBoard({
                 apply(item.id);
               }}
             >
-              <Icon name={item.icon} className="h-7 w-7" strokeWidth={on ? 2.15 : 1.6} />
-              <span className="sr-only">{label}</span>
+              <Icon name={item.icon} className="h-6 w-6" strokeWidth={on ? 2.15 : 1.6} />
+              <span className="max-w-full truncate px-1 text-[11px] font-medium leading-none">{label}</span>
             </button>
           );
         })}

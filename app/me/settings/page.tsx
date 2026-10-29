@@ -17,7 +17,6 @@ export default async function MeSettingsPage({ searchParams }: { searchParams: P
   ]);
   const locale = prefs.locale;
   const lists: [string, string][] = [
-    ["/me/favorites", tx(locale, "收藏", "Favorites")],
     ["/me/bids", tx(locale, "出價", "Bids")],
     ["/notifications", tx(locale, "通知", "Notifications")],
     ["/cart", tx(locale, "購物車", "Cart")],

@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { cleanComment, cleanCommentImage, commentWrite, COMMENT_REACTS, replyDraft, tenorGif } from "./comments";
 import { EDGE_GUARD, gestureEnd, HOLD_MS, lockAxis, SWIPE_DOWN, SWIPE_X } from "./gesture";
-import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingSuggestionCard, ownedPostId, postBuy, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard, wishlistPostVisible } from "./posts";
+import { cardDisplayName, collectionBoardNext, collectionVisibility, hideTarget, listingPageHref, listingSuggestionCard, ownedPostId, postBuy, postEditHref, postMenuFlags, POST_MENU_ORDER, reportTarget, sellingAsk, shouldPublishPost, toPostCard, wishlistPostVisible } from "./posts";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -191,7 +191,36 @@ assert(
 assert(suggestion.caption === "", "a listing suggestion has no post caption");
 assert(suggestion.priceCents === 100, "suggestion can show a price");
 assert(suggestion.priceHref === null && suggestion.buy?.kind === "deal" && suggestion.buy.listingId === "seed_luffy", "suggestion price does not open checkout");
-assert(suggestion.href === "/listing/seed_luffy", "a suggested listing opens the listing");
+assert(suggestion.href === "/listing/seed_luffy", "a listing with no post still opens the listing");
+const linkedSuggestion = listingSuggestionCard({
+  saved: false,
+  postId: "post_luffy",
+  listing: {
+    id: "seed_luffy",
+    title: "路飛",
+    cardName: "路飛",
+    personName: null,
+    conditionTrack: "RAW",
+    rawGrade: "A",
+    grader: null,
+    gradeValue: null,
+    status: "ACTIVE",
+    quantityAvailable: 1,
+    saleType: "BUY_NOW",
+    price: 100,
+    currentBid: null,
+    startPrice: null,
+    auctionSettled: false,
+    photos: [{ url: "/demo/cards/seed_luffy.svg" }],
+    seller: { id: "user_ming", nickname: "卡牌阿明", avatarUrl: null },
+  },
+});
+assert(linkedSuggestion.href === "/post/post_luffy" && linkedSuggestion.sharePath === "/post/post_luffy" && linkedSuggestion.priceHref === null, "a feed card for a sell post opens the post");
+assert(listingPageHref(null) === null, "a post with no listing has no 睇貨頁");
+assert(listingPageHref({ id: "seed_luffy", status: "ACTIVE" }) === "/listing/seed_luffy", "a live listing opens from the post");
+assert(listingPageHref({ id: "sold1", status: "SOLD" }) === "/listing/sold1", "a sold listing still opens for specs and 收藏");
+assert(listingPageHref({ id: "draft1", status: "DRAFT" }) === null, "a draft listing stays off the post");
+assert(listingPageHref({ id: "draft1", status: "UNLISTED" }, true) === "/listing/draft1", "the owner can still open an unlisted sale");
 
 const auction = toPostCard({
   postId: "p3",
@@ -223,7 +252,7 @@ const auction = toPostCard({
   liked: false,
   saved: false,
 });
-assert(auction.priceCents === 5000 && auction.priceHref === "/listing/auc1", "an auction price opens the bid");
+assert(auction.priceCents === 5000 && auction.priceHref === null && auction.href === "/post/p3", "an auction on a post stays on the post");
 assert(auction.buy?.kind === "contact" && auction.buy.listingId === "auc1", "an auction that cannot be carted contacts the seller");
 assert(
   postBuy({ id: "gone", ...{ status: "ACTIVE", quantityAvailable: 0, saleType: "BUY_NOW", price: 100, currentBid: null, startPrice: null, auctionSettled: false } }) === null,
@@ -288,12 +317,15 @@ assert(lockAxis(4, 3) === null && lockAxis(20, 4) === "x" && lockAxis(4, 20) ===
 assert(collectionMenu.includes("放賣") && collectionMenu.includes("改為私人") && collectionMenu.includes("改為公開") && collectionMenu.includes("toggleCollectionVisibility"), "sell and privacy stay on the collection menu");
 assert(!profileBoard.includes("<CollectionMenu") && !profileBoard.includes("sellHref") && !profileBoard.includes("collectionItemId"), "the profile does not show the owned-card grid");
 assert(profileBoard.includes("savedListings") && profileBoard.includes("savedPosts") && profileBoard.includes("貨品") && profileBoard.includes("貼文"), "收藏 tab shows saved products and posts");
+assert(!profileBoard.includes('sr-only">{label}'), "the 收藏 tab label is on screen");
+assert(profileBoard.includes("貨品同貼文的收藏會喺呢度"), "empty 收藏 says products and posts land here");
 assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
 assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not render the privacy form itself");
 assert(menu.includes('if (own) return null'), "own posts do not offer report");
 const postPage = readFileSync(new URL("../app/post/[id]/page.tsx", import.meta.url), "utf8");
 assert(!postPage.includes("DeletePostForm") && !postPage.includes("刪除貼文"), "the post page delete stays in the long-press menu");
 assert(!postPage.includes("睇圖鑑") && !postPage.includes("/dex") && !postPage.includes("喺賣場查看"), "post detail does not send people to the dex or back through the market");
+assert(postPage.includes("睇貨頁") && postPage.includes("listingPageHref"), "a post with a listing offers 睇貨頁");
 assert(!postPage.includes("addComment"), "the post page does not submit comments through a navigation");
 assert(!postCard.includes("button={false}"), "feed cards keep the ellipsis button");
 assert(postCard.includes('name="messages"') && postCard.includes("aria-label={commentLabel}"), "comments are an icon with a label");
@@ -313,8 +345,11 @@ assert(postCard.includes("post.author.id"), "the author does not get a buy bar")
 assert(postCard.includes("formatHkd") && postCard.includes("internalLabel"), "the price stays text and share opens the sheet");
 assert(postCard.includes("swipeRightFormId") && postCard.includes("like-") && postCard.includes("PhotoStrip"), "feed cards like on swipe right and swipe multi-photo strips");
 assert(postCard.includes("togglePostSave") && postCard.includes("toggleFavorite") && postCard.includes('tx(locale, "收藏", "Favorite")'), "posts and listing cards can be saved to 收藏");
+assert(postCard.includes("post.postId ? null : post.priceHref"), "a post price does not open the listing");
 const favPage = readFileSync(new URL("../app/me/favorites/page.tsx", import.meta.url), "utf8");
-assert(favPage.includes("prisma.postSave") && favPage.includes("wishlistPostVisible") && favPage.includes('tx(prefs.locale, "收藏", "Favorites")'), "the wishlist page lists saved posts and listings");
+assert(favPage.includes('redirect("/me?tab=saved")') && !favPage.includes("prisma.postSave") && !favPage.includes("<PostCard") && !favPage.includes("<ListingCard"), "/me/favorites redirects to the profile 收藏 tab");
+const settingsPage = readFileSync(new URL("../app/me/settings/page.tsx", import.meta.url), "utf8");
+assert(!settingsPage.includes("/me/favorites") && !settingsPage.includes("我的收藏"), "settings does not add a second favorites list");
 assert(postCard.includes("aspect-[4/5]") && postCard.includes("object-cover"), "feed photos keep the 4:5 cover frame");
 assert(postCard.includes("object-contain"), "detail photos show the whole image");
 assert(postCard.includes("h-10 min-w-10") && postCard.includes("strokeWidth={2.25}"), "actions are at least 40px with a deeper stroke");
@@ -336,6 +371,7 @@ assert(!postCard.includes("justify-center"), "actions sit with the content");
 const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 assert(!home.includes("FollowRail") && !home.includes("loadFollowRail") && !home.includes("StoryRail"), "home feed does not mount the following avatar rail");
 assert(home.indexOf("primary.map") < home.indexOf("suggested.map"), "following posts still lead the home feed");
+assert(home.includes("postByListing.get(listing.id)"), "feed listing cards open the linked post");
 assert(!home.includes("寫貼文") && !home.includes("關注中"), "home has no write-post or following label");
 const strip = readFileSync(new URL("../components/photo-strip.tsx", import.meta.url), "utf8");
 assert(strip.includes("snap-x") && strip.includes("stopPropagation") && !strip.includes("touch-pan-x"), "photo swipe does not lock the page to horizontal");

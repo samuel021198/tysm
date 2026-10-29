@@ -43,11 +43,12 @@ export function PostCard({
   const likeLabel = post.likeCount ? `${tx(locale, "讚", "Like")} ${post.likeCount}` : tx(locale, "讚", "Like");
   const buy = viewerId != null && viewerId === post.author.id ? null : post.buy;
   const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
+  const priceLink = post.postId ? null : post.priceHref;
   const price =
     post.priceCents == null ? null : (
       <div className="mt-1 flex items-center justify-between gap-2">
-        {buy?.kind === "contact" && post.priceHref ? (
-          <Link href={post.priceHref} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
+        {buy?.kind === "contact" && priceLink ? (
+          <Link href={priceLink} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
         ) : (
           <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
         )}
