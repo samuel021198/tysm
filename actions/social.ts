@@ -21,12 +21,13 @@ export async function toggleFavorite(formData: FormData) {
   const id = String(formData.get("listingId") || "");
   const user = await viewer(`/listing/${id}`);
   const existing = await prisma.favorite.findUnique({ where: { userId_listingId: { userId: user.id, listingId: id } } });
+  // Raw count: Prisma @updatedAt would read a favorite as a price or content edit.
   if (existing) {
     await prisma.favorite.delete({ where: { id: existing.id } });
-    await prisma.listing.update({ where: { id }, data: { favoriteCount: { decrement: 1 } } });
+    await prisma.$executeRaw`UPDATE "Listing" SET "favoriteCount" = "favoriteCount" - 1 WHERE "id" = ${id}`;
   } else {
     await prisma.favorite.create({ data: { userId: user.id, listingId: id } });
-    await prisma.listing.update({ where: { id }, data: { favoriteCount: { increment: 1 } } });
+    await prisma.$executeRaw`UPDATE "Listing" SET "favoriteCount" = "favoriteCount" + 1 WHERE "id" = ${id}`;
   }
   // Same as post likes: redirect(next) reloads whatever page the heart was on.
   revalidatePath(`/listing/${id}`);
@@ -165,7 +166,8 @@ export async function pingView(listingId: string) {
   const jar = await cookies();
   const seen = new Set((jar.get("tysm_seen")?.value || "").split(",").filter(Boolean));
   if (!seen.has(listingId)) {
-    await prisma.listing.update({ where: { id: listingId }, data: { viewCount: { increment: 1 } } }).catch(() => undefined);
+    // Raw count: a view is not a re-list or a price change.
+    await prisma.$executeRaw`UPDATE "Listing" SET "viewCount" = "viewCount" + 1 WHERE "id" = ${listingId}`.catch(() => undefined);
     seen.add(listingId);
     jar.set("tysm_seen", [...seen].slice(-40).join(","), {
       httpOnly: true,

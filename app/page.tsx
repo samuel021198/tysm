@@ -45,6 +45,8 @@ export default async function HomePage({
       startPrice: true,
       auctionSettled: true,
       catalogCardId: true,
+      createdAt: true,
+      updatedAt: true,
       sellerId: true,
       photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
       seller: { select: { id: true, nickname: true, avatarUrl: true } },
@@ -59,6 +61,7 @@ export default async function HomePage({
       })
     : [];
   const favIds = new Set(favRows.map((row) => row.listingId));
+  const now = new Date().toISOString();
   const postLinks = extras.length
     ? await prisma.collectionItem.findMany({
         where: { listingId: { in: extras.map((listing) => listing.id) } },
@@ -88,7 +91,7 @@ export default async function HomePage({
       {primary.length ? (
         <section className="grid gap-3">
           {primary.map((post) => (
-            <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
+            <PostCard key={post.id} post={post} locale={prefs.locale} now={now} next="/" viewerId={viewer?.id ?? null} />
           ))}
         </section>
       ) : null}
@@ -100,10 +103,10 @@ export default async function HomePage({
           <h2 className="mb-1 text-sm font-semibold leading-none text-muted">{tx(prefs.locale, "建議", "Suggested")}</h2>
           <div className="grid gap-3">
             {suggested.map((post) => (
-              <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
+              <PostCard key={post.id} post={post} locale={prefs.locale} now={now} next="/" viewerId={viewer?.id ?? null} />
             ))}
             {listingCards.map((post) => (
-              <PostCard key={post.id} post={post} locale={prefs.locale} next="/" viewerId={viewer?.id ?? null} />
+              <PostCard key={post.id} post={post} locale={prefs.locale} now={now} next="/" viewerId={viewer?.id ?? null} />
             ))}
           </div>
         </section>

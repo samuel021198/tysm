@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
+import { activityLine } from "@/lib/time";
 import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { RESERVE_BADGE } from "@/lib/deal-phase";
@@ -101,6 +102,7 @@ export default async function ListingPage({
   ]);
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
   const locale = prefs.locale;
+  const listed = activityLine(listing.createdAt, listing.updatedAt, new Date(), locale);
   const [sellerReviews, sellerShipped, sellerSales] = await Promise.all([
     prisma.review.aggregate({ where: { subjectId: listing.sellerId }, _avg: { stars: true }, _count: true }),
     prisma.order.findMany({ where: { sellerId: listing.sellerId, shippedAt: { not: null } }, select: { shippedAt: true, shipBy: true } }),
@@ -316,6 +318,8 @@ export default async function ListingPage({
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={null}
+          timeLabel={listed.text}
+          timeAt={listed.at.toISOString()}
         />
         <form action={toggleFavorite} className="text-sm">
           <input type="hidden" name="listingId" value={id} />

@@ -27,6 +27,8 @@ export function PurchasePanel({
   loggedIn,
   bidsVoided,
   ownerNote,
+  timeLabel = null,
+  timeAt = null,
 }: {
   locale: Locale;
   id: string;
@@ -45,23 +47,34 @@ export function PurchasePanel({
   loggedIn: boolean;
   bidsVoided: boolean;
   ownerNote: string | null;
+  /** One relative line under the price. */
+  timeLabel?: string | null;
+  timeAt?: string | null;
 }) {
   const publicBid = currentBid ?? startPrice ?? 0;
   const bidFloor = isLeader && yourMax != null ? yourMax + 1 : minBid;
   const handoverLabel = tx(locale, "傾交收", "Arrange handover");
+  const bin = showHandover && price != null ? price : null;
+  const listedAt = timeLabel ? (
+    <time dateTime={timeAt || undefined} className="mt-1 block text-xs font-normal leading-4 text-muted">
+      {timeLabel}
+    </time>
+  ) : null;
 
   return (
     <>
-      {showHandover && price != null ? (
+      {bin != null ? (
         <div>
           <p className="text-xs font-medium text-muted">{tx(locale, "直購價", "Buy It Now")}</p>
-          <p className="price text-2xl leading-none">{formatHkd(price, locale)}</p>
+          <p className="price text-2xl leading-none">{formatHkd(bin, locale)}</p>
+          {listedAt}
         </div>
       ) : null}
       {live || endsAt ? (
         <div className="grid gap-1 rounded-2xl bg-soft p-3">
           <p className="text-xs font-medium text-muted">{tx(locale, "目前出價", "Current bid")}</p>
           <p className="price text-xl leading-none">{formatHkd(publicBid, locale)}</p>
+          {bin != null ? null : listedAt}
           {live ? (
             <p className="text-sm">
               {tx(locale, "下一口最低", "Next minimum")} {formatHkd(minBid, locale)}

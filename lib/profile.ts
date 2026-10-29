@@ -217,6 +217,7 @@ function homePostInclude(viewerId: string | null) {
             personName: true,
             title: true,
             catalogCardId: true,
+            updatedAt: true,
           },
         },
       },
@@ -286,6 +287,7 @@ export async function loadHomeFeed(viewerId: string | null, hidden: string[], hi
       commentCount: row._count.comments,
       liked: viewerId ? row.likes.some((like) => like.userId === viewerId) : false,
       saved: viewerId ? row.saves.some((save) => save.userId === viewerId) : false,
+      createdAt: row.createdAt,
     });
   }
   const primary = primaryRows.map(toCard);
