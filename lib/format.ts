@@ -5,6 +5,14 @@ export function formatJpy(yen: number): string {
   return `¥${amount}`;
 }
 
+/** Rejected-bid banner. Includes the floor when the listing still knows it. */
+export function bidFloorText(locale: Locale, code: string, cents: number | null | undefined): string | null {
+  if ((code !== "below_min" && code !== "below_start") || cents == null || !Number.isSafeInteger(cents) || cents <= 0) return null;
+  const money = formatHkd(cents, locale);
+  if (code === "below_start") return locale === "en" ? `Bid is below the start price of ${money}` : `出價低於起標價 ${money}`;
+  return locale === "en" ? `Bid is below the minimum of ${money}` : `出價低於最低加價，最低 ${money}`;
+}
+
 export function formatHkd(cents: number, locale: Locale): string {
   const amount = new Intl.NumberFormat(locale === "en" ? "en-HK" : "zh-HK", {
     minimumFractionDigits: 2,

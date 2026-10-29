@@ -51,14 +51,22 @@ export function PostCard({
   const buy = viewerId != null && viewerId === post.author.id ? null : post.buy;
   const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
   const priceLink = post.postId ? null : post.priceHref;
+  const auctionPill = post.auction ? (
+    <span className="inline-flex h-5 items-center rounded-full bg-soft px-2 text-[11px] font-semibold leading-none">
+      {tx(locale, "拍賣", "Auction")}
+    </span>
+  ) : null;
   const price =
     post.priceCents == null ? null : (
       <div className="mt-1 flex items-center justify-between gap-2">
-        {buy?.kind === "contact" && priceLink ? (
-          <Link href={priceLink} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
-        ) : (
-          <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
-        )}
+        <span className="flex min-w-0 items-center gap-1.5">
+          {buy?.kind === "contact" && priceLink ? (
+            <Link href={priceLink} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
+          ) : (
+            <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
+          )}
+          {auctionPill}
+        </span>
         {sellHref ? (
           <Link href={sellHref} className="btn btn-primary shrink-0">{tx(locale, "放賣", "List for sale")}</Link>
         ) : buy && post.listingId ? (
@@ -157,7 +165,7 @@ export function PostCard({
     ) : null}
     </PostMenu>
     {gallery && buy && post.listingId && post.priceCents != null ? (
-      <BuyBar locale={locale} price={priceText} listingId={post.listingId} postId={post.postId} />
+      <BuyBar locale={locale} price={priceText} auction={post.auction} listingId={post.listingId} postId={post.postId} />
     ) : null}
     </>
   );
@@ -218,11 +226,13 @@ function FeedCaption({ text, more }: { text: string; more: string }) {
 function BuyBar({
   locale,
   price,
+  auction,
   listingId,
   postId,
 }: {
   locale: Locale;
   price: string;
+  auction: boolean;
   listingId: string;
   postId: string | null;
 }) {
@@ -231,7 +241,10 @@ function BuyBar({
       <div className="h-20" aria-hidden />
       <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card/95 px-3 py-2 backdrop-blur md:bottom-0">
         <div className="mx-auto flex max-w-lg items-center gap-3">
-          <p className="price min-w-0 flex-1 truncate text-lg leading-none">{price}</p>
+          <p className="price min-w-0 flex-1 truncate text-lg leading-none">
+            {price}
+            {auction ? <span className="ml-2 align-middle text-xs font-semibold text-ink">{tx(locale, "拍賣", "Auction")}</span> : null}
+          </p>
           <HandoverForm locale={locale} listingId={listingId} postId={postId} layout="row" />
         </div>
       </div>

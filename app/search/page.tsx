@@ -14,6 +14,7 @@ import { compKey, loadCompSeries, priorSalePrices } from "@/lib/comps";
 import { hkdToCents } from "@/lib/format";
 import { listedPostWhere, listingQueryWhere, marketSearchHref, marketShow, searchScore, type MarketShow } from "@/lib/search";
 import { sellingAsk, toPostCard } from "@/lib/posts";
+import { shopDisplayCents } from "@/lib/shop-inventory";
 
 function one(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value || "";
@@ -152,14 +153,12 @@ export default async function SearchPage({
         ])
       : Promise.resolve(null),
   ]);
+  const askOf = (listing: (typeof listings)[number]) => shopDisplayCents(listing) ?? 0;
   if (sort === "price_asc" || sort === "price_desc") {
-    const priceOf = (listing: (typeof listings)[number]) => listing.price ?? listing.currentBid ?? listing.startPrice ?? 0;
-    listings.sort((a, b) => (sort === "price_asc" ? priceOf(a) - priceOf(b) : priceOf(b) - priceOf(a)));
+    listings.sort((a, b) => (sort === "price_asc" ? askOf(a) - askOf(b) : askOf(b) - askOf(a)));
   } else if (sort === "relevance" && q) {
     listings.sort((a, b) => searchScore(b, q) - searchScore(a, q));
   }
-  const askOf = (listing: (typeof listings)[number]) =>
-    listing.saleType === "AUCTION" ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? 0;
   const inPrice = (ask: number) => (priceMin == null || ask >= priceMin) && (priceMax == null || ask <= priceMax);
   const priced = listings.filter((listing) => inPrice(askOf(listing)));
   const shown = priced.slice(0, 48);

@@ -5,6 +5,7 @@ import { activeWhere } from "@/lib/feed";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { cardDisplayName } from "@/lib/posts";
+import { shopDisplayCents } from "@/lib/shop-inventory";
 import { cardHubListingWhere, cardHubPostWhere, findHref, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
@@ -40,7 +41,7 @@ export default async function FindPage({
 
   let users: { id: string; nickname: string; avatarUrl: string | null }[] = [];
   let posts: { id: string; name: string; author: string; photo: string | null }[] = [];
-  let listings: { id: string; name: string; photo: string | null; price: number | null }[] = [];
+  let listings: { id: string; name: string; photo: string | null; price: number | null; auction: boolean }[] = [];
   let people: { id: string; nickname: string; avatarUrl: string | null }[] = [];
 
   if (q && !drafting) await sweep();
@@ -105,6 +106,7 @@ export default async function FindPage({
               currentBid: true,
               startPrice: true,
               saleType: true,
+              auctionSettled: true,
               photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
               category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } },
             },
@@ -153,7 +155,8 @@ export default async function FindPage({
       id: listing.id,
       name: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
       photo: listing.photos[0]?.url || null,
-      price: listing.saleType === "AUCTION" ? listing.currentBid ?? listing.startPrice : listing.price ?? listing.currentBid,
+      price: shopDisplayCents(listing),
+      auction: listing.saleType !== "BUY_NOW" && !listing.auctionSettled,
     }));
     const seen = new Set<string>();
     people = [];
@@ -288,7 +291,12 @@ export default async function FindPage({
                         <img src={listing.photo || "/demo/back.svg"} alt="" className="h-10 w-10 shrink-0 bg-soft object-contain" />
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-medium">{listing.name}</span>
-                          {listing.price != null ? <span className="block text-xs font-semibold">{formatHkd(listing.price, locale)}</span> : null}
+                          {listing.price != null ? (
+                            <span className="block text-xs font-semibold">
+                              {formatHkd(listing.price, locale)}
+                              {listing.auction ? ` · ${tx(locale, "拍賣", "Auction")}` : ""}
+                            </span>
+                          ) : null}
                         </span>
                       </Link>
                     </li>

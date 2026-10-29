@@ -41,6 +41,10 @@ assert(
   shopDisplayCents({ saleType: "AUCTION", price: null, startPrice: 50, currentBid: 80, auctionSettled: false }) === 80,
   "a live auction shows the bid",
 );
+assert(
+  shopDisplayCents({ saleType: "BOTH", price: 2000, startPrice: 500, currentBid: 1100, auctionSettled: false }) === 1100,
+  "buy-now on a live auction is not the card price",
+);
 
 const schema = readFileSync(new URL("../prisma/schema.prisma", import.meta.url), "utf8");
 assert(schema.includes("enum ListingStatus") && !schema.includes("RESERVED") && schema.includes("binLockOrderId"), "no new status; a hold is the existing lock");

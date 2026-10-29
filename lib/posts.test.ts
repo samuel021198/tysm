@@ -252,8 +252,39 @@ const auction = toPostCard({
   liked: false,
   saved: false,
 });
-assert(auction.priceCents === 5000 && auction.priceHref === null && auction.href === "/post/p3", "an auction on a post stays on the post");
+assert(auction.priceCents === 5000 && auction.auction && auction.priceHref === null && auction.href === "/post/p3", "an auction on a post stays on the post and shows the bid");
 assert(auction.buy?.kind === "contact" && auction.buy.listingId === "auc1", "an auction that cannot be carted contacts the seller");
+const mixed = toPostCard({
+  postId: "p4",
+  body: "#FS",
+  author: card.author,
+  photos: [],
+  item: {
+    title: "直購拍賣卡",
+    cardName: "皮卡丘",
+    conditionTrack: "RAW",
+    rawGrade: "A",
+    photos: [],
+    listing: {
+      id: "both1",
+      status: "ACTIVE",
+      quantityAvailable: 1,
+      saleType: "BOTH",
+      price: 2000,
+      currentBid: 1100,
+      startPrice: 800,
+      auctionSettled: false,
+      cardName: "皮卡丘",
+      personName: null,
+      title: "直購拍賣卡",
+    },
+  },
+  likeCount: 0,
+  commentCount: 0,
+  liked: false,
+  saved: false,
+});
+assert(mixed.priceCents === 1100 && mixed.auction, "a live auction with buy-now shows the current bid, not the buy-now price");
 assert(
   postBuy({ id: "gone", ...{ status: "ACTIVE", quantityAvailable: 0, saleType: "BUY_NOW", price: 100, currentBid: null, startPrice: null, auctionSettled: false } }) === null,
   "a sold-out post is not a buy",
@@ -365,6 +396,13 @@ assert(
     purchase.includes('value="buy"') &&
     purchase.includes('value="compose"') &&
     purchase.includes("openThread") &&
+    purchase.includes("即買") &&
+    purchase.includes("起標價") &&
+    purchase.includes("確認") &&
+    purchase.includes("取消") &&
+    purchase.includes("grid-cols-2") &&
+    purchase.includes("buyItNowAction") &&
+    !purchase.includes("grid-cols-3") &&
     !purchase.includes("HandoverForm") &&
     !purchase.includes("查詢") &&
     !purchase.includes("聯絡買家") &&
@@ -386,6 +424,7 @@ const listingCard = readFileSync(new URL("../components/listing-card.tsx", impor
 const bookmark = 'name="bookmark"';
 assert(postCard.includes(bookmark) && postCard.includes("filled={post.saved}") && !postCard.includes("M7.2 5h9.6"), "post save uses the shared bookmark");
 assert(listingCard.includes(bookmark) && listingCard.includes("filled={favorited}") && !listingCard.includes("♥") && !listingCard.includes("♡"), "listing favorite uses the shared bookmark");
+assert(listingCard.includes("shopDisplayCents") && listingCard.includes("拍賣") && postCard.includes("post.auction") && postCard.includes("拍賣"), "feed and mall cards label a live auction and do not price it as buy-now");
 assert(listingPage.includes(bookmark) && listingPage.includes("filled={Boolean(favored)}") && !listingPage.includes("♥") && !listingPage.includes("♡"), "listing page favorite uses the shared bookmark");
 const titleRowStart = listingPage.indexOf('className="mt-2 flex items-center justify-between gap-3"');
 const titleRow = listingPage.slice(titleRowStart, listingPage.indexOf("</form>", titleRowStart));

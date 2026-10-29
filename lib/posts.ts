@@ -103,11 +103,17 @@ function postPrice(listing: (AskListing & { id: string }) | null): {
   cents: number | null;
   href: string | null;
   buy: PostBuy | null;
+  auction: boolean;
 } {
   const buy = postBuy(listing);
-  if (!listing || !buy) return { cents: null, href: null, buy: null };
-  if (buy.kind === "deal") return { cents: listing.price, href: null, buy };
-  return { cents: sellingAsk(listing), href: `/listing/${listing.id}`, buy };
+  if (!listing || !buy) return { cents: null, href: null, buy: null, auction: false };
+  const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
+  return {
+    cents: sellingAsk(listing),
+    href: buy.kind === "deal" ? null : `/listing/${listing.id}`,
+    buy,
+    auction,
+  };
 }
 
 export function cardDisplayName(parts: {
@@ -130,6 +136,8 @@ export type PostCardModel = {
   cardName: string;
   condition: string | null;
   priceCents: number | null;
+  /** Live auction. The cents are the current bid, or the start price when nobody has bid. */
+  auction: boolean;
   priceHref: string | null;
   likeCount: number;
   commentCount: number;
@@ -253,6 +261,7 @@ export function toPostCard(input: {
     cardName,
     condition: input.item ? conditionLabel(input.item) : null,
     priceCents: price.cents,
+    auction: price.auction,
     // Feed taps stay on the post. The listing opens from 睇貨頁.
     priceHref: null,
     likeCount: input.likeCount,
@@ -311,6 +320,7 @@ export function listingSuggestionCard(input: {
     cardName: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
     condition: conditionLabel(listing),
     priceCents: price.cents,
+    auction: price.auction,
     priceHref: postId ? null : price.href,
     likeCount: 0,
     commentCount: 0,

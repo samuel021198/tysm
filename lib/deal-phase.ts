@@ -131,6 +131,12 @@ export function intentBlocked(phase: DealPhase | null, offer: "PENDING" | "ACCEP
   return phase !== "CHATTING";
 }
 
+/** A finished or cancelled deal does not block another 直接購買. An open offer or reserve does. */
+export function directBuyBlocked(phase: DealPhase | null, offer: "PENDING" | "ACCEPTED" | null): boolean {
+  if (!phase || phase === "DONE" || phase === "CANCELLED") return false;
+  return intentBlocked(phase, offer);
+}
+
 /** Entry writes intent only for 查詢 and 直接購買. 議價 waits until the offer is submitted. DIRECT sticks. */
 export function nextThreadIntent(
   current: ThreadIntent | null,
@@ -171,6 +177,19 @@ export function contactThreadId(threads: ThreadStamp[], orders: ContactOrder[]):
   });
   if (!reusable.length) return null;
   return [...reusable].sort((a, b) => b.createdAt - a.createdAt || (a.id < b.id ? 1 : a.id > b.id ? -1 : 0))[0].id;
+}
+
+/**
+ * Thread that should receive 議價. Stay on an open deal.
+ * A thread that only holds DONE stays history (#132). Null means create one.
+ */
+export function offerThreadChoice(threadId: string, threads: ThreadStamp[], orders: ContactOrder[]): string | null {
+  const mine = ordersOnThread(threadId, threads, orders);
+  if (mine.some((order) => order.phase !== "DONE" && order.phase !== "CANCELLED")) return threadId;
+  if (!mine.some((order) => order.phase === "DONE")) return threadId;
+  const reuse = contactThreadId(threads, orders);
+  if (reuse && reuse !== threadId) return reuse;
+  return null;
 }
 
 /** Orders whose chat is this thread. A later 聯絡 does not inherit a finished deal. */

@@ -34,6 +34,8 @@ import {
   showDealStream,
   threadEntryQuery,
   contactThreadId,
+  directBuyBlocked,
+  offerThreadChoice,
   ordersOnThread,
   threadIdForOrder,
   readDealEvent,
@@ -140,6 +142,12 @@ assert(contactThreadId([doneThread, freshThread], [doneOrder]) === "new", "聯�
 assert(contactThreadId([doneThread], [{ createdAt: 20, phase: "CANCELLED" }]) === "old", "a cancelled deal does not start a new thread");
 assert(contactThreadId([doneThread], [doneOrder, { createdAt: 25, phase: "CHATTING" }]) === "old", "an open deal stays on its thread");
 assert(contactThreadId([], [doneOrder]) === null, "no thread yet means create one");
+assert(offerThreadChoice("old", [doneThread], [doneOrder]) === null, "議價 after DONE creates a new thread");
+assert(offerThreadChoice("old", [doneThread, freshThread], [doneOrder]) === "new", "議價 after DONE uses the later thread, not the finished one");
+assert(offerThreadChoice("new", [doneThread, freshThread], [doneOrder]) === "new", "a later thread can take a new offer");
+assert(offerThreadChoice("old", [doneThread], [doneOrder, { createdAt: 25, phase: "CHATTING" }]) === "old", "an open deal stays on its thread");
+assert(!directBuyBlocked("DONE", null) && !directBuyBlocked("CANCELLED", null) && !directBuyBlocked(null, null) && !directBuyBlocked("CHATTING", null), "a finished deal does not block 直接購買");
+assert(directBuyBlocked("CHATTING", "PENDING") && directBuyBlocked("CONFIRMED", null), "an open offer or reserve still blocks 直接購買");
 assert(threadIdForOrder(20, [doneThread, freshThread]) === "old" && threadIdForOrder(40, [doneThread, freshThread]) === "new", "an order stays on the thread that was open when it started");
 assert(threadIdForOrder(5, [doneThread]) === "old", "an order older than the thread still belongs to it");
 assert(ordersOnThread("new", [doneThread, freshThread], [doneOrder]).length === 0 && ordersOnThread("old", [doneThread, freshThread], [doneOrder]).length === 1, "a new 聯絡 does not inherit the finished order");
