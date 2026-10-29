@@ -9,7 +9,7 @@ import { listingDexLinks } from "@/lib/dex";
 import { activeWhere, cardInclude } from "@/lib/feed";
 import { RESERVE_BADGE } from "@/lib/deal-phase";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
-import { followedSellerIds, isBlocked } from "@/lib/social";
+import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
 import { conditionLabel, minimumNextBid } from "@/lib/rules";
@@ -23,7 +23,8 @@ import { PurchasePanel } from "@/components/purchase-panel";
 import { Sparkline } from "@/components/sparkline";
 import { ViewPing } from "@/components/pings";
 import { offerRespondAction, deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
-import { reportAction, toggleFavorite, toggleFollow } from "@/actions/social";
+import { toggleFavorite, toggleFollow } from "@/actions/social";
+import { PersonMenu } from "@/components/safety-menu";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -67,7 +68,8 @@ export default async function ListingPage({
   const owner = viewer?.id === listing.sellerId;
   const visible = ["ACTIVE", "ENDED", "SOLD"].includes(listing.status) || owner || viewer?.role === "ADMIN";
   if (!visible) notFound();
-  if (viewer && !owner && (await isBlocked(viewer.id, listing.sellerId))) notFound();
+  const hidden = viewer ? await hiddenUserIds(viewer.id) : [];
+  if (viewer && !owner && hidden.includes(listing.sellerId)) notFound();
 
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
@@ -78,7 +80,7 @@ export default async function ListingPage({
       ? prisma.offer.findMany({
           where: {
             listingId: id,
-            ...(owner ? {} : { buyerId: viewer.id }),
+            ...(owner ? (hidden.length ? { buyerId: { notIn: hidden } } : {}) : { buyerId: viewer.id }),
             status: { in: ["PENDING", "COUNTERED", "ACCEPTED"] },
           },
           include: { buyer: { select: { nickname: true } } },
@@ -86,7 +88,7 @@ export default async function ListingPage({
         })
       : Promise.resolve([]),
     prisma.listing.findMany({
-      where: { ...activeWhere([]), categoryId: listing.categoryId, id: { not: id }, sellerId: { not: listing.sellerId } },
+      where: { ...activeWhere(hidden), categoryId: listing.categoryId, id: { not: id }, sellerId: { not: listing.sellerId } },
       include: cardInclude,
       take: 4,
     }),
@@ -331,7 +333,8 @@ export default async function ListingPage({
           </button>
         </form>
         <div className="text-sm">
-          <Link href={`/shop/${listing.sellerId}`} className="flex items-center gap-3">
+          <div className="flex items-start justify-between gap-2">
+          <Link href={`/shop/${listing.sellerId}`} className="flex min-w-0 items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-full bg-accent text-sm font-bold text-white">
               {listing.seller.nickname.slice(0, 1)}
             </span>
@@ -344,6 +347,17 @@ export default async function ListingPage({
               </span>
             </span>
           </Link>
+          {viewer && !owner ? (
+            <PersonMenu
+              locale={locale}
+              userId={listing.sellerId}
+              reportType="LISTING"
+              reportId={id}
+              next={`/listing/${id}`}
+              away="/"
+            />
+          ) : null}
+          </div>
           {!owner && viewer ? (
             <form action={toggleFollow} className="mt-3">
               <input type="hidden" name="sellerId" value={listing.sellerId} />
@@ -358,17 +372,6 @@ export default async function ListingPage({
             {listing.status === "UNLISTED" ? <form action={relistAction}><input type="hidden" name="listingId" value={id} /><button className="btn-ghost btn">{tx(locale, "重新上架", "Relist")}</button></form> : null}
             {listing.status === "DRAFT" ? <form action={deleteDraftAction}><input type="hidden" name="listingId" value={id} /><button className="btn-ghost btn">{tx(locale, "刪除草稿", "Delete draft")}</button></form> : null}
           </div>
-        ) : null}
-        {viewer && !owner ? (
-          <details className="text-sm">
-            <summary className="cursor-pointer text-muted">{tx(locale, "更多", "More")}</summary>
-            <form action={reportAction} className="mt-2 grid gap-2">
-              <input type="hidden" name="targetType" value="LISTING" />
-              <input type="hidden" name="targetId" value={id} />
-              <textarea className="field" name="reason" placeholder={tx(locale, "檢舉原因", "Report reason")} />
-              <button className="text-left text-sm underline">{tx(locale, "檢舉刊登", "Report listing")}</button>
-            </form>
-          </details>
         ) : null}
         {!viewer ? <p className="text-sm"><Link className="text-link" href={`/login?next=/listing/${id}`}>{tx(locale, "登入後先可以購買、出價、收藏或傳訊息。", "Log in to buy, bid, favorite, or message.")}</Link></p> : null}
       </aside>

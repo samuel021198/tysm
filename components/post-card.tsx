@@ -74,6 +74,7 @@ export function PostCard({
       listingId={post.listingId}
       own={viewerId != null && viewerId === post.author.id}
       loggedIn={viewerId != null}
+      userId={post.author.id}
       sharePath={post.sharePath}
       next={next}
       swipeRightFormId={likeFormId}

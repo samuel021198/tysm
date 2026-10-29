@@ -159,7 +159,7 @@ function isoStamp(value: Date | string | null | undefined): string | null {
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
-export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "edit"] as const;
+export const POST_MENU_ORDER = ["delete", "share", "hide", "report", "block", "edit"] as const;
 export type PostMenuAction = (typeof POST_MENU_ORDER)[number];
 
 /** Which long-press actions are enabled. The menu still shows every action. */
@@ -168,6 +168,7 @@ export function postMenuFlags(input: {
   loggedIn: boolean;
   postId: string | null;
   listingId: string | null;
+  userId?: string | null;
 }): Record<PostMenuAction, boolean> {
   const target = Boolean(input.postId || input.listingId);
   return {
@@ -175,6 +176,7 @@ export function postMenuFlags(input: {
     share: true,
     hide: input.loggedIn && target,
     report: input.loggedIn && !input.own && target,
+    block: input.loggedIn && !input.own && Boolean(input.userId),
     edit: input.own && postEditHref(input.postId, input.listingId) != null,
   };
 }
