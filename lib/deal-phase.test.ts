@@ -18,6 +18,8 @@ import {
   cleanOfferNote,
   dealEventBody,
   dealEventCopy,
+  latestOpenOfferMessage,
+  supersededOfferBody,
   offerAckGate,
   offerEntry,
   offerFormLocked,
@@ -57,7 +59,8 @@ assert(!labels.some((label) => label.includes("待付款") || label.includes("�
 
 assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUploadProof("CONFIRMED", 0) && !canUploadProof("CONFIRMED", 1), "proof opens only after the offer is accepted, and only once");
 assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && canOfferFromMenu("ARRANGED", false), "either party can offer while talking");
-assert(!canOfferFromMenu("CHATTING", true) && !canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true), "the + item is omitted once an offer is pending, reserved, finished, or blocked");
+assert(!canOfferFromMenu("CHATTING", true) && canOfferFromMenu("CHATTING", true, false, true) && canOfferFromMenu("ARRANGED", true, false, true), "only the proposer keeps + while an offer is live, so they can replace it");
+assert(!canOfferFromMenu("CONFIRMED", false) && !canOfferFromMenu("PROOF", false) && !canOfferFromMenu("SELLER_PAID", false) && !canOfferFromMenu("DONE", false) && !canOfferFromMenu("CANCELLED", false) && !canOfferFromMenu("CHATTING", false, true) && !canOfferFromMenu("CONFIRMED", true, false, true), "the + item is omitted once reserved, finished, or blocked");
 assert(offerEntry(true, 4) === "bound" && offerEntry(false, 0) === "empty" && offerEntry(false, 1) === "auto" && offerEntry(false, 2) === "pick", "a bound thread skips the picker; an unbound thread follows the active count");
 assert(offerFormLocked(false, false) && !offerFormLocked(false, true) && !offerFormLocked(true, false), "price and note unlock after the checkbox or a stored ack");
 const missingAck = offerAckGate(false, null);
@@ -96,5 +99,14 @@ assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "要約已拒絕" &&
 assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已解除保留", "release names who unlocked");
 const body = dealEventBody({ kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
 assert(readDealEvent(body)?.kind === "offer" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
+const replaced = supersededOfferBody(body);
+const replacedEvent = replaced ? readDealEvent(replaced) : null;
+assert(replacedEvent?.kind === "offer" && replacedEvent.superseded === true && replacedEvent.amount === 12300 && replacedEvent.note === "旺角", "replacing an offer keeps the old terms and marks 已取代");
+assert(replaced != null && supersededOfferBody(replaced) === null && supersededOfferBody("hello") === null, "a gray bubble is not stamped again");
+const older = { id: "a", body };
+const newer = { id: "b", body: dealEventBody({ kind: "offer", name: "Bea", amount: 200, note: "" }) };
+assert(latestOpenOfferMessage([older, newer])?.id === "b", "the live card is the newest offer bubble");
+assert(latestOpenOfferMessage([{ id: "a", body: replaced! }, newer])?.id === "b", "a superseded bubble is not the live offer");
+assert(latestOpenOfferMessage([{ id: "a", body: replaced! }]) === null, "a thread of only replaced offers has no live bubble");
 
 console.log("deal-phase.test.ts ok");

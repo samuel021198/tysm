@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, readDealEvent, readDealMeta } from "@/lib/deal-phase";
+import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, latestOpenOfferMessage, readDealEvent, readDealMeta } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -55,12 +55,16 @@ export default async function ThreadPage({
   });
   const order = open ?? orders.find((row) => dealPhase(row) === "DONE") ?? orders[0] ?? null;
   const phase = order ? dealPhase(order) : null;
-  const pending = order ? readDealMeta(order.fulfillment).offer?.status === "PENDING" : false;
+  const offer = order ? readDealMeta(order.fulfillment).offer : null;
+  const pendingOffer = offer?.status === "PENDING" ? offer : null;
+  const pending = Boolean(pendingOffer);
   const blocked = order
     ? order.items.some((item) => dealBlocked(dealPhase(order), item.listing.status, item.listing.binLockOrderId, order.id))
     : Boolean(thread.listing?.binLockOrderId);
   const listingClosed = Boolean(thread.listing && thread.listing.status !== "ACTIVE");
-  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed);
+  const canOffer = canOfferFromMenu(phase, pending, blocked || listingClosed, pendingOffer?.by === viewer.id);
+  const liveOfferId = pending ? latestOpenOfferMessage(thread.messages)?.id ?? null : null;
+  const reviseItem = order?.items[0];
   const listPrice = thread.listing ? (thread.listing.price ?? thread.listing.currentBid ?? thread.listing.startPrice) : null;
   const bound = thread.listing ? { id: thread.listing.id, title: thread.listing.title, priceCents: listPrice, cover: null as string | null } : null;
   // ponytail: 30 newest unlocked listings. A paged sheet is the upgrade if a shop has more.
@@ -90,6 +94,17 @@ export default async function ThreadPage({
         <ol className="grid content-start gap-2.5">
           {thread.messages.map((message) => {
             const event = readDealEvent(message.body);
+            if (event?.kind === "offer" && event.superseded) {
+              const copy = dealEventCopy(prefs.locale, event);
+              return (
+                <li key={message.id} className="mx-auto grid w-full max-w-[18rem] justify-items-center gap-0.5 rounded-2xl border border-line bg-soft px-3 py-2 text-center text-xs text-muted">
+                  <p className="font-semibold">{tx(prefs.locale, "已取代", "Superseded")}</p>
+                  <p>{copy.text}</p>
+                  {copy.note ? <p>{copy.note}</p> : null}
+                </li>
+              );
+            }
+            if (event?.kind === "offer" && message.id === liveOfferId) return null;
             if (event) {
               const copy = dealEventCopy(prefs.locale, event);
               return (
@@ -131,6 +146,23 @@ export default async function ThreadPage({
                 next={`/messages/${id}`}
                 reviewed={order.reviews.some((review) => review.authorId === viewer.id)}
                 payment={sellerPayment(thread.seller)}
+                names={{ buyer: thread.buyer.nickname, seller: thread.seller.nickname }}
+                revise={
+                  pendingOffer && pendingOffer.by !== viewer.id && reviseItem
+                    ? {
+                        threadId: id,
+                        riskAcked: Boolean(viewer.p2pRiskAckAt),
+                        priceCents: pendingOffer.amount,
+                        note: pendingOffer.note,
+                        listing: {
+                          id: reviseItem.listingId,
+                          title: reviseItem.title,
+                          priceCents: reviseItem.unitPrice,
+                          cover: null,
+                        },
+                      }
+                    : null
+                }
                 order={order}
               />
             </li>
@@ -138,7 +170,20 @@ export default async function ThreadPage({
         </ol>
         </div>
       </ThreadScroll>
-      <MessageComposer locale={prefs.locale} threadId={id} focus={sp.compose === "1"} canOffer={canOffer} bound={bound} choices={choices} riskAcked={Boolean(viewer.p2pRiskAckAt)} />
+      <MessageComposer
+        locale={prefs.locale}
+        threadId={id}
+        focus={sp.compose === "1"}
+        canOffer={canOffer}
+        bound={bound}
+        choices={choices}
+        riskAcked={Boolean(viewer.p2pRiskAckAt)}
+        offerPrefill={
+          pendingOffer && pendingOffer.by === viewer.id
+            ? { priceCents: pendingOffer.amount, note: pendingOffer.note }
+            : null
+        }
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
-import { cleanOfferNote, dealEventBody, dealPhase, readDealMeta, type DealOffer } from "./deal-phase";
+import { cleanOfferNote, dealEventBody, dealPhase, latestOpenOfferMessage, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
 import { Fail, asFail } from "./fail";
 import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
@@ -44,6 +44,20 @@ function withDeal(
     ...(offer ? { offer: { by: offer.by, name: offer.name, amount: offer.amount, note: offer.note, status: offer.status } } : {}),
   };
   return { ...base, ...(extra ?? {}), deal };
+}
+
+async function markLiveOfferSuperseded(tx: Prisma.TransactionClient, threadId: string) {
+  // ponytail: one scan for the newest live offer bubble. An offer id on the message is the upgrade if bubbles stop being appended in order.
+  const messages = await tx.message.findMany({
+    where: { threadId },
+    select: { id: true, body: true },
+    orderBy: { createdAt: "asc" },
+  });
+  const live = latestOpenOfferMessage(messages);
+  if (!live) return;
+  const next = supersededOfferBody(live.body);
+  if (!next) return;
+  await tx.message.update({ where: { id: live.id }, data: { body: next } });
 }
 
 async function postDealNote(
@@ -372,8 +386,8 @@ export async function proposeDealOffer(userId: string, threadId: string, listing
       if (!order) throw new Fail("state");
       const meta = readDealMeta(order.fulfillment);
       const phase = dealPhase(order);
-      if (meta.offer?.status === "PENDING") throw new Fail("pending");
       if (phase !== "CHATTING" && phase !== "ARRANGED") throw new Fail("state");
+      if (meta.offer?.status === "PENDING") await markLiveOfferSuperseded(tx, thread.id);
       const offer: DealOffer = { by: userId, name, amount, note: cleaned.note, status: "PENDING" };
       const changed = await tx.order.updateMany({
         where: { id: order.id, status: { in: [...OPEN_TALK] } },

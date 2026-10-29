@@ -53,12 +53,17 @@ assert(!orderPage.includes("DealDisclaimer") && !orderPage.includes("sticky"), "
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
 assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
 assert(!deal.includes("確認交易") && !deal.includes("提出要約") && !deal.includes("canSellerLock"), "make offer is not a deal-card button");
-assert(deal.includes("接受要約") && deal.includes("拒絕") && deal.includes("撤回要約") && deal.includes("等待對方回應"), "a pending offer is accepted, declined, or withdrawn on the bubble");
+assert(deal.includes("接受要約") && deal.includes("ReviseOfferButton") && deal.includes("拒絕") && deal.includes('stream ? "撤回"') && deal.includes("提出：") && deal.includes("等待："), "the live card names who proposed and who is waiting; the counterparty accepts, revises, or declines");
+assert(deal.includes("撤回要約"), "the handover page still says 撤回要約");
+assert(page.includes("已取代") && page.includes("event.superseded") && page.includes("liveOfferId"), "a replaced offer stays in the log as 已取代, and the live one is only the deal card");
+assert(page.includes("pendingOffer?.by === viewer.id") && page.includes("offerPrefill"), "the proposer can open + while their offer is live, with the current price and note");
+assert(src.includes("prefill={offerPrefill}"), "the + menu opens the same make-offer form");
 assert(deal.includes("已收款") && deal.includes("已收貨") && deal.includes("解除保留") && deal.includes("約定交收") && deal.includes("取消交收"), "later handover actions stay on the bubble");
 assert(src.includes('name="plus"') && src.includes("提出要約") && src.includes("canOffer") && !src.includes('name="camera"'), "the left control is + and offer is a menu item");
 const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.url), "utf8");
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
+assert(sheet.includes("改價回覆") && sheet.includes("prefill") && sheet.includes("makeDealOfferAction"), "改價回覆 reuses the make-offer form with the current price and note");
 assert(sheet.includes("DealDisclaimer") && sheet.includes("DEAL_ACK") && sheet.includes("offerFormLocked") && sheet.includes("disabled={locked}"), "the offer form keeps a risk line and locks price until the first checkbox");
 assert(sheet.includes("ackP2pRisk") && src.includes("riskAcked") && src.includes("persisted={riskAcked}"), "the checkbox is once per account, then the form opens straight away");
 assert(!src.includes("localStorage"), "the ack is not stored only in the browser");
@@ -75,6 +80,8 @@ assert(!start.includes('get("ack")') && !start.includes("p2pRiskAck"), "starting
 const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
 const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
 assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");
+assert(deals.includes("markLiveOfferSuperseded") && !deals.includes('Fail("pending")'), "submitting another offer replaces the live one");
+assert(deals.includes('if (offer.by === userId) throw new Fail("forbidden")') && deals.includes("softLock"), "accept locks the displayed offer; the proposer does not press a second agree");
 assert(proof.includes("上傳付款證明"), "payment proof stays a deal action");
 
 console.log("message-composer.test.ts ok");
