@@ -34,4 +34,17 @@ assert(
   "the threshold itself counts as an update",
 );
 
+assert(relativeTime(new Date("2026-10-20T10:00:00+08:00"), now, "zh-HK") === "20/10", "older zh-HK dates are D/M");
+assert(relativeTime(new Date("2026-10-20T10:00:00+08:00"), now, "en") === "10/20", "older english dates stay M/D");
+assert(relativeTime(new Date("2026-11-06T00:00:00+08:00"), now, "zh-HK") === "6/11", "future zh-HK dates are D/M");
+assert(relativeTime(new Date("2026-11-06T00:00:00+08:00"), now, "en") === "11/6", "future english dates stay M/D");
+assert(
+  activityLine(new Date("2026-10-01T10:00:00+08:00"), new Date("2026-10-20T10:00:00+08:00"), now, "zh-HK").text === "更新於 · 20/10",
+  "an older update stamps D/M in zh-HK",
+);
+assert(
+  activityLine(new Date("2026-10-01T10:00:00+08:00"), new Date("2026-10-20T10:00:00+08:00"), now, "en").text === "Updated · 10/20",
+  "an older update stamps M/D in english",
+);
+
 console.log("time ok");

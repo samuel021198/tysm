@@ -4,13 +4,17 @@ export function NewsCover({
   source,
   coverUrl,
   className = "",
+  fit = "cover",
 }: {
   source: string;
   coverUrl?: string | null;
   className?: string;
+  /** Detail passes contain so a portrait slab is not cropped into a strip. */
+  fit?: "cover" | "contain";
 }) {
   if (coverUrl) {
-    return <img src={coverUrl} alt="" className={`bg-soft object-cover ${className}`} />;
+    const framed = fit === "contain" ? "object-contain" : "object-cover";
+    return <img src={coverUrl} alt="" className={`bg-soft ${framed} ${className}`} />;
   }
   const logo = newsBrandLogo(source);
   if (logo) {

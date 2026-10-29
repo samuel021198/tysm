@@ -65,6 +65,138 @@ export function newsDetailCopy(body: string, linkUrl?: string | null): { copy: s
   return { copy: fallback ? body.replace(/\n+$/, "") : body, sourceUrl: fallback };
 }
 
+const NEWS_FIELD_KEYS = new Set([
+  "產品",
+  "產品詳情",
+  "售價",
+  "預訂/購買日期",
+  "預計出貨日",
+  "拍品",
+  "成交價",
+  "評級",
+  "編號",
+  "成交日期",
+  "拍賣場",
+  "備註",
+  "product",
+  "item",
+  "product details",
+  "details",
+  "price",
+  "preorder/purchase date",
+  "pre-order/purchase date",
+  "pre-order date",
+  "preorder date",
+  "purchase date",
+  "release date",
+  "expected ship date",
+  "ship date",
+  "lot",
+  "sale price",
+  "hammer price",
+  "sold for",
+  "grade",
+  "number",
+  "cert",
+  "serial",
+  "sale date",
+  "date sold",
+  "auction house",
+  "notes",
+  "remarks",
+]);
+
+const NEWS_PRICE_KEYS = new Set(["售價", "成交價", "price", "sale price", "hammer price", "sold for"]);
+
+const NEWS_LINK_KEYS = new Set(["相關連結", "相關鏈接", "相關链接", "related link", "related links", "link", "source"]);
+
+function normNewsLabel(label: string): string {
+  return label.trim().toLowerCase().replace(/／/g, "/").replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ");
+}
+
+function knownNewsLabel(label: string): boolean {
+  const norm = normNewsLabel(label);
+  if (!norm || NEWS_LINK_KEYS.has(norm)) return false;
+  if (NEWS_FIELD_KEYS.has(norm)) return true;
+  const parts = norm.split("/");
+  return parts.length > 1 && parts.every((part) => NEWS_FIELD_KEYS.has(part));
+}
+
+function priceNewsLabel(label: string): boolean {
+  const norm = normNewsLabel(label);
+  return NEWS_PRICE_KEYS.has(norm) || norm.split("/").some((part) => NEWS_PRICE_KEYS.has(part));
+}
+
+export type NewsDetailBlock =
+  | { kind: "prose"; text: string }
+  | { kind: "field"; label: string; value: string; emphasis: boolean };
+
+/**
+ * Label lines become field cards. Empty values (including empty 備註) drop.
+ * `相關連結` is not a card — its https URL is returned once for the source button.
+ * ponytail: an unknown label stays prose until it is added to NEWS_FIELD_KEYS.
+ */
+export function newsDetailBlocks(copy: string): { blocks: NewsDetailBlock[]; linkUrl: string | null } {
+  const blocks: NewsDetailBlock[] = [];
+  const prose: string[] = [];
+  let linkUrl: string | null = null;
+  const flush = () => {
+    const text = prose.join("\n").trim();
+    prose.length = 0;
+    if (text) blocks.push({ kind: "prose", text });
+  };
+  for (const line of copy.split("\n")) {
+    const match = /^[ \t]*([^：:]{1,40})[ \t]*[：:][ \t]*(.*)$/.exec(line);
+    const label = match?.[1].trim() ?? "";
+    const value = match?.[2].trim() ?? "";
+    if (!match || !knownNewsLabel(label)) {
+      if (match && NEWS_LINK_KEYS.has(normNewsLabel(label))) {
+        flush();
+        if (!linkUrl && httpsUrl(value)) linkUrl = value;
+        continue;
+      }
+      prose.push(line);
+      continue;
+    }
+    flush();
+    if (!value) continue;
+    blocks.push({ kind: "field", label, value, emphasis: priceNewsLabel(label) });
+  }
+  flush();
+  return { blocks, linkUrl };
+}
+
+/** List chip. Goldin, or a body that names 成交價, is 成交 rather than 抽選. */
+export function newsListTag(row: { source: string; body: string; tag: string }, locale: Locale): string {
+  if (row.source === "Goldin" || row.body.includes("成交價")) return locale === "en" ? "Sold" : "成交";
+  if (row.tag === "RESTOCK") return locale === "en" ? "Restock" : "重販";
+  if (row.tag === "DATE") return locale === "en" ? "Draw" : "抽選";
+  return locale === "en" ? "Release" : "發售";
+}
+
+/**
+ * One teaser line. When the meta stamp is already a calendar day, drop that D/M and M/D token
+ * so `30/10` is not printed again under `30/10`.
+ */
+export function newsListTeaser(teaser: string, at: Date, now: Date, locale: Locale): string {
+  const text = teaser.trim();
+  if (!text) return "";
+  const stamp = newsUpdatedAgo(at, now, locale);
+  const match = /^(\d{1,2})\/(\d{1,2})$/.exec(stamp);
+  if (!match) return text;
+  const forms = [...new Set([`${match[1]}/${match[2]}`, `${match[2]}/${match[1]}`])];
+  let next = text;
+  for (const form of forms) {
+    next = next.replace(new RegExp(`(^|[^0-9/])(?:約\\s*)?${form.replaceAll("/", "\\/")}(?![0-9/])`, "g"), "$1");
+  }
+  if (next === text) return text;
+  return next
+    .split(/[|｜]/)
+    .map((part) => part.replace(/[ \t]{2,}/g, " ").trim())
+    .filter(Boolean)
+    .join(" | ");
+}
+
 /** Newest source time first. Ignores hot and updatedAt. Null `eventAt` uses `createdAt`. */
 export function compareNewsByEventAt(a: { eventAt: Date | null; createdAt: Date }, b: { eventAt: Date | null; createdAt: Date }): number {
   return newsSortAt(b).getTime() - newsSortAt(a).getTime();
