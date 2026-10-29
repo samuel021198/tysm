@@ -16,6 +16,8 @@ const ERR: Record<string, [string, string]> = {
   photo_url: ["相片須為已上傳圖片、https，或站內示範圖", "Photos must be an upload, https, or a bundled demo image"],
   price: ["請填寫有效直購價", "Enter a valid Buy It Now price"],
   start: ["請填寫有效拍賣起標價", "Enter a valid auction start price"],
+  reserve: ["底價須高於或等於起標價", "Reserve must be at least the start price"],
+  auction_days: ["拍賣時長只可以係 1、3、5 或 7 日", "Auction length is 1, 3, 5, or 7 days"],
   auction_end: ["拍賣結束時間須為香港時間，並於刊登後 30 分鐘至 14 日內", "Auction end must be 30 minutes to 14 days after publish (Hong Kong time)"],
   both_price: ["直購價須高於起標價", "Buy It Now must be higher than the start price"],
   offer: ["最低接受價須大於 0 且低於直購價", "Minimum offer must be above 0 and below Buy It Now"],

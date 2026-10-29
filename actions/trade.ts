@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { cleanOfferNote, offerAckGate } from "@/lib/deal-phase";
 import { hkdToCents, safeNext } from "@/lib/format";
-import { importCsv, markListingSold, parseListingForm, relistListing, saveListing, unlistListing, updateListingPrice, deleteDraft } from "@/lib/listings";
-import { placeBid } from "@/lib/bids";
+import { importCsv, markListingSold, parseListingForm, relistAuctionFixed, relistListing, saveListing, unlistListing, updateListingPrice, deleteDraft } from "@/lib/listings";
+import { placePublicBid } from "@/lib/bids";
 import { respondOffer } from "@/lib/offers";
 import {
   acceptDealOffer,
@@ -117,6 +117,16 @@ export async function markShopSold(formData: FormData) {
   redirect(back);
 }
 
+export async function relistFixedAction(formData: FormData) {
+  const id = String(formData.get("listingId") || "");
+  const user = await viewer(`/listing/${id}`);
+  const price = hkdToCents(String(formData.get("price") || ""));
+  if (price == null || price <= 0) redirect(`/listing/${id}?err=price`);
+  const result = await relistAuctionFixed(user.id, id, price);
+  if (!result.ok) redirect(`/listing/${id}?err=${result.error}`);
+  redirect(`/listing/${id}?ok=saved`);
+}
+
 export async function relistAction(formData: FormData) {
   const user = await viewer("/sell");
   const id = String(formData.get("listingId") || "");
@@ -147,9 +157,9 @@ export async function importCsvAction(_prev: { error?: string; rows?: { row: num
 export async function bidAction(formData: FormData) {
   const id = String(formData.get("listingId") || "");
   const user = await viewer(`/listing/${id}`);
-  const max = hkdToCents(String(formData.get("max") || ""));
-  if (max == null || max <= 0) redirect(`/listing/${id}?err=below_min`);
-  const result = await placeBid(user.id, id, max);
+  const amount = hkdToCents(String(formData.get("amount") || formData.get("max") || ""));
+  if (amount == null || amount <= 0) redirect(`/listing/${id}?err=below_min`);
+  const result = await placePublicBid(user.id, id, amount);
   revalidatePath(`/listing/${id}`);
   redirect(`/listing/${id}?${result.ok ? "ok=bid" : `err=${result.error}`}`);
 }

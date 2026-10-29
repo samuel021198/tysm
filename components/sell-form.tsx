@@ -43,6 +43,8 @@ export type SellInitial = {
   saleType: string;
   price: string;
   startPrice: string;
+  reserve?: string;
+  auctionDays?: string;
   auctionEndsAt: string;
   offersEnabled: boolean;
   minOffer: string;
@@ -183,6 +185,10 @@ export function SellForm({
   const [step, setStep] = useState(editing ? 3 : fromDex ? 1 : 0);
   const [categoryId, setCategoryId] = useState(initial?.categoryId || fallbackCategory);
   const [price, setPrice] = useState(initial?.price || "");
+  const [mode, setMode] = useState<"fixed" | "auction">(initial?.saleType && initial.saleType !== "BUY_NOW" ? "auction" : "fixed");
+  const [startPrice, setStartPrice] = useState(initial?.startPrice || "");
+  const [reserve, setReserve] = useState(initial?.reserve || "");
+  const [auctionDays, setAuctionDays] = useState(initial?.auctionDays || "3");
   const [description, setDescription] = useState(initial?.description || "");
   const [sfCod, setSfCod] = useState(initial?.shipSfCod ?? true);
   const [meetup, setMeetup] = useState(initial?.shipMeetup ?? false);
@@ -219,6 +225,16 @@ export function SellForm({
   const dragFrom = useRef<number | null>(null);
   const locked = initial?.locked || false;
   const multi = cards.length >= 2;
+  const postedSale = locked
+    ? initial?.saleType === "AUCTION" || initial?.saleType === "BOTH"
+      ? initial.saleType
+      : "BUY_NOW"
+    : !multi && mode === "auction"
+      ? price.trim()
+        ? "BOTH"
+        : "AUCTION"
+      : "BUY_NOW";
+  const auction = postedSale !== "BUY_NOW";
   const selected = ordered.find((cat) => cat.id === categoryId);
   const catalogGame = catalogSlug(selected?.slug);
   const categoryLabel = selected ? (locale === "en" ? selected.nameEn : selected.nameZh) : "";
@@ -413,16 +429,25 @@ export function SellForm({
       {linkPost ? <input type="hidden" name="alsoPost" value="on" /> : null}
       <input type="hidden" name="photos" value={JSON.stringify(photos)} />
       <input type="hidden" name="cards" value={JSON.stringify(payload())} />
-      <input type="hidden" name="saleType" value={initial?.saleType && initial.saleType !== "BUY_NOW" ? initial.saleType : "BUY_NOW"} />
+      <input type="hidden" name="saleType" value={postedSale} />
       <input type="hidden" name="quantity" value={String(initial?.quantity || 1)} />
       <input type="hidden" name="shippingDays" value={String(shipWithin)} />
       <input type="hidden" name="conditionTrack" value={first?.track || "RAW"} />
       <input type="hidden" name="rawGrade" value={first?.rawGrade || "A"} />
       <input type="hidden" name="grader" value={first?.grader || "PSA"} />
       <input type="hidden" name="gradeScore" value={first?.track === "GRADED" ? first.gradeScore : ""} />
-      {initial?.saleType && initial.saleType !== "BUY_NOW" ? (
+      {!locked && auction ? (
+        <>
+          <input type="hidden" name="startPrice" value={startPrice} />
+          <input type="hidden" name="reserve" value={reserve} />
+          <input type="hidden" name="auctionDays" value={auctionDays} />
+        </>
+      ) : null}
+      {locked && initial?.saleType && initial.saleType !== "BUY_NOW" ? (
         <>
           <input type="hidden" name="startPrice" value={initial.startPrice} />
+          <input type="hidden" name="reserve" value={initial.reserve || ""} />
+          <input type="hidden" name="auctionDays" value={initial.auctionDays || ""} />
           <input type="hidden" name="auctionEndsAt" value={initial.auctionEndsAt} />
         </>
       ) : null}
@@ -494,20 +519,64 @@ export function SellForm({
         {multi ? (
           <p className="rounded-2xl bg-soft px-3 py-3 text-sm">{tx(locale, "多過一張卡，價錢改喺每張卡下面填。", "More than one card: enter a price on each card.")}</p>
         ) : (
-          <label className="grid gap-1 text-sm font-medium">
-            {tx(locale, "價錢 HKD", "Price HKD")}
-            <input
-              className="field"
-              name={locked ? undefined : "price"}
-              disabled={locked}
-              inputMode="decimal"
-              value={price}
-              aria-invalid={shown.includes("price")}
-              placeholder="280"
-              onChange={(event) => setPrice(event.target.value)}
-            />
-            <FieldError locale={locale} codes={shown} code="price" />
-          </label>
+          <div className="grid gap-3">
+            {!locked ? (
+              <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={tx(locale, "售賣方式", "Sale type")}>
+                <button type="button" aria-pressed={mode === "fixed"} className={`h-11 rounded-full text-sm font-semibold ${mode === "fixed" ? "bg-accent text-white" : "bg-soft"}`} onClick={() => setMode("fixed")}>
+                  {tx(locale, "固定價", "Fixed price")}
+                </button>
+                <button type="button" aria-pressed={mode === "auction"} className={`h-11 rounded-full text-sm font-semibold ${mode === "auction" ? "bg-accent text-white" : "bg-soft"}`} onClick={() => setMode("auction")}>
+                  {tx(locale, "拍賣", "Auction")}
+                </button>
+              </div>
+            ) : null}
+            {auction ? (
+              <>
+                <label className="grid gap-1 text-sm font-medium">
+                  {tx(locale, "起標價 HKD", "Start price HKD")}
+                  <input className="field" inputMode="decimal" value={startPrice} disabled={locked} data-focus="startPrice" aria-invalid={shown.includes("start")} placeholder="100" onChange={(event) => setStartPrice(event.target.value)} />
+                  <FieldError locale={locale} codes={shown} code="start" />
+                </label>
+                <div data-focus="auctionDays" className="grid gap-1">
+                  <p className="text-sm font-medium">{tx(locale, "時長", "Length")}</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    {([1, 3, 5, 7] as const).map((days) => (
+                      <button key={days} type="button" aria-pressed={auctionDays === String(days)} disabled={locked} className={`h-11 rounded-full text-sm font-semibold ${auctionDays === String(days) ? "bg-accent text-white" : "bg-soft"}`} onClick={() => setAuctionDays(String(days))}>
+                        {tx(locale, `${days} 日`, `${days}d`)}
+                      </button>
+                    ))}
+                  </div>
+                  <FieldError locale={locale} codes={shown} code="auction_days" />
+                </div>
+                <label className="grid gap-1 text-sm font-medium">
+                  {tx(locale, "底價 HKD（可留空）", "Reserve HKD (optional)")}
+                  <span className="font-normal text-muted">{tx(locale, "買家唔見", "Buyers don't see this")}</span>
+                  <input className="field" inputMode="decimal" value={reserve} disabled={locked} data-focus="reserve" aria-invalid={shown.includes("reserve")} placeholder={tx(locale, "可留空", "Optional")} onChange={(event) => setReserve(event.target.value)} />
+                  <FieldError locale={locale} codes={shown} code="reserve" />
+                </label>
+                <label className="grid gap-1 text-sm font-medium">
+                  {tx(locale, "即買價 HKD（可留空）", "Buy It Now HKD (optional)")}
+                  <input className="field" name={locked ? undefined : "price"} disabled={locked} inputMode="decimal" value={price} data-focus="price" aria-invalid={shown.includes("both_price")} placeholder={tx(locale, "可留空", "Optional")} onChange={(event) => setPrice(event.target.value)} />
+                  <FieldError locale={locale} codes={shown} code="both_price" />
+                </label>
+              </>
+            ) : (
+              <label className="grid gap-1 text-sm font-medium">
+                {tx(locale, "價錢 HKD", "Price HKD")}
+                <input
+                  className="field"
+                  name={locked ? undefined : "price"}
+                  disabled={locked}
+                  inputMode="decimal"
+                  value={price}
+                  aria-invalid={shown.includes("price")}
+                  placeholder="280"
+                  onChange={(event) => setPrice(event.target.value)}
+                />
+                <FieldError locale={locale} codes={shown} code="price" />
+              </label>
+            )}
+          </div>
         )}
 
         <div data-wizard-jump data-focus="photos" tabIndex={-1} className="grid gap-2 outline-none">
@@ -789,7 +858,19 @@ export function SellForm({
           </div>
           <p className="text-lg font-semibold">{title || tx(locale, "未填標題", "No title yet")}</p>
           {description ? <p className="whitespace-pre-wrap text-muted">{description}</p> : null}
-          <p>{multi ? tx(locale, `合計 HK$${cards.reduce((sum, card) => sum + (Number(card.price) || 0), 0)}`, `Total HK$${cards.reduce((sum, card) => sum + (Number(card.price) || 0), 0)}`) : price ? `HK$${price}` : tx(locale, "未填價錢", "No price yet")}</p>
+          <p>
+            {multi
+              ? tx(locale, `合計 HK$${cards.reduce((sum, card) => sum + (Number(card.price) || 0), 0)}`, `Total HK$${cards.reduce((sum, card) => sum + (Number(card.price) || 0), 0)}`)
+              : auction
+                ? tx(
+                    locale,
+                    `拍賣 · 起標 HK$${startPrice || "—"} · ${auctionDays} 日${reserve.trim() ? ` · 底價 HK$${reserve}` : ""}${price.trim() ? ` · 即買 HK$${price}` : ""}`,
+                    `Auction · start HK$${startPrice || "—"} · ${auctionDays}d${reserve.trim() ? ` · reserve HK$${reserve}` : ""}${price.trim() ? ` · BIN HK$${price}` : ""}`,
+                  )
+                : price
+                  ? `HK$${price}`
+                  : tx(locale, "未填價錢", "No price yet")}
+          </p>
           <ul className="grid gap-1 text-muted">
             {cards.map((card) => (
               <li key={card.key}>
