@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "./db";
-import { cleanOfferNote, dealEventBody, dealPhase, latestOpenOfferMessage, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
+import { canConfirmHandover, cleanOfferNote, dealEventBody, dealPhase, handoverFlags, latestOpenOfferMessage, readDealMeta, supersededOfferBody, type DealOffer } from "./deal-phase";
 import { Fail, asFail } from "./fail";
 import { isAllowedMediaUrl } from "./format";
 import { insertOrder, releaseReservedStock } from "./orders";
@@ -31,16 +31,27 @@ export type ShareCard = {
 
 function withDeal(
   existing: unknown,
-  patch: { meetupAgreed?: boolean; confirmed?: boolean; proofs?: { url: string }[]; offer?: DealOffer | null },
+  patch: {
+    meetupAgreed?: boolean;
+    confirmed?: boolean;
+    proofs?: { url: string }[];
+    offer?: DealOffer | null;
+    buyerHandover?: boolean;
+    sellerHandover?: boolean;
+  },
   extra?: Record<string, unknown>,
 ): Prisma.InputJsonValue {
   const base = existing && typeof existing === "object" && !Array.isArray(existing) ? { ...(existing as Record<string, unknown>) } : {};
   const prev = readDealMeta(existing);
   const offer = patch.offer === undefined ? prev.offer : patch.offer;
+  const buyerHandover = patch.buyerHandover ?? prev.buyerHandover;
+  const sellerHandover = patch.sellerHandover ?? prev.sellerHandover;
   const deal = {
     private: true,
     meetupAgreed: patch.meetupAgreed ?? prev.meetupAgreed ?? false,
     confirmed: patch.confirmed ?? prev.confirmed ?? false,
+    ...(buyerHandover ? { buyerHandover: true } : {}),
+    ...(sellerHandover ? { sellerHandover: true } : {}),
     proofs: patch.proofs ?? prev.proofs,
     ...(offer ? { offer: { by: offer.by, name: offer.name, amount: offer.amount, note: offer.note, status: offer.status } } : {}),
   };
@@ -468,7 +479,7 @@ type ReserveOrder = {
   items: { id: string; quantity: number; listingId: string }[];
 };
 
-/** Accept the live offer and hold the listing. Same binLockOrderId + confirmed path as 確認交易. */
+/** Accept the live offer and hold the listing. */
 async function acceptAndReserve(tx: Prisma.TransactionClient, order: ReserveOrder, userId: string, offer: DealOffer) {
   const listingIds = [...new Set(order.items.map((item) => item.listingId))].sort();
   if (!listingIds.length) throw new Fail("state");
@@ -493,7 +504,7 @@ async function acceptAndReserve(tx: Prisma.TransactionClient, order: ReserveOrde
   return postDealNote(tx, order, userId, dealEventBody({ kind: "lock" }));
 }
 
-/** Counterparty accepts. Seller「接受要約」is the hold; a buyer accepting the seller's price holds too, so there is no second 確認交易. */
+/** Counterparty accepts. That accept is the reservation; there is no second confirm step. */
 export async function acceptDealOffer(userId: string, orderId: string) {
   try {
     const result = await prisma.$transaction(async (tx) => {
@@ -553,7 +564,7 @@ export async function confirmDeal(userId: string, orderId: string) {
     });
     const href = noticeHref(result.threadId);
     if (result.accepted) await notifyKind(result.notifyId, "offer-accept", href, result.title);
-    else await notify(result.notifyId, "order", "賣家已確認交易", "貨品已鎖定。", href);
+    else await notify(result.notifyId, "order", "已保留", "貨品已保留。", href);
     return { ok: true as const };
   } catch (error) {
     const code = asFail(error);
@@ -569,7 +580,7 @@ export async function releaseReserve(userId: string, orderId: string) {
       const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
       if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
       const meta = readDealMeta(order.fulfillment);
-      if (!meta.confirmed || meta.proofs.length > 0) throw new Fail("state");
+      if (!meta.confirmed || meta.proofs.length > 0 || meta.buyerHandover || meta.sellerHandover) throw new Fail("state");
       if (!OPEN_TALK.includes(order.status as (typeof OPEN_TALK)[number])) throw new Fail("state");
       const ids = [...new Set(order.items.map((item) => item.listingId))].sort();
       await lockRows(tx, "Listing", ids);
@@ -597,8 +608,60 @@ export async function releaseReserve(userId: string, orderId: string) {
       return { notifyId: other, threadId, name };
     });
     const href = noticeHref(result.threadId);
-    await notify(result.notifyId, "order", `${result.name} 已解除鎖定`, "可以再提出要約。", href);
+    await notify(result.notifyId, "order", `${result.name} 已取消保留`, "可以再議價。", href);
     return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+const HANDOVER_OPEN = ["PENDING_PAYMENT", "AWAITING_SHIP", "IN_ESCROW", "SHIPPED"] as const;
+
+/** Either party confirms handover once. The second confirm completes the order and marks the listing sold. */
+export async function confirmHandover(userId: string, orderId: string) {
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      await lockRows(tx, "Order", [orderId]);
+      const order = await tx.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      if (!HANDOVER_OPEN.includes(order.status as (typeof HANDOVER_OPEN)[number])) throw new Fail("state");
+      const phase = dealPhase(order);
+      const flags = handoverFlags(order);
+      const buyer = order.buyerId === userId;
+      const already = buyer ? flags.buyer : flags.seller;
+      if (!canConfirmHandover(phase, already)) throw new Fail("state");
+      const nextBuyer = buyer ? true : flags.buyer;
+      const nextSeller = buyer ? flags.seller : true;
+      const both = nextBuyer && nextSeller;
+      const ids = [...new Set(order.items.map((item) => item.listingId))].sort();
+      if (both && ids.length) {
+        await lockRows(tx, "Listing", ids);
+        await tx.listing.updateMany({
+          where: { id: { in: ids }, sellerId: order.sellerId, status: { not: "SOLD" } },
+          data: { status: "SOLD", quantityAvailable: 0, binLockOrderId: null },
+        });
+      }
+      const changed = await tx.order.updateMany({
+        where: { id: order.id, status: { in: [...HANDOVER_OPEN] } },
+        data: {
+          ...(both ? { status: "COMPLETED", completedAt: new Date() } : {}),
+          fulfillment: withDeal(order.fulfillment, { buyerHandover: nextBuyer, sellerHandover: nextSeller }),
+        },
+      });
+      if (changed.count !== 1) throw new Fail("state");
+      const threadId = await postDealNote(tx, order, userId, dealEventBody({ kind: "handover" }));
+      return { both, other: buyer ? order.sellerId : order.buyerId, threadId };
+    });
+    const href = noticeHref(result.threadId);
+    if (result.both) {
+      await notify(result.other, "order", "交易已完成", "可以評分。", href);
+      await notify(userId, "order", "交易已完成", "可以評分。", href);
+    } else {
+      await notify(result.other, "order", "對方已確認交收", "請確認交收。", href);
+    }
+    return { ok: true as const, done: result.both };
   } catch (error) {
     const code = asFail(error);
     if (code) return { ok: false as const, error: code };

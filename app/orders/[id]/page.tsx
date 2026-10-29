@@ -65,7 +65,7 @@ export default async function OrderPage({
         ))}
       </ul>
       <p className="price text-xl">{formatHkd(order.total, locale)}</p>
-      <p className="text-xs text-muted">{tx(locale, "議定金額只供顯示，平台唔會收款。", "The amount is shown only. The platform does not charge it.")}</p>
+      <p className="text-xs text-muted">{tx(locale, "議定金額只供顯示，平台不代收款。", "The amount is shown only. The platform does not take payment.")}</p>
       {note ? <p className="text-sm">{tx(locale, "面交", "Meet-up")} · {note}</p> : null}
       <p className="text-sm text-muted">
         {tx(locale, "買家", "Buyer")} {order.buyer.nickname} · {tx(locale, "賣家", "Seller")} {order.seller.nickname}

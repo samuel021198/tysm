@@ -1,35 +1,28 @@
 import Link from "next/link";
-import { acceptDealOfferAction, arrangeDealAction, cancelDealAction, confirmAction, confirmDealAction, declineDealOfferAction, markSoldAction, releaseReserveAction, sellerPaidAction, withdrawDealOfferAction } from "@/actions/trade";
+import { acceptDealOfferAction, confirmHandoverAction, declineDealOfferAction, withdrawDealOfferAction } from "@/actions/trade";
 import {
-  canArrange,
-  canBuyerReceive,
-  canCancel,
-  canMarkSold,
-  canReleaseReserve,
-  canSellerConfirm,
-  canSellerLock,
-  canUploadProof,
+  canConfirmHandover,
   DEAL_BANNER,
   dealBlocked,
   dealEventCopy,
   dealPhase,
+  handoverFlags,
   phaseLabel,
   readDealMeta,
   RESERVE_BLOCKED,
-  showPaymentDetails,
 } from "@/lib/deal-phase";
 import { meetupNote } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { DealRatingForm } from "./deal-rating-form";
 import { ReviseOfferButton, type OfferChoice } from "./offer-sheet";
-import { ProofForm } from "./proof-form";
 
 type Item = {
   id: string;
   title: string;
   listingId: string;
   unitPrice: number;
+  imageUrl?: string | null;
   listing: {
     status: string;
     binLockOrderId: string | null;
@@ -74,7 +67,6 @@ function DealView({
   next,
   order,
   rating,
-  payment,
   names,
   revise = null,
   pin = true,
@@ -87,15 +79,16 @@ function DealView({
   const stream = variant === "stream";
   const phase = dealPhase(order);
   const meta = readDealMeta(order.fulfillment);
-  const proofs = meta.proofs.length;
   const buyer = viewerId === order.buyerId;
   const seller = viewerId === order.sellerId;
+  const flags = handoverFlags(order);
+  const mine = buyer ? flags.buyer : seller ? flags.seller : false;
+  const peer = buyer ? flags.seller : seller ? flags.buyer : false;
   const listing = order.items[0]?.listing ?? null;
   const sold = order.items.some((item) => item.listing.status === "SOLD");
   const blocked = order.items.some((item) => dealBlocked(phase, item.listing.status, item.listing.binLockOrderId, order.id));
   const note = meetupNote(order.fulfillment, listing);
   const primary = "btn btn-primary w-full";
-  const showPayment = !blocked && payment && showPaymentDetails(phase, meta.confirmed === true, proofs) ? payment : null;
   const pending = meta.offer?.status === "PENDING" ? meta.offer : null;
   const accepted = meta.offer?.status === "ACCEPTED" ? meta.offer : null;
   const offerLine = pending ? dealEventCopy(locale, { kind: "offer", name: pending.name, amount: pending.amount, note: pending.note }) : null;
@@ -156,7 +149,7 @@ function DealView({
               <form action={acceptDealOfferAction} className="w-full">
                 <input type="hidden" name="orderId" value={order.id} />
                 <input type="hidden" name="next" value={next} />
-                <button className={primary}>{tx(locale, "接受要約", "Accept offer")}</button>
+                <button className={primary}>{tx(locale, "接受", "Accept")}</button>
               </form>
               {revise ? (
                 <ReviseOfferButton
@@ -183,83 +176,34 @@ function DealView({
           {accepted.note ? <p className="mt-1 text-xs">{accepted.note}</p> : null}
         </div>
       ) : null}
-      {showPayment ? (
-        <div className="rounded-xl bg-soft px-3 py-2 text-sm">
-          <p className="text-xs font-semibold">{tx(locale, "付款資料", "Payment details")}</p>
-          <p className="mt-1">{[showPayment.method, showPayment.holder, showPayment.account].filter(Boolean).join(" · ")}</p>
-          <p className="mt-1 text-xs text-muted">{tx(locale, "請直接付款予賣家。", "Pay the seller directly.")}</p>
-        </div>
-      ) : null}
-      {proofs > 0 ? (
-        <div className="flex flex-wrap justify-center gap-2">
-          {meta.proofs.map((proof) => (
-            <img key={proof.url} src={proof.url} alt={tx(locale, "付款證明", "Payment proof")} className="h-24 w-20 rounded-xl bg-soft object-contain" />
-          ))}
-        </div>
-      ) : null}
-      {stream && !blocked && accepted && !meta.confirmed && buyer ? <p className="text-center text-sm">{tx(locale, "待賣家確認交易。", "Waiting for the seller to confirm.")}</p> : null}
-      {stream && seller && !blocked && !sold && canSellerLock(phase) && !pending ? (
-        <form action={confirmDealAction}>
+      {stream && (buyer || seller) && !blocked && canConfirmHandover(phase, mine) ? (
+        <form action={confirmHandoverAction}>
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="next" value={next} />
-          <button className={primary}>{tx(locale, "確認交易", "Confirm deal")}</button>
+          <button className={primary}>{tx(locale, "確認交收", "Confirm handover")}</button>
         </form>
       ) : null}
-      {stream && phase === "CONFIRMED" && proofs === 0 && seller && !blocked ? <p className="text-center text-sm">{tx(locale, "待買家上載付款證明。", "Waiting for payment proof.")}</p> : null}
-      {stream && buyer && !blocked && canUploadProof(phase, proofs) ? <ProofForm locale={locale} orderId={order.id} next={next} /> : null}
-      {stream && seller && canSellerConfirm(phase, proofs) ? (
-        <form action={sellerPaidAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className={primary}>{tx(locale, "確認已交收", "Confirm handover")}</button>
-        </form>
-      ) : null}
-      {stream && phase === "PROOF" && buyer ? <p className="text-center text-sm">{tx(locale, "待賣家確認已交收。", "Waiting for the seller to confirm handover.")}</p> : null}
-      {stream && buyer && canBuyerReceive(phase) ? (
-        <form action={confirmAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className={primary}>{tx(locale, "確認收貨", "Confirm receipt")}</button>
-        </form>
-      ) : null}
-      {stream && phase === "SELLER_PAID" && seller ? <p className="text-center text-sm">{tx(locale, "待買家確認收貨。", "Waiting for the buyer to confirm receipt.")}</p> : null}
+      {stream && (buyer || seller) && mine && !peer ? <p className="text-center text-sm">{tx(locale, "待對方確認交收。", "Waiting for the other person to confirm.")}</p> : null}
       {stream && phase === "DONE" && (buyer || seller) ? (
-        rating ? (
-          <div className="text-center text-xs text-muted">
-            <p>{tx(locale, `已評分 ${"★".repeat(rating.stars)}`, `Rated ${"★".repeat(rating.stars)}`)}</p>
-            {rating.comment ? <p>{rating.comment}</p> : null}
-          </div>
-        ) : (
-          <DealRatingForm locale={locale} orderId={order.id} />
-        )
-      ) : null}
-      {stream && seller && canMarkSold(phase, proofs, sold ? "SOLD" : "ACTIVE") ? (
-        <form action={markSoldAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className="btn btn-ghost w-full">{tx(locale, "標記已出售", "Mark sold")}</button>
-        </form>
-      ) : null}
-      {stream && (buyer || seller) && !blocked && canReleaseReserve(phase) ? (
-        <form action={releaseReserveAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className="btn btn-ghost w-full">{tx(locale, "解除鎖定", "Release lock")}</button>
-        </form>
-      ) : null}
-      {stream && (buyer || seller) && !blocked && canArrange(phase) ? (
-        <form action={arrangeDealAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className="btn btn-ghost w-full">{tx(locale, "約定交收", "Set meetup")}</button>
-        </form>
-      ) : null}
-      {stream && (buyer || seller) && canCancel(phase, sold ? "SOLD" : "ACTIVE") ? (
-        <form action={cancelDealAction}>
-          <input type="hidden" name="orderId" value={order.id} />
-          <input type="hidden" name="next" value={next} />
-          <button className={stream ? "w-full text-center text-xs text-muted underline" : "text-left text-xs text-muted underline"}>{tx(locale, "取消交收", "Cancel handover")}</button>
-        </form>
+        <div className="grid gap-2">
+          {order.items[0] ? (
+            <Link href={`/listing/${order.items[0].listingId}`} className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-2 text-left">
+              <img src={order.items[0].imageUrl || "/demo/back.svg"} alt="" className="h-10 w-10 rounded-lg bg-soft object-cover" />
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-medium">{order.items[0].title}</span>
+                <span className="price block text-sm">{formatHkd(order.total, locale)}</span>
+              </span>
+            </Link>
+          ) : null}
+          {rating ? (
+            <div className="text-center text-xs text-muted">
+              <p>{tx(locale, `已評分 ${"★".repeat(rating.stars)}`, `Rated ${"★".repeat(rating.stars)}`)}</p>
+              {rating.comment ? <p>{rating.comment}</p> : null}
+            </div>
+          ) : (
+            <DealRatingForm locale={locale} orderId={order.id} />
+          )}
+        </div>
       ) : null}
       {next.startsWith("/messages/") ? (
         <Link className={stream ? "text-center text-xs font-semibold text-link" : "text-xs font-semibold text-link"} href={`/orders/${order.id}`}>{tx(locale, "交收詳情", "Handover details")}</Link>

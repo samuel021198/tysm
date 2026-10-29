@@ -6,9 +6,9 @@ import type { Locale } from "./i18n";
 export const DEAL_BANNER = "私下交收・平台唔代收、唔擔保";
 export const DEAL_ACK = "我明白：雙方自行交收，錢貨風險自負；TSM 唔處理付款、爭議或退款。";
 export const DEAL_RISK = "平台只提供配對同聊天紀錄；付款方式、交收、真偽同爭議由買賣雙方自行負責。";
-export const RESERVE_BADGE = "已鎖貨";
-export const RESERVE_BLOCKED = "此貨品已鎖定。";
-export const OFFER_EMPTY = "對方而家冇可要約嘅貨";
+export const RESERVE_BADGE = "已保留";
+export const RESERVE_BLOCKED = "此貨品已保留。";
+export const OFFER_EMPTY = "對方目前沒有可議價的貨品。";
 export const OFFER_NOTE_MAX = 80;
 
 export type DealPhase = "CHATTING" | "ARRANGED" | "CONFIRMED" | "PROOF" | "SELLER_PAID" | "DONE" | "CANCELLED";
@@ -25,6 +25,8 @@ export type DealMeta = {
   private?: boolean;
   meetupAgreed?: boolean;
   confirmed?: boolean;
+  buyerHandover: boolean;
+  sellerHandover: boolean;
   proofs: { url: string }[];
   offer: DealOffer | null;
 };
@@ -45,7 +47,7 @@ function readOffer(value: unknown): DealOffer | null {
 }
 
 export function readDealMeta(fulfillment: unknown): DealMeta {
-  const empty: DealMeta = { proofs: [], offer: null };
+  const empty: DealMeta = { proofs: [], offer: null, buyerHandover: false, sellerHandover: false };
   if (!fulfillment || typeof fulfillment !== "object" || Array.isArray(fulfillment)) return empty;
   const deal = (fulfillment as { deal?: unknown }).deal;
   if (!deal || typeof deal !== "object" || Array.isArray(deal)) return empty;
@@ -62,6 +64,8 @@ export function readDealMeta(fulfillment: unknown): DealMeta {
     private: row.private === true,
     meetupAgreed: row.meetupAgreed === true,
     confirmed: row.confirmed === true,
+    buyerHandover: row.buyerHandover === true,
+    sellerHandover: row.sellerHandover === true,
     proofs,
     offer: readOffer(row.offer),
   };
@@ -97,7 +101,7 @@ export function offerAckGate(
   return { ok: false, error: "deal_ack" };
 }
 
-/** Omit「提出要約」from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. Accepting locks the listing. */
+/** Omit 議價 from the + menu. No greyed-out row. A live offer stays available only to the proposer, who can replace it. Accepting reserves the listing. */
 export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, blocked = false, proposer = false, accepted = false): boolean {
   if (blocked || accepted) return false;
   if (pending && !proposer) return false;
@@ -105,7 +109,7 @@ export function canOfferFromMenu(phase: DealPhase | null, pending: boolean, bloc
   return phase === "CHATTING" || phase === "ARRANGED";
 }
 
-/** Seller soft-lock at the listed price, when nobody has a live offer. Proof stays closed until this deal is 已鎖貨. */
+/** Seller soft-lock at the listed price, when nobody has a live offer. */
 export function canSellerLock(phase: DealPhase): boolean {
   return phase === "CHATTING" || phase === "ARRANGED";
 }
@@ -115,11 +119,22 @@ export function offersClosed(status: string, lockOrderId: string | null | undefi
   return status === "SOLD" || Boolean(lockOrderId);
 }
 
+/** Who has already tapped 確認交收. A legacy shipped row counts as the seller side. */
+export function handoverFlags(order: { status: string; fulfillment?: unknown }): { buyer: boolean; seller: boolean } {
+  const meta = readDealMeta(order.fulfillment);
+  return {
+    buyer: meta.buyerHandover || order.status === "COMPLETED",
+    seller: meta.sellerHandover || order.status === "SHIPPED" || order.status === "COMPLETED",
+  };
+}
+
 /** Map a stored order onto the handover the buyer and seller actually see. */
 export function dealPhase(order: { status: string; fulfillment?: unknown }): DealPhase {
   if (order.status === "CANCELLED" || order.status === "REFUNDED" || order.status === "DISPUTED") return "CANCELLED";
   if (order.status === "COMPLETED") return "DONE";
-  if (order.status === "SHIPPED") return "SELLER_PAID";
+  const flags = handoverFlags(order);
+  if (flags.buyer && flags.seller) return "DONE";
+  if (flags.buyer || flags.seller) return "SELLER_PAID";
   const meta = readDealMeta(order.fulfillment);
   if (order.status === "IN_ESCROW" || meta.proofs.length > 0) return "PROOF";
   if (meta.confirmed) return "CONFIRMED";
@@ -129,7 +144,7 @@ export function dealPhase(order: { status: string; fulfillment?: unknown }): Dea
 
 export function phaseLabel(locale: "zh-HK" | "en", phase: DealPhase): string {
   const zh: Record<DealPhase, string> = {
-    CHATTING: "要約中",
+    CHATTING: "議價中",
     ARRANGED: "待交收",
     CONFIRMED: RESERVE_BADGE,
     PROOF: "待交收",
@@ -138,9 +153,9 @@ export function phaseLabel(locale: "zh-HK" | "en", phase: DealPhase): string {
     CANCELLED: "已取消",
   };
   const en: Record<DealPhase, string> = {
-    CHATTING: "Offer",
+    CHATTING: "Negotiating",
     ARRANGED: "To hand over",
-    CONFIRMED: "Locked",
+    CONFIRMED: "Reserved",
     PROOF: "To hand over",
     SELLER_PAID: "To hand over",
     DONE: "Completed",
@@ -183,6 +198,12 @@ export function canSellerConfirm(phase: DealPhase, proofs: number): boolean {
   return phase === "PROOF" && proofs > 0;
 }
 
+/** Either party confirms handover once, after the listing is reserved. Legacy proof rows can finish the same way. */
+export function canConfirmHandover(phase: DealPhase, already: boolean): boolean {
+  if (already) return false;
+  return phase === "CONFIRMED" || phase === "PROOF" || phase === "SELLER_PAID";
+}
+
 export function canBuyerReceive(phase: DealPhase): boolean {
   return phase === "SELLER_PAID";
 }
@@ -211,6 +232,7 @@ export type DealEvent =
   | { kind: "decline" }
   | { kind: "withdraw" }
   | { kind: "lock" }
+  | { kind: "handover" }
   | { kind: "release"; name: string };
 
 export function dealEventBody(event: DealEvent): string {
@@ -227,7 +249,7 @@ export function readDealEvent(body: string): DealEvent | null {
   }
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
   const kind = (row as { kind?: unknown }).kind;
-  if (kind === "accept" || kind === "decline" || kind === "withdraw" || kind === "lock") return { kind };
+  if (kind === "accept" || kind === "decline" || kind === "withdraw" || kind === "lock" || kind === "handover") return { kind };
   if (kind === "release") {
     const name = (row as { name?: unknown }).name;
     if (typeof name !== "string" || !name.trim()) return null;
@@ -264,11 +286,12 @@ export function dealEventCopy(locale: Locale, event: DealEvent): { text: string;
   const en = locale === "en";
   if (event.kind === "offer") {
     const price = formatHkd(event.amount, locale);
-    return { text: en ? `${event.name} made an offer of ${price}.` : `${event.name} 提出要約 ${price}。`, note: event.note };
+    return { text: en ? `${event.name} offered ${price}.` : `${event.name} 提出議價 ${price}。`, note: event.note };
   }
-  if (event.kind === "accept") return { text: en ? "Offer accepted." : "要約已接受。", note: "" };
-  if (event.kind === "decline") return { text: en ? "Offer declined." : "要約已拒絕。", note: "" };
-  if (event.kind === "withdraw") return { text: en ? "Offer withdrawn." : "要約已撤回。", note: "" };
-  if (event.kind === "lock") return { text: en ? "The item is locked." : "貨品已鎖定。", note: "" };
-  return { text: en ? `${event.name} released the lock.` : `${event.name} 已解除鎖定。`, note: "" };
+  if (event.kind === "accept") return { text: en ? "Accepted." : "已接受。", note: "" };
+  if (event.kind === "decline") return { text: en ? "Declined." : "已拒絕。", note: "" };
+  if (event.kind === "withdraw") return { text: en ? "Withdrawn." : "已撤回。", note: "" };
+  if (event.kind === "lock") return { text: en ? "Reserved." : "已保留。", note: "" };
+  if (event.kind === "handover") return { text: en ? "Handover confirmed." : "已確認交收。", note: "" };
+  return { text: en ? `${event.name} cancelled the reservation.` : `${event.name} 已取消保留。`, note: "" };
 }

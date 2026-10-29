@@ -14,8 +14,10 @@ import {
   canSeePayment,
   canSellerLock,
   showPaymentDetails,
+  canConfirmHandover,
   canSellerConfirm,
   canUploadProof,
+  handoverFlags,
   cleanOfferNote,
   dealEventBody,
   dealEventCopy,
@@ -44,20 +46,23 @@ assert(DEAL_RISK === "平台只提供配對同聊天紀錄；付款方式、交�
 assert(dealPhase({ status: "PENDING_PAYMENT" }) === "CHATTING", "a new deal is talking");
 assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { meetupAgreed: true, proofs: [] } } }) === "ARRANGED", "meetup agreement is optional and stays before proof");
 assert(dealPhase({ status: "AWAITING_SHIP" }) === "ARRANGED", "legacy awaiting-ship reads as meetup set");
-assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [] } } }) === "CONFIRMED", "seller lock is 已鎖貨 before proof");
-assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, meetupAgreed: true, proofs: [] } } }) === "CONFIRMED", "a meetup stays locked once the seller confirms");
-assert(dealPhase({ status: "IN_ESCROW" }) === "PROOF", "legacy escrow reads as waiting on the seller, without that word");
-assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [{ url: "https://cdn.example/a.jpg" }] } } }) === "PROOF", "a bound proof image is 待確認收款");
-assert(dealPhase({ status: "SHIPPED" }) === "SELLER_PAID", "seller handover confirm stays 待交收 until receipt");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [] } } }) === "CONFIRMED", "accept reserve is 已保留 before handover");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, meetupAgreed: true, proofs: [] } } }) === "CONFIRMED", "a meetup stays reserved once the offer is accepted");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, buyerHandover: true, proofs: [] } } }) === "SELLER_PAID", "one confirm is 待交收");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, buyerHandover: true, sellerHandover: true, proofs: [] } } }) === "DONE", "both confirms finish even before the status write is reread");
+assert(dealPhase({ status: "IN_ESCROW" }) === "PROOF", "legacy escrow reads as 待交收, without a payment word");
+assert(dealPhase({ status: "PENDING_PAYMENT", fulfillment: { deal: { confirmed: true, proofs: [{ url: "https://cdn.example/a.jpg" }] } } }) === "PROOF", "a legacy proof row stays 待交收");
+assert(dealPhase({ status: "SHIPPED" }) === "SELLER_PAID", "a legacy seller confirm stays 待交收 until the buyer confirms");
+assert(dealPhase({ status: "SHIPPED", fulfillment: { deal: { buyerHandover: true, proofs: [] } } }) === "DONE", "legacy seller confirm plus buyer confirm is done");
 assert(dealPhase({ status: "COMPLETED" }) === "DONE", "both confirms finish the deal");
 assert(dealPhase({ status: "CANCELLED" }) === "CANCELLED" && dealPhase({ status: "REFUNDED" }) === "CANCELLED", "stopped deals are cancelled");
 
 const labels = (["CHATTING", "ARRANGED", "CONFIRMED", "PROOF", "SELLER_PAID", "DONE", "CANCELLED"] as const).map((phase) => phaseLabel("zh-HK", phase));
-assert(labels.join() === "要約中,待交收,已鎖貨,待交收,待交收,已完成,已取消", "zh labels stay inside the locked status words");
-assert(phaseLabel("zh-HK", "CONFIRMED") === RESERVE_BADGE && RESERVE_BADGE === "已鎖貨", "the lock badge is 已鎖貨");
-assert(RESERVE_BLOCKED === "此貨品已鎖定。", "other threads use the locked copy");
-assert(OFFER_EMPTY === "對方而家冇可要約嘅貨", "an unbound chat with nothing to offer says so");
-assert(!labels.some((label) => label.includes("待付款") || label.includes("托管") || label.includes("託管") || label.includes("放款") || label.includes("已確認")), "payment chips stay off the labels");
+assert(labels.join() === "議價中,待交收,已保留,待交收,待交收,已完成,已取消", "zh labels stay inside the locked status words");
+assert(phaseLabel("zh-HK", "CONFIRMED") === RESERVE_BADGE && RESERVE_BADGE === "已保留", "the reserve badge is 已保留");
+assert(RESERVE_BLOCKED === "此貨品已保留。", "other threads use the reserved copy");
+assert(OFFER_EMPTY === "對方目前沒有可議價的貨品。", "an unbound chat with nothing to negotiate says so");
+assert(!labels.some((label) => label.includes("待付款") || label.includes("托管") || label.includes("託管") || label.includes("放款") || label.includes("已確認") || label.includes("要約") || label.includes("已鎖貨")), "payment chips and old offer words stay off the labels");
 
 assert(!canUploadProof("CHATTING", 0) && !canUploadProof("ARRANGED", 0) && canUploadProof("CONFIRMED", 0) && !canUploadProof("CONFIRMED", 1), "proof opens only after the offer is accepted, and only once");
 assert(canOfferFromMenu(null, false) && canOfferFromMenu("CHATTING", false) && canOfferFromMenu("ARRANGED", false), "either party can offer while talking");
@@ -79,8 +84,10 @@ assert(showPaymentDetails("CONFIRMED", true, 0) && showPaymentDetails("PROOF", t
 assert(reservedByOther("order_a", "order_b") && !reservedByOther("order_a", "order_a") && !reservedByOther(null, "order_b"), "another deal's lock blocks this thread");
 assert(dealBlocked("CHATTING", "ACTIVE", "order_a", "order_b") && !dealBlocked("CONFIRMED", "ACTIVE", "order_a", "order_a"), "only the locked deal continues");
 assert(dealBlocked("ARRANGED", "SOLD", null, "order_b") && !dealBlocked("PROOF", "SOLD", null, "order_a"), "a sold listing keeps other threads out of payment");
-assert(!canSellerConfirm("CHATTING", 0) && !canSellerConfirm("CONFIRMED", 0) && !canSellerConfirm("PROOF", 0) && canSellerConfirm("PROOF", 1), "seller 確認已交收 waits for proof");
-assert(!canBuyerReceive("PROOF") && canBuyerReceive("SELLER_PAID"), "buyer 確認收貨 follows seller handover confirm");
+assert(!canSellerConfirm("CHATTING", 0) && !canSellerConfirm("CONFIRMED", 0) && !canSellerConfirm("PROOF", 0) && canSellerConfirm("PROOF", 1), "the old seller gate still waits for a stored proof");
+assert(!canBuyerReceive("PROOF") && canBuyerReceive("SELLER_PAID"), "the old buyer gate still follows a shipped row");
+assert(canConfirmHandover("CONFIRMED", false) && canConfirmHandover("PROOF", false) && canConfirmHandover("SELLER_PAID", false) && !canConfirmHandover("CONFIRMED", true) && !canConfirmHandover("CHATTING", false) && !canConfirmHandover("ARRANGED", false) && !canConfirmHandover("DONE", false), "either side confirms once after the item is reserved");
+assert(handoverFlags({ status: "SHIPPED" }).seller && !handoverFlags({ status: "SHIPPED" }).buyer && handoverFlags({ status: "COMPLETED" }).buyer && handoverFlags({ status: "COMPLETED" }).seller, "legacy shipped counts as the seller; completed counts as both");
 assert(!canMarkSold("CHATTING", 0, "ACTIVE") && !canMarkSold("ARRANGED", 0, "ACTIVE") && !canMarkSold("CONFIRMED", 0, "ACTIVE"), "sold is not available before proof");
 assert(canMarkSold("PROOF", 1, "ACTIVE") && canMarkSold("SELLER_PAID", 0, "ACTIVE") && canMarkSold("DONE", 0, "ACTIVE"), "sold opens from proof onward");
 assert(!canMarkSold("PROOF", 1, "SOLD") && !canCancel("CHATTING", "SOLD") && !canCancel("DONE", "ACTIVE"), "sold and finished deals do not cancel");
@@ -92,16 +99,19 @@ assert(readDealMeta({ deal: { proofs: [] } }).confirmed !== true, "a new deal is
 assert(readDealMeta(null).proofs.length === 0 && readDealMeta(null).offer === null, "missing fulfillment has no proof or offer");
 assert(readDealMeta({ deal: { proofs: [], offer: { by: "u", name: "Alex", amount: 500, note: "旺角", status: "PENDING" } } }).offer?.amount === 500, "a pending offer round-trips");
 assert(readDealMeta({ deal: { proofs: [], offer: { by: "", name: "Alex", amount: 500, note: "", status: "PENDING" } } }).offer === null, "a blank offerer is dropped");
+assert(readDealMeta({ deal: { proofs: [], buyerHandover: true } }).buyerHandover === true && readDealMeta({ deal: { proofs: [] } }).sellerHandover === false, "handover flags round-trip");
 const note = cleanOfferNote("  旺角\n7pm ");
 assert(note.ok && note.note === "旺角 7pm", "a handover note is one line");
 assert(!cleanOfferNote("x".repeat(81)).ok && cleanOfferNote("").ok, "an empty note is allowed and a long one is not");
 assert(offerEntry(true, 0) === "bound", "a bound thread does not care that the counterparty has no other listings");
 const offered = dealEventCopy("zh-HK", { kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
-assert(offered.text === "Alex 提出要約 HK$123.00。" && offered.note === "旺角", "the offer bubble names the price");
-assert(dealEventCopy("zh-HK", { kind: "accept" }).text === "要約已接受。", "accept copy does not lock the item");
-assert(dealEventCopy("zh-HK", { kind: "lock" }).text === "貨品已鎖定。", "seller confirm copy is one sentence");
-assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "要約已拒絕。" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "要約已撤回。", "decline and withdraw copy is one sentence");
-assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已解除鎖定。", "release names who unlocked");
+assert(offered.text === "Alex 提出議價 HK$123.00。" && offered.note === "旺角", "the offer bubble names the price");
+assert(dealEventCopy("zh-HK", { kind: "accept" }).text === "已接受。", "accept copy is one short sentence");
+assert(dealEventCopy("zh-HK", { kind: "lock" }).text === "已保留。", "reserve copy is one sentence");
+assert(dealEventCopy("zh-HK", { kind: "decline" }).text === "已拒絕。" && dealEventCopy("zh-HK", { kind: "withdraw" }).text === "已撤回。", "decline and withdraw copy is one sentence");
+assert(dealEventCopy("zh-HK", { kind: "handover" }).text === "已確認交收。", "each handover confirm is one sentence");
+assert(dealEventCopy("zh-HK", { kind: "release", name: "Alex" }).text === "Alex 已取消保留。", "release names who cancelled the reservation");
+assert(![offered.text, dealEventCopy("zh-HK", { kind: "accept" }).text, dealEventCopy("zh-HK", { kind: "decline" }).text, dealEventCopy("zh-HK", { kind: "withdraw" }).text, dealEventCopy("zh-HK", { kind: "lock" }).text, dealEventCopy("zh-HK", { kind: "handover" }).text].some((text) => text.includes("要約")), "bubbles do not say 要約");
 const body = dealEventBody({ kind: "offer", name: "Alex", amount: 12300, note: "旺角" });
 assert(readDealEvent(body)?.kind === "offer" && readDealEvent(dealEventBody({ kind: "lock" }))?.kind === "lock" && readDealEvent("hello") === null && readDealEvent("\u2063nope") === null, "only marked events render as system bubbles");
 const replaced = supersededOfferBody(body);

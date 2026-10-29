@@ -8,7 +8,7 @@ export type OpenGroup = "offering" | "locked" | "handover" | "ended";
 
 export type FootprintKind = "offering" | "locked" | "handover" | "cancelled" | "declined" | "expired" | "withdrawn" | "done";
 
-/** 交易中: 要約中, 已鎖貨, 待交收. Cancelled deals fold into 已結束. */
+/** 交易中: 議價中, 已保留, 待交收. Cancelled deals fold into 已結束. */
 export function openDealGroup(phase: DealPhase): OpenGroup | null {
   if (phase === "DONE") return null;
   if (phase === "CANCELLED") return "ended";
@@ -43,8 +43,8 @@ export function dealKind(phase: DealPhase): FootprintKind | null {
 
 export function footprintStatusLabel(locale: Locale, kind: FootprintKind): string {
   const zh: Record<FootprintKind, string> = {
-    offering: "要約中",
-    locked: "已鎖貨",
+    offering: "議價中",
+    locked: "已保留",
     handover: "待交收",
     cancelled: "已取消",
     declined: "已拒絕",
@@ -91,7 +91,7 @@ function threadKey(listingId: string, buyerId: string, sellerId: string) {
 }
 
 /**
- * Owner footprint. Open offers without an order are the seller inbox inside 要約中.
+ * Owner footprint. Open offers without an order are the seller inbox inside 議價中.
  * ponytail: last 80 orders, 40 offers, 200 threads. Upgrade path: keyset per tab.
  */
 export async function loadFootprint(userId: string): Promise<FootprintBoard> {

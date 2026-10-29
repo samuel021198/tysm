@@ -35,7 +35,6 @@ assert(trade.includes("redirect(`${next}?"), "deal actions on an order page stil
 
 const page = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta.url), "utf8");
 const deal = readFileSync(new URL("../components/deal-panel.tsx", import.meta.url), "utf8");
-const proof = readFileSync(new URL("../components/proof-form.tsx", import.meta.url), "utf8");
 const css = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 assert(!existsSync(new URL("../components/thread-log.tsx", import.meta.url)), "the sticky thread log overlay is gone");
 const scroll = readFileSync(new URL("../components/thread-scroll.tsx", import.meta.url), "utf8");
@@ -52,17 +51,16 @@ const orderPage = readFileSync(new URL("../app/orders/[id]/page.tsx", import.met
 assert(!orderPage.includes("DealDisclaimer") && !orderPage.includes("sticky"), "the handover page does not repeat the gray banner");
 assert(!page.includes("paddingTop") && !css.includes("thread-log-scroll") && !css.includes("paddingTop: height"), "no reserved top inset for a deal bar");
 assert(deal.includes("export function DealStream") && deal.includes('variant === "stream"'), "the stream bubble stays in the message list");
-assert(!deal.includes("提出要約") && deal.includes("確認交易") && deal.includes("canSellerLock"), "seller 確認交易 is a stream action; make offer stays in the + menu");
+assert(!deal.includes("要約") && !deal.includes("確認交易") && !deal.includes("確認已交收") && !deal.includes("確認收貨") && !deal.includes("上載付款證明") && !deal.includes("ProofForm") && !deal.includes("付款證明"), "the bubble has no offer-word, proof upload, or split confirm");
 const pendingAnswer = deal.slice(deal.indexOf("viewerId !== pending.by"), deal.indexOf('phase === "CONFIRMED"'));
-assert(pendingAnswer.includes("接受要約") && pendingAnswer.includes("acceptDealOfferAction") && !pendingAnswer.includes("確認交易") && !pendingAnswer.includes("confirmDealAction"), "answering a live offer is 接受要約, which is the lock");
-assert(deal.includes("接受要約") && deal.includes("ReviseOfferButton") && deal.includes("拒絕") && deal.includes("撤回") && deal.includes("提出：") && deal.includes("等待："), "the live card names who proposed and who is waiting; either person accepts, revises, or declines");
-assert(!deal.includes("撤回要約"), "withdraw uses the locked label 撤回");
+assert(pendingAnswer.includes('tx(locale, "接受", "Accept")') && pendingAnswer.includes("acceptDealOfferAction") && !pendingAnswer.includes("確認交易") && !pendingAnswer.includes("confirmDealAction"), "answering a live offer is 接受, which is the reservation");
+assert(deal.includes('tx(locale, "接受", "Accept")') && deal.includes("ReviseOfferButton") && deal.includes("拒絕") && deal.includes("撤回") && deal.includes("提出：") && deal.includes("等待：") && deal.includes("確認交收") && deal.includes("confirmHandoverAction"), "the live card names who proposed and who is waiting; either person accepts, revises, or declines, then both confirm handover");
+assert(!deal.includes("撤回要約") && !deal.includes("解除鎖定") && !deal.includes("約定交收") && !deal.includes("取消交收") && !deal.includes("標記已出售"), "retired handover buttons stay off the bubble");
 assert(page.includes("已取代") && page.includes("event.superseded") && page.includes("liveOfferId"), "a replaced offer stays in the log as 已取代, and the live one is only the deal card");
 assert(page.includes("pendingOffer?.by === viewer.id") && page.includes("offerPrefill"), "the proposer can open + while their offer is live, with the current price and note");
 assert(src.includes("prefill={offerPrefill}"), "the + menu opens the same make-offer form");
-assert(deal.includes("確認已交收") && deal.includes("確認收貨") && deal.includes("解除鎖定") && deal.includes("約定交收") && deal.includes("取消交收"), "later handover actions stay on the bubble");
-assert(deal.includes("stream && seller && canSellerConfirm") && deal.includes("stream && buyer && canBuyerReceive") && deal.includes("stream && buyer && !blocked && canUploadProof"), "primary confirm, receipt, and proof actions render only in the chat bubble");
-assert(src.includes('name="plus"') && src.includes("提出要約") && src.includes("canOffer") && !src.includes('name="camera"'), "the left control is + and offer is a menu item");
+assert(deal.includes("canConfirmHandover") && deal.includes("stream && (buyer || seller)") && deal.includes("待對方確認交收。"), "both sides share one confirm, and the side that already tapped waits");
+assert(src.includes('name="plus"') && src.includes('tx(locale, "議價", "Offer")') && src.includes("canOffer") && !src.includes("提出要約") && !src.includes('name="camera"'), "the left control is + and 議價 is a menu item");
 const sheet = readFileSync(new URL("../components/offer-sheet.tsx", import.meta.url), "utf8");
 const handover = readFileSync(new URL("../components/handover-form.tsx", import.meta.url), "utf8");
 assert(sheet.includes("OFFER_EMPTY") && sheet.includes("交收備註") && sheet.includes("offerEntry"), "the sheet picks a listing only when the thread is not already bound");
@@ -75,7 +73,7 @@ const login = readFileSync(new URL("../components/login-form.tsx", import.meta.u
 assert(!auth.includes("p2pRiskAckAt") && !login.includes("DEAL_ACK") && !login.includes("p2pRiskAck"), "registration does not record or require this ack");
 assert(login.includes("服務條款") && login.includes('name="accept"'), "signup keeps its own terms tick");
 assert(handover.includes("傾交收") && !handover.includes("提出要約") && !handover.includes("DEAL_ACK") && !handover.includes("checkbox"), "posts keep 傾交收 and do not show a risk checkbox");
-assert(deal.includes("ProofForm") && deal.includes("交收詳情"), "proof upload and the detail link stay available");
+assert(!existsSync(new URL("../components/proof-form.tsx", import.meta.url)) && deal.includes("交收詳情") && deal.includes("imageUrl"), "proof upload is gone; the detail link and the rating card stay");
 assert(!orderPage.includes("送出評價") && !orderPage.includes("confirmAction") && orderPage.includes("打開聊天"), "the handover page is a status mirror back into the chat");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
 assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
@@ -100,7 +98,7 @@ const acceptFn = deals.slice(deals.indexOf("export async function acceptDealOffe
 const confirmFn = deals.slice(deals.indexOf("export async function confirmDeal"), deals.indexOf("export async function releaseReserve"));
 assert(reserveFn.includes("softLock") && reserveFn.includes("confirmed: true") && reserveFn.includes('kind: "lock"'), "accepting holds the listing on the existing confirmed lock");
 assert(acceptFn.includes("acceptAndReserve") && acceptFn.includes('if (offer.by === userId) throw new Fail("forbidden")') && acceptFn.includes("order.sellerId !== userId") && acceptFn.includes("order.buyerId !== userId"), "either party accepts the other's offer, and that accept is the hold");
-assert(confirmFn.includes("acceptAndReserve") && confirmFn.includes("softLock") && confirmFn.includes("order.sellerId !== userId") && confirmFn.includes('kind: "lock"'), "a no-offer 確認交易 still uses the same hold");
-assert(proof.includes("上載付款證明") && !proof.includes("上傳付款證明"), "payment proof uses the locked label");
+assert(confirmFn.includes("acceptAndReserve") && confirmFn.includes("softLock") && confirmFn.includes("order.sellerId !== userId") && confirmFn.includes('kind: "lock"'), "the unused no-offer hold still uses the same lock");
+assert(deals.includes("export async function confirmHandover") && deals.includes('kind: "handover"') && deals.includes('status: "COMPLETED"') && deals.includes('status: "SOLD"'), "the second confirm completes the order and marks the listing sold");
 
 console.log("message-composer.test.ts ok");

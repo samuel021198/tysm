@@ -38,8 +38,8 @@ export default async function FootprintPage({ searchParams }: { searchParams: Pr
         <div className="grid gap-4">
           {board.offering.length || board.locked.length || board.handover.length ? (
             <>
-              <Phase locale={locale} title={tx(locale, "要約中", "Offers")} rows={board.offering} empty={tx(locale, "未有要約。", "No offers.")} />
-              <Phase locale={locale} title={tx(locale, "已鎖貨", "Locked")} rows={board.locked} empty={tx(locale, "未有已鎖貨。", "Nothing locked.")} />
+              <Phase locale={locale} title={tx(locale, "議價中", "Negotiating")} rows={board.offering} empty={tx(locale, "未有議價。", "No negotiations.")} />
+              <Phase locale={locale} title={tx(locale, "已保留", "Reserved")} rows={board.locked} empty={tx(locale, "未有已保留。", "Nothing reserved.")} />
               <Phase locale={locale} title={tx(locale, "待交收", "To hand over")} rows={board.handover} empty={tx(locale, "未有待交收。", "Nothing to hand over.")} />
             </>
           ) : (

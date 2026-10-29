@@ -61,8 +61,8 @@ const ERR: Record<string, [string, string]> = {
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],
   state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
-  reserved: ["此貨品已鎖定。", "This item is locked."],
-  pending: ["已有一個要約，請先撤回或等對方回覆", "There is already an offer. Withdraw it or wait for a reply"],
+  reserved: ["此貨品已保留。", "This item is reserved."],
+  pending: ["已有一筆議價，請先撤回或等待對方回覆", "There is already an offer. Withdraw it or wait for a reply"],
   deal_ack: ["請先剔選私下交收風險", "Confirm the private handover risk first"],
   deal_price: ["請填最終價錢（HK$）", "Enter the final price in HK$"],
   offer_note: ["交收備註只可以一行，最多 80 字", "The handover note is one line, up to 80 characters"],
@@ -137,7 +137,7 @@ export function offerStatusLabel(locale: Locale, status: string): string {
 
 export function orderStatusLabel(locale: Locale, status: string): string {
   const zh: Record<string, string> = {
-    PENDING_PAYMENT: "要約中",
+    PENDING_PAYMENT: "議價中",
     IN_ESCROW: "待交收",
     AWAITING_SHIP: "待交收",
     SHIPPED: "待交收",

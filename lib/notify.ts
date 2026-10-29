@@ -19,15 +19,15 @@ function line(detail: string | undefined, fallback: string): string {
 export function noticeCopy(kind: NoticeKind, detail?: string): { type: NoticeType; title: string; body: string } {
   switch (kind) {
     case "offer-new":
-      return { type: "offer", title: "新要約", body: line(detail, "對方提出咗要約。") };
+      return { type: "offer", title: "新議價", body: line(detail, "對方提出議價。") };
     case "offer-supersede":
-      return { type: "offer", title: "改價覆蓋", body: line(detail, "對方改咗要約。") };
+      return { type: "offer", title: "改價覆蓋", body: line(detail, "對方已改價。") };
     case "offer-accept":
-      return { type: "offer", title: "對方已接受", body: line(detail, "要約已接受。") };
+      return { type: "offer", title: "對方已接受", body: line(detail, "已接受。") };
     case "offer-decline":
-      return { type: "offer", title: "對方已拒絕", body: line(detail, "要約已被拒絕。") };
+      return { type: "offer", title: "對方已拒絕", body: line(detail, "已拒絕。") };
     case "offer-withdraw":
-      return { type: "offer", title: "對方已撤回", body: line(detail, "要約已撤回。") };
+      return { type: "offer", title: "對方已撤回", body: line(detail, "已撤回。") };
     case "handover":
       return { type: "order", title: "待交收提醒", body: line(detail, "可以安排交收。") };
     case "message":
