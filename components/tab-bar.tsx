@@ -13,7 +13,19 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   useEffect(() => subscribeTabIntent(setIntent), []);
   const meHref = loggedIn ? "/me" : "/login";
   const tabs = [
-    { href: "/", label: tx(locale, "主頁", "Home"), icon: "home" as const, on: pathname === "/" },
+    { href: "/", label: tx(locale, "貼文", "Post"), icon: "note" as const, on: pathname === "/" },
+    {
+      href: "/shop",
+      label: tx(locale, "商店", "Shop"),
+      icon: "bag" as const,
+      on: pathname === "/shop" || pathname.startsWith("/shop/"),
+    },
+    {
+      href: "/find",
+      label: tx(locale, "搜尋", "Search"),
+      icon: "search" as const,
+      on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
+    },
     {
       href: "/news",
       label: tx(locale, "新聞", "News"),
@@ -21,23 +33,10 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
       on: pathname === "/news" || pathname.startsWith("/news/"),
     },
     {
-      href: "/find",
-      label: tx(locale, "搜尋", "Search"),
-      icon: "search" as const,
-      accent: true,
-      on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
-    },
-    {
-      href: "/rank",
-      label: tx(locale, "排行", "Rank"),
-      icon: "rank" as const,
-      on: pathname === "/rank" || pathname.startsWith("/rank/"),
-    },
-    {
       href: meHref,
       label: tx(locale, "個人", "Profile"),
       icon: "me" as const,
-      on: pathname.startsWith("/me") || pathname.startsWith("/login") || pathname.startsWith("/orders") || pathname.startsWith("/notifications"),
+      on: pathname.startsWith("/me") || pathname.startsWith("/login") || pathname.startsWith("/orders"),
     },
   ];
 
@@ -60,13 +59,11 @@ function Tab({
   label,
   icon,
   on,
-  accent = false,
 }: {
   href: string;
   label: string;
-  icon: "home" | "news" | "search" | "rank" | "me";
+  icon: "note" | "bag" | "search" | "news" | "me";
   on: boolean;
-  accent?: boolean;
 }) {
   return (
     <li className="h-full">
@@ -74,15 +71,9 @@ function Tab({
         href={href}
         aria-label={label}
         aria-current={on ? "page" : undefined}
-        className={`grid h-full place-items-center ${accent ? "text-white" : on ? "text-ink" : "text-muted"}`}
+        className={`grid h-full place-items-center ${on ? "text-ink" : "text-muted"}`}
       >
-        {accent ? (
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-white">
-            <Icon name={icon} className="h-[22px] w-[22px] text-white" strokeWidth={2} />
-          </span>
-        ) : (
-          <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
-        )}
+        <Icon name={icon} className="h-[22px] w-[22px]" strokeWidth={on ? 2 : 1.6} />
       </Link>
     </li>
   );

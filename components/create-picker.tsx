@@ -62,11 +62,11 @@ export function CreatePicker({
     links[(current + dir + links.length) % links.length]?.focus({ preventScroll: true });
   }
 
-  const rootClass = variant === "header" ? "relative shrink-0" : "relative";
+  const rootClass = variant === "header" ? "relative shrink-0" : `relative h-full w-full ${creating ? "text-ink" : "text-muted"}`;
   const summaryClass =
     variant === "header"
       ? "inline-flex h-9 shrink-0 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded-full bg-accent/10 px-2.5 text-sm font-medium text-link ring-1 ring-inset ring-accent/15 hover:bg-accent/15 [&::-webkit-details-marker]:hidden"
-      : "grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full bg-accent text-white [&::-webkit-details-marker]:hidden";
+      : "grid h-full w-full cursor-pointer list-none place-items-center [&::-webkit-details-marker]:hidden";
 
   return (
     <details key={pathname} ref={rootRef} className={rootClass} onToggle={onToggle}>
@@ -78,8 +78,8 @@ export function CreatePicker({
       >
         <Icon
           name="plus"
-          className={variant === "header" ? "h-3.5 w-3.5" : "h-[22px] w-[22px] text-white"}
-          strokeWidth={variant === "header" ? 2.25 : 2}
+          className={variant === "header" ? "h-3.5 w-3.5" : "h-[22px] w-[22px]"}
+          strokeWidth={variant === "header" ? 2.25 : creating ? 2 : 1.6}
         />
         {variant === "header" ? label : null}
       </summary>
