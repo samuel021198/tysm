@@ -23,7 +23,7 @@ import { PurchasePanel } from "@/components/purchase-panel";
 import { Sparkline } from "@/components/sparkline";
 import { ViewPing } from "@/components/pings";
 import { deleteDraftAction, relistAction, unlistAction } from "@/actions/trade";
-import { toggleFavorite, toggleFollow } from "@/actions/social";
+import { toggleFavorite } from "@/actions/social";
 import { PersonMenu } from "@/components/safety-menu";
 import { NameLine } from "@/components/profile-header";
 import { ratingFromAggregate } from "@/lib/ratings";
@@ -75,7 +75,7 @@ export default async function ListingPage({
 
   const hasAuction = listing.saleType !== "BUY_NOW" && !listing.bidsVoided && listing.auctionEndsAt != null;
   const live = Boolean(hasAuction && !listing.auctionSettled && listing.auctionEndsAt && listing.auctionEndsAt > new Date());
-  const [mine, bidCount, offers, similar, sales, comps, favored, following, follows] = await Promise.all([
+  const [mine, bidCount, offers, similar, sales, comps, favored, follows] = await Promise.all([
     viewer ? prisma.proxyBid.findUnique({ where: { listingId_bidderId: { listingId: id, bidderId: viewer.id } } }) : null,
     prisma.proxyBid.count({ where: { listingId: id } }),
     viewer
@@ -102,7 +102,6 @@ export default async function ListingPage({
     }),
     loadComps(listing),
     viewer ? prisma.favorite.findUnique({ where: { userId_listingId: { userId: viewer.id, listingId: id } } }) : null,
-    viewer ? prisma.follow.findUnique({ where: { followerId_sellerId: { followerId: viewer.id, sellerId: listing.sellerId } } }) : null,
     followedSellerIds(viewer?.id ?? null),
   ]);
   const minBid = minimumNextBid(listing.startPrice ?? 0, listing.currentBid, bidCount > 0);
@@ -139,7 +138,22 @@ export default async function ListingPage({
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{reserved ? shopPillLabel(locale, "RESERVED") : listingStatusLabel(locale, listing.status)}</span>
           {listing.certNumber ? <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">#{listing.certNumber}</span> : null}
         </div>
-        <h1 className="mt-2 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <h1 className="min-w-0 flex-1 text-[1.3rem] font-bold leading-tight">{listing.title}</h1>
+          <form action={toggleFavorite} className="shrink-0">
+            <input type="hidden" name="listingId" value={id} />
+            <input type="hidden" name="next" value={`/listing/${id}`} />
+            <button
+              type="submit"
+              className={`grid h-10 w-10 place-items-center ${favored ? "text-accent" : "text-ink"}`}
+              aria-label={tx(locale, "收藏", "Favorite")}
+              title={tx(locale, "收藏", "Favorite")}
+              aria-pressed={Boolean(favored)}
+            >
+              <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={Boolean(favored)} />
+            </button>
+          </form>
+        </div>
         {listing.items.length ? (
           <ul className="mt-2 grid gap-1 text-sm text-muted">
             {listing.items.map((item) => (
@@ -308,14 +322,6 @@ export default async function ListingPage({
           timeLabel={listed.text}
           timeAt={listed.at.toISOString()}
         />
-        <form action={toggleFavorite} className="text-sm">
-          <input type="hidden" name="listingId" value={id} />
-          <input type="hidden" name="next" value={`/listing/${id}`} />
-          <button className="btn btn-ghost gap-1.5" aria-pressed={Boolean(favored)}>
-            <Icon name="bookmark" className="h-5 w-5" strokeWidth={2.25} filled={Boolean(favored)} />
-            {tx(locale, "收藏", "Favorite")}
-          </button>
-        </form>
         <div className="text-sm">
           <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-3">
@@ -348,12 +354,6 @@ export default async function ListingPage({
             />
           ) : null}
           </div>
-          {!owner && viewer ? (
-            <form action={toggleFollow} className="mt-3">
-              <input type="hidden" name="sellerId" value={listing.sellerId} />
-              <button className="btn btn-ghost">{following ? tx(locale, "取消關注", "Unfollow") : tx(locale, "關注賣家", "Follow seller")}</button>
-            </form>
-          ) : null}
         </div>
         {owner ? (
           <div className="flex flex-wrap gap-2">
