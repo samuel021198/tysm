@@ -15,6 +15,7 @@ import { Flash } from "@/components/shell";
 import { MessageComposer } from "@/components/message-composer";
 import { PersonMenu } from "@/components/safety-menu";
 import { ThreadScroll } from "@/components/thread-scroll";
+import { ThreadViewport } from "@/components/thread-viewport";
 
 export default async function ThreadPage({
   params,
@@ -94,9 +95,10 @@ export default async function ThreadPage({
       }))
     : [];
   return (
-    <div className="thread-fit px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+    <div className="thread-fit px-3">
+      <ThreadViewport />
       <ReadPing id={id} />
-      <header className="thread-bar -mx-3 grid shrink-0 grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center border-b border-line bg-card px-1 pt-[env(safe-area-inset-top)]">
+      <header className="thread-bar -mx-3 grid shrink-0 grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center border-b border-line bg-card px-1">
         <Link
           href="/messages"
           aria-label={tx(prefs.locale, "返回訊息", "Back to messages")}

@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { composerCanSend, composerExpanded } from "./message-composer";
+import { threadFrameBox } from "./thread-viewport";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -73,7 +74,8 @@ const login = readFileSync(new URL("../components/login-form.tsx", import.meta.u
 assert(!auth.includes("p2pRiskAckAt") && !login.includes("DEAL_ACK") && !login.includes("p2pRiskAck"), "registration does not record or require this ack");
 assert(login.includes("服務條款") && login.includes('name="accept"'), "signup keeps its own terms tick");
 assert(handover.includes("傾交收") && !handover.includes("提出要約") && !handover.includes("DEAL_ACK") && !handover.includes("checkbox"), "posts keep 傾交收 and do not show a risk checkbox");
-assert(!existsSync(new URL("../components/proof-form.tsx", import.meta.url)) && deal.includes("交收詳情") && deal.includes("imageUrl"), "proof upload is gone; the detail link and the rating card stay");
+assert(!existsSync(new URL("../components/proof-form.tsx", import.meta.url)) && deal.includes("交收詳情") && deal.includes("DealRatingForm") && !deal.includes("imageUrl") && !deal.includes("h-10 w-10"), "proof upload is gone; the detail link and the rating form stay, without a second listing card");
+assert(/\{stream \? \([\s\S]*pending\.amount[\s\S]*\) : \(/.test(deal) && deal.includes("order.items.map"), "the chat bubble can show the offer amount; the listing name and price stay on the order card");
 assert(!orderPage.includes("送出評價") && !orderPage.includes("confirmAction") && orderPage.includes("打開聊天"), "the handover page is a status mirror back into the chat");
 assert(deal.includes("sticky top-[calc(3rem+env(safe-area-inset-top))]"), "the order page can still pin the card to the window");
 assert(deal.includes("{stream ? null : <p className=\"text-xs text-muted\">{DEAL_BANNER}</p>}"), "deal detail keeps one fine-print line, and the chat bubble does not");
@@ -92,7 +94,20 @@ assert(
   "a thread hides the site header, footer, and tab bar",
 );
 const threadLoading = readFileSync(new URL("../app/messages/[id]/loading.tsx", import.meta.url), "utf8");
-assert(threadLoading.includes("thread-fit"), "the thread stays fullscreen while it loads");
+assert(threadLoading.includes("thread-fit") && threadLoading.includes("ThreadViewport"), "the thread stays fullscreen while it loads");
+assert(page.includes("ThreadViewport"), "the open thread tracks the visible viewport");
+assert(!src.includes("sticky") && !src.includes("--tab-h"), "the composer sits in the column instead of sticking to the layout viewport");
+assert(
+  css.includes("top: var(--vv-top, 0px)") && css.includes("height: var(--vvh, 100svh)") && /body:has\(\.thread-fit\) \{[\s\S]*?min-height: 0;/.test(css) && css.includes('html[data-thread-keyboard="open"] .thread-fit') && css.includes("padding-bottom: max(0.5rem, env(safe-area-inset-bottom))") && css.includes("padding-top: env(safe-area-inset-top)"),
+  "the thread follows the visual viewport and keeps the notch and home indicator clear",
+);
+const frame = readFileSync(new URL("../components/thread-viewport.tsx", import.meta.url), "utf8");
+assert(frame.includes("visualViewport") && frame.includes("threadFrameBox") && frame.includes("--vvh") && frame.includes("threadKeyboard"), "the shell publishes the visible band");
+assert(threadFrameBox({ innerHeight: 800, height: 400, offsetTop: 0, scale: 1.2 }) === null, "pinch zoom is not a keyboard");
+const toolbar = threadFrameBox({ innerHeight: 800, height: 750, offsetTop: 0 });
+assert(toolbar?.keyboard === false && toolbar.height === 750, "the Safari toolbar is not a keyboard");
+const keys = threadFrameBox({ innerHeight: 844, height: 420.4, offsetTop: 80.2 });
+assert(keys?.keyboard === true && keys.height === 420 && keys.top === 80, "the frame tracks the visible band above the keyboard");
 assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價"), "the pinned card links to the listing and offers 議價");
 assert(bar.includes("offerClosed") && bar.includes("disabled={offerClosed}") && bar.includes("if (!openOffer || offerClosed)"), "the pinned 議價 stays labelled 議價 and does not open when reserved or sold");
 assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("還價"), "the pinned card does not rename the button or add a shop tab");

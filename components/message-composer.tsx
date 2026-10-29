@@ -91,8 +91,7 @@ export function MessageComposer({
           setPending(false);
         }
       }}
-      className={`relative sticky z-20 bg-card/95 px-1.5 py-1 shadow-card backdrop-blur md:static ${expanded ? "rounded-2xl" : "rounded-full"}`}
-      style={{ bottom: "calc(var(--tab-h) + 0.35rem)" }}
+      className={`relative z-20 shrink-0 bg-card/95 px-1.5 py-1 shadow-card backdrop-blur ${expanded ? "rounded-2xl" : "rounded-full"}`}
       onFocus={() => setFocused(true)}
       onBlur={(event) => {
         const next = event.relatedTarget;

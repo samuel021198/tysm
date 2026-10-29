@@ -335,13 +335,28 @@ svg {
   }
 }
 
-/* A thread is the screen: site header, footer, and tab bar step aside until you leave. */
+/* A thread is the screen: site header, footer, and tab bar step aside until you leave.
+   iOS Safari keeps 100dvh at the layout viewport when the keyboard opens, so the
+   shell follows the visual viewport instead. 100svh is the pre-JS fallback. */
+html:has(.thread-fit) {
+  background: var(--bg);
+  height: 100%;
+  overflow: hidden;
+}
+
 body:has(.thread-fit) {
   --tab-h: 0px;
+  position: fixed;
+  top: var(--vv-top, 0px);
+  left: 0;
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100dvh;
+  height: var(--vvh, 100svh);
+  min-height: 0;
   overflow: hidden;
+  overscroll-behavior: none;
   padding-bottom: 0;
 }
 
@@ -373,9 +388,24 @@ body:has(.thread-fit) > main > div {
   min-height: 0;
   flex: 1 1 auto;
   flex-direction: column;
+  box-sizing: border-box;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+html[data-thread-keyboard="open"] .thread-fit {
+  padding-bottom: 0.5rem;
+}
+
+.thread-bar {
+  padding-top: env(safe-area-inset-top);
+}
+
+html[data-thread-offset="1"] .thread-bar {
+  padding-top: 0;
 }
 
 .thread-fit > form {
+  position: relative;
   flex-shrink: 0;
   margin-top: 0.5rem;
 }
