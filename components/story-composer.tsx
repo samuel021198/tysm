@@ -8,11 +8,6 @@ import { clampPct, clampScale, containRect, STORY_EMOJIS, TEXT_COLORS, type Stor
 import { fileToDataUrl } from "./photo-file";
 import { Icon } from "./icons";
 
-const DEMOS = [
-  { url: "/demo/cards/seed_charizard.svg", zh: "噴火龍", en: "Charizard" },
-  { url: "/demo/cards/seed_pikachu.svg", zh: "皮卡丘", en: "Pikachu" },
-];
-
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
@@ -458,14 +453,6 @@ export function StoryComposer({ locale }: { locale: Locale }) {
             <button type="button" className="btn btn-ghost min-h-12 flex-1" onClick={() => cameraRef.current?.click()}>
               {tx(locale, "系統相機", "System camera")}
             </button>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2">
-            {DEMOS.map((demo) => (
-              <button key={demo.url} type="button" className="h-11 rounded-full bg-white/10 px-3 text-sm" onClick={() => setPreview(demo.url)}>
-                {tx(locale, "示範 · ", "Demo · ")}
-                {locale === "en" ? demo.en : demo.zh}
-              </button>
-            ))}
           </div>
         </div>
       )}

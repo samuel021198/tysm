@@ -7,9 +7,9 @@ import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { PHOTO_MAX, parseListingForm, wizardFocusField, wizardPublishIssues, wizardStepForIssue, type ListingInput } from "@/lib/sell-wizard";
 import { enhanceDataUrl, fileToDataUrl } from "./photo-file";
-import { insertTag, tagsFromCaption } from "@/lib/tags";
+import { startHashtag } from "@/lib/tags";
 import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
-import { TopicSuggest } from "./topic-field";
+import { HashtagHint } from "./topic-field";
 
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
@@ -80,12 +80,6 @@ export type SellInitial = {
 };
 
 type CardDraft = SellCardInitial & { key: string };
-
-const DEMOS = [
-  { url: "/demo/cards/seed_charizard.svg", zh: "噴火龍", en: "Charizard" },
-  { url: "/demo/cards/seed_pikachu.svg", zh: "皮卡丘", en: "Pikachu" },
-  { url: "/demo/cards/seed_luffy.svg", zh: "路飛", en: "Luffy" },
-];
 
 const RAW_OPTIONS = [
   ["A", "A · 近全新", "A · Near mint"],
@@ -207,6 +201,8 @@ export function SellForm({
   const [blockKind, setBlockKind] = useState<BlockKind>("publish");
   const [note, setNote] = useState("");
   const [title, setTitle] = useState(initial?.title || "");
+  const [descCursor, setDescCursor] = useState((initial?.description || "").length);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const alertRef = useRef<HTMLDivElement>(null);
@@ -369,6 +365,18 @@ export function SellForm({
     if (urls.length) setPhotos((current) => [...current, ...urls.map((url) => ({ url, role: "GALLERY" as const }))].slice(0, PHOTO_MAX));
     setPhotoNote(failed ? tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG.") : "");
     if (fileRef.current) fileRef.current.value = "";
+  }
+
+  function addHashtag() {
+    const next = startHashtag(description, descCursor);
+    setDescription(next.text);
+    setDescCursor(next.cursor);
+    requestAnimationFrame(() => {
+      const el = descriptionRef.current;
+      if (!el) return;
+      el.focus();
+      el.setSelectionRange(next.cursor, next.cursor);
+    });
   }
 
   function movePhoto(from: number, to: number) {
@@ -567,40 +575,27 @@ export function SellForm({
           {photoNote ? <p className="text-sm text-danger">{photoNote}</p> : null}
           <FieldError locale={locale} codes={shown} code="photos" />
           <FieldError locale={locale} codes={shown} code="photo_url" />
-          <div className="flex flex-wrap gap-2">
-            {DEMOS.map((demo) => (
-              <button
-                key={demo.url}
-                type="button"
-                className="btn btn-ghost h-11 px-3 text-sm"
-                disabled={photos.length >= PHOTO_MAX}
-                onClick={() => setPhotos((current) => (current.length >= PHOTO_MAX ? current : [...current, { url: demo.url, role: "GALLERY" }]))}
-              >
-                {locale === "en" ? demo.en : demo.zh}
-              </button>
-            ))}
-          </div>
         </div>
 
         <label className="grid gap-1 text-sm font-medium">
           {tx(locale, "簡單描述", "Short description")}
           <textarea
+            ref={descriptionRef}
             className="field min-h-28"
             name="description"
             maxLength={5000}
             value={description}
-            placeholder={tx(locale, "可留空。可以加話題，例如 #PC #FS。", "Optional. Topics like #PC #FS are fine.")}
+            placeholder={tx(locale, "可留空。", "Optional.")}
             aria-invalid={shown.includes("description")}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={(event) => {
+              setDescription(event.target.value);
+              setDescCursor(event.target.selectionStart ?? event.target.value.length);
+            }}
+            onSelect={(event) => setDescCursor(event.currentTarget.selectionStart ?? description.length)}
           />
           <FieldError locale={locale} codes={shown} code="description" />
         </label>
-        <TopicSuggest
-          locale={locale}
-          tags={tagsFromCaption(description)}
-          partial={null}
-          onPick={(tag) => setDescription((current) => insertTag(current, current.length, tag).text)}
-        />
+        <HashtagHint locale={locale} onAdd={addHashtag} />
       </div>
 
       {!locked ? (
@@ -646,15 +641,9 @@ export function SellForm({
                   named={false}
                   label={tx(locale, "卡名（選填）", "Card name (optional)")}
                   placeholder={
-                    catalogGame === "one-piece"
-                      ? tx(locale, "打卡名，例如 路飛 或 OP01-001", "Card name, e.g. Luffy or OP01-001")
-                      : catalogGame === "riftbound"
-                        ? tx(locale, "打卡名，例如 Annie", "Card name, e.g. Annie")
-                        : catalogGame === "topps-basketball"
-                          ? tx(locale, "打球員，例如 LeBron", "Player, e.g. LeBron")
-                          : catalogGame === "topps-soccer"
-                            ? tx(locale, "打球員，例如 Mbappé", "Player, e.g. Mbappé")
-                            : tx(locale, "打卡名，例如 2022 Charizard", "Card name, e.g. 2022 Charizard")
+                    catalogGame === "topps-basketball" || catalogGame === "topps-soccer"
+                      ? tx(locale, "打球員或卡號", "Player or number")
+                      : tx(locale, "打卡名或卡號", "Card name or number")
                   }
                   pinOnPick={(hit) => hit.cardName}
                   onValue={(value) => patchCard(index, { name: value, catalogId: "", catalogTitle: "" })}

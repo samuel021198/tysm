@@ -105,7 +105,7 @@ export function CatalogTitleField({
           aria-controls={listId}
           aria-invalid={invalid || undefined}
           ref={inputRef}
-          placeholder={placeholder ?? tx(locale, "打卡名，例如 2022 Charizard", "Card name, e.g. 2022 Charizard")}
+          placeholder={placeholder ?? tx(locale, "打卡名或卡號", "Card name or number")}
           onChange={(event) => onValue(event.target.value)}
           onFocus={() => {
             if (value.trim().length >= 2 && value.trim() !== pinned.current) setOpen(true);

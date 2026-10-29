@@ -14,12 +14,6 @@ import { TopicField } from "./topic-field";
 type Cat = { id: string; nameZh: string; nameEn: string; groupKey: string; slug?: string };
 type Photo = { url: string; role: "FRONT" | "BACK" | "GALLERY" };
 
-const DEMOS = [
-  { url: "/demo/cards/seed_charizard.svg", zh: "噴火龍", en: "Charizard" },
-  { url: "/demo/cards/seed_pikachu.svg", zh: "皮卡丘", en: "Pikachu" },
-  { url: "/demo/cards/seed_charizard-back.svg", zh: "卡背", en: "Back" },
-];
-
 const RAW = [
   ["A", "A · 近全新", "A · Near mint"],
   ["B", "B · 良好", "B · Good"],
@@ -172,13 +166,6 @@ export function CollectForm({
           {tx(locale, "加相片", "Add photos")}
           <input className="sr-only" type="file" accept="image/*" multiple onChange={(event) => void onFiles(event.target.files)} />
         </label>
-        <div className="flex flex-wrap gap-2">
-          {DEMOS.map((demo) => (
-            <button key={demo.url} type="button" className="h-11 rounded-full bg-soft px-3 text-sm" onClick={() => addPhoto(demo.url)}>
-              {locale === "en" ? demo.en : demo.zh}
-            </button>
-          ))}
-        </div>
         {photoNote ? <p className="text-sm text-danger">{photoNote}</p> : null}
         {mode === "collection" ? (
           <p className="text-sm text-muted">{tx(locale, "My Binder 至少一張相。放賣至少兩張，評級卡要有正面同背面。", "One photo for My Binder. Two to sell. Graded cards need a front and a back.")}</p>
@@ -204,7 +191,7 @@ export function CollectForm({
             locale={locale}
             value={cardName}
             label={tx(locale, "卡名", "Card name")}
-            placeholder={tx(locale, "例如噴火龍 VMAX", "e.g. Charizard VMAX")}
+            placeholder={tx(locale, "卡名或卡號", "Card name or number")}
             pinOnPick={(hit) => hit.cardName || hit.title}
             onValue={(value) => {
               setCardName(value);
