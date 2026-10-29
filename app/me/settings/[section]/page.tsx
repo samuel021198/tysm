@@ -112,6 +112,10 @@ function Account({
 }) {
   return (
     <div className="grid gap-3">
+      <Link href="/me/settings/verify" className="surface flex h-11 items-center justify-between px-3 text-[13px] font-medium">
+        {tx(locale, "申請認證", "Apply for verification")}
+        <span className="text-sm leading-none text-muted" aria-hidden>›</span>
+      </Link>
       <section className="surface grid gap-1 p-3 text-sm">
         <p>{viewer.email || tx(locale, "未有電郵", "No email")}</p>
         <p>{viewer.phoneVerified && viewer.phone ? viewer.phone : tx(locale, "電話未驗證", "Phone not verified")}</p>

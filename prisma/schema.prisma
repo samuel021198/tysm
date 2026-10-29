@@ -13,7 +13,7 @@ enum UserRole {
   ADMIN
 }
 
-/// Profile name pill. NORMAL draws nothing. Not an upload or review flow.
+/// Profile name pill. NORMAL draws nothing. An approved VerificationApplication sets this.
 enum VerificationTier {
   NORMAL
   TRUSTED
@@ -221,6 +221,7 @@ model User {
   storyViews      StoryView[]
   feedHides       FeedHide[]
   usernameChanges UsernameChange[]
+  verificationApplications VerificationApplication[]
 }
 
 /// One row per successful @username change. The edit form allows 2 in 30 days.
@@ -232,6 +233,34 @@ model UsernameChange {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+enum VerificationTrack {
+  TRUSTED
+  MERCHANT
+}
+
+enum VerificationApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// Seller verification request. One PENDING row per user is a partial unique index in the migration.
+model VerificationApplication {
+  id          String                        @id @default(cuid())
+  userId      String
+  track       VerificationTrack
+  /// ponytail: public image store, random key. Move to a private bucket if the file must leave the public base URL.
+  documentUrl String
+  reason      String
+  status      VerificationApplicationStatus @default(PENDING)
+  createdAt   DateTime                      @default(now())
+  decidedAt   DateTime?
+  user        User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([status, createdAt])
 }
 
 model OtpChallenge {

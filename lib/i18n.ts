@@ -80,6 +80,10 @@ const ERR: Record<string, [string, string]> = {
   story_photo: ["請先影相或由相簿揀一張相", "Take a photo or choose one from your album"],
   comment: ["留言要 1–300 字，或加相／GIF", "Comment needs 1–300 characters, or a photo or GIF"],
   payfail: ["平台唔會代收款。", "The platform does not take payment."],
+  verify_track: ["請揀誠信或商戶", "Choose trusted or merchant"],
+  verify_reason: ["原因要 1–200 字", "Reason must be 1–200 characters"],
+  verify_photo: ["請上傳 JPG 或 PNG 文件", "Upload a JPG or PNG document"],
+  verify_pending: ["審核中，暫時唔使再交", "Already in review"],
 };
 
 export function errText(locale: Locale, code: string): string {
