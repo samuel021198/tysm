@@ -335,25 +335,49 @@ svg {
   }
 }
 
-/* Thread fills the viewport: messages scroll, the composer stays at the bottom. */
-@media (max-width: 767px) {
-  body:has(.thread-fit) > footer {
-    display: none;
-  }
+/* A thread is the screen: site header, footer, and tab bar step aside until you leave. */
+body:has(.thread-fit) {
+  --tab-h: 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+body:has(.thread-fit) > .site-header,
+body:has(.thread-fit) > footer,
+body:has(.thread-fit) > .tab-bar {
+  display: none;
+}
+
+body:has(.thread-fit) > main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+body:has(.thread-fit) > main > div {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .thread-fit {
   display: flex;
-  height: calc(100dvh - var(--header-h) - var(--tab-h) - 1.5rem);
   min-height: 0;
+  flex: 1 1 auto;
   flex-direction: column;
-  gap: 1rem;
 }
 
-@media (min-width: 768px) {
-  .thread-fit {
-    height: calc(100dvh - var(--header-h) - var(--tab-h) - 2.5rem);
-  }
+.thread-fit > form {
+  flex-shrink: 0;
+  margin-top: 0.5rem;
 }
 
 .thread-log {

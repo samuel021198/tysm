@@ -83,6 +83,16 @@ const openedThread = social.slice(social.indexOf("export async function openThre
 assert(openedThread.includes('focus === "offer"') && openedThread.includes("?offer=1") && openedThread.includes('focus === "compose"') && openedThread.includes("?compose=1"), "議價 and 聯絡賣家 open the same listing thread");
 const bar = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
 assert(page.includes("<ListingChatBar") && page.includes('openOffer={sp.offer === "1"}'), "a listing thread pins the product row and can open 議價");
+assert(page.includes('href="/messages"') && page.includes("thread-bar") && page.includes("返回訊息"), "the thread bar goes back to the inbox");
+assert(!page.includes('href="/"'), "the thread bar does not send people home");
+const inbox = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
+assert(!inbox.includes("thread-fit") && !inbox.includes("thread-bar"), "the inbox keeps the normal shell");
+assert(
+  css.includes("body:has(.thread-fit) > .site-header") && css.includes("body:has(.thread-fit) > .tab-bar") && css.includes("body:has(.thread-fit) > footer") && css.includes("--tab-h: 0px"),
+  "a thread hides the site header, footer, and tab bar",
+);
+const threadLoading = readFileSync(new URL("../app/messages/[id]/loading.tsx", import.meta.url), "utf8");
+assert(threadLoading.includes("thread-fit"), "the thread stays fullscreen while it loads");
 assert(bar.includes("sticky top-0") && bar.includes("/listing/${listingId}") && bar.includes("priceOnly") && bar.includes("議價"), "the pinned card links to the listing and offers 議價");
 assert(bar.includes("offerClosed") && bar.includes("disabled={offerClosed}") && bar.includes("if (!openOffer || offerClosed)"), "the pinned 議價 stays labelled 議價 and does not open when reserved or sold");
 assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("還價"), "the pinned card does not rename the button or add a shop tab");
