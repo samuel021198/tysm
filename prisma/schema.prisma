@@ -13,6 +13,13 @@ enum UserRole {
   ADMIN
 }
 
+/// Profile name pill. NORMAL draws nothing. Not an upload or review flow.
+enum VerificationTier {
+  NORMAL
+  TRUSTED
+  MERCHANT
+}
+
 enum ListingStatus {
   DRAFT
   SCHEDULED
@@ -155,6 +162,8 @@ model User {
   /// Interest topics without a leading #. Not parsed from bio. At most 8.
   interestTags       String[]  @default([])
   role               UserRole  @default(USER)
+  /// Badge beside the display name. NORMAL is quiet (no pill).
+  verificationTier   VerificationTier @default(NORMAL)
   termsAcceptedAt    DateTime?
   /// Private-handover checkbox on 提出要約. Not the signup terms tick.
   p2pRiskAckAt       DateTime?

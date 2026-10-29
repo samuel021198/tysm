@@ -30,6 +30,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         completed={board.completed}
         postCount={board.postCount}
         listingCount={board.listingCount}
+        verificationTier={viewer.verificationTier}
         self
       />
       <div id="profile-posts">

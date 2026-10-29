@@ -51,6 +51,7 @@ export default async function ShopPage({
           completed={board.completed}
           postCount={board.postCount}
           listingCount={board.listingCount}
+          verificationTier={seller.verificationTier}
           self={viewer?.id === seller.id}
         >
           {viewer && viewer.id !== seller.id ? (

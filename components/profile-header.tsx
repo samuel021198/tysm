@@ -5,6 +5,19 @@ import { mapsSearchUrl, profileLinkLabel } from "@/lib/profile-edit";
 import { BioText } from "./bio-text";
 import { TopicChips } from "./topic-chips";
 
+export type VerificationTierName = "NORMAL" | "TRUSTED" | "MERCHANT";
+
+/** Four-character pill beside the display name. NORMAL is no badge. */
+export function verificationPill(tier: VerificationTierName): { label: string; className: string } | null {
+  if (tier === "TRUSTED") {
+    return { label: "誠信用戶", className: "bg-[#E8F5E9] text-[#1B5E20]" };
+  }
+  if (tier === "MERCHANT") {
+    return { label: "專業商戶", className: "bg-[#FFF3E0] text-[#E65100]" };
+  }
+  return null;
+}
+
 export function ProfileHeader({
   locale,
   userId,
@@ -21,6 +34,7 @@ export function ProfileHeader({
   completed,
   postCount,
   listingCount,
+  verificationTier = "NORMAL",
   self,
   children,
 }: {
@@ -39,11 +53,14 @@ export function ProfileHeader({
   completed: number;
   postCount: number;
   listingCount: number;
+  verificationTier?: VerificationTierName;
   self?: boolean;
   children?: ReactNode;
 }) {
   const blurb = bio?.trim();
   const place = handoverPlace?.trim();
+  const pill = verificationPill(verificationTier);
+  const action = "inline-flex h-8 flex-1 items-center justify-center rounded-full border border-line bg-card px-2 text-xs font-medium text-ink";
   const score = reviews.length ? (reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length).toFixed(1) : null;
   const rating = `★ ${score ?? "—"} (${completed})`;
   const stats = [
@@ -74,7 +91,14 @@ export function ProfileHeader({
       </div>
       <div>
         <h1 className="text-[15px] font-semibold leading-snug">
-          {nickname}
+          <span className="inline-flex items-center gap-1 align-middle">
+            {nickname}
+            {pill ? (
+              <span className={`inline-flex items-center whitespace-nowrap rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none ${pill.className}`}>
+                {pill.label}
+              </span>
+            ) : null}
+          </span>
           {username ? <span className="ml-1.5 font-normal text-muted">@{username}</span> : null}
           {!username && self ? (
             <Link href="/me/edit" className="ml-1.5 font-normal text-link">
@@ -105,15 +129,15 @@ export function ProfileHeader({
         ) : null}
       </div>
       {self ? (
-        <div className="grid grid-cols-3 gap-2">
-          <Link href="/me/edit" className="btn btn-ghost px-2 text-xs">
-            {tx(locale, "編輯個人檔案", "Edit profile")}
+        <div className="flex items-center gap-1.5">
+          <Link href="/me/edit" className={action}>
+            {tx(locale, "編輯", "Edit")}
           </Link>
-          <Link href="/me/footprint" className="btn btn-ghost px-2 text-xs">
-            {tx(locale, "我的足跡", "Footprint")}
+          <Link href="/me/footprint" className={action}>
+            {tx(locale, "足跡", "Footprint")}
           </Link>
-          <Link href="/me/settings" className="btn btn-ghost px-2 text-xs">
-            {tx(locale, "設定", "Settings")}
+          <Link href="/me/settings" aria-label={tx(locale, "設定", "Settings")} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-card text-sm leading-none">
+            <span aria-hidden>⚙️</span>
           </Link>
         </div>
       ) : null}

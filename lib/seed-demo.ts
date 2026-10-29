@@ -24,6 +24,10 @@ import {
 } from "../prisma/demo-catalog";
 
 const daysAgo = (value: number) => new Date(Date.now() - value * 86400000);
+
+function demoVerificationTier(value: unknown): "NORMAL" | "TRUSTED" | "MERCHANT" {
+  return value === "TRUSTED" || value === "MERCHANT" ? value : "NORMAL";
+}
 const hoursAgo = (value: number) => new Date(Date.now() - value * 60 * 60 * 1000);
 
 /** Clears accounts and their content. Catalog sets, catalog cards, categories, and site settings stay. */
@@ -506,6 +510,7 @@ export async function seedDemo() {
       consecutiveUnpaid: 0,
       bidBanned: false,
       avatarUrl: "avatarUrl" in user ? user.avatarUrl : null,
+      verificationTier: demoVerificationTier("verificationTier" in user ? user.verificationTier : undefined),
     };
     await prisma.user.upsert({
       where: { id: user.id },

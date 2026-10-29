@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { verificationPill } from "../components/profile-header";
 import {
   BIO_MAX,
   INTEREST_TAG_MAX,
@@ -70,6 +71,18 @@ const settings = readFileSync(new URL("../app/me/settings/page.tsx", import.meta
 const footprint = readFileSync(new URL("../app/me/footprint/page.tsx", import.meta.url), "utf8");
 assert(header.includes("則貼文") && header.includes("商品") && header.includes("粉絲") && header.includes("/followers"), "stats are posts, listings, and followers");
 assert(header.includes('href="/me/edit"') && header.includes('href="/me/footprint"') && header.includes('href="/me/settings"'), "self profile has edit, footprint, and settings");
+assert(header.includes('tx(locale, "編輯", "Edit")') && header.includes('tx(locale, "足跡", "Footprint")') && header.includes("⚙️") && header.includes('aria-label={tx(locale, "設定", "Settings")}'), "actions are a thin row: short labels and a gear");
+assert(header.includes("h-8") && !header.includes("btn-ghost") && !header.includes("編輯個人檔案") && !header.includes("我的足跡"), "profile actions are not the old text bricks");
+assert(!header.includes("普通"), "the default tier draws no badge");
+assert(verificationPill("NORMAL") === null, "normal tier has no pill");
+const trusted = verificationPill("TRUSTED");
+const merchant = verificationPill("MERCHANT");
+assert(trusted?.label === "誠信用戶" && [...trusted.label].length === 4 && trusted.className.includes("#E8F5E9") && trusted.className.includes("#1B5E20"), "trusted is a light-green four-character pill");
+assert(merchant?.label === "專業商戶" && [...merchant.label].length === 4 && merchant.className.includes("#FFF3E0") && merchant.className.includes("#E65100"), "merchant is a light-gold four-character pill");
+const me = readFileSync(new URL("../app/me/page.tsx", import.meta.url), "utf8");
+const shop = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
+assert(me.includes("verificationTier={viewer.verificationTier}") && shop.includes("verificationTier={seller.verificationTier}"), "own profile and public shop pass the stored tier");
+assert(!editForm.includes("verificationTier") && !editForm.includes("誠信用戶") && !edit.includes("HKID"), "profile edit does not collect verification");
 assert(header.includes("TopicChips") && header.includes("mapsSearchUrl") && header.includes("bio"), "tags, handover place, and bio sit on the header");
 assert(editForm.includes("name=\"nickname\"") && editForm.includes("name=\"username\"") && editForm.includes("name=\"bio\"") && editForm.includes("name=\"link\"") && editForm.includes("name=\"handoverPlace\"") && editForm.includes("name=\"interestTags\""), "edit profile is a field form");
 assert(edit.includes("BIO_MAX") && edit.includes("usernameChangesRemaining"), "the form shows the bio ceiling and the handle allowance");
