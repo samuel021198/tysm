@@ -72,7 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </main>
         <Footer locale={prefs.locale} />
         <TabBar locale={prefs.locale} loggedIn={Boolean(viewer)} />
-        <PromoToast kind={promoToast} />
+        <PromoToast kind={promoToast} locale={prefs.locale} />
       </body>
     </html>
   );

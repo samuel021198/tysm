@@ -6,6 +6,7 @@ import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
 import { CreatePicker } from "./create-picker";
 import { HeaderMenu } from "./header-menu";
 import { Icon } from "./icons";
+import { PromoToast } from "./promo-toast";
 import { SearchBox } from "./search-box";
 import { TopBar } from "./top-bar";
 
@@ -123,6 +124,7 @@ export function Footer({ locale }: { locale: Locale }) {
 }
 
 export function Flash({ locale, ok, err, minCents = null }: { locale: Locale; ok?: string; err?: string; minCents?: number | null }) {
+  if (ok === "live") return <PromoToast kind="live" locale={locale} />;
   const success: Record<string, [string, string]> = {
     saved: ["已儲存", "Saved"],
     accepted: ["已接受。", "Accepted."],

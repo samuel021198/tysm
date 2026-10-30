@@ -4,7 +4,7 @@ export function Icon({
   strokeWidth = 1.75,
   filled = false,
 }: {
-  name: "home" | "search" | "plus" | "check" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank" | "auction";
+  name: "home" | "search" | "plus" | "check" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank" | "auction" | "ticket";
   className?: string;
   strokeWidth?: number;
   filled?: boolean;
@@ -184,6 +184,14 @@ export function Icon({
         <path d="M4.5 14.2 11.2 7.5" />
         <path d="M3.8 20.2h9.4" />
         <path d="M9 14.5 6.2 20.2" />
+      </svg>
+    );
+  }
+  if (name === "ticket") {
+    return (
+      <svg {...props}>
+        <path d="M4.2 8.4A1.6 1.6 0 0 1 5.8 6.8h12.4A1.6 1.6 0 0 1 19.8 8.4v1.2a1.55 1.55 0 0 0 0 3.1v1.2a1.6 1.6 0 0 1-1.6 1.6H5.8a1.6 1.6 0 0 1-1.6-1.6v-1.2a1.55 1.55 0 0 0 0-3.1z" />
+        <path d="M12 8.6v6.8" strokeDasharray="1.2 1.5" />
       </svg>
     );
   }

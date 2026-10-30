@@ -87,7 +87,7 @@ const ERR: Record<string, [string, string]> = {
   verify_photo: ["請上傳 JPG 或 PNG 文件", "Upload a JPG or PNG document"],
   verify_store: ["文件暫時上傳不到，請稍後再試。", "Could not store the document. Try again shortly."],
   verify_pending: ["審核中，暫時不必再交", "Already in review"],
-  tokens: ["token 不足", "Not enough tokens"],
+  tokens: ["飛不足", "Not enough"],
 };
 
 export function errText(locale: Locale, code: string): string {

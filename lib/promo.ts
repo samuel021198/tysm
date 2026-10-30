@@ -7,6 +7,8 @@ export const PROMO_PER_DAY = 1;
 
 export type PromoPlan = "off" | "arm" | "keep" | "charge";
 export type PromoToast = "earn" | "spend";
+/** `live` is the publish-and-charge tip. It is not stored; the spend flag is cleared so the two do not stack. */
+export type PromoTip = PromoToast | "live";
 
 /**
  * Hong Kong calendar day as YYYY-MM-DD.
@@ -18,6 +20,21 @@ export function hkDay(now = new Date()): string {
 
 export function promoToastKind(value: string | null | undefined): PromoToast | null {
   return value === "earn" || value === "spend" ? value : null;
+}
+
+/** Visible tip. `pop` scales once; lead + pop + tail is the full line. */
+export function promoTipParts(kind: PromoTip, locale: "zh-HK" | "en" = "zh-HK"): { lead: string; pop: string; tail: string } {
+  const zh = locale !== "en";
+  if (kind === "earn") return { lead: zh ? "＋7 飛" : "+7", pop: "", tail: "" };
+  if (kind === "live") {
+    return zh ? { lead: "已刊登 · 推廣 ", pop: "−1", tail: " 飛" } : { lead: "Published · Promo ", pop: "−1", tail: "" };
+  }
+  return zh ? { lead: "推廣 ", pop: "−1", tail: " 飛" } : { lead: "Promo ", pop: "−1", tail: "" };
+}
+
+/** A publish that charged this request uses one merged tip. Anything else keeps its own success copy. */
+export function publishFlash(ok: "draft" | "scheduled" | "published", charged: boolean) {
+  return ok === "published" && charged ? "live" : ok;
 }
 
 /** Null balance still needs the one-time grant. A number, including 0, does not. */
@@ -85,8 +102,8 @@ export async function commitPromo(
     promoDay: string | null;
     now: Date;
   },
-): Promise<{ promoted: boolean; promoDay: string | null }> {
-  if (input.want == null) return { promoted: input.promoted, promoDay: input.promoDay };
+): Promise<{ promoted: boolean; promoDay: string | null; charged: boolean }> {
+  if (input.want == null) return { promoted: input.promoted, promoDay: input.promoDay, charged: false };
   const today = hkDay(input.now);
   const plan = planPromo({ want: input.want, live: input.live, promoDay: input.promoDay, today });
   if (plan === "charge") {
@@ -96,7 +113,7 @@ export async function commitPromo(
     });
     if (!spent.count) throw new PromoShortError();
   }
-  return promoFields(plan, input.promoDay, today);
+  return { ...promoFields(plan, input.promoDay, today), charged: plan === "charge" };
 }
 
 /**

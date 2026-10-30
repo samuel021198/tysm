@@ -615,10 +615,10 @@ export function SellForm({
                 {promote ? tx(locale, "開", "On") : tx(locale, "關", "Off")}
               </button>
             </div>
-            <p className="text-xs text-muted">{tx(locale, "消耗 1 token／日 · 示範期已送 7", "1 token per day · 7 granted for the demo")}</p>
+            <p className="text-xs text-muted">{tx(locale, "消耗 1 飛／日 · 示範期已送 7", "1 per day · 7 granted for the demo")}</p>
             {promoShort ? (
               <p className="text-xs text-danger">
-                <Link href="/me#promo">{tx(locale, "token 不足", "Not enough tokens")}</Link>
+                <Link href="/me#promo">{tx(locale, "飛不足", "Not enough")}</Link>
               </p>
             ) : null}
           </div>
