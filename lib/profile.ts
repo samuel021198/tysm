@@ -27,6 +27,7 @@ const postInclude = {
           currentBid: true,
           startPrice: true,
           auctionSettled: true,
+          auctionEndsAt: true,
           cardName: true,
           personName: true,
           title: true,
@@ -241,6 +242,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       startPrice: row.startPrice,
       currentBid: row.currentBid,
       auctionSettled: row.auctionSettled,
+      auctionEndsAt: row.auctionEndsAt ? row.auctionEndsAt.toISOString() : null,
       photos: row.photos.map((photo) => ({ url: photo.url })),
     })),
     inventory: inventoryRows.map((row) => ({
@@ -307,6 +309,7 @@ function homePostInclude(viewerId: string | null) {
             currentBid: true,
             startPrice: true,
             auctionSettled: true,
+            auctionEndsAt: true,
             cardName: true,
             personName: true,
             title: true,

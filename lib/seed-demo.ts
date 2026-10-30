@@ -1,3 +1,4 @@
+import { fronts } from "../prisma/demo-card-fronts";
 import { DEMO_ACCOUNTS, TRIAL_ACCOUNTS } from "./demo-login";
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
@@ -69,12 +70,11 @@ export async function wipeUserContent() {
 }
 
 async function seedAuctionDemos() {
-  const cover = (id: string) => demoShowcaseListings.find((row) => row.id === id)?.photos[0] ?? "/demo/back.svg";
   const rows = [
     {
       id: "demo_auction_zard",
       sellerId: "user_kai",
-      title: "拍賣示範 · 噴火龍",
+      title: "噴火龍 Charizard",
       description: "拍賣示範。起標公開，底價只有賣家睇到。",
       saleType: "AUCTION" as const,
       price: null as number | null,
@@ -83,13 +83,13 @@ async function seedAuctionDemos() {
       auctionDays: 3,
       currentBid: 80000,
       leaderId: "user_mars" as string | null,
-      photo: cover("mars_list_01"),
+      photo: fronts.charizard,
       cardName: "噴火龍",
     },
     {
       id: "demo_auction_bin",
       sellerId: "user_hoi",
-      title: "拍賣示範 · 即買",
+      title: "皮卡丘 Pikachu",
       description: "拍賣示範，可以即買。",
       saleType: "BOTH" as const,
       price: 50000 as number | null,
@@ -98,7 +98,7 @@ async function seedAuctionDemos() {
       auctionDays: 1,
       currentBid: null as number | null,
       leaderId: null as string | null,
-      photo: cover("tyu_list_02"),
+      photo: fronts.pikachu,
       cardName: "皮卡丘",
     },
   ];

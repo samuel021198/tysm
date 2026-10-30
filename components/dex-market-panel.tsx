@@ -7,6 +7,7 @@ import { catalogFlavor } from "@/lib/flavor";
 import { formatHkd, formatJpy } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { conditionLabel } from "@/lib/rules";
+import { Countdown } from "./countdown";
 import { hiddenUserIds } from "@/lib/social";
 import {
   formatPct,
@@ -247,21 +248,26 @@ export async function DexSales({
       <ul className="grid gap-3">
         {listings.map((listing) => (
           <li key={listing.id}>
-            <Link href={`/listing/${listing.id}`} className="surface flex min-h-[5.5rem] items-center gap-3 p-3">
-              <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
-              <span className="min-w-0 flex-1">
-                <span className="line-clamp-2 block font-semibold">{listing.title}</span>
-                <span className="text-sm text-muted">
-                  {conditionLabel(listing)} · {listing.seller.nickname}
+            <div className="surface flex min-h-[5.5rem] items-center gap-3 p-3">
+              <Link href={`/listing/${listing.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+                <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
+                <span className="min-w-0 flex-1">
+                  <span className="line-clamp-2 block font-semibold">{listing.title}</span>
+                  <span className="text-sm text-muted">
+                    {conditionLabel(listing)} · {listing.seller.nickname}
+                  </span>
+                  {listing.saleType !== "BUY_NOW" && !listing.auctionSettled && listing.auctionEndsAt ? (
+                    <span className="mt-0.5 block text-[11px] font-medium text-muted"><Countdown endsAt={listing.auctionEndsAt.toISOString()} locale={locale} /></span>
+                  ) : null}
                 </span>
-              </span>
+              </Link>
               <span className="price shrink-0 text-right text-lg">
-                {formatHkd(ask(listing), locale)}
+                <Link href={`/listing/${listing.id}`}>{formatHkd(ask(listing), locale)}</Link>
                 {listing.saleType !== "BUY_NOW" && !listing.auctionSettled ? (
-                  <span className="mt-1 block text-[11px] font-semibold">{tx(locale, "拍賣", "Auction")}</span>
+                  <Link href="/auction" className="mt-1 block text-[11px] font-semibold">{tx(locale, "拍賣", "Auction")}</Link>
                 ) : null}
               </span>
-            </Link>
+            </div>
           </li>
         ))}
         {samples.map((trade) => (

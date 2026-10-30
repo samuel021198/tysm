@@ -7,6 +7,7 @@ import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
 import { LISTING_CROP_ASPECT } from "@/lib/photo-crop";
 import { AUCTION_DAYS } from "@/lib/auction";
+import { cardDisplayName } from "@/lib/posts";
 import { PHOTO_MAX, parseListingForm, wizardFocusField, wizardPublishIssues, wizardStepForIssue, type ListingInput } from "@/lib/sell-wizard";
 import { usePhotoCropQueue } from "./photo-crop";
 import { startHashtag } from "@/lib/tags";
@@ -169,6 +170,7 @@ export function SellForm({
   storeReady = false,
   storeLabel = "",
   linkPost = false,
+  preferAuction = false,
 }: {
   locale: Locale;
   categories: Cat[];
@@ -177,6 +179,8 @@ export function SellForm({
   storeReady?: boolean;
   storeLabel?: string;
   linkPost?: boolean;
+  /** Opened from 拍賣專區. Any account can list. */
+  preferAuction?: boolean;
 }) {
   const [state, action] = useActionState(saveListingAction, null);
   const ordered = useMemo(() => orderedCategories(categories), [categories]);
@@ -186,7 +190,9 @@ export function SellForm({
   const [step, setStep] = useState(editing ? 3 : fromDex ? 1 : 0);
   const [categoryId, setCategoryId] = useState(initial?.categoryId || fallbackCategory);
   const [price, setPrice] = useState(initial?.price || "");
-  const [mode, setMode] = useState<"fixed" | "auction">(initial?.saleType && initial.saleType !== "BUY_NOW" ? "auction" : "fixed");
+  const [mode, setMode] = useState<"fixed" | "auction">(
+    preferAuction || (initial?.saleType && initial.saleType !== "BUY_NOW") ? "auction" : "fixed",
+  );
   const [startPrice, setStartPrice] = useState(initial?.startPrice || "");
   const [reserve, setReserve] = useState(initial?.reserve || "");
   const [auctionDays, setAuctionDays] = useState(initial?.auctionDays || "3");
@@ -539,7 +545,7 @@ export function SellForm({
                   <FieldError locale={locale} codes={shown} code="start" />
                 </label>
                 <div data-focus="auctionDays" className="grid gap-1">
-                  <p className="text-sm font-medium">{tx(locale, "時長（1–14 日）", "Length (1–14 days)")}</p>
+                  <p className="text-sm font-medium">{tx(locale, "時長（1、3、5 或 7 日）", "Length (1, 3, 5, or 7 days)")}</p>
                   <div className="flex gap-2 overflow-x-auto pb-1">
                     {AUCTION_DAYS.map((days) => (
                       <button key={days} type="button" aria-pressed={auctionDays === String(days)} disabled={locked} className={`h-11 shrink-0 rounded-full px-3 text-sm font-semibold ${auctionDays === String(days) ? "bg-accent text-white" : "bg-soft"}`} onClick={() => setAuctionDays(String(days))}>
@@ -551,7 +557,7 @@ export function SellForm({
                 </div>
                 <label className="grid gap-1 text-sm font-medium">
                   {tx(locale, "底價 HKD（可留空）", "Reserve HKD (optional)")}
-                  <span className="font-normal text-muted">{tx(locale, "買家可見", "Buyers can see this")}</span>
+                  <span className="font-normal text-muted">{tx(locale, "買家唔見", "Hidden from buyers")}</span>
                   <input className="field" inputMode="decimal" value={reserve} disabled={locked} data-focus="reserve" aria-invalid={shown.includes("reserve")} placeholder={tx(locale, "可留空", "Optional")} onChange={(event) => setReserve(event.target.value)} />
                   <FieldError locale={locale} codes={shown} code="reserve" />
                 </label>
@@ -875,7 +881,7 @@ export function SellForm({
           <ul className="grid gap-1 text-muted">
             {cards.map((card) => (
               <li key={card.key}>
-                {card.catalogTitle || card.name || tx(locale, "未填卡名", "No card name")}
+                {cardDisplayName({ catalogTitle: card.catalogTitle, cardName: card.name, title: cards.length < 2 ? title : "" }) || tx(locale, "未填卡名", "No card name")}
                 {multi && card.price ? ` · HK$${card.price}` : ""}
                 {` · ${card.track === "GRADED" ? `${card.grader} ${card.gradeScore}` : card.rawGrade}`}
               </li>

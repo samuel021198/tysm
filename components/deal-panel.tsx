@@ -156,7 +156,7 @@ function DealView({
               <button className="btn btn-ghost w-full">{tx(locale, "撤回", "Withdraw")}</button>
             </form>
           ) : null}
-          {stream && !blocked && viewerId !== pending.by ? (
+          {!blocked && viewerId !== pending.by ? (
             <div className="grid w-full gap-2">
               <form action={acceptDealOfferAction} className="w-full">
                 <input type="hidden" name="orderId" value={order.id} />
@@ -171,6 +171,9 @@ function DealView({
                   priceCents={revise.priceCents}
                   note={revise.note}
                   riskAcked={revise.riskAcked}
+                  label={seller ? tx(locale, "還價", "Counter") : undefined}
+                  priceOnly={seller}
+                  submitLabel={seller ? tx(locale, "送出", "Send") : undefined}
                 />
               ) : null}
               <form action={declineDealOfferAction} className="w-full">

@@ -7,6 +7,7 @@ import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
+import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
 import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
@@ -15,7 +16,7 @@ export const metadata = { title: "商店" };
 const CHIPS: { id: ShopTab; href: string; zh: string; en: string }[] = [
   { id: "all", href: "/shop", zh: "全部", en: "All" },
   { id: "new", href: "/shop?tab=new", zh: "新上架", en: "New" },
-  { id: "auction", href: "/shop?tab=auction", zh: "拍賣", en: "Auctions" },
+  { id: "auction", href: "/auction", zh: "拍賣", en: "Auctions" },
   { id: "shops", href: "/shop?tab=shops", zh: "商店", en: "Shops" },
 ];
 
@@ -119,20 +120,25 @@ function MallCard({
   const amount = auction ? listing.currentBid ?? listing.startPrice ?? 0 : listing.price ?? listing.currentBid ?? listing.startPrice ?? 0;
   const store = listing.seller.storeName?.trim() || listing.seller.nickname;
   return (
-    <Link href={`/listing/${listing.id}`} className="surface flex h-full flex-col overflow-hidden">
-      <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />
+    <article className="surface flex h-full flex-col overflow-hidden">
+      <Link href={`/listing/${listing.id}`} className="block">
+        <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />
+      </Link>
       <span className="grid gap-1 px-2.5 py-2">
-        <span className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</span>
-        <span className="price text-base leading-none">{formatHkd(amount, locale)}</span>
+        <Link href={`/listing/${listing.id}`} className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</Link>
+        <Link href={`/listing/${listing.id}`} className="price text-base leading-none">{formatHkd(amount, locale)}</Link>
         {auction ? (
-          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-link">
+          <Link href="/auction" className="inline-flex w-fit items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-link">
             <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
             {tx(locale, "拍賣", "Auction")}
-          </span>
+          </Link>
         ) : null}
-        <span className="truncate text-xs text-muted">{store}</span>
+        {auction && listing.auctionEndsAt ? (
+          <span className="text-[11px] font-medium text-muted"><Countdown endsAt={listing.auctionEndsAt.toISOString()} locale={locale} /></span>
+        ) : null}
+        <Link href={`/listing/${listing.id}`} className="truncate text-xs text-muted">{store}</Link>
       </span>
-    </Link>
+    </article>
   );
 }
 

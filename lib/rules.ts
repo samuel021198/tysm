@@ -7,19 +7,10 @@ export const REVIEW_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
 export type Proxy = { bidderId: string; maxAmount: number; updatedAt: Date };
 
-/** eBay-lite HKD ladder, clamped to 5–20% of the current bid. Amounts are cents. */
+/** Next raise: the higher of HK$10 and 5% of the current bid. Amounts are cents. */
 export function bidIncrementCents(currentCents: number): number {
-  const hk = currentCents / 100;
-  let step = 20000;
-  if (hk < 50) step = 100;
-  else if (hk < 200) step = 500;
-  else if (hk < 500) step = 1000;
-  else if (hk < 1000) step = 2000;
-  else if (hk < 2500) step = 5000;
-  else if (hk < 5000) step = 10000;
   const five = Math.max(1, Math.ceil((currentCents * 5) / 100));
-  const twenty = Math.max(five, Math.floor((currentCents * 20) / 100));
-  return Math.min(Math.max(step, five), twenty);
+  return Math.max(1000, five);
 }
 
 export function resolveAuction(startPrice: number, proxies: Proxy[]): { leaderId: string | null; price: number } {

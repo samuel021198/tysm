@@ -21,10 +21,12 @@ function assert(cond: unknown, msg: string): asserts cond {
 const t0 = new Date("2026-01-01T00:00:00Z");
 const t1 = new Date("2026-01-01T00:01:00Z");
 
-assert(bidIncrementCents(10000) === 500, "HK$100 increment stays the ladder HK$5 inside 5–20%");
-assert(bidIncrementCents(80000) === 4000, "HK$800 increment is floored to 5% (HK$40)");
-assert(bidIncrementCents(499900) === Math.ceil((499900 * 5) / 100), "near HK$5000 the 5% floor beats the ladder");
-assert(bidIncrementCents(500000) === Math.ceil((500000 * 5) / 100), "HK$5000 increment is floored to 5%");
+assert(bidIncrementCents(10000) === 1000, "HK$100 raises by HK$10");
+assert(bidIncrementCents(11000) === 1000, "HK$110 raises by HK$10");
+assert(minimumNextBid(11000, 11000, true) === 12000, "HK$110 next minimum is HK$120");
+assert(bidIncrementCents(80000) === 4000, "HK$800 increment is 5% (HK$40)");
+assert(bidIncrementCents(499900) === Math.ceil((499900 * 5) / 100), "near HK$5000, 5% beats HK$10");
+assert(bidIncrementCents(500000) === Math.ceil((500000 * 5) / 100), "HK$5000 increment is 5%");
 
 const start = 50000;
 const only = resolveAuction(start, [{ bidderId: "A", maxAmount: 120000, updatedAt: t0 }]);

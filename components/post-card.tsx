@@ -10,6 +10,7 @@ import type { PostCardModel } from "@/lib/posts";
 import { activityLine } from "@/lib/time";
 import { HandoverForm } from "./handover-form";
 import { CommentSheet } from "./comment-sheet";
+import { Countdown } from "./countdown";
 import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
@@ -52,13 +53,17 @@ export function PostCard({
   const priceText = post.priceCents == null ? "" : formatHkd(post.priceCents, locale);
   const priceLink = post.postId ? null : post.priceHref;
   const auctionPill = post.auction ? (
-    <span className="inline-flex h-5 items-center rounded-full bg-soft px-2 text-[11px] font-semibold leading-none">
+    <Link href="/auction" className="inline-flex h-5 items-center rounded-full bg-soft px-2 text-[11px] font-semibold leading-none">
       {tx(locale, "拍賣", "Auction")}
-    </span>
+    </Link>
+  ) : null;
+  const auctionClock = post.auction && post.auctionEndsAt ? (
+    <p className="mt-1 text-xs font-medium text-muted"><Countdown endsAt={post.auctionEndsAt} locale={locale} /></p>
   ) : null;
   const price =
     post.priceCents == null ? null : (
-      <div className="mt-1 flex items-center justify-between gap-2">
+      <div className="mt-1">
+      <div className="flex items-center justify-between gap-2">
         <span className="flex min-w-0 items-center gap-1.5">
           {buy?.kind === "contact" && priceLink ? (
             <Link href={priceLink} className="price shrink-0 text-[15px] leading-none">{priceText}</Link>
@@ -81,6 +86,8 @@ export function PostCard({
         ) : buy && post.listingId ? (
           <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} layout="row" />
         ) : null}
+      </div>
+      {auctionClock}
       </div>
     );
   const stamp = post.createdAt ? activityLine(post.createdAt, post.updatedAt, new Date(now), locale) : null;
@@ -252,7 +259,7 @@ function BuyBar({
         <div className="mx-auto flex max-w-lg items-center gap-3">
           <p className="price min-w-0 flex-1 truncate text-lg leading-none">
             {price}
-            {auction ? <span className="ml-2 align-middle text-xs font-semibold text-ink">{tx(locale, "拍賣", "Auction")}</span> : null}
+            {auction ? <Link href="/auction" className="ml-2 align-middle text-xs font-semibold text-ink">{tx(locale, "拍賣", "Auction")}</Link> : null}
           </p>
           {auction ? (
             <Link

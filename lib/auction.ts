@@ -1,25 +1,27 @@
 import { bidIncrementCents } from "./rules";
 
-/** Trader auction lock. Amounts are cents. eBay-lite ladder, clamped to 5–20% of current. */
+/** Trader auction lock. Amounts are cents. Raise is max(HK$10, 5%). */
 
 export const AUCTION_DAY_MIN = 1;
-export const AUCTION_DAY_MAX = 14;
+export const AUCTION_DAY_MAX = 7;
 
-/** Chip list for the sell form. Any integer 1–14 is valid. */
-export const AUCTION_DAYS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
+/** Chip list for the sell form. Only these lengths. */
+export const AUCTION_DAYS = [1, 3, 5, 7] as const;
 
-export type AuctionDays = number;
+export type AuctionDays = (typeof AUCTION_DAYS)[number];
+
+const AUCTION_DAY_SET = new Set<number>(AUCTION_DAYS);
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** 新上架 is listings published inside this window. 全部 is every live listing. */
 export const NEW_LISTING_MS = 7 * DAY_MS;
 
-export function isAuctionDays(value: number | null | undefined): value is number {
-  return Number.isInteger(value) && value! >= AUCTION_DAY_MIN && value! <= AUCTION_DAY_MAX;
+export function isAuctionDays(value: number | null | undefined): value is AuctionDays {
+  return typeof value === "number" && AUCTION_DAY_SET.has(value);
 }
 
-/** Raise over the current high: eBay ladder, never under 5% or over 20% of current. */
+/** Raise over the current high: HK$10 or 5%, whichever is higher. */
 export function publicIncrementCents(currentCents: number): number {
   return bidIncrementCents(currentCents);
 }

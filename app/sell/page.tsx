@@ -110,7 +110,7 @@ function catalogCardParam(value: string | undefined) {
   return /^[A-Za-z0-9_-]{8,40}$/.test(id) ? id : "";
 }
 
-export default async function SellPage({ searchParams }: { searchParams: Promise<{ catalogCardId?: string; collectionItemId?: string }> }) {
+export default async function SellPage({ searchParams }: { searchParams: Promise<{ catalogCardId?: string; collectionItemId?: string; sale?: string }> }) {
   const sp = await searchParams;
   const requestedCatalogId = catalogCardParam(sp.catalogCardId);
   const collectionItemId = catalogCardParam(sp.collectionItemId);
@@ -239,6 +239,7 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
         initial={initialWithCollection}
+        preferAuction={sp.sale === "auction"}
       />
     </div>
   );
