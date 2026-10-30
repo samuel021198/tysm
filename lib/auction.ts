@@ -32,6 +32,19 @@ export function publicMinimumBid(startPrice: number, currentBid: number | null, 
   return currentBid + publicIncrementCents(currentBid);
 }
 
+/**
+ * Reserve cents this viewer may see. Guests and other buyers get null,
+ * including while the auction is still live. The seller still sees their own.
+ */
+export function shownReserveCents(
+  reservePrice: number | null | undefined,
+  viewerId: string | null | undefined,
+  sellerId: string,
+): number | null {
+  if (reservePrice == null || viewerId == null || viewerId !== sellerId) return null;
+  return reservePrice;
+}
+
 /** Won listings become 已保留. Anything else is 流標. */
 export function auctionOutcome(args: {
   high: number | null;

@@ -9,6 +9,7 @@ import {
   publicIncrementCents,
   publicMinimumBid,
   shopTab,
+  shownReserveCents,
 } from "./auction";
 import { buyerDescription, displayPhoto } from "./demo-covers";
 import { bidIncrementCents, DEAL_STALE_MS, nextUnpaidStrike } from "./rules";
@@ -31,6 +32,11 @@ assert(auctionOutcome({ high: 10000, leaderId: "a", reserve: 15000, voided: fals
 assert(auctionOutcome({ high: 15000, leaderId: "a", reserve: 15000, voided: false }) === "won", "meeting the reserve is 已保留");
 assert(auctionOutcome({ high: 10000, leaderId: "a", reserve: null, voided: false }) === "won", "no reserve sells to the high bid");
 assert(auctionOutcome({ high: 20000, leaderId: "a", reserve: null, voided: true }) === "passed", "voided bids do not win");
+
+assert(shownReserveCents(150000, null, "seller") === null, "a guest does not see the reserve while the auction is live");
+assert(shownReserveCents(150000, "buyer", "seller") === null, "a buyer does not see the reserve on a live auction");
+assert(shownReserveCents(150000, "seller", "seller") === 150000, "the seller still sees their own reserve");
+assert(shownReserveCents(null, "seller", "seller") === null, "a blank reserve stays blank");
 
 const now = new Date("2026-10-30T00:00:00Z");
 const keptEnd = new Date("2026-11-02T00:00:00Z");
@@ -75,7 +81,30 @@ const panel = readFileSync(new URL("../components/purchase-panel.tsx", import.me
 assert(panel.includes("目前出價") && panel.includes("剩餘時間") && panel.includes("function BidSheet") && panel.includes('name="amount"') && !panel.includes("你的最高出價"), "auction detail is current bid, time left, and an amount-only sheet");
 assert(panel.includes(">即買</button>") || panel.includes('"即買"'), "Buy It Now stays a button");
 const listing = readFileSync(new URL("../app/listing/[id]/page.tsx", import.meta.url), "utf8");
-assert(listing.includes("owner && listing.reservePrice") && listing.includes("底價 ${formatHkd(listing.reservePrice, locale)}") && !listing.includes("買家睇唔到") && listing.includes("relistFixedAction"), "reserve is owner-only; unsold can relist fixed");
+assert(
+  listing.includes("shownReserveCents(listing.reservePrice, viewer?.id, listing.sellerId)") &&
+    listing.split("listing.reservePrice").length === 2 &&
+    listing.includes("底價 ${formatHkd(reserveCents, locale)}") &&
+    !listing.includes("live || owner") &&
+    !listing.includes("買家睇唔到") &&
+    listing.includes("relistFixedAction"),
+  "reserve amount is seller-only on the listing page; unsold can relist fixed",
+);
+const feed = readFileSync(new URL("./feed.ts", import.meta.url), "utf8");
+assert(feed.includes("publicCardSelect") && !feed.includes("reservePrice") && !feed.includes("cardInclude"), "public cards select fields and leave the reserve out");
+const search = readFileSync(new URL("../app/search/page.tsx", import.meta.url), "utf8");
+const profileQuery = readFileSync(new URL("./profile.ts", import.meta.url), "utf8");
+const dexQuery = readFileSync(new URL("./dex-query.ts", import.meta.url), "utf8");
+assert(
+  search.includes("publicCardSelect") &&
+    !search.includes("reservePrice") &&
+    listing.includes("select: publicCardSelect") &&
+    profileQuery.includes("select: publicCardSelect") &&
+    dexQuery.includes("select: publicCardSelect"),
+  "search, similar cards, shop grid, and dex sales use the public select",
+);
+const edit = readFileSync(new URL("../app/sell/[id]/page.tsx", import.meta.url), "utf8");
+assert(edit.includes("reserve: centsToInput(listing.reservePrice)") && edit.includes("listing.sellerId !== viewer.id"), "the seller edit form still loads their reserve");
 const orders = readFileSync(new URL("./orders.ts", import.meta.url), "utf8");
 assert(orders.includes("attachDealThread") && orders.includes("settleAuction") && orders.includes("管理員人手處理"), "win opens settle chat; unpaid points at manual ban");
 const admin = readFileSync(new URL("../app/admin/page.tsx", import.meta.url), "utf8");
@@ -85,6 +114,9 @@ assert(post.includes('name="auction"') && post.includes("post.auction") && post.
 const profile = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 assert(profile.includes('name="auction"') && profile.includes("拍賣") && profile.includes('href="/auction"') && profile.includes("<Countdown"), "profile tiles link to the zone and show time left");
 const zone = readFileSync(new URL("../app/auction/page.tsx", import.meta.url), "utf8");
+const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
+assert(!home.includes("reservePrice") && !find.includes("reservePrice") && !zone.includes("reservePrice") && !shop.includes("reservePrice"), "feed, find, auction zone, and shop do not read the reserve");
 assert(zone.includes('href="/sell?sale=auction"') && zone.includes("任何帳戶均可刊登拍賣") && zone.includes("暫未有拍賣。") && zone.includes("auctionEndsAt") && zone.includes("<Countdown") && !zone.includes("canListAuction"), "the zone is open to every account and shows time left");
 assert(shop.includes('href="/auction"') && shop.includes("<Countdown"), "the shop 拍賣 chip opens the zone and cards show time left");
 const inventory = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");

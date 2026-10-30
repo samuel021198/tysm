@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { activeWhere, cardInclude } from "@/lib/feed";
+import { activeWhere, publicCardSelect } from "@/lib/feed";
 import { feedHideIds, followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { Flash } from "@/components/shell";
@@ -71,7 +71,7 @@ export default async function SearchPage({
     wantListings
       ? prisma.listing.findMany({
           where,
-          include: { ...cardInclude, category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } } },
+          select: { ...publicCardSelect, category: { select: { nameZh: true, nameEn: true, parent: { select: { nameZh: true, nameEn: true } } } } },
           orderBy: sort === "ending" ? { auctionEndsAt: "asc" } : { publishedAt: "desc" },
           take: 200,
         })

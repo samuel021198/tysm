@@ -1,6 +1,6 @@
 import { prisma } from "./db";
 import { ratingFromAggregate } from "./ratings";
-import { cardInclude } from "./feed";
+import { publicCardSelect } from "./feed";
 import { cardDisplayName, toPostCard, wishlistPostVisible, type PostCardModel } from "./posts";
 import { SHOP_INVENTORY_STATUSES } from "./shop-inventory";
 import { feedHideIds, hiddenUserIds } from "./social";
@@ -126,7 +126,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       ? Promise.resolve([])
       : prisma.listing.findMany({
           where: publicShop,
-          include: cardInclude,
+          select: publicCardSelect,
           orderBy: { publishedAt: "desc" },
           take: 24,
         }),
