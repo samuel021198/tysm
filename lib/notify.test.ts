@@ -21,6 +21,13 @@ assert(deals.includes('outcome.superseded ? "offer-supersede" : "offer-new"'), "
 assert(deals.includes('"handover"'), "entering handover writes 待交收提醒");
 const page = readFileSync(new URL("../app/notifications/page.tsx", import.meta.url), "utf8");
 assert(page.includes("relativeTime") && page.includes("openNotification") && page.includes("rounded-full bg-accent"), "the list is unread dot, relative time, and mark-on-tap");
+assert(page.includes("<InboxHub") && page.includes('tab="notes"'), "the bell opens the notes hub tab");
+const inbox = readFileSync(new URL("../app/messages/page.tsx", import.meta.url), "utf8");
+assert(inbox.includes("<InboxHub") && inbox.includes('tab="messages"'), "messages is the other hub tab");
+const hub = readFileSync(new URL("../components/inbox-hub.tsx", import.meta.url), "utf8");
+assert(hub.includes("通知") && hub.includes("訊息") && hub.includes('"/notifications"') && hub.includes('"/messages"'), "hub tabs are 通知 and 訊息");
+const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
+assert(layout.includes("noteUnread") && layout.includes("msgUnread") && layout.includes("noteUnread || msgUnread"), "bell badge is notifications OR unread messages");
 const settings = readFileSync(new URL("../app/me/settings/[section]/page.tsx", import.meta.url), "utf8");
 assert(settings.includes("notifyOffers") && settings.includes("notifyMessages") && settings.includes("notifyEmail") && settings.includes("PushToggle"), "settings keeps separate toggles plus email opt-in and browser push");
 

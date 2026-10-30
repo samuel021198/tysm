@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { tx } from "@/lib/i18n";
 import { relativeTime } from "@/lib/time";
+import { InboxHub } from "@/components/inbox-hub";
 
 export default async function NotificationsPage() {
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
@@ -13,6 +14,7 @@ export default async function NotificationsPage() {
   const now = new Date();
   return (
     <div>
+      <InboxHub locale={locale} tab="notes" />
       <div className="mb-3 flex items-center gap-1">
         <h1 className="page-title mb-0 min-w-0 flex-1">{tx(locale, "通知", "Notifications")}</h1>
         <form action={markNotifications}>

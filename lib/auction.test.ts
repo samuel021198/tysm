@@ -51,7 +51,7 @@ assert(shopTab(undefined) === "all" && shopTab("new") === "new" && shopTab("auct
 assert(NEW_LISTING_MS === 7 * 86400000, "新上架 is the last 7 days");
 
 const shop = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
-assert(shop.includes("全部") && shop.includes("新上架") && shop.includes("拍賣") && shop.includes("商店"), "mall chips are 全部, 新上架, 拍賣, 商店");
+assert(shop.includes("全部") && shop.includes("新上架") && shop.includes("拍賣") && shop.includes("商店") && shop.includes('href="/rank"') && shop.includes("排行"), "mall chips are 全部, 新上架, 拍賣, 商店, plus 排行");
 assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("/shop/${store.id}") && shop.includes("NEW_LISTING_MS"), "listing cards show the bid and the store; 新上架 uses the recent window");
 assert(shop.includes("VerificationPill") && shop.includes("avatarUrl") && shop.includes("去放賣") && shop.includes('href="/sell"') && !shop.includes("listings[0]"), "store rows are avatar, name, pill, and counts; empty states offer 去放賣");
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");

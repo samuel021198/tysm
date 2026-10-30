@@ -179,7 +179,8 @@ assert(!page.includes("成交") && !page.includes("likes") && !page.includes("Li
 assert(page.includes("#E0B53A") && page.includes("#B7C0C8") && page.includes("#C9844A"), "the first three ranks keep gold, silver, and bronze medals");
 assert(page.includes("change.text"), "the percent change stays on the row");
 const top = readFileSync(new URL("../components/top-bar.tsx", import.meta.url), "utf8");
-assert(!tab.includes('href: "/rank"') && top.includes('href="/rank"') && top.includes("排行榜") && top.includes('icon="rank"') && !tab.includes('href: "/market"'), "rank is a top-bar slot, not a bottom tab");
+const shopMall = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
+assert(!tab.includes('href: "/rank"') && !top.includes('href="/rank"') && shopMall.includes('href="/rank"') && shopMall.includes("排行") && !tab.includes('href: "/market"'), "rank opens from shop, not a top or bottom tab");
 assert(shell.includes('href="/rank"'), "desktop nav includes rank");
 const pager = readFileSync(new URL("../components/rank-pager.tsx", import.meta.url), "utf8");
 assert(page.includes("<RankPager") && pager.includes("rankTabStep") && pager.includes("data-rank-pager") && pager.includes("adjacentTab"), "rank content swipes segments, then the neighbouring root");

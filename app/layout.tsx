@@ -40,12 +40,21 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await connection();
   const [viewer, prefs] = await Promise.all([getViewer(), getPrefs()]);
-  const [cartCount, unread] = viewer
+  const [cartCount, noteUnread, msgUnread] = viewer
     ? await Promise.all([
         prisma.cartItem.count({ where: { userId: viewer.id } }),
         prisma.notification.count({ where: { userId: viewer.id, readAt: null } }),
+        prisma.message.count({
+          where: {
+            readAt: null,
+            senderId: { not: viewer.id },
+            thread: { OR: [{ buyerId: viewer.id }, { sellerId: viewer.id }] },
+          },
+        }),
       ])
-    : [0, 0];
+    : [0, 0, 0];
+  // Badge if either stream has unread; prefer the notification count when both do.
+  const unread = noteUnread || msgUnread;
   return (
     <html lang={prefs.locale === "en" ? "en" : "zh-HK"} className={`${sans.variable} ${display.variable}${prefs.theme === "dark" ? " dark" : ""}`}>
       <body className="font-sans antialiased">
