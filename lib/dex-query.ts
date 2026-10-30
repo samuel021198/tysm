@@ -4,7 +4,7 @@ import { DEMO_CARDS, DEMO_SETS } from "./demo-dex";
 import { hidePokemonDemoSeries } from "./dex-rail-state";
 import { prisma } from "./db";
 import { catalogWhere, numberKey, type DexGame, type DexPrintRegion } from "./dex";
-import { activeWhere, cardInclude } from "./feed";
+import { activeWhere, publicCardSelect } from "./feed";
 
 const cardSelect = {
   id: true,
@@ -276,7 +276,7 @@ export const getDexCard = cache(async (id: string) => {
 export async function salesForCard(cardId: string, hidden: string[]) {
   return prisma.listing.findMany({
     where: { AND: [activeWhere(hidden), { OR: [{ catalogCardId: cardId }, { items: { some: { catalogCardId: cardId } } }] }] },
-    include: cardInclude,
+    select: publicCardSelect,
     orderBy: { publishedAt: "desc" },
     take: 24,
   });

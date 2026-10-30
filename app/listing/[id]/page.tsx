@@ -5,14 +5,14 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT, anonBidder, toHkDate } from "@/lib/format";
 import { activityLine } from "@/lib/time";
-import { activeWhere, cardInclude } from "@/lib/feed";
+import { activeWhere, publicCardSelect } from "@/lib/feed";
 import { dealPhase, directBuyBlocked, offersClosed, readDealMeta } from "@/lib/deal-phase";
 import { shopPill, shopPillLabel } from "@/lib/shop-inventory";
 import { tx, listingStatusLabel, offerStatusLabel } from "@/lib/i18n";
 import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
-import { publicMinimumBid } from "@/lib/auction";
+import { publicMinimumBid, shownReserveCents } from "@/lib/auction";
 import { buyerDescription, displayPhoto } from "@/lib/demo-covers";
 import { cardDisplayName } from "@/lib/posts";
 import { conditionLabel } from "@/lib/rules";
@@ -71,6 +71,7 @@ export default async function ListingPage({
   ]);
   if (!listing) notFound();
   const owner = viewer?.id === listing.sellerId;
+  const reserveCents = shownReserveCents(listing.reservePrice, viewer?.id, listing.sellerId);
   const visible = ["ACTIVE", "ENDED", "SOLD"].includes(listing.status) || owner || viewer?.role === "ADMIN";
   if (!visible) notFound();
   const hidden = viewer ? await hiddenUserIds(viewer.id) : [];
@@ -93,7 +94,7 @@ export default async function ListingPage({
       : Promise.resolve([]),
     prisma.listing.findMany({
       where: { ...activeWhere(hidden), categoryId: listing.categoryId, id: { not: id }, sellerId: { not: listing.sellerId } },
-      include: cardInclude,
+      select: publicCardSelect,
       take: 4,
     }),
     prisma.orderItem.findMany({
@@ -344,8 +345,8 @@ export default async function ListingPage({
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={
-            owner && listing.reservePrice != null
-              ? tx(locale, `底價 ${formatHkd(listing.reservePrice, locale)}`, `Reserve ${formatHkd(listing.reservePrice, locale)}`)
+            reserveCents != null
+              ? tx(locale, `底價 ${formatHkd(reserveCents, locale)}`, `Reserve ${formatHkd(reserveCents, locale)}`)
               : owner && listing.auctionPassed
                 ? tx(locale, "未達底價或無人出價。可以改做固定價再賣。", "Reserve was not met, or there were no bids. Relist at a fixed price.")
                 : null
