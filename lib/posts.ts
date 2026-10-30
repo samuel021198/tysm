@@ -1,3 +1,4 @@
+import { buyerDescription } from "./demo-covers";
 import { safeNext } from "./format";
 import { conditionLabel } from "./rules";
 import { displayCaption, mergeTags, tagsFromCaption } from "./tags";
@@ -123,11 +124,12 @@ export function cardDisplayName(parts: {
   title?: string | null;
   body?: string | null;
 }): string {
-  for (const part of [parts.catalogTitle, parts.cardName, parts.personName, parts.title, parts.body]) {
+  for (const part of [parts.catalogTitle, parts.cardName, parts.personName, parts.title]) {
     const text = part?.trim();
     if (text) return text;
   }
-  return "";
+  const body = parts.body?.trim();
+  return body ? buyerDescription(body) : "";
 }
 
 function auctionEndStamp(value: Date | string | null | undefined, live: boolean): string | null {

@@ -52,6 +52,41 @@ assert(
 assert(cardDisplayName({ cardName: "噴火龍", title: "其他" }) === "噴火龍", "card name wins");
 assert(cardDisplayName({ personName: "美斯", title: "卡" }) === "美斯", "person name is the card");
 assert(cardDisplayName({ body: "  今日收卡  " }) === "今日收卡", "standalone post uses the caption");
+assert(
+  cardDisplayName({ body: "Soft-launch QA auction. Start 100, reserve 200, BIN 500, 1 day." }) === "Soft-launch QA auction. Start 100, BIN 500, 1 day.",
+  "a body-only name drops the reserve amount",
+);
+const leakedCaption = toPostCard({
+  postId: "qa",
+  body: "Soft-launch QA auction. Start 100, reserve 200, BIN 500, 1 day.",
+  author: { id: "u", nickname: "阿明", avatarUrl: null },
+  photos: [],
+  item: {
+    title: "QA soft-launch 拍賣 Charizard",
+    cardName: "Charizard",
+    conditionTrack: "RAW",
+    rawGrade: "A",
+    photos: [],
+    listing: {
+      id: "qa_list",
+      status: "ACTIVE",
+      quantityAvailable: 1,
+      saleType: "AUCTION",
+      price: null,
+      currentBid: null,
+      startPrice: 10000,
+      auctionSettled: false,
+      cardName: "Charizard",
+      personName: null,
+      title: "QA soft-launch 拍賣 Charizard",
+    },
+  },
+  likeCount: 0,
+  commentCount: 0,
+  liked: false,
+  saved: false,
+});
+assert(leakedCaption.caption === "Soft-launch QA auction. Start 100, BIN 500, 1 day." && !leakedCaption.caption.toLowerCase().includes("reserve"), "a home feed caption does not show the reserve amount");
 assert(cardDisplayName({ cardName: "  ", title: "噴火龍" }) === "噴火龍", "a blank card name falls through to the filled title");
 assert(cardDisplayName({ catalogTitle: "   ", cardName: "", title: "已填標題" }) === "已填標題", "whitespace is not a card name");
 

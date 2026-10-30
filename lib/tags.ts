@@ -1,3 +1,5 @@
+import { buyerDescription } from "./demo-covers";
+
 /** Topic labels. Stored without `#`. The composer asks for one `#`, it does not offer a topic list. */
 
 const TAG_RE = /(^|[^\p{L}\p{N}_])#([\p{L}\p{N}_]{1,24})/gu;
@@ -41,9 +43,9 @@ export function mergeTags(...groups: string[][]): string[] {
   return tagsFromCaption(groups.flat().map((tag) => `#${tag}`).join(" "));
 }
 
-/** Caption for display. Topic tokens move onto the chips. */
+/** Caption for display. Topic tokens move onto the chips. Reserve amounts stay off public text. */
 export function displayCaption(text: string): string {
-  return text
+  return buyerDescription(text)
     .replace(new RegExp(TAG_RE.source, "gu"), "$1")
     .replace(/[ \t]{2,}/g, " ")
     .replace(/[ \t]+\n/g, "\n")
