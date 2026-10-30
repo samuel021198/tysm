@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { displayPhoto } from "@/lib/demo-covers";
 import { formatHkd } from "@/lib/format";
 import { DEAL_RISK } from "@/lib/deal-phase";
 import { tx } from "@/lib/i18n";
@@ -39,7 +40,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
           <h2 className="text-sm font-semibold"><Link href={`/shop/${sellerId}`}>{rows[0].listing.seller.nickname}</Link></h2>
           {rows.map((item) => (
             <div key={item.id} className="mt-3 flex items-start gap-3">
-              <img src={item.listing.photos[0]?.url || "/demo/back.svg"} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
+              <img src={displayPhoto(item.listing.photos[0]?.url)} alt="" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
               <div className="min-w-0 flex-1">
                 <Link href={`/listing/${item.listingId}`} className="line-clamp-2 text-sm font-medium leading-snug">{item.listing.title}</Link>
                 <p className="price mt-1 text-base leading-none">{formatHkd(item.listing.price ?? 0, prefs.locale)}</p>

@@ -7,6 +7,7 @@ import { toggleFavorite } from "@/actions/social";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
+import { displayPhoto } from "@/lib/demo-covers";
 import { activityLine } from "@/lib/time";
 import { HandoverForm } from "./handover-form";
 import { CommentSheet } from "./comment-sheet";
@@ -36,7 +37,7 @@ export function PostCard({
   /** Author 「放賣」. Sits on the price row when this card already shows a price. */
   sellHref?: string | null;
 }) {
-  const photos = post.photos.length ? post.photos : ["/demo/back.svg"];
+  const photos = (post.photos.length ? post.photos : ["/demo/back.svg"]).map((url) => displayPhoto(url));
   const likeFormId = post.likePostId ? `like-${post.id}` : undefined;
   const [count, setCount] = useState(post.commentCount);
   const [commentsOpen, setCommentsOpen] = useState(false);
