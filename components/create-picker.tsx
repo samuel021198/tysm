@@ -87,7 +87,7 @@ export function CreatePicker({
         role="menu"
         aria-label={tx(locale, "新增", "Create")}
         onKeyDown={onMenuKey}
-        className={`absolute top-full z-50 w-64 rounded-xl border border-line bg-card p-1 text-ink shadow-card ${variant === "header" ? "right-0 mt-4" : "left-1/2 mt-1 -translate-x-1/2"}`}
+        className={`absolute top-full z-50 w-64 rounded-xl border border-line bg-card p-1 text-ink shadow-card ${variant === "header" ? "right-0 mt-4" : "left-0 mt-1"}`}
       >
         {CREATE_MODES.map((item) => (
           <Link

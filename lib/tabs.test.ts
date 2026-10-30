@@ -17,7 +17,7 @@ assert(adjacentTab("/news", 1, true) === "/me", "news swipe left opens profile")
 assert(adjacentTab("/news", 1, false) === "/login", "logged-out profile tab is login");
 assert(adjacentTab("/me", -1, true) === "/news", "profile swipe right opens news");
 assert(adjacentTab("/login", -1, false) === "/news", "login swipe right opens news");
-assert(tabPagerIndex("/rank") === null && adjacentTab("/rank", 1, true) === null, "rank is a top destination, not a bottom tab");
+assert(tabPagerIndex("/rank") === null && adjacentTab("/rank", 1, true) === null, "rank is outside the bottom tab pager");
 assert(tabPagerIndex("/market") === null && adjacentTab("/market", 1, true) === null, "market is not a tab");
 assert(tabPagerIndex("/shop/user_tyu") === null, "a seller shop is not the shop tab root");
 assert(adjacentTab("/", -1, true) === null && adjacentTab("/me", 1, true) === null, "the pager stops at the ends");

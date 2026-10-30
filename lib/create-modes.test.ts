@@ -39,24 +39,24 @@ assert(
   shopPage.includes("全部") && shopPage.includes("新上架") && shopPage.includes("拍賣") && shopPage.includes("商店") && shopPage.includes("/shop/${store.id}"),
   "the shop tab is the mall: chips and store cards",
 );
+assert(shopPage.includes('href="/rank"') && shopPage.includes("排行"), "rank opens from the shop mall");
 assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 
 const shell = readFileSync(new URL("../components/shell.tsx", import.meta.url), "utf8");
 const top = readFileSync(new URL("../components/top-bar.tsx", import.meta.url), "utf8");
 assert(shell.includes("<TopBar") && !shell.includes('variant="corner"') && !shell.includes("absolute inset-y-0 right-1"), "mobile header is the top bar; the corner add is gone");
-assert(top.includes("md:hidden") && top.includes("grid-cols-5") && top.includes("h-[3.25rem]") && top.includes("max-w-lg"), "top bar matches the bottom 5-column grid and height");
-const homeSlot = top.indexOf('href="/"');
-const rankSlot = top.indexOf('href="/rank"');
+assert(top.includes("md:hidden") && top.includes("grid-cols-3") && top.includes("h-[3.25rem]") && top.includes("max-w-lg"), "top bar is three slots at tab height");
 const createSlot = top.indexOf('variant="top"');
+const homeSlot = top.indexOf('href="/"');
 const notesSlot = top.indexOf('href="/notifications"');
-const inboxSlot = top.indexOf('href="/messages"');
-assert(homeSlot >= 0 && homeSlot < rankSlot && rankSlot < createSlot && createSlot < notesSlot && notesSlot < inboxSlot, "top order is logo, rank, create, notifications, messages");
-assert(top.includes("tsm-monogram.png") && top.includes("主頁") && !top.includes("tysm-wordmark"), "home slot is the monogram");
-assert(top.includes("排行榜") && top.includes('icon="rank"') && top.includes("h-[22px]") && !top.includes("拍賣") && !top.includes('href="/find"') && !top.includes('icon="tag"'), "second slot is rankings at 22px");
+assert(createSlot >= 0 && createSlot < homeSlot && homeSlot < notesSlot, "top order is create, logo, notifications");
+assert(top.includes("tsm-monogram.png") && top.includes("主頁") && !top.includes("tysm-wordmark"), "center slot is the monogram");
+assert(!top.includes('href="/rank"') && !top.includes("排行榜") && !top.includes('icon="rank"') && !top.includes('href="/messages"') && !top.includes('icon="messages"'), "rank and messages stay off the top bar");
 assert(!top.includes("rounded-full bg-accent text-white") && !top.includes("bg-accent text-white"), "top bar has no green circle");
-assert(top.includes("通知") && top.includes("訊息") && top.includes("aria-label") && !top.includes("<span>{label}</span>"), "top items are icon-only with Chinese names");
-assert(top.includes("strokeWidth={on ? 2 : 1.6}"), "top strokes match the bottom bar");
+assert(top.includes("通知") && top.includes('name="bell"') && top.includes("aria-label") && !top.includes("<span>{label}</span>"), "bell is icon-only with a Chinese name");
+assert(top.includes("strokeWidth={hubOn ? 2 : 1.6}"), "top strokes match the bottom bar");
+assert(top.includes('pathname.startsWith("/messages/")'), "bell stays on across the messages hub tab");
 assert(shell.includes('src="/brand/tsm-monogram.png"'), "desktop header keeps the TSM monogram");
 assert(!shell.includes("tysm-wordmark"), "old wordmark is not referenced");
 assert(shell.includes('variant="header"'), "desktop header still opens create");

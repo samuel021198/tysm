@@ -8,6 +8,7 @@ import { formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { shareLabel, shareTarget } from "@/lib/share";
 import { hiddenUserIds } from "@/lib/social";
+import { InboxHub } from "@/components/inbox-hub";
 import { NameLine } from "@/components/profile-header";
 
 export default async function MessagesPage({ searchParams }: { searchParams: Promise<{ share?: string }> }) {
@@ -32,6 +33,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
   const visible = threads.filter((thread) => !hidden.has(thread.buyerId === viewer.id ? thread.sellerId : thread.buyerId));
   return (
     <div>
+      {share ? null : <InboxHub locale={prefs.locale} tab="messages" />}
       <h1 className="page-title">{share ? tx(prefs.locale, "內部分享", "In TYSM") : tx(prefs.locale, "訊息", "Messages")}</h1>
       {visible.length === 0 ? <p className="empty">{tx(prefs.locale, "未有對話。", "No conversations.")}</p> : null}
       <ul className="grid gap-2.5">
