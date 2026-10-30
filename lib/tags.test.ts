@@ -23,6 +23,9 @@ assert(tagsFromCaption("收藏。 #PC #pc #賣 #Charizard").join() === "PC,賣,C
 assert(tagsFromCaption("求 #OP09 同 #寶可夢").join() === "OP09,寶可夢", "Chinese topics parse inside a sentence");
 assert(displayCaption("卡面乾淨。 #FS #Charizard") === "卡面乾淨。", "display moves topics off the caption");
 assert(displayCaption("想搵 #ISO 同系列") === "想搵 同系列", "an inline topic leaves the sentence");
+const qaCaption = "Soft-launch QA auction. Start 100, reserve 200, BIN 500, 1 day.";
+assert(displayCaption(`${qaCaption} #FS`) === "Soft-launch QA auction. Start 100, BIN 500, 1 day." && !displayCaption(qaCaption).toLowerCase().includes("reserve"), "a feed caption drops the reserve amount");
+assert(displayCaption("起標 100，底價 HK$200，即買 500") === "起標 100，即買 500", "a feed caption drops a 底價 amount");
 assert(hashPartial("你好 #ch", 7) === "ch" && hashPartial("你好", 2) === null, "the open hash is the token being typed");
 const started = startHashtag("今日收卡", 4);
 assert(started.text === "今日收卡 #" && started.cursor === 6, "the hint inserts one hash at the caret");
