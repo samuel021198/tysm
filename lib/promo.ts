@@ -29,7 +29,7 @@ export function promoTipParts(kind: PromoTip, locale: "zh-HK" | "en" = "zh-HK"):
   if (kind === "live") {
     return zh ? { lead: "已刊登 · 推廣 ", pop: "−1", tail: " 飛" } : { lead: "Published · Promo ", pop: "−1", tail: "" };
   }
-  return zh ? { lead: "推廣 ", pop: "−1", tail: "" } : { lead: "Promo ", pop: "−1", tail: "" };
+  return zh ? { lead: "推廣 ", pop: "−1", tail: " 飛" } : { lead: "Promo ", pop: "−1", tail: "" };
 }
 
 /** A publish that charged this request uses one merged tip. Anything else keeps its own success copy. */

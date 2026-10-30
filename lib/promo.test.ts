@@ -23,7 +23,7 @@ assert(promoToastKind("earn") === "earn" && promoToastKind("spend") === "spend" 
 const liveTip = promoTipParts("live");
 const spendTip = promoTipParts("spend");
 assert(`${liveTip.lead}${liveTip.pop}${liveTip.tail}` === "已刊登 · 推廣 −1 飛", "a publish that charges shows one merged line");
-assert(promoTipParts("earn").lead === "＋7 飛" && `${spendTip.lead}${spendTip.pop}${spendTip.tail}` === "推廣 −1", "earn and a later deduct keep their own lines");
+assert(promoTipParts("earn").lead === "＋7 飛" && `${spendTip.lead}${spendTip.pop}${spendTip.tail}` === "推廣 −1 飛", "earn and a later deduct keep their own lines");
 assert(publishFlash("published", true) === "live" && publishFlash("published", false) === "published" && publishFlash("draft", true) === "draft", "only a charged publish replaces the success copy");
 
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
