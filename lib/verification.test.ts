@@ -91,7 +91,7 @@ assert(!route.includes("storeUploadedImage") && !route.includes("putR2Object"), 
 const i18n = readFileSync(new URL("./i18n.ts", import.meta.url), "utf8");
 const schema = readFileSync(new URL("../prisma/schema.prisma", import.meta.url), "utf8");
 const r2 = readFileSync(new URL("./r2.ts", import.meta.url), "utf8");
-assert(i18n.includes("文件暫時上傳唔到，請稍後再試。"), "missing private storage tells the applicant to retry");
+assert(i18n.includes("文件暫時上傳不到，請稍後再試。"), "missing private storage tells the applicant to retry");
 assert(schema.includes("private:verification") && !schema.includes("public image store"), "the column is documented as a private ref");
 
 const storeFn = r2.slice(r2.indexOf("export async function storeVerificationDocument"), r2.indexOf("export function imageFromDataUrl"));

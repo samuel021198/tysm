@@ -12,7 +12,7 @@ assert(hkPartsToInput("31", "4", "2026", "0", "0") === "", "april 31");
 assert(hkPartsToInput("10", "23", "2026", "18", "0") === "", "month 23 is not a date");
 assert(hkPartsToInput("", "10", "2026", "18", "0") === "", "incomplete");
 assert(formatJpy(190000) === "¥190,000" && formatJpy(83) === "¥83", "yen stays whole yen");
-assert(bidFloorText("zh-HK", "below_min", 1100) === "出價低於最低加價，最低 HK$11.00", "a low bid names the minimum");
+assert(bidFloorText("zh-HK", "below_min", 1100) === "出價低於最低加價 HK$11.00", "a low bid names the minimum");
 assert(bidFloorText("zh-HK", "below_start", 800) === "出價低於起標價 HK$8.00", "a bid under the start names that floor");
 assert(bidFloorText("zh-HK", "state", 1100) === null, "other errors stay on the shared copy");
 

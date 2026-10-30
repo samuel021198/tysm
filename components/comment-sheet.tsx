@@ -161,7 +161,7 @@ export function CommentSheet({
       setGifOpen(false);
       setError("");
     } catch {
-      setError(tx(locale, "相片讀唔到，請改用 JPG、PNG 或 WebP。", "That photo could not be read. Use JPG, PNG, or WebP."));
+      setError(tx(locale, "相片無法讀取，請改用 JPG、PNG 或 WebP。", "That photo could not be read. Use JPG, PNG, or WebP."));
     }
     if (fileRef.current) fileRef.current.value = "";
   }

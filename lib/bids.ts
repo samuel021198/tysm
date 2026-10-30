@@ -57,7 +57,7 @@ export async function placePublicBid(userId: string, listingId: string, amount: 
       if (!outcome.ok) return outcome;
       await notify(outcome.sellerId, "bid", "拍賣有新出價", outcome.title, `/listing/${listingId}`);
       if (outcome.previousLeader && outcome.previousLeader !== userId) {
-        await notify(outcome.previousLeader, "bid", "你已被超價", outcome.title, `/listing/${listingId}`);
+        await notify(outcome.previousLeader, "bid", "你的出價已被超越", outcome.title, `/listing/${listingId}`);
       }
       return { ok: true as const, price: amount, leading: true };
     } catch (error) {
@@ -157,7 +157,7 @@ export async function placeBid(userId: string, listingId: string, maxAmount: num
         await notify(userId, "bid", "你的出價未領先", outcome.title, `/listing/${listingId}`);
       }
       if (outcome.previousLeader && outcome.previousLeader !== outcome.leaderId) {
-        await notify(outcome.previousLeader, "bid", "你已被超價", outcome.title, `/listing/${listingId}`);
+        await notify(outcome.previousLeader, "bid", "你的出價已被超越", outcome.title, `/listing/${listingId}`);
       }
       return { ok: true as const, price: outcome.price, leading: outcome.leaderId === userId, extended: outcome.extended };
     } catch (error) {

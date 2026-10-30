@@ -15,7 +15,7 @@ export default async function CheckoutPage({
     <div className="mx-auto grid max-w-xl gap-3">
       <h1 className="page-title">{tx(locale, "交收", "Handover")}</h1>
       <p className="text-sm leading-6">{DEAL_RISK}</p>
-      <p className="text-sm text-muted">{tx(locale, "平台唔代收、唔擔保。請喺貨品頁按「傾交收」。", "The platform does not take payment. Open the listing and arrange a handover.")}</p>
+      <p className="text-sm text-muted">{tx(locale, "平台不代收、不擔保。請於貨品頁安排交收。", "The platform does not take payment. Open the listing and arrange a handover.")}</p>
       <Link className="btn btn-primary w-fit" href={back}>{tx(locale, "返回貨品", "Back to the item")}</Link>
     </div>
   );

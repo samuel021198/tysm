@@ -18,7 +18,7 @@ export function VerifyForm({ locale }: { locale: Locale }) {
       setNote("");
     } catch {
       setDocumentUrl("");
-      setNote(tx(locale, "文件讀唔到，請改用 JPG 或 PNG。", "That file could not be read. Use JPG or PNG."));
+      setNote(tx(locale, "文件無法讀取，請改用 JPG 或 PNG。", "That file could not be read. Use JPG or PNG."));
     }
     if (fileRef.current) fileRef.current.value = "";
   }

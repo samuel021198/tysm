@@ -65,12 +65,12 @@ export default async function AuctionPage() {
         </Link>
       </nav>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm text-muted">{tx(locale, "任何帳戶都可以刊登拍賣。出價開放。", "Any account can list an auction. Bidding is open.")}</p>
+        <p className="text-sm text-muted">{tx(locale, "任何帳戶均可刊登拍賣。", "Any account can list an auction. Bidding is open.")}</p>
         <Link href="/sell?sale=auction" className="btn btn-primary shrink-0">{tx(locale, "刊登拍賣", "List an auction")}</Link>
       </div>
       {listings.length === 0 ? (
         <div className="grid justify-items-center gap-3 py-10">
-          <p className="text-center text-sm text-muted">{tx(locale, "暫時未有拍賣。", "No auctions yet.")}</p>
+          <p className="text-center text-sm text-muted">{tx(locale, "暫未有拍賣。", "No auctions yet.")}</p>
           <Link href="/sell?sale=auction" className="btn btn-primary">{tx(locale, "刊登拍賣", "List an auction")}</Link>
         </div>
       ) : (

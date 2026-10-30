@@ -52,8 +52,8 @@ function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(DEAL_BANNER === "私下交收・平台唔代收、唔擔保", "banner copy is locked");
-assert(DEAL_ACK === "我明白：雙方自行交收，錢貨風險自負；TSM 唔處理付款、爭議或退款。", "ack copy is locked");
+assert(DEAL_BANNER === "私下交收・平台不代收、不擔保", "banner copy is locked");
+assert(DEAL_ACK === "我明白：雙方自行交收，錢貨風險自負；TSM 不處理付款、爭議或退款。", "ack copy is locked");
 assert(DEAL_RISK === "平台只提供配對同聊天紀錄；付款方式、交收、真偽同爭議由買賣雙方自行負責。", "risk copy is locked");
 
 assert(dealPhase({ status: "PENDING_PAYMENT" }) === "CHATTING", "a new deal is talking");

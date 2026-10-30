@@ -280,8 +280,10 @@ export default async function ListingPage({
         ) : null}
         {hasAuction ? (
           <section className="mt-6">
-            <h2 className="font-semibold">{tx(locale, "出價紀錄", "Bid history")}</h2>
-            <p className="text-sm text-muted">{tx(locale, "出價係公開金額。加價係 HK$10 或目前出價的 5%，以較高者為準。", "Bids are public. The raise is HK$10 or 5% of the current bid, whichever is higher.")}</p>
+            <div className="flex flex-wrap items-baseline gap-x-2">
+              <h2 className="font-semibold">{tx(locale, "出價紀錄", "Bid history")}</h2>
+              <p className="text-sm text-muted">{tx(locale, "出價是公開金額。加價取 HK$10 或目前出價的 5%（較高者）。", "Bids are public. The raise is HK$10 or 5% of the current bid, whichever is higher.")}</p>
+            </div>
             {listing.bidEvents.length === 0 ? <p className="text-sm">{tx(locale, "未有出價。", "No bids yet.")}</p> : null}
             <ul className="mt-2 text-sm">
               {listing.bidEvents.map((event) => (

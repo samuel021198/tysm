@@ -251,8 +251,10 @@ export function ProfileBoard({
         </>
       ) : (
         <p className="empty mx-3 sm:mx-0">
-          <span className="block">{tx(locale, "未有收藏。", "No favorites yet.")}</span>
-          {isSelf ? <span className="mt-1 block">{tx(locale, "貨品同貼文的收藏會喺呢度。", "Saved products and posts show up here.")}</span> : null}
+          <span>
+            {tx(locale, "暫未有收藏。", "No favorites yet.")}
+            {isSelf ? tx(locale, "貨品與貼文的收藏會顯示於此。", "Saved products and posts show up here.") : null}
+          </span>
         </p>
       );
     }
@@ -293,7 +295,7 @@ export function ProfileBoard({
           })}
         </ul>
       ) : (
-        <p className="empty mx-3 sm:mx-0">{tx(locale, "未有賣緊的卡。", "Nothing for sale.")}</p>
+        <p className="empty mx-3 sm:mx-0">{tx(locale, "暫未有在售。", "Nothing for sale.")}</p>
       );
     }
     if (id === "reviews") {

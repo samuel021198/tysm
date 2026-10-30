@@ -359,7 +359,7 @@ assert(
     profileBoard.includes("h-0.5 w-1/4 bg-ink"),
   "profile content tabs are icon-only; the selected tab keeps a deeper stroke and underline",
 );
-assert(profileBoard.includes("貨品同貼文的收藏會喺呢度"), "empty 收藏 says products and posts land here");
+assert(profileBoard.includes("貨品與貼文的收藏會顯示於此"), "empty 收藏 says products and posts land here");
 assert(!profileBoard.includes("text-link"), "sell and privacy are not green captions under the thumb");
 assert(!profileBoard.includes("toggleCollectionVisibility"), "the board does not render the privacy form itself");
 assert(menu.includes('if (own) return null'), "own posts do not offer report");

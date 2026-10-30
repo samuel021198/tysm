@@ -76,7 +76,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
       </nav>
       {tab === "shops" ? (
         storeRows.length === 0 ? (
-          <Empty locale={locale} text={["暫時未有商店。", "No shops yet."]} />
+          <Empty locale={locale} text={["暫未有商店。", "No shops yet."]} />
         ) : (
           <ul className="grid gap-2">
             {storeRows.map((store) => (
@@ -87,7 +87,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
           </ul>
         )
       ) : listings.length === 0 ? (
-        <Empty locale={locale} text={tab === "auction" ? ["暫時未有拍賣。", "No auctions yet."] : ["暫時未有貨品。", "Nothing listed yet."]} />
+        <Empty locale={locale} text={tab === "auction" ? ["暫未有拍賣。", "No auctions yet."] : ["暫未有貨品。", "Nothing listed yet."]} />
       ) : (
         <div className="feed">
           {listings.map((listing) => (
@@ -216,9 +216,9 @@ async function loadStores(hidden: string[], recentSince: Date) {
 
 function Empty({ locale, text }: { locale: Locale; text: [string, string] }) {
   return (
-    <div className="grid justify-items-center gap-3 py-10">
+    <div className="grid justify-items-center gap-2 py-6">
       <p className="text-center text-sm text-muted">{tx(locale, text[0], text[1])}</p>
-      <Link href="/sell" className="btn btn-primary">{tx(locale, "去放賣", "List something")}</Link>
+      <Link href="/sell" className="btn btn-primary">{tx(locale, "刊登貨品", "List something")}</Link>
     </div>
   );
 }
