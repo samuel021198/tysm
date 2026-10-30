@@ -13,6 +13,7 @@ import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
 import { publicMinimumBid } from "@/lib/auction";
+import { buyerDescription, displayPhoto } from "@/lib/demo-covers";
 import { cardDisplayName } from "@/lib/posts";
 import { conditionLabel } from "@/lib/rules";
 import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
@@ -39,8 +40,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!listing) return { title: "TSM" };
   return {
     title: listing.title,
-    description: listing.description.slice(0, 160),
-    openGraph: listing.photos[0] ? { images: [listing.photos[0].url] } : undefined,
+    description: buyerDescription(listing.description).slice(0, 160),
+    openGraph: listing.photos[0] ? { images: [displayPhoto(listing.photos[0].url)] } : undefined,
   };
 }
 
@@ -149,7 +150,7 @@ export default async function ListingPage({
       <ViewPing id={id} />
       <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
         <Flash locale={locale} ok={sp.ok} err={sp.err} minCents={minCents} />
-        <Gallery photos={listing.photos.map((photo) => ({ url: photo.url, role: photo.role }))} alt={listing.title} locale={locale} />
+        <Gallery photos={listing.photos.map((photo) => ({ url: displayPhoto(photo.url), role: photo.role }))} alt={listing.title} locale={locale} />
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{conditionLabel(listing)}</span>
           <span className="inline-flex h-8 items-center rounded-full bg-soft px-3 text-xs font-medium">{listing.auctionPassed ? tx(locale, "流標", "Passed") : reserved ? shopPillLabel(locale, "RESERVED") : listingStatusLabel(locale, listing.status)}</span>
@@ -191,7 +192,7 @@ export default async function ListingPage({
       </div>
       <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2">
         <div>
-          <RichText text={listing.description} />
+          <RichText text={buyerDescription(listing.description)} />
         </div>
         <dl className="surface mt-4 grid grid-cols-2 gap-x-3 gap-y-3 p-4 text-sm">
           {listing.game ? <div><dt className="text-muted">{tx(locale, "遊戲", "Game")}</dt><dd>{listing.game}</dd></div> : null}

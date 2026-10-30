@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { canOfferFromMenu, dealBlocked, dealEventCopy, dealPhase, intentBlocked, latestOpenOfferMessage, offersClosed, pinAction, readDealEvent, readDealMeta, showDealStream, threadIdForOrder } from "@/lib/deal-phase";
 import { loadShareCards, sellerPayment } from "@/lib/deals";
+import { displayPhoto } from "@/lib/demo-covers";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
 import { ratingFromAggregate } from "@/lib/ratings";
@@ -112,7 +113,7 @@ export default async function ThreadPage({
         id: listing.id,
         title: listing.title,
         priceCents: listing.price ?? listing.currentBid ?? listing.startPrice,
-        cover: listing.photos[0]?.url ?? null,
+        cover: displayPhoto(listing.photos[0]?.url),
       }))
     : [];
   return (
@@ -164,7 +165,7 @@ export default async function ThreadPage({
             listingId={thread.listing.id}
             title={thread.listing.title}
             priceCents={listPrice}
-            cover={thread.listing.photos[0]?.url ?? null}
+            cover={displayPhoto(thread.listing.photos[0]?.url)}
             openOffer={sp.offer === "1"}
             offerClosed={offersClosed(thread.listing.status, thread.listing.binLockOrderId)}
             riskAcked={Boolean(viewer.p2pRiskAckAt)}

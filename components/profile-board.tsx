@@ -7,6 +7,7 @@ import { EDGE_GUARD } from "@/lib/gesture";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
+import { displayPhoto } from "@/lib/demo-covers";
 import { shopDisplayCents } from "@/lib/shop-inventory";
 import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
 import { Countdown } from "./countdown";
@@ -277,7 +278,7 @@ export function ProfileBoard({
             return (
               <li key={listing.id} className="relative min-w-0">
                 <Link href={`/listing/${listing.id}`} aria-label={label} className="relative block">
-                  <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                  <img src={displayPhoto(listing.photos[0]?.url)} alt="" loading="lazy" decoding="async" className={tile} />
                 </Link>
                 {auction ? (
                   <Link href="/auction" className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">

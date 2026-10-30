@@ -10,6 +10,7 @@ import {
   publicMinimumBid,
   shopTab,
 } from "./auction";
+import { buyerDescription, displayPhoto } from "./demo-covers";
 import { bidIncrementCents, DEAL_STALE_MS, nextUnpaidStrike } from "./rules";
 import { dealStale } from "./deal-phase";
 
@@ -88,5 +89,15 @@ assert(zone.includes('href="/sell?sale=auction"') && zone.includes("任何帳戶
 assert(shop.includes('href="/auction"') && shop.includes("<Countdown"), "the shop 拍賣 chip opens the zone and cards show time left");
 const inventory = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");
 assert(inventory.includes('name="auction"'), "own shop inventory marks auctions");
+const greenZard = "https://pub-9b9f3109670d41aeac8a465ff7b3e999.r2.dev/uploads/listings/6d83b20f6759074beffc8493.jpg";
+const greenYuan = "https://pub-9b9f3109670d41aeac8a465ff7b3e999.r2.dev/uploads/listings/e231693f8a4aa3b27934df3c.jpg";
+assert(displayPhoto(greenZard) === "/demo/photos/charizard.webp" && displayPhoto(greenYuan) === "/demo/photos/pikachu.webp", "the QA green covers render as real card files");
+assert(displayPhoto("/demo/cards/seed_charizard.svg") === "/demo/photos/charizard.webp" && displayPhoto("/demo/other.svg") === "/demo/other.svg", "seed charizard svg is swapped; other art stays");
+const leaked = buyerDescription("Soft-launch QA auction. Start 100, reserve 200, BIN 500, 1 day.");
+assert(leaked === "Soft-launch QA auction. Start 100, BIN 500, 1 day." && !leaked.toLowerCase().includes("reserve"), "public copy drops the reserve amount");
+const covers = readFileSync(new URL("./demo-covers.ts", import.meta.url), "utf8");
+const refresh = readFileSync(new URL("../scripts/refresh-demo-covers.ts", import.meta.url), "utf8");
+assert(covers.includes("QA soft-launch 拍賣 Charizard") && covers.includes("QA 拍賣測試 1元") && refresh.includes("DEMO_COVERS") && refresh.includes("--apply") && refresh.includes('startsWith: "seed_"') && !refresh.includes("user.delete") && !refresh.includes("listing.delete"), "refresh rewrites only known demo covers");
+assert(zone.includes("displayPhoto") && listing.includes("buyerDescription"), "the zone and the listing page use the cover and description swaps");
 
 console.log("auction ok");

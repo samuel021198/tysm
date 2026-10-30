@@ -7,6 +7,7 @@ import { catalogFlavor } from "@/lib/flavor";
 import { formatHkd, formatJpy } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { conditionLabel } from "@/lib/rules";
+import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "./countdown";
 import { hiddenUserIds } from "@/lib/social";
 import {
@@ -250,7 +251,7 @@ export async function DexSales({
           <li key={listing.id}>
             <div className="surface flex min-h-[5.5rem] items-center gap-3 p-3">
               <Link href={`/listing/${listing.id}`} className="flex min-w-0 flex-1 items-center gap-3">
-                <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
+                <img src={displayPhoto(listing.photos[0]?.url)} alt="" loading="lazy" decoding="async" className="h-20 w-16 shrink-0 rounded-xl bg-soft object-contain" />
                 <span className="min-w-0 flex-1">
                   <span className="line-clamp-2 block font-semibold">{listing.title}</span>
                   <span className="text-sm text-muted">

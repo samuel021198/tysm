@@ -4,6 +4,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { activeWhere } from "@/lib/feed";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
+import { displayPhoto } from "@/lib/demo-covers";
 import { cardDisplayName } from "@/lib/posts";
 import { shopDisplayCents } from "@/lib/shop-inventory";
 import { cardHubListingWhere, cardHubPostWhere, findHref, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
@@ -243,14 +244,14 @@ export default async function FindPage({
     ...postCovers.map((post) => ({
       key: `post:${post.id}`,
       href: `/post/${post.id}`,
-      image: post.collectionItem?.photos[0]?.url || post.photos[0]?.url || "/demo/back.svg",
+      image: displayPhoto(post.collectionItem?.photos[0]?.url || post.photos[0]?.url),
       label: (post.collectionItem?.cardName || post.collectionItem?.title || post.body || "貼文").trim().slice(0, 80) || "貼文",
       at: post.createdAt.getTime(),
     })),
     ...listingCovers.map((listing) => ({
       key: `listing:${listing.id}`,
       href: `/listing/${listing.id}`,
-      image: listing.photos[0]?.url || "/demo/back.svg",
+      image: displayPhoto(listing.photos[0]?.url),
       label: (listing.cardName || listing.title).trim().slice(0, 80),
       at: (listing.publishedAt ?? listing.createdAt).getTime(),
     })),

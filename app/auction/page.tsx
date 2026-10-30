@@ -6,6 +6,7 @@ import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
+import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
 
@@ -103,7 +104,7 @@ function AuctionCard({
   return (
     <article className="surface flex h-full flex-col overflow-hidden">
       <Link href={`/listing/${listing.id}`} className="block">
-        <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />
+        <img src={displayPhoto(listing.photos[0]?.url)} alt="" className="block aspect-[4/5] w-full bg-soft object-contain" />
       </Link>
       <span className="grid gap-1 px-2.5 py-2">
         <Link href={`/listing/${listing.id}`} className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</Link>
