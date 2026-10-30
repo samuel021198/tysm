@@ -81,4 +81,24 @@ const profile = readFileSync(new URL("./profile.ts", import.meta.url), "utf8");
 assert(profile.includes("SHOP_INVENTORY_STATUSES") && profile.includes("reserved: Boolean(row.binLockOrderId)"), "own 商品 count is the shop list; 已保留 is the hold");
 assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }'), "visitors still load public 在售");
 
+const store = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
+assert(
+  store.includes("<NameLine") && store.includes("verificationTier={seller.verificationTier}") && store.includes("rating={rating}"),
+  "the store header is shop name, pill, then score",
+);
+assert(
+  store.includes("本店推廣") && store.includes("promoted.length > 0") && store.includes("overflow-x-auto"),
+  "本店推廣 is a horizontal row only when that seller has promoted listings",
+);
+assert(
+  store.includes("grid-cols-2") && store.includes("<PromoPill") && store.includes("最後 1 件") && store.includes("quantityAvailable === 1") && !store.includes('className="feed"'),
+  "inventory stays a 2-column grid with the promo pill and a last-one label",
+);
+assert(
+  !store.includes("最近瀏覽") && !store.includes("FollowRail") && !store.includes("SearchBox") && !store.includes("新上架") && !store.includes("<ProfileBoard"),
+  "the store page has no recent row, following rail, search, mall chips, or profile tabs",
+);
+assert(store.includes("publicCardSelect") && !store.includes("reservePrice"), "the store grid uses the public select and leaves the reserve out");
+assert(store.includes("暫未有貨品。") && !store.includes("上架第一件"), "empty stock is one short line");
+
 console.log("shop-inventory.test.ts ok");
