@@ -34,6 +34,7 @@ import {
   openDispute,
 } from "@/lib/orders";
 import { prisma } from "@/lib/db";
+import { publishFlash } from "@/lib/promo";
 
 async function viewer(next: string) {
   const user = await getViewer();
@@ -54,8 +55,12 @@ export async function saveListingAction(_prev: { error?: string } | null, formDa
   revalidatePath("/me");
   revalidatePath(`/listing/${result.id}`);
   const ok = input.intent === "draft" ? "draft" : input.intent === "schedule" ? "scheduled" : "published";
-  if (formData.get("alsoPost") === "on" && result.postId) redirect(`/post/${result.postId}?ok=posted`);
-  redirect(`/listing/${result.id}?ok=${ok}`);
+  const flash = publishFlash(ok, result.charged);
+  if (flash === "live") {
+    await prisma.user.updateMany({ where: { id: user.id, promoToast: "spend" }, data: { promoToast: null } });
+  }
+  if (formData.get("alsoPost") === "on" && result.postId) redirect(`/post/${result.postId}?ok=${flash === "live" ? "live" : "posted"}`);
+  redirect(`/listing/${result.id}?ok=${flash}`);
 }
 
 export async function unlistAction(formData: FormData) {

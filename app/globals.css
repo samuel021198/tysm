@@ -285,6 +285,50 @@ svg {
   }
 }
 
+@keyframes promo-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  85% {
+    transform: translateY(-2px);
+  }
+}
+
+.promo-bounce {
+  animation: promo-bounce 400ms ease-out 1;
+}
+
+@keyframes promo-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.promo-pop {
+  display: inline-block;
+  animation: promo-pop 400ms ease-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-bounce,
+  .promo-pop {
+    animation: none;
+  }
+}
+
 .chips {
   display: flex;
   gap: 0.35rem;

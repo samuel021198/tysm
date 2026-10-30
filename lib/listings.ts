@@ -286,6 +286,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
   }
 
   let savedId: string;
+  let charged = false;
   try {
     savedId = await prisma.$transaction(async (tx) => {
       const promo = await commitPromo(tx, {
@@ -296,6 +297,7 @@ export async function saveListing(userId: string, input: ListingInput, listingId
         promoDay: listing?.promoDay ?? null,
         now,
       });
+      charged = promo.charged;
       if (!listing) {
         const created = await tx.listing.create({
           data: {
@@ -336,10 +338,10 @@ export async function saveListing(userId: string, input: ListingInput, listingId
     if (error instanceof PromoShortError) return { ok: false as const, error: "tokens" };
     throw error;
   }
-  return done(savedId, userId, collectionItemId);
+  return done(savedId, userId, collectionItemId, charged);
 }
 
-async function done(id: string, userId: string, collectionItemId?: string) {
+async function done(id: string, userId: string, collectionItemId?: string, charged = false) {
   if (collectionItemId) {
     await prisma.collectionItem.updateMany({
       where: { id: collectionItemId, ownerId: userId, OR: [{ listingId: null }, { listingId: id }] },
@@ -347,7 +349,7 @@ async function done(id: string, userId: string, collectionItemId?: string) {
     });
   }
   const synced = await syncListingInventory(id);
-  return { ok: true as const, id, postId: synced.postId };
+  return { ok: true as const, id, postId: synced.postId, charged };
 }
 
 export async function unlistListing(userId: string, listingId: string, asAdmin = false) {

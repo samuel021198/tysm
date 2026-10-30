@@ -5,6 +5,7 @@ import Link from "next/link";
 import { tx, type Locale } from "@/lib/i18n";
 import { mapsSearchUrl, profileLinkLabel } from "@/lib/profile-edit";
 import { BioText } from "./bio-text";
+import { Icon } from "./icons";
 import { ProfileTabLink } from "./profile-tab-link";
 import { TopicChips } from "./topic-chips";
 
@@ -200,7 +201,10 @@ export function ProfileHeader({
       </div>
       {self && tokenBalance != null ? (
         <p id="promo" className="text-sm leading-snug">
-          <span className="font-semibold">Token {tokenBalance}</span>
+          <span className="inline-flex items-center gap-1.5 font-semibold">
+            <Icon name="ticket" className="promo-bounce h-[22px] w-[22px]" />
+            {tokenBalance}
+          </span>
           <span className="mt-1 block text-[11px] font-normal text-muted">{tx(locale, `＝可推廣 ${tokenBalance} 日`, `${tokenBalance} promo days`)}</span>
         </p>
       ) : null}
