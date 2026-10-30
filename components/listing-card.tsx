@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { toggleFavorite } from "@/actions/social";
 import { conditionLabel } from "@/lib/rules";
-import { formatHkd, formatHKT } from "@/lib/format";
+import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { shopDisplayCents } from "@/lib/shop-inventory";
+import { Countdown } from "./countdown";
 import { Icon } from "./icons";
 import { Sparkline } from "./sparkline";
 
@@ -69,25 +70,28 @@ export function ListingCard({
         </form>
       </div>
       <div className="flex flex-1 flex-col gap-1 px-2.5 pb-2.5 pt-2">
-        <Link href={`/listing/${listing.id}`} className="flex flex-1 flex-col gap-1">
-          <h2 className="line-clamp-2 min-h-[2.5em] text-sm font-semibold leading-snug">{listing.title}</h2>
-          <p className="flex items-center gap-1.5">
-            <span className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</span>
-            {auction ? (
-              <span className="inline-flex h-5 items-center gap-1 rounded-full bg-accent/10 px-2 text-[11px] font-semibold leading-none text-link">
-                <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
-                {tx(locale, "拍賣", "Auction")}
-              </span>
-            ) : null}
-          </p>
-          {series && series.length ? <PriceDelta locale={locale} amount={amount} series={series} /> : null}
-          <p className="mt-auto truncate text-xs leading-4 text-muted">
-            {[
-              sale,
-              followed ? tx(locale, "關注中", "Following") : "",
-              live && listing.auctionEndsAt ? formatHKT(listing.auctionEndsAt, locale, false) : listing.seller.nickname,
-            ].filter(Boolean).join(" · ")}
-          </p>
+        <Link href={`/listing/${listing.id}`} className="line-clamp-2 min-h-[2.5em] text-sm font-semibold leading-snug">
+          <h2>{listing.title}</h2>
+        </Link>
+        <p className="flex items-center gap-1.5">
+          <Link href={`/listing/${listing.id}`} className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</Link>
+          {auction ? (
+            <Link href="/auction" className="inline-flex h-5 items-center gap-1 rounded-full bg-accent/10 px-2 text-[11px] font-semibold leading-none text-link">
+              <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+              {tx(locale, "拍賣", "Auction")}
+            </Link>
+          ) : null}
+        </p>
+        {live && listing.auctionEndsAt ? (
+          <p className="text-[11px] font-medium text-muted"><Countdown endsAt={listing.auctionEndsAt.toISOString()} locale={locale} /></p>
+        ) : null}
+        {series && series.length ? <PriceDelta locale={locale} amount={amount} series={series} /> : null}
+        <Link href={`/listing/${listing.id}`} className="mt-auto truncate text-xs leading-4 text-muted">
+          {[
+            sale,
+            followed ? tx(locale, "關注中", "Following") : "",
+            listing.seller.nickname,
+          ].filter(Boolean).join(" · ")}
         </Link>
       </div>
     </article>

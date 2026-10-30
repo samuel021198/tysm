@@ -12,18 +12,16 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   if (!viewer) {
     return (
-      <div className="mx-auto grid max-w-3xl gap-3 pb-24 md:pb-0">
+      <div className="mx-auto grid max-w-3xl gap-3 pb-[calc(var(--tab-h)+1rem)] md:pb-0">
         <p className="px-1 text-sm text-muted">{tx(prefs.locale, "登入後先睇到你的個人頁。", "Log in to see your profile.")}</p>
-        <div className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card px-3 py-2 md:static md:border-0 md:bg-transparent md:px-0">
-          <Link href="/login?next=/me" className="btn btn-primary w-full">{tx(prefs.locale, "登入", "Log in")}</Link>
-        </div>
+        <Link href="/login?next=/me" className="btn btn-primary w-full md:w-auto">{tx(prefs.locale, "登入", "Log in")}</Link>
       </div>
     );
   }
   const board = await profileContent(viewer.id, viewer.id);
   const locale = prefs.locale;
   return (
-    <div className="mx-auto grid max-w-3xl gap-3 pb-20 md:pb-0">
+    <div className="mx-auto grid max-w-3xl gap-3 pb-[calc(var(--tab-h)+1rem)] md:pb-0">
       <Flash locale={locale} ok={sp.ok} err={sp.err} />
       <ProfileHeader
         locale={locale}
@@ -61,7 +59,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           viewerId={viewer.id}
         />
       </div>
-      <form action={logout} className="fixed inset-x-0 bottom-[var(--tab-h)] z-30 border-t border-line bg-card px-3 py-2 md:hidden">
+      <form action={logout} className="md:hidden">
         <button className="btn btn-ghost w-full">{tx(locale, "登出", "Log out")}</button>
       </form>
     </div>

@@ -23,6 +23,7 @@ export function OfferSheet({
   persisted,
   prefill = null,
   priceOnly = false,
+  submitLabel,
   onAcked,
   onClose,
 }: {
@@ -38,6 +39,8 @@ export function OfferSheet({
   prefill?: { priceCents: number; note: string } | null;
   /** Listing and chat 議價. Price only; the + menu keeps the note. */
   priceOnly?: boolean;
+  /** Overrides the submit label. A counter sends with 送出. */
+  submitLabel?: string;
   onAcked: () => void;
   onClose: () => void;
 }) {
@@ -122,6 +125,7 @@ export function OfferSheet({
                 aria-label={priceOnly ? "價錢" : tx(locale, "最終價錢", "Final price")}
               />
             </label>
+            {priceOnly && prefill?.note ? <input type="hidden" name="note" value={prefill.note} /> : null}
             {priceOnly ? null : (
               <label className="grid gap-1 text-xs font-semibold">
                 {tx(locale, "交收備註", "Handover note")}
@@ -136,7 +140,7 @@ export function OfferSheet({
                 />
               </label>
             )}
-            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{priceOnly ? "議價" : tx(locale, "議價", "Offer")}</button>
+            <button className="btn btn-primary w-full disabled:opacity-40" disabled={locked}>{submitLabel ?? (priceOnly ? "議價" : tx(locale, "議價", "Offer"))}</button>
           </form>
         ) : null}
       </div>
@@ -152,6 +156,9 @@ export function ReviseOfferButton({
   priceCents,
   note,
   riskAcked,
+  label,
+  priceOnly = false,
+  submitLabel,
 }: {
   locale: Locale;
   threadId: string;
@@ -159,6 +166,10 @@ export function ReviseOfferButton({
   priceCents: number;
   note: string;
   riskAcked: boolean;
+  /** Seller counter. Buyer re-bid keeps 改價回覆. */
+  label?: string;
+  priceOnly?: boolean;
+  submitLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [acked, setAcked] = useState(riskAcked);
@@ -166,7 +177,7 @@ export function ReviseOfferButton({
   return (
     <>
       <button type="button" className="btn btn-ghost w-full" onClick={() => setOpen(true)}>
-        {tx(locale, "改價回覆", "Revise price")}
+        {label ?? tx(locale, "改價回覆", "Revise price")}
       </button>
       {open ? (
         <OfferSheet
@@ -177,6 +188,8 @@ export function ReviseOfferButton({
           acked={acked}
           persisted={riskAcked}
           prefill={{ priceCents, note }}
+          priceOnly={priceOnly}
+          submitLabel={submitLabel}
           onAcked={() => setAcked(true)}
           onClose={() => setOpen(false)}
         />

@@ -114,7 +114,7 @@ const board = readFileSync(new URL("../components/profile-board.tsx", import.met
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
 assert(tab.includes('loggedIn ? "/me" : "/login"'), "profile tab stays on the public profile");
 assert(me.includes("<ProfileHeader") && me.includes("self") && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles"), "/me is header plus board");
-assert(me.includes("logout") && me.includes('tx(locale, "登出", "Log out")') && me.includes('tx(prefs.locale, "登入", "Log in")') && me.includes("md:hidden") && me.includes('bottom-[var(--tab-h)]'), "mobile /me has 登出 when logged in and 登入 when logged out");
+assert(me.includes("logout") && me.includes('tx(locale, "登出", "Log out")') && me.includes('tx(prefs.locale, "登入", "Log in")') && me.includes("md:hidden") && me.includes("pb-[calc(var(--tab-h)+1rem)]") && !me.includes("fixed inset-x-0 bottom-[var(--tab-h)]"), "mobile /me keeps 登出 in flow, with tab-bar padding under it");
 assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
 assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
 assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");

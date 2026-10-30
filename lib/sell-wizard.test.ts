@@ -174,12 +174,16 @@ assert(
   "a 3-day auction does not need a custom end",
 );
 assert(
-  wizardPublishIssues(card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 14, auctionEndsAt: null }), "tcg", now).length === 0,
-  "a 14-day auction is allowed",
+  wizardPublishIssues(card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 14, auctionEndsAt: null }), "tcg", now).includes("auction_days"),
+  "a 14-day auction is not a chip length",
+);
+assert(
+  wizardStepIssues(0, card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 2, auctionEndsAt: null }), "tcg", now).includes("auction_days"),
+  "2 days is not 1, 3, 5, or 7",
 );
 assert(
   wizardStepIssues(0, card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 15, auctionEndsAt: null }), "tcg", now).includes("auction_days"),
-  "duration above 14 days is rejected",
+  "duration outside 1, 3, 5, or 7 is rejected",
 );
 assert(
   wizardStepIssues(0, card({ saleType: "AUCTION", priceCents: null, startPriceCents: 5000, auctionDays: 3, reserveCents: 1000, auctionEndsAt: null }), "tcg", now).includes("reserve"),

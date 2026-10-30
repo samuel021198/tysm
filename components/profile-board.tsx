@@ -9,6 +9,7 @@ import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
 import { shopDisplayCents } from "@/lib/shop-inventory";
 import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
+import { Countdown } from "./countdown";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
 import { PROFILE_TAB_EVENT } from "./profile-tab-link";
@@ -24,6 +25,7 @@ type Sale = {
   startPrice: number | null;
   currentBid: number | null;
   auctionSettled: boolean;
+  auctionEndsAt?: string | null;
   photos: { url: string }[];
 };
 
@@ -273,17 +275,18 @@ export function ProfileBoard({
             const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
             const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
             return (
-              <li key={listing.id} className="min-w-0">
+              <li key={listing.id} className="relative min-w-0">
                 <Link href={`/listing/${listing.id}`} aria-label={label} className="relative block">
                   <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-                  {auction ? (
-                    <span className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-full bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
-                      <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
-                      {tx(locale, "拍賣", "Auction")}
-                    </span>
-                  ) : null}
                 </Link>
+                {auction ? (
+                  <Link href="/auction" className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
+                    <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+                    {tx(locale, "拍賣", "Auction")}
+                  </Link>
+                ) : null}
                 {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
+                {auction && listing.auctionEndsAt ? <p className="truncate px-1 text-[10px] text-muted"><Countdown endsAt={listing.auctionEndsAt} locale={locale} /></p> : null}
               </li>
             );
           })}

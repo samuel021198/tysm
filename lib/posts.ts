@@ -117,12 +117,23 @@ function postPrice(listing: (AskListing & { id: string }) | null): {
 }
 
 export function cardDisplayName(parts: {
+  catalogTitle?: string | null;
   cardName?: string | null;
   personName?: string | null;
   title?: string | null;
   body?: string | null;
 }): string {
-  return (parts.cardName || parts.personName || parts.title || parts.body || "").trim();
+  for (const part of [parts.catalogTitle, parts.cardName, parts.personName, parts.title, parts.body]) {
+    const text = part?.trim();
+    if (text) return text;
+  }
+  return "";
+}
+
+function auctionEndStamp(value: Date | string | null | undefined, live: boolean): string | null {
+  if (!live || value == null || value === "") return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
 export type PostCardModel = {
@@ -138,6 +149,8 @@ export type PostCardModel = {
   priceCents: number | null;
   /** Live auction. The cents are the current bid, or the start price when nobody has bid. */
   auction: boolean;
+  /** ISO end, only while the auction is still the selling clock. */
+  auctionEndsAt: string | null;
   priceHref: string | null;
   likeCount: number;
   commentCount: number;
@@ -232,6 +245,7 @@ export function toPostCard(input: {
       title: string;
       catalogCardId?: string | null;
       updatedAt?: Date | string | null;
+      auctionEndsAt?: Date | string | null;
     });
   });
   likeCount: number;
@@ -262,6 +276,7 @@ export function toPostCard(input: {
     condition: input.item ? conditionLabel(input.item) : null,
     priceCents: price.cents,
     auction: price.auction,
+    auctionEndsAt: auctionEndStamp(listing?.auctionEndsAt, price.auction),
     // Feed taps stay on the post. The listing opens from 睇貨頁.
     priceHref: null,
     likeCount: input.likeCount,
@@ -299,6 +314,7 @@ export function listingSuggestionCard(input: {
     seller: { id: string; nickname: string; avatarUrl?: string | null };
     createdAt?: Date | string | null;
     updatedAt?: Date | string | null;
+    auctionEndsAt?: Date | string | null;
   };
   saved: boolean;
 }): PostCardModel {
@@ -321,6 +337,7 @@ export function listingSuggestionCard(input: {
     condition: conditionLabel(listing),
     priceCents: price.cents,
     auction: price.auction,
+    auctionEndsAt: auctionEndStamp(listing.auctionEndsAt, price.auction),
     priceHref: postId ? null : price.href,
     likeCount: 0,
     commentCount: 0,

@@ -52,6 +52,8 @@ assert(
 assert(cardDisplayName({ cardName: "噴火龍", title: "其他" }) === "噴火龍", "card name wins");
 assert(cardDisplayName({ personName: "美斯", title: "卡" }) === "美斯", "person name is the card");
 assert(cardDisplayName({ body: "  今日收卡  " }) === "今日收卡", "standalone post uses the caption");
+assert(cardDisplayName({ cardName: "  ", title: "噴火龍" }) === "噴火龍", "a blank card name falls through to the filled title");
+assert(cardDisplayName({ catalogTitle: "   ", cardName: "", title: "已填標題" }) === "已填標題", "whitespace is not a card name");
 
 const card = toPostCard({
   postId: "p1",
@@ -245,6 +247,7 @@ const auction = toPostCard({
       cardName: "皮卡丘",
       personName: null,
       title: "拍賣卡",
+      auctionEndsAt: "2026-11-02T00:00:00.000Z",
     },
   },
   likeCount: 0,
@@ -252,7 +255,7 @@ const auction = toPostCard({
   liked: false,
   saved: false,
 });
-assert(auction.priceCents === 5000 && auction.auction && auction.priceHref === null && auction.href === "/post/p3", "an auction on a post stays on the post and shows the bid");
+assert(auction.priceCents === 5000 && auction.auction && auction.auctionEndsAt === "2026-11-02T00:00:00.000Z" && auction.priceHref === null && auction.href === "/post/p3", "an auction on a post stays on the post, shows the bid, and keeps the end");
 assert(auction.buy?.kind === "contact" && auction.buy.listingId === "auc1", "an auction that cannot be carted contacts the seller");
 const mixed = toPostCard({
   postId: "p4",

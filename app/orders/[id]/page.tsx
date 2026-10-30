@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { dealPhase, threadIdForOrder } from "@/lib/deal-phase";
+import { dealPhase, readDealMeta, threadIdForOrder } from "@/lib/deal-phase";
 import { meetupNote, sellerPayment } from "@/lib/deals";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -47,6 +47,24 @@ export default async function OrderPage({
     threads.map((row) => ({ id: row.id, createdAt: row.createdAt.getTime() })),
   );
   const note = meetupNote(order.fulfillment, order.items[0]?.listing ?? null);
+  const pendingOffer = readDealMeta(order.fulfillment).offer;
+  const liveOffer = pendingOffer?.status === "PENDING" ? pendingOffer : null;
+  const reviseItem = order.items[0];
+  const revise =
+    liveOffer && liveOffer.by !== viewer.id && reviseItem && threadId
+      ? {
+          threadId,
+          riskAcked: Boolean(viewer.p2pRiskAckAt),
+          priceCents: liveOffer.amount,
+          note: liveOffer.note,
+          listing: {
+            id: reviseItem.listingId,
+            title: reviseItem.title,
+            priceCents: reviseItem.unitPrice,
+            cover: null,
+          },
+        }
+      : null;
 
   return (
     <div className="grid gap-4">
@@ -58,6 +76,8 @@ export default async function OrderPage({
           viewerId={viewer.id}
           next={`/orders/${id}`}
           payment={sellerPayment(order.seller)}
+          names={{ buyer: order.buyer.nickname, seller: order.seller.nickname }}
+          revise={revise}
           order={order}
         />
       ) : null}

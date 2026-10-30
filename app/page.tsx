@@ -44,6 +44,7 @@ export default async function HomePage({
       currentBid: true,
       startPrice: true,
       auctionSettled: true,
+      auctionEndsAt: true,
       catalogCardId: true,
       createdAt: true,
       updatedAt: true,

@@ -13,6 +13,7 @@ import { followedSellerIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { loadComps } from "@/lib/comps";
 import { publicMinimumBid } from "@/lib/auction";
+import { cardDisplayName } from "@/lib/posts";
 import { conditionLabel } from "@/lib/rules";
 import { hasStoreAddress, offeredMethods, onTimePercent, shipMethodLabel } from "@/lib/shipping";
 import { Flash } from "@/components/shell";
@@ -174,7 +175,7 @@ export default async function ListingPage({
           <ul className="mt-2 grid gap-1 text-sm text-muted">
             {listing.items.map((item) => (
               <li key={item.id}>
-                {item.catalogTitle || item.cardName || tx(locale, "未填卡名", "No card name")}
+                {cardDisplayName({ catalogTitle: item.catalogTitle, cardName: item.cardName, title: listing.title }) || tx(locale, "未填卡名", "No card name")}
                 {listing.items.length > 1 && item.price != null ? ` · ${formatHkd(item.price, locale)}` : ""}
                 {` · ${conditionLabel(item)}`}
               </li>
@@ -340,7 +341,7 @@ export default async function ListingPage({
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={
-            listing.reservePrice != null && (live || owner)
+            owner && listing.reservePrice != null
               ? tx(locale, `底價 ${formatHkd(listing.reservePrice, locale)}`, `Reserve ${formatHkd(listing.reservePrice, locale)}`)
               : owner && listing.auctionPassed
                 ? tx(locale, "未達底價或無人出價。可以改做固定價再賣。", "Reserve was not met, or there were no bids. Relist at a fixed price.")

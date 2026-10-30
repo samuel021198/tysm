@@ -135,7 +135,7 @@ assert(bar.includes("offerClosed") && bar.includes("disabled={offerClosed}") && 
 assert(!bar.includes("出價") && !bar.includes("聯絡買家") && !bar.includes("瀏覽賣家") && !bar.includes("canOffer") && !bar.includes("還價"), "the pinned card does not rename the button or add a shop tab");
 assert(page.includes("offerClosed={offersClosed"), "the thread greys 議價 from the listing hold");
 assert(sheet.includes('priceOnly ? "議價"') && sheet.includes("priceOnly ? null") && sheet.includes("價錢"), "the 議價 sheet asks for a price and skips the note");
-assert(!sheet.includes("還價") && !deal.includes("瀏覽賣家"), "this wave does not add a counter-offer or a seller tab");
+assert(!sheet.includes("還價") && deal.includes('tx(locale, "還價", "Counter")') && deal.includes('tx(locale, "送出", "Send")') && deal.includes("priceOnly={seller}") && !deal.includes("瀏覽賣家"), "seller 還價 reuses the amount sheet; no new seller tab");
 const deals = readFileSync(new URL("../lib/deals.ts", import.meta.url), "utf8");
 const opened = deals.slice(deals.indexOf("export async function openHandover"), deals.indexOf("export async function attachDealThread"));
 assert(!opened.includes("input.ack") && !opened.includes('error: "terms"'), "opening a handover is not gated on a post checkbox");
