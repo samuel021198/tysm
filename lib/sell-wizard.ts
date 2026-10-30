@@ -72,6 +72,8 @@ export type ListingInput = {
   stockType?: "IN_STOCK" | "PREORDER";
   shipWithinDays?: number | null;
   preorderShipDate?: Date | null;
+  /** Absent on CSV and locked edits, which leave the existing flag alone. */
+  promote?: boolean;
 };
 
 export const RAW: RawGrade[] = ["A", "B", "C", "D"];
@@ -204,6 +206,7 @@ const STEP_OF: Record<string, number> = {
   both_price: 0,
   offer: 0,
   qty: 0,
+  tokens: 0,
   card_price: 1,
   grade: 1,
   category: 1,
@@ -260,6 +263,7 @@ export function wizardFocusField(code: string, input?: ListingInput | null): str
   if (code === "category") return "categoryId";
   if (code === "video") return "videoUrl";
   if (code === "price" || code === "both_price") return "price";
+  if (code === "tokens") return "promote";
   if (code === "card_price") return "cardPrice";
   if (code === "start") return "startPrice";
   if (code === "reserve") return "reserve";
@@ -431,5 +435,6 @@ export function parseListingForm(formData: FormData): ListingInput | null {
     stockType,
     shipWithinDays: SHIP_WITHIN.includes(within as (typeof SHIP_WITHIN)[number]) ? within : null,
     preorderShipDate: fromHkDate(String(formData.get("preorderShipDate") || "")),
+    promote: formData.has("promote") ? formData.get("promote") === "on" : undefined,
   };
 }

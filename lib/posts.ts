@@ -149,6 +149,8 @@ export type PostCardModel = {
   cardName: string;
   condition: string | null;
   priceCents: number | null;
+  /** Live 推廣 pill. False when the listing is not promoted. */
+  promoted: boolean;
   /** Live auction. The cents are the current bid, or the start price when nobody has bid. */
   auction: boolean;
   /** ISO end, only while the auction is still the selling clock. */
@@ -248,6 +250,7 @@ export function toPostCard(input: {
       catalogCardId?: string | null;
       updatedAt?: Date | string | null;
       auctionEndsAt?: Date | string | null;
+      promoted?: boolean;
     });
   });
   likeCount: number;
@@ -277,6 +280,7 @@ export function toPostCard(input: {
     cardName,
     condition: input.item ? conditionLabel(input.item) : null,
     priceCents: price.cents,
+    promoted: Boolean(listing?.promoted),
     auction: price.auction,
     auctionEndsAt: auctionEndStamp(listing?.auctionEndsAt, price.auction),
     // Feed taps stay on the post. The listing opens from 睇貨頁.
@@ -317,6 +321,7 @@ export function listingSuggestionCard(input: {
     createdAt?: Date | string | null;
     updatedAt?: Date | string | null;
     auctionEndsAt?: Date | string | null;
+    promoted?: boolean;
   };
   saved: boolean;
 }): PostCardModel {
@@ -338,6 +343,7 @@ export function listingSuggestionCard(input: {
     cardName: cardDisplayName({ cardName: listing.cardName, personName: listing.personName, title: listing.title }),
     condition: conditionLabel(listing),
     priceCents: price.cents,
+    promoted: Boolean(listing.promoted),
     auction: price.auction,
     auctionEndsAt: auctionEndStamp(listing.auctionEndsAt, price.auction),
     priceHref: postId ? null : price.href,

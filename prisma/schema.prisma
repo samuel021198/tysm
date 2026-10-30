@@ -189,6 +189,10 @@ model User {
   notifyMessages     Boolean   @default(true)
   /// Opt-in. Category toggles still apply; this only queues the email channel.
   notifyEmail        Boolean   @default(false)
+  /// Soft-launch promo balance. Null until the one-time grant of 7. Platform points, not a wallet.
+  promoBalance       Int?
+  /// Pending tip: "earn" or "spend". Cleared when shown.
+  promoToast         String?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 
@@ -431,6 +435,10 @@ model Listing {
   preorderShipDate  DateTime?
   viewCount         Int            @default(0)
   favoriteCount     Int            @default(0)
+  /// Buyer-facing 推廣 pill. One token per Hong Kong day while this listing is live.
+  promoted          Boolean        @default(false)
+  /// Last Hong Kong calendar day (YYYY-MM-DD) charged for this listing.
+  promoDay          String?
   catalogCardId     String?
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
@@ -455,6 +463,7 @@ model Listing {
   @@index([categoryId])
   @@index([auctionEndsAt])
   @@index([catalogCardId])
+  @@index([promoted, promoDay])
 }
 
 /// One card inside a listing. The buyer-facing title stays on Listing.title.

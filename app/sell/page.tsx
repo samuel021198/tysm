@@ -240,6 +240,7 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
         initial={initialWithCollection}
         preferAuction={sp.sale === "auction"}
+        promoBalance={viewer.promoBalance ?? 0}
       />
     </div>
   );

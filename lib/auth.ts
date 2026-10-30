@@ -4,6 +4,7 @@ import { cache } from "react";
 import type { User } from "@prisma/client";
 import { prisma } from "./db";
 import { normalizePhone } from "./format";
+import { ensurePromoGrant } from "./promo";
 import type { Locale } from "./i18n";
 
 const SESSION = "tysm_session";
@@ -60,7 +61,7 @@ export const getViewer = cache(async (): Promise<User | null> => {
   if (!id) return null;
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user) return null;
-  return promoteAdmin(user);
+  return ensurePromoGrant(await promoteAdmin(user));
 });
 
 export async function setSessionCookie(userId: string) {

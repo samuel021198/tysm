@@ -10,6 +10,7 @@ import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
+import { PromoPill } from "@/components/promo-pill";
 import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
 export const metadata = { title: "商店" };
@@ -49,6 +50,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
           currentBid: true,
           auctionEndsAt: true,
           auctionSettled: true,
+          promoted: true,
           seller: { select: { id: true, nickname: true, storeName: true } },
           photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
         },
@@ -113,6 +115,7 @@ function MallCard({
     currentBid: number | null;
     auctionEndsAt: Date | null;
     auctionSettled: boolean;
+    promoted: boolean;
     seller: { nickname: string; storeName: string | null };
     photos: { url: string }[];
   };
@@ -127,7 +130,10 @@ function MallCard({
       </Link>
       <span className="grid gap-1 px-2.5 py-2">
         <Link href={`/listing/${listing.id}`} className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</Link>
-        <Link href={`/listing/${listing.id}`} className="price text-base leading-none">{formatHkd(amount, locale)}</Link>
+        <span className="flex items-center gap-1.5">
+          <Link href={`/listing/${listing.id}`} className="price text-base leading-none">{formatHkd(amount, locale)}</Link>
+          <PromoPill promoted={listing.promoted} />
+        </span>
         {auction ? (
           <Link href="/auction" className="inline-flex w-fit items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-link">
             <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />

@@ -14,6 +14,7 @@ import { Countdown } from "./countdown";
 import { Icon } from "./icons";
 import { PostMenu } from "./post-menu";
 import { PROFILE_TAB_EVENT } from "./profile-tab-link";
+import { PromoPill } from "./promo-pill";
 import { ShopInventory, type ShopInventoryRow } from "./shop-inventory";
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
@@ -27,6 +28,7 @@ type Sale = {
   currentBid: number | null;
   auctionSettled: boolean;
   auctionEndsAt?: string | null;
+  promoted?: boolean;
   photos: { url: string }[];
 };
 
@@ -288,7 +290,12 @@ export function ProfileBoard({
                     {tx(locale, "拍賣", "Auction")}
                   </Link>
                 ) : null}
-                {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
+                {amount != null ? (
+                  <p className="flex items-center gap-1 px-1 py-1 text-[10px] font-semibold leading-none">
+                    <span className="truncate">{formatHkd(amount, locale)}</span>
+                    <PromoPill promoted={listing.promoted} />
+                  </p>
+                ) : null}
                 {auction && listing.auctionEndsAt ? <p className="truncate px-1 text-[10px] text-muted"><Countdown endsAt={listing.auctionEndsAt} locale={locale} /></p> : null}
               </li>
             );

@@ -4,6 +4,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { centsToInput, toHkDate, toHkInput } from "@/lib/format";
 import { formatGradeValue } from "@/lib/rules";
 import { SellForm } from "@/components/sell-form";
+import { hkDay } from "@/lib/promo";
 
 export default async function EditListingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -64,6 +65,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
           publishAt: listing.publishAt ? toHkInput(listing.publishAt) : "",
           photos: listing.photos.map((photo) => ({ url: photo.url, role: photo.role })),
           locked: proxies + events > 0,
+          promoted: listing.promoted,
           catalogCardId: listing.catalogCardId || "",
           stockType: listing.stockType,
           shipWithinDays: listing.shipWithinDays,
@@ -91,6 +93,8 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
         }}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
+        promoBalance={viewer.promoBalance ?? 0}
+        promoPaidToday={listing.promoDay === hkDay()}
       />
     </div>
   );

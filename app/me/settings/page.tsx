@@ -9,6 +9,7 @@ export default async function MeSettingsPage() {
   const locale = prefs.locale;
   const rows: [string, string, boolean?][] = [
     ["/me/settings/notifications", tx(locale, "通知", "Notifications")],
+    ["/me#promo", tx(locale, "推廣 token", "Promo tokens")],
     ["/me/settings/account", tx(locale, "帳號與安全", "Account and security")],
     ["/me/settings/privacy", tx(locale, "隱私", "Privacy")],
     ["/me/settings/language", tx(locale, "語言", "Language")],

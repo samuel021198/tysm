@@ -29,6 +29,7 @@ export default async function AddPage({ searchParams }: { searchParams: Promise<
         categories={categories.map((cat) => ({ id: cat.id, nameZh: cat.nameZh, nameEn: cat.nameEn, groupKey: cat.groupKey || "tcg", slug: cat.slug }))}
         storeReady={Boolean(viewer.storeDistrict?.trim() && viewer.storeLine1?.trim())}
         storeLabel={[viewer.storeName, viewer.storeDistrict, viewer.storeLine1].filter(Boolean).join(" ")}
+        promoBalance={viewer.promoBalance ?? 0}
       />
     </div>
   );

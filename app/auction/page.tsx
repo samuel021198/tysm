@@ -9,6 +9,7 @@ import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
+import { PromoPill } from "@/components/promo-pill";
 
 export const metadata = { title: "拍賣" };
 
@@ -41,6 +42,7 @@ export default async function AuctionPage() {
       startPrice: true,
       currentBid: true,
       auctionEndsAt: true,
+      promoted: true,
       seller: { select: { nickname: true, storeName: true } },
       photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
     },
@@ -95,6 +97,7 @@ function AuctionCard({
     startPrice: number | null;
     currentBid: number | null;
     auctionEndsAt: Date | null;
+    promoted: boolean;
     seller: { nickname: string; storeName: string | null };
     photos: { url: string }[];
   };
@@ -110,6 +113,7 @@ function AuctionCard({
         <Link href={`/listing/${listing.id}`} className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</Link>
         <span className="flex items-center gap-1.5">
           <Link href={`/listing/${listing.id}`} className="price text-base leading-none">{formatHkd(amount, locale)}</Link>
+          <PromoPill promoted={listing.promoted} />
           <Link href="/auction" className="inline-flex w-fit items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-link">
             <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
             {tx(locale, "拍賣", "Auction")}

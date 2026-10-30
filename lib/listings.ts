@@ -9,6 +9,7 @@ import { catalogSuggestion, type CatalogSuggestCard } from "./catalog-suggest";
 import { syncListingInventory } from "./inventory";
 import { shopMenu, shopPill, shopPriceEditable } from "./shop-inventory";
 import { hasStoreAddress } from "./shipping";
+import { PromoShortError, commitPromo } from "./promo";
 import { GRADERS, PHOTO_MAX, RAW, listingCatalogId, parseListingForm, validateListing, type CardItemInput, type ListingInput, type PhotoInput } from "./sell-wizard";
 
 export type { ListingInput, PhotoInput };
@@ -279,44 +280,63 @@ export async function saveListing(userId: string, input: ListingInput, listingId
     return { ok: false as const, error: "photo_url" };
   }
 
-  if (!listing) {
-    const created = await prisma.listing.create({
-      data: {
-        sellerId: userId,
-        categoryId: input.categoryId,
-        ...rest,
-        quantityAvailable: rest.quantity,
-        photos: { create: photos.map((photo, index) => ({ url: photo.url, role: photo.role, position: index })) },
-        ...(items ? { items: { create: itemRows(items) } } : {}),
-      },
-    });
-    return done(created.id, userId, collectionItemId);
+  if (listing) {
+    const reserved = listing.quantity - listing.quantityAvailable;
+    if (data.quantity < reserved) return { ok: false as const, error: "stock" };
   }
 
-  const reserved = listing.quantity - listing.quantityAvailable;
-  if (data.quantity < reserved) return { ok: false as const, error: "stock" };
-  await prisma.$transaction([
-    prisma.listing.update({
-      where: { id: listing.id },
-      data: {
-        ...rest,
-        categoryId: input.categoryId,
-        quantityAvailable: data.quantity - reserved,
-        currentBid: rest.saleType === "BUY_NOW" ? null : listing.currentBid,
-      },
-    }),
-    prisma.listingPhoto.deleteMany({ where: { listingId: listing.id } }),
-    prisma.listingPhoto.createMany({
-      data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url.trim(), role: photo.role, position: index })),
-    }),
-    ...(items
-      ? [
-          prisma.listingItem.deleteMany({ where: { listingId: listing.id } }),
-          prisma.listingItem.createMany({ data: itemRows(items).map((row) => ({ ...row, listingId: listing.id })) }),
-        ]
-      : []),
-  ]);
-  return done(listing.id, userId, collectionItemId);
+  let savedId: string;
+  try {
+    savedId = await prisma.$transaction(async (tx) => {
+      const promo = await commitPromo(tx, {
+        userId,
+        want: filled.promote,
+        live: rest.status === "ACTIVE",
+        promoted: listing?.promoted ?? false,
+        promoDay: listing?.promoDay ?? null,
+        now,
+      });
+      if (!listing) {
+        const created = await tx.listing.create({
+          data: {
+            sellerId: userId,
+            categoryId: input.categoryId,
+            ...rest,
+            promoted: promo.promoted,
+            promoDay: promo.promoDay,
+            quantityAvailable: rest.quantity,
+            photos: { create: photos.map((photo, index) => ({ url: photo.url, role: photo.role, position: index })) },
+            ...(items ? { items: { create: itemRows(items) } } : {}),
+          },
+        });
+        return created.id;
+      }
+      await tx.listing.update({
+        where: { id: listing.id },
+        data: {
+          ...rest,
+          categoryId: input.categoryId,
+          promoted: promo.promoted,
+          promoDay: promo.promoDay,
+          quantityAvailable: data.quantity - (listing.quantity - listing.quantityAvailable),
+          currentBid: rest.saleType === "BUY_NOW" ? null : listing.currentBid,
+        },
+      });
+      await tx.listingPhoto.deleteMany({ where: { listingId: listing.id } });
+      await tx.listingPhoto.createMany({
+        data: photos.map((photo, index) => ({ listingId: listing.id, url: photo.url, role: photo.role, position: index })),
+      });
+      if (items) {
+        await tx.listingItem.deleteMany({ where: { listingId: listing.id } });
+        await tx.listingItem.createMany({ data: itemRows(items).map((row) => ({ ...row, listingId: listing.id })) });
+      }
+      return listing.id;
+    });
+  } catch (error) {
+    if (error instanceof PromoShortError) return { ok: false as const, error: "tokens" };
+    throw error;
+  }
+  return done(savedId, userId, collectionItemId);
 }
 
 async function done(id: string, userId: string, collectionItemId?: string) {

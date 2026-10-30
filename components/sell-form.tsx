@@ -2,6 +2,7 @@
 
 import { useActionState, useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 import { saveListingAction } from "@/actions/trade";
 import { DISTRICTS, hkPartsToInput, isAllowedMediaUrl } from "@/lib/format";
 import { tx, errText, type Locale } from "@/lib/i18n";
@@ -76,6 +77,7 @@ export type SellInitial = {
   publishAt: string;
   photos: Photo[];
   locked: boolean;
+  promoted?: boolean;
   catalogCardId?: string;
   collectionItemId?: string;
   cards?: SellCardInitial[];
@@ -171,6 +173,8 @@ export function SellForm({
   storeLabel = "",
   linkPost = false,
   preferAuction = false,
+  promoBalance = 0,
+  promoPaidToday = false,
 }: {
   locale: Locale;
   categories: Cat[];
@@ -181,6 +185,9 @@ export function SellForm({
   linkPost?: boolean;
   /** Opened from 拍賣專區. Any account can list. */
   preferAuction?: boolean;
+  promoBalance?: number;
+  /** Already charged for this listing today, so turning it back on does not spend again. */
+  promoPaidToday?: boolean;
 }) {
   const [state, action] = useActionState(saveListingAction, null);
   const ordered = useMemo(() => orderedCategories(categories), [categories]);
@@ -207,6 +214,8 @@ export function SellForm({
   const [publishAt, setPublishAt] = useState(initial?.publishAt || "");
   const [stockType, setStockType] = useState<"IN_STOCK" | "PREORDER">(initial?.stockType === "PREORDER" ? "PREORDER" : "IN_STOCK");
   const [shipWithin, setShipWithin] = useState(initial?.shipWithinDays === 7 || initial?.shipWithinDays === 30 ? initial.shipWithinDays : 3);
+  const [promote, setPromote] = useState(Boolean(initial?.promoted) && (promoBalance >= 1 || promoPaidToday));
+  const promoShort = promoBalance < 1 && !promoPaidToday;
   const [preorderDate, setPreorderDate] = useState(initial?.preorderShipDate || "");
   const [photos, setPhotos] = useState<Photo[]>(() => (initial?.photos || []).filter((photo) => photo.url).slice(0, PHOTO_MAX));
   const [cards, setCards] = useState<CardDraft[]>(() => cardsFromInitial(initial));
@@ -461,6 +470,7 @@ export function SellForm({
       {initial?.offersEnabled ? <input type="hidden" name="offersEnabled" value="on" /> : null}
       {initial?.offersEnabled ? <input type="hidden" name="minOffer" value={initial.minOffer} /> : null}
       {initial?.videoUrl ? <input type="hidden" name="videoUrl" value={initial.videoUrl} /> : null}
+      {!locked ? <input type="hidden" name="promote" value={promote ? "on" : "off"} /> : null}
       {locked && initial ? <LockedFields initial={initial} /> : null}
 
       {!locked ? (
@@ -586,6 +596,33 @@ export function SellForm({
             )}
           </div>
         )}
+
+        {!locked ? (
+          <div data-focus="promote" className="grid gap-1">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-medium">{tx(locale, "推廣", "Promote")}</span>
+              <button
+                type="button"
+                aria-pressed={promote}
+                aria-label={tx(locale, promote ? "關閉推廣" : "開啟推廣", promote ? "Turn promo off" : "Turn promo on")}
+                disabled={promoShort && !promote}
+                className={`h-8 rounded-full px-3 text-xs font-semibold ${promote ? "bg-accent text-white" : "bg-soft text-ink"} disabled:opacity-50`}
+                onClick={() => {
+                  if (promote) setPromote(false);
+                  else if (!promoShort) setPromote(true);
+                }}
+              >
+                {promote ? tx(locale, "開", "On") : tx(locale, "關", "Off")}
+              </button>
+            </div>
+            <p className="text-xs text-muted">{tx(locale, "消耗 1 token／日 · 示範期已送 7", "1 token per day · 7 granted for the demo")}</p>
+            {promoShort ? (
+              <p className="text-xs text-danger">
+                <Link href="/me#promo">{tx(locale, "token 不足", "Not enough tokens")}</Link>
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         <div data-wizard-jump data-focus="photos" tabIndex={-1} className="grid gap-2 outline-none">
           <div className="flex items-baseline justify-between gap-3">

@@ -16,6 +16,7 @@ import { Icon } from "./icons";
 import { PhotoStrip } from "./photo-strip";
 import { PostMenu } from "./post-menu";
 import { ShareButton } from "./share-button";
+import { PromoPill } from "./promo-pill";
 import { TopicChips } from "./topic-chips";
 
 export function PostCard({
@@ -71,6 +72,7 @@ export function PostCard({
           ) : (
             <p className="price shrink-0 text-[15px] leading-none">{priceText}</p>
           )}
+          <PromoPill promoted={post.promoted} />
           {auctionPill}
         </span>
         {sellHref ? (

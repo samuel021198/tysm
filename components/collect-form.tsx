@@ -45,6 +45,7 @@ export function CollectForm({
   phoneVerified,
   storeReady = false,
   storeLabel = "",
+  promoBalance = 0,
 }: {
   locale: Locale;
   mode: "collection" | "post";
@@ -52,6 +53,7 @@ export function CollectForm({
   phoneVerified: boolean;
   storeReady?: boolean;
   storeLabel?: string;
+  promoBalance?: number;
 }) {
   const [state, action] = useActionState(mode === "post" ? savePost : saveCollection, null);
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -165,7 +167,7 @@ export function CollectForm({
           <input type="checkbox" checked={alsoList} onChange={(event) => toggleList(event.target.checked)} className="h-6 w-6" />
         </label>
         {!phoneVerified ? <p className="text-sm text-danger">{tx(locale, "放賣要先驗證香港電話。", "Verify your Hong Kong phone before selling.")}</p> : null}
-        <SellForm key={listToken} locale={locale} categories={categories} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} />
+        <SellForm key={listToken} locale={locale} categories={categories} storeReady={storeReady} storeLabel={storeLabel} linkPost initial={initial} promoBalance={promoBalance} />
         {cropEditor}
       </div>
     );
