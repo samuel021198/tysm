@@ -32,6 +32,7 @@ import {
   nextThreadIntent,
   pinAction,
   showDealStream,
+  dealStale,
   threadEntryQuery,
   contactThreadId,
   directBuyBlocked,
@@ -45,6 +46,7 @@ import {
   readDealMeta,
   reservedByOther,
 } from "./deal-phase";
+import { DEAL_STALE_MS } from "./rules";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -129,6 +131,8 @@ assert(DIRECT_WAIT === "待賣家回覆。", "the buyer waits without a status p
 assert(![offered.text, directCopy.text, dealEventCopy("zh-HK", { kind: "sold" }).text, dealEventCopy("zh-HK", { kind: "accept" }).text, dealEventCopy("zh-HK", { kind: "decline" }).text, dealEventCopy("zh-HK", { kind: "withdraw" }).text, dealEventCopy("zh-HK", { kind: "lock" }).text, dealEventCopy("zh-HK", { kind: "handover" }).text].some((text) => text.includes("要約")), "bubbles do not say 要約");
 assert(readDealEvent(dealEventBody({ kind: "direct", amount: 10000 }))?.kind === "direct" && readDealEvent(dealEventBody({ kind: "sold" }))?.kind === "sold", "direct buy and 已售 are system lines");
 assert(!showDealStream("CHATTING", null) && showDealStream("CHATTING", "PENDING") && showDealStream("CONFIRMED", "ACCEPTED") && showDealStream("DONE", null), "議價中 waits for a submitted offer; later phases still show");
+const staleNow = new Date("2026-10-30T00:00:00Z");
+assert(dealStale("CONFIRMED", new Date(staleNow.getTime() - DEAL_STALE_MS), staleNow) && !dealStale("CHATTING", new Date(staleNow.getTime() - DEAL_STALE_MS), staleNow), "stale settle chat is 3 days after lock, not while chatting");
 assert(!intentBlocked(null, null) && !intentBlocked("CANCELLED", null) && !intentBlocked("CHATTING", null) && intentBlocked("CHATTING", "PENDING") && intentBlocked("CONFIRMED", null), "a deal blocks a new entry once there is an offer or the talk phase is over");
 const openOpts = { priced: true, closed: false, blocked: false };
 assert(nextThreadIntent(null, "offer", openOpts) === null && nextThreadIntent(null, "compose", openOpts) === "INQUIRY" && nextThreadIntent(null, "buy", openOpts) === "DIRECT", "議價 does not store intent; 聯絡賣家 is 查詢; 直接購買 is direct");

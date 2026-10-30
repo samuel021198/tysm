@@ -1,5 +1,6 @@
 import { formatHkd } from "./format";
 import type { Locale } from "./i18n";
+import { DEAL_STALE_MS } from "./rules";
 
 /** Private handover phases. Old OrderStatus values stay in the database; the UI reads these. */
 
@@ -231,6 +232,12 @@ export function pinAction(input: {
 export function showDealStream(phase: DealPhase, offer: "PENDING" | "ACCEPTED" | null): boolean {
   if (phase === "CHATTING" && offer !== "PENDING") return false;
   return true;
+}
+
+/** No pay proof / no ship for 3 days → counterpart reports; admin bans by hand. */
+export function dealStale(phase: DealPhase, createdAt: Date, now = new Date()): boolean {
+  if (phase === "DONE" || phase === "CANCELLED" || phase === "CHATTING") return false;
+  return now.getTime() - createdAt.getTime() >= DEAL_STALE_MS;
 }
 
 export const DIRECT_WAIT = "待賣家回覆。";

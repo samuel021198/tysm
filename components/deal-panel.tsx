@@ -6,6 +6,7 @@ import {
   dealBlocked,
   dealEventCopy,
   dealPhase,
+  dealStale,
   handoverFlags,
   phaseLabel,
   readDealMeta,
@@ -56,6 +57,7 @@ type DealProps = {
     sellerId: string;
     total: number;
     fulfillment: unknown;
+    createdAt: Date;
     items: Item[];
   };
 };
@@ -93,6 +95,7 @@ function DealView({
   const offerLine = pending ? dealEventCopy(locale, { kind: "offer", name: pending.name, amount: pending.amount, note: pending.note }) : null;
   const waitingRaw = pending ? (pending.by === order.buyerId ? names?.seller : pending.by === order.sellerId ? names?.buyer : "") : "";
   const waitingLabel = waitingRaw?.trim() || tx(locale, "對方", "them");
+  const stale = dealStale(phase, order.createdAt);
 
   return (
     <section
@@ -128,6 +131,11 @@ function DealView({
         </div>
       )}
       {blocked ? <p className={`text-sm font-medium ${stream ? "text-center" : ""}`}>{tx(locale, RESERVE_BLOCKED, "This item is locked.")}</p> : null}
+      {stale && (buyer || seller) ? (
+        <p className={`text-sm ${stream ? "text-center" : ""}`}>
+          {tx(locale, "超過 3 日未付款或未寄出，可以檢舉對方。禁拍由管理員人手處理。", "Over 3 days with no pay or ship — report them. Bid bans are manual.")}
+        </p>
+      ) : null}
       {pending && offerLine && (buyer || seller) ? (
         <div className={`grid gap-2 ${stream ? "justify-items-center text-center" : ""}`}>
           {stream ? (

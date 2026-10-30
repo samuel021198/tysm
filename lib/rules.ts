@@ -7,16 +7,19 @@ export const REVIEW_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
 export type Proxy = { bidderId: string; maxAmount: number; updatedAt: Date };
 
-/** eBay-style HKD ladder. Amounts are cents. */
+/** eBay-lite HKD ladder, clamped to 5–20% of the current bid. Amounts are cents. */
 export function bidIncrementCents(currentCents: number): number {
   const hk = currentCents / 100;
-  if (hk < 50) return 100;
-  if (hk < 200) return 500;
-  if (hk < 500) return 1000;
-  if (hk < 1000) return 2000;
-  if (hk < 2500) return 5000;
-  if (hk < 5000) return 10000;
-  return 20000;
+  let step = 20000;
+  if (hk < 50) step = 100;
+  else if (hk < 200) step = 500;
+  else if (hk < 500) step = 1000;
+  else if (hk < 1000) step = 2000;
+  else if (hk < 2500) step = 5000;
+  else if (hk < 5000) step = 10000;
+  const five = Math.max(1, Math.ceil((currentCents * 5) / 100));
+  const twenty = Math.max(five, Math.floor((currentCents * 20) / 100));
+  return Math.min(Math.max(step, five), twenty);
 }
 
 export function resolveAuction(startPrice: number, proxies: Proxy[]): { leaderId: string | null; price: number } {
@@ -69,10 +72,13 @@ export function extendedEnd(currentEnd: Date, now: Date): Date {
   return currentEnd;
 }
 
+/** Track unpaid wins for admin. Never auto-bans — report → manual ban. */
 export function nextUnpaidStrike(current: number): { consecutive: number; banned: boolean } {
-  const consecutive = current + 1;
-  return { consecutive, banned: consecutive >= 3 };
+  return { consecutive: current + 1, banned: false };
 }
+
+/** Stale private handover (no pay proof / no ship). Counterparty reports; admin bans by hand. */
+export const DEAL_STALE_MS = 3 * 24 * 60 * 60 * 1000;
 
 export function canSubmitBuyerRound(currentRound: number): boolean {
   return currentRound < MAX_OFFER_ROUNDS;

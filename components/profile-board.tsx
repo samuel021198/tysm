@@ -270,11 +270,18 @@ export function ProfileBoard({
         <ul className="grid grid-cols-3 gap-px">
           {listings.map((listing) => {
             const amount = shopAsk(listing);
+            const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
             const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
             return (
               <li key={listing.id} className="min-w-0">
-                <Link href={`/listing/${listing.id}`} aria-label={label} className="block">
+                <Link href={`/listing/${listing.id}`} aria-label={label} className="relative block">
                   <img src={listing.photos[0]?.url || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
+                  {auction ? (
+                    <span className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-full bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
+                      <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+                      {tx(locale, "拍賣", "Auction")}
+                    </span>
+                  ) : null}
                 </Link>
                 {amount != null ? <p className="truncate px-1 py-1 text-[10px] font-semibold leading-none">{formatHkd(amount, locale)}</p> : null}
               </li>

@@ -7,6 +7,7 @@ import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
+import { Icon } from "@/components/icons";
 import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
 export const metadata = { title: "商店" };
@@ -123,7 +124,12 @@ function MallCard({
       <span className="grid gap-1 px-2.5 py-2">
         <span className="line-clamp-2 text-sm font-semibold leading-snug">{listing.title}</span>
         <span className="price text-base leading-none">{formatHkd(amount, locale)}</span>
-        {auction ? <span className="w-fit rounded-full bg-soft px-2 py-0.5 text-[11px] font-semibold">{tx(locale, "拍賣", "Auction")}</span> : null}
+        {auction ? (
+          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-link">
+            <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+            {tx(locale, "拍賣", "Auction")}
+          </span>
+        ) : null}
         <span className="truncate text-xs text-muted">{store}</span>
       </span>
     </Link>
