@@ -19,6 +19,7 @@ import {
 } from "@/lib/profile-edit";
 import { PhotoStoreError, storeUploadedImage } from "@/lib/r2";
 import { headers } from "next/headers";
+import { PROMO_GRANT } from "@/lib/promo";
 
 async function bounce() {
   const ref = safeNext((await headers()).get("referer"));
@@ -117,6 +118,8 @@ export async function verifyOtp(_prev: { error?: string } | null, formData: Form
         phoneVerified: parsed.channel === "phone",
         nickname,
         termsAcceptedAt: new Date(),
+        promoBalance: PROMO_GRANT,
+        promoToast: "earn",
       },
     }));
   if (existing) {

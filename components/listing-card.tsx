@@ -7,6 +7,7 @@ import { displayPhoto } from "@/lib/demo-covers";
 import { shopDisplayCents } from "@/lib/shop-inventory";
 import { Countdown } from "./countdown";
 import { Icon } from "./icons";
+import { PromoPill } from "./promo-pill";
 import { Sparkline } from "./sparkline";
 
 type CardListing = {
@@ -24,6 +25,7 @@ type CardListing = {
   grader: string | null;
   gradeValue: number | null;
   sellerId: string;
+  promoted?: boolean;
   photos: { url: string }[];
   seller: { nickname: string };
 };
@@ -76,6 +78,7 @@ export function ListingCard({
         </Link>
         <p className="flex items-center gap-1.5">
           <Link href={`/listing/${listing.id}`} className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</Link>
+          <PromoPill promoted={listing.promoted} />
           {auction ? (
             <Link href="/auction" className="inline-flex h-5 items-center gap-1 rounded-full bg-accent/10 px-2 text-[11px] font-semibold leading-none text-link">
               <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />

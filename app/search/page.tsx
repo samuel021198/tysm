@@ -130,6 +130,7 @@ export default async function SearchPage({
                     startPrice: true,
                     auctionEndsAt: true,
                     auctionSettled: true,
+                    promoted: true,
                     publishedAt: true,
                     catalogCardId: true,
                     updatedAt: true,

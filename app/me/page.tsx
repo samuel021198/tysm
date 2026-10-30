@@ -39,6 +39,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         listingCount={board.listingCount}
         verificationTier={viewer.verificationTier}
         self
+        tokenBalance={viewer.promoBalance ?? 0}
       />
       <div id="profile-posts">
         <ProfileBoard

@@ -111,6 +111,7 @@ export function ProfileHeader({
   listingCount,
   verificationTier = "NORMAL",
   self,
+  tokenBalance = null,
   children,
 }: {
   locale: Locale;
@@ -128,6 +129,7 @@ export function ProfileHeader({
   listingCount: number;
   verificationTier?: VerificationTierName;
   self?: boolean;
+  tokenBalance?: number | null;
   children?: ReactNode;
 }) {
   const blurb = bio?.trim();
@@ -196,6 +198,12 @@ export function ProfileHeader({
           </a>
         ) : null}
       </div>
+      {self && tokenBalance != null ? (
+        <p id="promo" className="text-sm leading-snug">
+          <span className="font-semibold">Token {tokenBalance}</span>
+          <span className="mt-1 block text-[11px] font-normal text-muted">{tx(locale, `＝可推廣 ${tokenBalance} 日`, `${tokenBalance} promo days`)}</span>
+        </p>
+      ) : null}
       {self ? (
         <div className="flex items-center gap-1.5">
           <Link href="/me/edit" className={action}>

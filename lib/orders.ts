@@ -5,6 +5,7 @@ import { syncListingInventory } from "./inventory";
 import { purgeExpiredStories } from "./story-feed";
 import { notify } from "./social";
 import { auctionOutcome } from "./auction";
+import { settlePromos } from "./promo";
 import { dealEventBody } from "./deal-phase";
 import {
   AUTO_RELEASE_MS,
@@ -740,6 +741,7 @@ export async function sweep() {
     data: { status: "ACTIVE", publishedAt: now },
   });
   for (const row of scheduled) await syncListingInventory(row.id);
+  await settlePromos(now);
   await prisma.offer.updateMany({
     where: { status: { in: ["PENDING", "COUNTERED"] }, expiresAt: { lt: now } },
     data: { status: "EXPIRED" },

@@ -26,6 +26,7 @@ export const publicCardSelect = {
   currentBid: true,
   auctionEndsAt: true,
   auctionSettled: true,
+  promoted: true,
   favoriteCount: true,
   conditionTrack: true,
   rawGrade: true,

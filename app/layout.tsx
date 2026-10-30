@@ -3,8 +3,10 @@ import { Noto_Sans_HK, Sora } from "next/font/google";
 import { connection } from "next/server";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
+import { PromoToast } from "@/components/promo-toast";
 import { Footer, Header } from "@/components/shell";
 import { TabBar } from "@/components/tab-bar";
+import { settlePromos, takePromoToast } from "@/lib/promo";
 import { TabSwipe } from "@/components/tab-swipe";
 import "./globals.css";
 
@@ -40,8 +42,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await connection();
   const [viewer, prefs] = await Promise.all([getViewer(), getPrefs()]);
-  const [cartCount, noteUnread, msgUnread] = viewer
-    ? await Promise.all([
+  const counts = viewer
+    ? Promise.all([
         prisma.cartItem.count({ where: { userId: viewer.id } }),
         prisma.notification.count({ where: { userId: viewer.id, readAt: null } }),
         prisma.message.count({
@@ -52,7 +54,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           },
         }),
       ])
-    : [0, 0, 0];
+    : Promise.resolve([0, 0, 0] as const);
+  const spent = viewer ? await settlePromos(new Date(), viewer.id) : false;
+  const promoToast = viewer ? await takePromoToast(viewer.id, spent ? "spend" : viewer.promoToast) : null;
+  const [cartCount, noteUnread, msgUnread] = await counts;
   // Badge if either stream has unread; prefer the notification count when both do.
   const unread = noteUnread || msgUnread;
   return (
@@ -67,6 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </main>
         <Footer locale={prefs.locale} />
         <TabBar locale={prefs.locale} loggedIn={Boolean(viewer)} />
+        <PromoToast kind={promoToast} />
       </body>
     </html>
   );

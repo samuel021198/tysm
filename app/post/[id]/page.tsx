@@ -44,6 +44,7 @@ export default async function PostPage({
                 startPrice: true,
                 auctionSettled: true,
                 auctionEndsAt: true,
+                promoted: true,
                 cardName: true,
                 personName: true,
                 title: true,
