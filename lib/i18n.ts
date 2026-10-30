@@ -36,7 +36,7 @@ const ERR: Record<string, [string, string]> = {
   forbidden: ["沒有權限", "You cannot do that"],
   phone: ["賣家必須先驗證香港電話", "Sellers need a verified Hong Kong phone"],
   banned: ["你已被禁止出價，請聯絡管理員", "Bidding is disabled on this account. Contact an admin"],
-  own: ["唔可以買或出價自己的貨品", "You cannot buy or bid on your own listing"],
+  own: ["不可以買或出價自己的貨品", "You cannot buy or bid on your own listing"],
   unavailable: ["貨品已不可購買", "This listing is not available"],
   below_min: ["出價低於最低加價", "Bid is below the minimum increment"],
   below_start: ["出價低於起標價", "Bid is below the start price"],
@@ -54,7 +54,7 @@ const ERR: Record<string, [string, string]> = {
   username_rate: ["30 日內最多改用戶名稱 2 次", "You can change your username twice every 30 days"],
   username_taken: ["這個用戶名稱已被使用", "That username is taken"],
   links: ["連結最多 3 個 https 網址，或地區／商場名稱", "Use up to 3 https links, or a district / mall name"],
-  place: ["交收地區只可以填地區或商場，唔好填街號或門牌", "Handover area is a district or mall, not a street or door number"],
+  place: ["交收地區只可以填地區或商場，不要填街號或門牌", "Handover area is a district or mall, not a street or door number"],
   tags: ["興趣話題最多 8 個", "Up to 8 interest tags"],
   target: ["請輸入電郵或 8 位香港電話", "Enter an email or an 8-digit Hong Kong phone"],
   code: ["驗證碼不正確或已過期", "Code is wrong or expired"],
@@ -81,12 +81,12 @@ const ERR: Record<string, [string, string]> = {
   post: ["寫幾隻字或者加一張相", "Add a few words or a photo"],
   story_photo: ["請先影相或由相簿揀一張相", "Take a photo or choose one from your album"],
   comment: ["留言要 1–300 字，或加相／GIF", "Comment needs 1–300 characters, or a photo or GIF"],
-  payfail: ["平台唔會代收款。", "The platform does not take payment."],
+  payfail: ["平台不會代收款。", "The platform does not take payment."],
   verify_track: ["請揀誠信或商戶", "Choose trusted or merchant"],
   verify_reason: ["原因要 1–200 字", "Reason must be 1–200 characters"],
   verify_photo: ["請上傳 JPG 或 PNG 文件", "Upload a JPG or PNG document"],
-  verify_store: ["文件暫時上傳唔到，請稍後再試。", "Could not store the document. Try again shortly."],
-  verify_pending: ["審核中，暫時唔使再交", "Already in review"],
+  verify_store: ["文件暫時上傳不到，請稍後再試。", "Could not store the document. Try again shortly."],
+  verify_pending: ["審核中，暫時不必再交", "Already in review"],
 };
 
 export function errText(locale: Locale, code: string): string {

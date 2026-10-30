@@ -4,8 +4,8 @@ import { DEAL_STALE_MS } from "./rules";
 
 /** Private handover phases. Old OrderStatus values stay in the database; the UI reads these. */
 
-export const DEAL_BANNER = "私下交收・平台唔代收、唔擔保";
-export const DEAL_ACK = "我明白：雙方自行交收，錢貨風險自負；TSM 唔處理付款、爭議或退款。";
+export const DEAL_BANNER = "私下交收・平台不代收、不擔保";
+export const DEAL_ACK = "我明白：雙方自行交收，錢貨風險自負；TSM 不處理付款、爭議或退款。";
 export const DEAL_RISK = "平台只提供配對同聊天紀錄；付款方式、交收、真偽同爭議由買賣雙方自行負責。";
 export const RESERVE_BADGE = "已保留";
 export const RESERVE_BLOCKED = "此貨品已保留。";

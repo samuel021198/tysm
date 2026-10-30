@@ -218,7 +218,7 @@ export function SellForm({
       setPhotos((current) => (current.length >= PHOTO_MAX ? current : [...current, { url, role: "GALLERY" }]));
       setPhotoNote("");
     },
-    onFail: () => setPhotoNote(tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG.")),
+    onFail: () => setPhotoNote(tx(locale, "有相片無法讀取，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG.")),
   });
   const [block, setBlock] = useState<string[]>([]);
   const [blockKind, setBlockKind] = useState<BlockKind>("publish");
@@ -391,7 +391,7 @@ export function SellForm({
       files.push(file);
     }
     enqueuePhotos(files, PHOTO_MAX - photos.length);
-    if (failed) setPhotoNote(tx(locale, "有相片讀唔到，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG."));
+    if (failed) setPhotoNote(tx(locale, "有相片無法讀取，請改用 JPG 或 PNG。", "Some photos could not be read. Use JPG or PNG."));
     if (fileRef.current) fileRef.current.value = "";
   }
 
@@ -420,8 +420,8 @@ export function SellForm({
   const shown = block;
   const blockHeading =
     blockKind === "draft"
-      ? tx(locale, "未可以存草稿，仲未齊：", "Can't save the draft yet. Still missing:")
-      : tx(locale, "未可以發布，仲未齊：", "Can't publish yet. Still missing:");
+      ? tx(locale, "未能存草稿，資料未齊：", "Can't save the draft yet. Still missing:")
+      : tx(locale, "未能發布，資料未齊：", "Can't publish yet. Still missing:");
 
   const shipSummary = [
     sfCod ? tx(locale, "順豐到付", "SF cash on delivery") : "",
@@ -507,7 +507,10 @@ export function SellForm({
 
       <div hidden={!locked && step !== 0} className="grid gap-4">
         <label className="grid gap-1 text-sm font-medium">
-          {tx(locale, "標題", "Title")}
+          <span className="flex flex-wrap items-baseline gap-x-2">
+            {tx(locale, "標題", "Title")}
+            <span className="font-normal text-muted">{tx(locale, "標題由你填寫，不會被圖鑑取代。", "You write the title. It is not replaced by the dex.")}</span>
+          </span>
           <input
             className="field"
             name={locked ? undefined : "title"}
@@ -521,10 +524,9 @@ export function SellForm({
           />
           <FieldError locale={locale} codes={shown} code="title" />
         </label>
-        <p className="text-sm text-muted">{tx(locale, "標題由你自己寫，唔會跟圖鑑改。", "You write the title. It is not replaced by the dex.")}</p>
 
         {multi ? (
-          <p className="rounded-2xl bg-soft px-3 py-3 text-sm">{tx(locale, "多過一張卡，價錢改喺每張卡下面填。", "More than one card: enter a price on each card.")}</p>
+          <p className="text-sm text-muted">{tx(locale, "多於一張卡時，請在每張卡下填寫價錢。", "More than one card: enter a price on each card.")}</p>
         ) : (
           <div className="grid gap-3">
             {!locked ? (
@@ -556,13 +558,12 @@ export function SellForm({
                   <FieldError locale={locale} codes={shown} code="auction_days" />
                 </div>
                 <label className="grid gap-1 text-sm font-medium">
-                  {tx(locale, "底價 HKD（可留空）", "Reserve HKD (optional)")}
-                  <span className="font-normal text-muted">{tx(locale, "買家唔見", "Hidden from buyers")}</span>
+                  {tx(locale, "底價 HKD（選填・買家不可見）", "Reserve HKD (optional)")}
                   <input className="field" inputMode="decimal" value={reserve} disabled={locked} data-focus="reserve" aria-invalid={shown.includes("reserve")} placeholder={tx(locale, "可留空", "Optional")} onChange={(event) => setReserve(event.target.value)} />
                   <FieldError locale={locale} codes={shown} code="reserve" />
                 </label>
                 <label className="grid gap-1 text-sm font-medium">
-                  {tx(locale, "即買價 HKD（可留空）", "Buy It Now HKD (optional)")}
+                  {tx(locale, "即買價 HKD（選填）", "Buy It Now HKD (optional)")}
                   <input className="field" name={locked ? undefined : "price"} disabled={locked} inputMode="decimal" value={price} data-focus="price" aria-invalid={shown.includes("both_price")} placeholder={tx(locale, "可留空", "Optional")} onChange={(event) => setPrice(event.target.value)} />
                   <FieldError locale={locale} codes={shown} code="both_price" />
                 </label>
@@ -589,7 +590,7 @@ export function SellForm({
         <div data-wizard-jump data-focus="photos" tabIndex={-1} className="grid gap-2 outline-none">
           <div className="flex items-baseline justify-between gap-3">
             <p className="text-sm font-medium">{tx(locale, `相片：${photos.length}/${PHOTO_MAX}`, `Photos: ${photos.length}/${PHOTO_MAX}`)}</p>
-            <p className="text-xs text-muted">{tx(locale, "第一張係封面", "First photo is the cover")}</p>
+            <p className="text-xs text-muted">{tx(locale, "第一張是封面", "First photo is the cover")}</p>
           </div>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {photos.map((photo, index) => (
@@ -802,7 +803,7 @@ export function SellForm({
             )}
             <FieldError locale={locale} codes={shown} code="ship_within" anchor="shipWithin" />
           </fieldset>
-          <p className="text-muted">{tx(locale, "至少選一種交收方式。雙方自行交收，平台唔代收款。", "Pick at least one handover method. You settle it yourselves. The platform does not take payment.")}</p>
+          <p className="text-sm text-muted">{tx(locale, "至少選一種交收方式。雙方自行交收，平台不代收款。", "Pick at least one handover method. You settle it yourselves. The platform does not take payment.")}</p>
           <label className="grid gap-1 rounded-2xl bg-soft p-3">
             <span className="flex min-h-12 items-center gap-2 font-medium">
               <input type="checkbox" name="shipSfCod" data-wizard-jump checked={sfCod} aria-invalid={shown.includes("shipping")} onChange={(event) => setSfCod(event.target.checked)} />
@@ -894,7 +895,7 @@ export function SellForm({
               : tx(locale, `現貨 · ${shipWithin} 日內出貨`, `In stock · ships within ${shipWithin} days`)}
           </p>
           <p className="text-muted">{shipSummary.join(" · ") || tx(locale, "未選交收方式", "No handover method")}</p>
-          <p className="text-muted">{tx(locale, "買家會喺貨品頁按傾交收。平台唔代收、唔擔保。", "Buyers arrange a handover from the listing. The platform does not take payment.")}</p>
+          <p className="text-sm text-muted">{tx(locale, "買家於貨品頁安排交收。平台不代收、不擔保。", "Buyers arrange a handover from the listing. The platform does not take payment.")}</p>
           {hints.length ? (
             <ul className="text-muted">
               {hints.map((hint) => (

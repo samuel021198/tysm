@@ -198,7 +198,7 @@ export function PurchasePanel({
           <div className="relative z-10 w-full max-w-lg rounded-t-3xl bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card">
             <p className="text-sm font-semibold">{tx(locale, "即買", "Buy now")}</p>
             <p className="price mt-1 text-2xl leading-none">{formatHkd(price, locale)}</p>
-            <p className="mt-2 text-sm text-muted">{tx(locale, "確認後拍賣結束，貨品會保留俾你傾交收。", "Confirming ends the auction and reserves the card for handover.")}</p>
+            <p className="mt-1 text-sm text-muted">{tx(locale, "確認後拍賣結束，貨品將保留予你安排交收。", "Confirming ends the auction and reserves the card for handover.")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button type="button" className="btn btn-ghost w-full" onClick={() => setConfirmBin(false)}>取消</button>
               <button type="submit" form="listing-bin" className="btn btn-primary w-full">確認</button>

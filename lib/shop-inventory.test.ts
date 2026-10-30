@@ -65,7 +65,7 @@ assert(
 const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 assert(board.includes("PROFILE_TAB_EVENT") && board.includes("<ShopInventory") && board.includes("isSelf"), "own shop tab is the management list");
 assert(board.includes("未有上架。") && board.includes("上架第一件") && board.includes('href="/sell"'), "empty own shop uses the existing create flow");
-assert(board.includes("未有賣緊的卡。") && board.includes("grid-cols-3"), "visitors keep the public sale grid");
+assert(board.includes("暫未有在售。") && board.includes("grid-cols-3"), "visitors keep the public sale grid");
 assert(!board.includes("⋯"), "the thumbnail grid does not grow an ellipsis");
 
 const list = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");

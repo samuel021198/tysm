@@ -67,10 +67,10 @@ const shop = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf
 assert(shop.includes("全部") && shop.includes("新上架") && shop.includes("拍賣") && shop.includes("商店") && shop.includes('href="/rank"') && shop.includes("排行"), "mall chips are 全部, 新上架, 拍賣, 商店, plus 排行");
 assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("/shop/${store.id}") && shop.includes("NEW_LISTING_MS"), "listing cards show the bid and the store; 新上架 uses the recent window");
 assert(shop.includes('name="auction"') && shop.includes("拍賣"), "shop mall cards show the auction entry");
-assert(shop.includes("VerificationPill") && shop.includes("avatarUrl") && shop.includes("去放賣") && shop.includes('href="/sell"') && !shop.includes("listings[0]"), "store rows are avatar, name, pill, and counts; empty states offer 去放賣");
+assert(shop.includes("VerificationPill") && shop.includes("avatarUrl") && shop.includes("刊登貨品") && shop.includes("暫未有拍賣。") && shop.includes('href="/sell"') && !shop.includes("listings[0]"), "store rows are avatar, name, pill, and counts; empty states offer 刊登貨品");
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
-assert(sell.includes("固定價") && sell.includes("起標價") && sell.includes("買家唔見") && sell.includes("preferAuction") && sell.includes("AUCTION_DAYS") && sell.includes("1、3、5 或 7"), "any account can auction; reserve is hidden; length is 1, 3, 5, or 7");
-assert(sell.includes("即買價 HKD（可留空）"), "BIN stays optional");
+assert(sell.includes("固定價") && sell.includes("起標價") && sell.includes("底價 HKD（選填・買家不可見）") && !sell.includes("買家唔見") && sell.includes("preferAuction") && sell.includes("AUCTION_DAYS") && sell.includes("1、3、5 或 7"), "any account can auction; reserve stays hidden; length is 1, 3, 5, or 7");
+assert(sell.includes("即買價 HKD（選填）"), "BIN stays optional");
 const panel = readFileSync(new URL("../components/purchase-panel.tsx", import.meta.url), "utf8");
 assert(panel.includes("目前出價") && panel.includes("剩餘時間") && panel.includes("function BidSheet") && panel.includes('name="amount"') && !panel.includes("你的最高出價"), "auction detail is current bid, time left, and an amount-only sheet");
 assert(panel.includes(">即買</button>") || panel.includes('"即買"'), "Buy It Now stays a button");
@@ -85,7 +85,7 @@ assert(post.includes('name="auction"') && post.includes("post.auction") && post.
 const profile = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 assert(profile.includes('name="auction"') && profile.includes("拍賣") && profile.includes('href="/auction"') && profile.includes("<Countdown"), "profile tiles link to the zone and show time left");
 const zone = readFileSync(new URL("../app/auction/page.tsx", import.meta.url), "utf8");
-assert(zone.includes('href="/sell?sale=auction"') && zone.includes("任何帳戶都可以刊登拍賣") && zone.includes("auctionEndsAt") && zone.includes("<Countdown") && !zone.includes("canListAuction"), "the zone is open to every account and shows time left");
+assert(zone.includes('href="/sell?sale=auction"') && zone.includes("任何帳戶均可刊登拍賣") && zone.includes("暫未有拍賣。") && zone.includes("auctionEndsAt") && zone.includes("<Countdown") && !zone.includes("canListAuction"), "the zone is open to every account and shows time left");
 assert(shop.includes('href="/auction"') && shop.includes("<Countdown"), "the shop 拍賣 chip opens the zone and cards show time left");
 const inventory = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");
 assert(inventory.includes('name="auction"'), "own shop inventory marks auctions");

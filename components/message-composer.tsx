@@ -64,7 +64,7 @@ export function MessageComposer({
       setImageUrl(await fileToDataUrl(file));
       setNote("");
     } catch {
-      setNote(tx(locale, "相片讀唔到，請改用 JPG 或 PNG。", "That photo could not be read. Use JPG or PNG."));
+      setNote(tx(locale, "相片無法讀取，請改用 JPG 或 PNG。", "That photo could not be read. Use JPG or PNG."));
     }
     if (fileRef.current) fileRef.current.value = "";
   }

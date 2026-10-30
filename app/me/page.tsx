@@ -13,7 +13,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
   if (!viewer) {
     return (
       <div className="mx-auto grid max-w-3xl gap-3 pb-[calc(var(--tab-h)+1rem)] md:pb-0">
-        <p className="px-1 text-sm text-muted">{tx(prefs.locale, "登入後先睇到你的個人頁。", "Log in to see your profile.")}</p>
+        <p className="px-1 text-sm text-muted">{tx(prefs.locale, "登入後即可查看個人頁。", "Log in to see your profile.")}</p>
         <Link href="/login?next=/me" className="btn btn-primary w-full md:w-auto">{tx(prefs.locale, "登入", "Log in")}</Link>
       </div>
     );
