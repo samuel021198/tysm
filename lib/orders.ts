@@ -311,10 +311,8 @@ export async function cancelUnpaidOrder(orderId: string, reason: "timeout" | "bu
       await notify(
         result.buyerId,
         "bid",
-        result.banned ? "出價功能已停用" : "交收未完成",
-        result.banned
-          ? "連續 3 次拍賣得標未完成交收，你已被禁止出價，直至管理員解除。"
-          : "拍賣得標未有完成交收。",
+        "交收未完成",
+        "拍賣得標未有完成交收。對方可以檢舉；禁拍由管理員人手處理。",
         `/orders/${orderId}`,
       );
     }

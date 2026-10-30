@@ -21,10 +21,10 @@ function assert(cond: unknown, msg: string): asserts cond {
 const t0 = new Date("2026-01-01T00:00:00Z");
 const t1 = new Date("2026-01-01T00:01:00Z");
 
-assert(bidIncrementCents(10000) === 500, "HK$100 increment is HK$5");
-assert(bidIncrementCents(80000) === 2000, "HK$800 increment is HK$20");
-assert(bidIncrementCents(499900) === 10000, "just under HK$5000 increment is HK$100");
-assert(bidIncrementCents(500000) === 20000, "HK$5000 increment is HK$200");
+assert(bidIncrementCents(10000) === 500, "HK$100 increment stays the ladder HK$5 inside 5–20%");
+assert(bidIncrementCents(80000) === 4000, "HK$800 increment is floored to 5% (HK$40)");
+assert(bidIncrementCents(499900) === Math.ceil((499900 * 5) / 100), "near HK$5000 the 5% floor beats the ladder");
+assert(bidIncrementCents(500000) === Math.ceil((500000 * 5) / 100), "HK$5000 increment is floored to 5%");
 
 const start = 50000;
 const only = resolveAuction(start, [{ bidderId: "A", maxAmount: 120000, updatedAt: t0 }]);
@@ -34,8 +34,8 @@ const war = resolveAuction(start, [
   { bidderId: "A", maxAmount: 80000, updatedAt: t0 },
   { bidderId: "B", maxAmount: 120000, updatedAt: t1 },
 ]);
-assert(war.leaderId === "B" && war.price === 82000, "proxy raises one increment over the second max");
-assert(minimumNextBid(start, war.price, true) === 84000, "public next bid is one increment, not the hidden max");
+assert(war.leaderId === "B" && war.price === 84000, "proxy raises one 5% step over the second max");
+assert(minimumNextBid(start, war.price, true) === 84000 + bidIncrementCents(84000), "public next bid is one increment, not the hidden max");
 
 const tie = resolveAuction(start, [
   { bidderId: "A", maxAmount: 90000, updatedAt: t0 },
@@ -44,26 +44,26 @@ const tie = resolveAuction(start, [
 assert(tie.leaderId === "A" && tie.price === 90000, "earlier equal max wins the tie");
 
 assert(minimumNextBid(start, null, false) === start, "opening bid is the start price");
-assert(minimumNextBid(start, 82000, true) === 84000, "next bid is current plus increment");
+assert(minimumNextBid(start, 80000, true) === 84000, "next bid is current plus 5%");
 
 const ok = validateMaxBid({
   startPrice: start,
-  currentPrice: 82000,
+  currentPrice: 84000,
   hasBids: true,
   leaderId: "B",
   bidderId: "A",
-  maxAmount: 84000,
+  maxAmount: 84000 + bidIncrementCents(84000),
   existingMax: 80000,
 });
 assert(ok.ok, "challenger at the minimum is accepted");
 
 const low = validateMaxBid({
   startPrice: start,
-  currentPrice: 82000,
+  currentPrice: 84000,
   hasBids: true,
   leaderId: "B",
   bidderId: "C",
-  maxAmount: 83000,
+  maxAmount: 85000,
   existingMax: null,
 });
 assert(!low.ok && low.reason === "below_min", "under the ladder is rejected");
@@ -74,8 +74,8 @@ const later = new Date(now.getTime() + 10 * 60 * 1000);
 assert(extendedEnd(soon, now).getTime() === now.getTime() + 2 * 60 * 1000, "anti-snipe extends inside 2 minutes");
 assert(extendedEnd(later, now).getTime() === later.getTime(), "anti-snipe leaves a longer auction alone");
 
-assert(nextUnpaidStrike(2).banned && nextUnpaidStrike(2).consecutive === 3, "third unpaid win bans bidding");
-assert(!nextUnpaidStrike(1).banned, "second strike is only a warning");
+assert(!nextUnpaidStrike(2).banned && nextUnpaidStrike(2).consecutive === 3, "unpaid strikes never auto-ban");
+assert(!nextUnpaidStrike(1).banned, "strikes stay a count for admin");
 assert(canSubmitBuyerRound(2) && !canSubmitBuyerRound(3), "offers stop after 3 buyer rounds");
 
 assert(parseGrade("PSA", "10") === 100, "PSA 10");

@@ -74,7 +74,10 @@ export function ListingCard({
           <p className="flex items-center gap-1.5">
             <span className="price text-[1.25rem] leading-none">{formatHkd(amount, locale)}</span>
             {auction ? (
-              <span className="inline-flex h-5 items-center rounded-full bg-soft px-2 text-[11px] font-semibold leading-none">{tx(locale, "拍賣", "Auction")}</span>
+              <span className="inline-flex h-5 items-center gap-1 rounded-full bg-accent/10 px-2 text-[11px] font-semibold leading-none text-link">
+                <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+                {tx(locale, "拍賣", "Auction")}
+              </span>
             ) : null}
           </p>
           {series && series.length ? <PriceDelta locale={locale} amount={amount} series={series} /> : null}

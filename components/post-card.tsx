@@ -69,6 +69,15 @@ export function PostCard({
         </span>
         {sellHref ? (
           <Link href={sellHref} className="btn btn-primary shrink-0">{tx(locale, "放賣", "List for sale")}</Link>
+        ) : buy && post.listingId && post.auction ? (
+          <Link
+            href={`/listing/${post.listingId}`}
+            className="btn btn-primary shrink-0"
+            aria-label={tx(locale, "拍賣", "Auction")}
+            title={tx(locale, "拍賣", "Auction")}
+          >
+            <Icon name="auction" className="h-4 w-4" strokeWidth={2.5} />
+          </Link>
         ) : buy && post.listingId ? (
           <HandoverForm locale={locale} listingId={post.listingId} postId={post.postId} layout="row" />
         ) : null}
@@ -245,7 +254,18 @@ function BuyBar({
             {price}
             {auction ? <span className="ml-2 align-middle text-xs font-semibold text-ink">{tx(locale, "拍賣", "Auction")}</span> : null}
           </p>
-          <HandoverForm locale={locale} listingId={listingId} postId={postId} layout="row" />
+          {auction ? (
+            <Link
+              href={`/listing/${listingId}`}
+              className="btn btn-primary shrink-0"
+              aria-label={tx(locale, "拍賣", "Auction")}
+              title={tx(locale, "拍賣", "Auction")}
+            >
+              <Icon name="auction" className="h-4 w-4" strokeWidth={2.5} />
+            </Link>
+          ) : (
+            <HandoverForm locale={locale} listingId={listingId} postId={postId} layout="row" />
+          )}
         </div>
       </div>
     </>

@@ -5,7 +5,7 @@ import { getPrefs, getViewer } from "@/lib/auth";
 import { formatHkd, formatHKT } from "@/lib/format";
 import { listingStatusLabel, orderStatusLabel, tx } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
-import { addCategory, adminDecide, adminUnlist, liftBan, resolveReport } from "@/actions/admin";
+import { addCategory, adminDecide, adminUnlist, banBids, liftBan, resolveReport } from "@/actions/admin";
 
 const tabs = ["overview", "users", "listings", "orders", "disputes", "reports", "categories"] as const;
 
@@ -48,7 +48,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               <span>{user.nickname} · {user.email || user.phone} · {user.role} {user.bidBanned ? "· banned" : ""} · strikes {user.consecutiveUnpaid}</span>
               {user.bidBanned ? (
                 <form action={liftBan}><input type="hidden" name="userId" value={user.id} /><button className="btn-ghost btn">{tx(locale, "解除禁拍", "Lift bid ban")}</button></form>
-              ) : null}
+              ) : (
+                <form action={banBids}><input type="hidden" name="userId" value={user.id} /><button className="btn-ghost btn">{tx(locale, "禁拍", "Ban bids")}</button></form>
+              )}
             </li>
           ))}
         </ul>

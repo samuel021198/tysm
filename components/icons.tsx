@@ -4,7 +4,7 @@ export function Icon({
   strokeWidth = 1.75,
   filled = false,
 }: {
-  name: "home" | "search" | "plus" | "check" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank";
+  name: "home" | "search" | "plus" | "check" | "messages" | "me" | "bag" | "bell" | "sun" | "moon" | "book" | "tag" | "bookmark" | "binder" | "note" | "camera" | "grid" | "star" | "news" | "rank" | "auction";
   className?: string;
   strokeWidth?: number;
   filled?: boolean;
@@ -173,6 +173,17 @@ export function Icon({
         <path d="M6.2 19.5V13.2h3.1v6.3" />
         <path d="M10.45 19.5V7.4h3.1v12.1" />
         <path d="M14.7 19.5V10.4h3.1v9.1" />
+      </svg>
+    );
+  }
+  if (name === "auction") {
+    return (
+      <svg {...props}>
+        <path d="M14.2 3.8 20.2 9.8" />
+        <path d="M12.4 5.6 18.4 11.6" />
+        <path d="M4.5 14.2 11.2 7.5" />
+        <path d="M3.8 20.2h9.4" />
+        <path d="M9 14.5 6.2 20.2" />
       </svg>
     );
   }

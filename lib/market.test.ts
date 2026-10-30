@@ -37,7 +37,7 @@ const later = new Date("2026-10-02T00:00:00Z");
 assert(onTimePercent([{ shippedAt: early, shipBy: later }]) === 100, "shipped before the deadline is on time");
 assert(onTimePercent([{ shippedAt: later, shipBy: early }]) === 0, "late ship");
 assert(onTimePercent([{ shippedAt: early, shipBy: null }]) === null, "missing deadline is not counted as 0%");
-assert(minimumNextBid(50000, 82000, true) === 84000, "HK$820 next bid is HK$840");
+assert(minimumNextBid(50000, 82000, true) === 86100, "HK$820 next bid is +5% (HK$861)");
 assert(priorSalePrices([{ listingId: "a", unitPrice: 12800 }, { listingId: "b", unitPrice: 8600 }], "b").join() === "12800", "a card's own sale is not the last price");
 assert(priorSalePrices([{ listingId: "a", unitPrice: 0 }], "b").length === 0, "a zero sale is not a comparison");
 

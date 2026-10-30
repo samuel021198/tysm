@@ -6,6 +6,7 @@ import { markShopSold, unlistShopListing, updateShopPrice } from "@/actions/trad
 import { centsToInput, formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "@/lib/shop-inventory";
+import { Icon } from "./icons";
 
 export type ShopInventoryRow = {
   id: string;
@@ -57,8 +58,11 @@ export function ShopInventory({ locale, rows, next }: { locale: Locale; rows: Sh
                 <img src={row.photo || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className="h-14 w-11 bg-soft object-contain" />
               </Link>
               <div className="min-w-0 flex-1">
-                <Link href={`/listing/${row.id}`} className="block truncate text-sm font-semibold">
-                  {row.title}
+                <Link href={`/listing/${row.id}`} className="flex items-center gap-1 truncate text-sm font-semibold">
+                  {row.saleType !== "BUY_NOW" && !row.auctionSettled ? (
+                    <Icon name="auction" className="h-3.5 w-3.5 shrink-0 text-link" strokeWidth={2.5} />
+                  ) : null}
+                  <span className="truncate">{row.title}</span>
                 </Link>
                 {editable ? (
                   <form action={updateShopPrice} data-gesture="" className="mt-0.5 flex items-center gap-1">

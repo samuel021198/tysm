@@ -340,8 +340,8 @@ export default async function ListingPage({
           loggedIn={Boolean(viewer)}
           bidsVoided={listing.bidsVoided}
           ownerNote={
-            owner && listing.reservePrice != null
-              ? tx(locale, `底價 ${formatHkd(listing.reservePrice, locale)}（買家睇唔到）`, `Reserve ${formatHkd(listing.reservePrice, locale)} (hidden from buyers)`)
+            listing.reservePrice != null && (live || owner)
+              ? tx(locale, `底價 ${formatHkd(listing.reservePrice, locale)}`, `Reserve ${formatHkd(listing.reservePrice, locale)}`)
               : owner && listing.auctionPassed
                 ? tx(locale, "未達底價或無人出價。可以改做固定價再賣。", "Reserve was not met, or there were no bids. Relist at a fixed price.")
                 : null

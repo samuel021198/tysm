@@ -23,6 +23,16 @@ export async function liftBan(formData: FormData) {
   redirect("/admin?tab=users&ok=saved");
 }
 
+/** Manual bid ban after a report. No auto / temp ban path. */
+export async function banBids(formData: FormData) {
+  await admin();
+  await prisma.user.update({
+    where: { id: String(formData.get("userId") || "") },
+    data: { bidBanned: true },
+  });
+  redirect("/admin?tab=users&ok=saved");
+}
+
 export async function adminUnlist(formData: FormData) {
   const user = await admin();
   await unlistListing(user.id, String(formData.get("listingId") || ""), true);
