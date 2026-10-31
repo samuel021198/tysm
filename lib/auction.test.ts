@@ -8,6 +8,9 @@ import {
   isAuctionDays,
   publicIncrementCents,
   publicMinimumBid,
+  mallCat,
+  mallHref,
+  mallSort,
   shopTab,
   shownReserveCents,
 } from "./auction";
@@ -62,6 +65,11 @@ assert(auctionSchedule({ saleType: "BUY_NOW", auctionDays: 3, fallbackEnd: keptE
 assert(isAuctionDays(1) && isAuctionDays(3) && isAuctionDays(5) && isAuctionDays(7) && !isAuctionDays(2) && !isAuctionDays(14) && !isAuctionDays(0) && !isAuctionDays(15), "length is 1, 3, 5, or 7");
 assert(AUCTION_DAY_MIN === 1 && AUCTION_DAY_MAX === 7, "longest chip is 7 days");
 assert(shopTab(undefined) === "all" && shopTab("new") === "new" && shopTab("auction") === "auction" && shopTab("shops") === "shops" && shopTab("nope") === "all", "mall chips");
+assert(mallSort(undefined) === "new" && mallSort("price_asc") === "price_asc" && mallSort("price_desc") === "price_desc" && mallSort("ending") === "ending" && mallSort("relevance") === "new", "mall sort defaults to 最新上架");
+assert(mallHref() === "/shop" && mallHref({ q: "  皮卡丘  ", sort: "new", tab: "all" }) === `/shop?q=${encodeURIComponent("皮卡丘")}`, "an empty mall search is /shop and a query is ?q=");
+assert(mallHref({ tab: "new", q: "路飛", sort: "price_asc" }) === `/shop?tab=new&q=${encodeURIComponent("路飛")}&sort=price_asc`, "new, query, and price sort stay on /shop");
+assert(mallHref({ tab: "shops" }) === "/shop?tab=shops", "the shops chip stays the store directory");
+assert(mallCat(undefined) === "picks" && mallCat("picks") === "picks" && mallCat(" pokemon ") === "pokemon", "a blank category is 精選");
 assert(NEW_LISTING_MS === 7 * 86400000, "新上架 is the last 7 days");
 
 assert(!nextUnpaidStrike(2).banned && nextUnpaidStrike(2).consecutive === 3, "unpaid strikes never auto-ban");
@@ -70,10 +78,10 @@ assert(dealStale("CONFIRMED", new Date(now.getTime() - DEAL_STALE_MS), now), "co
 assert(!dealStale("DONE", new Date(now.getTime() - DEAL_STALE_MS), now), "finished deals are not stale");
 
 const shop = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
-assert(shop.includes("全部") && shop.includes("新上架") && shop.includes("拍賣") && shop.includes("商店") && shop.includes('href="/rank"') && shop.includes("排行"), "mall chips are 全部, 新上架, 拍賣, 商店, plus 排行");
-assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("/shop/${store.id}") && shop.includes("NEW_LISTING_MS"), "listing cards show the bid and the store; 新上架 uses the recent window");
-assert(shop.includes('name="auction"') && shop.includes("拍賣"), "shop mall cards show the auction entry");
-assert(shop.includes("VerificationPill") && shop.includes("avatarUrl") && shop.includes("刊登貨品") && shop.includes("暫未有拍賣。") && shop.includes('href="/sell"') && !shop.includes("listings[0]"), "store rows are avatar, name, pill, and counts; empty states offer 刊登貨品");
+const board = readFileSync(new URL("../components/mall-board.tsx", import.meta.url), "utf8");
+assert(shop.includes("currentBid") && shop.includes("storeName") && shop.includes("NEW_LISTING_MS") && shop.includes("listingQueryWhere") && !shop.includes("MallRails") && !shop.includes('href="/rank"'), "the mall loads listings without the old rails or a rank chip");
+assert(board.includes("/shop/${store.id}") && board.includes("熱門商品") && board.includes("附近商戶") && board.includes("已關注") && board.includes('name="auction"') && board.includes("拍賣"), "tabs are hot, nearby shops, following, and auctions");
+assert(board.includes("VerificationPill") && board.includes("avatarUrl") && board.includes("刊登貨品") && board.includes("暫未有拍賣。") && board.includes('href="/sell"') && !board.includes("listings[0]"), "nearby rows are avatar, name, pill, and counts; empty states offer 刊登貨品");
 const sell = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
 assert(sell.includes("固定價") && sell.includes("起標價") && sell.includes("底價 HKD（選填・買家不可見）") && !sell.includes("買家唔見") && sell.includes("preferAuction") && sell.includes("AUCTION_DAYS") && sell.includes("1、3、5 或 7"), "any account can auction; reserve stays hidden; length is 1, 3, 5, or 7");
 assert(sell.includes("即買價 HKD（選填）"), "BIN stays optional");
@@ -118,7 +126,7 @@ const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
 assert(!home.includes("reservePrice") && !find.includes("reservePrice") && !zone.includes("reservePrice") && !shop.includes("reservePrice"), "feed, find, auction zone, and shop do not read the reserve");
 assert(zone.includes('href="/sell?sale=auction"') && zone.includes("任何帳戶均可刊登拍賣") && zone.includes("暫未有拍賣。") && zone.includes("auctionEndsAt") && zone.includes("<Countdown") && !zone.includes("canListAuction"), "the zone is open to every account and shows time left");
-assert(shop.includes('href="/auction"') && shop.includes("<Countdown"), "the shop 拍賣 chip opens the zone and cards show time left");
+assert(board.includes('href="/auction"') && board.includes("<Countdown") && board.includes('useState<Lane>("hot")') && !board.includes("router.push"), "auction cards show time left; mall tabs do not refresh the page");
 const inventory = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");
 assert(inventory.includes('name="auction"'), "own shop inventory marks auctions");
 const greenZard = "https://pub-9b9f3109670d41aeac8a465ff7b3e999.r2.dev/uploads/listings/6d83b20f6759074beffc8493.jpg";

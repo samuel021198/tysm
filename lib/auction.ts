@@ -85,3 +85,29 @@ export function shopTab(value: string | undefined): ShopTab {
   if (value === "new" || value === "auction" || value === "shops") return value;
   return "all";
 }
+
+/** Mall listing order. Default stays off the URL. */
+export type MallSort = "new" | "price_asc" | "price_desc" | "ending";
+
+export function mallSort(value: string | undefined): MallSort {
+  if (value === "price_asc" || value === "price_desc" || value === "ending") return value;
+  return "new";
+}
+
+/** Category chip. Blank and `picks` are 精選. */
+export function mallCat(value: string | undefined): string {
+  const id = (value ?? "").trim().slice(0, 40);
+  if (!id || id === "picks") return "picks";
+  return id;
+}
+
+/** `/shop` with the chips, search, and sort that are actually on. */
+export function mallHref(opts: { tab?: ShopTab; q?: string; sort?: MallSort } = {}): string {
+  const params = new URLSearchParams();
+  const q = opts.q?.trim().slice(0, 80) ?? "";
+  if (opts.tab && opts.tab !== "all") params.set("tab", opts.tab);
+  if (q) params.set("q", q);
+  if (opts.sort && opts.sort !== "new") params.set("sort", opts.sort);
+  const search = params.toString();
+  return search ? `/shop?${search}` : "/shop";
+}

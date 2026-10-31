@@ -35,11 +35,13 @@ assert(!tab.includes("accent: true") && !tab.includes("rounded-full bg-accent") 
 assert(tab.includes("h-[22px]") && tab.includes("strokeWidth={on ? 2 : 1.6}"), "bottom icons stay 22px");
 assert(!tab.includes('href: "/messages"'), "chat is not a tab");
 const shopPage = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
+const mallBoard = readFileSync(new URL("../components/mall-board.tsx", import.meta.url), "utf8");
+const mallLib = readFileSync(new URL("../lib/shop-inventory.ts", import.meta.url), "utf8");
 assert(
-  shopPage.includes("全部") && shopPage.includes("新上架") && shopPage.includes("拍賣") && shopPage.includes("商店") && shopPage.includes("/shop/${store.id}"),
-  "the shop tab is the mall: chips and store cards",
+  mallBoard.includes("精選") && mallLib.includes("Pokémon") && mallLib.includes("Topps") && mallLib.includes("One Piece") && mallLib.includes("Riftbound") && mallBoard.includes("熱門商品") && mallBoard.includes("附近商戶") && mallBoard.includes("拍賣") && mallBoard.includes("/shop/${store.id}"),
+  "the shop tab is the mall: category chips, lanes, and store cards",
 );
-assert(shopPage.includes('href="/rank"') && shopPage.includes("排行"), "rank opens from the shop mall");
+assert(!shopPage.includes('href="/rank"') && !mallBoard.includes("排行榜"), "the mall no longer hosts a rank chip");
 assert(!tab.includes("<span>{label}</span>") && tab.includes("aria-label={label}"), "tabs are icons only");
 assert(!tab.includes("AddSheet") && !tab.includes("新增") && !tab.includes("add-sheet"), "center add sheet is gone");
 

@@ -357,18 +357,18 @@ export default async function ListingPage({
         <div className="text-sm">
           <div className="flex items-start justify-between gap-2">
           <div className="flex min-w-0 items-center gap-3">
-            <Link href={`/shop/${listing.sellerId}`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-bold text-white">
+            <Link href={`/u/${listing.sellerId}`} className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-sm font-bold text-white">
               {listing.seller.nickname.slice(0, 1)}
             </Link>
             <span className="min-w-0">
               <NameLine
-                name={<Link href={`/shop/${listing.sellerId}`} className="font-medium">{listing.seller.nickname}</Link>}
+                name={<Link href={`/u/${listing.sellerId}`} className="font-medium">{listing.seller.nickname}</Link>}
                 nameClassName="truncate"
                 tier={listing.seller.verificationTier}
                 locale={locale}
                 rating={sellerRating}
               />
-              <Link href={`/shop/${listing.sellerId}`} className="mt-0.5 block text-xs text-muted">
+              <Link href={`/u/${listing.sellerId}`} className="mt-0.5 block text-xs text-muted">
                 {tx(locale, "賣家", "Seller")}
                 {` · ${tx(locale, "完成", "Sold")} ${sellerSales}`}
                 {sellerOnTime != null ? ` · ${tx(locale, "準時寄出", "On time")} ${sellerOnTime}%` : ""}
