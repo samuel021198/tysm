@@ -82,7 +82,7 @@ export function ListingChatBar({
                 {seller ? (
                   <NameLine
                     className="mt-0.5 text-xs"
-                    name={<Link href={`/shop/${seller.id}`} className="font-medium">{seller.nickname}</Link>}
+                    name={<Link href={`/u/${seller.id}`} className="font-medium">{seller.nickname}</Link>}
                     nameClassName="truncate"
                     tier={seller.tier}
                     locale={locale}

@@ -1,47 +1,47 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { NEW_LISTING_MS, shopTab, type ShopTab } from "@/lib/auction";
+import { mallHref, mallSort, NEW_LISTING_MS, shopTab } from "@/lib/auction";
 import { activeWhere } from "@/lib/feed";
 import { formatHkd } from "@/lib/format";
 import { tx, type Locale } from "@/lib/i18n";
 import { sweep } from "@/lib/orders";
+import { listingQueryWhere } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
+import { orderMallListings } from "@/lib/shop-inventory";
 import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
+import { MallBar } from "@/components/mall-bar";
 import { MallRails } from "@/components/mall-rails";
 import { PromoPill } from "@/components/promo-pill";
 import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
 export const metadata = { title: "商店" };
 
-const CHIPS: { id: ShopTab; href: string; zh: string; en: string }[] = [
-  { id: "all", href: "/shop", zh: "全部", en: "All" },
-  { id: "new", href: "/shop?tab=new", zh: "新上架", en: "New" },
-  { id: "auction", href: "/auction", zh: "拍賣", en: "Auctions" },
-  { id: "shops", href: "/shop?tab=shops", zh: "商店", en: "Shops" },
-];
-
-export default async function ShopMallPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+export default async function ShopMallPage({ searchParams }: { searchParams: Promise<{ tab?: string; q?: string; sort?: string }> }) {
   await sweep();
   const sp = await searchParams;
   const tab = shopTab(sp.tab);
+  const q = (sp.q ?? "").trim().slice(0, 80);
+  const sort = mallSort(sp.sort);
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
   const locale = prefs.locale;
   const showListings = tab !== "shops";
   const recentSince = new Date(Date.now() - NEW_LISTING_MS);
-  const listings = showListings
+  const listed = showListings
     ? await prisma.listing.findMany({
         where: {
           ...activeWhere(hidden),
           ...(tab === "new" ? { publishedAt: { gte: recentSince } } : {}),
           ...(tab === "auction" ? { saleType: { in: ["AUCTION", "BOTH"] as const } } : {}),
           ...(hides.listingIds.length ? { id: { notIn: hides.listingIds } } : {}),
+          ...(q ? { AND: [listingQueryWhere(q)] } : {}),
         },
         orderBy: { publishedAt: "desc" },
-        take: 24,
+        // ponytail: price and ending rank the newest 200 in memory. Upgrade: a stored sort price.
+        take: sort === "new" ? 24 : 200,
         select: {
           id: true,
           title: true,
@@ -57,26 +57,20 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
         },
       })
     : [];
+  const listings = orderMallListings(listed, sort).slice(0, 24);
   const storeRows = tab === "shops" ? await loadStores(hidden, recentSince) : [];
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto w-full max-w-3xl">
       <h1 className="sr-only">{tx(locale, "商店", "Shop")}</h1>
+      <MallBar locale={locale} tab={tab} q={q} sort={sort} />
       <MallRails locale={locale} viewerId={viewer?.id ?? null} hidden={hidden} hiddenListingIds={hides.listingIds} />
       <nav aria-label={tx(locale, "商店", "Shop")} className="flex gap-2 overflow-x-auto py-3">
-        {CHIPS.map((chip) => (
-          <Link
-            key={chip.id}
-            href={chip.href}
-            aria-current={tab === chip.id ? "page" : undefined}
-            className={`inline-flex h-8 shrink-0 items-center rounded-full px-3 text-sm font-semibold ${tab === chip.id ? "bg-accent text-white" : "bg-soft text-ink"}`}
-          >
-            {tx(locale, chip.zh, chip.en)}
-          </Link>
-        ))}
-        <Link href="/rank" className="inline-flex h-8 shrink-0 items-center rounded-full bg-soft px-3 text-sm font-semibold text-ink">
-          {tx(locale, "排行", "Rank")}
-        </Link>
+        <Chip href={mallHref({ q, sort })} on={tab === "all"} label={tx(locale, "全部", "All")} />
+        <Chip href={mallHref({ tab: "new", q, sort })} on={tab === "new"} label={tx(locale, "新上架", "New")} />
+        <Chip href="/auction" on={tab === "auction"} label={tx(locale, "拍賣", "Auctions")} />
+        <Chip href={mallHref({ tab: "shops", q, sort })} on={tab === "shops"} label={tx(locale, "商店", "Shops")} />
+        <Chip href="/rank" on={false} label={tx(locale, "排行", "Rank")} />
       </nav>
       {tab === "shops" ? (
         storeRows.length === 0 ? (
@@ -100,6 +94,18 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
         </div>
       )}
     </div>
+  );
+}
+
+function Chip({ href, on, label }: { href: string; on: boolean; label: string }) {
+  return (
+    <Link
+      href={href}
+      aria-current={on ? "page" : undefined}
+      className={`inline-flex h-8 shrink-0 items-center rounded-full px-3 text-sm font-semibold ${on ? "bg-accent text-white" : "bg-soft text-ink"}`}
+    >
+      {label}
+    </Link>
   );
 }
 

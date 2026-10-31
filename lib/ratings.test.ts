@@ -69,6 +69,7 @@ const thread = readFileSync(new URL("../app/messages/[id]/page.tsx", import.meta
 assert(thread.includes("ratings:") && thread.includes("rating={order.ratings.find"), "the thread loads this viewer's rating");
 assert(thread.includes("rating={otherRating}") && thread.includes("tier={other.verificationTier}") && thread.includes("thread.seller.verificationTier") && thread.includes("rating: sellerRating") && !thread.includes("other.username") && !thread.includes("@{"), "chat top and the pin-card seller use the stored tier and average, with no handle");
 const pin = readFileSync(new URL("../components/listing-chat-bar.tsx", import.meta.url), "utf8");
-assert(pin.includes("<NameLine") && pin.includes("seller.tier") && pin.includes("seller.rating") && pin.includes("/shop/${seller.id}") && pin.indexOf("/shop/${seller.id}") > pin.indexOf("/listing/${listingId}"), "the pinned card seller line sits outside the product link");
+assert(pin.includes("<NameLine") && pin.includes("seller.tier") && pin.includes("seller.rating") && pin.includes("/u/${seller.id}") && !pin.includes("/shop/${seller.id}") && pin.indexOf("/u/${seller.id}") > pin.indexOf("/listing/${listingId}"), "the pinned card seller line sits outside the product link and opens the profile");
+assert(listing.includes("href={`/u/${listing.sellerId}`}") && !listing.includes("href={`/shop/${listing.sellerId}`}"), "the listing seller avatar and name open the profile");
 
 console.log("ratings.test.ts ok");

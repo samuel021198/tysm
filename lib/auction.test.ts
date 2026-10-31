@@ -8,6 +8,8 @@ import {
   isAuctionDays,
   publicIncrementCents,
   publicMinimumBid,
+  mallHref,
+  mallSort,
   shopTab,
   shownReserveCents,
 } from "./auction";
@@ -62,6 +64,10 @@ assert(auctionSchedule({ saleType: "BUY_NOW", auctionDays: 3, fallbackEnd: keptE
 assert(isAuctionDays(1) && isAuctionDays(3) && isAuctionDays(5) && isAuctionDays(7) && !isAuctionDays(2) && !isAuctionDays(14) && !isAuctionDays(0) && !isAuctionDays(15), "length is 1, 3, 5, or 7");
 assert(AUCTION_DAY_MIN === 1 && AUCTION_DAY_MAX === 7, "longest chip is 7 days");
 assert(shopTab(undefined) === "all" && shopTab("new") === "new" && shopTab("auction") === "auction" && shopTab("shops") === "shops" && shopTab("nope") === "all", "mall chips");
+assert(mallSort(undefined) === "new" && mallSort("price_asc") === "price_asc" && mallSort("price_desc") === "price_desc" && mallSort("ending") === "ending" && mallSort("relevance") === "new", "mall sort defaults to 最新上架");
+assert(mallHref() === "/shop" && mallHref({ q: "  皮卡丘  ", sort: "new", tab: "all" }) === `/shop?q=${encodeURIComponent("皮卡丘")}`, "an empty mall search is /shop and a query is ?q=");
+assert(mallHref({ tab: "new", q: "路飛", sort: "price_asc" }) === `/shop?tab=new&q=${encodeURIComponent("路飛")}&sort=price_asc`, "new, query, and price sort stay on /shop");
+assert(mallHref({ tab: "shops" }) === "/shop?tab=shops", "the shops chip stays the store directory");
 assert(NEW_LISTING_MS === 7 * 86400000, "新上架 is the last 7 days");
 
 assert(!nextUnpaidStrike(2).banned && nextUnpaidStrike(2).consecutive === 3, "unpaid strikes never auto-ban");

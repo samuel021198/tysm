@@ -47,6 +47,25 @@ export function shopMenu(pill: ShopPill | null): { edit: boolean; unlist: boolea
   return { edit: pill != null, unlist: live, sold: live };
 }
 
+export function orderMallListings<T extends Parameters<typeof shopDisplayCents>[0] & { auctionEndsAt: Date | null }>(rows: T[], sort: "new" | "price_asc" | "price_desc" | "ending"): T[] {
+  if (sort === "new") return rows;
+  const next = [...rows];
+  if (sort === "price_asc" || sort === "price_desc") {
+    next.sort((a, b) => {
+      const delta = (shopDisplayCents(a) ?? 0) - (shopDisplayCents(b) ?? 0);
+      return sort === "price_asc" ? delta : -delta;
+    });
+    return next;
+  }
+  next.sort((a, b) => mallEnd(a) - mallEnd(b));
+  return next;
+}
+
+function mallEnd(listing: { saleType: "BUY_NOW" | "AUCTION" | "BOTH"; auctionSettled: boolean; auctionEndsAt: Date | null }): number {
+  if (listing.saleType === "BUY_NOW" || listing.auctionSettled || !listing.auctionEndsAt) return Number.POSITIVE_INFINITY;
+  return listing.auctionEndsAt.getTime();
+}
+
 export function shopDisplayCents(listing: {
   saleType: "BUY_NOW" | "AUCTION" | "BOTH";
   price: number | null;

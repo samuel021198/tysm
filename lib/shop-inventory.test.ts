@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
+import { orderMallListings, shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -37,6 +37,14 @@ assert(!shopMenu("SOLD").sold && !shopMenu("SOLD").unlist && shopMenu("SOLD").ed
 assert(!shopMenu("UNLISTED").unlist && !shopMenu("ENDED").sold, "下架 and 已售 are not offered again");
 
 assert(shopDisplayCents({ saleType: "BUY_NOW", price: 100, startPrice: null, currentBid: null, auctionSettled: false }) === 100, "buy now shows the price");
+const cheap = { saleType: "BUY_NOW" as const, price: 100, startPrice: null, currentBid: null, auctionSettled: false, auctionEndsAt: null };
+const dear = { saleType: "BUY_NOW" as const, price: 500, startPrice: null, currentBid: null, auctionSettled: false, auctionEndsAt: null };
+const soon = { saleType: "AUCTION" as const, price: null, startPrice: 200, currentBid: 200, auctionSettled: false, auctionEndsAt: new Date("2026-11-01T00:00:00Z") };
+const later = { saleType: "AUCTION" as const, price: null, startPrice: 50, currentBid: 50, auctionSettled: false, auctionEndsAt: new Date("2026-12-01T00:00:00Z") };
+assert(orderMallListings([dear, cheap], "new").map((row) => row.price).join() === "500,100", "最新上架 keeps the loaded order");
+assert(orderMallListings([dear, cheap], "price_asc").map((row) => row.price).join() === "100,500", "價錢由低至高");
+assert(orderMallListings([cheap, dear], "price_desc").map((row) => row.price).join() === "500,100", "價錢由高至低");
+assert(orderMallListings([cheap, later, soon], "ending")[0] === soon && orderMallListings([cheap, later, soon], "ending")[2] === cheap, "即將結束 puts live auctions first and fixed price last");
 assert(
   shopDisplayCents({ saleType: "AUCTION", price: null, startPrice: 50, currentBid: 80, auctionSettled: false }) === 80,
   "a live auction shows the bid",
@@ -84,7 +92,16 @@ assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }
 const store = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
 const mall = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
 const rails = readFileSync(new URL("../components/mall-rails.tsx", import.meta.url), "utf8");
-assert(mall.includes("<MallRails") && mall.indexOf("<MallRails") < mall.indexOf("<nav"), "recent and watch rows sit above the mall chips");
+assert(
+  mall.includes("<MallBar") && mall.indexOf("<MallBar") < mall.indexOf("<MallRails") && mall.indexOf("<MallRails") < mall.indexOf("<nav"),
+  "search, sort, and more sit above the rails, and the rails sit above the chips",
+);
+const bar = readFileSync(new URL("../components/mall-bar.tsx", import.meta.url), "utf8");
+assert(
+  bar.includes('name="q"') && bar.includes("最新上架") && bar.includes("價錢由低至高") && bar.includes("價錢由高至低") && bar.includes("即將結束") && bar.includes("排行榜") && bar.includes('"/rank"') && bar.includes('"/shop/recent"') && bar.includes('"/shop/watch"') && !bar.includes("max-w-[390px]") && !bar.includes("max-w-[375px]"),
+  "the mall row is search, the four sorts, and more, without a fixed phone width",
+);
+assert(mall.includes("listingQueryWhere") && mall.includes("orderMallListings") && mall.includes('href="/auction"') && mall.includes('href="/rank"') && mall.includes("/shop/${store.id}"), "search filters listings; 拍賣, 排行, and 進店 stay");
 assert(
   rails.includes("最近瀏覽") && rails.includes("追蹤") && rails.includes("查看全部") && rails.includes("最後 1 件") && rails.includes("quantityAvailable === 1") && rails.includes('name="bookmark"'),
   "mall rails are cover rows with a watch mark and a last-one badge",
@@ -102,7 +119,7 @@ assert(
   "inventory stays a 2-column grid with the promo pill and a last-one label",
 );
 assert(
-  !store.includes("最近瀏覽") && !store.includes("FollowRail") && !store.includes("SearchBox") && !store.includes("新上架") && !store.includes("<ProfileBoard"),
+  !store.includes("最近瀏覽") && !store.includes("FollowRail") && !store.includes("SearchBox") && !store.includes("MallBar") && !store.includes("新上架") && !store.includes("<ProfileBoard"),
   "the store page has no recent row, following rail, search, mall chips, or profile tabs",
 );
 assert(store.includes("publicCardSelect") && !store.includes("reservePrice"), "the store grid uses the public select and leaves the reserve out");
