@@ -13,28 +13,28 @@ export function TabBar({ locale, loggedIn }: { locale: Locale; loggedIn: boolean
   useEffect(() => subscribeTabIntent(setIntent), []);
   const meHref = loggedIn ? "/me" : "/login";
   const tabs = [
-    { href: "/", label: tx(locale, "貼文", "Post"), icon: "note" as const, on: pathname === "/" },
+    { href: "/", label: "Front", icon: "note" as const, on: pathname === "/" },
     {
       href: "/shop",
-      label: tx(locale, "商店", "Shop"),
+      label: "Shopping",
       icon: "bag" as const,
       on: pathname === "/shop" || pathname.startsWith("/shop/"),
     },
     {
       href: "/find",
-      label: tx(locale, "搜尋", "Search"),
+      label: "Discover",
       icon: "search" as const,
       on: pathname === "/find" || pathname.startsWith("/find/") || pathname.startsWith("/search"),
     },
     {
       href: "/news",
-      label: tx(locale, "新聞", "News"),
+      label: "News",
       icon: "news" as const,
       on: pathname === "/news" || pathname.startsWith("/news/"),
     },
     {
       href: meHref,
-      label: tx(locale, "個人", "Profile"),
+      label: "Profile",
       icon: "me" as const,
       on: pathname.startsWith("/me") || pathname.startsWith("/login") || pathname.startsWith("/orders"),
     },
