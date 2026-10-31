@@ -5,12 +5,13 @@ import { textHits } from "./search";
 /** Cards on 熱門／已關注／拍賣. Nearby shops use the same cap. */
 export const MALL_FEED_CAP = 16;
 
-/** Chips beside 精選. Topps covers every Topps leaf. */
+/** Chips beside 精選. Topps covers every Topps leaf. Yu-Gi-Oh is one leaf; other Wave-1 brands stay under 更多. */
 export const MALL_CHIPS = [
   { id: "pokemon", zh: "Pokémon", en: "Pokémon" },
   { id: "topps", zh: "Topps", en: "Topps" },
   { id: "one-piece", zh: "One Piece", en: "One Piece" },
   { id: "riftbound", zh: "Riftbound", en: "Riftbound" },
+  { id: "yugioh", zh: "Yu-Gi-Oh", en: "Yu-Gi-Oh" },
 ] as const;
 
 const MALL_CHIP_SLUGS: Record<(typeof MALL_CHIPS)[number]["id"], readonly string[]> = {
@@ -18,6 +19,7 @@ const MALL_CHIP_SLUGS: Record<(typeof MALL_CHIPS)[number]["id"], readonly string
   topps: ["topps-soccer", "topps-basketball", "topps-baseball"],
   "one-piece": ["one-piece"],
   riftbound: ["riftbound"],
+  yugioh: ["yugioh"],
 };
 
 export function mallPinnedSlug(slug: string): boolean {
@@ -122,6 +124,7 @@ export function mallCategoryHit(cat: string, row: { categorySlug: string; game: 
     if (cat === "pokemon") return game.includes("pokemon") || game.includes("pokémon") || game.includes("寶可夢");
     if (cat === "one-piece") return game.includes("one piece") || game.includes("海賊") || row.categorySlug === "one-piece";
     if (cat === "riftbound") return game.includes("riftbound");
+    if (cat === "yugioh") return game.includes("yu-gi-oh") || game.includes("yugioh") || game.includes("遊戲王");
     return false;
   }
   return row.categorySlug === cat;
