@@ -304,12 +304,12 @@ export function CommentSheet({
           <ul className="grid gap-3">
             {comments.map((comment) => (
               <li key={comment.id} className="flex gap-2 text-sm">
-                <Link href={`/shop/${comment.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
+                <Link href={`/u/${comment.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
                   {comment.author.avatarUrl ? <img src={comment.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : comment.author.nickname.slice(0, 1)}
                 </Link>
                 <div className="min-w-0 flex-1">
                   <p>
-                    <Link href={`/shop/${comment.author.id}`} className="font-semibold">{comment.author.nickname}</Link>
+                    <Link href={`/u/${comment.author.id}`} className="font-semibold">{comment.author.nickname}</Link>
                     {comment.body ? <> {comment.body}</> : null}
                   </p>
                   {comment.imageUrl ? <img src={comment.imageUrl} alt="" className="mt-1 max-h-40 max-w-[12rem] rounded-lg bg-soft object-contain" /> : null}

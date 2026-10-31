@@ -346,7 +346,7 @@ export default async function FindPage({
 
 function PersonLink({ user }: { user: { id: string; nickname: string; avatarUrl: string | null } }) {
   return (
-    <Link href={`/shop/${user.id}`} className="flex h-11 items-center gap-2 text-sm font-medium">
+    <Link href={`/u/${user.id}`} className="flex h-11 items-center gap-2 text-sm font-medium">
       <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
         {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" /> : user.nickname.slice(0, 1)}
       </span>

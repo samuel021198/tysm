@@ -104,6 +104,18 @@ assert(
   "another profile puts a speech-bubble 訊息 between 關注 and the ellipsis",
 );
 assert(shop.includes("viewer.id !== seller.id") && !me.includes("openDirectThread") && !me.includes('aria-label={tx(locale, "訊息"'), "your own profile has no message button");
+const pub = readFileSync(new URL("../app/u/[id]/page.tsx", import.meta.url), "utf8");
+assert(
+  pub.includes("<ProfileHeader") &&
+    pub.includes("<ProfileBoard") &&
+    pub.includes('redirect("/me")') &&
+    pub.includes("toggleFollow") &&
+    pub.includes('aria-label={tx(locale, "訊息", "Message")}') &&
+    !pub.includes("tokenBalance") &&
+    !pub.includes("/me/settings") &&
+    !pub.includes("logout"),
+  "another person opens the same header and grid, without settings or the promo balance",
+);
 assert(editForm.includes("name=\"nickname\"") && editForm.includes("name=\"username\"") && editForm.includes("name=\"bio\"") && editForm.includes("name=\"link\"") && editForm.includes("name=\"handoverPlace\"") && editForm.includes("name=\"interestTags\""), "edit profile is a field form");
 assert(edit.includes("BIO_MAX") && edit.includes("usernameChangesRemaining"), "the form shows the bio ceiling and the handle allowance");
 assert(!settings.includes("/me/edit") && !settings.includes("/me/footprint") && !settings.includes('"/orders"') && !settings.includes("saveAddress") && !settings.includes("/me/favorites"), "settings does not hold edit, footprint, orders, addresses, or favorites");

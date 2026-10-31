@@ -18,7 +18,8 @@ assert(blockAway("/", "u") === "/", "the feed stays put");
 assert(blockAway("/search?q=a", "u") === "/search", "search stays put");
 assert(blockAway("/post/p", "u") === "/", "a post page is left, it would 404");
 assert(blockAway("/listing/l", "u") === "/", "a listing page is left");
-assert(blockAway("/shop/u", "u") === "/" && blockAway("/shop/u/followers", "u") === "/", "their profile is left");
+assert(blockAway("/shop/u", "u") === "/" && blockAway("/shop/u/followers", "u") === "/", "their shop is left");
+assert(blockAway("/u/u", "u") === "/", "their profile is left");
 assert(blockAway("/messages/t", "u") === "/messages", "a thread returns to the inbox");
 assert(blockAway("https://evil.test", "u") === "/", "an off-site next is dropped");
 

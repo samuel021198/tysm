@@ -113,11 +113,11 @@ export function PostCard({
     >
     <article className="surface overflow-hidden">
       <div className="flex items-center gap-2 px-2.5 py-2 pr-9">
-        <Link href={`/shop/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
+        <Link href={`/u/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
         </Link>
         <div className="flex min-w-0 flex-1 items-baseline gap-1.5">
-          <Link href={`/shop/${post.author.id}`} className="min-w-0 truncate font-semibold">
+          <Link href={`/u/${post.author.id}`} className="min-w-0 truncate font-semibold">
             {post.author.nickname}
           </Link>
           {stamp ? (
