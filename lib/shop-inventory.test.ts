@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { orderMallListings, shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
+import { MALL_FEED_CAP, mallCategoryHit, orderMallListings, pickMallListings, shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -42,9 +42,22 @@ const dear = { saleType: "BUY_NOW" as const, price: 500, startPrice: null, curre
 const soon = { saleType: "AUCTION" as const, price: null, startPrice: 200, currentBid: 200, auctionSettled: false, auctionEndsAt: new Date("2026-11-01T00:00:00Z") };
 const later = { saleType: "AUCTION" as const, price: null, startPrice: 50, currentBid: 50, auctionSettled: false, auctionEndsAt: new Date("2026-12-01T00:00:00Z") };
 assert(orderMallListings([dear, cheap], "new").map((row) => row.price).join() === "500,100", "最新上架 keeps the loaded order");
-assert(orderMallListings([dear, cheap], "price_asc").map((row) => row.price).join() === "100,500", "價錢由低至高");
-assert(orderMallListings([cheap, dear], "price_desc").map((row) => row.price).join() === "500,100", "價錢由高至低");
+assert(orderMallListings([{ ...cheap, promoted: true }, { ...dear, promoted: false }], "price_desc")[0]?.price === 500, "a promo pill does not outrank a higher price");
+assert(orderMallListings([dear, cheap], "price_asc").map((row) => row.price).join() === "100,500", "價錢低→高");
+assert(orderMallListings([cheap, dear], "price_desc").map((row) => row.price).join() === "500,100", "高→低");
 assert(orderMallListings([cheap, later, soon], "ending")[0] === soon && orderMallListings([cheap, later, soon], "ending")[2] === cheap, "即將結束 puts live auctions first and fixed price last");
+const poke = { ...cheap, sellerId: "poke", title: "皮卡丘", game: "Pokémon", cardName: "皮卡丘", categorySlug: "pokemon", categoryZh: "寶可夢", categoryEn: "Pokémon" };
+const idol = { ...dear, sellerId: "idol", title: "球鞋", game: null, cardName: null, categorySlug: "idols", categoryZh: "偶像", categoryEn: "Idols" };
+const topps = { ...cheap, price: 300, sellerId: "topps", title: "Chrome", game: "Topps Basketball", cardName: "Siakam", categorySlug: "topps-basketball", categoryZh: "Topps 籃球", categoryEn: "Topps Basketball" };
+const lane = { lane: "hot" as const, interests: [] as string[], sort: "new" as const, followedIds: [] as string[] };
+assert(pickMallListings([idol, poke], { ...lane, cat: "picks", interests: ["寶可夢"] }).map((row) => row.sellerId).join() === "poke", "精選 follows interest tags");
+assert(pickMallListings([idol, poke], { ...lane, cat: "picks" }).length === 2, "精選 with no tags keeps the lane");
+assert(pickMallListings([idol, poke, topps], { ...lane, cat: "pokemon" })[0]?.sellerId === "poke", "the Pokémon chip is that category");
+assert(pickMallListings([idol, topps], { ...lane, cat: "topps" })[0]?.sellerId === "topps" && !mallCategoryHit("topps", { categorySlug: "football", game: null }), "Topps is its own chip");
+assert(pickMallListings([idol, poke], { ...lane, lane: "follow", cat: "picks", followedIds: ["idol"] })[0]?.sellerId === "idol", "已關注 is people you follow");
+const named = { sellerId: "x", title: "x", game: null, cardName: null, categorySlug: "pokemon", categoryZh: "寶可夢", categoryEn: "Pokémon" };
+assert(pickMallListings([{ ...cheap, ...named, sellerId: "buy" }, { ...soon, ...named, sellerId: "auc" }], { ...lane, lane: "auction", cat: "picks", now: new Date("2026-10-01T00:00:00Z").getTime() })[0]?.sellerId === "auc", "拍賣 is a live auction");
+assert(MALL_FEED_CAP === 16 && pickMallListings(Array.from({ length: 20 }, (_, index) => ({ ...cheap, sellerId: String(index), title: String(index), game: null, cardName: null, categorySlug: "pokemon", categoryZh: "寶可夢", categoryEn: "Pokémon" })), { ...lane, cat: "picks" }).length === 16, "a lane shows at most 16");
 assert(
   shopDisplayCents({ saleType: "AUCTION", price: null, startPrice: 50, currentBid: 80, auctionSettled: false }) === 80,
   "a live auction shows the bid",
@@ -92,16 +105,17 @@ assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }
 const store = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
 const mall = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
 const rails = readFileSync(new URL("../components/mall-rails.tsx", import.meta.url), "utf8");
+assert(mall.includes("<MallBoard") && mall.includes("listingQueryWhere") && mall.includes("MALL_FEED_CAP") && !mall.includes("MallRails") && !mall.includes("MallBar") && !mall.includes('href="/rank"'), "the mall loads a capped feed and does not mount the old rails");
+const mallBoard = readFileSync(new URL("../components/mall-board.tsx", import.meta.url), "utf8");
 assert(
-  mall.includes("<MallBar") && mall.indexOf("<MallBar") < mall.indexOf("<MallRails") && mall.indexOf("<MallRails") < mall.indexOf("<nav"),
-  "search, sort, and more sit above the rails, and the rails sit above the chips",
+  mallBoard.includes('name="q"') && mallBoard.includes("詳細篩選") && mallBoard.includes("精選") && mallBoard.includes("MALL_CHIPS") && mallBoard.includes("更多") && mallBoard.includes("熱門商品") && mallBoard.includes("附近商戶") && mallBoard.includes("已關注") && mallBoard.includes("拍賣") && mallBoard.includes('useState<Lane>("hot")') && !mallBoard.includes("useRouter") && !mallBoard.includes("router.push"),
+  "search, category chips, and tabs; tabs do not navigate",
 );
-const bar = readFileSync(new URL("../components/mall-bar.tsx", import.meta.url), "utf8");
 assert(
-  bar.includes('name="q"') && bar.includes("最新上架") && bar.includes("價錢由低至高") && bar.includes("價錢由高至低") && bar.includes("即將結束") && bar.includes("排行榜") && bar.includes('"/rank"') && bar.includes('"/shop/recent"') && bar.includes('"/shop/watch"') && !bar.includes("max-w-[390px]") && !bar.includes("max-w-[375px]"),
-  "the mall row is search, the four sorts, and more, without a fixed phone width",
+  mallBoard.includes("最新上架") && mallBoard.includes("價錢低→高") && mallBoard.includes("高→低") && mallBoard.includes("即將結束") && mallBoard.includes('href="/shop/recent"') && mallBoard.includes('href="/shop/watch"') && !mallBoard.includes("排行榜") && !mallBoard.includes("max-w-[390px]") && !mallBoard.includes("max-w-[375px]"),
+  "the filter sheet is sort plus shortcuts, without a fixed phone width",
 );
-assert(mall.includes("listingQueryWhere") && mall.includes("orderMallListings") && mall.includes('href="/auction"') && mall.includes('href="/rank"') && mall.includes("/shop/${store.id}"), "search filters listings; 拍賣, 排行, and 進店 stay");
+assert(mallBoard.includes("/shop/${store.id}") && mallBoard.includes("<PromoPill") && !mallBoard.includes("promoted ? -1"), "進店 stays on shop cards and the promo pill is not a sort key");
 assert(
   rails.includes("最近瀏覽") && rails.includes("追蹤") && rails.includes("查看全部") && rails.includes("最後 1 件") && rails.includes("quantityAvailable === 1") && rails.includes('name="bookmark"'),
   "mall rails are cover rows with a watch mark and a last-one badge",

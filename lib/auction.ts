@@ -94,6 +94,13 @@ export function mallSort(value: string | undefined): MallSort {
   return "new";
 }
 
+/** Category chip. Blank and `picks` are 精選. */
+export function mallCat(value: string | undefined): string {
+  const id = (value ?? "").trim().slice(0, 40);
+  if (!id || id === "picks") return "picks";
+  return id;
+}
+
 /** `/shop` with the chips, search, and sort that are actually on. */
 export function mallHref(opts: { tab?: ShopTab; q?: string; sort?: MallSort } = {}): string {
   const params = new URLSearchParams();
