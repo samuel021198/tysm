@@ -81,6 +81,7 @@ assert(scoreSnkrHit(en151, mewEn) === 0, "tcgdex sv03.5 does not equal SNKRDUNK 
 assert(snkrQueries(charizard)[0] === "M6a 137", "first query is set code plus number");
 assert(snkrQueries(base).includes("Charizard Base Set 4"), "english set name is searched when the code differs");
 assert(!snkrEnabled("ONE_PIECE") && !snkrEnabled("RIFTBOUND") && !snkrEnabled("DEMO") && !snkrEnabled("TOPPS_BASKETBALL") && !snkrEnabled("TOPPS_SOCCER"), "only pokemon is priced");
+assert(!snkrEnabled("YUGIOH") && !snkrEnabled("DIGIMON") && !snkrEnabled("WEISS_SCHWARZ") && !snkrEnabled("LORCANA") && !snkrEnabled("MTG") && !snkrEnabled("FLESH_AND_BLOOD") && !snkrEnabled("BANDAI_GUNDAM") && !snkrEnabled("DRAGON_BALL"), "wave-1 names are not priced");
 assert(snkrLive(charizard) && !snkrLive({ ...charizard, game: "DEMO" }), "the demo game does not call SNKRDUNK");
 assert(parseTrendRange("1w") === "1w" && parseTrendRange("nope") === "all", "trend range");
 

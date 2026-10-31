@@ -276,7 +276,31 @@ export function keptMirroredUrl(
 
 export function catalogObjectKey(game: string, externalId: string, ext: string): string {
   const folder =
-    game === "ONE_PIECE" ? "one-piece" : game === "RIFTBOUND" ? "riftbound" : game === "TOPPS_BASKETBALL" || game === "TOPPS_SOCCER" ? "topps" : game === "DEMO" ? "demo" : "pokemon";
+    game === "ONE_PIECE"
+      ? "one-piece"
+      : game === "RIFTBOUND"
+        ? "riftbound"
+        : game === "TOPPS_BASKETBALL" || game === "TOPPS_SOCCER"
+          ? "topps"
+          : game === "DEMO"
+            ? "demo"
+            : game === "YUGIOH"
+              ? "yugioh"
+              : game === "DIGIMON"
+                ? "digimon"
+                : game === "WEISS_SCHWARZ"
+                  ? "weiss-schwarz"
+                  : game === "LORCANA"
+                    ? "lorcana"
+                    : game === "MTG"
+                      ? "mtg"
+                      : game === "FLESH_AND_BLOOD"
+                        ? "flesh-and-blood"
+                        : game === "BANDAI_GUNDAM"
+                          ? "gundam"
+                          : game === "DRAGON_BALL"
+                            ? "dragon-ball"
+                            : "pokemon";
   const safe = externalId.replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 120);
   return `dex/${folder}/${safe}.${ext}`;
 }

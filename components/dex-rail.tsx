@@ -10,6 +10,13 @@ const GAMES = [
   ["RIFTBOUND", "Riftbound", "Riftbound"],
   ["TOPPS_BASKETBALL", "Topps 籃球", "Topps Basketball"],
   ["TOPPS_SOCCER", "Topps 足球", "Topps Soccer"],
+  ["YUGIOH", "遊戲王", "Yu-Gi-Oh"],
+  ["WEISS_SCHWARZ", "黑白雙翼", "Weiss Schwarz"],
+  ["DIGIMON", "數碼暴龍", "Digimon"],
+  ["LORCANA", "Lorcana", "Lorcana"],
+  ["MTG", "魔法風雲會", "Magic"],
+  ["FLESH_AND_BLOOD", "Flesh and Blood", "Flesh and Blood"],
+  ["BANDAI_GUNDAM", "高達", "Gundam"],
   ["DEMO", "Demo", "Demo"],
 ] as const;
 

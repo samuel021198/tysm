@@ -7,6 +7,7 @@ import { collectorEvents, merchantEvents, postEvents, tallyRanks } from "../lib/
 import { resolveAuction } from "../lib/rules";
 import { isSceneCover, isSeedCardFront } from "./demo-card-fronts";
 import {
+  EXTRA_CARD_CATEGORIES,
   LEAF_CATEGORIES,
   demoCart,
   demoFavorites,
@@ -58,6 +59,19 @@ for (const [id] of LEAF_CATEGORIES) {
   const rows = active.filter((item) => item.categoryId === id);
   assert(rows.length >= 7, `${id} needs at least 7 active listings`);
 }
+const categoryRows = [...LEAF_CATEGORIES, ...EXTRA_CARD_CATEGORIES];
+assert(new Set(categoryRows.map((row) => row[0])).size === categoryRows.length, "category ids stay unique");
+assert(new Set(categoryRows.map((row) => row[1])).size === categoryRows.length, "category slugs stay unique");
+const extraSlugs = new Set<string>(EXTRA_CARD_CATEGORIES.map((row) => row[1]));
+for (const slug of ["yugioh", "weiss-schwarz", "digimon", "lorcana", "mtg", "flesh-and-blood", "gundam", "dragon-ball", "other"]) {
+  assert(extraSlugs.has(slug), `${slug} is a sell leaf`);
+}
+assert(!extraSlugs.has("other-cards"), "其他 uses the live other slug");
+const bySlug = new Map(EXTRA_CARD_CATEGORIES.map((row) => [row[1], row]));
+assert(bySlug.get("other")?.[0] === "cat_other" && bySlug.get("other")?.[2] === "其他", "其他 keeps the live id and nameZh");
+assert(bySlug.get("yugioh")?.[0] === "cat_yugioh" && bySlug.get("weiss-schwarz")?.[0] === "cat_weiss_schwarz", "wave-1 leaf ids match the live rows");
+assert(bySlug.get("mtg")?.[0] === "cat_mtg" && bySlug.get("flesh-and-blood")?.[0] === "cat_flesh_and_blood" && bySlug.get("dragon-ball")?.[0] === "cat_dragon_ball", "mtg, fab, and dragon ball ids match the live rows");
+assert(!extraSlugs.has("union-arena") && !extraSlugs.has("vanguard"), "wave-2 leaves stay out");
 assert(active.some((item) => item.saleType === "BUY_NOW"), "buy now");
 assert(active.filter((item) => item.saleType === "AUCTION").length >= 12, "auctions");
 assert(active.filter((item) => item.saleType === "BOTH").length >= 6, "buy now plus auction");

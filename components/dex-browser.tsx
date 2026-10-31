@@ -14,6 +14,14 @@ function blurb(game: DexGame, locale: "zh" | "en") {
   if (game === "RIFTBOUND") return locale === "en" ? "Official Riftbound cards, in English." : "Riftbound 官方卡牌，英文。";
   if (game === "TOPPS_BASKETBALL") return locale === "en" ? "Topps Basketball cards. English names first; pictures come later." : "Topps 籃球卡，先收英文名，圖之後再補。";
   if (game === "TOPPS_SOCCER") return locale === "en" ? "Topps Soccer cards. English names first; pictures come later." : "Topps 足球卡，先收英文名，圖之後再補。";
+  if (game === "YUGIOH") return locale === "en" ? "Yu-Gi-Oh names. Pictures come later." : "遊戲王卡名，圖之後再補。";
+  if (game === "WEISS_SCHWARZ") return locale === "en" ? "Weiss Schwarz names. Pictures come later." : "黑白雙翼卡名，圖之後再補。";
+  if (game === "DIGIMON") return locale === "en" ? "Digimon names. Pictures come later." : "數碼暴龍卡名，圖之後再補。";
+  if (game === "LORCANA") return locale === "en" ? "Lorcana names. Pictures come later." : "Lorcana 卡名，圖之後再補。";
+  if (game === "MTG") return locale === "en" ? "Magic names. Pictures come later." : "魔法風雲會卡名，圖之後再補。";
+  if (game === "FLESH_AND_BLOOD") return locale === "en" ? "Flesh and Blood names. Pictures come later." : "Flesh and Blood 卡名，圖之後再補。";
+  if (game === "BANDAI_GUNDAM") return locale === "en" ? "Gundam names. Pictures come later." : "高達卡名，圖之後再補。";
+  if (game === "DRAGON_BALL") return locale === "en" ? "Dragon Ball names. Pictures come later." : "龍珠卡名，圖之後再補。";
   if (game === "DEMO") return locale === "en" ? "Sample cards, so the dex and prices have something to show." : "示範卡牌，方便睇版面同行情。";
   return locale === "en" ? "Official Pokémon cards, in Japanese and English." : "寶可夢官方卡牌，日文同英文。";
 }

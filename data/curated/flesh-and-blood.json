@@ -1,0 +1,9519 @@
+{
+  "brand": "Flesh and Blood",
+  "proposedEnum": "FLESH_AND_BLOOD",
+  "imageUrl": null,
+  "series": [
+    {
+      "name": "Flesh and Blood / FAB",
+      "cards": [
+        {
+          "nameEn": "Lexi"
+        },
+        {
+          "nameEn": "Lexi, Livewire"
+        },
+        {
+          "nameEn": "Azalea"
+        },
+        {
+          "nameEn": "Boltyn"
+        },
+        {
+          "nameEn": "Bravo"
+        },
+        {
+          "nameEn": "Chane"
+        },
+        {
+          "nameEn": "Dash"
+        },
+        {
+          "nameEn": "Dash I/O"
+        },
+        {
+          "nameEn": "Dorinthea"
+        },
+        {
+          "nameEn": "Fai"
+        },
+        {
+          "nameEn": "Fight Fair"
+        },
+        {
+          "nameEn": "Iyslander"
+        },
+        {
+          "nameEn": "Kassai"
+        },
+        {
+          "nameEn": "Katsu"
+        },
+        {
+          "nameEn": "Miragai"
+        },
+        {
+          "nameEn": "Oldhim"
+        },
+        {
+          "nameEn": "Prism"
+        },
+        {
+          "nameEn": "Rhinar"
+        },
+        {
+          "nameEn": "Viserai"
+        },
+        {
+          "nameEn": "Zen"
+        },
+        {
+          "nameEn": "Zen State"
+        },
+        {
+          "nameEn": "Billowing Mirage"
+        },
+        {
+          "nameEn": "Blazen Yoroi"
+        },
+        {
+          "nameEn": "Bravo, Showstopper"
+        },
+        {
+          "nameEn": "Coalescence Mirage"
+        },
+        {
+          "nameEn": "Dash, Database"
+        },
+        {
+          "nameEn": "Dashing Flashfoot"
+        },
+        {
+          "nameEn": "Data Doll MKII"
+        },
+        {
+          "nameEn": "Dorinthea Ironsong"
+        },
+        {
+          "nameEn": "Frozen to Death"
+        },
+        {
+          "nameEn": "Invoke Miragai"
+        },
+        {
+          "nameEn": "Ira, Crimson Haze"
+        },
+        {
+          "nameEn": "Iyslander, Stormbind"
+        },
+        {
+          "nameEn": "Katsu, the Wanderer"
+        },
+        {
+          "nameEn": "Lunar Mirage"
+        },
+        {
+          "nameEn": "Miraging Metamorph"
+        },
+        {
+          "nameEn": "Passing Mirage"
+        },
+        {
+          "nameEn": "Prismatic Lens"
+        },
+        {
+          "nameEn": "Prismatic Leyline"
+        },
+        {
+          "nameEn": "Prismatic Shield"
+        },
+        {
+          "nameEn": "Shimmering Mirage"
+        },
+        {
+          "nameEn": "System Failure"
+        },
+        {
+          "nameEn": "Teklovossen"
+        },
+        {
+          "nameEn": "Viral Diffusion"
+        },
+        {
+          "nameEn": "Viserai, Rune Blood"
+        },
+        {
+          "nameEn": "Zenith Blade"
+        },
+        {
+          "nameEn": "Azalea, Ace in the Hole"
+        },
+        {
+          "nameEn": "Bravo, Flattering Showman"
+        },
+        {
+          "nameEn": "Bravo, Star of the Show"
+        },
+        {
+          "nameEn": "Chane, Bound by Shadow"
+        },
+        {
+          "nameEn": "Crown of Frozen Thoughts"
+        },
+        {
+          "nameEn": "Dash, Inventor Extraordinaire"
+        },
+        {
+          "nameEn": "Dorinthea, Quicksilver Prodigy"
+        },
+        {
+          "nameEn": "Fai, Rising Rebellion"
+        },
+        {
+          "nameEn": "Ira, Scarlet Revenger"
+        },
+        {
+          "nameEn": "Kassai of the Golden Sand"
+        },
+        {
+          "nameEn": "Kassai, Cintari Sellsword"
+        },
+        {
+          "nameEn": "Manifestation of Miragai"
+        },
+        {
+          "nameEn": "Mask of Wizened Whiskers"
+        },
+        {
+          "nameEn": "Prism, Advent of Thrones"
+        },
+        {
+          "nameEn": "Prism, Awakener of Sol"
+        },
+        {
+          "nameEn": "Prism, Sculptor of Arc Light"
+        },
+        {
+          "nameEn": "Professor Teklovossen"
+        },
+        {
+          "nameEn": "Rhinar, Reckless Rampage"
+        },
+        {
+          "nameEn": "Ser Boltyn, Breaker of Dawn"
+        },
+        {
+          "nameEn": "Teklovossen's Workshop"
+        },
+        {
+          "nameEn": "Teklovossen, Esteemed Magnate"
+        },
+        {
+          "nameEn": "Teklovossen, the Mechropotent"
+        },
+        {
+          "nameEn": "Widow Veil Respirator"
+        },
+        {
+          "nameEn": "Zen, Tamer of Purpose"
+        },
+        {
+          "nameEn": "Oldhim, Grandfather of Eternity"
+        },
+        {
+          "nameEn": "Aether Arc"
+        },
+        {
+          "nameEn": "Aetherize"
+        },
+        {
+          "nameEn": "Aftershock"
+        },
+        {
+          "nameEn": "Agility"
+        },
+        {
+          "nameEn": "All In"
+        },
+        {
+          "nameEn": "Amnesia"
+        },
+        {
+          "nameEn": "Anothos"
+        },
+        {
+          "nameEn": "Aphrodias"
+        },
+        {
+          "nameEn": "Aqua Laps"
+        },
+        {
+          "nameEn": "Arakni"
+        },
+        {
+          "nameEn": "Arc Ramp"
+        },
+        {
+          "nameEn": "Art of War"
+        },
+        {
+          "nameEn": "Ash"
+        },
+        {
+          "nameEn": "Aurora"
+        },
+        {
+          "nameEn": "Avast Ye!"
+        },
+        {
+          "nameEn": "Awakening"
+        },
+        {
+          "nameEn": "Azvolai"
+        },
+        {
+          "nameEn": "Back Stab"
+        },
+        {
+          "nameEn": "Bad Beats"
+        },
+        {
+          "nameEn": "Bad Breath"
+        },
+        {
+          "nameEn": "Bait"
+        },
+        {
+          "nameEn": "Bam Bam"
+        },
+        {
+          "nameEn": "Banksy"
+        },
+        {
+          "nameEn": "Bare Fangs"
+        },
+        {
+          "nameEn": "Bare Swing"
+        },
+        {
+          "nameEn": "Barnacle"
+        },
+        {
+          "nameEn": "Bash Brute"
+        },
+        {
+          "nameEn": "Bear Hug"
+        },
+        {
+          "nameEn": "Beast Mode"
+        },
+        {
+          "nameEn": "Belittle"
+        },
+        {
+          "nameEn": "Berserk"
+        },
+        {
+          "nameEn": "Bet Big"
+        },
+        {
+          "nameEn": "Betsy"
+        },
+        {
+          "nameEn": "Big Bertha"
+        },
+        {
+          "nameEn": "Big Bop"
+        },
+        {
+          "nameEn": "Big Bully"
+        },
+        {
+          "nameEn": "Big Shot"
+        },
+        {
+          "nameEn": "Big Slick"
+        },
+        {
+          "nameEn": "Bingo"
+        },
+        {
+          "nameEn": "Bite"
+        },
+        {
+          "nameEn": "Blade Cuff"
+        },
+        {
+          "nameEn": "Blade Rush"
+        },
+        {
+          "nameEn": "Blanch"
+        },
+        {
+          "nameEn": "Blast Rig"
+        },
+        {
+          "nameEn": "Bleed Out"
+        },
+        {
+          "nameEn": "Blink"
+        },
+        {
+          "nameEn": "Blizzard"
+        },
+        {
+          "nameEn": "Blood Drop"
+        },
+        {
+          "nameEn": "Blood Line"
+        },
+        {
+          "nameEn": "Blunten"
+        },
+        {
+          "nameEn": "Boast"
+        },
+        {
+          "nameEn": "Booze!"
+        },
+        {
+          "nameEn": "Brainstorm"
+        },
+        {
+          "nameEn": "Brandish"
+        },
+        {
+          "nameEn": "Break Tide"
+        },
+        {
+          "nameEn": "Briar"
+        },
+        {
+          "nameEn": "Browbeat"
+        },
+        {
+          "nameEn": "Brush Off"
+        },
+        {
+          "nameEn": "Buckle"
+        },
+        {
+          "nameEn": "Buckwild"
+        },
+        {
+          "nameEn": "Bull Bar"
+        },
+        {
+          "nameEn": "Burgeoning"
+        },
+        {
+          "nameEn": "Burn Away"
+        },
+        {
+          "nameEn": "Burn Bare"
+        },
+        {
+          "nameEn": "Buzz Bolt"
+        },
+        {
+          "nameEn": "Carve Up"
+        },
+        {
+          "nameEn": "Cash In"
+        },
+        {
+          "nameEn": "Cash Out"
+        },
+        {
+          "nameEn": "Cast Bones"
+        },
+        {
+          "nameEn": "Censor"
+        },
+        {
+          "nameEn": "Cheap Shot"
+        },
+        {
+          "nameEn": "Cheers!"
+        },
+        {
+          "nameEn": "Chest Puff"
+        },
+        {
+          "nameEn": "Chivalry"
+        },
+        {
+          "nameEn": "Chokeslam"
+        },
+        {
+          "nameEn": "Cindra"
+        },
+        {
+          "nameEn": "Civic Duty"
+        },
+        {
+          "nameEn": "Civic Peak"
+        },
+        {
+          "nameEn": "Cleave"
+        },
+        {
+          "nameEn": "Cold Snap"
+        },
+        {
+          "nameEn": "Cold Wave"
+        },
+        {
+          "nameEn": "Concuss"
+        },
+        {
+          "nameEn": "Confidence"
+        },
+        {
+          "nameEn": "Copper"
+        },
+        {
+          "nameEn": "Copper Cog"
+        },
+        {
+          "nameEn": "Courage"
+        },
+        {
+          "nameEn": "Crackling"
+        },
+        {
+          "nameEn": "Crankshaft"
+        },
+        {
+          "nameEn": "Crash Down"
+        },
+        {
+          "nameEn": "Craterhoof"
+        },
+        {
+          "nameEn": "Crazy Brew"
+        },
+        {
+          "nameEn": "Creep"
+        },
+        {
+          "nameEn": "Cromai"
+        },
+        {
+          "nameEn": "Cull"
+        },
+        {
+          "nameEn": "Cut Deep"
+        },
+        {
+          "nameEn": "Dampen"
+        },
+        {
+          "nameEn": "Data Link"
+        },
+        {
+          "nameEn": "Dauntless"
+        },
+        {
+          "nameEn": "Dawnblade"
+        },
+        {
+          "nameEn": "Dead Eye"
+        },
+        {
+          "nameEn": "Deadly Duo"
+        },
+        {
+          "nameEn": "Debilitate"
+        },
+        {
+          "nameEn": "Deep Blue"
+        },
+        {
+          "nameEn": "Diamond"
+        },
+        {
+          "nameEn": "Dice Up"
+        },
+        {
+          "nameEn": "Diced"
+        },
+        {
+          "nameEn": "Dig In"
+        },
+        {
+          "nameEn": "Disable"
+        },
+        {
+          "nameEn": "Disarm"
+        },
+        {
+          "nameEn": "Disembody"
+        },
+        {
+          "nameEn": "Dishonor"
+        },
+        {
+          "nameEn": "Disperse"
+        },
+        {
+          "nameEn": "Divvy Up"
+        },
+        {
+          "nameEn": "Dodge"
+        },
+        {
+          "nameEn": "Dominia"
+        },
+        {
+          "nameEn": "Donkey"
+        },
+        {
+          "nameEn": "Doomsaying"
+        },
+        {
+          "nameEn": "Doomsday"
+        },
+        {
+          "nameEn": "Downswing"
+        },
+        {
+          "nameEn": "Draco Fire"
+        },
+        {
+          "nameEn": "Drag Down"
+        },
+        {
+          "nameEn": "Dreadbore"
+        },
+        {
+          "nameEn": "Drill Shot"
+        },
+        {
+          "nameEn": "Dromai"
+        },
+        {
+          "nameEn": "Droplet"
+        },
+        {
+          "nameEn": "Durendal"
+        },
+        {
+          "nameEn": "Duskblade"
+        },
+        {
+          "nameEn": "Dustup"
+        },
+        {
+          "nameEn": "Earth Form"
+        },
+        {
+          "nameEn": "Ebon Fold"
+        },
+        {
+          "nameEn": "Echoflash"
+        },
+        {
+          "nameEn": "Eclipse"
+        },
+        {
+          "nameEn": "Edge Ahead"
+        },
+        {
+          "nameEn": "Electrify"
+        },
+        {
+          "nameEn": "Eloquence"
+        },
+        {
+          "nameEn": "Embalm"
+        },
+        {
+          "nameEn": "Embolden"
+        },
+        {
+          "nameEn": "En Garde"
+        },
+        {
+          "nameEn": "Encase"
+        },
+        {
+          "nameEn": "Encore"
+        },
+        {
+          "nameEn": "Enigma"
+        },
+        {
+          "nameEn": "Entangle"
+        },
+        {
+          "nameEn": "Eradicate"
+        },
+        {
+          "nameEn": "Erase Face"
+        },
+        {
+          "nameEn": "Evergreen"
+        },
+        {
+          "nameEn": "Evo Recall"
+        },
+        {
+          "nameEn": "Expedite"
+        },
+        {
+          "nameEn": "Exposed"
+        },
+        {
+          "nameEn": "Fabricate"
+        },
+        {
+          "nameEn": "Fang"
+        },
+        {
+          "nameEn": "Fault Line"
+        },
+        {
+          "nameEn": "Fealty"
+        },
+        {
+          "nameEn": "Fiddle-dee"
+        },
+        {
+          "nameEn": "Final Act"
+        },
+        {
+          "nameEn": "Firewall"
+        },
+        {
+          "nameEn": "Fist Pump"
+        },
+        {
+          "nameEn": "Fisticuffs"
+        },
+        {
+          "nameEn": "Flake Out"
+        },
+        {
+          "nameEn": "Flash"
+        },
+        {
+          "nameEn": "Flash Bolt"
+        },
+        {
+          "nameEn": "Flex"
+        },
+        {
+          "nameEn": "Flex Claws"
+        },
+        {
+          "nameEn": "Flex Speed"
+        },
+        {
+          "nameEn": "Flic Flak"
+        },
+        {
+          "nameEn": "Florian"
+        },
+        {
+          "nameEn": "Flourish"
+        },
+        {
+          "nameEn": "Flurry"
+        },
+        {
+          "nameEn": "Fog Down"
+        },
+        {
+          "nameEn": "Frailty"
+        },
+        {
+          "nameEn": "Frazzle"
+        },
+        {
+          "nameEn": "Frightmare"
+        },
+        {
+          "nameEn": "Frost Fang"
+        },
+        {
+          "nameEn": "Frost Hex"
+        },
+        {
+          "nameEn": "Frost Lock"
+        },
+        {
+          "nameEn": "Frostbite"
+        },
+        {
+          "nameEn": "Frosting"
+        },
+        {
+          "nameEn": "Fry"
+        },
+        {
+          "nameEn": "Full Tilt"
+        },
+        {
+          "nameEn": "Fulminate"
+        },
+        {
+          "nameEn": "Gas Up"
+        },
+        {
+          "nameEn": "Genesis"
+        },
+        {
+          "nameEn": "Germinate"
+        },
+        {
+          "nameEn": "Gigawatt"
+        },
+        {
+          "nameEn": "Glisten"
+        },
+        {
+          "nameEn": "Go Bananas"
+        },
+        {
+          "nameEn": "Gold"
+        },
+        {
+          "nameEn": "Golden Cog"
+        },
+        {
+          "nameEn": "Grim Feast"
+        },
+        {
+          "nameEn": "Grow Claws"
+        },
+        {
+          "nameEn": "Grow Wings"
+        },
+        {
+          "nameEn": "Growl"
+        },
+        {
+          "nameEn": "Gutshot"
+        },
+        {
+          "nameEn": "HMS Kraken"
+        },
+        {
+          "nameEn": "HMS Marlin"
+        },
+        {
+          "nameEn": "Haboob"
+        },
+        {
+          "nameEn": "Hala"
+        },
+        {
+          "nameEn": "Haven Veil"
+        },
+        {
+          "nameEn": "Havoc Wrap"
+        },
+        {
+          "nameEn": "Head Jab"
+        },
+        {
+          "nameEn": "Head Shot"
+        },
+        {
+          "nameEn": "Head Stone"
+        },
+        {
+          "nameEn": "Headbutt"
+        },
+        {
+          "nameEn": "Heads Up"
+        },
+        {
+          "nameEn": "Heat Wave"
+        },
+        {
+          "nameEn": "Heave Ho!"
+        },
+        {
+          "nameEn": "Heist"
+        },
+        {
+          "nameEn": "High Riser"
+        },
+        {
+          "nameEn": "Hiss"
+        },
+        {
+          "nameEn": "Hold 'em"
+        },
+        {
+          "nameEn": "Hold Firm"
+        },
+        {
+          "nameEn": "Hold Focus"
+        },
+        {
+          "nameEn": "Hook"
+        },
+        {
+          "nameEn": "Hot Streak"
+        },
+        {
+          "nameEn": "Hot Top"
+        },
+        {
+          "nameEn": "Hulk Up"
+        },
+        {
+          "nameEn": "Humble"
+        },
+        {
+          "nameEn": "Hunt's End"
+        },
+        {
+          "nameEn": "Hurl"
+        },
+        {
+          "nameEn": "Hyper-X3"
+        },
+        {
+          "nameEn": "Ice Bolt"
+        },
+        {
+          "nameEn": "Ice Quake"
+        },
+        {
+          "nameEn": "Ice Storm"
+        },
+        {
+          "nameEn": "Icebind"
+        },
+        {
+          "nameEn": "Ignite"
+        },
+        {
+          "nameEn": "Illuminate"
+        },
+        {
+          "nameEn": "Incision"
+        },
+        {
+          "nameEn": "Index"
+        },
+        {
+          "nameEn": "Inertia"
+        },
+        {
+          "nameEn": "Infect"
+        },
+        {
+          "nameEn": "Infiltrate"
+        },
+        {
+          "nameEn": "Inflame"
+        },
+        {
+          "nameEn": "Inner Chi"
+        },
+        {
+          "nameEn": "Interlude"
+        },
+        {
+          "nameEn": "Invigorate"
+        },
+        {
+          "nameEn": "Isolate"
+        },
+        {
+          "nameEn": "Jive"
+        },
+        {
+          "nameEn": "Jump Start"
+        },
+        {
+          "nameEn": "Kano"
+        },
+        {
+          "nameEn": "Kayo"
+        },
+        {
+          "nameEn": "Kindle"
+        },
+        {
+          "nameEn": "Knives Out"
+        },
+        {
+          "nameEn": "Kyloria"
+        },
+        {
+          "nameEn": "Lava Burst"
+        },
+        {
+          "nameEn": "Lay Low"
+        },
+        {
+          "nameEn": "Lay Waste"
+        },
+        {
+          "nameEn": "Leg Tap"
+        },
+        {
+          "nameEn": "Levia"
+        },
+        {
+          "nameEn": "Line"
+        },
+        {
+          "nameEn": "Line It Up"
+        },
+        {
+          "nameEn": "Liquefy"
+        },
+        {
+          "nameEn": "Loan Shark"
+        },
+        {
+          "nameEn": "Lobotomy"
+        },
+        {
+          "nameEn": "Log Fall"
+        },
+        {
+          "nameEn": "Long Shot"
+        },
+        {
+          "nameEn": "Look Tuff"
+        },
+        {
+          "nameEn": "Low Blow"
+        },
+        {
+          "nameEn": "Lubricate"
+        },
+        {
+          "nameEn": "Luminaris"
+        },
+        {
+          "nameEn": "MHz Script"
+        },
+        {
+          "nameEn": "Magrar"
+        },
+        {
+          "nameEn": "Malign"
+        },
+        {
+          "nameEn": "Mangle"
+        },
+        {
+          "nameEn": "Marked"
+        },
+        {
+          "nameEn": "Marlynn"
+        },
+        {
+          "nameEn": "Massacre"
+        },
+        {
+          "nameEn": "Master Cog"
+        },
+        {
+          "nameEn": "Maul"
+        },
+        {
+          "nameEn": "Mauling Qi"
+        },
+        {
+          "nameEn": "Maxx Nitro"
+        },
+        {
+          "nameEn": "Medkit"
+        },
+        {
+          "nameEn": "MetEx"
+        },
+        {
+          "nameEn": "Might"
+        },
+        {
+          "nameEn": "Mind Warp"
+        },
+        {
+          "nameEn": "Minnowism"
+        },
+        {
+          "nameEn": "Moon Wish"
+        },
+        {
+          "nameEn": "Moonshot"
+        },
+        {
+          "nameEn": "Mulch"
+        },
+        {
+          "nameEn": "Nekria"
+        },
+        {
+          "nameEn": "Nimblism"
+        },
+        {
+          "nameEn": "Nimby"
+        },
+        {
+          "nameEn": "No Fear"
+        },
+        {
+          "nameEn": "Numbskull"
+        },
+        {
+          "nameEn": "Nuu"
+        },
+        {
+          "nameEn": "Oaken Old"
+        },
+        {
+          "nameEn": "Oblivion"
+        },
+        {
+          "nameEn": "Off Beat"
+        },
+        {
+          "nameEn": "Off Cuts"
+        },
+        {
+          "nameEn": "Olympia"
+        },
+        {
+          "nameEn": "Olé"
+        },
+        {
+          "nameEn": "Oscilio"
+        },
+        {
+          "nameEn": "Out Muscle"
+        },
+        {
+          "nameEn": "Out Pace"
+        },
+        {
+          "nameEn": "Outed"
+        },
+        {
+          "nameEn": "Ouvia"
+        },
+        {
+          "nameEn": "Over Flex"
+        },
+        {
+          "nameEn": "Over Loop"
+        },
+        {
+          "nameEn": "Overbear"
+        },
+        {
+          "nameEn": "Overblast"
+        },
+        {
+          "nameEn": "Overcharge"
+        },
+        {
+          "nameEn": "Overload"
+        },
+        {
+          "nameEn": "Overpower"
+        },
+        {
+          "nameEn": "Overswing"
+        },
+        {
+          "nameEn": "Pack Call"
+        },
+        {
+          "nameEn": "Pack Hunt"
+        },
+        {
+          "nameEn": "Pass Over"
+        },
+        {
+          "nameEn": "Pay Day"
+        },
+        {
+          "nameEn": "Pay Up"
+        },
+        {
+          "nameEn": "Payload"
+        },
+        {
+          "nameEn": "Peg Leg"
+        },
+        {
+          "nameEn": "Perforate"
+        },
+        {
+          "nameEn": "Perk Up"
+        },
+        {
+          "nameEn": "Pink Visor"
+        },
+        {
+          "nameEn": "Pleiades"
+        },
+        {
+          "nameEn": "Plow Under"
+        },
+        {
+          "nameEn": "Plunge"
+        },
+        {
+          "nameEn": "Polar Cap"
+        },
+        {
+          "nameEn": "Ponder"
+        },
+        {
+          "nameEn": "Pound Town"
+        },
+        {
+          "nameEn": "Powder Keg"
+        },
+        {
+          "nameEn": "Power Play"
+        },
+        {
+          "nameEn": "Provoke"
+        },
+        {
+          "nameEn": "Prowl"
+        },
+        {
+          "nameEn": "Pry"
+        },
+        {
+          "nameEn": "Puffin"
+        },
+        {
+          "nameEn": "Pulping"
+        },
+        {
+          "nameEn": "Pulverize"
+        },
+        {
+          "nameEn": "Pummel"
+        },
+        {
+          "nameEn": "Puncture"
+        },
+        {
+          "nameEn": "Put on Ice"
+        },
+        {
+          "nameEn": "Quicken"
+        },
+        {
+          "nameEn": "Quickfire"
+        },
+        {
+          "nameEn": "Quickstep"
+        },
+        {
+          "nameEn": "Rake Back"
+        },
+        {
+          "nameEn": "Ram Raider"
+        },
+        {
+          "nameEn": "Rapid Fire"
+        },
+        {
+          "nameEn": "Ratchet Up"
+        },
+        {
+          "nameEn": "Raw Meat"
+        },
+        {
+          "nameEn": "Razor Ring"
+        },
+        {
+          "nameEn": "Re-Charge!"
+        },
+        {
+          "nameEn": "Recoil"
+        },
+        {
+          "nameEn": "Red Hot"
+        },
+        {
+          "nameEn": "Red Liner"
+        },
+        {
+          "nameEn": "Reel In"
+        },
+        {
+          "nameEn": "Regicide"
+        },
+        {
+          "nameEn": "Rejuvenate"
+        },
+        {
+          "nameEn": "Rend Flesh"
+        },
+        {
+          "nameEn": "Rev Up"
+        },
+        {
+          "nameEn": "Rewind"
+        },
+        {
+          "nameEn": "Rift Bind"
+        },
+        {
+          "nameEn": "Rifting"
+        },
+        {
+          "nameEn": "Riled Up"
+        },
+        {
+          "nameEn": "Riptide"
+        },
+        {
+          "nameEn": "Rise Above"
+        },
+        {
+          "nameEn": "Rise Up"
+        },
+        {
+          "nameEn": "Rok"
+        },
+        {
+          "nameEn": "Rotary Ram"
+        },
+        {
+          "nameEn": "Rough Up"
+        },
+        {
+          "nameEn": "Rout"
+        },
+        {
+          "nameEn": "Runaways"
+        },
+        {
+          "nameEn": "Rune Flash"
+        },
+        {
+          "nameEn": "Rune Snare"
+        },
+        {
+          "nameEn": "Runechant"
+        },
+        {
+          "nameEn": "Rust Belt"
+        },
+        {
+          "nameEn": "Sand Cover"
+        },
+        {
+          "nameEn": "Sap"
+        },
+        {
+          "nameEn": "Scour"
+        },
+        {
+          "nameEn": "Sea Legs"
+        },
+        {
+          "nameEn": "Sedate"
+        },
+        {
+          "nameEn": "Seerstone"
+        },
+        {
+          "nameEn": "Semblance"
+        },
+        {
+          "nameEn": "Shake Down"
+        },
+        {
+          "nameEn": "Shatter"
+        },
+        {
+          "nameEn": "Shiver"
+        },
+        {
+          "nameEn": "Shove Off"
+        },
+        {
+          "nameEn": "Show Time!"
+        },
+        {
+          "nameEn": "Showdown"
+        },
+        {
+          "nameEn": "Shred"
+        },
+        {
+          "nameEn": "Shuck"
+        },
+        {
+          "nameEn": "Sift"
+        },
+        {
+          "nameEn": "Silken Gi"
+        },
+        {
+          "nameEn": "Silver"
+        },
+        {
+          "nameEn": "Singe"
+        },
+        {
+          "nameEn": "Sink Below"
+        },
+        {
+          "nameEn": "Sinker"
+        },
+        {
+          "nameEn": "Sit!"
+        },
+        {
+          "nameEn": "Sizzle"
+        },
+        {
+          "nameEn": "Skullhorn"
+        },
+        {
+          "nameEn": "Skyzyk"
+        },
+        {
+          "nameEn": "Slap-Happy"
+        },
+        {
+          "nameEn": "Slay"
+        },
+        {
+          "nameEn": "Sleep Dart"
+        },
+        {
+          "nameEn": "Slice Up"
+        },
+        {
+          "nameEn": "Slither"
+        },
+        {
+          "nameEn": "Sloggism"
+        },
+        {
+          "nameEn": "Smash Up"
+        },
+        {
+          "nameEn": "Smell Fear"
+        },
+        {
+          "nameEn": "Smoke Out"
+        },
+        {
+          "nameEn": "Snag"
+        },
+        {
+          "nameEn": "Snap Shot"
+        },
+        {
+          "nameEn": "Snapback"
+        },
+        {
+          "nameEn": "Snatch"
+        },
+        {
+          "nameEn": "Snow Under"
+        },
+        {
+          "nameEn": "Snuff Out"
+        },
+        {
+          "nameEn": "Sonic Boom"
+        },
+        {
+          "nameEn": "Soul Food"
+        },
+        {
+          "nameEn": "Soup Up"
+        },
+        {
+          "nameEn": "Spillover"
+        },
+        {
+          "nameEn": "Spitfire"
+        },
+        {
+          "nameEn": "Stab Wound"
+        },
+        {
+          "nameEn": "Stand Tall"
+        },
+        {
+          "nameEn": "Star Fall"
+        },
+        {
+          "nameEn": "Steadfast"
+        },
+        {
+          "nameEn": "Stone Rain"
+        },
+        {
+          "nameEn": "Stormshard"
+        },
+        {
+          "nameEn": "Stormwhirl"
+        },
+        {
+          "nameEn": "Stun Star"
+        },
+        {
+          "nameEn": "Submerge"
+        },
+        {
+          "nameEn": "Sun Kiss"
+        },
+        {
+          "nameEn": "Supercell"
+        },
+        {
+          "nameEn": "Superstar"
+        },
+        {
+          "nameEn": "Swabbie"
+        },
+        {
+          "nameEn": "Swift Shot"
+        },
+        {
+          "nameEn": "Swing Big"
+        },
+        {
+          "nameEn": "T-Bone"
+        },
+        {
+          "nameEn": "Take Aim"
+        },
+        {
+          "nameEn": "Take Cover"
+        },
+        {
+          "nameEn": "Take That!"
+        },
+        {
+          "nameEn": "Taylor"
+        },
+        {
+          "nameEn": "Teklo Core"
+        },
+        {
+          "nameEn": "Tempt Over"
+        },
+        {
+          "nameEn": "Tenacity"
+        },
+        {
+          "nameEn": "Terra"
+        },
+        {
+          "nameEn": "Thaw"
+        },
+        {
+          "nameEn": "Themai"
+        },
+        {
+          "nameEn": "Thrive"
+        },
+        {
+          "nameEn": "Throttle"
+        },
+        {
+          "nameEn": "Thrust"
+        },
+        {
+          "nameEn": "Thump"
+        },
+        {
+          "nameEn": "Thunk"
+        },
+        {
+          "nameEn": "Thwart"
+        },
+        {
+          "nameEn": "Tiger Trap"
+        },
+        {
+          "nameEn": "Tip-Off"
+        },
+        {
+          "nameEn": "Toby Jugs"
+        },
+        {
+          "nameEn": "Tomeltai"
+        },
+        {
+          "nameEn": "Toughen Up"
+        },
+        {
+          "nameEn": "Toughness"
+        },
+        {
+          "nameEn": "Toxic Tips"
+        },
+        {
+          "nameEn": "Toxicity"
+        },
+        {
+          "nameEn": "Trade In"
+        },
+        {
+          "nameEn": "Tri-shot"
+        },
+        {
+          "nameEn": "Trot Along"
+        },
+        {
+          "nameEn": "Trounce"
+        },
+        {
+          "nameEn": "Truce"
+        },
+        {
+          "nameEn": "Tuffnut"
+        },
+        {
+          "nameEn": "Turn Heads"
+        },
+        {
+          "nameEn": "Twin Drive"
+        },
+        {
+          "nameEn": "Two-Faced"
+        },
+        {
+          "nameEn": "Under Loop"
+        },
+        {
+          "nameEn": "Unicycle"
+        },
+        {
+          "nameEn": "Unmovable"
+        },
+        {
+          "nameEn": "Unsheathed"
+        },
+        {
+          "nameEn": "Untamed"
+        },
+        {
+          "nameEn": "Uprising"
+        },
+        {
+          "nameEn": "Uzuri"
+        },
+        {
+          "nameEn": "Vela Flash"
+        },
+        {
+          "nameEn": "Verdance"
+        },
+        {
+          "nameEn": "Vigor"
+        },
+        {
+          "nameEn": "Vigor Rush"
+        },
+        {
+          "nameEn": "Vipox"
+        },
+        {
+          "nameEn": "Voltaris"
+        },
+        {
+          "nameEn": "Vynnset"
+        },
+        {
+          "nameEn": "Vynserakai"
+        },
+        {
+          "nameEn": "Wage Gold"
+        },
+        {
+          "nameEn": "Wage Might"
+        },
+        {
+          "nameEn": "Wage Vigor"
+        },
+        {
+          "nameEn": "Wallop"
+        },
+        {
+          "nameEn": "Wash Away"
+        },
+        {
+          "nameEn": "Wax Off"
+        },
+        {
+          "nameEn": "Wax On"
+        },
+        {
+          "nameEn": "Weave Ice"
+        },
+        {
+          "nameEn": "Widowmaker"
+        },
+        {
+          "nameEn": "Wild Ride"
+        },
+        {
+          "nameEn": "Wither"
+        },
+        {
+          "nameEn": "Withstand"
+        },
+        {
+          "nameEn": "Yendurai"
+        },
+        {
+          "nameEn": "Yo Ho Ho!"
+        },
+        {
+          "nameEn": "Zap"
+        },
+        {
+          "nameEn": "Zipper Hit"
+        },
+        {
+          "nameEn": "Zoom In"
+        },
+        {
+          "nameEn": "Zyggy"
+        },
+        {
+          "nameEn": "A Bit off the Side"
+        },
+        {
+          "nameEn": "A Drop in the Ocean"
+        },
+        {
+          "nameEn": "A Good Clean Fight"
+        },
+        {
+          "nameEn": "A Moment's Peace"
+        },
+        {
+          "nameEn": "Absorb in Aether"
+        },
+        {
+          "nameEn": "Absorption Dome"
+        },
+        {
+          "nameEn": "Achilles Accelerator"
+        },
+        {
+          "nameEn": "Act of Glory"
+        },
+        {
+          "nameEn": "Adaptive Alpha Mold"
+        },
+        {
+          "nameEn": "Adaptive Dissolver"
+        },
+        {
+          "nameEn": "Adaptive Plating"
+        },
+        {
+          "nameEn": "Adrenaline Rush"
+        },
+        {
+          "nameEn": "Aether Ashwing"
+        },
+        {
+          "nameEn": "Aether Conduit"
+        },
+        {
+          "nameEn": "Aether Crackers"
+        },
+        {
+          "nameEn": "Aether Dart"
+        },
+        {
+          "nameEn": "Aether Flare"
+        },
+        {
+          "nameEn": "Aether Hail"
+        },
+        {
+          "nameEn": "Aether Icevein"
+        },
+        {
+          "nameEn": "Aether Ironweave"
+        },
+        {
+          "nameEn": "Aether Quickening"
+        },
+        {
+          "nameEn": "Aether Sink"
+        },
+        {
+          "nameEn": "Aether Slash"
+        },
+        {
+          "nameEn": "Aether Spindle"
+        },
+        {
+          "nameEn": "Aether Wildfire"
+        },
+        {
+          "nameEn": "Aethersling"
+        },
+        {
+          "nameEn": "Affirm Loyalty"
+        },
+        {
+          "nameEn": "Aggressive Pounce"
+        },
+        {
+          "nameEn": "Agile Engagement"
+        },
+        {
+          "nameEn": "Agile Windup"
+        },
+        {
+          "nameEn": "Agility Stance"
+        },
+        {
+          "nameEn": "Air of a Comeback"
+        },
+        {
+          "nameEn": "Alluring Inducement"
+        },
+        {
+          "nameEn": "Alluvion Constellas"
+        },
+        {
+          "nameEn": "Alpha Instinct"
+        },
+        {
+          "nameEn": "Alpha Rampage"
+        },
+        {
+          "nameEn": "Already Dead"
+        },
+        {
+          "nameEn": "Amethyst Amulet"
+        },
+        {
+          "nameEn": "Amethyst Tiara"
+        },
+        {
+          "nameEn": "Amplify the Arknight"
+        },
+        {
+          "nameEn": "Amplifying Arrow"
+        },
+        {
+          "nameEn": "Amulet of Earth"
+        },
+        {
+          "nameEn": "Amulet of Echoes"
+        },
+        {
+          "nameEn": "Amulet of Havencall"
+        },
+        {
+          "nameEn": "Amulet of Ice"
+        },
+        {
+          "nameEn": "Amulet of Ignition"
+        },
+        {
+          "nameEn": "Amulet of Lightning"
+        },
+        {
+          "nameEn": "Amulet of Oblation"
+        },
+        {
+          "nameEn": "Anaphylactic Shock"
+        },
+        {
+          "nameEn": "Ancestral Harmony"
+        },
+        {
+          "nameEn": "And Again..."
+        },
+        {
+          "nameEn": "Angelic Attendant"
+        },
+        {
+          "nameEn": "Angelic Descent"
+        },
+        {
+          "nameEn": "Angelic Wrath"
+        },
+        {
+          "nameEn": "Angry Bones"
+        },
+        {
+          "nameEn": "Anka, Drag Under"
+        },
+        {
+          "nameEn": "Annals of Sutcliffe"
+        },
+        {
+          "nameEn": "Annihilate the Armed"
+        },
+        {
+          "nameEn": "Annihilator Engine"
+        },
+        {
+          "nameEn": "Anthem of Spring"
+        },
+        {
+          "nameEn": "Anticipating Gaze"
+        },
+        {
+          "nameEn": "Apex Bonebreaker"
+        },
+        {
+          "nameEn": "Apocalypse Automaton"
+        },
+        {
+          "nameEn": "Aqua Seeing Shell"
+        },
+        {
+          "nameEn": "Arakni, Black Widow"
+        },
+        {
+          "nameEn": "Arakni, Funnel Web"
+        },
+        {
+          "nameEn": "Arakni, Huntsman"
+        },
+        {
+          "nameEn": "Arakni, Marionette"
+        },
+        {
+          "nameEn": "Arakni, Orb-Weaver"
+        },
+        {
+          "nameEn": "Arakni, Redback"
+        },
+        {
+          "nameEn": "Arakni, Tarantula"
+        },
+        {
+          "nameEn": "Arakni, Trap-Door"
+        },
+        {
+          "nameEn": "Arc Bending"
+        },
+        {
+          "nameEn": "Arc Light Sentinel"
+        },
+        {
+          "nameEn": "Arc Lightning"
+        },
+        {
+          "nameEn": "Arcane Compliance"
+        },
+        {
+          "nameEn": "Arcane Cussing"
+        },
+        {
+          "nameEn": "Arcane Lantern"
+        },
+        {
+          "nameEn": "Arcane Polarity"
+        },
+        {
+          "nameEn": "Arcane Seeds // Life"
+        },
+        {
+          "nameEn": "Arcane Twining"
+        },
+        {
+          "nameEn": "Arcanic Crackle"
+        },
+        {
+          "nameEn": "Arcanic Cunning"
+        },
+        {
+          "nameEn": "Arcanic Reproach"
+        },
+        {
+          "nameEn": "Arcanic Shockwave"
+        },
+        {
+          "nameEn": "Arcanic Spike"
+        },
+        {
+          "nameEn": "Arcanite Fortress"
+        },
+        {
+          "nameEn": "Arcanite Skullcap"
+        },
+        {
+          "nameEn": "Arcbane Grasp"
+        },
+        {
+          "nameEn": "Arctic Incarceration"
+        },
+        {
+          "nameEn": "Arena Medic"
+        },
+        {
+          "nameEn": "Argh... Smash!"
+        },
+        {
+          "nameEn": "Arknight Ascendancy"
+        },
+        {
+          "nameEn": "Arknight Shard"
+        },
+        {
+          "nameEn": "Arousing Wave"
+        },
+        {
+          "nameEn": "Arrogant Showboating"
+        },
+        {
+          "nameEn": "Art of Desire: Body"
+        },
+        {
+          "nameEn": "Art of Desire: Mind"
+        },
+        {
+          "nameEn": "Art of Desire: Soul"
+        },
+        {
+          "nameEn": "Asking for Trouble"
+        },
+        {
+          "nameEn": "Assault and Battery"
+        },
+        {
+          "nameEn": "Assembly Module"
+        },
+        {
+          "nameEn": "Astral Assault"
+        },
+        {
+          "nameEn": "Astral Bridge"
+        },
+        {
+          "nameEn": "Astral Etchings"
+        },
+        {
+          "nameEn": "Astral Strike"
+        },
+        {
+          "nameEn": "Astravolt Elemental"
+        },
+        {
+          "nameEn": "Attention Grabbers"
+        },
+        {
+          "nameEn": "Auric Shards"
+        },
+        {
+          "nameEn": "Aurum Aegis"
+        },
+        {
+          "nameEn": "Authority of Ataya"
+        },
+        {
+          "nameEn": "Autosave Script"
+        },
+        {
+          "nameEn": "Autumn's Touch"
+        },
+        {
+          "nameEn": "Awakening Bellow"
+        },
+        {
+          "nameEn": "Back Alley Breakline"
+        },
+        {
+          "nameEn": "Back Heel Kick"
+        },
+        {
+          "nameEn": "Back for Seconds"
+        },
+        {
+          "nameEn": "Backspin Thrust"
+        },
+        {
+          "nameEn": "Backup Protocol: BLU"
+        },
+        {
+          "nameEn": "Backup Protocol: RED"
+        },
+        {
+          "nameEn": "Backup Protocol: YEL"
+        },
+        {
+          "nameEn": "Balance of Justice"
+        },
+        {
+          "nameEn": "Ball Breaker"
+        },
+        {
+          "nameEn": "Ball Lightning"
+        },
+        {
+          "nameEn": "Bank Breaker"
+        },
+        {
+          "nameEn": "Banneret of Courage"
+        },
+        {
+          "nameEn": "Banneret of Vigor"
+        },
+        {
+          "nameEn": "Barbed Barrage"
+        },
+        {
+          "nameEn": "Barbed Castaway"
+        },
+        {
+          "nameEn": "Barbed Undertow"
+        },
+        {
+          "nameEn": "Bare Destruction"
+        },
+        {
+          "nameEn": "Bark Obscenities"
+        },
+        {
+          "nameEn": "Barkbone Strapping"
+        },
+        {
+          "nameEn": "Barraging Beatdown"
+        },
+        {
+          "nameEn": "Barraging Big Horn"
+        },
+        {
+          "nameEn": "Barraging Brawnhide"
+        },
+        {
+          "nameEn": "Basalt Boots"
+        },
+        {
+          "nameEn": "Base of the Mountain"
+        },
+        {
+          "nameEn": "Bash Guardian"
+        },
+        {
+          "nameEn": "Bastion of Duty"
+        },
+        {
+          "nameEn": "Bastion of Unity"
+        },
+        {
+          "nameEn": "Battalion Barque"
+        },
+        {
+          "nameEn": "Batter to a Pulp"
+        },
+        {
+          "nameEn": "Battered Not Broken"
+        },
+        {
+          "nameEn": "Battering Bolt"
+        },
+        {
+          "nameEn": "Battlefield Beacon"
+        },
+        {
+          "nameEn": "Battlefield Blitz"
+        },
+        {
+          "nameEn": "Battlefield Breaker"
+        },
+        {
+          "nameEn": "Battlefront Bastion"
+        },
+        {
+          "nameEn": "Be Like Water"
+        },
+        {
+          "nameEn": "Beacon of Victory"
+        },
+        {
+          "nameEn": "Beaming Blade"
+        },
+        {
+          "nameEn": "Beaming Bravado"
+        },
+        {
+          "nameEn": "Beast Within"
+        },
+        {
+          "nameEn": "Beat of the Ironsong"
+        },
+        {
+          "nameEn": "Beat the Same Drum"
+        },
+        {
+          "nameEn": "Beaten Trackers"
+        },
+        {
+          "nameEn": "Beckon Applause"
+        },
+        {
+          "nameEn": "Beckon Steel"
+        },
+        {
+          "nameEn": "Beckoning Brilliance"
+        },
+        {
+          "nameEn": "Beckoning Haunt"
+        },
+        {
+          "nameEn": "Beckoning Light"
+        },
+        {
+          "nameEn": "Beckoning Mistblade"
+        },
+        {
+          "nameEn": "Become the Arknight"
+        },
+        {
+          "nameEn": "Become the Bottle"
+        },
+        {
+          "nameEn": "Become the Cup"
+        },
+        {
+          "nameEn": "Belly Buster"
+        },
+        {
+          "nameEn": "Below the Belt"
+        },
+        {
+          "nameEn": "Beneath the Surface"
+        },
+        {
+          "nameEn": "Beseech the Demigon"
+        },
+        {
+          "nameEn": "Big Blinder"
+        },
+        {
+          "nameEn": "Big Blue Sky"
+        },
+        {
+          "nameEn": "Big Game Trophy Shot"
+        },
+        {
+          "nameEn": "Bigger Than Big"
+        },
+        {
+          "nameEn": "Billowing Mist"
+        },
+        {
+          "nameEn": "Bios Update"
+        },
+        {
+          "nameEn": "Biting Blade"
+        },
+        {
+          "nameEn": "Biting Breeze"
+        },
+        {
+          "nameEn": "Biting Gale"
+        },
+        {
+          "nameEn": "Bittering Thorns"
+        },
+        {
+          "nameEn": "Blackout Kick"
+        },
+        {
+          "nameEn": "Blackstone Greaves"
+        },
+        {
+          "nameEn": "Blacktek Whisperers"
+        },
+        {
+          "nameEn": "Blade Beckoner Boots"
+        },
+        {
+          "nameEn": "Blade Beckoner Helm"
+        },
+        {
+          "nameEn": "Blade Dance"
+        },
+        {
+          "nameEn": "Blade Flash"
+        },
+        {
+          "nameEn": "Blade Flurry"
+        },
+        {
+          "nameEn": "Blade Runner"
+        },
+        {
+          "nameEn": "Blast to Oblivion"
+        },
+        {
+          "nameEn": "Blaze Headlong"
+        },
+        {
+          "nameEn": "Blaze, Firemind"
+        },
+        {
+          "nameEn": "Blazing Aether"
+        },
+        {
+          "nameEn": "Blessing of Aegis"
+        },
+        {
+          "nameEn": "Blessing of Aether"
+        },
+        {
+          "nameEn": "Blessing of Bellona"
+        },
+        {
+          "nameEn": "Blessing of Focus"
+        },
+        {
+          "nameEn": "Blessing of Occult"
+        },
+        {
+          "nameEn": "Blessing of Patience"
+        },
+        {
+          "nameEn": "Blessing of Qi"
+        },
+        {
+          "nameEn": "Blessing of Savagery"
+        },
+        {
+          "nameEn": "Blessing of Serenity"
+        },
+        {
+          "nameEn": "Blessing of Spirits"
+        },
+        {
+          "nameEn": "Blessing of Steel"
+        },
+        {
+          "nameEn": "Blessing of Themis"
+        },
+        {
+          "nameEn": "Blinding Beam"
+        },
+        {
+          "nameEn": "Blink of an Eye"
+        },
+        {
+          "nameEn": "Blistering Assault"
+        },
+        {
+          "nameEn": "Blistering Blade"
+        },
+        {
+          "nameEn": "Blitz Kicks"
+        },
+        {
+          "nameEn": "Blizzard Bolt"
+        },
+        {
+          "nameEn": "Blood Drop Brocade"
+        },
+        {
+          "nameEn": "Blood Follows Blade"
+        },
+        {
+          "nameEn": "Blood Runs Deep"
+        },
+        {
+          "nameEn": "Blood Scent"
+        },
+        {
+          "nameEn": "Blood Tribute"
+        },
+        {
+          "nameEn": "Blood in the Water"
+        },
+        {
+          "nameEn": "Blood of the Dracai"
+        },
+        {
+          "nameEn": "Blood on Her Hands"
+        },
+        {
+          "nameEn": "Bloodied Boots"
+        },
+        {
+          "nameEn": "Bloodied Gauntlet"
+        },
+        {
+          "nameEn": "Bloodied Helm"
+        },
+        {
+          "nameEn": "Bloodied Oval"
+        },
+        {
+          "nameEn": "Bloodied Shield"
+        },
+        {
+          "nameEn": "Bloodied Strapping"
+        },
+        {
+          "nameEn": "Bloodrot Pox"
+        },
+        {
+          "nameEn": "Bloodrot Trap"
+        },
+        {
+          "nameEn": "Bloodrush Bellow"
+        },
+        {
+          "nameEn": "Bloodsheath Skeleta"
+        },
+        {
+          "nameEn": "Bloodtorn Bodice"
+        },
+        {
+          "nameEn": "Blossom of Spring"
+        },
+        {
+          "nameEn": "Blossoming Decay"
+        },
+        {
+          "nameEn": "Blow for a Blow"
+        },
+        {
+          "nameEn": "Blue Fin Harpoon"
+        },
+        {
+          "nameEn": "Blue Sea Tricorn"
+        },
+        {
+          "nameEn": "Bluff Catcher"
+        },
+        {
+          "nameEn": "Blunt Retort"
+        },
+        {
+          "nameEn": "Blur Reality"
+        },
+        {
+          "nameEn": "Bluster Buff"
+        },
+        {
+          "nameEn": "Board the Ship"
+        },
+        {
+          "nameEn": "Bolfar, Bear Hands"
+        },
+        {
+          "nameEn": "Bolt of Courage"
+        },
+        {
+          "nameEn": "Bolt'n Boots"
+        },
+        {
+          "nameEn": "Bolt'n' Shot"
+        },
+        {
+          "nameEn": "Bolting Blade"
+        },
+        {
+          "nameEn": "Bonds of Agony"
+        },
+        {
+          "nameEn": "Bonds of Ancestry"
+        },
+        {
+          "nameEn": "Bonds of Attraction"
+        },
+        {
+          "nameEn": "Bonds of Memory"
+        },
+        {
+          "nameEn": "Bone Basher"
+        },
+        {
+          "nameEn": "Bone Head Barrier"
+        },
+        {
+          "nameEn": "Bone Puppetry"
+        },
+        {
+          "nameEn": "Bone Vizier"
+        },
+        {
+          "nameEn": "Bonebreaker Bellow"
+        },
+        {
+          "nameEn": "Boneyard Marauder"
+        },
+        {
+          "nameEn": "Boo, Resident Spook"
+        },
+        {
+          "nameEn": "Boom Grenade"
+        },
+        {
+          "nameEn": "Boots of Omnis Ward"
+        },
+        {
+          "nameEn": "Boots to the Boards"
+        },
+        {
+          "nameEn": "Boulder Drop"
+        },
+        {
+          "nameEn": "Boulder Trap"
+        },
+        {
+          "nameEn": "Bounding Demigon"
+        },
+        {
+          "nameEn": "Bracers of Belief"
+        },
+        {
+          "nameEn": "Bracken Rap"
+        },
+        {
+          "nameEn": "Brain Freeze"
+        },
+        {
+          "nameEn": "Bramble Spark"
+        },
+        {
+          "nameEn": "Braveforge Bracers"
+        },
+        {
+          "nameEn": "Break Ground"
+        },
+        {
+          "nameEn": "Break Stature"
+        },
+        {
+          "nameEn": "Break of Dawn"
+        },
+        {
+          "nameEn": "Breaker Helm Protos"
+        },
+        {
+          "nameEn": "Breaking Point"
+        },
+        {
+          "nameEn": "Breaking Scales"
+        },
+        {
+          "nameEn": "Breakneck Battery"
+        },
+        {
+          "nameEn": "Breakwater Undertow"
+        },
+        {
+          "nameEn": "Breed Anger"
+        },
+        {
+          "nameEn": "Breeze Rider Boots"
+        },
+        {
+          "nameEn": "Brimming Blade"
+        },
+        {
+          "nameEn": "Brothers in Arms"
+        },
+        {
+          "nameEn": "Brothers of Flame"
+        },
+        {
+          "nameEn": "Bruised Leather"
+        },
+        {
+          "nameEn": "Brutal Assault"
+        },
+        {
+          "nameEn": "Brutus, Summa Rudis"
+        },
+        {
+          "nameEn": "Buccaneer's Bounty"
+        },
+        {
+          "nameEn": "Buckling Blow"
+        },
+        {
+          "nameEn": "Bull's Eye Bracers"
+        },
+        {
+          "nameEn": "Bully Tactics"
+        },
+        {
+          "nameEn": "Bunker Beard"
+        },
+        {
+          "nameEn": "Burdens of the Past"
+        },
+        {
+          "nameEn": "Burly Bones"
+        },
+        {
+          "nameEn": "Burn Rubber"
+        },
+        {
+          "nameEn": "Burn Them All"
+        },
+        {
+          "nameEn": "Burn Up // Shock"
+        },
+        {
+          "nameEn": "Burning Blade Dance"
+        },
+        {
+          "nameEn": "Buzzard Helm"
+        },
+        {
+          "nameEn": "Buzzsaw Trap"
+        },
+        {
+          "nameEn": "By the Book"
+        },
+        {
+          "nameEn": "Cadaverous Tilling"
+        },
+        {
+          "nameEn": "Call for Backup"
+        },
+        {
+          "nameEn": "Call in the Big Guns"
+        },
+        {
+          "nameEn": "Call to the Grave"
+        },
+        {
+          "nameEn": "Calming Breeze"
+        },
+        {
+          "nameEn": "Calming Cloak"
+        },
+        {
+          "nameEn": "Calming Gesture"
+        },
+        {
+          "nameEn": "Canopy Shelter"
+        },
+        {
+          "nameEn": "Captain of the Guard"
+        },
+        {
+          "nameEn": "Captain's Call"
+        },
+        {
+          "nameEn": "Captain's Coat"
+        },
+        {
+          "nameEn": "Caress of the Reaper"
+        },
+        {
+          "nameEn": "Carrion Crown"
+        },
+        {
+          "nameEn": "Carrion Husk"
+        },
+        {
+          "nameEn": "Cartilage Crush"
+        },
+        {
+          "nameEn": "Catch of the Day"
+        },
+        {
+          "nameEn": "Celebrant Broadsword"
+        },
+        {
+          "nameEn": "Celestial Cataclysm"
+        },
+        {
+          "nameEn": "Celestial Kimono"
+        },
+        {
+          "nameEn": "Celestial Reprimand"
+        },
+        {
+          "nameEn": "Celestial Resolve"
+        },
+        {
+          "nameEn": "Cerebellum Processor"
+        },
+        {
+          "nameEn": "Chain Lightning"
+        },
+        {
+          "nameEn": "Chain Reaction"
+        },
+        {
+          "nameEn": "Chain of Brutality"
+        },
+        {
+          "nameEn": "Chains of Eminence"
+        },
+        {
+          "nameEn": "Chains of Mephetis"
+        },
+        {
+          "nameEn": "Challenge the Alpha"
+        },
+        {
+          "nameEn": "Channel Lake Frigid"
+        },
+        {
+          "nameEn": "Channel Mount Heroic"
+        },
+        {
+          "nameEn": "Channel Mount Isen"
+        },
+        {
+          "nameEn": "Chart a Course"
+        },
+        {
+          "nameEn": "Chart the High Seas"
+        },
+        {
+          "nameEn": "Chase the Tail"
+        },
+        {
+          "nameEn": "Cheater's Charm"
+        },
+        {
+          "nameEn": "Cheating Scoundrel"
+        },
+        {
+          "nameEn": "Check-Raise"
+        },
+        {
+          "nameEn": "Chief Ruk'utan"
+        },
+        {
+          "nameEn": "Chill to the Bone"
+        },
+        {
+          "nameEn": "Chilling Icevein"
+        },
+        {
+          "nameEn": "Chorus of Ironsong"
+        },
+        {
+          "nameEn": "Chorus of Rotwood"
+        },
+        {
+          "nameEn": "Chowder, Hearty Cook"
+        },
+        {
+          "nameEn": "Chromatic Refinement"
+        },
+        {
+          "nameEn": "Cindering Foresight"
+        },
+        {
+          "nameEn": "Cinderskin Devotion"
+        },
+        {
+          "nameEn": "Cintari Saber"
+        },
+        {
+          "nameEn": "Cintari Sellsword"
+        },
+        {
+          "nameEn": "Circular Flowtide"
+        },
+        {
+          "nameEn": "Civic Guide"
+        },
+        {
+          "nameEn": "Civic Steps"
+        },
+        {
+          "nameEn": "Clamp Press"
+        },
+        {
+          "nameEn": "Clap 'Em in Irons"
+        },
+        {
+          "nameEn": "Clarity Potion"
+        },
+        {
+          "nameEn": "Clash of Agility"
+        },
+        {
+          "nameEn": "Clash of Arms"
+        },
+        {
+          "nameEn": "Clash of Bravado"
+        },
+        {
+          "nameEn": "Clash of Chests"
+        },
+        {
+          "nameEn": "Clash of Heads"
+        },
+        {
+          "nameEn": "Clash of Legs"
+        },
+        {
+          "nameEn": "Clash of Might"
+        },
+        {
+          "nameEn": "Clash of Mountains"
+        },
+        {
+          "nameEn": "Clash of Shields"
+        },
+        {
+          "nameEn": "Clash of Vigor"
+        },
+        {
+          "nameEn": "Claw of Vynserakai"
+        },
+        {
+          "nameEn": "Cleansing Light"
+        },
+        {
+          "nameEn": "Clear Conscience"
+        },
+        {
+          "nameEn": "Clearing Bellow"
+        },
+        {
+          "nameEn": "Clearwater Elixir"
+        },
+        {
+          "nameEn": "Clip Flexor"
+        },
+        {
+          "nameEn": "Cloak of Darkness"
+        },
+        {
+          "nameEn": "Cloud City Steamboat"
+        },
+        {
+          "nameEn": "Cloud Cover"
+        },
+        {
+          "nameEn": "Cloud Skiff"
+        },
+        {
+          "nameEn": "Coat of Allegiance"
+        },
+        {
+          "nameEn": "Coat of Frost"
+        },
+        {
+          "nameEn": "Coax a Commotion"
+        },
+        {
+          "nameEn": "Codex of Bloodrot"
+        },
+        {
+          "nameEn": "Codex of Frailty"
+        },
+        {
+          "nameEn": "Codex of Inertia"
+        },
+        {
+          "nameEn": "Coercive Tendency"
+        },
+        {
+          "nameEn": "Cog in the Machine"
+        },
+        {
+          "nameEn": "Cognition Field"
+        },
+        {
+          "nameEn": "Cognition Nodes"
+        },
+        {
+          "nameEn": "Cogwerx Base Arms"
+        },
+        {
+          "nameEn": "Cogwerx Base Chest"
+        },
+        {
+          "nameEn": "Cogwerx Base Head"
+        },
+        {
+          "nameEn": "Cogwerx Base Legs"
+        },
+        {
+          "nameEn": "Cogwerx Blunderbuss"
+        },
+        {
+          "nameEn": "Cogwerx Dovetail"
+        },
+        {
+          "nameEn": "Cogwerx Tinker Rings"
+        },
+        {
+          "nameEn": "Cogwerx Workshop"
+        },
+        {
+          "nameEn": "Cogwerx Zeppelin"
+        },
+        {
+          "nameEn": "Collapsing Trap"
+        },
+        {
+          "nameEn": "Colors of Aria"
+        },
+        {
+          "nameEn": "Colossal Bearing"
+        },
+        {
+          "nameEn": "Combustible Courier"
+        },
+        {
+          "nameEn": "Combustion Point"
+        },
+        {
+          "nameEn": "Come to Fight"
+        },
+        {
+          "nameEn": "Comeback Kicks"
+        },
+        {
+          "nameEn": "Comeback Kid"
+        },
+        {
+          "nameEn": "Comet Collision"
+        },
+        {
+          "nameEn": "Comet Storm // Shock"
+        },
+        {
+          "nameEn": "Command Respect"
+        },
+        {
+          "nameEn": "Command and Conquer"
+        },
+        {
+          "nameEn": "Compounding Anger"
+        },
+        {
+          "nameEn": "Concealed Blade"
+        },
+        {
+          "nameEn": "Concealed Nerve Gas"
+        },
+        {
+          "nameEn": "Concealed Object"
+        },
+        {
+          "nameEn": "Concealed Pathogen"
+        },
+        {
+          "nameEn": "Concealed Sedative"
+        },
+        {
+          "nameEn": "Concoct Disorder"
+        },
+        {
+          "nameEn": "Condemn to Slaughter"
+        },
+        {
+          "nameEn": "Conduit of Frostburn"
+        },
+        {
+          "nameEn": "Conflicting Thoughts"
+        },
+        {
+          "nameEn": "Confront Adversity"
+        },
+        {
+          "nameEn": "Constella Flowslide"
+        },
+        {
+          "nameEn": "Constella Tiara"
+        },
+        {
+          "nameEn": "Constella Uplift"
+        },
+        {
+          "nameEn": "Constella Waves"
+        },
+        {
+          "nameEn": "Consuming Aftermath"
+        },
+        {
+          "nameEn": "Consuming Volition"
+        },
+        {
+          "nameEn": "Convection Amplifier"
+        },
+        {
+          "nameEn": "Core Reaction"
+        },
+        {
+          "nameEn": "Coronet Peak"
+        },
+        {
+          "nameEn": "Corrosive Space Dust"
+        },
+        {
+          "nameEn": "Cosmic Awakening"
+        },
+        {
+          "nameEn": "Cosmic Duality"
+        },
+        {
+          "nameEn": "Cosmic Flare"
+        },
+        {
+          "nameEn": "Cosmic Suture"
+        },
+        {
+          "nameEn": "Count Your Blessings"
+        },
+        {
+          "nameEn": "Courage of Bladehold"
+        },
+        {
+          "nameEn": "Courageous Crossing"
+        },
+        {
+          "nameEn": "Courageous Steelhand"
+        },
+        {
+          "nameEn": "Cracked Bauble"
+        },
+        {
+          "nameEn": "Cracker Bauble"
+        },
+        {
+          "nameEn": "Cracker Jax"
+        },
+        {
+          "nameEn": "Crackle from Afar"
+        },
+        {
+          "nameEn": "Crane Dance"
+        },
+        {
+          "nameEn": "Cranial Crush"
+        },
+        {
+          "nameEn": "Crash Down the Gates"
+        },
+        {
+          "nameEn": "Crash Site Salvage"
+        },
+        {
+          "nameEn": "Crash and Bash"
+        },
+        {
+          "nameEn": "Crater Fist"
+        },
+        {
+          "nameEn": "Cries of Encore"
+        },
+        {
+          "nameEn": "Crimson Waltz"
+        },
+        {
+          "nameEn": "Crippling Crush"
+        },
+        {
+          "nameEn": "Critical Strike"
+        },
+        {
+          "nameEn": "Cross the Line"
+        },
+        {
+          "nameEn": "Crouching Tiger"
+        },
+        {
+          "nameEn": "Crow's Nest"
+        },
+        {
+          "nameEn": "Crowd Control"
+        },
+        {
+          "nameEn": "Crowd Goes Wild"
+        },
+        {
+          "nameEn": "Crowd Roars Fight!"
+        },
+        {
+          "nameEn": "Crown of Dichotomy"
+        },
+        {
+          "nameEn": "Crown of Dominion"
+        },
+        {
+          "nameEn": "Crown of Everbloom"
+        },
+        {
+          "nameEn": "Crown of Providence"
+        },
+        {
+          "nameEn": "Crown of Reflection"
+        },
+        {
+          "nameEn": "Crown of Seeds"
+        },
+        {
+          "nameEn": "Cruel Ambition"
+        },
+        {
+          "nameEn": "Crumble to Eternity"
+        },
+        {
+          "nameEn": "Crush Confidence"
+        },
+        {
+          "nameEn": "Crush the Weak"
+        },
+        {
+          "nameEn": "Crushing Impact"
+        },
+        {
+          "nameEn": "Cryptic Crossing"
+        },
+        {
+          "nameEn": "Current Funnel"
+        },
+        {
+          "nameEn": "Cut Down to Size"
+        },
+        {
+          "nameEn": "Cut Off at the Knees"
+        },
+        {
+          "nameEn": "Cut Through"
+        },
+        {
+          "nameEn": "Cut n' Carve"
+        },
+        {
+          "nameEn": "Cut the Deck"
+        },
+        {
+          "nameEn": "Cut the Small Talk"
+        },
+        {
+          "nameEn": "Cut to the Chase"
+        },
+        {
+          "nameEn": "Cutpurse Rapier"
+        },
+        {
+          "nameEn": "Cutting Couriers"
+        },
+        {
+          "nameEn": "Cutting Retort"
+        },
+        {
+          "nameEn": "Cyclone Roundhouse"
+        },
+        {
+          "nameEn": "Dabble in Darkness"
+        },
+        {
+          "nameEn": "Daily Grind"
+        },
+        {
+          "nameEn": "Dance of Darkness"
+        },
+        {
+          "nameEn": "Danger Digits"
+        },
+        {
+          "nameEn": "Darling of the Crowd"
+        },
+        {
+          "nameEn": "Dazzling Crescendo"
+        },
+        {
+          "nameEn": "Dead Threads"
+        },
+        {
+          "nameEn": "Deadly Display"
+        },
+        {
+          "nameEn": "Deadwood Dirge"
+        },
+        {
+          "nameEn": "Deadwood Rumbler"
+        },
+        {
+          "nameEn": "Dealer's Grip"
+        },
+        {
+          "nameEn": "Death Dealer"
+        },
+        {
+          "nameEn": "Death Touch"
+        },
+        {
+          "nameEn": "Deathly Delight"
+        },
+        {
+          "nameEn": "Deathly Duet"
+        },
+        {
+          "nameEn": "Deathly Wail"
+        },
+        {
+          "nameEn": "Deathmatch Arena"
+        },
+        {
+          "nameEn": "Decimator Great Axe"
+        },
+        {
+          "nameEn": "Deep Blue Sea"
+        },
+        {
+          "nameEn": "Deep Rooted Evil"
+        },
+        {
+          "nameEn": "Defang the Dragon"
+        },
+        {
+          "nameEn": "Defender of Daybreak"
+        },
+        {
+          "nameEn": "Demolition Crew"
+        },
+        {
+          "nameEn": "Demolition Protocol"
+        },
+        {
+          "nameEn": "Demonstrate Devotion"
+        },
+        {
+          "nameEn": "Den of the Spider"
+        },
+        {
+          "nameEn": "Dense Blue Mist"
+        },
+        {
+          "nameEn": "Deny Redemption"
+        },
+        {
+          "nameEn": "Depths of Despair"
+        },
+        {
+          "nameEn": "Descend into Madness"
+        },
+        {
+          "nameEn": "Descendent Gustwave"
+        },
+        {
+          "nameEn": "Desires of Flesh"
+        },
+        {
+          "nameEn": "Devotion Never Dies"
+        },
+        {
+          "nameEn": "Diabolic Offering"
+        },
+        {
+          "nameEn": "Diabolic Ultimatum"
+        },
+        {
+          "nameEn": "Diadem of Dreamstate"
+        },
+        {
+          "nameEn": "Diamond Amulet"
+        },
+        {
+          "nameEn": "Diamond Hands"
+        },
+        {
+          "nameEn": "Dig Up Dinner"
+        },
+        {
+          "nameEn": "Dimenxxional Gateway"
+        },
+        {
+          "nameEn": "Dimenxxional Vortex"
+        },
+        {
+          "nameEn": "Disdainful Delight"
+        },
+        {
+          "nameEn": "Display Loyalty"
+        },
+        {
+          "nameEn": "Display of Artistry"
+        },
+        {
+          "nameEn": "Dissipation Shield"
+        },
+        {
+          "nameEn": "Dissolution Sphere"
+        },
+        {
+          "nameEn": "Dissolve Reality"
+        },
+        {
+          "nameEn": "Dissolving Shield"
+        },
+        {
+          "nameEn": "Distant Rumbling"
+        },
+        {
+          "nameEn": "Disturb the Peace"
+        },
+        {
+          "nameEn": "Dive Through Data"
+        },
+        {
+          "nameEn": "Double Cross Strap"
+        },
+        {
+          "nameEn": "Double Down"
+        },
+        {
+          "nameEn": "Double Strike"
+        },
+        {
+          "nameEn": "Double Trouble"
+        },
+        {
+          "nameEn": "Doubling Season"
+        },
+        {
+          "nameEn": "Douse in Runeblood"
+        },
+        {
+          "nameEn": "Down But Not Out"
+        },
+        {
+          "nameEn": "Down and Dirty"
+        },
+        {
+          "nameEn": "Dr. Mortimer"
+        },
+        {
+          "nameEn": "Dracona Optimai"
+        },
+        {
+          "nameEn": "Dragon Power"
+        },
+        {
+          "nameEn": "Dragons of Legend"
+        },
+        {
+          "nameEn": "Dramatic Pause"
+        },
+        {
+          "nameEn": "Draw Back the Hammer"
+        },
+        {
+          "nameEn": "Draw Swords"
+        },
+        {
+          "nameEn": "Draw a Crowd"
+        },
+        {
+          "nameEn": "Drawing Dead"
+        },
+        {
+          "nameEn": "Drawn to the Blade"
+        },
+        {
+          "nameEn": "Dread Screamer"
+        },
+        {
+          "nameEn": "Dread Scythe"
+        },
+        {
+          "nameEn": "Dread Triptych"
+        },
+        {
+          "nameEn": "Dream Weavers"
+        },
+        {
+          "nameEn": "Driftwood Quiver"
+        },
+        {
+          "nameEn": "Drinking Buddy"
+        },
+        {
+          "nameEn": "Drive Brake"
+        },
+        {
+          "nameEn": "Driving Blade"
+        },
+        {
+          "nameEn": "Dromai, Ash Artist"
+        },
+        {
+          "nameEn": "Drone of Brutality"
+        },
+        {
+          "nameEn": "Drop of Dragon Blood"
+        },
+        {
+          "nameEn": "Drop the Anchor"
+        },
+        {
+          "nameEn": "Drowning Dire"
+        },
+        {
+          "nameEn": "Dry Powder Shot"
+        },
+        {
+          "nameEn": "Dual Threat"
+        },
+        {
+          "nameEn": "Duelist Gauntlets"
+        },
+        {
+          "nameEn": "Dumpster Dive"
+        },
+        {
+          "nameEn": "Dunebreaker Cenipai"
+        },
+        {
+          "nameEn": "Dusk Path Pilgrimage"
+        },
+        {
+          "nameEn": "Dust Runner Outlaw"
+        },
+        {
+          "nameEn": "Duty Bound Blitz"
+        },
+        {
+          "nameEn": "Dyadic Carapace"
+        },
+        {
+          "nameEn": "Dyed Silk Sleeves"
+        },
+        {
+          "nameEn": "Dynastic Dedication"
+        },
+        {
+          "nameEn": "Dynastic Diadem"
+        },
+        {
+          "nameEn": "Earth's Embrace"
+        },
+        {
+          "nameEn": "Earthlore Bounty"
+        },
+        {
+          "nameEn": "Earthlore Surge"
+        },
+        {
+          "nameEn": "Ebbing Arcstride"
+        },
+        {
+          "nameEn": "Echo Casque"
+        },
+        {
+          "nameEn": "Eclectic Magnetism"
+        },
+        {
+          "nameEn": "Eclipse Existence"
+        },
+        {
+          "nameEn": "Edge Laden Plate"
+        },
+        {
+          "nameEn": "Edge of Autumn"
+        },
+        {
+          "nameEn": "Edge of Their Seats"
+        },
+        {
+          "nameEn": "Edict of Steel"
+        },
+        {
+          "nameEn": "Eirina's Prayer"
+        },
+        {
+          "nameEn": "Electrolyze"
+        },
+        {
+          "nameEn": "Electryn Joltstep"
+        },
+        {
+          "nameEn": "Electryn Mindmeld"
+        },
+        {
+          "nameEn": "Elemental Strike"
+        },
+        {
+          "nameEn": "Elliptical Conflux"
+        },
+        {
+          "nameEn": "Eloquent Eulogy"
+        },
+        {
+          "nameEn": "Embermaw Cenipai"
+        },
+        {
+          "nameEn": "Embodiment of Earth"
+        },
+        {
+          "nameEn": "Embody Greatness"
+        },
+        {
+          "nameEn": "Emboldened Blade"
+        },
+        {
+          "nameEn": "Embrace Adversity"
+        },
+        {
+          "nameEn": "Embraforged Gauntlet"
+        },
+        {
+          "nameEn": "Emerging Avalanche"
+        },
+        {
+          "nameEn": "Emerging Dominance"
+        },
+        {
+          "nameEn": "Emerging Power"
+        },
+        {
+          "nameEn": "Emeritus Scolding"
+        },
+        {
+          "nameEn": "Emissary of Moon"
+        },
+        {
+          "nameEn": "Emissary of Tides"
+        },
+        {
+          "nameEn": "Emissary of Wind"
+        },
+        {
+          "nameEn": "Empowering Ruckus"
+        },
+        {
+          "nameEn": "Empyrean Rapture"
+        },
+        {
+          "nameEn": "Enact Vengeance"
+        },
+        {
+          "nameEn": "Enchanted Quiver"
+        },
+        {
+          "nameEn": "Enchanting Melody"
+        },
+        {
+          "nameEn": "Enclosed Firemind"
+        },
+        {
+          "nameEn": "Endear Devotion"
+        },
+        {
+          "nameEn": "Endless Arrow"
+        },
+        {
+          "nameEn": "Endless Maw"
+        },
+        {
+          "nameEn": "Endless Winter"
+        },
+        {
+          "nameEn": "Energetic Impact"
+        },
+        {
+          "nameEn": "Energy Potion"
+        },
+        {
+          "nameEn": "Engage Steel"
+        },
+        {
+          "nameEn": "Engaged Swiftblade"
+        },
+        {
+          "nameEn": "Engulfing Flamewave"
+        },
+        {
+          "nameEn": "Engulfing Light"
+        },
+        {
+          "nameEn": "Engulfing Shadows"
+        },
+        {
+          "nameEn": "Enigma Chimera"
+        },
+        {
+          "nameEn": "Enigma, New Moon"
+        },
+        {
+          "nameEn": "Enion Surge"
+        },
+        {
+          "nameEn": "Enlightened Strike"
+        },
+        {
+          "nameEn": "Entangling Shot"
+        },
+        {
+          "nameEn": "Entwine Earth"
+        },
+        {
+          "nameEn": "Entwine Ice"
+        },
+        {
+          "nameEn": "Entwine Lightning"
+        },
+        {
+          "nameEn": "Envelop in Darkness"
+        },
+        {
+          "nameEn": "Erode Authority"
+        },
+        {
+          "nameEn": "Escalate Bloodshed"
+        },
+        {
+          "nameEn": "Escalate Order"
+        },
+        {
+          "nameEn": "Escalate Violence"
+        },
+        {
+          "nameEn": "Etchings of Arcana"
+        },
+        {
+          "nameEn": "Eternal Inferno"
+        },
+        {
+          "nameEn": "Evasive Leap"
+        },
+        {
+          "nameEn": "Evasive Nageboshi"
+        },
+        {
+          "nameEn": "Everbloom // Life"
+        },
+        {
+          "nameEn": "Evo Atom Breaker"
+        },
+        {
+          "nameEn": "Evo Battery Pack"
+        },
+        {
+          "nameEn": "Evo Beta Base Arms"
+        },
+        {
+          "nameEn": "Evo Beta Base Chest"
+        },
+        {
+          "nameEn": "Evo Beta Base Head"
+        },
+        {
+          "nameEn": "Evo Beta Base Legs"
+        },
+        {
+          "nameEn": "Evo Buzz Hive"
+        },
+        {
+          "nameEn": "Evo Charging Rods"
+        },
+        {
+          "nameEn": "Evo Circuit Breaker"
+        },
+        {
+          "nameEn": "Evo Cogspitter"
+        },
+        {
+          "nameEn": "Evo Command Center"
+        },
+        {
+          "nameEn": "Evo Data Mine"
+        },
+        {
+          "nameEn": "Evo Energy Matrix"
+        },
+        {
+          "nameEn": "Evo Engine Room"
+        },
+        {
+          "nameEn": "Evo Face Breaker"
+        },
+        {
+          "nameEn": "Evo Heartdrive"
+        },
+        {
+          "nameEn": "Evo Mach Breaker"
+        },
+        {
+          "nameEn": "Evo Magneto"
+        },
+        {
+          "nameEn": "Evo Rapid Fire"
+        },
+        {
+          "nameEn": "Evo Scatter Shot"
+        },
+        {
+          "nameEn": "Evo Sentry Base Arms"
+        },
+        {
+          "nameEn": "Evo Sentry Base Head"
+        },
+        {
+          "nameEn": "Evo Sentry Base Legs"
+        },
+        {
+          "nameEn": "Evo Shortcircuit"
+        },
+        {
+          "nameEn": "Evo Smoothbore"
+        },
+        {
+          "nameEn": "Evo Speedslip"
+        },
+        {
+          "nameEn": "Evo Steel Soul Tower"
+        },
+        {
+          "nameEn": "Evo Tekloscope"
+        },
+        {
+          "nameEn": "Evo Thruster"
+        },
+        {
+          "nameEn": "Evo Whizz Bang"
+        },
+        {
+          "nameEn": "Evo Zip Line"
+        },
+        {
+          "nameEn": "Evo Zoom Call"
+        },
+        {
+          "nameEn": "Excessive Bloodloss"
+        },
+        {
+          "nameEn": "Expendable Limbs"
+        },
+        {
+          "nameEn": "Exploding Aether"
+        },
+        {
+          "nameEn": "Explosive Growth"
+        },
+        {
+          "nameEn": "Express Lightning"
+        },
+        {
+          "nameEn": "Exude Confidence"
+        },
+        {
+          "nameEn": "Eye of Ophidia"
+        },
+        {
+          "nameEn": "Fabric of Blossoms"
+        },
+        {
+          "nameEn": "Fabric of Hope"
+        },
+        {
+          "nameEn": "Fabric of Providence"
+        },
+        {
+          "nameEn": "Fabric of Scales"
+        },
+        {
+          "nameEn": "Fabric of Spring"
+        },
+        {
+          "nameEn": "Face Adversity"
+        },
+        {
+          "nameEn": "Face Purgatory"
+        },
+        {
+          "nameEn": "Fact-Finding Mission"
+        },
+        {
+          "nameEn": "Falcon Wing"
+        },
+        {
+          "nameEn": "Familiar Stench"
+        },
+        {
+          "nameEn": "Familiar Story"
+        },
+        {
+          "nameEn": "Fang Strike"
+        },
+        {
+          "nameEn": "Farflight Longbow"
+        },
+        {
+          "nameEn": "Fast and Furious"
+        },
+        {
+          "nameEn": "Fasting Carcass"
+        },
+        {
+          "nameEn": "Fatal Engagement"
+        },
+        {
+          "nameEn": "Fate Foreseen"
+        },
+        {
+          "nameEn": "Fatigue Shot"
+        },
+        {
+          "nameEn": "Feign Death"
+        },
+        {
+          "nameEn": "Feign Vengeance"
+        },
+        {
+          "nameEn": "Feisty Locals"
+        },
+        {
+          "nameEn": "Felling Swing"
+        },
+        {
+          "nameEn": "Felling of the Crown"
+        },
+        {
+          "nameEn": "Fender Bender"
+        },
+        {
+          "nameEn": "Feral Instinct"
+        },
+        {
+          "nameEn": "Fertile Ground"
+        },
+        {
+          "nameEn": "Fervent Forerunner"
+        },
+        {
+          "nameEn": "Fiddler's Green"
+        },
+        {
+          "nameEn": "Fight Dirty"
+        },
+        {
+          "nameEn": "Fight from Behind"
+        },
+        {
+          "nameEn": "Fightmaster Kox"
+        },
+        {
+          "nameEn": "Figment of Erudition"
+        },
+        {
+          "nameEn": "Figment of Judgment"
+        },
+        {
+          "nameEn": "Figment of Ravages"
+        },
+        {
+          "nameEn": "Figment of Rebirth"
+        },
+        {
+          "nameEn": "Figment of Tenacity"
+        },
+        {
+          "nameEn": "Figment of Triumph"
+        },
+        {
+          "nameEn": "Figment of War"
+        },
+        {
+          "nameEn": "Find Center"
+        },
+        {
+          "nameEn": "Fire and Brimstone"
+        },
+        {
+          "nameEn": "Fire in the Hole"
+        },
+        {
+          "nameEn": "Firebreathing"
+        },
+        {
+          "nameEn": "Fish Fingers"
+        },
+        {
+          "nameEn": "Fix the Match"
+        },
+        {
+          "nameEn": "Flail of Agony"
+        },
+        {
+          "nameEn": "Flamecall Awakening"
+        },
+        {
+          "nameEn": "Flamescale Furnace"
+        },
+        {
+          "nameEn": "Flash of Brilliance"
+        },
+        {
+          "nameEn": "Flashfreeze"
+        },
+        {
+          "nameEn": "Flat Trackers"
+        },
+        {
+          "nameEn": "Flatten the Field"
+        },
+        {
+          "nameEn": "Fleece the Frail"
+        },
+        {
+          "nameEn": "Fleeing Starbreeze"
+        },
+        {
+          "nameEn": "Fleet Foot Sandals"
+        },
+        {
+          "nameEn": "Fletch a Blue Tail"
+        },
+        {
+          "nameEn": "Fletch a Red Tail"
+        },
+        {
+          "nameEn": "Fletch a Yellow Tail"
+        },
+        {
+          "nameEn": "Flex Strength"
+        },
+        {
+          "nameEn": "Flick Knives"
+        },
+        {
+          "nameEn": "Flicker Reality"
+        },
+        {
+          "nameEn": "Flicker Trick"
+        },
+        {
+          "nameEn": "Flicker Wisp"
+        },
+        {
+          "nameEn": "Flight Path"
+        },
+        {
+          "nameEn": "Flittering Charge"
+        },
+        {
+          "nameEn": "Flittering Spike"
+        },
+        {
+          "nameEn": "Flood of Force"
+        },
+        {
+          "nameEn": "Flow Through"
+        },
+        {
+          "nameEn": "Flowing Stormstrike"
+        },
+        {
+          "nameEn": "Flowshard Elemental"
+        },
+        {
+          "nameEn": "Flowstate Embodiment"
+        },
+        {
+          "nameEn": "Fluid Motion"
+        },
+        {
+          "nameEn": "Flurry Foot Dance"
+        },
+        {
+          "nameEn": "Flurry Stance"
+        },
+        {
+          "nameEn": "Fluster Fist"
+        },
+        {
+          "nameEn": "Fluttersteps"
+        },
+        {
+          "nameEn": "Flying High"
+        },
+        {
+          "nameEn": "Flying Kick"
+        },
+        {
+          "nameEn": "Fool's Gold"
+        },
+        {
+          "nameEn": "For the Dracai"
+        },
+        {
+          "nameEn": "For the Emperor"
+        },
+        {
+          "nameEn": "For the Realm"
+        },
+        {
+          "nameEn": "Force Sight"
+        },
+        {
+          "nameEn": "Force of Nature"
+        },
+        {
+          "nameEn": "Foreboding Bolt"
+        },
+        {
+          "nameEn": "Forged for War"
+        },
+        {
+          "nameEn": "Forked Lightning"
+        },
+        {
+          "nameEn": "Four Finger Gloves"
+        },
+        {
+          "nameEn": "Fractal Creation"
+        },
+        {
+          "nameEn": "Fractal Replication"
+        },
+        {
+          "nameEn": "Frail Swingline"
+        },
+        {
+          "nameEn": "Frailty Trap"
+        },
+        {
+          "nameEn": "Fraying Lifeforce"
+        },
+        {
+          "nameEn": "Freezing Point"
+        },
+        {
+          "nameEn": "Frontline Gauntlets"
+        },
+        {
+          "nameEn": "Frontline Helm"
+        },
+        {
+          "nameEn": "Frontline Legs"
+        },
+        {
+          "nameEn": "Frontline Plating"
+        },
+        {
+          "nameEn": "Frontline Scout"
+        },
+        {
+          "nameEn": "Frost Spike"
+        },
+        {
+          "nameEn": "Frosthaven Sheath"
+        },
+        {
+          "nameEn": "Fruits of the Forest"
+        },
+        {
+          "nameEn": "Fuel Injector"
+        },
+        {
+          "nameEn": "Full of Bravado"
+        },
+        {
+          "nameEn": "Funeral Moon"
+        },
+        {
+          "nameEn": "Future Sight"
+        },
+        {
+          "nameEn": "Galaxxi Black"
+        },
+        {
+          "nameEn": "Gallantry Gold"
+        },
+        {
+          "nameEn": "Galvanic Bender"
+        },
+        {
+          "nameEn": "Gambler's Gloves"
+        },
+        {
+          "nameEn": "Gang Robbery"
+        },
+        {
+          "nameEn": "Garland of Spring"
+        },
+        {
+          "nameEn": "Gas Guzzler"
+        },
+        {
+          "nameEn": "Gate to i'Arathael"
+        },
+        {
+          "nameEn": "Gauntlet of Might"
+        },
+        {
+          "nameEn": "Gauntlets of Unity"
+        },
+        {
+          "nameEn": "Gaze the Ages"
+        },
+        {
+          "nameEn": "Gear Turner"
+        },
+        {
+          "nameEn": "Genis Wotchuneed"
+        },
+        {
+          "nameEn": "Gentle Breeze"
+        },
+        {
+          "nameEn": "Gesture of Goodwill"
+        },
+        {
+          "nameEn": "Ghostly Touch"
+        },
+        {
+          "nameEn": "Ghostly Visit"
+        },
+        {
+          "nameEn": "Give No Quarter"
+        },
+        {
+          "nameEn": "Give and Take"
+        },
+        {
+          "nameEn": "Glacial Footsteps"
+        },
+        {
+          "nameEn": "Glacial Horns"
+        },
+        {
+          "nameEn": "Glaring Impact"
+        },
+        {
+          "nameEn": "Gleam of the Blade"
+        },
+        {
+          "nameEn": "Glidewell Fins"
+        },
+        {
+          "nameEn": "Glory Plate"
+        },
+        {
+          "nameEn": "Glory Seeker"
+        },
+        {
+          "nameEn": "Gloves of Erasure"
+        },
+        {
+          "nameEn": "Glyph Overlay"
+        },
+        {
+          "nameEn": "Glyph Power Spell"
+        },
+        {
+          "nameEn": "Gold Hunter Ketch"
+        },
+        {
+          "nameEn": "Gold Hunter Longboat"
+        },
+        {
+          "nameEn": "Gold Hunter Marauder"
+        },
+        {
+          "nameEn": "Gold the Tip"
+        },
+        {
+          "nameEn": "Gold-Baited Hook"
+        },
+        {
+          "nameEn": "Golden Company"
+        },
+        {
+          "nameEn": "Golden Gait"
+        },
+        {
+          "nameEn": "Golden Galea"
+        },
+        {
+          "nameEn": "Golden Gauntlets"
+        },
+        {
+          "nameEn": "Golden Glare"
+        },
+        {
+          "nameEn": "Golden Grail"
+        },
+        {
+          "nameEn": "Golden Heart Plate"
+        },
+        {
+          "nameEn": "Golden Skull"
+        },
+        {
+          "nameEn": "Golden Skywarden"
+        },
+        {
+          "nameEn": "Golden Tipple"
+        },
+        {
+          "nameEn": "Goldfin Harpoon"
+        },
+        {
+          "nameEn": "Goldkiss Rum"
+        },
+        {
+          "nameEn": "Goldwing Turbine"
+        },
+        {
+          "nameEn": "Goliath Gauntlet"
+        },
+        {
+          "nameEn": "Gone in a Flash"
+        },
+        {
+          "nameEn": "Good Time Chapeau"
+        },
+        {
+          "nameEn": "Goon Battery"
+        },
+        {
+          "nameEn": "Goon Beatdown"
+        },
+        {
+          "nameEn": "Goon Tactics"
+        },
+        {
+          "nameEn": "Gore Belching"
+        },
+        {
+          "nameEn": "Gorganian Tome"
+        },
+        {
+          "nameEn": "Gorgon's Gaze"
+        },
+        {
+          "nameEn": "Grains of Bloodspill"
+        },
+        {
+          "nameEn": "Grandeur of Valahai"
+        },
+        {
+          "nameEn": "Grandstand Legplates"
+        },
+        {
+          "nameEn": "Graphene Chelicera"
+        },
+        {
+          "nameEn": "Grasp of Darkness"
+        },
+        {
+          "nameEn": "Gravekeeping"
+        },
+        {
+          "nameEn": "Graveling Growl"
+        },
+        {
+          "nameEn": "Graven Call"
+        },
+        {
+          "nameEn": "Graven Cowl"
+        },
+        {
+          "nameEn": "Graven Gaslight"
+        },
+        {
+          "nameEn": "Graven Gloves"
+        },
+        {
+          "nameEn": "Graven Justaucorpse"
+        },
+        {
+          "nameEn": "Graven Vestment"
+        },
+        {
+          "nameEn": "Graven Walkers"
+        },
+        {
+          "nameEn": "Gravy Bones"
+        },
+        {
+          "nameEn": "Grind Them Down"
+        },
+        {
+          "nameEn": "Grinding Gears"
+        },
+        {
+          "nameEn": "Groundbreaker Crix"
+        },
+        {
+          "nameEn": "HMS Barracuda"
+        },
+        {
+          "nameEn": "Hack to Reality"
+        },
+        {
+          "nameEn": "Hadron Collider"
+        },
+        {
+          "nameEn": "Hala Goldenhelm"
+        },
+        {
+          "nameEn": "Halo of Illumination"
+        },
+        {
+          "nameEn": "Halo of Lumina Light"
+        },
+        {
+          "nameEn": "Hammer of Havenhold"
+        },
+        {
+          "nameEn": "Hamstring Shot"
+        },
+        {
+          "nameEn": "Hanabi Blaster"
+        },
+        {
+          "nameEn": "Hand Behind the Pen"
+        },
+        {
+          "nameEn": "Hand of Vengeance"
+        },
+        {
+          "nameEn": "Hard Knuckle"
+        },
+        {
+          "nameEn": "Harmonized Kodachi"
+        },
+        {
+          "nameEn": "Harmony of the Hunt"
+        },
+        {
+          "nameEn": "Harness Lightning"
+        },
+        {
+          "nameEn": "Harvest Season"
+        },
+        {
+          "nameEn": "Hatchet of Body"
+        },
+        {
+          "nameEn": "Hatchet of Mind"
+        },
+        {
+          "nameEn": "Haunting Rendition"
+        },
+        {
+          "nameEn": "Haunting Specter"
+        },
+        {
+          "nameEn": "Haze Bending"
+        },
+        {
+          "nameEn": "Haze Shelter"
+        },
+        {
+          "nameEn": "Head Leads the Tail"
+        },
+        {
+          "nameEn": "Headliner Helm"
+        },
+        {
+          "nameEn": "Healing Balm"
+        },
+        {
+          "nameEn": "Healing Potion"
+        },
+        {
+          "nameEn": "Heart Wrencher"
+        },
+        {
+          "nameEn": "Heart of Bladehold"
+        },
+        {
+          "nameEn": "Heart of Fyendal"
+        },
+        {
+          "nameEn": "Heart of Ice"
+        },
+        {
+          "nameEn": "Heart of Vengeance"
+        },
+        {
+          "nameEn": "Heart-throb"
+        },
+        {
+          "nameEn": "Hearty Block"
+        },
+        {
+          "nameEn": "Heat Seeker"
+        },
+        {
+          "nameEn": "Heaven's Claws"
+        },
+        {
+          "nameEn": "Heavy Artillery"
+        },
+        {
+          "nameEn": "Heavy Metal Hardcore"
+        },
+        {
+          "nameEn": "Heavy Swing"
+        },
+        {
+          "nameEn": "Helio's Mitre"
+        },
+        {
+          "nameEn": "Hell Hammer"
+        },
+        {
+          "nameEn": "Helm of Halo's Grace"
+        },
+        {
+          "nameEn": "Helm of Hindsight"
+        },
+        {
+          "nameEn": "Helm of Isen's Peak"
+        },
+        {
+          "nameEn": "Helm of Lignum Vitae"
+        },
+        {
+          "nameEn": "Helm of Safe Haven"
+        },
+        {
+          "nameEn": "Helm of Sharp Eye"
+        },
+        {
+          "nameEn": "Helm of Unity"
+        },
+        {
+          "nameEn": "Helm of the Adored"
+        },
+        {
+          "nameEn": "Helm of the Arknight"
+        },
+        {
+          "nameEn": "Helmsman's Peak"
+        },
+        {
+          "nameEn": "Hemorrhage Bore"
+        },
+        {
+          "nameEn": "Herald of Erudition"
+        },
+        {
+          "nameEn": "Herald of Judgment"
+        },
+        {
+          "nameEn": "Herald of Protection"
+        },
+        {
+          "nameEn": "Herald of Ravages"
+        },
+        {
+          "nameEn": "Herald of Rebirth"
+        },
+        {
+          "nameEn": "Herald of Sekem"
+        },
+        {
+          "nameEn": "Herald of Tenacity"
+        },
+        {
+          "nameEn": "Herald of Triumph"
+        },
+        {
+          "nameEn": "Herald of Victoria"
+        },
+        {
+          "nameEn": "Heroic Grit"
+        },
+        {
+          "nameEn": "Heroic Pose"
+        },
+        {
+          "nameEn": "Heron's Flight"
+        },
+        {
+          "nameEn": "Hidden Agenda"
+        },
+        {
+          "nameEn": "Hide Tanner"
+        },
+        {
+          "nameEn": "High Octane"
+        },
+        {
+          "nameEn": "High Pitched Howl"
+        },
+        {
+          "nameEn": "High Roller"
+        },
+        {
+          "nameEn": "High Speed Impact"
+        },
+        {
+          "nameEn": "High Striker"
+        },
+        {
+          "nameEn": "High Voltage"
+        },
+        {
+          "nameEn": "Hit and Run"
+        },
+        {
+          "nameEn": "Hit the Gas"
+        },
+        {
+          "nameEn": "Hit the High Notes"
+        },
+        {
+          "nameEn": "Hit the Jackpot"
+        },
+        {
+          "nameEn": "Hoarding of Denial"
+        },
+        {
+          "nameEn": "Hocus Pocus"
+        },
+        {
+          "nameEn": "Hoist 'Em Up"
+        },
+        {
+          "nameEn": "Hold the Line"
+        },
+        {
+          "nameEn": "Holo Shield"
+        },
+        {
+          "nameEn": "Homage to Ancestors"
+        },
+        {
+          "nameEn": "Honed for Honor"
+        },
+        {
+          "nameEn": "Honing Hood"
+        },
+        {
+          "nameEn": "Hood of Red Sand"
+        },
+        {
+          "nameEn": "Hope Merchant's Hood"
+        },
+        {
+          "nameEn": "Hornet's Sting"
+        },
+        {
+          "nameEn": "Horrors of the Past"
+        },
+        {
+          "nameEn": "Hostile Encroachment"
+        },
+        {
+          "nameEn": "Hot on Their Heels"
+        },
+        {
+          "nameEn": "Howl from Beyond"
+        },
+        {
+          "nameEn": "Humble Entrance"
+        },
+        {
+          "nameEn": "Humour Plunge"
+        },
+        {
+          "nameEn": "Hundred Winds"
+        },
+        {
+          "nameEn": "Hungering Demigon"
+        },
+        {
+          "nameEn": "Hungry for More"
+        },
+        {
+          "nameEn": "Hunt a Killer"
+        },
+        {
+          "nameEn": "Hunt the Hunter"
+        },
+        {
+          "nameEn": "Hunted or Hunter"
+        },
+        {
+          "nameEn": "Hunter or Hunted?"
+        },
+        {
+          "nameEn": "Hunter's Klaive"
+        },
+        {
+          "nameEn": "Hurricane Technique"
+        },
+        {
+          "nameEn": "Hydraulic Press"
+        },
+        {
+          "nameEn": "Hyper Driver"
+        },
+        {
+          "nameEn": "Hyper Inflation"
+        },
+        {
+          "nameEn": "Hyper Scrapper"
+        },
+        {
+          "nameEn": "Hypothermia"
+        },
+        {
+          "nameEn": "Ice Eternal"
+        },
+        {
+          "nameEn": "Icy Encounter"
+        },
+        {
+          "nameEn": "Immobilizing Shot"
+        },
+        {
+          "nameEn": "Impenetrable Belief"
+        },
+        {
+          "nameEn": "Imperial Edict"
+        },
+        {
+          "nameEn": "Imperial Intent"
+        },
+        {
+          "nameEn": "Imperial Ledger"
+        },
+        {
+          "nameEn": "Imperial Warhorn"
+        },
+        {
+          "nameEn": "Imposing Visage"
+        },
+        {
+          "nameEn": "Impulsive Desire"
+        },
+        {
+          "nameEn": "In the Swing"
+        },
+        {
+          "nameEn": "Increase the Tension"
+        },
+        {
+          "nameEn": "Indefensibly Honed"
+        },
+        {
+          "nameEn": "Induce Panic"
+        },
+        {
+          "nameEn": "Induction Chamber"
+        },
+        {
+          "nameEn": "Inertia Trap"
+        },
+        {
+          "nameEn": "Infecting Shot"
+        },
+        {
+          "nameEn": "Infectious Host"
+        },
+        {
+          "nameEn": "Infuse Alloy"
+        },
+        {
+          "nameEn": "Infuse Titanium"
+        },
+        {
+          "nameEn": "Ink-lined Cloak"
+        },
+        {
+          "nameEn": "Insidious Chill"
+        },
+        {
+          "nameEn": "Inspire Lightning"
+        },
+        {
+          "nameEn": "Instill Fear"
+        },
+        {
+          "nameEn": "Insult to Injury"
+        },
+        {
+          "nameEn": "Intellect Penalty"
+        },
+        {
+          "nameEn": "Intimate Inducement"
+        },
+        {
+          "nameEn": "Into the Muck"
+        },
+        {
+          "nameEn": "Intoxicating Shot"
+        },
+        {
+          "nameEn": "Invert Existence"
+        },
+        {
+          "nameEn": "Inverter's Nightcowl"
+        },
+        {
+          "nameEn": "Invigorating Light"
+        },
+        {
+          "nameEn": "Invoke Azvolai"
+        },
+        {
+          "nameEn": "Invoke Cromai"
+        },
+        {
+          "nameEn": "Invoke Dominia"
+        },
+        {
+          "nameEn": "Invoke Kyloria"
+        },
+        {
+          "nameEn": "Invoke Nekria"
+        },
+        {
+          "nameEn": "Invoke Ouvia"
+        },
+        {
+          "nameEn": "Invoke Suraya"
+        },
+        {
+          "nameEn": "Invoke Themai"
+        },
+        {
+          "nameEn": "Invoke Tomeltai"
+        },
+        {
+          "nameEn": "Invoke Vynserakai"
+        },
+        {
+          "nameEn": "Invoke Yendurai"
+        },
+        {
+          "nameEn": "Ion Charged"
+        },
+        {
+          "nameEn": "Ire of the Crowd"
+        },
+        {
+          "nameEn": "Iris of Reality"
+        },
+        {
+          "nameEn": "Iris of the Blossom"
+        },
+        {
+          "nameEn": "Ironfist Revelation"
+        },
+        {
+          "nameEn": "Ironhide Gauntlet"
+        },
+        {
+          "nameEn": "Ironhide Helm"
+        },
+        {
+          "nameEn": "Ironhide Legs"
+        },
+        {
+          "nameEn": "Ironhide Plate"
+        },
+        {
+          "nameEn": "Ironrot Gauntlet"
+        },
+        {
+          "nameEn": "Ironrot Helm"
+        },
+        {
+          "nameEn": "Ironrot Legs"
+        },
+        {
+          "nameEn": "Ironrot Plate"
+        },
+        {
+          "nameEn": "Ironsong Pride"
+        },
+        {
+          "nameEn": "Ironsong Response"
+        },
+        {
+          "nameEn": "Ironsong Versus"
+        },
+        {
+          "nameEn": "Isenhowl Weathervane"
+        },
+        {
+          "nameEn": "Jack Be Nimble"
+        },
+        {
+          "nameEn": "Jack Be Quick"
+        },
+        {
+          "nameEn": "Jack-o'-lantern"
+        },
+        {
+          "nameEn": "Jagged Edge"
+        },
+        {
+          "nameEn": "Jarl Vetreiði"
+        },
+        {
+          "nameEn": "Jaws of Victory"
+        },
+        {
+          "nameEn": "Jittery Bones"
+        },
+        {
+          "nameEn": "Jolly Bludger"
+        },
+        {
+          "nameEn": "Jubeel, Spellbane"
+        },
+        {
+          "nameEn": "Junkyard Dogg"
+        },
+        {
+          "nameEn": "Just a Nick"
+        },
+        {
+          "nameEn": "Kayo, Berserker Runt"
+        },
+        {
+          "nameEn": "Kayo, Strong-arm"
+        },
+        {
+          "nameEn": "Kelpie, Tangled Mess"
+        },
+        {
+          "nameEn": "King Kraken Harpoon"
+        },
+        {
+          "nameEn": "King Shark Harpoon"
+        },
+        {
+          "nameEn": "Kiss of Death"
+        },
+        {
+          "nameEn": "Knife Through"
+        },
+        {
+          "nameEn": "Knife Through Butter"
+        },
+        {
+          "nameEn": "Knucklehead"
+        },
+        {
+          "nameEn": "Koi Blessed Kimono"
+        },
+        {
+          "nameEn": "Kraken's Aethervein"
+        },
+        {
+          "nameEn": "Kunai of Retribution"
+        },
+        {
+          "nameEn": "Lace with Bloodrot"
+        },
+        {
+          "nameEn": "Lace with Frailty"
+        },
+        {
+          "nameEn": "Lace with Inertia"
+        },
+        {
+          "nameEn": "Laced Lightning"
+        },
+        {
+          "nameEn": "Laden with Earth"
+        },
+        {
+          "nameEn": "Laden with Frost"
+        },
+        {
+          "nameEn": "Laden with Lightning"
+        },
+        {
+          "nameEn": "Lady Barthimont"
+        },
+        {
+          "nameEn": "Lair of the Spider"
+        },
+        {
+          "nameEn": "Last Ditch Effort"
+        },
+        {
+          "nameEn": "Lava Vein Loyalty"
+        },
+        {
+          "nameEn": "Lay Down the Law"
+        },
+        {
+          "nameEn": "Lay to Rest"
+        },
+        {
+          "nameEn": "Lead the Charge"
+        },
+        {
+          "nameEn": "Lead with Heart"
+        },
+        {
+          "nameEn": "Lead with Power"
+        },
+        {
+          "nameEn": "Lead with Speed"
+        },
+        {
+          "nameEn": "Leap Frog Gloves"
+        },
+        {
+          "nameEn": "Leap Frog Leggings"
+        },
+        {
+          "nameEn": "Leap Frog Slime Skin"
+        },
+        {
+          "nameEn": "Leap Frog Vocal Sac"
+        },
+        {
+          "nameEn": "Leave 'Em Speechless"
+        },
+        {
+          "nameEn": "Leave No Witnesses"
+        },
+        {
+          "nameEn": "Leave Them Hanging"
+        },
+        {
+          "nameEn": "Leave a Dent"
+        },
+        {
+          "nameEn": "Leaven Sheath"
+        },
+        {
+          "nameEn": "Leech Memory"
+        },
+        {
+          "nameEn": "Leech Renown"
+        },
+        {
+          "nameEn": "Leech Vitality"
+        },
+        {
+          "nameEn": "Legacy of Ikaru"
+        },
+        {
+          "nameEn": "Lesson in Lava"
+        },
+        {
+          "nameEn": "Lessons Learned"
+        },
+        {
+          "nameEn": "Levia, Redeemed"
+        },
+        {
+          "nameEn": "Liar's Charm"
+        },
+        {
+          "nameEn": "Life for a Life"
+        },
+        {
+          "nameEn": "Life of the Party"
+        },
+        {
+          "nameEn": "Light Fingers"
+        },
+        {
+          "nameEn": "Light Up the Leaves"
+        },
+        {
+          "nameEn": "Light it Up"
+        },
+        {
+          "nameEn": "Light of Sol"
+        },
+        {
+          "nameEn": "Light the Way"
+        },
+        {
+          "nameEn": "Lighten the Load"
+        },
+        {
+          "nameEn": "Lightning Flow"
+        },
+        {
+          "nameEn": "Lightning Form"
+        },
+        {
+          "nameEn": "Lightning Greaves"
+        },
+        {
+          "nameEn": "Lightning Overload"
+        },
+        {
+          "nameEn": "Lightning Press"
+        },
+        {
+          "nameEn": "Lightning Surge"
+        },
+        {
+          "nameEn": "Limpit, Hop-a-long"
+        },
+        {
+          "nameEn": "Line Crossers"
+        },
+        {
+          "nameEn": "Lion's Pounce"
+        },
+        {
+          "nameEn": "Lionclaw Maul"
+        },
+        {
+          "nameEn": "Liquid-Cooled Mayhem"
+        },
+        {
+          "nameEn": "Little Big Foot"
+        },
+        {
+          "nameEn": "Livewire Press"
+        },
+        {
+          "nameEn": "Locked and Loaded"
+        },
+        {
+          "nameEn": "Long Whisker Loyalty"
+        },
+        {
+          "nameEn": "Longdraw Half-glove"
+        },
+        {
+          "nameEn": "Longsword Leggings"
+        },
+        {
+          "nameEn": "Look Within"
+        },
+        {
+          "nameEn": "Looking for a Scrap"
+        },
+        {
+          "nameEn": "Looming Doom"
+        },
+        {
+          "nameEn": "Loot the Arsenal"
+        },
+        {
+          "nameEn": "Loot the Hold"
+        },
+        {
+          "nameEn": "Lord Sutcliffe"
+        },
+        {
+          "nameEn": "Lord of Wind"
+        },
+        {
+          "nameEn": "Lost in Thought"
+        },
+        {
+          "nameEn": "Lost in Transit"
+        },
+        {
+          "nameEn": "Lumina Ascension"
+        },
+        {
+          "nameEn": "Lumina Lance"
+        },
+        {
+          "nameEn": "Lunartide Plunderer"
+        },
+        {
+          "nameEn": "Lunging Press"
+        },
+        {
+          "nameEn": "Lyath Goldmane"
+        },
+        {
+          "nameEn": "Macho Grande"
+        },
+        {
+          "nameEn": "Madcap Charger"
+        },
+        {
+          "nameEn": "Madcap Muscle"
+        },
+        {
+          "nameEn": "Mage Hunter Arrow"
+        },
+        {
+          "nameEn": "Mage Master Boots"
+        },
+        {
+          "nameEn": "Magmatic Carapace"
+        },
+        {
+          "nameEn": "Malefic Incantation"
+        },
+        {
+          "nameEn": "Man Overboard"
+        },
+        {
+          "nameEn": "Mandible Claw"
+        },
+        {
+          "nameEn": "Manifest Muscle"
+        },
+        {
+          "nameEn": "March of Loyalty"
+        },
+        {
+          "nameEn": "Mark of Lightning"
+        },
+        {
+          "nameEn": "Mark of the Beast"
+        },
+        {
+          "nameEn": "Mark of the Huntsman"
+        },
+        {
+          "nameEn": "Mark the Prey"
+        },
+        {
+          "nameEn": "Mark with Magma"
+        },
+        {
+          "nameEn": "Mask of Deceit"
+        },
+        {
+          "nameEn": "Mask of Many Faces"
+        },
+        {
+          "nameEn": "Mask of Momentum"
+        },
+        {
+          "nameEn": "Mask of Perdition"
+        },
+        {
+          "nameEn": "Mask of Three Tails"
+        },
+        {
+          "nameEn": "Mauvrion Skies"
+        },
+        {
+          "nameEn": "Maximum Velocity"
+        },
+        {
+          "nameEn": "Meat and Greet"
+        },
+        {
+          "nameEn": "Mechanical Strength"
+        },
+        {
+          "nameEn": "Meet Madness"
+        },
+        {
+          "nameEn": "Meganetic Lockwave"
+        },
+        {
+          "nameEn": "Meganetic Protocol"
+        },
+        {
+          "nameEn": "Meganetic Shockwave"
+        },
+        {
+          "nameEn": "Melody, Sing-along"
+        },
+        {
+          "nameEn": "Melting Point"
+        },
+        {
+          "nameEn": "Memorial Ground"
+        },
+        {
+          "nameEn": "Mental Block"
+        },
+        {
+          "nameEn": "Merciful Retribution"
+        },
+        {
+          "nameEn": "Merciless Battleaxe"
+        },
+        {
+          "nameEn": "Mercurial Skies"
+        },
+        {
+          "nameEn": "Meridian Pathway"
+        },
+        {
+          "nameEn": "Metacarpus Node"
+        },
+        {
+          "nameEn": "Meteoric Impact"
+        },
+        {
+          "nameEn": "Meteoric Rise"
+        },
+        {
+          "nameEn": "Micro-processor"
+        },
+        {
+          "nameEn": "Midas Touch"
+        },
+        {
+          "nameEn": "Mighty Windup"
+        },
+        {
+          "nameEn": "Mightybone Knuckles"
+        },
+        {
+          "nameEn": "Miller's Grindstone"
+        },
+        {
+          "nameEn": "Mind Meets Might"
+        },
+        {
+          "nameEn": "Mind's Desire"
+        },
+        {
+          "nameEn": "Mindstate of Tiger"
+        },
+        {
+          "nameEn": "Minerva Themis"
+        },
+        {
+          "nameEn": "Mini Forcefield"
+        },
+        {
+          "nameEn": "Mini Meataxe"
+        },
+        {
+          "nameEn": "Mischievous Meeps"
+        },
+        {
+          "nameEn": "Misfire Dampener"
+        },
+        {
+          "nameEn": "Mist Hunter"
+        },
+        {
+          "nameEn": "Mistborn Protector"
+        },
+        {
+          "nameEn": "Mistcloak Gully"
+        },
+        {
+          "nameEn": "Mocking Blow"
+        },
+        {
+          "nameEn": "Moment Maker"
+        },
+        {
+          "nameEn": "Money or Your Life?"
+        },
+        {
+          "nameEn": "Monkey Powder"
+        },
+        {
+          "nameEn": "Monolith of Galcia"
+        },
+        {
+          "nameEn": "Monstrous Veil"
+        },
+        {
+          "nameEn": "Moon Chakra"
+        },
+        {
+          "nameEn": "Moray le Fay"
+        },
+        {
+          "nameEn": "Mordred Tide"
+        },
+        {
+          "nameEn": "Morlock Hill"
+        },
+        {
+          "nameEn": "Mounting Anger"
+        },
+        {
+          "nameEn": "Mournful Casket"
+        },
+        {
+          "nameEn": "Mugenshi: RELEASE"
+        },
+        {
+          "nameEn": "Murderous Rabble"
+        },
+        {
+          "nameEn": "Murkmire Grapnel"
+        },
+        {
+          "nameEn": "Murky Water"
+        },
+        {
+          "nameEn": "Muscle Mutt"
+        },
+        {
+          "nameEn": "Mutated Mass"
+        },
+        {
+          "nameEn": "Myrkhellir Helm"
+        },
+        {
+          "nameEn": "Nasty Surprise"
+        },
+        {
+          "nameEn": "Nebula Blade"
+        },
+        {
+          "nameEn": "Nebula Duality"
+        },
+        {
+          "nameEn": "Nebulus Cycle"
+        },
+        {
+          "nameEn": "Nerve Scalpel"
+        },
+        {
+          "nameEn": "Nerves of Steel"
+        },
+        {
+          "nameEn": "Nettling Shot"
+        },
+        {
+          "nameEn": "Never Give Up"
+        },
+        {
+          "nameEn": "Never Yield"
+        },
+        {
+          "nameEn": "New Horizon"
+        },
+        {
+          "nameEn": "Night's Embrace"
+        },
+        {
+          "nameEn": "Nimble Strike"
+        },
+        {
+          "nameEn": "Nip at the Heels"
+        },
+        {
+          "nameEn": "Nitro Mechanoid"
+        },
+        {
+          "nameEn": "Nix the Nimble"
+        },
+        {
+          "nameEn": "No Hero Stands Alone"
+        },
+        {
+          "nameEn": "No Tall Tales"
+        },
+        {
+          "nameEn": "Nom de Plume"
+        },
+        {
+          "nameEn": "Northern Winds"
+        },
+        {
+          "nameEn": "Not So Fast"
+        },
+        {
+          "nameEn": "Not So Mighty"
+        },
+        {
+          "nameEn": "Not So Tuff"
+        },
+        {
+          "nameEn": "Nourishing Emptiness"
+        },
+        {
+          "nameEn": "Nourishing Glow"
+        },
+        {
+          "nameEn": "Nucleus Aetherbolt"
+        },
+        {
+          "nameEn": "Null // Shock"
+        },
+        {
+          "nameEn": "Null Time Zone"
+        },
+        {
+          "nameEn": "Nullrune Boots"
+        },
+        {
+          "nameEn": "Nullrune Gloves"
+        },
+        {
+          "nameEn": "Nullrune Hood"
+        },
+        {
+          "nameEn": "Nullrune Robe"
+        },
+        {
+          "nameEn": "Numbskull Charm"
+        },
+        {
+          "nameEn": "Nuu, Alluring Desire"
+        },
+        {
+          "nameEn": "Oasis Respite"
+        },
+        {
+          "nameEn": "Oath of Loyalty"
+        },
+        {
+          "nameEn": "Oath of Oak"
+        },
+        {
+          "nameEn": "Oath of Steel"
+        },
+        {
+          "nameEn": "Oath of the Arknight"
+        },
+        {
+          "nameEn": "Obsidian Fire Vein"
+        },
+        {
+          "nameEn": "Odds on Favorite"
+        },
+        {
+          "nameEn": "Ode to Wrath"
+        },
+        {
+          "nameEn": "Offensive Behavior"
+        },
+        {
+          "nameEn": "Okana Scar Wraps"
+        },
+        {
+          "nameEn": "Old Favorite"
+        },
+        {
+          "nameEn": "Old Knocker"
+        },
+        {
+          "nameEn": "Old Leather and Vim"
+        },
+        {
+          "nameEn": "Olde Leather Boots"
+        },
+        {
+          "nameEn": "Olde Leather Gloves"
+        },
+        {
+          "nameEn": "Olde Leather Helm"
+        },
+        {
+          "nameEn": "Olde Leather Plate"
+        },
+        {
+          "nameEn": "Ollin Ice Cap"
+        },
+        {
+          "nameEn": "Omens of Arcana"
+        },
+        {
+          "nameEn": "Ominous Aggression"
+        },
+        {
+          "nameEn": "Ominous Excavation"
+        },
+        {
+          "nameEn": "Ominous Respite"
+        },
+        {
+          "nameEn": "On a Knife Edge"
+        },
+        {
+          "nameEn": "On the Horizon"
+        },
+        {
+          "nameEn": "One-Two Punch"
+        },
+        {
+          "nameEn": "Onyx Amulet"
+        },
+        {
+          "nameEn": "Opal Amulet"
+        },
+        {
+          "nameEn": "Open the Center"
+        },
+        {
+          "nameEn": "Open the Flood Gates"
+        },
+        {
+          "nameEn": "Optekal Monocle"
+        },
+        {
+          "nameEn": "Orb-Weaver Spinneret"
+        },
+        {
+          "nameEn": "Orbitoclast"
+        },
+        {
+          "nameEn": "Ornate Tessen"
+        },
+        {
+          "nameEn": "Out for Blood"
+        },
+        {
+          "nameEn": "Outland Skirmish"
+        },
+        {
+          "nameEn": "Outside Interference"
+        },
+        {
+          "nameEn": "Over the Top"
+        },
+        {
+          "nameEn": "Overbearing Presence"
+        },
+        {
+          "nameEn": "Overcome Adversity"
+        },
+        {
+          "nameEn": "Overcrowded"
+        },
+        {
+          "nameEn": "Overload Script"
+        },
+        {
+          "nameEn": "Overturn the Results"
+        },
+        {
+          "nameEn": "Overwhelming Swing"
+        },
+        {
+          "nameEn": "Paddle Faster"
+        },
+        {
+          "nameEn": "Pain in the Backside"
+        },
+        {
+          "nameEn": "Painful Passage"
+        },
+        {
+          "nameEn": "Painful Premonition"
+        },
+        {
+          "nameEn": "Palantir Aeronought"
+        },
+        {
+          "nameEn": "Panel Beater"
+        },
+        {
+          "nameEn": "Parable of Humility"
+        },
+        {
+          "nameEn": "Paragon Plate"
+        },
+        {
+          "nameEn": "Parched Terrain"
+        },
+        {
+          "nameEn": "Parry Blade"
+        },
+        {
+          "nameEn": "Patch the Hole"
+        },
+        {
+          "nameEn": "Path Well Traveled"
+        },
+        {
+          "nameEn": "Path of Same Ends"
+        },
+        {
+          "nameEn": "Path of Vengeance"
+        },
+        {
+          "nameEn": "Pathing Helix"
+        },
+        {
+          "nameEn": "Peace of Mind"
+        },
+        {
+          "nameEn": "Peaceful Sanctuary"
+        },
+        {
+          "nameEn": "Pearl Amulet"
+        },
+        {
+          "nameEn": "Pec Perfect"
+        },
+        {
+          "nameEn": "Pedal to the Metal"
+        },
+        {
+          "nameEn": "Pendulum Trap"
+        },
+        {
+          "nameEn": "Penetration Script"
+        },
+        {
+          "nameEn": "Perch Grapplers"
+        },
+        {
+          "nameEn": "Performance Bonus"
+        },
+        {
+          "nameEn": "Persuasive Prognosis"
+        },
+        {
+          "nameEn": "Phantasmaclasm"
+        },
+        {
+          "nameEn": "Phantasmal Footsteps"
+        },
+        {
+          "nameEn": "Phantasmal Haze"
+        },
+        {
+          "nameEn": "Phantasmal Symbiosis"
+        },
+        {
+          "nameEn": "Phantasmify"
+        },
+        {
+          "nameEn": "Phantom Tidemaw"
+        },
+        {
+          "nameEn": "Phoenix Flame"
+        },
+        {
+          "nameEn": "Phoenix Form"
+        },
+        {
+          "nameEn": "Photon Rush"
+        },
+        {
+          "nameEn": "Photon Splicing"
+        },
+        {
+          "nameEn": "Pick Up the Point"
+        },
+        {
+          "nameEn": "Pick to Pieces"
+        },
+        {
+          "nameEn": "Pierce Reality"
+        },
+        {
+          "nameEn": "Piercing Shadow Vise"
+        },
+        {
+          "nameEn": "Pile Driver"
+        },
+        {
+          "nameEn": "Pilfer the Tomb"
+        },
+        {
+          "nameEn": "Pilfer the Wreck"
+        },
+        {
+          "nameEn": "Pillar of Unity"
+        },
+        {
+          "nameEn": "Pinion Sentry"
+        },
+        {
+          "nameEn": "Pitfall Trap"
+        },
+        {
+          "nameEn": "Plague Hive"
+        },
+        {
+          "nameEn": "Plan for the Worst"
+        },
+        {
+          "nameEn": "Plasma Barrel Shot"
+        },
+        {
+          "nameEn": "Plasma Mainline"
+        },
+        {
+          "nameEn": "Plasma Purifier"
+        },
+        {
+          "nameEn": "Plate of Tough Love"
+        },
+        {
+          "nameEn": "Plating of Unity"
+        },
+        {
+          "nameEn": "Platinum Amulet"
+        },
+        {
+          "nameEn": "Pledge Fealty"
+        },
+        {
+          "nameEn": "Pleiades, Superstar"
+        },
+        {
+          "nameEn": "Plow Through"
+        },
+        {
+          "nameEn": "Plume of Evergrowth"
+        },
+        {
+          "nameEn": "Plunder Run"
+        },
+        {
+          "nameEn": "Plunder the Poor"
+        },
+        {
+          "nameEn": "Plunge the Prospect"
+        },
+        {
+          "nameEn": "Plutonic Starplate"
+        },
+        {
+          "nameEn": "Point of Engagement"
+        },
+        {
+          "nameEn": "Point of Escalation"
+        },
+        {
+          "nameEn": "Point the Tip"
+        },
+        {
+          "nameEn": "Poison the Tips"
+        },
+        {
+          "nameEn": "Poison the Well"
+        },
+        {
+          "nameEn": "Poisoned Blade"
+        },
+        {
+          "nameEn": "Polar Blast"
+        },
+        {
+          "nameEn": "Polarus Pulse Ray"
+        },
+        {
+          "nameEn": "Polished Blade"
+        },
+        {
+          "nameEn": "Polly Cranka"
+        },
+        {
+          "nameEn": "Pop the Bubble"
+        },
+        {
+          "nameEn": "Popped Collar Polo"
+        },
+        {
+          "nameEn": "Portside Exchange"
+        },
+        {
+          "nameEn": "Potion of Déjà Vu"
+        },
+        {
+          "nameEn": "Potion of Ironhide"
+        },
+        {
+          "nameEn": "Potion of Luck"
+        },
+        {
+          "nameEn": "Potion of Seeing"
+        },
+        {
+          "nameEn": "Potion of Strength"
+        },
+        {
+          "nameEn": "Pounamu Amulet"
+        },
+        {
+          "nameEn": "Pouncing Paws"
+        },
+        {
+          "nameEn": "Pouncing Qi"
+        },
+        {
+          "nameEn": "Pound for Pound"
+        },
+        {
+          "nameEn": "Pound of Flesh"
+        },
+        {
+          "nameEn": "Pounding Gale"
+        },
+        {
+          "nameEn": "Pour the Mold"
+        },
+        {
+          "nameEn": "Power Stance"
+        },
+        {
+          "nameEn": "Prayer of Bellona"
+        },
+        {
+          "nameEn": "Preach Modesty"
+        },
+        {
+          "nameEn": "Precision Press"
+        },
+        {
+          "nameEn": "Predatory Assault"
+        },
+        {
+          "nameEn": "Predatory Plating"
+        },
+        {
+          "nameEn": "Predatory Streak"
+        },
+        {
+          "nameEn": "Premeditate"
+        },
+        {
+          "nameEn": "Preserve Tradition"
+        },
+        {
+          "nameEn": "Prey Spotters"
+        },
+        {
+          "nameEn": "Prey on Insecurity"
+        },
+        {
+          "nameEn": "Prime the Crowd"
+        },
+        {
+          "nameEn": "Primed to Fight"
+        },
+        {
+          "nameEn": "Primeval Bellow"
+        },
+        {
+          "nameEn": "Prized Galea"
+        },
+        {
+          "nameEn": "Prizeworn Gauntlet"
+        },
+        {
+          "nameEn": "Prizeworn Plating"
+        },
+        {
+          "nameEn": "Proclaim Vengeance"
+        },
+        {
+          "nameEn": "Prognosticate"
+        },
+        {
+          "nameEn": "Promise of Plenty"
+        },
+        {
+          "nameEn": "Promising Terrain"
+        },
+        {
+          "nameEn": "Prophetic Quickstep"
+        },
+        {
+          "nameEn": "Proto Base Arms"
+        },
+        {
+          "nameEn": "Proto Base Chest"
+        },
+        {
+          "nameEn": "Proto Base Head"
+        },
+        {
+          "nameEn": "Proto Base Legs"
+        },
+        {
+          "nameEn": "Prowess of Agility"
+        },
+        {
+          "nameEn": "Public Bounty"
+        },
+        {
+          "nameEn": "Puffer Jacket"
+        },
+        {
+          "nameEn": "Puffin, Hightail"
+        },
+        {
+          "nameEn": "Pulse of Candlehold"
+        },
+        {
+          "nameEn": "Pulse of Isenloft"
+        },
+        {
+          "nameEn": "Pulse of Volthaven"
+        },
+        {
+          "nameEn": "Pulsewave Harpoon"
+        },
+        {
+          "nameEn": "Pulsewave Protocol"
+        },
+        {
+          "nameEn": "Pulsing Cardia"
+        },
+        {
+          "nameEn": "Punching Gloves"
+        },
+        {
+          "nameEn": "Pursuit of Knowledge"
+        },
+        {
+          "nameEn": "Push Forward"
+        },
+        {
+          "nameEn": "Push the Point"
+        },
+        {
+          "nameEn": "Put in Context"
+        },
+        {
+          "nameEn": "Putrid Stirrings"
+        },
+        {
+          "nameEn": "Qi Unleashed"
+        },
+        {
+          "nameEn": "Quantum Processor"
+        },
+        {
+          "nameEn": "Quelling Robe"
+        },
+        {
+          "nameEn": "Quelling Sleeves"
+        },
+        {
+          "nameEn": "Quelling Slippers"
+        },
+        {
+          "nameEn": "Quick Clicks"
+        },
+        {
+          "nameEn": "Quick Succession"
+        },
+        {
+          "nameEn": "Quickdodge Flexors"
+        },
+        {
+          "nameEn": "Quickening Sand"
+        },
+        {
+          "nameEn": "Quicksilver Dagger"
+        },
+        {
+          "nameEn": "Quicksilver Dance"
+        },
+        {
+          "nameEn": "Radiant Flow"
+        },
+        {
+          "nameEn": "Radiant Forcefield"
+        },
+        {
+          "nameEn": "Radiant Raiment"
+        },
+        {
+          "nameEn": "Radiant Touch"
+        },
+        {
+          "nameEn": "Radiant View"
+        },
+        {
+          "nameEn": "Ragamuffin's Hat"
+        },
+        {
+          "nameEn": "Rage Baiters"
+        },
+        {
+          "nameEn": "Rage Specter"
+        },
+        {
+          "nameEn": "Raging Onslaught"
+        },
+        {
+          "nameEn": "Rain Razors"
+        },
+        {
+          "nameEn": "Rainbow Goo Trap"
+        },
+        {
+          "nameEn": "Raise Blades"
+        },
+        {
+          "nameEn": "Raise an Army"
+        },
+        {
+          "nameEn": "Rake Over the Coals"
+        },
+        {
+          "nameEn": "Rake the Embers"
+        },
+        {
+          "nameEn": "Rally the Rearguard"
+        },
+        {
+          "nameEn": "Rally the Underdog"
+        },
+        {
+          "nameEn": "Random Events Unfold"
+        },
+        {
+          "nameEn": "Ransack and Raze"
+        },
+        {
+          "nameEn": "Rapid Reflex"
+        },
+        {
+          "nameEn": "Rapturous Applause"
+        },
+        {
+          "nameEn": "Rattle Bones"
+        },
+        {
+          "nameEn": "Ravenous Meataxe"
+        },
+        {
+          "nameEn": "Ravenous Rabble"
+        },
+        {
+          "nameEn": "Rawhide Rumble"
+        },
+        {
+          "nameEn": "Ray of Hope"
+        },
+        {
+          "nameEn": "Raydn, Duskbane"
+        },
+        {
+          "nameEn": "Razor Reflex"
+        },
+        {
+          "nameEn": "Razor's Edge"
+        },
+        {
+          "nameEn": "Razzle Dazzle"
+        },
+        {
+          "nameEn": "Read the Glide Path"
+        },
+        {
+          "nameEn": "Read the Ripples"
+        },
+        {
+          "nameEn": "Read the Runes"
+        },
+        {
+          "nameEn": "Ready to Roll"
+        },
+        {
+          "nameEn": "Reality Refractor"
+        },
+        {
+          "nameEn": "Reaper's Call"
+        },
+        {
+          "nameEn": "Reaping Blade"
+        },
+        {
+          "nameEn": "Rebellious Rush"
+        },
+        {
+          "nameEn": "Recede to Mistform"
+        },
+        {
+          "nameEn": "Reckless Arithmetic"
+        },
+        {
+          "nameEn": "Reckless Charge"
+        },
+        {
+          "nameEn": "Reckless Stampede"
+        },
+        {
+          "nameEn": "Reckless Swing"
+        },
+        {
+          "nameEn": "Red Alert Boots"
+        },
+        {
+          "nameEn": "Red Alert Gloves"
+        },
+        {
+          "nameEn": "Red Alert Vest"
+        },
+        {
+          "nameEn": "Red Alert Visor"
+        },
+        {
+          "nameEn": "Red Fin Harpoon"
+        },
+        {
+          "nameEn": "Red Lure Harpoon"
+        },
+        {
+          "nameEn": "Red in the Ledger"
+        },
+        {
+          "nameEn": "Redback Shroud"
+        },
+        {
+          "nameEn": "Redspine Manta"
+        },
+        {
+          "nameEn": "Reduce to Runechant"
+        },
+        {
+          "nameEn": "Redwood Hammer"
+        },
+        {
+          "nameEn": "Reek of Corruption"
+        },
+        {
+          "nameEn": "Refraction Bolters"
+        },
+        {
+          "nameEn": "Regain Composure"
+        },
+        {
+          "nameEn": "Regrowth // Shock"
+        },
+        {
+          "nameEn": "Regurgitating Slog"
+        },
+        {
+          "nameEn": "Reincarnate"
+        },
+        {
+          "nameEn": "Reinforce Steel"
+        },
+        {
+          "nameEn": "Reinforce the Line"
+        },
+        {
+          "nameEn": "Release the Tension"
+        },
+        {
+          "nameEn": "Relentless Pursuit"
+        },
+        {
+          "nameEn": "Remember the Mists"
+        },
+        {
+          "nameEn": "Remembrance"
+        },
+        {
+          "nameEn": "Remorseless"
+        },
+        {
+          "nameEn": "Renounce Grandeur"
+        },
+        {
+          "nameEn": "Renounce Violence"
+        },
+        {
+          "nameEn": "Resounding Courage"
+        },
+        {
+          "nameEn": "Rest Before Battle"
+        },
+        {
+          "nameEn": "Restless Bones"
+        },
+        {
+          "nameEn": "Restless Coalescence"
+        },
+        {
+          "nameEn": "Restvine Elixir"
+        },
+        {
+          "nameEn": "Retrace the Past"
+        },
+        {
+          "nameEn": "Return Fire"
+        },
+        {
+          "nameEn": "Revel in Runeblood"
+        },
+        {
+          "nameEn": "Reverberate"
+        },
+        {
+          "nameEn": "Reverent Rerebrace"
+        },
+        {
+          "nameEn": "Revolting Gesture"
+        },
+        {
+          "nameEn": "Reya, the Unyielding"
+        },
+        {
+          "nameEn": "Richter Scale"
+        },
+        {
+          "nameEn": "Riddle with Regret"
+        },
+        {
+          "nameEn": "Ride the Tailwind"
+        },
+        {
+          "nameEn": "Ridge Rider Shot"
+        },
+        {
+          "nameEn": "Rift Breaker"
+        },
+        {
+          "nameEn": "Rift Skitter"
+        },
+        {
+          "nameEn": "Rifted Torment"
+        },
+        {
+          "nameEn": "Riggermortis"
+        },
+        {
+          "nameEn": "Right Behind You"
+        },
+        {
+          "nameEn": "Righteous Cleansing"
+        },
+        {
+          "nameEn": "Ring of Roses"
+        },
+        {
+          "nameEn": "Rip Off the Top"
+        },
+        {
+          "nameEn": "Rip Through Reality"
+        },
+        {
+          "nameEn": "Rip Up Their Virtues"
+        },
+        {
+          "nameEn": "Ripple Away"
+        },
+        {
+          "nameEn": "Rippling Wave"
+        },
+        {
+          "nameEn": "Rise from the Ashes"
+        },
+        {
+          "nameEn": "Rising Energy"
+        },
+        {
+          "nameEn": "Rising Knee Thrust"
+        },
+        {
+          "nameEn": "Rising Power"
+        },
+        {
+          "nameEn": "Rising Resentment"
+        },
+        {
+          "nameEn": "Rising Solartide"
+        },
+        {
+          "nameEn": "Rising Speed"
+        },
+        {
+          "nameEn": "Rising Tide"
+        },
+        {
+          "nameEn": "Rites of Earthlore"
+        },
+        {
+          "nameEn": "Rites of Lightning"
+        },
+        {
+          "nameEn": "Roar of the Tiger"
+        },
+        {
+          "nameEn": "Roaring Beam"
+        },
+        {
+          "nameEn": "Rob the Rich"
+        },
+        {
+          "nameEn": "Robe of Rapture"
+        },
+        {
+          "nameEn": "Rockslide Trap"
+        },
+        {
+          "nameEn": "Rockyard Rodeo"
+        },
+        {
+          "nameEn": "Roiling Fissure"
+        },
+        {
+          "nameEn": "Rolling Thunder"
+        },
+        {
+          "nameEn": "Romping Club"
+        },
+        {
+          "nameEn": "Ronin Renegade"
+        },
+        {
+          "nameEn": "Root-Bound Trunks"
+        },
+        {
+          "nameEn": "Rootbound Carapace"
+        },
+        {
+          "nameEn": "Rosetta Thorn"
+        },
+        {
+          "nameEn": "Rotten Old Buckler"
+        },
+        {
+          "nameEn": "Rotten Remains"
+        },
+        {
+          "nameEn": "Rotwood Reaper"
+        },
+        {
+          "nameEn": "Rouse the Ancients"
+        },
+        {
+          "nameEn": "Rousing Aether"
+        },
+        {
+          "nameEn": "Rowdy Locals"
+        },
+        {
+          "nameEn": "Rubble Raiser"
+        },
+        {
+          "nameEn": "Ruby Amulet"
+        },
+        {
+          "nameEn": "Rugged Roller"
+        },
+        {
+          "nameEn": "Rumble Grunting"
+        },
+        {
+          "nameEn": "Run Roughshod"
+        },
+        {
+          "nameEn": "Run Through"
+        },
+        {
+          "nameEn": "Run into Trouble"
+        },
+        {
+          "nameEn": "Runebleed Robe"
+        },
+        {
+          "nameEn": "Runeblood Barrier"
+        },
+        {
+          "nameEn": "Runechant of Envy"
+        },
+        {
+          "nameEn": "Runechant of Greed"
+        },
+        {
+          "nameEn": "Runechant of Lust"
+        },
+        {
+          "nameEn": "Runechant of Pride"
+        },
+        {
+          "nameEn": "Runechant of Sloth"
+        },
+        {
+          "nameEn": "Runechant of Wrath"
+        },
+        {
+          "nameEn": "Runehold Release"
+        },
+        {
+          "nameEn": "Runerager Swarm"
+        },
+        {
+          "nameEn": "Runic Fellingsong"
+        },
+        {
+          "nameEn": "Runic Reaping"
+        },
+        {
+          "nameEn": "Runic Reckoning"
+        },
+        {
+          "nameEn": "Runic Reclamation"
+        },
+        {
+          "nameEn": "Runner Runner"
+        },
+        {
+          "nameEn": "Rush of Power"
+        },
+        {
+          "nameEn": "Rushing River"
+        },
+        {
+          "nameEn": "Rusted Relic"
+        },
+        {
+          "nameEn": "Rusty Harpoon"
+        },
+        {
+          "nameEn": "Ruu'di, Gem Keeper"
+        },
+        {
+          "nameEn": "Sack the Shifty"
+        },
+        {
+          "nameEn": "Sadistic Scowl"
+        },
+        {
+          "nameEn": "Salt the Wound"
+        },
+        {
+          "nameEn": "Saltwater Swell"
+        },
+        {
+          "nameEn": "Salvage Shot"
+        },
+        {
+          "nameEn": "Sanctuary of Aria"
+        },
+        {
+          "nameEn": "Sand Sketched Plan"
+        },
+        {
+          "nameEn": "Sandscour Greatbow"
+        },
+        {
+          "nameEn": "Sapphire Amulet"
+        },
+        {
+          "nameEn": "Sapwood Elixir"
+        },
+        {
+          "nameEn": "Sash of Sandikai"
+        },
+        {
+          "nameEn": "Savage Beatdown"
+        },
+        {
+          "nameEn": "Savage Claw"
+        },
+        {
+          "nameEn": "Savage Feast"
+        },
+        {
+          "nameEn": "Savage Sash"
+        },
+        {
+          "nameEn": "Savage Swing"
+        },
+        {
+          "nameEn": "Save the Thought"
+        },
+        {
+          "nameEn": "Saving Grace"
+        },
+        {
+          "nameEn": "Savor Bloodshed"
+        },
+        {
+          "nameEn": "Sawbones, Dock Hand"
+        },
+        {
+          "nameEn": "Scabskin Leathers"
+        },
+        {
+          "nameEn": "Scalding Iron"
+        },
+        {
+          "nameEn": "Scalding Rain"
+        },
+        {
+          "nameEn": "Scale Peeler"
+        },
+        {
+          "nameEn": "Scar Tissue"
+        },
+        {
+          "nameEn": "Scar for a Scar"
+        },
+        {
+          "nameEn": "Scarf for a Scarf"
+        },
+        {
+          "nameEn": "Scattering Conflux"
+        },
+        {
+          "nameEn": "Scepter of Pain"
+        },
+        {
+          "nameEn": "Schism of Chaos"
+        },
+        {
+          "nameEn": "Scorpio, Comet Tail"
+        },
+        {
+          "nameEn": "Scout the Periphery"
+        },
+        {
+          "nameEn": "Scouting Shot"
+        },
+        {
+          "nameEn": "Scowling Flesh Bag"
+        },
+        {
+          "nameEn": "Scramble Pulse"
+        },
+        {
+          "nameEn": "Scrap Compactor"
+        },
+        {
+          "nameEn": "Scrap Harvester"
+        },
+        {
+          "nameEn": "Scrap Hopper"
+        },
+        {
+          "nameEn": "Scrap Prospector"
+        },
+        {
+          "nameEn": "Scrap Trader"
+        },
+        {
+          "nameEn": "Scrub the Deck"
+        },
+        {
+          "nameEn": "Scurv, Stowaway"
+        },
+        {
+          "nameEn": "Scuttle Toes"
+        },
+        {
+          "nameEn": "Scuttle the Canal"
+        },
+        {
+          "nameEn": "Sea Floor Salvage"
+        },
+        {
+          "nameEn": "Sealace Sarong"
+        },
+        {
+          "nameEn": "Searing Emberblade"
+        },
+        {
+          "nameEn": "Searing Gaze"
+        },
+        {
+          "nameEn": "Searing Ray"
+        },
+        {
+          "nameEn": "Searing Shot"
+        },
+        {
+          "nameEn": "Searing Touch"
+        },
+        {
+          "nameEn": "Seasoned Saviour"
+        },
+        {
+          "nameEn": "Second Strike"
+        },
+        {
+          "nameEn": "Second Swing"
+        },
+        {
+          "nameEn": "Security Script"
+        },
+        {
+          "nameEn": "Sedation Shot"
+        },
+        {
+          "nameEn": "Seduce Secrets"
+        },
+        {
+          "nameEn": "Seeds of Agony"
+        },
+        {
+          "nameEn": "Seeds of Strength"
+        },
+        {
+          "nameEn": "Seeds of Tomorrow"
+        },
+        {
+          "nameEn": "Seek Enlightenment"
+        },
+        {
+          "nameEn": "Seek Horizon"
+        },
+        {
+          "nameEn": "Seek Vengeance"
+        },
+        {
+          "nameEn": "Seek and Destroy"
+        },
+        {
+          "nameEn": "Seeker Kunai"
+        },
+        {
+          "nameEn": "Seeker's Gilet"
+        },
+        {
+          "nameEn": "Seeker's Hood"
+        },
+        {
+          "nameEn": "Seeker's Leggings"
+        },
+        {
+          "nameEn": "Seeker's Mitts"
+        },
+        {
+          "nameEn": "Seeping Shadows"
+        },
+        {
+          "nameEn": "Seismic Eruption"
+        },
+        {
+          "nameEn": "Seismic Shelter"
+        },
+        {
+          "nameEn": "Seismic Shift"
+        },
+        {
+          "nameEn": "Seismic Stir"
+        },
+        {
+          "nameEn": "Seismic Surge"
+        },
+        {
+          "nameEn": "Send Packing"
+        },
+        {
+          "nameEn": "Sense Weakness"
+        },
+        {
+          "nameEn": "Serpent's Kiss"
+        },
+        {
+          "nameEn": "Settle the Bill"
+        },
+        {
+          "nameEn": "Shaden Death Hydra"
+        },
+        {
+          "nameEn": "Shaden Scream"
+        },
+        {
+          "nameEn": "Shaden Swing"
+        },
+        {
+          "nameEn": "Shadow Puppetry"
+        },
+        {
+          "nameEn": "Shadow of Blasmophet"
+        },
+        {
+          "nameEn": "Shadow of Ursur"
+        },
+        {
+          "nameEn": "Shadowrealm Horror"
+        },
+        {
+          "nameEn": "Shamanic Shinbones"
+        },
+        {
+          "nameEn": "Shapeless Form"
+        },
+        {
+          "nameEn": "Sharp 'n Shine"
+        },
+        {
+          "nameEn": "Sharp Incline"
+        },
+        {
+          "nameEn": "Sharp Shooters"
+        },
+        {
+          "nameEn": "Sharpen Steel"
+        },
+        {
+          "nameEn": "Sharpened Senses"
+        },
+        {
+          "nameEn": "Sharpening Sparks"
+        },
+        {
+          "nameEn": "Shatter Sorcery"
+        },
+        {
+          "nameEn": "Shattering Flowtide"
+        },
+        {
+          "nameEn": "Shattering Grasp"
+        },
+        {
+          "nameEn": "Shattering Stardust"
+        },
+        {
+          "nameEn": "Sheltered Cove"
+        },
+        {
+          "nameEn": "Shield Bash"
+        },
+        {
+          "nameEn": "Shield Beater"
+        },
+        {
+          "nameEn": "Shield Wall"
+        },
+        {
+          "nameEn": "Shifting Tides"
+        },
+        {
+          "nameEn": "Shimmer of the Blade"
+        },
+        {
+          "nameEn": "Shimmering Specter"
+        },
+        {
+          "nameEn": "Shimmers of Silver"
+        },
+        {
+          "nameEn": "Shining Courage"
+        },
+        {
+          "nameEn": "Shitty Xmas Present"
+        },
+        {
+          "nameEn": "Shock Charmers"
+        },
+        {
+          "nameEn": "Shock Frock"
+        },
+        {
+          "nameEn": "Shock Striker"
+        },
+        {
+          "nameEn": "Shoot Your Mouth Off"
+        },
+        {
+          "nameEn": "Short Shrift"
+        },
+        {
+          "nameEn": "Short and Sharp"
+        },
+        {
+          "nameEn": "Show No Mercy"
+        },
+        {
+          "nameEn": "Show of Strength"
+        },
+        {
+          "nameEn": "Shriek Razors"
+        },
+        {
+          "nameEn": "Shrill of Skullform"
+        },
+        {
+          "nameEn": "Shroud of Darkness"
+        },
+        {
+          "nameEn": "Sic 'Em Shot"
+        },
+        {
+          "nameEn": "Sigil of Aether"
+        },
+        {
+          "nameEn": "Sigil of Astral Flow"
+        },
+        {
+          "nameEn": "Sigil of Brilliance"
+        },
+        {
+          "nameEn": "Sigil of Cycles"
+        },
+        {
+          "nameEn": "Sigil of Deadwood"
+        },
+        {
+          "nameEn": "Sigil of Earth"
+        },
+        {
+          "nameEn": "Sigil of Fate"
+        },
+        {
+          "nameEn": "Sigil of Forethought"
+        },
+        {
+          "nameEn": "Sigil of Fyendal"
+        },
+        {
+          "nameEn": "Sigil of Lightning"
+        },
+        {
+          "nameEn": "Sigil of Parapets"
+        },
+        {
+          "nameEn": "Sigil of Permafrost"
+        },
+        {
+          "nameEn": "Sigil of Protection"
+        },
+        {
+          "nameEn": "Sigil of Sanctuary"
+        },
+        {
+          "nameEn": "Sigil of Shelter"
+        },
+        {
+          "nameEn": "Sigil of Silphidae"
+        },
+        {
+          "nameEn": "Sigil of Solace"
+        },
+        {
+          "nameEn": "Sigil of Solitude"
+        },
+        {
+          "nameEn": "Sigil of Suffering"
+        },
+        {
+          "nameEn": "Sigil of Voltaris"
+        },
+        {
+          "nameEn": "Signal Jammer"
+        },
+        {
+          "nameEn": "Silent Stilettos"
+        },
+        {
+          "nameEn": "Silken Form"
+        },
+        {
+          "nameEn": "Silken Shawl"
+        },
+        {
+          "nameEn": "Silken Shroud"
+        },
+        {
+          "nameEn": "Silken Slippers"
+        },
+        {
+          "nameEn": "Silken Symphony"
+        },
+        {
+          "nameEn": "Silver Palms"
+        },
+        {
+          "nameEn": "Silver Talons"
+        },
+        {
+          "nameEn": "Silver the Tip"
+        },
+        {
+          "nameEn": "Silverdrop Downpour"
+        },
+        {
+          "nameEn": "Silversheen Needle"
+        },
+        {
+          "nameEn": "Silverstride Dodgers"
+        },
+        {
+          "nameEn": "Silverwind Shuriken"
+        },
+        {
+          "nameEn": "Singeing Flowstride"
+        },
+        {
+          "nameEn": "Singeing Steelblade"
+        },
+        {
+          "nameEn": "Singing Steelblade"
+        },
+        {
+          "nameEn": "Singularity"
+        },
+        {
+          "nameEn": "Siren's Call"
+        },
+        {
+          "nameEn": "Sisters of Fire"
+        },
+        {
+          "nameEn": "Sizzling Steel"
+        },
+        {
+          "nameEn": "Skera Strapping"
+        },
+        {
+          "nameEn": "Skittering Sands"
+        },
+        {
+          "nameEn": "Skull Crack"
+        },
+        {
+          "nameEn": "Skull Crushers"
+        },
+        {
+          "nameEn": "Skullbone Crosswrap"
+        },
+        {
+          "nameEn": "Sky Fire Lanterns"
+        },
+        {
+          "nameEn": "Sky Skimmer"
+        },
+        {
+          "nameEn": "Skybody Keikoi"
+        },
+        {
+          "nameEn": "Skybound Shot"
+        },
+        {
+          "nameEn": "Skycrest Keikoi"
+        },
+        {
+          "nameEn": "Skyhold Keikoi"
+        },
+        {
+          "nameEn": "Skywalker Keikoi"
+        },
+        {
+          "nameEn": "Skyward Serenade"
+        },
+        {
+          "nameEn": "Skywarden no.161803"
+        },
+        {
+          "nameEn": "Slay the Scholars"
+        },
+        {
+          "nameEn": "Sledge of Anvilheim"
+        },
+        {
+          "nameEn": "Slice and Dice"
+        },
+        {
+          "nameEn": "Smack of Reality"
+        },
+        {
+          "nameEn": "Small Blinder"
+        },
+        {
+          "nameEn": "Small Problem"
+        },
+        {
+          "nameEn": "Smash Instinct"
+        },
+        {
+          "nameEn": "Smash and Grab"
+        },
+        {
+          "nameEn": "Smash with Big Rock"
+        },
+        {
+          "nameEn": "Smash with Big Tree"
+        },
+        {
+          "nameEn": "Smashback Alehorn"
+        },
+        {
+          "nameEn": "Smashing Good Time"
+        },
+        {
+          "nameEn": "Smashing Ground"
+        },
+        {
+          "nameEn": "Smashing Performance"
+        },
+        {
+          "nameEn": "Smoldering Scales"
+        },
+        {
+          "nameEn": "Smoldering Steel"
+        },
+        {
+          "nameEn": "Snap Fingers"
+        },
+        {
+          "nameEn": "Snapdragon Scalers"
+        },
+        {
+          "nameEn": "Snarky Prick"
+        },
+        {
+          "nameEn": "Sneak Attack"
+        },
+        {
+          "nameEn": "Soaring Strike"
+        },
+        {
+          "nameEn": "Solar Plexus"
+        },
+        {
+          "nameEn": "Solforge Gauntlet"
+        },
+        {
+          "nameEn": "Solid Ground"
+        },
+        {
+          "nameEn": "Solitary Companion"
+        },
+        {
+          "nameEn": "Solray Plating"
+        },
+        {
+          "nameEn": "Sonata Arcanix"
+        },
+        {
+          "nameEn": "Sonata Fantasmia"
+        },
+        {
+          "nameEn": "Sonata Galaxia"
+        },
+        {
+          "nameEn": "Song of Sinew"
+        },
+        {
+          "nameEn": "Song of Sweet Nectar"
+        },
+        {
+          "nameEn": "Song of Yesteryears"
+        },
+        {
+          "nameEn": "Soul Bond Belief"
+        },
+        {
+          "nameEn": "Soul Butcher"
+        },
+        {
+          "nameEn": "Soul Cleaver"
+        },
+        {
+          "nameEn": "Soul Harvest"
+        },
+        {
+          "nameEn": "Soul Reaping"
+        },
+        {
+          "nameEn": "Soul Shackle"
+        },
+        {
+          "nameEn": "Soul Shield"
+        },
+        {
+          "nameEn": "Soulbead Strike"
+        },
+        {
+          "nameEn": "Soulbond Resolve"
+        },
+        {
+          "nameEn": "Sound the Alarm"
+        },
+        {
+          "nameEn": "Sow Tomorrow"
+        },
+        {
+          "nameEn": "Sowing Thorns"
+        },
+        {
+          "nameEn": "Spark Spray"
+        },
+        {
+          "nameEn": "Spark of Genius"
+        },
+        {
+          "nameEn": "Spears of Surreality"
+        },
+        {
+          "nameEn": "Spectral Procession"
+        },
+        {
+          "nameEn": "Spectral Prowler"
+        },
+        {
+          "nameEn": "Spectral Rider"
+        },
+        {
+          "nameEn": "Spectral Shield"
+        },
+        {
+          "nameEn": "Speed Demon"
+        },
+        {
+          "nameEn": "Spell Fray Cloak"
+        },
+        {
+          "nameEn": "Spell Fray Gloves"
+        },
+        {
+          "nameEn": "Spell Fray Leggings"
+        },
+        {
+          "nameEn": "Spell Fray Tiara"
+        },
+        {
+          "nameEn": "Spellbane Aegis"
+        },
+        {
+          "nameEn": "Spellbane Sigil"
+        },
+        {
+          "nameEn": "Spellbane Trap"
+        },
+        {
+          "nameEn": "Spellblade Assault"
+        },
+        {
+          "nameEn": "Spellblade Strike"
+        },
+        {
+          "nameEn": "Spellbound Creepers"
+        },
+        {
+          "nameEn": "Spellfire Cloak"
+        },
+        {
+          "nameEn": "Spew Obscenities"
+        },
+        {
+          "nameEn": "Spew Shadow"
+        },
+        {
+          "nameEn": "Spider's Bite"
+        },
+        {
+          "nameEn": "Spike Pit Trap"
+        },
+        {
+          "nameEn": "Spike with Bloodrot"
+        },
+        {
+          "nameEn": "Spike with Frailty"
+        },
+        {
+          "nameEn": "Spike with Inertia"
+        },
+        {
+          "nameEn": "Spill Blood"
+        },
+        {
+          "nameEn": "Spinal Crush"
+        },
+        {
+          "nameEn": "Spinning Wheel Kick"
+        },
+        {
+          "nameEn": "Spire Sniping"
+        },
+        {
+          "nameEn": "Spirit of Christmas"
+        },
+        {
+          "nameEn": "Spirit of Eirina"
+        },
+        {
+          "nameEn": "Spirit of War"
+        },
+        {
+          "nameEn": "Splatter Skull"
+        },
+        {
+          "nameEn": "Splintering Deadwood"
+        },
+        {
+          "nameEn": "Spoiled Skull"
+        },
+        {
+          "nameEn": "Spoils of War"
+        },
+        {
+          "nameEn": "Spreading Flames"
+        },
+        {
+          "nameEn": "Spreading Mist"
+        },
+        {
+          "nameEn": "Spreading Plague"
+        },
+        {
+          "nameEn": "Spring Load"
+        },
+        {
+          "nameEn": "Spring Tidings"
+        },
+        {
+          "nameEn": "Spring a Leak"
+        },
+        {
+          "nameEn": "Sprocket Rocket"
+        },
+        {
+          "nameEn": "Sprout Strength"
+        },
+        {
+          "nameEn": "Spur Locked"
+        },
+        {
+          "nameEn": "Squire's Bracers"
+        },
+        {
+          "nameEn": "Squizzy & Floof"
+        },
+        {
+          "nameEn": "Stabbing Pain"
+        },
+        {
+          "nameEn": "Stadium Centerpiece"
+        },
+        {
+          "nameEn": "Stadium Security"
+        },
+        {
+          "nameEn": "Stalker's Steps"
+        },
+        {
+          "nameEn": "Stamp Authority"
+        },
+        {
+          "nameEn": "Stand Ground"
+        },
+        {
+          "nameEn": "Stand Strong"
+        },
+        {
+          "nameEn": "Standing Order"
+        },
+        {
+          "nameEn": "Standing Ovation"
+        },
+        {
+          "nameEn": "Star Struck"
+        },
+        {
+          "nameEn": "Stardust Spike"
+        },
+        {
+          "nameEn": "Starfield Carapace"
+        },
+        {
+          "nameEn": "Starfield Touch"
+        },
+        {
+          "nameEn": "Starfield Veil"
+        },
+        {
+          "nameEn": "Starflow Robes"
+        },
+        {
+          "nameEn": "Starlight Road"
+        },
+        {
+          "nameEn": "Starlight Striders"
+        },
+        {
+          "nameEn": "Starting Point"
+        },
+        {
+          "nameEn": "Starting Stake"
+        },
+        {
+          "nameEn": "Starworld Warning"
+        },
+        {
+          "nameEn": "Stasis Cell"
+        },
+        {
+          "nameEn": "Static Shelter"
+        },
+        {
+          "nameEn": "Static Shock"
+        },
+        {
+          "nameEn": "Staunch Response"
+        },
+        {
+          "nameEn": "Steal Victory"
+        },
+        {
+          "nameEn": "Steam Canister"
+        },
+        {
+          "nameEn": "Steel Street Hoons"
+        },
+        {
+          "nameEn": "Steel on Steel"
+        },
+        {
+          "nameEn": "Steel to the Dome"
+        },
+        {
+          "nameEn": "Steelblade Shunt"
+        },
+        {
+          "nameEn": "Steelblade Supremacy"
+        },
+        {
+          "nameEn": "Steelbraid Buckler"
+        },
+        {
+          "nameEn": "Stellar Glide"
+        },
+        {
+          "nameEn": "Step Between"
+        },
+        {
+          "nameEn": "Sticky Fingers"
+        },
+        {
+          "nameEn": "Sting of Sorcery"
+        },
+        {
+          "nameEn": "Stinging Sprite"
+        },
+        {
+          "nameEn": "Stir the Aetherwinds"
+        },
+        {
+          "nameEn": "Stir the Pot"
+        },
+        {
+          "nameEn": "Stir the Wildwood"
+        },
+        {
+          "nameEn": "Stoke the Flames"
+        },
+        {
+          "nameEn": "Stonewall Confidence"
+        },
+        {
+          "nameEn": "Stonewall Gauntlet"
+        },
+        {
+          "nameEn": "Stonewall Impasse"
+        },
+        {
+          "nameEn": "Stony Woottonhog"
+        },
+        {
+          "nameEn": "Storm Striders"
+        },
+        {
+          "nameEn": "Storm of Sandikai"
+        },
+        {
+          "nameEn": "Stormshatter"
+        },
+        {
+          "nameEn": "Stormweaver's Aegis"
+        },
+        {
+          "nameEn": "Stormwind Sheath"
+        },
+        {
+          "nameEn": "Story Beats"
+        },
+        {
+          "nameEn": "Strategic Planning"
+        },
+        {
+          "nameEn": "Strength Rules All"
+        },
+        {
+          "nameEn": "Strength of Sequoia"
+        },
+        {
+          "nameEn": "Stride of Reprisal"
+        },
+        {
+          "nameEn": "Strike Gold"
+        },
+        {
+          "nameEn": "Strike Twice"
+        },
+        {
+          "nameEn": "Stroke of Foresight"
+        },
+        {
+          "nameEn": "Strong Wood"
+        },
+        {
+          "nameEn": "Strong Yield"
+        },
+        {
+          "nameEn": "Strongest Survive"
+        },
+        {
+          "nameEn": "Stubby Hammerers"
+        },
+        {
+          "nameEn": "Stunning Swipe"
+        },
+        {
+          "nameEn": "Succumb to Winter"
+        },
+        {
+          "nameEn": "Summer's Fall"
+        },
+        {
+          "nameEn": "Summerwood Shelter"
+        },
+        {
+          "nameEn": "Sunken Treasure"
+        },
+        {
+          "nameEn": "Sunkwater Exoshell"
+        },
+        {
+          "nameEn": "Sunkwater Lookout"
+        },
+        {
+          "nameEn": "Sunkwater Pincers"
+        },
+        {
+          "nameEn": "Sunkwater Scalers"
+        },
+        {
+          "nameEn": "Surface Shaking"
+        },
+        {
+          "nameEn": "Surgent Aethertide"
+        },
+        {
+          "nameEn": "Surgical Extraction"
+        },
+        {
+          "nameEn": "Surging Militia"
+        },
+        {
+          "nameEn": "Surging Strike"
+        },
+        {
+          "nameEn": "Swarming Gloomveil"
+        },
+        {
+          "nameEn": "Sweeping Blow"
+        },
+        {
+          "nameEn": "Swell Tidings"
+        },
+        {
+          "nameEn": "Swift Pickup"
+        },
+        {
+          "nameEn": "Swiftstrike Bracers"
+        },
+        {
+          "nameEn": "Swiftwater Sloop"
+        },
+        {
+          "nameEn": "Swindler's Grift"
+        },
+        {
+          "nameEn": "Swordmaster's Path"
+        },
+        {
+          "nameEn": "Swordmaster's Shine"
+        },
+        {
+          "nameEn": "Sworn Vengeance"
+        },
+        {
+          "nameEn": "Symbiosis Shot"
+        },
+        {
+          "nameEn": "Synapse Sparkcap"
+        },
+        {
+          "nameEn": "System Reset"
+        },
+        {
+          "nameEn": "Tag the Target"
+        },
+        {
+          "nameEn": "Take Flight"
+        },
+        {
+          "nameEn": "Take Up the Mantle"
+        },
+        {
+          "nameEn": "Take a Stab"
+        },
+        {
+          "nameEn": "Take it on the Chin"
+        },
+        {
+          "nameEn": "Take the Bait"
+        },
+        {
+          "nameEn": "Take the Lead"
+        },
+        {
+          "nameEn": "Take the Tempo"
+        },
+        {
+          "nameEn": "Take the Upper Hand"
+        },
+        {
+          "nameEn": "Tales of Adventure"
+        },
+        {
+          "nameEn": "Talisman of Balance"
+        },
+        {
+          "nameEn": "Talisman of Dousing"
+        },
+        {
+          "nameEn": "Talisman of Tithes"
+        },
+        {
+          "nameEn": "Talisman of Warfare"
+        },
+        {
+          "nameEn": "Talismanic Lens"
+        },
+        {
+          "nameEn": "Talk a Big Game"
+        },
+        {
+          "nameEn": "Tap Lessons Past"
+        },
+        {
+          "nameEn": "Tarantula Toxin"
+        },
+        {
+          "nameEn": "Target Totalizer"
+        },
+        {
+          "nameEn": "Tarpit Trap"
+        },
+        {
+          "nameEn": "Tear Asunder"
+        },
+        {
+          "nameEn": "Tear Down the Idols"
+        },
+        {
+          "nameEn": "Tear Limb from Limb"
+        },
+        {
+          "nameEn": "Tearing Shuko"
+        },
+        {
+          "nameEn": "Tectonic Crust"
+        },
+        {
+          "nameEn": "Tectonic Instability"
+        },
+        {
+          "nameEn": "Tectonic Plating"
+        },
+        {
+          "nameEn": "Tectonic Rift"
+        },
+        {
+          "nameEn": "Teeth of the Cog"
+        },
+        {
+          "nameEn": "Teklo Base Arms"
+        },
+        {
+          "nameEn": "Teklo Base Chest"
+        },
+        {
+          "nameEn": "Teklo Base Head"
+        },
+        {
+          "nameEn": "Teklo Base Legs"
+        },
+        {
+          "nameEn": "Teklo Blaster"
+        },
+        {
+          "nameEn": "Teklo Foundry Heart"
+        },
+        {
+          "nameEn": "Teklo Leveler"
+        },
+        {
+          "nameEn": "Teklo Plasma Pistol"
+        },
+        {
+          "nameEn": "Teklo Pounder"
+        },
+        {
+          "nameEn": "Teklo Trebuchet 2000"
+        },
+        {
+          "nameEn": "Tempest Aurora"
+        },
+        {
+          "nameEn": "Tempest Dancers"
+        },
+        {
+          "nameEn": "Tempestuous Kiss"
+        },
+        {
+          "nameEn": "Templar Spellbane"
+        },
+        {
+          "nameEn": "Temporal Wobble"
+        },
+        {
+          "nameEn": "Tension in the Air"
+        },
+        {
+          "nameEn": "Tentacular Toll"
+        },
+        {
+          "nameEn": "Terminator Tank"
+        },
+        {
+          "nameEn": "Terms of Combat"
+        },
+        {
+          "nameEn": "Territorial Domain"
+        },
+        {
+          "nameEn": "Test of Agility"
+        },
+        {
+          "nameEn": "Test of Iron Grip"
+        },
+        {
+          "nameEn": "Test of Might"
+        },
+        {
+          "nameEn": "Test of Strength"
+        },
+        {
+          "nameEn": "Test of Vigor"
+        },
+        {
+          "nameEn": "Testament of Valahai"
+        },
+        {
+          "nameEn": "That All You Got?"
+        },
+        {
+          "nameEn": "The Golden Son"
+        },
+        {
+          "nameEn": "The Librarian"
+        },
+        {
+          "nameEn": "The Moat Exchange"
+        },
+        {
+          "nameEn": "The Old Switcheroo"
+        },
+        {
+          "nameEn": "The Weakest Link"
+        },
+        {
+          "nameEn": "Thespian Charm"
+        },
+        {
+          "nameEn": "Thick Hide Hunter"
+        },
+        {
+          "nameEn": "Thiev'n Varmints"
+        },
+        {
+          "nameEn": "This Round's on Me"
+        },
+        {
+          "nameEn": "Threadbare Tunic"
+        },
+        {
+          "nameEn": "Three Visits"
+        },
+        {
+          "nameEn": "Three of a Kind"
+        },
+        {
+          "nameEn": "Throw Dagger"
+        },
+        {
+          "nameEn": "Thunder Quake"
+        },
+        {
+          "nameEn": "Thunderous Retort"
+        },
+        {
+          "nameEn": "Tiara of Suspense"
+        },
+        {
+          "nameEn": "Tick Tock Clock"
+        },
+        {
+          "nameEn": "Ticket Puncher"
+        },
+        {
+          "nameEn": "Tidal Surge"
+        },
+        {
+          "nameEn": "Tide Chakra"
+        },
+        {
+          "nameEn": "Tide Flippers"
+        },
+        {
+          "nameEn": "Tiger Eye Reflex"
+        },
+        {
+          "nameEn": "Tiger Stripe Shuko"
+        },
+        {
+          "nameEn": "Tiger Swipe"
+        },
+        {
+          "nameEn": "Tighten the Screws"
+        },
+        {
+          "nameEn": "Tigrine Reflex"
+        },
+        {
+          "nameEn": "Time Skippers"
+        },
+        {
+          "nameEn": "Timekeeper's Whim"
+        },
+        {
+          "nameEn": "Timesnap Potion"
+        },
+        {
+          "nameEn": "Timidity Point"
+        },
+        {
+          "nameEn": "Tip the Barkeep"
+        },
+        {
+          "nameEn": "Tit for Tat"
+        },
+        {
+          "nameEn": "Titan's Fist"
+        },
+        {
+          "nameEn": "Titanium Bauble"
+        },
+        {
+          "nameEn": "To Be Continued..."
+        },
+        {
+          "nameEn": "To the Point"
+        },
+        {
+          "nameEn": "Toe the Line"
+        },
+        {
+          "nameEn": "Tome of Aeo"
+        },
+        {
+          "nameEn": "Tome of Aetherwind"
+        },
+        {
+          "nameEn": "Tome of Divinity"
+        },
+        {
+          "nameEn": "Tome of Duplicity"
+        },
+        {
+          "nameEn": "Tome of Firebrand"
+        },
+        {
+          "nameEn": "Tome of Fyendal"
+        },
+        {
+          "nameEn": "Tome of Harvests"
+        },
+        {
+          "nameEn": "Tome of Pandemonium"
+        },
+        {
+          "nameEn": "Tome of Quandaries"
+        },
+        {
+          "nameEn": "Tome of Torment"
+        },
+        {
+          "nameEn": "Tome of the Arknight"
+        },
+        {
+          "nameEn": "Tongue Tied"
+        },
+        {
+          "nameEn": "Tooth and Claw"
+        },
+        {
+          "nameEn": "Tooth of the Dragon"
+        },
+        {
+          "nameEn": "Topsy Turvy"
+        },
+        {
+          "nameEn": "Torc of Vim"
+        },
+        {
+          "nameEn": "Torque Tuned"
+        },
+        {
+          "nameEn": "Torrent of Tempo"
+        },
+        {
+          "nameEn": "Touch of Reality"
+        },
+        {
+          "nameEn": "Tough Leather Boots"
+        },
+        {
+          "nameEn": "Tough Old Wrench"
+        },
+        {
+          "nameEn": "Tough Smashup"
+        },
+        {
+          "nameEn": "Tough as a Rok"
+        },
+        {
+          "nameEn": "Towering Titan"
+        },
+        {
+          "nameEn": "Trailblazing Aether"
+        },
+        {
+          "nameEn": "Trampling Trackers"
+        },
+        {
+          "nameEn": "Tranquil Passing"
+        },
+        {
+          "nameEn": "Transmogrify"
+        },
+        {
+          "nameEn": "Trap and Release"
+        },
+        {
+          "nameEn": "Treasure Island"
+        },
+        {
+          "nameEn": "Tremor of Resistance"
+        },
+        {
+          "nameEn": "Tremor of i'Arathael"
+        },
+        {
+          "nameEn": "Tripwire Trap"
+        },
+        {
+          "nameEn": "Truth or Trickery"
+        },
+        {
+          "nameEn": "Truths Retold"
+        },
+        {
+          "nameEn": "Turn Timber"
+        },
+        {
+          "nameEn": "Turn to Mindfire"
+        },
+        {
+          "nameEn": "Turning Point"
+        },
+        {
+          "nameEn": "Twelve Petal Kāṣāya"
+        },
+        {
+          "nameEn": "Twin Twisters"
+        },
+        {
+          "nameEn": "Twinkle Toes"
+        },
+        {
+          "nameEn": "Twinning Blade"
+        },
+        {
+          "nameEn": "Twist and Turn"
+        },
+        {
+          "nameEn": "Two Steps Ahead"
+        },
+        {
+          "nameEn": "Two Steps Forward"
+        },
+        {
+          "nameEn": "Under the Trap-Door"
+        },
+        {
+          "nameEn": "Undertow Stilettos"
+        },
+        {
+          "nameEn": "Unexpected Backhand"
+        },
+        {
+          "nameEn": "Unflinching Foothold"
+        },
+        {
+          "nameEn": "Unhallowed Rites"
+        },
+        {
+          "nameEn": "Unified Decree"
+        },
+        {
+          "nameEn": "United We Stand"
+        },
+        {
+          "nameEn": "Unravel Aggression"
+        },
+        {
+          "nameEn": "Unwavering Resolve"
+        },
+        {
+          "nameEn": "Unwinding Finality"
+        },
+        {
+          "nameEn": "Unworldly Bellow"
+        },
+        {
+          "nameEn": "Unyielding Grip"
+        },
+        {
+          "nameEn": "Up Sticks and Run"
+        },
+        {
+          "nameEn": "Up on a Pedestal"
+        },
+        {
+          "nameEn": "Up the Ante"
+        },
+        {
+          "nameEn": "Uphold Tradition"
+        },
+        {
+          "nameEn": "Urgent Delivery"
+        },
+        {
+          "nameEn": "Uzuri, Switchblade"
+        },
+        {
+          "nameEn": "V for Valor"
+        },
+        {
+          "nameEn": "V of the Vanguard"
+        },
+        {
+          "nameEn": "Valahai Riven"
+        },
+        {
+          "nameEn": "Valda Brightaxe"
+        },
+        {
+          "nameEn": "Valiant Dynamo"
+        },
+        {
+          "nameEn": "Valiant Thrust"
+        },
+        {
+          "nameEn": "Vantage Point"
+        },
+        {
+          "nameEn": "Vantom Banshee"
+        },
+        {
+          "nameEn": "Vantom Wraith"
+        },
+        {
+          "nameEn": "Vaporize // Shock"
+        },
+        {
+          "nameEn": "Veiled Intentions"
+        },
+        {
+          "nameEn": "Vengeful Apparition"
+        },
+        {
+          "nameEn": "Venomback Fabric"
+        },
+        {
+          "nameEn": "Venomous Bite"
+        },
+        {
+          "nameEn": "Verdant Tide"
+        },
+        {
+          "nameEn": "Vestige of Sol"
+        },
+        {
+          "nameEn": "Vexing Malice"
+        },
+        {
+          "nameEn": "Vexing Quillhand"
+        },
+        {
+          "nameEn": "Victor Goldmane"
+        },
+        {
+          "nameEn": "Vigilant Dodgers"
+        },
+        {
+          "nameEn": "Vigor Girth"
+        },
+        {
+          "nameEn": "Vigorous Engagement"
+        },
+        {
+          "nameEn": "Vigorous Roar"
+        },
+        {
+          "nameEn": "Vigorous Smashup"
+        },
+        {
+          "nameEn": "Vigorous Windup"
+        },
+        {
+          "nameEn": "Vile Inquisition"
+        },
+        {
+          "nameEn": "Villainous Pose"
+        },
+        {
+          "nameEn": "Virtuoso Bodice"
+        },
+        {
+          "nameEn": "Virulent Touch"
+        },
+        {
+          "nameEn": "Visionary of Orbits"
+        },
+        {
+          "nameEn": "Visit Anvilheim"
+        },
+        {
+          "nameEn": "Visit the Blacksmith"
+        },
+        {
+          "nameEn": "Visit the Boneyard"
+        },
+        {
+          "nameEn": "Visit the Dawnsmith"
+        },
+        {
+          "nameEn": "Visit the Prize Room"
+        },
+        {
+          "nameEn": "Viziertronic Model i"
+        },
+        {
+          "nameEn": "Void Wraith"
+        },
+        {
+          "nameEn": "Volatile Fluxor"
+        },
+        {
+          "nameEn": "Volcanic Vice"
+        },
+        {
+          "nameEn": "Voltbound Duality"
+        },
+        {
+          "nameEn": "Voltic Bolt"
+        },
+        {
+          "nameEn": "Voltic Impact"
+        },
+        {
+          "nameEn": "Voltic Vanguard"
+        },
+        {
+          "nameEn": "Voltic Veil"
+        },
+        {
+          "nameEn": "Volzar, Meteor Storm"
+        },
+        {
+          "nameEn": "Vow of Vengeance"
+        },
+        {
+          "nameEn": "Vynnset, Iron Maiden"
+        },
+        {
+          "nameEn": "Wage Agility"
+        },
+        {
+          "nameEn": "Wailer Humperdinck"
+        },
+        {
+          "nameEn": "Walk in My Shoes"
+        },
+        {
+          "nameEn": "Walk the Plank"
+        },
+        {
+          "nameEn": "Wall Breaker"
+        },
+        {
+          "nameEn": "Wander With Purpose"
+        },
+        {
+          "nameEn": "Waning Moon"
+        },
+        {
+          "nameEn": "Waning Vengeance"
+        },
+        {
+          "nameEn": "War Cry of Bellona"
+        },
+        {
+          "nameEn": "War Cry of Themis"
+        },
+        {
+          "nameEn": "War Machine"
+        },
+        {
+          "nameEn": "Warband of Bellona"
+        },
+        {
+          "nameEn": "Warmonger's Recital"
+        },
+        {
+          "nameEn": "Warrior's Valor"
+        },
+        {
+          "nameEn": "Wartune Herald"
+        },
+        {
+          "nameEn": "Washed Up Wave"
+        },
+        {
+          "nameEn": "Water Glow Lanterns"
+        },
+        {
+          "nameEn": "Water the Seeds"
+        },
+        {
+          "nameEn": "Wave of Reality"
+        },
+        {
+          "nameEn": "Waves of Aqua Marine"
+        },
+        {
+          "nameEn": "Wax and Wane"
+        },
+        {
+          "nameEn": "Waxing Specter"
+        },
+        {
+          "nameEn": "Wayfinder's Crest"
+        },
+        {
+          "nameEn": "Weave Earth"
+        },
+        {
+          "nameEn": "Weave Lightning"
+        },
+        {
+          "nameEn": "Wee Wrecking Ball"
+        },
+        {
+          "nameEn": "Weeping Battleground"
+        },
+        {
+          "nameEn": "Well Grounded"
+        },
+        {
+          "nameEn": "What Happens Next?"
+        },
+        {
+          "nameEn": "Whelming Gustwave"
+        },
+        {
+          "nameEn": "Whispering Mist"
+        },
+        {
+          "nameEn": "Whittle from Bone"
+        },
+        {
+          "nameEn": "Who Blinks First?"
+        },
+        {
+          "nameEn": "Who's the Tough Guy?"
+        },
+        {
+          "nameEn": "Wide Blue Yonder"
+        },
+        {
+          "nameEn": "Widespread Ruin"
+        },
+        {
+          "nameEn": "Widow Back Abdomen"
+        },
+        {
+          "nameEn": "Widow Claw Tarsus"
+        },
+        {
+          "nameEn": "Widow Web Crawler"
+        },
+        {
+          "nameEn": "Will of Arcana"
+        },
+        {
+          "nameEn": "Will of the Crowd"
+        },
+        {
+          "nameEn": "Wind Chakra"
+        },
+        {
+          "nameEn": "Wind Cutter"
+        },
+        {
+          "nameEn": "Wind Up the Crowd"
+        },
+        {
+          "nameEn": "Winds of Eternity"
+        },
+        {
+          "nameEn": "Winter's Bite"
+        },
+        {
+          "nameEn": "Winter's Grasp"
+        },
+        {
+          "nameEn": "Winter's Wail"
+        },
+        {
+          "nameEn": "Withering Shot"
+        },
+        {
+          "nameEn": "Wounded Bull"
+        },
+        {
+          "nameEn": "Wounding Blow"
+        },
+        {
+          "nameEn": "Wrath of Retribution"
+        },
+        {
+          "nameEn": "Wreck Havoc"
+        },
+        {
+          "nameEn": "Wrecker Romp"
+        },
+        {
+          "nameEn": "Wrecking Ball"
+        },
+        {
+          "nameEn": "Writhing Beast Hulk"
+        },
+        {
+          "nameEn": "Written in the Stars"
+        },
+        {
+          "nameEn": "Yellow Fin Harpoon"
+        },
+        {
+          "nameEn": "Yinti Yanti"
+        },
+        {
+          "nameEn": "Zap Clappers"
+        },
+        {
+          "nameEn": "Zealous Belting"
+        },
+        {
+          "nameEn": "Zephyr Needle"
+        },
+        {
+          "nameEn": "Zero to Fifty"
+        },
+        {
+          "nameEn": "Zero to Sixty"
+        },
+        {
+          "nameEn": "Zyggy Starlight"
+        },
+        {
+          "nameEn": "mBrio Base Cortex"
+        },
+        {
+          "nameEn": "mBrio Base Digits"
+        },
+        {
+          "nameEn": "mBrio Base Vizier"
+        },
+        {
+          "nameEn": "mBrio Base Walkers"
+        },
+        {
+          "nameEn": "10,000 Year Reunion"
+        },
+        {
+          "nameEn": "Aegis, Archangel of Protection"
+        },
+        {
+          "nameEn": "Aetherstorm Wellingtons"
+        },
+        {
+          "nameEn": "Amulet of Assertiveness"
+        },
+        {
+          "nameEn": "Amulet of Intervention"
+        },
+        {
+          "nameEn": "Ancestral Empowerment"
+        },
+        {
+          "nameEn": "Annexation of All Things Known"
+        },
+        {
+          "nameEn": "Annexation of Grandeur"
+        },
+        {
+          "nameEn": "Annexation of the Forge"
+        },
+        {
+          "nameEn": "Arakni, 5L!p3d 7hRu 7h3 cR4X"
+        },
+        {
+          "nameEn": "Arakni, Solitary Confinement"
+        },
+        {
+          "nameEn": "Arakni, Web of Deceit"
+        },
+        {
+          "nameEn": "Art of the Dragon: Blood"
+        },
+        {
+          "nameEn": "Art of the Dragon: Claw"
+        },
+        {
+          "nameEn": "Art of the Dragon: Fire"
+        },
+        {
+          "nameEn": "Art of the Dragon: Scale"
+        },
+        {
+          "nameEn": "Art of the Phoenix: War"
+        },
+        {
+          "nameEn": "Aspect of Tiger: Body"
+        },
+        {
+          "nameEn": "Aspect of Tiger: Mind"
+        },
+        {
+          "nameEn": "Aspect of Tiger: Soul"
+        },
+        {
+          "nameEn": "Attune with Cosmic Vibrations"
+        },
+        {
+          "nameEn": "Aurora, Emissary of Lightning"
+        },
+        {
+          "nameEn": "Aurora, Legacy of Tempest"
+        },
+        {
+          "nameEn": "Aurora, Shooting Star"
+        },
+        {
+          "nameEn": "Avalon, Archangel of Rebirth"
+        },
+        {
+          "nameEn": "Baalghor, Omen of the End"
+        },
+        {
+          "nameEn": "Backside of the Blade"
+        },
+        {
+          "nameEn": "Bandana of the Blue Beyond"
+        },
+        {
+          "nameEn": "Banneret of Gallantry"
+        },
+        {
+          "nameEn": "Banneret of Protection"
+        },
+        {
+          "nameEn": "Banneret of Resilience"
+        },
+        {
+          "nameEn": "Banneret of Salvation"
+        },
+        {
+          "nameEn": "Bask in Your Own Greatness"
+        },
+        {
+          "nameEn": "Battered, Beaten, and Broken"
+        },
+        {
+          "nameEn": "Bellona, Archangel of War"
+        },
+        {
+          "nameEn": "Benji, the Piercing Wind"
+        },
+        {
+          "nameEn": "Bequest the Vast Beyond"
+        },
+        {
+          "nameEn": "Betsy, Skin in the Game"
+        },
+        {
+          "nameEn": "Big Hits, Big Applause"
+        },
+        {
+          "nameEn": "Blade Beckoner Gauntlets"
+        },
+        {
+          "nameEn": "Blade Beckoner Plating"
+        },
+        {
+          "nameEn": "Blasmophet, Levia Consumed"
+        },
+        {
+          "nameEn": "Blasmophet, the Soul Harvester"
+        },
+        {
+          "nameEn": "Blessing of Deliverance"
+        },
+        {
+          "nameEn": "Blessing of Ingenuity"
+        },
+        {
+          "nameEn": "Blessing of Salvation"
+        },
+        {
+          "nameEn": "Blessing of Vynserakai"
+        },
+        {
+          "nameEn": "Blinding of the Old Ones"
+        },
+        {
+          "nameEn": "Blood Dripping Frenzy"
+        },
+        {
+          "nameEn": "Blood Splattered Vest"
+        },
+        {
+          "nameEn": "Bloodspill Invocation"
+        },
+        {
+          "nameEn": "Blossoming Spellblade"
+        },
+        {
+          "nameEn": "Boots of Astral Sanctuary"
+        },
+        {
+          "nameEn": "Bracers of Bellona's Grace"
+        },
+        {
+          "nameEn": "Brand with Cinderclaw"
+        },
+        {
+          "nameEn": "Break Open the Chests!"
+        },
+        {
+          "nameEn": "Brevant, Civic Protector"
+        },
+        {
+          "nameEn": "Briar, Warden of Thorns"
+        },
+        {
+          "nameEn": "Brush of Heavenly Rites"
+        },
+        {
+          "nameEn": "Bubba-Lubba, Run Aground"
+        },
+        {
+          "nameEn": "Bubble to the Surface"
+        },
+        {
+          "nameEn": "Burnished Bunkerplate"
+        },
+        {
+          "nameEn": "Cadaverous Contraband"
+        },
+        {
+          "nameEn": "Call Down the Lightning"
+        },
+        {
+          "nameEn": "Calmveil of Volthaven"
+        },
+        {
+          "nameEn": "Cap of Quick Thinking"
+        },
+        {
+          "nameEn": "Channel Galcia's Cradle"
+        },
+        {
+          "nameEn": "Channel Iceloch Glaze"
+        },
+        {
+          "nameEn": "Channel Lightning Valley"
+        },
+        {
+          "nameEn": "Channel Thunder Steppe"
+        },
+        {
+          "nameEn": "Channel the Bleak Expanse"
+        },
+        {
+          "nameEn": "Channel the Millennium Tree"
+        },
+        {
+          "nameEn": "Channel the Skybreaker"
+        },
+        {
+          "nameEn": "Channel the Tranquil Domain"
+        },
+        {
+          "nameEn": "Charge of the Light Brigade"
+        },
+        {
+          "nameEn": "Chorus of the Amphitheater"
+        },
+        {
+          "nameEn": "Chum, Friendly First Mate"
+        },
+        {
+          "nameEn": "Cindra, Dracai of Retribution"
+        },
+        {
+          "nameEn": "Clench the Upper Hand"
+        },
+        {
+          "nameEn": "Commanding Performance"
+        },
+        {
+          "nameEn": "Companion of the Claw"
+        },
+        {
+          "nameEn": "Compass of Sunken Depths"
+        },
+        {
+          "nameEn": "Conquer the Icy Terrain"
+        },
+        {
+          "nameEn": "Conqueror of the High Seas"
+        },
+        {
+          "nameEn": "Consign to Cosmos // Shock"
+        },
+        {
+          "nameEn": "Constella Contemplation"
+        },
+        {
+          "nameEn": "Construct Bank Breaker"
+        },
+        {
+          "nameEn": "Construct Nitro Mechanoid"
+        },
+        {
+          "nameEn": "Contest the Mindfield"
+        },
+        {
+          "nameEn": "Crucible of Aetherweave"
+        },
+        {
+          "nameEn": "Cut Through the Facade"
+        },
+        {
+          "nameEn": "Cut a Long Story Short"
+        },
+        {
+          "nameEn": "Cut from the Same Cloth"
+        },
+        {
+          "nameEn": "Cutty Shark, Quick Clip"
+        },
+        {
+          "nameEn": "Dawnblade, Resplendent"
+        },
+        {
+          "nameEn": "Deep Recesses of Existence"
+        },
+        {
+          "nameEn": "Destructive Aethertide"
+        },
+        {
+          "nameEn": "Destructive Deliberation"
+        },
+        {
+          "nameEn": "Destructive Fleetfoot"
+        },
+        {
+          "nameEn": "Destructive Tendencies"
+        },
+        {
+          "nameEn": "Didn't See That Coming"
+        },
+        {
+          "nameEn": "Dimenxxional Crossroads"
+        },
+        {
+          "nameEn": "Disenchantment of the Old Ones"
+        },
+        {
+          "nameEn": "Display of Craftsmanship"
+        },
+        {
+          "nameEn": "Dominate the Competition"
+        },
+        {
+          "nameEn": "Dragonscaler Flight Path"
+        },
+        {
+          "nameEn": "Drawn to the Dark Dimension"
+        },
+        {
+          "nameEn": "Drink 'Em Under the Table"
+        },
+        {
+          "nameEn": "Dust from Stillwater Shrine"
+        },
+        {
+          "nameEn": "Dust from the Chrome Caverns"
+        },
+        {
+          "nameEn": "Dust from the Fertile Fields"
+        },
+        {
+          "nameEn": "Dust from the Golden Plains"
+        },
+        {
+          "nameEn": "Dust from the Red Desert"
+        },
+        {
+          "nameEn": "Dust from the Shadow Crypts"
+        },
+        {
+          "nameEn": "Earthlore Empowerment"
+        },
+        {
+          "nameEn": "Electromagnetic Somersault"
+        },
+        {
+          "nameEn": "Electrostatic Discharge"
+        },
+        {
+          "nameEn": "Embodiment of Lightning"
+        },
+        {
+          "nameEn": "Emboldened by the Crowd"
+        },
+        {
+          "nameEn": "Emperor, Dracai of Aesir"
+        },
+        {
+          "nameEn": "Energy of the Audience"
+        },
+        {
+          "nameEn": "Enflame the Firebrand"
+        },
+        {
+          "nameEn": "Enigma, Ledger of Ancestry"
+        },
+        {
+          "nameEn": "Essence of Ancestry: Body"
+        },
+        {
+          "nameEn": "Essence of Ancestry: Mind"
+        },
+        {
+          "nameEn": "Essence of Ancestry: Soul"
+        },
+        {
+          "nameEn": "Even Bigger Than That!"
+        },
+        {
+          "nameEn": "Evo Sentry Base Chest"
+        },
+        {
+          "nameEn": "Evo Steel Soul Controller"
+        },
+        {
+          "nameEn": "Evo Steel Soul Memory"
+        },
+        {
+          "nameEn": "Evo Steel Soul Processor"
+        },
+        {
+          "nameEn": "Expedition to Azuro Keys"
+        },
+        {
+          "nameEn": "Expedition to Dreadfall Reach"
+        },
+        {
+          "nameEn": "Expedition to Horizon's Mantle"
+        },
+        {
+          "nameEn": "Exposed to the Elements"
+        },
+        {
+          "nameEn": "Extinguish the Flames"
+        },
+        {
+          "nameEn": "Ez Sqeez Bookie Syndicate"
+        },
+        {
+          "nameEn": "Fang, Dracai of Blades"
+        },
+        {
+          "nameEn": "Fearless Confrontation"
+        },
+        {
+          "nameEn": "Fight Night Prize Purse"
+        },
+        {
+          "nameEn": "Figment of Protection"
+        },
+        {
+          "nameEn": "Fingers of Fragmentation"
+        },
+        {
+          "nameEn": "Fire Tenet: Strike First"
+        },
+        {
+          "nameEn": "Fire that Burns Within"
+        },
+        {
+          "nameEn": "First Tenet of Chi: Moon"
+        },
+        {
+          "nameEn": "First Tenet of Chi: Tide"
+        },
+        {
+          "nameEn": "First Tenet of Chi: Wind"
+        },
+        {
+          "nameEn": "Flameborn Retribution"
+        },
+        {
+          "nameEn": "Flittering Forcefield"
+        },
+        {
+          "nameEn": "Flock of the Feather Walkers"
+        },
+        {
+          "nameEn": "Florian, Rotwood Harbinger"
+        },
+        {
+          "nameEn": "Fortitude of Anvilheim"
+        },
+        {
+          "nameEn": "Four Feathers One Crown"
+        },
+        {
+          "nameEn": "Frankie, Make Ends Meat"
+        },
+        {
+          "nameEn": "Freewheeling Renegades"
+        },
+        {
+          "nameEn": "Fyendal's Fighting Spirit"
+        },
+        {
+          "nameEn": "Fyendal's Spring Tunic"
+        },
+        {
+          "nameEn": "Gallow, End of the Line"
+        },
+        {
+          "nameEn": "Gauntlet of Boulderhold"
+        },
+        {
+          "nameEn": "Gauntlet of Sword and Sorcery"
+        },
+        {
+          "nameEn": "Gauntlets of Iron Will"
+        },
+        {
+          "nameEn": "Gauntlets of Tyrannical Rex"
+        },
+        {
+          "nameEn": "Gauntlets of the Boreal Domain"
+        },
+        {
+          "nameEn": "Gavel of Natural Order"
+        },
+        {
+          "nameEn": "Geyser of Seismic Stirrings"
+        },
+        {
+          "nameEn": "Ghost Protocol: Architect"
+        },
+        {
+          "nameEn": "Ghost Protocol: Mainframe"
+        },
+        {
+          "nameEn": "Give 'Em a Piece of Your Mind"
+        },
+        {
+          "nameEn": "Glide Through Starlight"
+        },
+        {
+          "nameEn": "Glint the Quicksilver"
+        },
+        {
+          "nameEn": "Glistening Steelblade"
+        },
+        {
+          "nameEn": "Gloves of Astral Sanctuary"
+        },
+        {
+          "nameEn": "Gloves of Azure Waves"
+        },
+        {
+          "nameEn": "Glyph Destruction Nodes"
+        },
+        {
+          "nameEn": "Goblet of Bloodrun Wine"
+        },
+        {
+          "nameEn": "Gold Hunter Lightsail"
+        },
+        {
+          "nameEn": "Good Deeds Don't Go Unnoticed"
+        },
+        {
+          "nameEn": "Good Natured Brutality"
+        },
+        {
+          "nameEn": "Grasp of the Arknight"
+        },
+        {
+          "nameEn": "Great Library of Solana"
+        },
+        {
+          "nameEn": "Grimoire of Fellingsong"
+        },
+        {
+          "nameEn": "Grimoire of the Haunt"
+        },
+        {
+          "nameEn": "Guardian of the Shadowrealm"
+        },
+        {
+          "nameEn": "Gustwave of the Second Wind"
+        },
+        {
+          "nameEn": "Hala, Bladesaint of the Vow"
+        },
+        {
+          "nameEn": "Hammerhead, Harpoon Cannon"
+        },
+        {
+          "nameEn": "Heartbeat of Candlehold"
+        },
+        {
+          "nameEn": "Heartened Cross Strap"
+        },
+        {
+          "nameEn": "Heavy Industry Gear Shift"
+        },
+        {
+          "nameEn": "Heavy Industry Power Plant"
+        },
+        {
+          "nameEn": "Heavy Industry Ram Stop"
+        },
+        {
+          "nameEn": "Heavy Industry Surveillance"
+        },
+        {
+          "nameEn": "Heirloom of Rabbit Hide"
+        },
+        {
+          "nameEn": "Heirloom of Snake Hide"
+        },
+        {
+          "nameEn": "Heirloom of Tiger Hide"
+        },
+        {
+          "nameEn": "Helm of Astral Sanctuary"
+        },
+        {
+          "nameEn": "Helm of Might and Magic"
+        },
+        {
+          "nameEn": "Hexagore, the Death Hydra"
+        },
+        {
+          "nameEn": "High Current Currency"
+        },
+        {
+          "nameEn": "Hood of Second Thoughts"
+        },
+        {
+          "nameEn": "Hooves of the Shadowbeast"
+        },
+        {
+          "nameEn": "Horns of the Despised"
+        },
+        {
+          "nameEn": "Hummingbird, Call of Adventure"
+        },
+        {
+          "nameEn": "Hungering Slaughterbeast"
+        },
+        {
+          "nameEn": "Hunt to the Ends of Rathe"
+        },
+        {
+          "nameEn": "Imperial Seal of Command"
+        },
+        {
+          "nameEn": "In the Palm of Your Hand"
+        },
+        {
+          "nameEn": "Invoke Dracona Optimai"
+        },
+        {
+          "nameEn": "Ironsong Determination"
+        },
+        {
+          "nameEn": "Jinglewood, Smash Hit"
+        },
+        {
+          "nameEn": "Judge, Jury, Executioner"
+        },
+        {
+          "nameEn": "Kabuto of Imperial Authority"
+        },
+        {
+          "nameEn": "Kano, Dracai of Aether"
+        },
+        {
+          "nameEn": "Kavdaen, Trader of Skins"
+        },
+        {
+          "nameEn": "Kayo, Armed and Dangerous"
+        },
+        {
+          "nameEn": "Kayo, Underhanded Cheat"
+        },
+        {
+          "nameEn": "Kick the Hornet's Nest"
+        },
+        {
+          "nameEn": "Killjoy, the Crooked Blade"
+        },
+        {
+          "nameEn": "Kimono of Layered Lessons"
+        },
+        {
+          "nameEn": "Knick Knack Bric-a-brac"
+        },
+        {
+          "nameEn": "Knock 'Em Off Their Feet"
+        },
+        {
+          "nameEn": "Korshem, Crossroad of Elements"
+        },
+        {
+          "nameEn": "Laughing Knee-Slappers"
+        },
+        {
+          "nameEn": "Lay Down the Challenge"
+        },
+        {
+          "nameEn": "Let Me Buy You a Drink"
+        },
+        {
+          "nameEn": "Levels of Enlightenment"
+        },
+        {
+          "nameEn": "Levia, Shadowborn Abomination"
+        },
+        {
+          "nameEn": "Ley Line of the Old Ones"
+        },
+        {
+          "nameEn": "Limbs of Lignum Vitae"
+        },
+        {
+          "nameEn": "Loyalty Beyond the Grave"
+        },
+        {
+          "nameEn": "Luminaris, Angel's Glow"
+        },
+        {
+          "nameEn": "Luminaris, Celestial Fury"
+        },
+        {
+          "nameEn": "Lyath Goldmane, Vile Savant"
+        },
+        {
+          "nameEn": "Machinations of Dominion"
+        },
+        {
+          "nameEn": "Mark of the Black Widow"
+        },
+        {
+          "nameEn": "Mark of the Funnel Web"
+        },
+        {
+          "nameEn": "Marlynn, Treasure Hunter"
+        },
+        {
+          "nameEn": "Mask of Recurring Nightmares"
+        },
+        {
+          "nameEn": "Mask of Shifting Perspectives"
+        },
+        {
+          "nameEn": "Mask of the Pouncing Lynx"
+        },
+        {
+          "nameEn": "Mask of the Swarming Claw"
+        },
+        {
+          "nameEn": "Maxx 'The Hype' Nitro"
+        },
+        {
+          "nameEn": "Metis, Archangel of Tenacity"
+        },
+        {
+          "nameEn": "Money Where Ya Mouth Is"
+        },
+        {
+          "nameEn": "Mutiny on the Battalion Barque"
+        },
+        {
+          "nameEn": "Mutiny on the Nimbus Sovereign"
+        },
+        {
+          "nameEn": "Mutiny on the Swiftwater"
+        },
+        {
+          "nameEn": "Mutually Assured Destruction"
+        },
+        {
+          "nameEn": "Nasreth, the Soul Harrower"
+        },
+        {
+          "nameEn": "Nature's Path Pilgrimage"
+        },
+        {
+          "nameEn": "Ninth Blade of the Blood Oath"
+        },
+        {
+          "nameEn": "Nock the Deathwhistle"
+        },
+        {
+          "nameEn": "Olympia, Prized Fighter"
+        },
+        {
+          "nameEn": "Orihon of Mystic Tenets"
+        },
+        {
+          "nameEn": "Oscilio, Forked Continuum"
+        },
+        {
+          "nameEn": "Overflow the Aetherwell"
+        },
+        {
+          "nameEn": "Oysten, Heart of Gold"
+        },
+        {
+          "nameEn": "Perennial Aetherbloom"
+        },
+        {
+          "nameEn": "Phoenix Bannerman: Arms"
+        },
+        {
+          "nameEn": "Phoenix Bannerman: Chest"
+        },
+        {
+          "nameEn": "Phoenix Bannerman: Head"
+        },
+        {
+          "nameEn": "Phoenix Bannerman: Legs"
+        },
+        {
+          "nameEn": "Pick Yourself Up Off the Floor"
+        },
+        {
+          "nameEn": "Pick a Card, Any Card"
+        },
+        {
+          "nameEn": "Pint of Strong and Stout"
+        },
+        {
+          "nameEn": "Polarity Reversal Script"
+        },
+        {
+          "nameEn": "Power of Make Believe"
+        },
+        {
+          "nameEn": "Prizeworn Pathfinders"
+        },
+        {
+          "nameEn": "Proclamation of Abundance"
+        },
+        {
+          "nameEn": "Proclamation of Combat"
+        },
+        {
+          "nameEn": "Proclamation of Production"
+        },
+        {
+          "nameEn": "Proclamation of Requisition"
+        },
+        {
+          "nameEn": "Pulsing Aether // Life"
+        },
+        {
+          "nameEn": "Punch Above Your Weight"
+        },
+        {
+          "nameEn": "Pursue to the Edge of Oblivion"
+        },
+        {
+          "nameEn": "Pursue to the Pits of Despair"
+        },
+        {
+          "nameEn": "Put 'Em In Their Place"
+        },
+        {
+          "nameEn": "Pyroglyphic Protection"
+        },
+        {
+          "nameEn": "Quartermaster's Boots"
+        },
+        {
+          "nameEn": "Quiver of Abyssal Depths"
+        },
+        {
+          "nameEn": "Quiver of Rustling Leaves"
+        },
+        {
+          "nameEn": "Rally the Coast Guard"
+        },
+        {
+          "nameEn": "Rampant Growth // Life"
+        },
+        {
+          "nameEn": "Rampart of the Ram's Head"
+        },
+        {
+          "nameEn": "Reach Beyond the Grave"
+        },
+        {
+          "nameEn": "Requiem for the Damned"
+        },
+        {
+          "nameEn": "Riches of Trōpal-Dhani"
+        },
+        {
+          "nameEn": "Riptide, Lurker of the Deep"
+        },
+        {
+          "nameEn": "Rising Sun, Setting Moon"
+        },
+        {
+          "nameEn": "Rites of Replenishment"
+        },
+        {
+          "nameEn": "Robe of Astral Sanctuary"
+        },
+        {
+          "nameEn": "Robe of Autumn's Fall"
+        },
+        {
+          "nameEn": "Robe of Resourcefulness"
+        },
+        {
+          "nameEn": "Runeblood Incantation"
+        },
+        {
+          "nameEn": "Runechant of Gluttony"
+        },
+        {
+          "nameEn": "Sacred Art: Jade Tiger Domain"
+        },
+        {
+          "nameEn": "Scooba, Salty Sea Dog"
+        },
+        {
+          "nameEn": "Scour the Battlescape"
+        },
+        {
+          "nameEn": "Second Tenet of Chi: Moon"
+        },
+        {
+          "nameEn": "Second Tenet of Chi: Tide"
+        },
+        {
+          "nameEn": "Second Tenet of Chi: Wind"
+        },
+        {
+          "nameEn": "Sekem, Archangel of Ravages"
+        },
+        {
+          "nameEn": "Shallow Water Shark Harpoon"
+        },
+        {
+          "nameEn": "Shatter the Weakpoint"
+        },
+        {
+          "nameEn": "Shelly, Hardened Traveler"
+        },
+        {
+          "nameEn": "Shelter from the Storm"
+        },
+        {
+          "nameEn": "Shift the Tide of Battle"
+        },
+        {
+          "nameEn": "Shiyana, Diamond Gemini"
+        },
+        {
+          "nameEn": "Shroud of the Fate Watcher"
+        },
+        {
+          "nameEn": "Sigil of Conductivity"
+        },
+        {
+          "nameEn": "Sigil of Gravespawning"
+        },
+        {
+          "nameEn": "Sigil of Temporal Manipulation"
+        },
+        {
+          "nameEn": "Sigil of the Arknight"
+        },
+        {
+          "nameEn": "Single Minded Determination"
+        },
+        {
+          "nameEn": "Sirens of Safe Harbor"
+        },
+        {
+          "nameEn": "Slithering Shadowpede"
+        },
+        {
+          "nameEn": "Smelting of the Old Ones"
+        },
+        {
+          "nameEn": "Song of Jack-be-Quick"
+        },
+        {
+          "nameEn": "Song of Larinkmorth White"
+        },
+        {
+          "nameEn": "Song of the Rosen Matador"
+        },
+        {
+          "nameEn": "Song of the Shining Knight"
+        },
+        {
+          "nameEn": "Song of the Wandering Mind"
+        },
+        {
+          "nameEn": "Spectral Manifestations"
+        },
+        {
+          "nameEn": "Springboard Somersault"
+        },
+        {
+          "nameEn": "Stacked in Your Favor"
+        },
+        {
+          "nameEn": "Staff of Verdant Shoots"
+        },
+        {
+          "nameEn": "Stains of the Redback"
+        },
+        {
+          "nameEn": "Steel Street Enforcement"
+        },
+        {
+          "nameEn": "Strength of Four Seasons"
+        },
+        {
+          "nameEn": "Strong Stomach for Adversity"
+        },
+        {
+          "nameEn": "Succumb to Temptation"
+        },
+        {
+          "nameEn": "Summit, the Unforgiving"
+        },
+        {
+          "nameEn": "Suraya, Archangel of Erudition"
+        },
+        {
+          "nameEn": "Suraya, Archangel of Knowledge"
+        },
+        {
+          "nameEn": "Sutcliffe's Research Notes"
+        },
+        {
+          "nameEn": "Sutcliffe's Suede Hides"
+        },
+        {
+          "nameEn": "Swing Fist, Think Later"
+        },
+        {
+          "nameEn": "Taipanis, Dracai of Judgement"
+        },
+        {
+          "nameEn": "Talishar, the Lost Prince"
+        },
+        {
+          "nameEn": "Talisman of Cremation"
+        },
+        {
+          "nameEn": "Talisman of Featherfoot"
+        },
+        {
+          "nameEn": "Talisman of Recompense"
+        },
+        {
+          "nameEn": "Tame the Beastly Behavior"
+        },
+        {
+          "nameEn": "Tear Through the Portal"
+        },
+        {
+          "nameEn": "Teklonetic Force Field"
+        },
+        {
+          "nameEn": "Tempest Palm Gustwave"
+        },
+        {
+          "nameEn": "Ten Foot Tall and Bulletproof"
+        },
+        {
+          "nameEn": "The Grain that Tips the Scale"
+        },
+        {
+          "nameEn": "The Suspense is Killing Me"
+        },
+        {
+          "nameEn": "Themis, Archangel of Judgment"
+        },
+        {
+          "nameEn": "Theryon, Magister of Justice"
+        },
+        {
+          "nameEn": "Third Eye of the Sphinx"
+        },
+        {
+          "nameEn": "Thistle Bloom // Life"
+        },
+        {
+          "nameEn": "Throw Caution to the Wind"
+        },
+        {
+          "nameEn": "Throw Yourself at Them"
+        },
+        {
+          "nameEn": "Tiger Form Incantation"
+        },
+        {
+          "nameEn": "Tiger Taming Khakkara"
+        },
+        {
+          "nameEn": "Tome of Imperial Flame"
+        },
+        {
+          "nameEn": "Traverse the Universe"
+        },
+        {
+          "nameEn": "Tremor of Anticipation"
+        },
+        {
+          "nameEn": "Tremorshield Sabatons"
+        },
+        {
+          "nameEn": "Trench of Sunken Treasure"
+        },
+        {
+          "nameEn": "Trench of Watery Depths"
+        },
+        {
+          "nameEn": "Tribute to Demolition"
+        },
+        {
+          "nameEn": "Tribute to the Legions of Doom"
+        },
+        {
+          "nameEn": "Tricorn of Saltwater Death"
+        },
+        {
+          "nameEn": "Trip the Light Fantastic"
+        },
+        {
+          "nameEn": "Tuffnut, Bumbling Hulkster"
+        },
+        {
+          "nameEn": "Turn the Crowd Grateful"
+        },
+        {
+          "nameEn": "Turn the Crowd Hateful"
+        },
+        {
+          "nameEn": "Twintek Charging Station"
+        },
+        {
+          "nameEn": "Two Sides to the Blade"
+        },
+        {
+          "nameEn": "Undercover Acquisition"
+        },
+        {
+          "nameEn": "Unforgetting Unforgiving"
+        },
+        {
+          "nameEn": "Unmake the Underlings"
+        },
+        {
+          "nameEn": "Uplifting Performance"
+        },
+        {
+          "nameEn": "Ursur, the Soul Reaper"
+        },
+        {
+          "nameEn": "Valda, Seismic Impact"
+        },
+        {
+          "nameEn": "Vambrace of Determination"
+        },
+        {
+          "nameEn": "Vengeance Never Rests"
+        },
+        {
+          "nameEn": "Verdance, Thorn of the Rose"
+        },
+        {
+          "nameEn": "Vest of the First Fist"
+        },
+        {
+          "nameEn": "Vestige of Flagellation"
+        },
+        {
+          "nameEn": "Victor Goldmane, Match Fixer"
+        },
+        {
+          "nameEn": "Victoria, Archangel of Triumph"
+        },
+        {
+          "nameEn": "Visit Goldmane Estate"
+        },
+        {
+          "nameEn": "Visit the 'Winner Takes All'"
+        },
+        {
+          "nameEn": "Visit the Floating Dojo"
+        },
+        {
+          "nameEn": "Visit the Golden Anvil"
+        },
+        {
+          "nameEn": "Visit the Imperial Forge"
+        },
+        {
+          "nameEn": "Voltaire, Strike Twice"
+        },
+        {
+          "nameEn": "Volzar, the Lightning Rod"
+        },
+        {
+          "nameEn": "Wall of Meat and Muscle"
+        },
+        {
+          "nameEn": "Warmonger's Diplomacy"
+        },
+        {
+          "nameEn": "Warpath of Winged Grace"
+        },
+        {
+          "nameEn": "Whirling Mist Blossom"
+        },
+        {
+          "nameEn": "Whisper of the Oracle"
+        },
+        {
+          "nameEn": "Widespread Annihilation"
+        },
+        {
+          "nameEn": "Widespread Destruction"
+        },
+        {
+          "nameEn": "Yoji, Royal Protector"
+        },
+        {
+          "nameEn": "Yorick, Weaver of Tales"
+        },
+        {
+          "nameEn": "Zane, Broadly Beloved"
+        },
+        {
+          "nameEn": "Aether Bindings of the Third Age"
+        },
+        {
+          "nameEn": "Barkskin of the Millennium Tree"
+        },
+        {
+          "nameEn": "Benefactor of Bloodworth Goldmane"
+        },
+        {
+          "nameEn": "Code of Conduct: Kill or Be Killed"
+        },
+        {
+          "nameEn": "Convulsions from the Bellows of Hell"
+        },
+        {
+          "nameEn": "Cosmo, Scroll of Ancestral Tapestry"
+        },
+        {
+          "nameEn": "Dr. Mortimer, Blight of the Pits"
+        },
+        {
+          "nameEn": "Expedition to Blackwater Strait"
+        },
+        {
+          "nameEn": "Gravy Bones, Shipwrecked Looter"
+        },
+        {
+          "nameEn": "Mask of Malicious Manifestations"
+        },
+        {
+          "nameEn": "Oscilio, Constella Intelligence"
+        },
+        {
+          "nameEn": "Oscilio, Scion of the Third Age"
+        },
+        {
+          "nameEn": "Sacred Art: Immortal Lunar Shrine"
+        },
+        {
+          "nameEn": "Sacred Art: Undercurrent Desires"
+        },
+        {
+          "nameEn": "Shifting Winds of the Mystic Beast"
+        },
+        {
+          "nameEn": "Stalagmite, Bastion of Isenloft"
+        },
+        {
+          "nameEn": "The Hand that Pulls the Strings"
+        },
+        {
+          "nameEn": "The Librarian, Magister of History"
+        },
+        {
+          "nameEn": "Time Flies When You're Having Fun"
+        },
+        {
+          "nameEn": "Victor Goldmane, High and Mighty"
+        }
+      ]
+    }
+  ]
+}

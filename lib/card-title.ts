@@ -228,6 +228,14 @@ export function titleGameLabel(game: string | null | undefined): string {
   if (text === "demo") return "Demo";
   if (text === "topps-basketball" || text === "topps-basket") return "Topps Basketball";
   if (text === "topps-soccer" || text === "topps-football") return "Topps Soccer";
+  if (text === "yugioh" || text === "yu-gi-oh" || text === "ygo") return "Yu-Gi-Oh";
+  if (text === "digimon") return "Digimon";
+  if (text === "weiss-schwarz" || text === "weiss" || text === "ws") return "Weiss Schwarz";
+  if (text === "lorcana") return "Lorcana";
+  if (text === "mtg" || text === "magic") return "Magic";
+  if (text === "flesh-and-blood" || text === "fab") return "Flesh and Blood";
+  if (text === "gundam" || text === "bandai-gundam") return "Gundam";
+  if (text === "dragon-ball" || text === "dragonball" || text === "dbs") return "Dragon Ball";
   return "Pokemon";
 }
 

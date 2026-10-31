@@ -1,9 +1,9 @@
 import { prisma } from "../lib/db";
-import { seedDemo } from "../lib/seed-demo";
+import { seedWave1 } from "../lib/seed-wave1";
 
-seedDemo()
+seedWave1()
   .then((counts) => {
-    console.log("seeded TYSM", counts);
+    console.log("seeded TYSM wave1", counts);
   })
   .catch((error) => {
     console.error(error);

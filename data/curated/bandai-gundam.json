@@ -1,0 +1,3043 @@
+{
+  "brand": "Gundam (Bandai)",
+  "proposedEnum": "BANDAI_GUNDAM",
+  "imageUrl": null,
+  "series": [
+    {
+      "name": "Bandai Gundam / Dual Impact",
+      "cards": [
+        {
+          "nameEn": "Gundam Barbatos 1st Form"
+        },
+        {
+          "nameEn": "Gundam Barbatos 3rd Form"
+        },
+        {
+          "nameEn": "Gundam X"
+        },
+        {
+          "nameEn": "Hyakuri"
+        },
+        {
+          "nameEn": "01 Gundam"
+        },
+        {
+          "nameEn": "Amida's Hyakuren"
+        },
+        {
+          "nameEn": "Calamity Gundam"
+        },
+        {
+          "nameEn": "Forbidden Gundam"
+        },
+        {
+          "nameEn": "Gundam AGE-1 Normal"
+        },
+        {
+          "nameEn": "Gundam AGE-1 Spallow"
+        },
+        {
+          "nameEn": "Gundam AGE-1 Titus"
+        },
+        {
+          "nameEn": "Gundam Airmaster"
+        },
+        {
+          "nameEn": "Gundam Ashtaron"
+        },
+        {
+          "nameEn": "Gundam Epyon"
+        },
+        {
+          "nameEn": "Gundam Heavyarms"
+        },
+        {
+          "nameEn": "Gundam Kimaris"
+        },
+        {
+          "nameEn": "Gundam Mk-II (AEUG)"
+        },
+        {
+          "nameEn": "Gundam Pharact"
+        },
+        {
+          "nameEn": "Hyaku-Shiki"
+        },
+        {
+          "nameEn": "Psycho Gundam"
+        },
+        {
+          "nameEn": "Raider Gundam"
+        },
+        {
+          "nameEn": "White Gundam"
+        },
+        {
+          "nameEn": "Zaku Ⅲ (Sleeves)"
+        },
+        {
+          "nameEn": "Zeta Gundam"
+        },
+        {
+          "nameEn": "Gundam Aerial Rebuild"
+        },
+        {
+          "nameEn": "Gundam Ashtaron (MA Mode)"
+        },
+        {
+          "nameEn": "Gundam Mk-II (Titans)"
+        },
+        {
+          "nameEn": "Police Zaku (Armored RRU Type)"
+        },
+        {
+          "nameEn": "Psycho Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Raider Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Gundam Airmaster (Fighter Mode)"
+        },
+        {
+          "nameEn": "A New Sign"
+        },
+        {
+          "nameEn": "AGE Device"
+        },
+        {
+          "nameEn": "Alexandria"
+        },
+        {
+          "nameEn": "Argama"
+        },
+        {
+          "nameEn": "Baqto"
+        },
+        {
+          "nameEn": "Barzam"
+        },
+        {
+          "nameEn": "Byarlant"
+        },
+        {
+          "nameEn": "Daughtress"
+        },
+        {
+          "nameEn": "Diva"
+        },
+        {
+          "nameEn": "Dominion"
+        },
+        {
+          "nameEn": "Elmeth"
+        },
+        {
+          "nameEn": "Flit Asuno"
+        },
+        {
+          "nameEn": "Freeden"
+        },
+        {
+          "nameEn": "G-Exes"
+        },
+        {
+          "nameEn": "GQuuuuuuX"
+        },
+        {
+          "nameEn": "Gabthley"
+        },
+        {
+          "nameEn": "Gafran"
+        },
+        {
+          "nameEn": "Gaza C"
+        },
+        {
+          "nameEn": "Genoace"
+        },
+        {
+          "nameEn": "Gwadan"
+        },
+        {
+          "nameEn": "Haman Karn"
+        },
+        {
+          "nameEn": "Hammerhead"
+        },
+        {
+          "nameEn": "Hizack"
+        },
+        {
+          "nameEn": "Lalah Sune"
+        },
+        {
+          "nameEn": "Marasai"
+        },
+        {
+          "nameEn": "Methuss"
+        },
+        {
+          "nameEn": "Nemo"
+        },
+        {
+          "nameEn": "Olba Frost"
+        },
+        {
+          "nameEn": "Qubeley"
+        },
+        {
+          "nameEn": "Rick Dias"
+        },
+        {
+          "nameEn": "Sleipnir"
+        },
+        {
+          "nameEn": "Sodon"
+        },
+        {
+          "nameEn": "Tallgeese"
+        },
+        {
+          "nameEn": "Taurus"
+        },
+        {
+          "nameEn": "White Wolf"
+        },
+        {
+          "nameEn": "Zedas"
+        },
+        {
+          "nameEn": "Abdul's Maganac"
+        },
+        {
+          "nameEn": "All-Range Attack"
+        },
+        {
+          "nameEn": "Aspiring Pilot"
+        },
+        {
+          "nameEn": "Beneath the Mask"
+        },
+        {
+          "nameEn": "Challia Bull (GQ)"
+        },
+        {
+          "nameEn": "Comrades Come First"
+        },
+        {
+          "nameEn": "Core Booster"
+        },
+        {
+          "nameEn": "Daughtress Command"
+        },
+        {
+          "nameEn": "Daughtress Weapon"
+        },
+        {
+          "nameEn": "Decisive Last Resort"
+        },
+        {
+          "nameEn": "Desil Galette"
+        },
+        {
+          "nameEn": "Dramatic Turnabout"
+        },
+        {
+          "nameEn": "Ein's Schwalbe Graze"
+        },
+        {
+          "nameEn": "Familial Devotion"
+        },
+        {
+          "nameEn": "Four Murasame"
+        },
+        {
+          "nameEn": "Ga-Zowmn (Sleeves)"
+        },
+        {
+          "nameEn": "Gaelio Bauduin"
+        },
+        {
+          "nameEn": "Galbaldy Beta"
+        },
+        {
+          "nameEn": "Genoace Custom"
+        },
+        {
+          "nameEn": "Guncannon (GQ)"
+        },
+        {
+          "nameEn": "Haman Karn's Gaza C"
+        },
+        {
+          "nameEn": "Heart Set on Revenge"
+        },
+        {
+          "nameEn": "Jenice Custom"
+        },
+        {
+          "nameEn": "Jerid Messa"
+        },
+        {
+          "nameEn": "Kamille Bidan"
+        },
+        {
+          "nameEn": "Lafter Frankland"
+        },
+        {
+          "nameEn": "Lauda's Dilanza"
+        },
+        {
+          "nameEn": "Momentary Respite"
+        },
+        {
+          "nameEn": "Quattro Bajeena"
+        },
+        {
+          "nameEn": "Rick Dias (Red)"
+        },
+        {
+          "nameEn": "Shagia Frost"
+        },
+        {
+          "nameEn": "Shuji's Hideout"
+        },
+        {
+          "nameEn": "Sisterly Care"
+        },
+        {
+          "nameEn": "Undying Persistence"
+        },
+        {
+          "nameEn": "Valedictorian"
+        },
+        {
+          "nameEn": "Delta Plus (Waverider Mode)"
+        },
+        {
+          "nameEn": "Gaelio's Schwalbe Graze"
+        },
+        {
+          "nameEn": "Garrod Ran & Tiffa Adill"
+        },
+        {
+          "nameEn": "Graze Ritter (Ground Type)"
+        },
+        {
+          "nameEn": "It's Name is Ryusei-Go"
+        },
+        {
+          "nameEn": "Kikeroga (MA Mode) (GQ)"
+        },
+        {
+          "nameEn": "Moebius (Peacemaker Team)"
+        },
+        {
+          "nameEn": "Mouar’s Determination"
+        },
+        {
+          "nameEn": "Orga, Crot, and Shani"
+        },
+        {
+          "nameEn": "Persistent and Fortudinous"
+        },
+        {
+          "nameEn": "Sayla's Light-Type Guncannon"
+        },
+        {
+          "nameEn": "That One Looks A Lot Stronger?"
+        },
+        {
+          "nameEn": "Turning Point of History"
+        },
+        {
+          "nameEn": "Carta's Graze Ritter (Ground Type)"
+        },
+        {
+          "nameEn": "GINN Long-Range Reconnaissance Type"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Freedom Ascension",
+      "cards": [
+        {
+          "nameEn": "Strike Freedom Gundam"
+        },
+        {
+          "nameEn": "Nu Gundam"
+        },
+        {
+          "nameEn": "Destiny Gundam"
+        },
+        {
+          "nameEn": "Gundam Exia Repair"
+        },
+        {
+          "nameEn": "Gundam Barbatos Lupus"
+        },
+        {
+          "nameEn": "Gundam Barbatos Lupus Rex"
+        },
+        {
+          "nameEn": "Wing Gundam Zero (EW)"
+        },
+        {
+          "nameEn": "Sazabi"
+        },
+        {
+          "nameEn": "V2 Gundam"
+        },
+        {
+          "nameEn": "Altron Gundam (EW)"
+        },
+        {
+          "nameEn": "Bolt Gundam"
+        },
+        {
+          "nameEn": "Chaos Gundam"
+        },
+        {
+          "nameEn": "Destroy Gundam"
+        },
+        {
+          "nameEn": "Dragon Gundam"
+        },
+        {
+          "nameEn": "Gaia Gundam"
+        },
+        {
+          "nameEn": "Gundam Calibarn"
+        },
+        {
+          "nameEn": "Gundam Fight"
+        },
+        {
+          "nameEn": "Gundam Maxter"
+        },
+        {
+          "nameEn": "Gundam Rose"
+        },
+        {
+          "nameEn": "Gundam Schwarzette"
+        },
+        {
+          "nameEn": "Haow Gundam"
+        },
+        {
+          "nameEn": "Kira's Strike Rouge"
+        },
+        {
+          "nameEn": "Master Gundam"
+        },
+        {
+          "nameEn": "Neros Gundam"
+        },
+        {
+          "nameEn": "Rising Gundam"
+        },
+        {
+          "nameEn": "Royal Gundam"
+        },
+        {
+          "nameEn": "Shining Gundam"
+        },
+        {
+          "nameEn": "Wings of Light"
+        },
+        {
+          "nameEn": "Abyss Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Chaos Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Gaia Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Gundam AGE-2 Double Bullet"
+        },
+        {
+          "nameEn": "Gundam AGE-2 Normal (SP Ver.)"
+        },
+        {
+          "nameEn": "Gundam Deathscythe Hell (EW)"
+        },
+        {
+          "nameEn": "Gundam Flauros (Ryusei-Go)"
+        },
+        {
+          "nameEn": "Gundam Heavyarms Custom (EW)"
+        },
+        {
+          "nameEn": "Gundam Sandrock Custom (EW)"
+        },
+        {
+          "nameEn": "Shining Gundam (Super Mode)"
+        },
+        {
+          "nameEn": "Strike Rouge (Ootori)"
+        },
+        {
+          "nameEn": "Calamity Gundam & Raider Gundam"
+        },
+        {
+          "nameEn": "Gundam Throne Eins (GN High Mega Launcher)"
+        },
+        {
+          "nameEn": "Asshimar"
+        },
+        {
+          "nameEn": "Axis"
+        },
+        {
+          "nameEn": "Desultor"
+        },
+        {
+          "nameEn": "Dijeh"
+        },
+        {
+          "nameEn": "Exass"
+        },
+        {
+          "nameEn": "Geara Doga"
+        },
+        {
+          "nameEn": "Girty Lue"
+        },
+        {
+          "nameEn": "Gun EZ"
+        },
+        {
+          "nameEn": "Gundnode"
+        },
+        {
+          "nameEn": "Hashmal"
+        },
+        {
+          "nameEn": "Javelin"
+        },
+        {
+          "nameEn": "Kayra Su"
+        },
+        {
+          "nameEn": "Leo"
+        },
+        {
+          "nameEn": "Murasame"
+        },
+        {
+          "nameEn": "Pluma"
+        },
+        {
+          "nameEn": "Quiet Zero"
+        },
+        {
+          "nameEn": "Ra Cailum"
+        },
+        {
+          "nameEn": "Re-GZ"
+        },
+        {
+          "nameEn": "Re-GZ BWS"
+        },
+        {
+          "nameEn": "White Ark"
+        },
+        {
+          "nameEn": "A Wind Against Fires"
+        },
+        {
+          "nameEn": "Airframe​ Seizure"
+        },
+        {
+          "nameEn": "Akatsuki (Oowashi)"
+        },
+        {
+          "nameEn": "Alpha Azieru"
+        },
+        {
+          "nameEn": "Andrew Waldfeld"
+        },
+        {
+          "nameEn": "Auel Neider"
+        },
+        {
+          "nameEn": "Become a Shield"
+        },
+        {
+          "nameEn": "Chad Chadan"
+        },
+        {
+          "nameEn": "Cyclone Punch"
+        },
+        {
+          "nameEn": "Darkness Finger"
+        },
+        {
+          "nameEn": "Demi Barding"
+        },
+        {
+          "nameEn": "Domon Kasshu"
+        },
+        {
+          "nameEn": "Felsi's Plea"
+        },
+        {
+          "nameEn": "Gavane Goonny"
+        },
+        {
+          "nameEn": "Gavane's Borjarnon"
+        },
+        {
+          "nameEn": "Graviton Hammer"
+        },
+        {
+          "nameEn": "Guel's Dilanza"
+        },
+        {
+          "nameEn": "Gun Blaster"
+        },
+        {
+          "nameEn": "Gyunei Guss"
+        },
+        {
+          "nameEn": "Gyunei's Jagd Doga"
+        },
+        {
+          "nameEn": "Hobby Hizack"
+        },
+        {
+          "nameEn": "Incendiary Spark"
+        },
+        {
+          "nameEn": "Interwoven Blessings"
+        },
+        {
+          "nameEn": "Kayra's Jegan"
+        },
+        {
+          "nameEn": "Kayra's Re-GZ"
+        },
+        {
+          "nameEn": "Landman Rodi"
+        },
+        {
+          "nameEn": "Lauda Neill"
+        },
+        {
+          "nameEn": "M1 Astray Shrike"
+        },
+        {
+          "nameEn": "Master Asia"
+        },
+        {
+          "nameEn": "Mutual Attraction"
+        },
+        {
+          "nameEn": "Noin's Taurus"
+        },
+        {
+          "nameEn": "Odelo Henrik"
+        },
+        {
+          "nameEn": "Overcoming Hardships"
+        },
+        {
+          "nameEn": "Presidential Office"
+        },
+        {
+          "nameEn": "Prospera Mercury"
+        },
+        {
+          "nameEn": "Quess Paraya"
+        },
+        {
+          "nameEn": "Quess's Jagd Doga"
+        },
+        {
+          "nameEn": "Rezin's Geara Doga"
+        },
+        {
+          "nameEn": "Rose Screamer"
+        },
+        {
+          "nameEn": "Shining Finger"
+        },
+        {
+          "nameEn": "Stellar Loussier"
+        },
+        {
+          "nameEn": "Sting Oakley"
+        },
+        {
+          "nameEn": "Tallgeese Ⅲ"
+        },
+        {
+          "nameEn": "Trowa Barton"
+        },
+        {
+          "nameEn": "Veteran's Pride"
+        },
+        {
+          "nameEn": "Waldfeld's Murasame"
+        },
+        {
+          "nameEn": "At the Risk of One's Life"
+        },
+        {
+          "nameEn": "Hoka Kyoten Juzetsujin"
+        },
+        {
+          "nameEn": "Newtype Labs Director"
+        },
+        {
+          "nameEn": "Not with Scattershot!"
+        },
+        {
+          "nameEn": "Quatre Raberba Winner"
+        },
+        {
+          "nameEn": "Shiden Custom (Ryusei-Go)"
+        },
+        {
+          "nameEn": "Widespread Annihilation"
+        },
+        {
+          "nameEn": "Exclusively Defense-Oriented Policy"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Phantom Aria",
+      "cards": [
+        {
+          "nameEn": "Gundam Barbatos Adapt"
+        },
+        {
+          "nameEn": "Unicorn Gundam (Awakened)"
+        },
+        {
+          "nameEn": "Unicorn Gundam 02 Banshee Norn (Destroy Mode)"
+        },
+        {
+          "nameEn": "Unicorn Gundam 02 Banshee Norn (Unicorn Mode)"
+        },
+        {
+          "nameEn": "Gundam DX"
+        },
+        {
+          "nameEn": "Gundam Nadleeh"
+        },
+        {
+          "nameEn": "Gundam Throne Drei"
+        },
+        {
+          "nameEn": "Gundam Throne Eins"
+        },
+        {
+          "nameEn": "Gundam Throne Zwei"
+        },
+        {
+          "nameEn": "Jamil's Gundam X"
+        },
+        {
+          "nameEn": "Psycho Gundam (GQ)"
+        },
+        {
+          "nameEn": "Psycho Gundam Mk-Ⅱ"
+        },
+        {
+          "nameEn": "V-Dash Gundam"
+        },
+        {
+          "nameEn": "Victory Gundam"
+        },
+        {
+          "nameEn": "Victory Gundam Hexa"
+        },
+        {
+          "nameEn": "∀ Gundam"
+        },
+        {
+          "nameEn": "Gundam Airmaster Burst"
+        },
+        {
+          "nameEn": "Gundam Kyrios (Tail Booster)"
+        },
+        {
+          "nameEn": "Gundam Kyrios (Trans-Am)"
+        },
+        {
+          "nameEn": "Gundam Leopard Destroy"
+        },
+        {
+          "nameEn": "Gundam Virtue (Trans-Am)"
+        },
+        {
+          "nameEn": "Rey's Blaze Zaku Phantom"
+        },
+        {
+          "nameEn": "Core Booster (005) & Core Booster (006)"
+        },
+        {
+          "nameEn": "Gundam Dynames (GN Full Shield)"
+        },
+        {
+          "nameEn": "Lunamaria's Gunner Zaku Warrior"
+        },
+        {
+          "nameEn": "A Baoa Qu"
+        },
+        {
+          "nameEn": "Agrissa"
+        },
+        {
+          "nameEn": "Alvaaron"
+        },
+        {
+          "nameEn": "Alvatore"
+        },
+        {
+          "nameEn": "Armory One"
+        },
+        {
+          "nameEn": "Backup"
+        },
+        {
+          "nameEn": "Bigro"
+        },
+        {
+          "nameEn": "Borjarnon"
+        },
+        {
+          "nameEn": "Encounter"
+        },
+        {
+          "nameEn": "Ennil El"
+        },
+        {
+          "nameEn": "Esperansa"
+        },
+        {
+          "nameEn": "Financier"
+        },
+        {
+          "nameEn": "Freeden Ⅱ"
+        },
+        {
+          "nameEn": "G-Falcon"
+        },
+        {
+          "nameEn": "GM III"
+        },
+        {
+          "nameEn": "GN-X"
+        },
+        {
+          "nameEn": "Gadeel"
+        },
+        {
+          "nameEn": "Gaplant"
+        },
+        {
+          "nameEn": "Garma Zabi"
+        },
+        {
+          "nameEn": "Gundvölva"
+        },
+        {
+          "nameEn": "Heindree"
+        },
+        {
+          "nameEn": "Hipheavy"
+        },
+        {
+          "nameEn": "Inspector"
+        },
+        {
+          "nameEn": "Jaburo"
+        },
+        {
+          "nameEn": "Neo Zeong"
+        },
+        {
+          "nameEn": "Pala Sys"
+        },
+        {
+          "nameEn": "Parts"
+        },
+        {
+          "nameEn": "Rozen Zulu"
+        },
+        {
+          "nameEn": "Shokew"
+        },
+        {
+          "nameEn": "Tokwan"
+        },
+        {
+          "nameEn": "Trinity"
+        },
+        {
+          "nameEn": "Willgem"
+        },
+        {
+          "nameEn": "Zakrello"
+        },
+        {
+          "nameEn": "Zeong"
+        },
+        {
+          "nameEn": "Üso Ewin"
+        },
+        {
+          "nameEn": "Ali al-Saachez"
+        },
+        {
+          "nameEn": "Core Fighter"
+        },
+        {
+          "nameEn": "Damage Control"
+        },
+        {
+          "nameEn": "Destined Battle"
+        },
+        {
+          "nameEn": "Deux Murasame"
+        },
+        {
+          "nameEn": "Fighting Alone"
+        },
+        {
+          "nameEn": "Flat (Militia)"
+        },
+        {
+          "nameEn": "GN Armor Type-E"
+        },
+        {
+          "nameEn": "Garma's Dopp"
+        },
+        {
+          "nameEn": "Graceful Demeanor"
+        },
+        {
+          "nameEn": "Hallelujah Haptism"
+        },
+        {
+          "nameEn": "Hambrabi (GQ)"
+        },
+        {
+          "nameEn": "Heine's Gouf Ignited"
+        },
+        {
+          "nameEn": "Industrial 7"
+        },
+        {
+          "nameEn": "Izuma Colony"
+        },
+        {
+          "nameEn": "Kindhearted"
+        },
+        {
+          "nameEn": "Loran Cehack"
+        },
+        {
+          "nameEn": "Lunamaria Hawke"
+        },
+        {
+          "nameEn": "Machine Doll Squad"
+        },
+        {
+          "nameEn": "Marbet Fingerhat"
+        },
+        {
+          "nameEn": "Michael Trinity"
+        },
+        {
+          "nameEn": "Moment of Rest"
+        },
+        {
+          "nameEn": "Nena Trinity"
+        },
+        {
+          "nameEn": "Reformationist"
+        },
+        {
+          "nameEn": "Reineforce Jr."
+        },
+        {
+          "nameEn": "Reliable Big Brother"
+        },
+        {
+          "nameEn": "Rey Za Burrel"
+        },
+        {
+          "nameEn": "Rosamia Badam"
+        },
+        {
+          "nameEn": "Schuzrum-Galluss"
+        },
+        {
+          "nameEn": "Silver Bullet"
+        },
+        {
+          "nameEn": "Sleggar Law"
+        },
+        {
+          "nameEn": "Sochie Heim"
+        },
+        {
+          "nameEn": "Spiritual Support"
+        },
+        {
+          "nameEn": "Trinity Warship"
+        },
+        {
+          "nameEn": "Wire-Guided Arm"
+        },
+        {
+          "nameEn": "Witches from Earth"
+        },
+        {
+          "nameEn": "World Distortion"
+        },
+        {
+          "nameEn": "Zeong (Head)"
+        },
+        {
+          "nameEn": "Zssa (Sleeves)"
+        },
+        {
+          "nameEn": "GN Armor Type-D (Trans-Am)"
+        },
+        {
+          "nameEn": "Indiscriminate Violence"
+        },
+        {
+          "nameEn": "Kikeroga (MS Mode) (GQ)"
+        },
+        {
+          "nameEn": "Overwhelming Pressure"
+        },
+        {
+          "nameEn": "Penelope (Flight Form)"
+        },
+        {
+          "nameEn": "Shrike Team's Bulwark"
+        },
+        {
+          "nameEn": "Zoloat (League Militaire)"
+        },
+        {
+          "nameEn": "9th Tactical Testing Sector"
+        },
+        {
+          "nameEn": "Al-Saachez's AEU Enact Custom Moralia Development Experiment Type"
+        },
+        {
+          "nameEn": "Daughtress High Mobility Command Wise Wallaby"
+        },
+        {
+          "nameEn": "Elan Ceres (Enhanced Person Number 5)"
+        },
+        {
+          "nameEn": "Graham's Union Flag Custom Ⅱ (GN Flag)"
+        },
+        {
+          "nameEn": "Guncannon (108) & Guncannon (109)"
+        },
+        {
+          "nameEn": "Xavier's Gyan Hakuji-Packs (GQ)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Stardust Trails",
+      "cards": [
+        {
+          "nameEn": "Gundam GP01"
+        },
+        {
+          "nameEn": "Gundam GP01Fb"
+        },
+        {
+          "nameEn": "Infinite Justice Gundam"
+        },
+        {
+          "nameEn": "ZZ Gundam"
+        },
+        {
+          "nameEn": "Zaku Ⅱ F2"
+        },
+        {
+          "nameEn": "Gundam Bael"
+        },
+        {
+          "nameEn": "Gundam GP02A"
+        },
+        {
+          "nameEn": "Gundam Kimaris Vidar"
+        },
+        {
+          "nameEn": "Gundam Mk-Ⅱ"
+        },
+        {
+          "nameEn": "Gundam Vidar"
+        },
+        {
+          "nameEn": "Legend Gundam"
+        },
+        {
+          "nameEn": "Shadow Gundam"
+        },
+        {
+          "nameEn": "The Gundam Says"
+        },
+        {
+          "nameEn": "Zaku Ⅱ F2 (EFSF)"
+        },
+        {
+          "nameEn": "Destroy Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Shining Gundam (Meikyo Shisui)"
+        },
+        {
+          "nameEn": "Waldfeld's Gaia Gundam"
+        },
+        {
+          "nameEn": "Neo Lorrnoke's Windam (Jet Striker)"
+        },
+        {
+          "nameEn": "A Miracle"
+        },
+        {
+          "nameEn": "Albion"
+        },
+        {
+          "nameEn": "Aspite"
+        },
+        {
+          "nameEn": "Bellona"
+        },
+        {
+          "nameEn": "Core Base"
+        },
+        {
+          "nameEn": "Core Top"
+        },
+        {
+          "nameEn": "Dom Tropen"
+        },
+        {
+          "nameEn": "Dra-C"
+        },
+        {
+          "nameEn": "Eagail"
+        },
+        {
+          "nameEn": "Elpeo Ple"
+        },
+        {
+          "nameEn": "Endra"
+        },
+        {
+          "nameEn": "Flat"
+        },
+        {
+          "nameEn": "GM Custom"
+        },
+        {
+          "nameEn": "GM Type C"
+        },
+        {
+          "nameEn": "Galluss J"
+        },
+        {
+          "nameEn": "Gaza D"
+        },
+        {
+          "nameEn": "Gozzo"
+        },
+        {
+          "nameEn": "Gwaden"
+        },
+        {
+          "nameEn": "Harry Ord"
+        },
+        {
+          "nameEn": "Kou Uraki"
+        },
+        {
+          "nameEn": "Mahiroo"
+        },
+        {
+          "nameEn": "Muttowooo"
+        },
+        {
+          "nameEn": "On Edge"
+        },
+        {
+          "nameEn": "Powered GM"
+        },
+        {
+          "nameEn": "R-Jarja"
+        },
+        {
+          "nameEn": "Roux Louka"
+        },
+        {
+          "nameEn": "Serpent"
+        },
+        {
+          "nameEn": "Soleil"
+        },
+        {
+          "nameEn": "Turn X"
+        },
+        {
+          "nameEn": "Val Walo"
+        },
+        {
+          "nameEn": "Vidar"
+        },
+        {
+          "nameEn": "WaD"
+        },
+        {
+          "nameEn": "WaDom"
+        },
+        {
+          "nameEn": "Windam"
+        },
+        {
+          "nameEn": "Xamel"
+        },
+        {
+          "nameEn": "Yomagn'tho"
+        },
+        {
+          "nameEn": "Z'Gok"
+        },
+        {
+          "nameEn": "Zssan"
+        },
+        {
+          "nameEn": "5th Luna"
+        },
+        {
+          "nameEn": "Afterglow of Zeon"
+        },
+        {
+          "nameEn": "Akatsuki (Shiranui)"
+        },
+        {
+          "nameEn": "Alphaciders"
+        },
+        {
+          "nameEn": "Anavel Gato"
+        },
+        {
+          "nameEn": "Cannon Illfuto"
+        },
+        {
+          "nameEn": "Corin Nander"
+        },
+        {
+          "nameEn": "Crybaby Poe"
+        },
+        {
+          "nameEn": "Dom Trooper"
+        },
+        {
+          "nameEn": "Familial Love"
+        },
+        {
+          "nameEn": "GM Cannon Ⅱ"
+        },
+        {
+          "nameEn": "God of War Ghingnham"
+        },
+        {
+          "nameEn": "Grace Under Pressure"
+        },
+        {
+          "nameEn": "Gym Ghingnham"
+        },
+        {
+          "nameEn": "Hamma-Hamma"
+        },
+        {
+          "nameEn": "Helmwige Reincar"
+        },
+        {
+          "nameEn": "Hoping for Peace"
+        },
+        {
+          "nameEn": "Infinite Variations"
+        },
+        {
+          "nameEn": "Judau Ashta"
+        },
+        {
+          "nameEn": "Julieta's Reginlaze"
+        },
+        {
+          "nameEn": "Karius' Rick Dom Ⅱ"
+        },
+        {
+          "nameEn": "Kelley Layzner"
+        },
+        {
+          "nameEn": "Mashymre Cello"
+        },
+        {
+          "nameEn": "Mashymre's Zssa"
+        },
+        {
+          "nameEn": "Merrybell Gadget"
+        },
+        {
+          "nameEn": "Merrybell's Bandit"
+        },
+        {
+          "nameEn": "Neo Core Fighter"
+        },
+        {
+          "nameEn": "Neo Lorrnoke"
+        },
+        {
+          "nameEn": "Presence Detected"
+        },
+        {
+          "nameEn": "Reginlaze Julia"
+        },
+        {
+          "nameEn": "Rivalry with Roux"
+        },
+        {
+          "nameEn": "SUMO Gold Type"
+        },
+        {
+          "nameEn": "SUMO Silver Type"
+        },
+        {
+          "nameEn": "Steady Support"
+        },
+        {
+          "nameEn": "Steely Loyalty"
+        },
+        {
+          "nameEn": "Stero's Mahiroo"
+        },
+        {
+          "nameEn": "Sturm und Drang"
+        },
+        {
+          "nameEn": "Turn X (Arms)"
+        },
+        {
+          "nameEn": "Turn X (Legs)"
+        },
+        {
+          "nameEn": "Turn X (Top)"
+        },
+        {
+          "nameEn": "Xavier Olivette"
+        },
+        {
+          "nameEn": "Elpeo Ple's Qubeley Mk-Ⅱ"
+        },
+        {
+          "nameEn": "Gyan Hakuji-Packs (GQ)"
+        },
+        {
+          "nameEn": "Restore the Front Line"
+        },
+        {
+          "nameEn": "Skipjack-class Warship"
+        },
+        {
+          "nameEn": "Teaching New Techniques"
+        },
+        {
+          "nameEn": "Unsanctioned Ordnance"
+        },
+        {
+          "nameEn": "Veterans Joining Forces"
+        },
+        {
+          "nameEn": "Wheel Spoke Formation"
+        },
+        {
+          "nameEn": "GQuuuuuuX (Omega Psycommu Released)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Eternal Nexus",
+      "cards": [
+        {
+          "nameEn": "Strike Freedom Gundam (EX)"
+        },
+        {
+          "nameEn": "Gundam Exia (EX)"
+        },
+        {
+          "nameEn": "Gundam GP00"
+        },
+        {
+          "nameEn": "Hi-Nu Gundam (EX)"
+        },
+        {
+          "nameEn": "Justice Gundam (EX)"
+        },
+        {
+          "nameEn": "Red Gundam(0085)"
+        },
+        {
+          "nameEn": "Gundam Barbatos 6th Form"
+        },
+        {
+          "nameEn": "Gundam Barbatos Lupus Rex (EX)"
+        },
+        {
+          "nameEn": "Rising Freedom Gundam"
+        },
+        {
+          "nameEn": "Build Strike Gundam (Full Package) (EX)"
+        },
+        {
+          "nameEn": "S Gundam"
+        },
+        {
+          "nameEn": "Beginning Gundam"
+        },
+        {
+          "nameEn": "Casval's Gundam"
+        },
+        {
+          "nameEn": "Character Requests"
+        },
+        {
+          "nameEn": "Extreme Gundam"
+        },
+        {
+          "nameEn": "Gundam Aquarius"
+        },
+        {
+          "nameEn": "Gundam Delta Kai"
+        },
+        {
+          "nameEn": "Gundam Geminass 01"
+        },
+        {
+          "nameEn": "Gundam Geminass 02"
+        },
+        {
+          "nameEn": "Gundam Lfrith Thorn"
+        },
+        {
+          "nameEn": "Gundam Lfrith Ur"
+        },
+        {
+          "nameEn": "Gundam Mk-Ⅲ"
+        },
+        {
+          "nameEn": "Gundam Pixy"
+        },
+        {
+          "nameEn": "Gundam Plutone"
+        },
+        {
+          "nameEn": "Psycho Zaku"
+        },
+        {
+          "nameEn": "Psycho Zaku (EX)"
+        },
+        {
+          "nameEn": "Saikoro Gundam"
+        },
+        {
+          "nameEn": "Striker Custom (EX)"
+        },
+        {
+          "nameEn": "Tornado Gundam"
+        },
+        {
+          "nameEn": "Blue Destiny Unit-1 (EX)"
+        },
+        {
+          "nameEn": "Gundam Astaroth Origin"
+        },
+        {
+          "nameEn": "Gundam TR-1 \"Hazel-Rah\""
+        },
+        {
+          "nameEn": "Narrative Gundam A-Packs (EX)"
+        },
+        {
+          "nameEn": "Zeta Gundam Ⅲ P2 Type"
+        },
+        {
+          "nameEn": "Gundam Astaroth Rinascimento (EX)"
+        },
+        {
+          "nameEn": "Gundam Astray Blue Frame Second L"
+        },
+        {
+          "nameEn": "Gundam Astray Gold Frame Amatsu"
+        },
+        {
+          "nameEn": "Gundam Astray Red Frame Custom (EX)"
+        },
+        {
+          "nameEn": "Gundam Ez8 High Mobility Custom"
+        },
+        {
+          "nameEn": "Gundam Full Armor (Thunderbolt) (EX)"
+        },
+        {
+          "nameEn": "Phoenix Gundam (Power Unleashed) (EX)"
+        },
+        {
+          "nameEn": "Big-Rang"
+        },
+        {
+          "nameEn": "G-Self"
+        },
+        {
+          "nameEn": "Haro"
+        },
+        {
+          "nameEn": "Hildolfr"
+        },
+        {
+          "nameEn": "Io Fleming"
+        },
+        {
+          "nameEn": "Jona Basta"
+        },
+        {
+          "nameEn": "MAP Weapon"
+        },
+        {
+          "nameEn": "Meir Siva"
+        },
+        {
+          "nameEn": "Oggo"
+        },
+        {
+          "nameEn": "Reiji"
+        },
+        {
+          "nameEn": "Yuu Kajima"
+        },
+        {
+          "nameEn": "Ze'Gok"
+        },
+        {
+          "nameEn": "Asuna Elmarit"
+        },
+        {
+          "nameEn": "Beside Pain"
+        },
+        {
+          "nameEn": "Chall Acustica"
+        },
+        {
+          "nameEn": "Daryl Lorenz"
+        },
+        {
+          "nameEn": "Dom Bein Nichts"
+        },
+        {
+          "nameEn": "Dom Gross Beil"
+        },
+        {
+          "nameEn": "Ellis Claude"
+        },
+        {
+          "nameEn": "Eternal Road"
+        },
+        {
+          "nameEn": "Fierce Enemy Assault"
+        },
+        {
+          "nameEn": "Gerbera Straight"
+        },
+        {
+          "nameEn": "Gouf Vijayanta"
+        },
+        {
+          "nameEn": "Ittou Tsurugi"
+        },
+        {
+          "nameEn": "Le Cygne (EX)"
+        },
+        {
+          "nameEn": "Master League Begins"
+        },
+        {
+          "nameEn": "Modification"
+        },
+        {
+          "nameEn": "Psycho Haro (EX)"
+        },
+        {
+          "nameEn": "Rondo Gina Sahaku"
+        },
+        {
+          "nameEn": "SP Conversion Chips"
+        },
+        {
+          "nameEn": "Sturm Faust"
+        },
+        {
+          "nameEn": "Tallgeese Ⅱ"
+        },
+        {
+          "nameEn": "Warship Cruise"
+        },
+        {
+          "nameEn": "Zudah Unit 1"
+        },
+        {
+          "nameEn": "Gaplant TR-5 \"Hrairoo\" Unit 1"
+        },
+        {
+          "nameEn": "Kycilia Zabi & Gwazine"
+        },
+        {
+          "nameEn": "Lacus Clyne & Eternal"
+        },
+        {
+          "nameEn": "Marina Ismail & Ptolemaios 2"
+        },
+        {
+          "nameEn": "Miorine Rembran & Academy Ship"
+        },
+        {
+          "nameEn": "Premium Unit Assembly"
+        },
+        {
+          "nameEn": "Taurus (Sanc Kingdom)"
+        },
+        {
+          "nameEn": "Tiffa Adill & Freeden"
+        },
+        {
+          "nameEn": "30cm Cannon (APFSDS Round)"
+        },
+        {
+          "nameEn": "Kudelia Aina Bernstein & Isaribi"
+        },
+        {
+          "nameEn": "Pale Rider (Ground Heavy Equipment Type)"
+        },
+        {
+          "nameEn": "Prototype Asshimar TR-3 \"Kehaar\""
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Steel Requiem",
+      "cards": [
+        {
+          "nameEn": "Gundam Exia (Trans-Am)"
+        },
+        {
+          "nameEn": "Justice Gundam (METEOR)"
+        },
+        {
+          "nameEn": "Gundam Barbatos 5th Form (Ground Type)"
+        },
+        {
+          "nameEn": "Altron Gundam"
+        },
+        {
+          "nameEn": "Gundam AGE-1 Flat"
+        },
+        {
+          "nameEn": "Gundam AGE-2 Normal"
+        },
+        {
+          "nameEn": "Gundam NT-1"
+        },
+        {
+          "nameEn": "Gundam X Divider"
+        },
+        {
+          "nameEn": "Providence Gundam"
+        },
+        {
+          "nameEn": "Towards Destiny"
+        },
+        {
+          "nameEn": "Z Gundam (Biosensor)"
+        },
+        {
+          "nameEn": "Gundam Gusion Rebake Full City"
+        },
+        {
+          "nameEn": "Gundam Heavyarms Custom"
+        },
+        {
+          "nameEn": "Gundam Sandrock Custom"
+        },
+        {
+          "nameEn": "Ξ Gundam (Flight Form)"
+        },
+        {
+          "nameEn": "Gundam Kimaris Trooper (Trooper Mode)"
+        },
+        {
+          "nameEn": "Gundam Kyrios (Tail Unit Flight Mode)"
+        },
+        {
+          "nameEn": "Gundam Virsago & Gundam Ashtaron"
+        },
+        {
+          "nameEn": "Zaku (Four Snake Eyes') [YETI] (GQ)"
+        },
+        {
+          "nameEn": "Ad Balloon"
+        },
+        {
+          "nameEn": "Balient"
+        },
+        {
+          "nameEn": "Baund Doc"
+        },
+        {
+          "nameEn": "CGUE"
+        },
+        {
+          "nameEn": "Defurse"
+        },
+        {
+          "nameEn": "Doritea"
+        },
+        {
+          "nameEn": "Downes"
+        },
+        {
+          "nameEn": "Emma Sheen"
+        },
+        {
+          "nameEn": "Eternal"
+        },
+        {
+          "nameEn": "Farsia"
+        },
+        {
+          "nameEn": "G-Bouncer"
+        },
+        {
+          "nameEn": "G-Defenser"
+        },
+        {
+          "nameEn": "Graze Ein"
+        },
+        {
+          "nameEn": "Hambrabi"
+        },
+        {
+          "nameEn": "Jachin Due"
+        },
+        {
+          "nameEn": "Jupitris"
+        },
+        {
+          "nameEn": "Kämpfer"
+        },
+        {
+          "nameEn": "Messala"
+        },
+        {
+          "nameEn": "Patulia"
+        },
+        {
+          "nameEn": "Radish"
+        },
+        {
+          "nameEn": "Rouei"
+        },
+        {
+          "nameEn": "Union Flag"
+        },
+        {
+          "nameEn": "Zedas M"
+        },
+        {
+          "nameEn": "Zedas R"
+        },
+        {
+          "nameEn": "Zeydra"
+        },
+        {
+          "nameEn": "Z’Gok E"
+        },
+        {
+          "nameEn": "AEU Hellion"
+        },
+        {
+          "nameEn": "Asemu Asuno"
+        },
+        {
+          "nameEn": "Auda's Maganac"
+        },
+        {
+          "nameEn": "Awkward Approach"
+        },
+        {
+          "nameEn": "Azee Gurumin"
+        },
+        {
+          "nameEn": "Bolinoak Sammahn"
+        },
+        {
+          "nameEn": "Bridge Crew"
+        },
+        {
+          "nameEn": "Carris Nautilus"
+        },
+        {
+          "nameEn": "Christina Mackenzie"
+        },
+        {
+          "nameEn": "Cyclops Team"
+        },
+        {
+          "nameEn": "Daughtress Flyer"
+        },
+        {
+          "nameEn": "Distant Reunion"
+        },
+        {
+          "nameEn": "Field Directive"
+        },
+        {
+          "nameEn": "GM Sniper II"
+        },
+        {
+          "nameEn": "GN Armor (Type-E)"
+        },
+        {
+          "nameEn": "Graham Aker"
+        },
+        {
+          "nameEn": "Hizack Custom"
+        },
+        {
+          "nameEn": "Immortal Colasour"
+        },
+        {
+          "nameEn": "Infiltrator Present"
+        },
+        {
+          "nameEn": "Jamil Neate"
+        },
+        {
+          "nameEn": "Messala (MA Mode)"
+        },
+        {
+          "nameEn": "Messer Type-F02"
+        },
+        {
+          "nameEn": "Mikhail Kaminsky"
+        },
+        {
+          "nameEn": "Peacemillion"
+        },
+        {
+          "nameEn": "Privileged Position"
+        },
+        {
+          "nameEn": "Rau Le Creuset"
+        },
+        {
+          "nameEn": "Reccoa's Shadow"
+        },
+        {
+          "nameEn": "Ribo Colony"
+        },
+        {
+          "nameEn": "Tieren Taozi"
+        },
+        {
+          "nameEn": "Unheralded Attack"
+        },
+        {
+          "nameEn": "Veteran Tactics"
+        },
+        {
+          "nameEn": "Warped Intent"
+        },
+        {
+          "nameEn": "Yazan Gable"
+        },
+        {
+          "nameEn": "Zeheart Galette"
+        },
+        {
+          "nameEn": "DINN (Commander Type)"
+        },
+        {
+          "nameEn": "Graham's Union Flag Custom"
+        },
+        {
+          "nameEn": "GuAIZ (Commander Type)"
+        },
+        {
+          "nameEn": "Penelope (Middle Form)"
+        },
+        {
+          "nameEn": "Tieren High Mobility Type"
+        },
+        {
+          "nameEn": "How Many Miles to the Battlefield?"
+        },
+        {
+          "nameEn": "Over the River and Through the Woods"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Newtype Rising",
+      "cards": [
+        {
+          "nameEn": "Justice Gundam"
+        },
+        {
+          "nameEn": "Sword Strike Gundam"
+        },
+        {
+          "nameEn": "Wing Gundam Zero"
+        },
+        {
+          "nameEn": "Unicorn Gundam 02 Banshee (Destroy Mode)"
+        },
+        {
+          "nameEn": "Unicorn Gundam 02 Banshee (Unicorn Mode)"
+        },
+        {
+          "nameEn": "Fatum-00"
+        },
+        {
+          "nameEn": "Char's Gelgoog"
+        },
+        {
+          "nameEn": "Zaku I Sniper Type"
+        },
+        {
+          "nameEn": "Zaku Mariner"
+        },
+        {
+          "nameEn": "Gundam Aerial (Mirasoul Flight Unit)"
+        },
+        {
+          "nameEn": "Adzam"
+        },
+        {
+          "nameEn": "Anksha"
+        },
+        {
+          "nameEn": "Big Zam"
+        },
+        {
+          "nameEn": "BuCUE"
+        },
+        {
+          "nameEn": "Cancer"
+        },
+        {
+          "nameEn": "DINN"
+        },
+        {
+          "nameEn": "Delta Plus"
+        },
+        {
+          "nameEn": "Dopp"
+        },
+        {
+          "nameEn": "Duo's Leo"
+        },
+        {
+          "nameEn": "G-Sky Easy"
+        },
+        {
+          "nameEn": "Galluss-K"
+        },
+        {
+          "nameEn": "Gamow"
+        },
+        {
+          "nameEn": "Gogg"
+        },
+        {
+          "nameEn": "Gouf"
+        },
+        {
+          "nameEn": "Gyan"
+        },
+        {
+          "nameEn": "Kusanagi"
+        },
+        {
+          "nameEn": "LaGOWE"
+        },
+        {
+          "nameEn": "M'Quve"
+        },
+        {
+          "nameEn": "Mistral"
+        },
+        {
+          "nameEn": "Pisces"
+        },
+        {
+          "nameEn": "Sayla Mass"
+        },
+        {
+          "nameEn": "Skygrasper"
+        },
+        {
+          "nameEn": "Yzak Jule"
+        },
+        {
+          "nameEn": "Zanzibar"
+        },
+        {
+          "nameEn": "Zechs' Leo"
+        },
+        {
+          "nameEn": "Zee Zulu"
+        },
+        {
+          "nameEn": "ZuOOT"
+        },
+        {
+          "nameEn": "Beguir-Pente"
+        },
+        {
+          "nameEn": "Byarlant Custom"
+        },
+        {
+          "nameEn": "Cagalli's Skygrasper"
+        },
+        {
+          "nameEn": "Covert Operative"
+        },
+        {
+          "nameEn": "Dearka Elthman"
+        },
+        {
+          "nameEn": "Deep Devotion"
+        },
+        {
+          "nameEn": "Demi Garrison"
+        },
+        {
+          "nameEn": "Dreissen (Sleeves)"
+        },
+        {
+          "nameEn": "Extreme Hatred"
+        },
+        {
+          "nameEn": "Fortress Defense"
+        },
+        {
+          "nameEn": "Geara Doga (Sleeves)"
+        },
+        {
+          "nameEn": "Midair Modifications"
+        },
+        {
+          "nameEn": "Nahel Argama"
+        },
+        {
+          "nameEn": "Noin's Aries"
+        },
+        {
+          "nameEn": "Rasid's Maganac"
+        },
+        {
+          "nameEn": "Rasid's Orders"
+        },
+        {
+          "nameEn": "Stark Jegan"
+        },
+        {
+          "nameEn": "Stealth Stratagem"
+        },
+        {
+          "nameEn": "Strategic Arms"
+        },
+        {
+          "nameEn": "The Desert Tiger"
+        },
+        {
+          "nameEn": "The Stubborn Cog"
+        },
+        {
+          "nameEn": "Zeon Remnant Forces"
+        },
+        {
+          "nameEn": "Assault on Torrington Base"
+        },
+        {
+          "nameEn": "Chuchu's Demi Trainer"
+        },
+        {
+          "nameEn": "Iron-Fisted Discipline"
+        },
+        {
+          "nameEn": "Mining Asteroid Palau"
+        },
+        {
+          "nameEn": "Securing the Supply Line"
+        },
+        {
+          "nameEn": "Signs of a Revolution"
+        },
+        {
+          "nameEn": "The Path to Victory or Defeat"
+        },
+        {
+          "nameEn": "13th Tactical Testing Sector"
+        },
+        {
+          "nameEn": "Elan Ceres (Enhanced Person Number 4)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Deck Build Box Freedom Ascension",
+      "cards": [
+        {
+          "nameEn": "Aile Strike Gundam"
+        },
+        {
+          "nameEn": "Freedom Gundam"
+        },
+        {
+          "nameEn": "Wing Gundam"
+        },
+        {
+          "nameEn": "Gundam Barbatos 4th Form"
+        },
+        {
+          "nameEn": "Unicorn Gundam (Destroy Mode)"
+        },
+        {
+          "nameEn": "Unicorn Gundam (Unicorn Mode)"
+        },
+        {
+          "nameEn": "Amuro Ray"
+        },
+        {
+          "nameEn": "Gundam"
+        },
+        {
+          "nameEn": "Sinanju"
+        },
+        {
+          "nameEn": "Zaku Ⅱ"
+        },
+        {
+          "nameEn": "Gundam Deathscythe"
+        },
+        {
+          "nameEn": "Gundam Gusion Rebake"
+        },
+        {
+          "nameEn": "Gundam Hajiroboshi"
+        },
+        {
+          "nameEn": "Gundam Lfrith"
+        },
+        {
+          "nameEn": "Gundam Virsago"
+        },
+        {
+          "nameEn": "Shenlong Gundam"
+        },
+        {
+          "nameEn": "Strike Rouge"
+        },
+        {
+          "nameEn": "Gundam Hajiroboshi (2nd Form)"
+        },
+        {
+          "nameEn": "Overflowing Affection"
+        },
+        {
+          "nameEn": "Archangel"
+        },
+        {
+          "nameEn": "Davao"
+        },
+        {
+          "nameEn": "Guncannon"
+        },
+        {
+          "nameEn": "Guntank"
+        },
+        {
+          "nameEn": "Heero Yuy"
+        },
+        {
+          "nameEn": "Hotarubi"
+        },
+        {
+          "nameEn": "Kshatriya"
+        },
+        {
+          "nameEn": "Rewloola"
+        },
+        {
+          "nameEn": "Rick Dom"
+        },
+        {
+          "nameEn": "A Show of Resolve"
+        },
+        {
+          "nameEn": "Banagher Links"
+        },
+        {
+          "nameEn": "Battle of Aces"
+        },
+        {
+          "nameEn": "Cagalli Yula Athha"
+        },
+        {
+          "nameEn": "Duo Maxwell"
+        },
+        {
+          "nameEn": "First Contact"
+        },
+        {
+          "nameEn": "Full Frontal"
+        },
+        {
+          "nameEn": "Kira Yamato"
+        },
+        {
+          "nameEn": "Marida Cruz"
+        },
+        {
+          "nameEn": "Mikazuki Augus"
+        },
+        {
+          "nameEn": "Unforeseen Incident"
+        },
+        {
+          "nameEn": "Wistario Afam"
+        },
+        {
+          "nameEn": "Geara Zulu (Guards Type)"
+        },
+        {
+          "nameEn": "Ryusei-Go (Graze Custom Ⅱ)"
+        },
+        {
+          "nameEn": "Underground Desert Base"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Edition Beta",
+      "cards": [
+        {
+          "nameEn": "Char's Zaku Ⅱ"
+        },
+        {
+          "nameEn": "Launcher Strike Gundam"
+        },
+        {
+          "nameEn": "Perfect Strike Gundam"
+        },
+        {
+          "nameEn": "Wing Gundam (Bird Mode)"
+        },
+        {
+          "nameEn": "Zaku Ⅰ"
+        },
+        {
+          "nameEn": "Gundam (MA Form)"
+        },
+        {
+          "nameEn": "Gundam Aerial"
+        },
+        {
+          "nameEn": "Gundam Sandrock"
+        },
+        {
+          "nameEn": "Strike Dagger"
+        },
+        {
+          "nameEn": "Gundam Aerial (Bit on Form)"
+        },
+        {
+          "nameEn": "Ball"
+        },
+        {
+          "nameEn": "Darilbalde"
+        },
+        {
+          "nameEn": "Falmel"
+        },
+        {
+          "nameEn": "G-Fighter"
+        },
+        {
+          "nameEn": "GM"
+        },
+        {
+          "nameEn": "Gelgoog"
+        },
+        {
+          "nameEn": "Jegan"
+        },
+        {
+          "nameEn": "Loto"
+        },
+        {
+          "nameEn": "M1 Astray"
+        },
+        {
+          "nameEn": "Maganac"
+        },
+        {
+          "nameEn": "Michaelis"
+        },
+        {
+          "nameEn": "ReZEL"
+        },
+        {
+          "nameEn": "Side 7"
+        },
+        {
+          "nameEn": "White Base"
+        },
+        {
+          "nameEn": "Chang Wufei"
+        },
+        {
+          "nameEn": "Demi Trainer"
+        },
+        {
+          "nameEn": "Guel Jeturk"
+        },
+        {
+          "nameEn": "Hawk of Endymion"
+        },
+        {
+          "nameEn": "Intercept Orders"
+        },
+        {
+          "nameEn": "Kai's Resolve"
+        },
+        {
+          "nameEn": "Naval Bombardment"
+        },
+        {
+          "nameEn": "Peaceful Timbre"
+        },
+        {
+          "nameEn": "Riddhe Marcenas"
+        },
+        {
+          "nameEn": "Simultaneous Fire"
+        },
+        {
+          "nameEn": "Suletta Mercury"
+        },
+        {
+          "nameEn": "Thoroughly Damaged"
+        },
+        {
+          "nameEn": "Citizens, Take a Stand!"
+        },
+        {
+          "nameEn": "Saint Gabriel Institute"
+        },
+        {
+          "nameEn": "The Witch and the Bride"
+        },
+        {
+          "nameEn": "Asticassia School of Technology, Earth House"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam Card Game / Sets",
+      "cards": [
+        {
+          "nameEn": "Destiny Ignition"
+        },
+        {
+          "nameEn": "Freedom Ascension"
+        },
+        {
+          "nameEn": "SEED Strike"
+        },
+        {
+          "nameEn": "Wings of Advance"
+        },
+        {
+          "nameEn": "Deck Build Box Freedom Ascension"
+        },
+        {
+          "nameEn": "Clan Unity"
+        },
+        {
+          "nameEn": "Iron Bloom"
+        },
+        {
+          "nameEn": "Aquatic Assault"
+        },
+        {
+          "nameEn": "Basic Cards"
+        },
+        {
+          "nameEn": "Celestial Drive"
+        },
+        {
+          "nameEn": "Dual Impact"
+        },
+        {
+          "nameEn": "Edition Beta"
+        },
+        {
+          "nameEn": "Eternal Nexus"
+        },
+        {
+          "nameEn": "Flash of Radiance"
+        },
+        {
+          "nameEn": "Generation Pulse"
+        },
+        {
+          "nameEn": "Heavy Dominion"
+        },
+        {
+          "nameEn": "Heroic Beginnings"
+        },
+        {
+          "nameEn": "Newtype Rising"
+        },
+        {
+          "nameEn": "Other Product Card"
+        },
+        {
+          "nameEn": "Phantom Aria"
+        },
+        {
+          "nameEn": "Promotion card"
+        },
+        {
+          "nameEn": "Raging Onslaught"
+        },
+        {
+          "nameEn": "Silent Barrage"
+        },
+        {
+          "nameEn": "Stardust Trails"
+        },
+        {
+          "nameEn": "Steel Requiem"
+        },
+        {
+          "nameEn": "Zeon's Rush"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Promotion card",
+      "cards": [
+        {
+          "nameEn": "Freedom Gundam (METEOR)"
+        },
+        {
+          "nameEn": "Zaku Ⅱ FZ"
+        },
+        {
+          "nameEn": "0 Gundam"
+        },
+        {
+          "nameEn": "Striker Pack"
+        },
+        {
+          "nameEn": "Gundam Deathscythe Hell"
+        },
+        {
+          "nameEn": "Hy-Gogg"
+        },
+        {
+          "nameEn": "Nyaan"
+        },
+        {
+          "nameEn": "Ple-Twelve"
+        },
+        {
+          "nameEn": "Z'Gok E"
+        },
+        {
+          "nameEn": "A Healthy Curiosity"
+        },
+        {
+          "nameEn": "Awakened Potential"
+        },
+        {
+          "nameEn": "Bernard Wiseman"
+        },
+        {
+          "nameEn": "Bit / Funnel"
+        },
+        {
+          "nameEn": "Eliminate Target"
+        },
+        {
+          "nameEn": "Human Karma"
+        },
+        {
+          "nameEn": "Improved Technique"
+        },
+        {
+          "nameEn": "Kshatriya Besserung"
+        },
+        {
+          "nameEn": "Sarah Zabiarov"
+        },
+        {
+          "nameEn": "Soma Peries"
+        },
+        {
+          "nameEn": "Zechs Merquise"
+        },
+        {
+          "nameEn": "AEU Enact Demonstration Color"
+        },
+        {
+          "nameEn": "Look of Determination"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Destiny Ignition",
+      "cards": [
+        {
+          "nameEn": "Strike Gundam"
+        },
+        {
+          "nameEn": "Blast Impulse Gundam"
+        },
+        {
+          "nameEn": "Blitz Gundam"
+        },
+        {
+          "nameEn": "Buster Gundam"
+        },
+        {
+          "nameEn": "Duel Gundam"
+        },
+        {
+          "nameEn": "Force Impulse Gundam"
+        },
+        {
+          "nameEn": "Impulse Gundam"
+        },
+        {
+          "nameEn": "Saviour Gundam"
+        },
+        {
+          "nameEn": "Sword Impulse Gundam"
+        },
+        {
+          "nameEn": "Zaku Warrior"
+        },
+        {
+          "nameEn": "Aegis Gundam (MA Mode)"
+        },
+        {
+          "nameEn": "Minerva"
+        },
+        {
+          "nameEn": "Vesalius"
+        },
+        {
+          "nameEn": "Athrun Zala"
+        },
+        {
+          "nameEn": "Awakened Power"
+        },
+        {
+          "nameEn": "Giant Killing"
+        },
+        {
+          "nameEn": "Shinn Asuka"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Aquatic Assault",
+      "cards": [
+        {
+          "nameEn": "Abyss Gundam"
+        },
+        {
+          "nameEn": "Char Aznable"
+        },
+        {
+          "nameEn": "Char's Z'Gok"
+        },
+        {
+          "nameEn": "Gundam Leopard"
+        },
+        {
+          "nameEn": "Acguy"
+        },
+        {
+          "nameEn": "Ash"
+        },
+        {
+          "nameEn": "Daughseat"
+        },
+        {
+          "nameEn": "GOOhN"
+        },
+        {
+          "nameEn": "Kapool"
+        },
+        {
+          "nameEn": "Mad Angler"
+        },
+        {
+          "nameEn": "Shamblo"
+        },
+        {
+          "nameEn": "ZnO"
+        },
+        {
+          "nameEn": "Zock"
+        },
+        {
+          "nameEn": "Loni Garvey"
+        },
+        {
+          "nameEn": "The Orca of Red Sea"
+        },
+        {
+          "nameEn": "A Twinkle from the Abyss"
+        },
+        {
+          "nameEn": "Poorly Planned Offensive"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Clan Unity",
+      "cards": [
+        {
+          "nameEn": "Red Gundam"
+        },
+        {
+          "nameEn": "Shuji Itō"
+        },
+        {
+          "nameEn": "Clan Battle"
+        },
+        {
+          "nameEn": "Close Combat"
+        },
+        {
+          "nameEn": "Fierce Unity"
+        },
+        {
+          "nameEn": "Gaia's Rick Dom (GQ)"
+        },
+        {
+          "nameEn": "Gelgoog (GQ)"
+        },
+        {
+          "nameEn": "Kaneban Co., Ltd."
+        },
+        {
+          "nameEn": "Ruthless Tactics"
+        },
+        {
+          "nameEn": "Sugai's Gelgoog (GQ)"
+        },
+        {
+          "nameEn": "Amate Yuzuriha (Machu)"
+        },
+        {
+          "nameEn": "GQuuuuuuX (Omega Psycommu)"
+        },
+        {
+          "nameEn": "Ortega's Rick Dom (GQ)"
+        },
+        {
+          "nameEn": "Schoolgirl and Smuggler"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Celestial Drive",
+      "cards": [
+        {
+          "nameEn": "Gundam Exia"
+        },
+        {
+          "nameEn": "Fatal Strike"
+        },
+        {
+          "nameEn": "Gundam Dynames"
+        },
+        {
+          "nameEn": "Gundam Kyrios"
+        },
+        {
+          "nameEn": "Gundam Virtue"
+        },
+        {
+          "nameEn": "Gundam Kyrios (Flight Mode)"
+        },
+        {
+          "nameEn": "Ptolemaios"
+        },
+        {
+          "nameEn": "Allelujah Haptism"
+        },
+        {
+          "nameEn": "Armed Intervention"
+        },
+        {
+          "nameEn": "Setsuna F. Seiei"
+        },
+        {
+          "nameEn": "Tactical Visionary"
+        },
+        {
+          "nameEn": "Tieria Erde"
+        },
+        {
+          "nameEn": "Lockon Stratos (Neil)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Heavy Dominion",
+      "cards": [
+        {
+          "nameEn": "Full Armor Unicorn Gundam (Destroy Mode)"
+        },
+        {
+          "nameEn": "Full Armor Unicorn Gundam (Unicorn Mode)"
+        },
+        {
+          "nameEn": "Duel Gundam (Assault Shroud)"
+        },
+        {
+          "nameEn": "Gundam NT-1 Full Armor"
+        },
+        {
+          "nameEn": "Gryphios 2"
+        },
+        {
+          "nameEn": "The-O"
+        },
+        {
+          "nameEn": "Battlefield Emotions"
+        },
+        {
+          "nameEn": "G-Falcon DX"
+        },
+        {
+          "nameEn": "Natural Talent"
+        },
+        {
+          "nameEn": "Palace Athene"
+        },
+        {
+          "nameEn": "Paptimus Scirocco"
+        },
+        {
+          "nameEn": "Blazing Mobile Suit Rider"
+        },
+        {
+          "nameEn": "Geara Doga (Heavy Armed Type)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Flash of Radiance",
+      "cards": [
+        {
+          "nameEn": "Ξ Gundam"
+        },
+        {
+          "nameEn": "Gustav Karl Type-00"
+        },
+        {
+          "nameEn": "Lady Luck"
+        },
+        {
+          "nameEn": "Lane Aim"
+        },
+        {
+          "nameEn": "Penelope"
+        },
+        {
+          "nameEn": "Siege Ploy"
+        },
+        {
+          "nameEn": "Valiant"
+        },
+        {
+          "nameEn": "Hathaway Noa"
+        },
+        {
+          "nameEn": "Messer Type-F01"
+        },
+        {
+          "nameEn": "Words for Hathaway"
+        },
+        {
+          "nameEn": "Messer Type-F02 Minelayer"
+        },
+        {
+          "nameEn": "Jegan Ground Type-A (Man Hunter)"
+        },
+        {
+          "nameEn": "Messer (Type-F Naked) (Commander Type)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Iron Bloom",
+      "cards": [
+        {
+          "nameEn": "Gundam Barbatos 2nd Form"
+        },
+        {
+          "nameEn": "Hyakuren"
+        },
+        {
+          "nameEn": "Graze"
+        },
+        {
+          "nameEn": "Isaribi"
+        },
+        {
+          "nameEn": "Akihiro Altland"
+        },
+        {
+          "nameEn": "CGS Mobile Worker"
+        },
+        {
+          "nameEn": "Graze Commander Type"
+        },
+        {
+          "nameEn": "Graze Custom"
+        },
+        {
+          "nameEn": "McGillis Fareed"
+        },
+        {
+          "nameEn": "With Iron and Blood"
+        },
+        {
+          "nameEn": "McGillis' Schwalbe Graze"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Generation Pulse",
+      "cards": [
+        {
+          "nameEn": "Super Gundam"
+        },
+        {
+          "nameEn": "Zeta Gundam (EX)"
+        },
+        {
+          "nameEn": "Diffuse Beam Cannon"
+        },
+        {
+          "nameEn": "Graze Duel Type"
+        },
+        {
+          "nameEn": "Mark Guilder"
+        },
+        {
+          "nameEn": "Tactical Training"
+        },
+        {
+          "nameEn": "Luna Mana & Carry Base"
+        },
+        {
+          "nameEn": "Mobile Worker (Tekkadan)"
+        },
+        {
+          "nameEn": "Unlocking the Development Diagram"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Raging Onslaught",
+      "cards": [
+        {
+          "nameEn": "Slash Zaku Phantom"
+        },
+        {
+          "nameEn": "Two Unicorns"
+        },
+        {
+          "nameEn": "Libra"
+        },
+        {
+          "nameEn": "Efreet Schneid"
+        },
+        {
+          "nameEn": "Milliardo Peacecraft"
+        },
+        {
+          "nameEn": "The Final Victor"
+        },
+        {
+          "nameEn": "Wise Leader's Pride"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Silent Barrage",
+      "cards": [
+        {
+          "nameEn": "Red Gundam (0079)"
+        },
+        {
+          "nameEn": "Bertigo"
+        },
+        {
+          "nameEn": "Final Duty"
+        },
+        {
+          "nameEn": "GX-Bit"
+        },
+        {
+          "nameEn": "I'm a Newtype"
+        },
+        {
+          "nameEn": "Operation to Intercept Solomon"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / SEED Strike",
+      "cards": [
+        {
+          "nameEn": "Aegis Gundam"
+        },
+        {
+          "nameEn": "Ginn"
+        },
+        {
+          "nameEn": "Moebius"
+        },
+        {
+          "nameEn": "Miguel's Ginn"
+        },
+        {
+          "nameEn": "Moebius Zero"
+        },
+        {
+          "nameEn": "The Magic Bullet of Dusk"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Zeon's Rush",
+      "cards": [
+        {
+          "nameEn": "Geara Zulu"
+        },
+        {
+          "nameEn": "Angelo's Geara Zulu"
+        },
+        {
+          "nameEn": "Dra-C (Sleeves)"
+        },
+        {
+          "nameEn": "Gaza D (Sleeves)"
+        },
+        {
+          "nameEn": "Indignation"
+        },
+        {
+          "nameEn": "The Blue Giant"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Other Product Card",
+      "cards": [
+        {
+          "nameEn": "GFreD"
+        },
+        {
+          "nameEn": "M.A.V. Tactics"
+        },
+        {
+          "nameEn": "Orga's Order"
+        },
+        {
+          "nameEn": "CGS Mobile Worker (Commander Type)"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Wings of Advance",
+      "cards": [
+        {
+          "nameEn": "Aries"
+        },
+        {
+          "nameEn": "Tragos"
+        },
+        {
+          "nameEn": "Corsica Base"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Basic Cards",
+      "cards": [
+        {
+          "nameEn": "EX Base"
+        },
+        {
+          "nameEn": "Resource"
+        },
+        {
+          "nameEn": "EX Resource"
+        }
+      ]
+    },
+    {
+      "name": "Bandai Gundam / Heroic Beginnings",
+      "cards": [
+        {
+          "nameEn": "Gundam Aerial (Permet Score Six)"
+        },
+        {
+          "nameEn": "Zowort"
+        }
+      ]
+    }
+  ]
+}

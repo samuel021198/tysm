@@ -2,6 +2,7 @@ import { fronts } from "../prisma/demo-card-fronts";
 import { DEMO_ACCOUNTS, TRIAL_ACCOUNTS } from "./demo-login";
 import { prisma } from "./db";
 import { ensureDemoCatalog } from "./dex-query";
+import { seedWave1 } from "./seed-wave1";
 import { NEWS_SAMPLES } from "./news";
 import { courierFor, mockTracking } from "./shipping";
 import {
@@ -646,6 +647,7 @@ export async function seedDemo() {
   await attachShowcaseDex();
   await seedSocial();
   await seedNews();
+  await seedWave1();
 
   const catalogCardsAfter = await prisma.catalogCard.count();
   const catalogSetsAfter = await prisma.catalogSet.count();
