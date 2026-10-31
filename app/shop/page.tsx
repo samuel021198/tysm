@@ -10,6 +10,7 @@ import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { displayPhoto } from "@/lib/demo-covers";
 import { Countdown } from "@/components/countdown";
 import { Icon } from "@/components/icons";
+import { MallRails } from "@/components/mall-rails";
 import { PromoPill } from "@/components/promo-pill";
 import { VerificationPill, type VerificationTierName } from "@/components/profile-header";
 
@@ -61,6 +62,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
   return (
     <div className="mx-auto max-w-3xl">
       <h1 className="sr-only">{tx(locale, "商店", "Shop")}</h1>
+      <MallRails locale={locale} viewerId={viewer?.id ?? null} hidden={hidden} hiddenListingIds={hides.listingIds} />
       <nav aria-label={tx(locale, "商店", "Shop")} className="flex gap-2 overflow-x-auto py-3">
         {CHIPS.map((chip) => (
           <Link

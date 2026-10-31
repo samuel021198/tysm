@@ -199,26 +199,26 @@ export function ProfileHeader({
           </a>
         ) : null}
       </div>
-      {self && tokenBalance != null ? (
-        <p id="promo" className="text-sm leading-snug">
-          <span className="inline-flex items-center gap-1.5 font-semibold">
-            <Icon name="ticket" className="promo-bounce h-[22px] w-[22px]" />
-            {tokenBalance}
-          </span>
-          <span className="mt-1 block text-[11px] font-normal text-muted">{tx(locale, `＝可推廣 ${tokenBalance} 日`, `${tokenBalance} promo days`)}</span>
-        </p>
-      ) : null}
       {self ? (
-        <div className="flex items-center gap-1.5">
-          <Link href="/me/edit" className={action}>
-            {tx(locale, "編輯", "Edit")}
-          </Link>
-          <Link href="/me/footprint" className={action}>
-            {tx(locale, "足跡", "Footprint")}
-          </Link>
-          <Link href="/me/settings" aria-label={tx(locale, "設定", "Settings")} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-card text-sm leading-none">
-            <span aria-hidden>⚙️</span>
-          </Link>
+        <div className="grid gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <Link href="/me/edit" className={action}>
+              {tx(locale, "編輯", "Edit")}
+            </Link>
+            <Link href="/me/footprint" className={action}>
+              {tx(locale, "足跡", "Footprint")}
+            </Link>
+            <Link href="/me/settings" aria-label={tx(locale, "設定", "Settings")} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-card text-sm leading-none">
+              <span aria-hidden>⚙️</span>
+            </Link>
+          </div>
+          {tokenBalance != null ? (
+            <p id="promo" className="flex items-center gap-1.5 text-sm leading-none">
+              <Icon name="ticket" className="promo-bounce h-[22px] w-[22px] shrink-0" />
+              <span className="font-semibold">{tokenBalance}</span>
+              <span className="text-[11px] font-normal text-muted">{tx(locale, `＝可推廣 ${tokenBalance} 日`, `${tokenBalance} promo days`)}</span>
+            </p>
+          ) : null}
         </div>
       ) : null}
       {children}

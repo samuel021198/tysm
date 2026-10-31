@@ -20,7 +20,9 @@ export function blockAway(next: string, userId: string): string {
   if (path === "/messages" || path.startsWith("/messages/")) return "/messages";
   if (
     userId &&
-    (path === `/shop/${userId}` ||
+    (path === `/u/${userId}` ||
+      path.startsWith(`/u/${userId}/`) ||
+      path === `/shop/${userId}` ||
       path.startsWith(`/shop/${userId}/`) ||
       path.startsWith("/post/") ||
       path.startsWith("/listing/"))

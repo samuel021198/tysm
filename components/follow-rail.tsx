@@ -14,7 +14,7 @@ export function FollowRail({ locale, people }: { locale: Locale; people: FollowR
         data-gesture=""
       >
         {people.map((person) => (
-          <Link key={person.id} href={`/shop/${person.id}`} className={`flex h-[58px] ${SLOT} shrink-0 flex-col items-center gap-0.5`}>
+          <Link key={person.id} href={`/u/${person.id}`} className={`flex h-[58px] ${SLOT} shrink-0 flex-col items-center gap-0.5`}>
             <span className="relative block h-11 w-11 shrink-0 overflow-hidden rounded-full bg-accent">
               {person.avatarUrl ? (
                 <img src={person.avatarUrl} alt="" width={44} height={44} decoding="async" className="absolute inset-0 h-11 w-11 object-cover" />

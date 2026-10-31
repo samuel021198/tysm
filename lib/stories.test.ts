@@ -90,7 +90,7 @@ assert(clampScale(4) === 2.6 && clampScale(0.2) === 0.6, "sticker scale stays in
 assert(containRect(90, 160, 90, 160).w === 90, "a story-shaped photo fills the stage");
 assert(containRect(100, 100, 200, 100).w === 100 && containRect(100, 100, 200, 100).h === 50, "a landscape photo is contained");
 const rail = readFileSync(new URL("../components/follow-rail.tsx", import.meta.url), "utf8");
-assert(rail.includes("overflow-x-auto") && rail.includes("flex-nowrap") && rail.includes('href={`/shop/${person.id}`}'), "the rail scrolls sideways and each avatar opens that profile");
+assert(rail.includes("overflow-x-auto") && rail.includes("flex-nowrap") && rail.includes('href={`/u/${person.id}`}'), "the rail scrolls sideways and each avatar opens that profile");
 assert(rail.includes("h-[58px]") && rail.includes("h-11 w-11") && rail.includes("width={44}") && rail.includes("(100%-2rem)/4.5"), "44px avatars, locked 58px row, 4.5 slots with a peek");
 assert(rail.includes("absolute inset-0") && rail.includes("shrink-0"), "avatar boxes are reserved before the image arrives");
 assert(!rail.includes("限時動態") && !rail.includes("/story/new") && !rail.includes("onSwipeLeft") && !rail.includes('role="dialog"') && !rail.includes("p-[3px]") && !rail.includes("story-bar"), "the rail is not a story ring or viewer");

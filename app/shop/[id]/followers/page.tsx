@@ -22,7 +22,7 @@ export default async function FollowersPage({ params }: { params: Promise<{ id: 
     select: { id: true, follower: { select: { id: true, nickname: true, avatarUrl: true } } },
   });
   const locale = prefs.locale;
-  const back = viewer?.id === seller.id ? "/me" : `/shop/${seller.id}`;
+  const back = viewer?.id === seller.id ? "/me" : `/u/${seller.id}`;
   return (
     <div className="mx-auto grid max-w-lg gap-3">
       <Link href={back} className="text-xs font-semibold text-link">{tx(locale, "返回個人頁", "Back to profile")}</Link>
@@ -31,7 +31,7 @@ export default async function FollowersPage({ params }: { params: Promise<{ id: 
         <ul className="surface divide-y divide-line overflow-hidden">
           {rows.map((row) => (
             <li key={row.id}>
-              <Link href={`/shop/${row.follower.id}`} className="flex h-14 items-center gap-3 px-3">
+              <Link href={`/u/${row.follower.id}`} className="flex h-14 items-center gap-3 px-3">
                 {row.follower.avatarUrl ? (
                   <img src={row.follower.avatarUrl} alt="" className="h-9 w-9 rounded-full object-cover" />
                 ) : (

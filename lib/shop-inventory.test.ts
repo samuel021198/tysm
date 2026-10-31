@@ -82,6 +82,13 @@ assert(profile.includes("SHOP_INVENTORY_STATUSES") && profile.includes("reserved
 assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }'), "visitors still load public 在售");
 
 const store = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");
+const mall = readFileSync(new URL("../app/shop/page.tsx", import.meta.url), "utf8");
+const rails = readFileSync(new URL("../components/mall-rails.tsx", import.meta.url), "utf8");
+assert(mall.includes("<MallRails") && mall.indexOf("<MallRails") < mall.indexOf("<nav"), "recent and watch rows sit above the mall chips");
+assert(
+  rails.includes("最近瀏覽") && rails.includes("追蹤") && rails.includes("查看全部") && rails.includes("最後 1 件") && rails.includes("quantityAvailable === 1") && rails.includes('name="bookmark"'),
+  "mall rails are cover rows with a watch mark and a last-one badge",
+);
 assert(
   store.includes("<NameLine") && store.includes("verificationTier={seller.verificationTier}") && store.includes("rating={rating}"),
   "the store header is shop name, pill, then score",

@@ -42,14 +42,17 @@ export async function toggleFavorite(formData: FormData) {
 
 export async function toggleFollow(formData: FormData) {
   const sellerId = String(formData.get("sellerId") || "");
-  const user = await viewer(`/shop/${sellerId}`);
-  if (sellerId === user.id) redirect(`/shop/${sellerId}?err=own`);
+  const shop = `/shop/${sellerId}`;
+  const requested = String(formData.get("next") || "");
+  const back = requested ? safeNext(requested).split("?")[0].split("#")[0] || shop : shop;
+  const user = await viewer(back);
+  if (sellerId === user.id) redirect(`${back}?err=own`);
   const existing = await prisma.follow.findUnique({
     where: { followerId_sellerId: { followerId: user.id, sellerId } },
   });
   if (existing) await prisma.follow.delete({ where: { id: existing.id } });
   else await prisma.follow.create({ data: { followerId: user.id, sellerId } });
-  redirect(`/shop/${sellerId}?ok=saved`);
+  redirect(`${back}?ok=saved`);
 }
 
 export async function blockUser(formData: FormData) {
@@ -136,11 +139,13 @@ export async function startHandover(formData: FormData) {
 /** Profile 「訊息」. Reuses the newest listing-free thread, either direction. A product thread stays pinned. */
 export async function openDirectThread(formData: FormData) {
   const otherId = String(formData.get("userId") || "");
-  const user = await viewer(otherId ? `/shop/${otherId}` : "/");
-  if (!otherId || otherId === user.id) redirect(`/shop/${user.id}?err=own`);
+  const requested = String(formData.get("next") || "");
+  const back = requested ? safeNext(requested).split("?")[0].split("#")[0] || "/" : otherId ? `/shop/${otherId}` : "/";
+  const user = await viewer(back);
+  if (!otherId || otherId === user.id) redirect(`${back}?err=own`);
   const other = await prisma.user.findUnique({ where: { id: otherId }, select: { id: true } });
   if (!other) redirect("/?err=forbidden");
-  if (await isBlocked(user.id, otherId)) redirect(`/shop/${otherId}?err=blocked`);
+  if (await isBlocked(user.id, otherId)) redirect(`${back}?err=blocked`);
   // ponytail: two taps at once can open two listing-free threads. Upgrade path: a partial unique on the pair where listingId is null.
   const existing = await prisma.messageThread.findFirst({
     where: {
