@@ -27,9 +27,12 @@ const shopTab = tab.indexOf('href: "/shop"');
 const search = tab.indexOf('href: "/find"');
 const news = tab.indexOf('href: "/news"');
 const profile = tab.indexOf('icon: "me"');
-assert(postTab >= 0 && postTab < shopTab && shopTab < search && search < news && news < profile, "tab order Post, Shop, Search, News, Profile");
+assert(postTab >= 0 && postTab < shopTab && shopTab < search && search < news && news < profile, "tab order Front, Shopping, Discover, News, Profile");
 assert(tab.includes("grid-cols-5") && !tab.includes("grid-cols-4"), "five bottom tabs");
-assert(tab.includes("貼文") && tab.includes("商店") && tab.includes("搜尋") && tab.includes("新聞") && !tab.includes("圖鑑") && !tab.includes('href: "/dex"'), "bottom tabs are post, shop, search, news, profile");
+assert(
+  tab.includes('label: "Front"') && tab.includes('label: "Shopping"') && tab.includes('label: "Discover"') && tab.includes('label: "News"') && tab.includes('label: "Profile"') && !tab.includes("貼文") && !tab.includes("商店") && !tab.includes("搜尋") && !tab.includes("圖鑑") && !tab.includes('href: "/dex"'),
+  "bottom tabs read Front, Shopping, Discover, News, Profile in English",
+);
 assert(tab.includes('icon: "note"') && tab.includes('icon: "bag"') && tab.includes('icon: "search"') && tab.includes('icon: "news"') && !tab.includes("排行") && !tab.includes('href: "/rank"') && !tab.includes("賣場") && !tab.includes('href: "/market"'), "search is the glass, shop is the bag, rank is not a bottom tab");
 assert(!tab.includes("accent: true") && !tab.includes("rounded-full bg-accent") && !tab.includes("bg-accent text-white"), "bottom icons are plain strokes, no green circle");
 assert(tab.includes("h-[22px]") && tab.includes("strokeWidth={on ? 2 : 1.6}"), "bottom icons stay 22px");
