@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { POST as postSeedWave1 } from "../app/api/internal/seed-wave1/route";
 import { catalogDisplayTitle, catalogTitleFromCard, rarityTitle } from "./card-title";
 import { catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog-batch";
 import { catalogImageSrc, catalogTileSrc, isR2PublicUrl, officialOpImageUrl } from "./catalog-image";
@@ -49,6 +50,13 @@ assert(soft.length === 50 && new Set(soft.map((row) => row.sellerPersona)).size 
 for (const row of soft) assert(row.imageUrl == null && names.get(row.proposedEnum)?.has(row.cardNameEn), `${row.id} name is in the curated list`);
 const waveSeed = readFileSync(new URL("./seed-wave1.ts", import.meta.url), "utf8");
 assert(!waveSeed.includes("wipeUserContent") && !waveSeed.includes("deleteMany"), "wave-1 seed only adds");
+assert(waveSeed.includes("wiped: false"), "wave-1 seed reports that it did not wipe");
+const waveRoute = readFileSync(new URL("../app/api/internal/seed-wave1/route.ts", import.meta.url), "utf8");
+assert(waveRoute.includes("seedWave1") && waveRoute.includes("authorizedBearer") && waveRoute.includes("BOOTSTRAP_SECRET"), "wave-1 route uses the bootstrap bearer");
+assert(waveRoute.includes("export const maxDuration = 300") && waveRoute.includes("counts"), "wave-1 route returns counts and allows the name insert");
+assert(!waveRoute.includes("seedDemo") && !waveRoute.includes("wipeUserContent") && !waveRoute.includes("deleteMany"), "wave-1 route does not wipe");
+const reseedRoute = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");
+assert(reseedRoute.includes("seedDemo") && reseedRoute.includes("export const maxDuration = 120") && !reseedRoute.includes("seedWave1"), "reseed stays the wipe path");
 const schema = readFileSync(new URL("../prisma/schema.prisma", import.meta.url), "utf8");
 assert(schema.includes("YUGIOH") && schema.includes("DRAGON_BALL") && !schema.includes("UNION_ARENA") && !schema.includes("VANGUARD") && !/PANINI_/.test(schema), "wave-2 enums stay out of the schema");
 assert(rarityTitle("SEC") === "SEC" && rarityTitle("Super Rare") === "Super Rare", "short rarity codes stay printed");
@@ -411,10 +419,33 @@ const chrome = files.find((file) => file.code === "TCB2526");
 assert(chrome && mapToppsSet(chrome).cards.length >= 200 && mapToppsSet(chrome).printRegion === "WEST", "2025-26 chrome basketball maps to western printings");
 assert(toppsQueue("TOPPS_BASKETBALL")[0]?.externalId.startsWith("en:"), "topps ingest cursors use the dex cursor shape");
 
-uploadCheck.then(
-  () => console.log("game catalog ok"),
-  (error) => {
-    console.error(error);
-    process.exit(1);
-  },
-);
+async function checkSeedWave1Auth() {
+  const previous = process.env.BOOTSTRAP_SECRET;
+  const call = (authorization?: string) =>
+    postSeedWave1(
+      new Request("http://localhost/api/internal/seed-wave1", {
+        method: "POST",
+        headers: authorization ? { authorization } : {},
+      }),
+    );
+  delete process.env.BOOTSTRAP_SECRET;
+  const missing = await call("Bearer test-secret");
+  assert(missing.status === 503 && (await missing.json()).error === "unconfigured", "no secret is 503");
+  process.env.BOOTSTRAP_SECRET = "test-secret";
+  const unauth = await call("Bearer wrong");
+  assert(unauth.status === 401 && (await unauth.json()).error === "unauthorized", "a bad bearer is 401");
+  const bare = await call();
+  assert(bare.status === 401, "a missing bearer is 401");
+  if (previous === undefined) delete process.env.BOOTSTRAP_SECRET;
+  else process.env.BOOTSTRAP_SECRET = previous;
+}
+
+uploadCheck
+  .then(() => checkSeedWave1Auth())
+  .then(
+    () => console.log("game catalog ok"),
+    (error) => {
+      console.error(error);
+      process.exit(1);
+    },
+  );
