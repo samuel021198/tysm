@@ -1,0 +1,4227 @@
+{
+  "brand": "Disney Lorcana",
+  "proposedEnum": "LORCANA",
+  "imageUrl": null,
+  "series": [
+    {
+      "name": "Disney Lorcana / Archazia's Island",
+      "cards": [
+        {
+          "nameEn": "Aladdin"
+        },
+        {
+          "nameEn": "Belle"
+        },
+        {
+          "nameEn": "Clarabelle"
+        },
+        {
+          "nameEn": "Elsa"
+        },
+        {
+          "nameEn": "Hades"
+        },
+        {
+          "nameEn": "Jafar"
+        },
+        {
+          "nameEn": "Moana"
+        },
+        {
+          "nameEn": "Mufasa"
+        },
+        {
+          "nameEn": "Mickey Mouse"
+        },
+        {
+          "nameEn": "Akela"
+        },
+        {
+          "nameEn": "Amber Coil"
+        },
+        {
+          "nameEn": "Anastasia"
+        },
+        {
+          "nameEn": "Anna"
+        },
+        {
+          "nameEn": "Archimedes"
+        },
+        {
+          "nameEn": "Aurora"
+        },
+        {
+          "nameEn": "Bagheera"
+        },
+        {
+          "nameEn": "Baloo"
+        },
+        {
+          "nameEn": "Basil"
+        },
+        {
+          "nameEn": "Baymax"
+        },
+        {
+          "nameEn": "Beast"
+        },
+        {
+          "nameEn": "Berlioz"
+        },
+        {
+          "nameEn": "Bolt"
+        },
+        {
+          "nameEn": "Bucky"
+        },
+        {
+          "nameEn": "Calhoun"
+        },
+        {
+          "nameEn": "Candlehead"
+        },
+        {
+          "nameEn": "Chernabog"
+        },
+        {
+          "nameEn": "Cinderella"
+        },
+        {
+          "nameEn": "Cogsworth"
+        },
+        {
+          "nameEn": "Cy-Bug"
+        },
+        {
+          "nameEn": "Daisy Duck"
+        },
+        {
+          "nameEn": "Dawson"
+        },
+        {
+          "nameEn": "Denahi"
+        },
+        {
+          "nameEn": "Diablo"
+        },
+        {
+          "nameEn": "Dr. Calico"
+        },
+        {
+          "nameEn": "Drizella"
+        },
+        {
+          "nameEn": "Duchess"
+        },
+        {
+          "nameEn": "Fa Zhou"
+        },
+        {
+          "nameEn": "Fidget"
+        },
+        {
+          "nameEn": "Freckles"
+        },
+        {
+          "nameEn": "Gantu"
+        },
+        {
+          "nameEn": "Gizmoduck"
+        },
+        {
+          "nameEn": "Goofy"
+        },
+        {
+          "nameEn": "Grewnge"
+        },
+        {
+          "nameEn": "Honeymaren"
+        },
+        {
+          "nameEn": "Iago"
+        },
+        {
+          "nameEn": "Ink Geyser"
+        },
+        {
+          "nameEn": "Jasmine"
+        },
+        {
+          "nameEn": "Kakamora"
+        },
+        {
+          "nameEn": "Kashekim"
+        },
+        {
+          "nameEn": "Kenai"
+        },
+        {
+          "nameEn": "Kida"
+        },
+        {
+          "nameEn": "King Candy"
+        },
+        {
+          "nameEn": "Koda"
+        },
+        {
+          "nameEn": "Kronk"
+        },
+        {
+          "nameEn": "Kuzco"
+        },
+        {
+          "nameEn": "Lady"
+        },
+        {
+          "nameEn": "Lady Kluck"
+        },
+        {
+          "nameEn": "Li Shang"
+        },
+        {
+          "nameEn": "Lucky"
+        },
+        {
+          "nameEn": "Mad Hatter"
+        },
+        {
+          "nameEn": "Madam Mim"
+        },
+        {
+          "nameEn": "Marie"
+        },
+        {
+          "nameEn": "Mattias"
+        },
+        {
+          "nameEn": "Maurice"
+        },
+        {
+          "nameEn": "Merlin"
+        },
+        {
+          "nameEn": "Mittens"
+        },
+        {
+          "nameEn": "Mr. Smee"
+        },
+        {
+          "nameEn": "Mulan"
+        },
+        {
+          "nameEn": "Mushu"
+        },
+        {
+          "nameEn": "Orville"
+        },
+        {
+          "nameEn": "Pacha"
+        },
+        {
+          "nameEn": "Pain"
+        },
+        {
+          "nameEn": "Panic"
+        },
+        {
+          "nameEn": "Pascal"
+        },
+        {
+          "nameEn": "Peg"
+        },
+        {
+          "nameEn": "Penny"
+        },
+        {
+          "nameEn": "Pepper"
+        },
+        {
+          "nameEn": "Perdita"
+        },
+        {
+          "nameEn": "Perla"
+        },
+        {
+          "nameEn": "Pete"
+        },
+        {
+          "nameEn": "Pongo"
+        },
+        {
+          "nameEn": "Rajah"
+        },
+        {
+          "nameEn": "Ratigan"
+        },
+        {
+          "nameEn": "Raya"
+        },
+        {
+          "nameEn": "Razoul"
+        },
+        {
+          "nameEn": "Rhino"
+        },
+        {
+          "nameEn": "Robin Hood"
+        },
+        {
+          "nameEn": "Ruby Coil"
+        },
+        {
+          "nameEn": "Shere Khan"
+        },
+        {
+          "nameEn": "Sir Kay"
+        },
+        {
+          "nameEn": "Snow White"
+        },
+        {
+          "nameEn": "Steel Coil"
+        },
+        {
+          "nameEn": "Suzy"
+        },
+        {
+          "nameEn": "Sven"
+        },
+        {
+          "nameEn": "Tamatoa"
+        },
+        {
+          "nameEn": "Tanana"
+        },
+        {
+          "nameEn": "Te Kā"
+        },
+        {
+          "nameEn": "The Prince"
+        },
+        {
+          "nameEn": "The Queen"
+        },
+        {
+          "nameEn": "Tick-Tock"
+        },
+        {
+          "nameEn": "Toby"
+        },
+        {
+          "nameEn": "Toulouse"
+        },
+        {
+          "nameEn": "Tramp"
+        },
+        {
+          "nameEn": "Trusty"
+        },
+        {
+          "nameEn": "Tuk Tuk"
+        },
+        {
+          "nameEn": "Yokai"
+        },
+        {
+          "nameEn": "Yzma"
+        },
+        {
+          "nameEn": "All Is Found"
+        },
+        {
+          "nameEn": "Amethyst Coil"
+        },
+        {
+          "nameEn": "Beagle Boys"
+        },
+        {
+          "nameEn": "Card Soldiers"
+        },
+        {
+          "nameEn": "Cheshire Cat"
+        },
+        {
+          "nameEn": "Devil's Eye Diamond"
+        },
+        {
+          "nameEn": "Dolores Madrigal"
+        },
+        {
+          "nameEn": "Donald Duck"
+        },
+        {
+          "nameEn": "Double Trouble"
+        },
+        {
+          "nameEn": "Edgar Balthazar"
+        },
+        {
+          "nameEn": "Emerald Coil"
+        },
+        {
+          "nameEn": "Fix-It Felix, Jr."
+        },
+        {
+          "nameEn": "Gaetan Moliere"
+        },
+        {
+          "nameEn": "Giant Cobra"
+        },
+        {
+          "nameEn": "Grandmother Fa"
+        },
+        {
+          "nameEn": "He's A Tramp"
+        },
+        {
+          "nameEn": "Helga Sinclair"
+        },
+        {
+          "nameEn": "Hiro Hamada"
+        },
+        {
+          "nameEn": "Honey Lemon"
+        },
+        {
+          "nameEn": "Isabela Madrigal"
+        },
+        {
+          "nameEn": "Jebidiah Farnsworth"
+        },
+        {
+          "nameEn": "John Silver"
+        },
+        {
+          "nameEn": "Kanine Krunchies"
+        },
+        {
+          "nameEn": "King Stefan"
+        },
+        {
+          "nameEn": "King of Hearts"
+        },
+        {
+          "nameEn": "Lady Tremaine"
+        },
+        {
+          "nameEn": "Lyle Tiberius Rourke"
+        },
+        {
+          "nameEn": "Madame Medusa"
+        },
+        {
+          "nameEn": "Magical Maneuvers"
+        },
+        {
+          "nameEn": "Maid Marian"
+        },
+        {
+          "nameEn": "Mariano Guzman"
+        },
+        {
+          "nameEn": "Maurice's Machine"
+        },
+        {
+          "nameEn": "Milo Thatch"
+        },
+        {
+          "nameEn": "Minnie Mouse"
+        },
+        {
+          "nameEn": "Mirabel Madrigal"
+        },
+        {
+          "nameEn": "Miss Bianca"
+        },
+        {
+          "nameEn": "Monsieur D'Arque"
+        },
+        {
+          "nameEn": "Mother Gothel"
+        },
+        {
+          "nameEn": "Out of Order"
+        },
+        {
+          "nameEn": "Penny the Orphan"
+        },
+        {
+          "nameEn": "Pepa Madrigal"
+        },
+        {
+          "nameEn": "Queen of Hearts"
+        },
+        {
+          "nameEn": "Restoring Atlantis"
+        },
+        {
+          "nameEn": "Restoring the Crown"
+        },
+        {
+          "nameEn": "Restoring the Heart"
+        },
+        {
+          "nameEn": "Roger Radcliffe"
+        },
+        {
+          "nameEn": "Sapphire Coil"
+        },
+        {
+          "nameEn": "Show Me More!"
+        },
+        {
+          "nameEn": "So Much to Give"
+        },
+        {
+          "nameEn": "Spaghetti Dinner"
+        },
+        {
+          "nameEn": "Stabbington Brother"
+        },
+        {
+          "nameEn": "The Family Madrigal"
+        },
+        {
+          "nameEn": "The Glass Slipper"
+        },
+        {
+          "nameEn": "The Matchmaker"
+        },
+        {
+          "nameEn": "The Phantom Blot"
+        },
+        {
+          "nameEn": "The Troubadour"
+        },
+        {
+          "nameEn": "This Is My Family"
+        },
+        {
+          "nameEn": "Thomas O'Malley"
+        },
+        {
+          "nameEn": "Thunderbolt"
+        },
+        {
+          "nameEn": "Training Staff"
+        },
+        {
+          "nameEn": "Treasure Guardian"
+        },
+        {
+          "nameEn": "Unconventional Tool"
+        },
+        {
+          "nameEn": "Wake Up, Alice!"
+        },
+        {
+          "nameEn": "Water Has Memory"
+        },
+        {
+          "nameEn": "We've Got Company!"
+        },
+        {
+          "nameEn": "Wendy Darling"
+        },
+        {
+          "nameEn": "Wreck-It Ralph"
+        },
+        {
+          "nameEn": "Baymax's Charging Station"
+        },
+        {
+          "nameEn": "The Return of Hercules"
+        },
+        {
+          "nameEn": "Tweedledee & Tweedledum"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Attack of the Vine!",
+      "cards": [
+        {
+          "nameEn": "Aladdin & Genie"
+        },
+        {
+          "nameEn": "Peter Pan & Tinker Bell"
+        },
+        {
+          "nameEn": "Genie"
+        },
+        {
+          "nameEn": "Maleficent"
+        },
+        {
+          "nameEn": "Peter Pan"
+        },
+        {
+          "nameEn": "Rapunzel"
+        },
+        {
+          "nameEn": "Scar"
+        },
+        {
+          "nameEn": "Stitch"
+        },
+        {
+          "nameEn": "Ursula"
+        },
+        {
+          "nameEn": "Belle & Beast"
+        },
+        {
+          "nameEn": "Discarded Armor"
+        },
+        {
+          "nameEn": "Lilo & Stitch"
+        },
+        {
+          "nameEn": "Maleficent & Diablo"
+        },
+        {
+          "nameEn": "Rapunzel's Tower"
+        },
+        {
+          "nameEn": "Tinker Bell"
+        },
+        {
+          "nameEn": "Mickey Mouse & Minnie Mouse"
+        },
+        {
+          "nameEn": "Rapunzel & Flynn Rider"
+        },
+        {
+          "nameEn": "Abby Park"
+        },
+        {
+          "nameEn": "Abu"
+        },
+        {
+          "nameEn": "Alpha"
+        },
+        {
+          "nameEn": "Boo"
+        },
+        {
+          "nameEn": "Broken Pod"
+        },
+        {
+          "nameEn": "Celia Mae"
+        },
+        {
+          "nameEn": "Cetus"
+        },
+        {
+          "nameEn": "Copper"
+        },
+        {
+          "nameEn": "Dash Parr"
+        },
+        {
+          "nameEn": "Dug"
+        },
+        {
+          "nameEn": "Eeyore"
+        },
+        {
+          "nameEn": "Gaston"
+        },
+        {
+          "nameEn": "Gopher"
+        },
+        {
+          "nameEn": "Grandma Wu"
+        },
+        {
+          "nameEn": "Hera"
+        },
+        {
+          "nameEn": "Kanga"
+        },
+        {
+          "nameEn": "Kevin"
+        },
+        {
+          "nameEn": "King Louie"
+        },
+        {
+          "nameEn": "Kocoum"
+        },
+        {
+          "nameEn": "Launchpad"
+        },
+        {
+          "nameEn": "Lilo"
+        },
+        {
+          "nameEn": "Lumpy"
+        },
+        {
+          "nameEn": "Mata"
+        },
+        {
+          "nameEn": "Maximus"
+        },
+        {
+          "nameEn": "Meeko"
+        },
+        {
+          "nameEn": "Megavolt"
+        },
+        {
+          "nameEn": "Meilin Lee"
+        },
+        {
+          "nameEn": "Merida"
+        },
+        {
+          "nameEn": "Ming Lee"
+        },
+        {
+          "nameEn": "Morph"
+        },
+        {
+          "nameEn": "Omnidroid"
+        },
+        {
+          "nameEn": "Owl"
+        },
+        {
+          "nameEn": "Petrify"
+        },
+        {
+          "nameEn": "Piglet"
+        },
+        {
+          "nameEn": "Pluto"
+        },
+        {
+          "nameEn": "Pocahontas"
+        },
+        {
+          "nameEn": "Posey"
+        },
+        {
+          "nameEn": "Potato"
+        },
+        {
+          "nameEn": "RAHR!"
+        },
+        {
+          "nameEn": "Rabbit"
+        },
+        {
+          "nameEn": "Red Alert"
+        },
+        {
+          "nameEn": "Roo"
+        },
+        {
+          "nameEn": "Roz"
+        },
+        {
+          "nameEn": "Russell"
+        },
+        {
+          "nameEn": "Splodyhead"
+        },
+        {
+          "nameEn": "Sprout"
+        },
+        {
+          "nameEn": "Startle"
+        },
+        {
+          "nameEn": "Sulley"
+        },
+        {
+          "nameEn": "Sun Yee"
+        },
+        {
+          "nameEn": "The Bear"
+        },
+        {
+          "nameEn": "The Vine"
+        },
+        {
+          "nameEn": "Tigger"
+        },
+        {
+          "nameEn": "Tod"
+        },
+        {
+          "nameEn": "Vine Pod"
+        },
+        {
+          "nameEn": "Vixey"
+        },
+        {
+          "nameEn": "Windstorm"
+        },
+        {
+          "nameEn": "Winifred"
+        },
+        {
+          "nameEn": "Woody"
+        },
+        {
+          "nameEn": "4*Town"
+        },
+        {
+          "nameEn": "Absorbing Bloom"
+        },
+        {
+          "nameEn": "Antonio Madrigal"
+        },
+        {
+          "nameEn": "Attack of the Vine!"
+        },
+        {
+          "nameEn": "Beast's Castle"
+        },
+        {
+          "nameEn": "Besties, Assemble!"
+        },
+        {
+          "nameEn": "Big Book of Hunny"
+        },
+        {
+          "nameEn": "Bunch of Balloons"
+        },
+        {
+          "nameEn": "Buzz Lightyear"
+        },
+        {
+          "nameEn": "Captain Hook"
+        },
+        {
+          "nameEn": "Carl Fredricksen"
+        },
+        {
+          "nameEn": "Carl's House"
+        },
+        {
+          "nameEn": "Charles Muntz"
+        },
+        {
+          "nameEn": "Christopher Robin"
+        },
+        {
+          "nameEn": "Closet Door Portal"
+        },
+        {
+          "nameEn": "Colonel Hathi"
+        },
+        {
+          "nameEn": "Cower Before Me!"
+        },
+        {
+          "nameEn": "Darkwing Duck"
+        },
+        {
+          "nameEn": "Dr. Bushroot"
+        },
+        {
+          "nameEn": "Dr. Hamsterviel"
+        },
+        {
+          "nameEn": "Ellie Fredricksen"
+        },
+        {
+          "nameEn": "Fflewddur Fflam"
+        },
+        {
+          "nameEn": "Flynn Rider"
+        },
+        {
+          "nameEn": "Focused Search"
+        },
+        {
+          "nameEn": "Hana's Inkcaster"
+        },
+        {
+          "nameEn": "Hundred Acre Wood"
+        },
+        {
+          "nameEn": "If I Didn't Have You"
+        },
+        {
+          "nameEn": "It's Gonna Be Great!"
+        },
+        {
+          "nameEn": "Laugh Canister"
+        },
+        {
+          "nameEn": "Magical Hunny Staff"
+        },
+        {
+          "nameEn": "Mike Wazowski"
+        },
+        {
+          "nameEn": "Miriam Mendelsohn"
+        },
+        {
+          "nameEn": "Mrs. Hasagawa"
+        },
+        {
+          "nameEn": "Mrs. Incredible"
+        },
+        {
+          "nameEn": "My Adventure Book"
+        },
+        {
+          "nameEn": "Narrow Escape"
+        },
+        {
+          "nameEn": "Nobody Like U"
+        },
+        {
+          "nameEn": "One and Only"
+        },
+        {
+          "nameEn": "Paradise Falls"
+        },
+        {
+          "nameEn": "Piercing Attack"
+        },
+        {
+          "nameEn": "Pocahontas & Meeko"
+        },
+        {
+          "nameEn": "Power Surge"
+        },
+        {
+          "nameEn": "Powhatan's Staff"
+        },
+        {
+          "nameEn": "Priya Mangal"
+        },
+        {
+          "nameEn": "Prophetic Vision"
+        },
+        {
+          "nameEn": "Protective Aura"
+        },
+        {
+          "nameEn": "Put That Thing Back"
+        },
+        {
+          "nameEn": "Quackerjack"
+        },
+        {
+          "nameEn": "Randall Boggs"
+        },
+        {
+          "nameEn": "Red Moon Ritual"
+        },
+        {
+          "nameEn": "Ring of Stones"
+        },
+        {
+          "nameEn": "Scout Ahead"
+        },
+        {
+          "nameEn": "Scream Canister"
+        },
+        {
+          "nameEn": "Source of the Vine"
+        },
+        {
+          "nameEn": "Sulley & Boo"
+        },
+        {
+          "nameEn": "The Horned King"
+        },
+        {
+          "nameEn": "The Irate Chef"
+        },
+        {
+          "nameEn": "The Madrigal Family"
+        },
+        {
+          "nameEn": "The Weedwhacker"
+        },
+        {
+          "nameEn": "To Wither a Flower"
+        },
+        {
+          "nameEn": "Tod & Copper"
+        },
+        {
+          "nameEn": "Translation Collar"
+        },
+        {
+          "nameEn": "Tyler Nguyen-Baker"
+        },
+        {
+          "nameEn": "Vine Entrance"
+        },
+        {
+          "nameEn": "Violet Parr"
+        },
+        {
+          "nameEn": "Willie the Giant"
+        },
+        {
+          "nameEn": "Winnie the Pooh"
+        },
+        {
+          "nameEn": "You Broke My Smolder"
+        },
+        {
+          "nameEn": "Carl Fredricksen & Russell"
+        },
+        {
+          "nameEn": "Darkwing Duck & Launchpad"
+        },
+        {
+          "nameEn": "Dash Parr & Violet Parr"
+        },
+        {
+          "nameEn": "Henry J. Waternoose III"
+        },
+        {
+          "nameEn": "I'm Never Not by Your Side"
+        },
+        {
+          "nameEn": "Look What You've Done"
+        },
+        {
+          "nameEn": "Sheriff of Nottingham"
+        },
+        {
+          "nameEn": "We'll Save Our Village"
+        },
+        {
+          "nameEn": "We've Got a Lot to Do!"
+        },
+        {
+          "nameEn": "Winnie the Pooh & Piglet"
+        },
+        {
+          "nameEn": "With a Few Good Friends"
+        },
+        {
+          "nameEn": "Woody & Buzz Lightyear"
+        },
+        {
+          "nameEn": "You've Got Some Punch"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Azurite Sea",
+      "cards": [
+        {
+          "nameEn": "Maui"
+        },
+        {
+          "nameEn": "Simba"
+        },
+        {
+          "nameEn": "Maleficent's Staff"
+        },
+        {
+          "nameEn": "Alice"
+        },
+        {
+          "nameEn": "Ambush!"
+        },
+        {
+          "nameEn": "Aunt Cass"
+        },
+        {
+          "nameEn": "B.E.N."
+        },
+        {
+          "nameEn": "Bellwether"
+        },
+        {
+          "nameEn": "Chief Bogo"
+        },
+        {
+          "nameEn": "Chip"
+        },
+        {
+          "nameEn": "Dale"
+        },
+        {
+          "nameEn": "David"
+        },
+        {
+          "nameEn": "Fairy Ship"
+        },
+        {
+          "nameEn": "Flotilla"
+        },
+        {
+          "nameEn": "Fred"
+        },
+        {
+          "nameEn": "Gazelle"
+        },
+        {
+          "nameEn": "Gold Coin"
+        },
+        {
+          "nameEn": "Good Job!"
+        },
+        {
+          "nameEn": "Heathcliff"
+        },
+        {
+          "nameEn": "Hercules"
+        },
+        {
+          "nameEn": "Hot Potato"
+        },
+        {
+          "nameEn": "Judy Hopps"
+        },
+        {
+          "nameEn": "Juju"
+        },
+        {
+          "nameEn": "Jumbo Pop"
+        },
+        {
+          "nameEn": "Kohut"
+        },
+        {
+          "nameEn": "Longboat"
+        },
+        {
+          "nameEn": "Mama Odie"
+        },
+        {
+          "nameEn": "March Hare"
+        },
+        {
+          "nameEn": "Markowski"
+        },
+        {
+          "nameEn": "MegaBot"
+        },
+        {
+          "nameEn": "Microbots"
+        },
+        {
+          "nameEn": "Mr. Arrow"
+        },
+        {
+          "nameEn": "Mr. Big"
+        },
+        {
+          "nameEn": "Mr. Litwak"
+        },
+        {
+          "nameEn": "Mullins"
+        },
+        {
+          "nameEn": "Nani"
+        },
+        {
+          "nameEn": "Nick Wilde"
+        },
+        {
+          "nameEn": "Oswald"
+        },
+        {
+          "nameEn": "Owl Island"
+        },
+        {
+          "nameEn": "Pixie Dust"
+        },
+        {
+          "nameEn": "Pleakley"
+        },
+        {
+          "nameEn": "Rafiki"
+        },
+        {
+          "nameEn": "Scrump"
+        },
+        {
+          "nameEn": "Sisu"
+        },
+        {
+          "nameEn": "Skull Rock"
+        },
+        {
+          "nameEn": "Sour Bill"
+        },
+        {
+          "nameEn": "Sunglasses"
+        },
+        {
+          "nameEn": "The Walrus"
+        },
+        {
+          "nameEn": "Thievery"
+        },
+        {
+          "nameEn": "Tiana"
+        },
+        {
+          "nameEn": "Tootles"
+        },
+        {
+          "nameEn": "Twin Fire"
+        },
+        {
+          "nameEn": "Wasabi"
+        },
+        {
+          "nameEn": "Zipper"
+        },
+        {
+          "nameEn": "Alistair Krei"
+        },
+        {
+          "nameEn": "Bend to My Will"
+        },
+        {
+          "nameEn": "Billy Bones"
+        },
+        {
+          "nameEn": "Captain Amelia"
+        },
+        {
+          "nameEn": "Card Soldier's Spear"
+        },
+        {
+          "nameEn": "Chip 'n' Dale"
+        },
+        {
+          "nameEn": "Cobra Bubbles"
+        },
+        {
+          "nameEn": "Dr. Delbert Doppler"
+        },
+        {
+          "nameEn": "Energy Blast"
+        },
+        {
+          "nameEn": "Gadget Hackwrench"
+        },
+        {
+          "nameEn": "Go Go Tomago"
+        },
+        {
+          "nameEn": "Grand Councilwoman"
+        },
+        {
+          "nameEn": "Helping Hand"
+        },
+        {
+          "nameEn": "Hiram Flaversham"
+        },
+        {
+          "nameEn": "Hundred Acre Island"
+        },
+        {
+          "nameEn": "I Won't Give In"
+        },
+        {
+          "nameEn": "I'm Still Here"
+        },
+        {
+          "nameEn": "Jim Hawkins"
+        },
+        {
+          "nameEn": "John Darling"
+        },
+        {
+          "nameEn": "King Hubert"
+        },
+        {
+          "nameEn": "King's Sensor Core"
+        },
+        {
+          "nameEn": "Lead the Way"
+        },
+        {
+          "nameEn": "Lose the Way"
+        },
+        {
+          "nameEn": "Mad Hatter's Teapot"
+        },
+        {
+          "nameEn": "Magic Carpet"
+        },
+        {
+          "nameEn": "Making Magic"
+        },
+        {
+          "nameEn": "Mertle Edmonds"
+        },
+        {
+          "nameEn": "Michael Darling"
+        },
+        {
+          "nameEn": "Monterey Jack"
+        },
+        {
+          "nameEn": "Mosquito Bite"
+        },
+        {
+          "nameEn": "Mystical Tree"
+        },
+        {
+          "nameEn": "Naveen's Ukulele"
+        },
+        {
+          "nameEn": "Olivia Flaversham"
+        },
+        {
+          "nameEn": "Perilous Maze"
+        },
+        {
+          "nameEn": "Pooh Pirate Ship"
+        },
+        {
+          "nameEn": "Prepare Your Bot"
+        },
+        {
+          "nameEn": "Prepare to Board!"
+        },
+        {
+          "nameEn": "Prince Naveen"
+        },
+        {
+          "nameEn": "Prince Phillip"
+        },
+        {
+          "nameEn": "Rescue Rangers Away!"
+        },
+        {
+          "nameEn": "Safe and Sound"
+        },
+        {
+          "nameEn": "Sail the Azurite Sea"
+        },
+        {
+          "nameEn": "Sugar Rush Speedway"
+        },
+        {
+          "nameEn": "Tadashi Hamada"
+        },
+        {
+          "nameEn": "The Carpenter"
+        },
+        {
+          "nameEn": "The White Rose"
+        },
+        {
+          "nameEn": "Training Dummy"
+        },
+        {
+          "nameEn": "Transport Pod"
+        },
+        {
+          "nameEn": "Treasure Mountain"
+        },
+        {
+          "nameEn": "You Came Back"
+        },
+        {
+          "nameEn": "A Very Merry Unbirthday"
+        },
+        {
+          "nameEn": "Adorabeezle Winterpop"
+        },
+        {
+          "nameEn": "Baymax's Healthcare Chip"
+        },
+        {
+          "nameEn": "Galactic Communicator"
+        },
+        {
+          "nameEn": "Galactic Council Chamber"
+        },
+        {
+          "nameEn": "Heffalumps and Woozles"
+        },
+        {
+          "nameEn": "Institute of Technology"
+        },
+        {
+          "nameEn": "Rescue Rangers Submarine"
+        },
+        {
+          "nameEn": "Seeking the Half Crown"
+        },
+        {
+          "nameEn": "Unfortunate Situation"
+        },
+        {
+          "nameEn": "Vanellope Von Schweetz"
+        },
+        {
+          "nameEn": "We Could Be Immortals"
+        },
+        {
+          "nameEn": "The Islands I Pulled from the Sea"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Reign of Jafar",
+      "cards": [
+        {
+          "nameEn": "Scarab"
+        },
+        {
+          "nameEn": "Belle's Favorite Book"
+        },
+        {
+          "nameEn": "Arianna"
+        },
+        {
+          "nameEn": "Atitaya"
+        },
+        {
+          "nameEn": "Bambi"
+        },
+        {
+          "nameEn": "Blue Fairy"
+        },
+        {
+          "nameEn": "Bobby"
+        },
+        {
+          "nameEn": "Brutus"
+        },
+        {
+          "nameEn": "Chaca"
+        },
+        {
+          "nameEn": "Chem Purse"
+        },
+        {
+          "nameEn": "Cri-Kee"
+        },
+        {
+          "nameEn": "Dormouse"
+        },
+        {
+          "nameEn": "Druun"
+        },
+        {
+          "nameEn": "Dumptruck"
+        },
+        {
+          "nameEn": "Faline"
+        },
+        {
+          "nameEn": "Figaro"
+        },
+        {
+          "nameEn": "Flower"
+        },
+        {
+          "nameEn": "Friend Owl"
+        },
+        {
+          "nameEn": "Gene"
+        },
+        {
+          "nameEn": "General Li"
+        },
+        {
+          "nameEn": "Geppetto"
+        },
+        {
+          "nameEn": "Get Out!"
+        },
+        {
+          "nameEn": "Ice Spikes"
+        },
+        {
+          "nameEn": "Jim Dear"
+        },
+        {
+          "nameEn": "Joey"
+        },
+        {
+          "nameEn": "Kaa"
+        },
+        {
+          "nameEn": "Khan"
+        },
+        {
+          "nameEn": "Louis"
+        },
+        {
+          "nameEn": "Mad Dog"
+        },
+        {
+          "nameEn": "Monstro"
+        },
+        {
+          "nameEn": "Mrs. Potts"
+        },
+        {
+          "nameEn": "Namaari"
+        },
+        {
+          "nameEn": "Nero"
+        },
+        {
+          "nameEn": "Quick Shot"
+        },
+        {
+          "nameEn": "Roquefort"
+        },
+        {
+          "nameEn": "Ryder"
+        },
+        {
+          "nameEn": "The Dodo"
+        },
+        {
+          "nameEn": "The Sultan"
+        },
+        {
+          "nameEn": "Thumper"
+        },
+        {
+          "nameEn": "Tipo"
+        },
+        {
+          "nameEn": "Undermine"
+        },
+        {
+          "nameEn": "Vinnie"
+        },
+        {
+          "nameEn": "Yelana"
+        },
+        {
+          "nameEn": "Adelaide Bonfamille"
+        },
+        {
+          "nameEn": "Alma Madrigal"
+        },
+        {
+          "nameEn": "Anita Radcliffe"
+        },
+        {
+          "nameEn": "Antonio's Jaguar"
+        },
+        {
+          "nameEn": "Atlantean Crystal"
+        },
+        {
+          "nameEn": "Beyond the Horizon"
+        },
+        {
+          "nameEn": "Bill the Lizard"
+        },
+        {
+          "nameEn": "Candy Drift"
+        },
+        {
+          "nameEn": "Charlotte La Bouff"
+        },
+        {
+          "nameEn": "Darling Dear"
+        },
+        {
+          "nameEn": "Desperate Plan"
+        },
+        {
+          "nameEn": "Forest Duel"
+        },
+        {
+          "nameEn": "Gloyd Orangeboar"
+        },
+        {
+          "nameEn": "Hamster Ball"
+        },
+        {
+          "nameEn": "Heads Held High"
+        },
+        {
+          "nameEn": "Honest John"
+        },
+        {
+          "nameEn": "Into the Unknown"
+        },
+        {
+          "nameEn": "It Means No Worries"
+        },
+        {
+          "nameEn": "Jeweled Collar"
+        },
+        {
+          "nameEn": "Jiminy Cricket"
+        },
+        {
+          "nameEn": "Jumba Jookiba"
+        },
+        {
+          "nameEn": "Light the Fuse"
+        },
+        {
+          "nameEn": "Little Sister"
+        },
+        {
+          "nameEn": "Ludwig Von Drake"
+        },
+        {
+          "nameEn": "Nathaniel Flint"
+        },
+        {
+          "nameEn": "Nothing We Won't Do"
+        },
+        {
+          "nameEn": "Only So Much Room"
+        },
+        {
+          "nameEn": "Palace Guard"
+        },
+        {
+          "nameEn": "Poe De Spell"
+        },
+        {
+          "nameEn": "Pouncing Practice"
+        },
+        {
+          "nameEn": "Prince Achmed"
+        },
+        {
+          "nameEn": "Royal Guard"
+        },
+        {
+          "nameEn": "She's Your Person"
+        },
+        {
+          "nameEn": "Television Set"
+        },
+        {
+          "nameEn": "The Coachman"
+        },
+        {
+          "nameEn": "The Colonel"
+        },
+        {
+          "nameEn": "The Mouse Queen"
+        },
+        {
+          "nameEn": "The Sword of Shan-Yu"
+        },
+        {
+          "nameEn": "The Wardrobe"
+        },
+        {
+          "nameEn": "They Never Come Back"
+        },
+        {
+          "nameEn": "Toby Turtle"
+        },
+        {
+          "nameEn": "Twitterpated"
+        },
+        {
+          "nameEn": "Vincenzo Santorini"
+        },
+        {
+          "nameEn": "Walk the Plank!"
+        },
+        {
+          "nameEn": "Wilhelmina Packard"
+        },
+        {
+          "nameEn": "Wrong Lever!"
+        },
+        {
+          "nameEn": "Everybody's Got a Weakness"
+        },
+        {
+          "nameEn": "Fantastical and Magical"
+        },
+        {
+          "nameEn": "He Who Steals and Runs Away"
+        },
+        {
+          "nameEn": "Most Everyone's Mad Here"
+        },
+        {
+          "nameEn": "Stopped Chaos in Its Tracks"
+        },
+        {
+          "nameEn": "The Nephews' Piggy Bank"
+        },
+        {
+          "nameEn": "Trials and Tribulations"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Hyperia City",
+      "cards": [
+        {
+          "nameEn": "Belle's City Guide"
+        },
+        {
+          "nameEn": "If She Doesn't Scare You"
+        },
+        {
+          "nameEn": "Abuelita"
+        },
+        {
+          "nameEn": "Air Drop"
+        },
+        {
+          "nameEn": "Arthur"
+        },
+        {
+          "nameEn": "Brooklyn"
+        },
+        {
+          "nameEn": "Clawhauser"
+        },
+        {
+          "nameEn": "Dante"
+        },
+        {
+          "nameEn": "Demona"
+        },
+        {
+          "nameEn": "Doug"
+        },
+        {
+          "nameEn": "Elisa Maza"
+        },
+        {
+          "nameEn": "Flash"
+        },
+        {
+          "nameEn": "Fru Fru"
+        },
+        {
+          "nameEn": "Goliath"
+        },
+        {
+          "nameEn": "Horace"
+        },
+        {
+          "nameEn": "Jasper"
+        },
+        {
+          "nameEn": "Jock"
+        },
+        {
+          "nameEn": "Jukebox"
+        },
+        {
+          "nameEn": "Koslov"
+        },
+        {
+          "nameEn": "Lafayette"
+        },
+        {
+          "nameEn": "Lexington"
+        },
+        {
+          "nameEn": "Lionheart"
+        },
+        {
+          "nameEn": "Mamá Coco"
+        },
+        {
+          "nameEn": "Napoleon"
+        },
+        {
+          "nameEn": "Pepita"
+        },
+        {
+          "nameEn": "Priscilla"
+        },
+        {
+          "nameEn": "Russel"
+        },
+        {
+          "nameEn": "Scram!"
+        },
+        {
+          "nameEn": "Scuttle"
+        },
+        {
+          "nameEn": "Sir Ector"
+        },
+        {
+          "nameEn": "Stacey"
+        },
+        {
+          "nameEn": "Yama"
+        },
+        {
+          "nameEn": "Yax"
+        },
+        {
+          "nameEn": "A Dark Age No More"
+        },
+        {
+          "nameEn": "Abigail & Amelia"
+        },
+        {
+          "nameEn": "Abigail Callaghan"
+        },
+        {
+          "nameEn": "Above the Crowd"
+        },
+        {
+          "nameEn": "Ancestral Guitar"
+        },
+        {
+          "nameEn": "Another Tale to Spin"
+        },
+        {
+          "nameEn": "Blinding Chem Ball"
+        },
+        {
+          "nameEn": "Central Station"
+        },
+        {
+          "nameEn": "Chemical Reaction"
+        },
+        {
+          "nameEn": "Creative Inspiration"
+        },
+        {
+          "nameEn": "David Xanatos"
+        },
+        {
+          "nameEn": "Don Karnage"
+        },
+        {
+          "nameEn": "Ernesto de la Cruz"
+        },
+        {
+          "nameEn": "Flippant Taunt"
+        },
+        {
+          "nameEn": "Fox Xanatos"
+        },
+        {
+          "nameEn": "Higitus Figitus"
+        },
+        {
+          "nameEn": "Hyperia City Express"
+        },
+        {
+          "nameEn": "Ink Explosion"
+        },
+        {
+          "nameEn": "Inkcaster Skates"
+        },
+        {
+          "nameEn": "Intense Research"
+        },
+        {
+          "nameEn": "Intimidation Tactics"
+        },
+        {
+          "nameEn": "Jousting Match"
+        },
+        {
+          "nameEn": "Khan Industries"
+        },
+        {
+          "nameEn": "Khan Stadium"
+        },
+        {
+          "nameEn": "Kit Cloudkicker"
+        },
+        {
+          "nameEn": "Land of the Dead"
+        },
+        {
+          "nameEn": "Lester the Possum"
+        },
+        {
+          "nameEn": "Mama Imelda"
+        },
+        {
+          "nameEn": "Merlin's Wand"
+        },
+        {
+          "nameEn": "Miguel Rivera"
+        },
+        {
+          "nameEn": "Mim's Malice"
+        },
+        {
+          "nameEn": "Molly Cunningham"
+        },
+        {
+          "nameEn": "Mr. Manchas"
+        },
+        {
+          "nameEn": "Never Too Far Apart"
+        },
+        {
+          "nameEn": "Owen Burnett"
+        },
+        {
+          "nameEn": "Pirate Plane"
+        },
+        {
+          "nameEn": "Port Authority"
+        },
+        {
+          "nameEn": "Prototype Chem Ball"
+        },
+        {
+          "nameEn": "Pushing Boundaries"
+        },
+        {
+          "nameEn": "Rebecca Cunningham"
+        },
+        {
+          "nameEn": "Remember Me"
+        },
+        {
+          "nameEn": "Rivera Family Photo"
+        },
+        {
+          "nameEn": "Shed Your Weary Load"
+        },
+        {
+          "nameEn": "Sir Pellinore"
+        },
+        {
+          "nameEn": "Speaker Stack"
+        },
+        {
+          "nameEn": "Spyglass Hat"
+        },
+        {
+          "nameEn": "The Beanstalk"
+        },
+        {
+          "nameEn": "The Torn Corner"
+        },
+        {
+          "nameEn": "This Is Business"
+        },
+        {
+          "nameEn": "Tia Victoria"
+        },
+        {
+          "nameEn": "Un Poco Loco"
+        },
+        {
+          "nameEn": "Upgraded Chem Purse"
+        },
+        {
+          "nameEn": "Woolter & Jesse"
+        },
+        {
+          "nameEn": "Everyone Knows Juanita"
+        },
+        {
+          "nameEn": "Everything Else Is Obsolete"
+        },
+        {
+          "nameEn": "Khan Transport Delivery"
+        },
+        {
+          "nameEn": "Leaning Tower of Cheese-a"
+        },
+        {
+          "nameEn": "Magnificent, Marvelous"
+        },
+        {
+          "nameEn": "Mamá Imelda's Blessing"
+        },
+        {
+          "nameEn": "Merlin's Shop and Smithy"
+        },
+        {
+          "nameEn": "Never Gonna Let You Cry"
+        },
+        {
+          "nameEn": "People Gonna Come Here"
+        },
+        {
+          "nameEn": "Though I Have to Say Goodbye"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Into the Inklands",
+      "cards": [
+        {
+          "nameEn": "Belle's House"
+        },
+        {
+          "nameEn": "Maui's Fish Hook"
+        },
+        {
+          "nameEn": "Airfoil"
+        },
+        {
+          "nameEn": "Ba-Boom!"
+        },
+        {
+          "nameEn": "Bernard"
+        },
+        {
+          "nameEn": "Chief Tui"
+        },
+        {
+          "nameEn": "Cubby"
+        },
+        {
+          "nameEn": "Della Duck"
+        },
+        {
+          "nameEn": "Distract"
+        },
+        {
+          "nameEn": "Divebomb"
+        },
+        {
+          "nameEn": "Fang"
+        },
+        {
+          "nameEn": "Flotsam"
+        },
+        {
+          "nameEn": "Friar Tuck"
+        },
+        {
+          "nameEn": "Gizmosuit"
+        },
+        {
+          "nameEn": "HeiHei"
+        },
+        {
+          "nameEn": "Hydra"
+        },
+        {
+          "nameEn": "Hydros"
+        },
+        {
+          "nameEn": "Jetsam"
+        },
+        {
+          "nameEn": "Lucky Dime"
+        },
+        {
+          "nameEn": "Lythos"
+        },
+        {
+          "nameEn": "Mr. Snoops"
+        },
+        {
+          "nameEn": "Never Land"
+        },
+        {
+          "nameEn": "Nottingham"
+        },
+        {
+          "nameEn": "Nutsy"
+        },
+        {
+          "nameEn": "Patch"
+        },
+        {
+          "nameEn": "Pua"
+        },
+        {
+          "nameEn": "Pyros"
+        },
+        {
+          "nameEn": "RLS Legacy"
+        },
+        {
+          "nameEn": "Repair"
+        },
+        {
+          "nameEn": "Rolly"
+        },
+        {
+          "nameEn": "Rufus"
+        },
+        {
+          "nameEn": "Scroop"
+        },
+        {
+          "nameEn": "Sir Hiss"
+        },
+        {
+          "nameEn": "Skippy"
+        },
+        {
+          "nameEn": "Slightly"
+        },
+        {
+          "nameEn": "Starkey"
+        },
+        {
+          "nameEn": "Stratos"
+        },
+        {
+          "nameEn": "The Bayou"
+        },
+        {
+          "nameEn": "The Lamp"
+        },
+        {
+          "nameEn": "Trigger"
+        },
+        {
+          "nameEn": "Vault Door"
+        },
+        {
+          "nameEn": "Voyage"
+        },
+        {
+          "nameEn": "Zazu"
+        },
+        {
+          "nameEn": "99 Puppies"
+        },
+        {
+          "nameEn": "Audrey Ramirez"
+        },
+        {
+          "nameEn": "Bestow a Gift"
+        },
+        {
+          "nameEn": "Boss's Orders"
+        },
+        {
+          "nameEn": "Cleansing Rainwater"
+        },
+        {
+          "nameEn": "Dalmatian Puppy"
+        },
+        {
+          "nameEn": "De Vil Manor"
+        },
+        {
+          "nameEn": "Flintheart Glomgold"
+        },
+        {
+          "nameEn": "Forbidden Mountain"
+        },
+        {
+          "nameEn": "Friend Like Me"
+        },
+        {
+          "nameEn": "Gramma Tala"
+        },
+        {
+          "nameEn": "Gustav the Giant"
+        },
+        {
+          "nameEn": "Gyro Gearloose"
+        },
+        {
+          "nameEn": "Heart of Atlantis"
+        },
+        {
+          "nameEn": "How Far I'll Go"
+        },
+        {
+          "nameEn": "I Will Find My Way"
+        },
+        {
+          "nameEn": "I've Got a Dream"
+        },
+        {
+          "nameEn": "It Calls Me"
+        },
+        {
+          "nameEn": "Jolly Roger"
+        },
+        {
+          "nameEn": "Joshua Sweet"
+        },
+        {
+          "nameEn": "Kuzco's Palace"
+        },
+        {
+          "nameEn": "Lena Sabrewing"
+        },
+        {
+          "nameEn": "Magic Broom"
+        },
+        {
+          "nameEn": "Magica De Spell"
+        },
+        {
+          "nameEn": "McDuck Manor"
+        },
+        {
+          "nameEn": "On Your Feet! Now!"
+        },
+        {
+          "nameEn": "Pride Lands"
+        },
+        {
+          "nameEn": "Prince John"
+        },
+        {
+          "nameEn": "Quick Patch"
+        },
+        {
+          "nameEn": "Rise of the Titans"
+        },
+        {
+          "nameEn": "Robin's Bow"
+        },
+        {
+          "nameEn": "Scrooge McDuck"
+        },
+        {
+          "nameEn": "Scrooge's Top Hat"
+        },
+        {
+          "nameEn": "Starlight Vial"
+        },
+        {
+          "nameEn": "Sumerian Talisman"
+        },
+        {
+          "nameEn": "Thaddeus E. Klang"
+        },
+        {
+          "nameEn": "The Bare Necessities"
+        },
+        {
+          "nameEn": "The Firebird"
+        },
+        {
+          "nameEn": "The Queen's Castle"
+        },
+        {
+          "nameEn": "The Sorcerer's Hat"
+        },
+        {
+          "nameEn": "The Sorcerer's Tower"
+        },
+        {
+          "nameEn": "Tiana's Palace"
+        },
+        {
+          "nameEn": "Webby Vanderquack"
+        },
+        {
+          "nameEn": "Wildcat's Wrench"
+        },
+        {
+          "nameEn": "And Then Along Came Zeus"
+        },
+        {
+          "nameEn": "Captain Hook's Rapier"
+        },
+        {
+          "nameEn": "Chernabog's Followers"
+        },
+        {
+          "nameEn": "Has Set My Heaaaaaaart . . ."
+        },
+        {
+          "nameEn": "Map of Treasure Planet"
+        },
+        {
+          "nameEn": "Olympus Would Be That Way"
+        },
+        {
+          "nameEn": "The Boss is on a Roll"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Whispers in the Well",
+      "cards": [
+        {
+          "nameEn": "Sudden Scare"
+        },
+        {
+          "nameEn": "Malicious, Mean, and Scary"
+        },
+        {
+          "nameEn": "Ares"
+        },
+        {
+          "nameEn": "Begone!"
+        },
+        {
+          "nameEn": "Big Nose"
+        },
+        {
+          "nameEn": "Broadway"
+        },
+        {
+          "nameEn": "Brom Bones"
+        },
+        {
+          "nameEn": "Bronx"
+        },
+        {
+          "nameEn": "Chef Louis"
+        },
+        {
+          "nameEn": "Chomp!"
+        },
+        {
+          "nameEn": "Coldstone"
+        },
+        {
+          "nameEn": "Creeper"
+        },
+        {
+          "nameEn": "Duckburg"
+        },
+        {
+          "nameEn": "Duckworth"
+        },
+        {
+          "nameEn": "Eilonwy"
+        },
+        {
+          "nameEn": "Finnick"
+        },
+        {
+          "nameEn": "Francine"
+        },
+        {
+          "nameEn": "Gurgi"
+        },
+        {
+          "nameEn": "Gwythaint"
+        },
+        {
+          "nameEn": "Hen Wen"
+        },
+        {
+          "nameEn": "Hermes"
+        },
+        {
+          "nameEn": "Higgins"
+        },
+        {
+          "nameEn": "Hook Hand"
+        },
+        {
+          "nameEn": "Hudson"
+        },
+        {
+          "nameEn": "Inkrunner"
+        },
+        {
+          "nameEn": "Mowgli"
+        },
+        {
+          "nameEn": "Nibs"
+        },
+        {
+          "nameEn": "Penumbra"
+        },
+        {
+          "nameEn": "Raksha"
+        },
+        {
+          "nameEn": "Rama"
+        },
+        {
+          "nameEn": "Shanti"
+        },
+        {
+          "nameEn": "So Be It!"
+        },
+        {
+          "nameEn": "Taran"
+        },
+        {
+          "nameEn": "The Twins"
+        },
+        {
+          "nameEn": "Vladimir"
+        },
+        {
+          "nameEn": "Zootopia"
+        },
+        {
+          "nameEn": "Black Heron"
+        },
+        {
+          "nameEn": "Blessed Bagpipes"
+        },
+        {
+          "nameEn": "But I'm Much Faster"
+        },
+        {
+          "nameEn": "Castle Wyvern"
+        },
+        {
+          "nameEn": "Cauldron Born"
+        },
+        {
+          "nameEn": "Della's Moon Lullaby"
+        },
+        {
+          "nameEn": "Detective's Badge"
+        },
+        {
+          "nameEn": "Emily Quackfaster"
+        },
+        {
+          "nameEn": "Enigmatic Inkcaster"
+        },
+        {
+          "nameEn": "Fergus McDuck"
+        },
+        {
+          "nameEn": "Fragile as a Flower"
+        },
+        {
+          "nameEn": "Get to Safety!"
+        },
+        {
+          "nameEn": "Ghostly Tale"
+        },
+        {
+          "nameEn": "Goldie O'Gilt"
+        },
+        {
+          "nameEn": "Grimorum Arcanorum"
+        },
+        {
+          "nameEn": "Headless Manhorse"
+        },
+        {
+          "nameEn": "Hen Wen's Visions"
+        },
+        {
+          "nameEn": "Ichabod Crane"
+        },
+        {
+          "nameEn": "Illuminary Tunnels"
+        },
+        {
+          "nameEn": "Ingenious Device"
+        },
+        {
+          "nameEn": "Ink Amplifier"
+        },
+        {
+          "nameEn": "Inscrutable Map"
+        },
+        {
+          "nameEn": "Inspector Tezuka"
+        },
+        {
+          "nameEn": "Katrina Van Tassel"
+        },
+        {
+          "nameEn": "Mayor Winddancer"
+        },
+        {
+          "nameEn": "Mrs. Beakley"
+        },
+        {
+          "nameEn": "Mushu's Rocket"
+        },
+        {
+          "nameEn": "Next Stop, Olympus"
+        },
+        {
+          "nameEn": "Or Rewrite History!"
+        },
+        {
+          "nameEn": "Performance Review"
+        },
+        {
+          "nameEn": "Potion of Malice"
+        },
+        {
+          "nameEn": "Promising Lead"
+        },
+        {
+          "nameEn": "Recovered Page"
+        },
+        {
+          "nameEn": "Search for Clues"
+        },
+        {
+          "nameEn": "Sleepy Hollow"
+        },
+        {
+          "nameEn": "Spooky Sight"
+        },
+        {
+          "nameEn": "Swooping Strike"
+        },
+        {
+          "nameEn": "The Bitterwood"
+        },
+        {
+          "nameEn": "The Black Cauldron"
+        },
+        {
+          "nameEn": "The Game's Afoot!"
+        },
+        {
+          "nameEn": "The Robot Queen"
+        },
+        {
+          "nameEn": "Time to Go!"
+        },
+        {
+          "nameEn": "Trust In Me"
+        },
+        {
+          "nameEn": "Violet Sabrewing"
+        },
+        {
+          "nameEn": "Webby's Diary"
+        },
+        {
+          "nameEn": "White Agony Plains"
+        },
+        {
+          "nameEn": "Can't Hold It Back Anymore"
+        },
+        {
+          "nameEn": "Castle of the Horned King"
+        },
+        {
+          "nameEn": "Fairy Godmother's Wand"
+        },
+        {
+          "nameEn": "He Hurled His Thunderbolt"
+        },
+        {
+          "nameEn": "Junior Woodchuck Guidebook"
+        },
+        {
+          "nameEn": "Might Solve a Mystery"
+        },
+        {
+          "nameEn": "Munchings and Crunchings"
+        },
+        {
+          "nameEn": "The Sword of Hercules"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Wilds Unknown",
+      "cards": [
+        {
+          "nameEn": "Alien"
+        },
+        {
+          "nameEn": "Angus"
+        },
+        {
+          "nameEn": "Babyhead"
+        },
+        {
+          "nameEn": "Bo Peep"
+        },
+        {
+          "nameEn": "Bullseye"
+        },
+        {
+          "nameEn": "Buzz's Arm"
+        },
+        {
+          "nameEn": "Club Door"
+        },
+        {
+          "nameEn": "Edna Mode"
+        },
+        {
+          "nameEn": "Elinor"
+        },
+        {
+          "nameEn": "Fat Cat"
+        },
+        {
+          "nameEn": "Fergus"
+        },
+        {
+          "nameEn": "Frozone"
+        },
+        {
+          "nameEn": "Gyro-Evac"
+        },
+        {
+          "nameEn": "Hamm"
+        },
+        {
+          "nameEn": "Hero Work"
+        },
+        {
+          "nameEn": "Incrediboy"
+        },
+        {
+          "nameEn": "Jessie"
+        },
+        {
+          "nameEn": "Jingle Joe"
+        },
+        {
+          "nameEn": "John Smith"
+        },
+        {
+          "nameEn": "Maudie"
+        },
+        {
+          "nameEn": "Mirage"
+        },
+        {
+          "nameEn": "Mor'du"
+        },
+        {
+          "nameEn": "RC"
+        },
+        {
+          "nameEn": "Rat Capone"
+        },
+        {
+          "nameEn": "Rex"
+        },
+        {
+          "nameEn": "Roller Bob"
+        },
+        {
+          "nameEn": "Sabotage"
+        },
+        {
+          "nameEn": "Super Suit"
+        },
+        {
+          "nameEn": "Syndrome"
+        },
+        {
+          "nameEn": "The Claw"
+        },
+        {
+          "nameEn": "The Witch"
+        },
+        {
+          "nameEn": "Amazu's Inkcaster"
+        },
+        {
+          "nameEn": "Andy's Room"
+        },
+        {
+          "nameEn": "Bouncing Ducky"
+        },
+        {
+          "nameEn": "Card Advantage"
+        },
+        {
+          "nameEn": "Dangerous Plan"
+        },
+        {
+          "nameEn": "Don't Be Nervous"
+        },
+        {
+          "nameEn": "Dr. Sara Bellum"
+        },
+        {
+          "nameEn": "Escape Plan"
+        },
+        {
+          "nameEn": "Fat Cat's Club"
+        },
+        {
+          "nameEn": "Firefly Swarm"
+        },
+        {
+          "nameEn": "Gadget's Goggles"
+        },
+        {
+          "nameEn": "Gosalyn Mallard"
+        },
+        {
+          "nameEn": "Hand-in-the-Box"
+        },
+        {
+          "nameEn": "Inner Strength"
+        },
+        {
+          "nameEn": "Jack-Jack Parr"
+        },
+        {
+          "nameEn": "Julieta's Arepas"
+        },
+        {
+          "nameEn": "Leviathan's Lair"
+        },
+        {
+          "nameEn": "Lord Dingwall"
+        },
+        {
+          "nameEn": "Lord MacGuffin"
+        },
+        {
+          "nameEn": "Lord Macintosh"
+        },
+        {
+          "nameEn": "Merida's Bow"
+        },
+        {
+          "nameEn": "Metamorphosis"
+        },
+        {
+          "nameEn": "Norton Nimnul"
+        },
+        {
+          "nameEn": "Pedro Madrigal"
+        },
+        {
+          "nameEn": "Pizza Planet"
+        },
+        {
+          "nameEn": "Plunger Crossbow"
+        },
+        {
+          "nameEn": "Preston Whitmore"
+        },
+        {
+          "nameEn": "Ranger Plane"
+        },
+        {
+          "nameEn": "Ranger Team-Up"
+        },
+        {
+          "nameEn": "Remote Inklands"
+        },
+        {
+          "nameEn": "Right Behind You"
+        },
+        {
+          "nameEn": "Safety Rope"
+        },
+        {
+          "nameEn": "Salvage Operation"
+        },
+        {
+          "nameEn": "Shepherd's Journal"
+        },
+        {
+          "nameEn": "Sid Phillips"
+        },
+        {
+          "nameEn": "Strange Things"
+        },
+        {
+          "nameEn": "Syndrome's Remote"
+        },
+        {
+          "nameEn": "The Family Scattered"
+        },
+        {
+          "nameEn": "The Leviathan"
+        },
+        {
+          "nameEn": "Three Arrows"
+        },
+        {
+          "nameEn": "Touch the Sky"
+        },
+        {
+          "nameEn": "Wee Dingwall"
+        },
+        {
+          "nameEn": "What Else Can I Do?"
+        },
+        {
+          "nameEn": "Wind-Up Frog"
+        },
+        {
+          "nameEn": "Young MacGuffin"
+        },
+        {
+          "nameEn": "Young Macintosh"
+        },
+        {
+          "nameEn": "DunBroch Family Tapestry"
+        },
+        {
+          "nameEn": "Hamish, Hubert & Harris"
+        },
+        {
+          "nameEn": "Like A Bird In the Sky"
+        },
+        {
+          "nameEn": "Pterodactyl Janie Doll"
+        },
+        {
+          "nameEn": "Someone Will Lose His Head"
+        },
+        {
+          "nameEn": "Super Relocation Program"
+        },
+        {
+          "nameEn": "The Island of Nomanisan"
+        },
+        {
+          "nameEn": "This Growing Pressure"
+        },
+        {
+          "nameEn": "When You Need Help, Just Call"
+        },
+        {
+          "nameEn": "You've Got a Friend in Me"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Fabled",
+      "cards": [
+        {
+          "nameEn": "Cruella De Vil"
+        },
+        {
+          "nameEn": "Peter Pan's Shadow"
+        },
+        {
+          "nameEn": "Maui's Place of Exile"
+        },
+        {
+          "nameEn": "Ursula's Shell Necklace"
+        },
+        {
+          "nameEn": "Agrabah"
+        },
+        {
+          "nameEn": "Atlantica"
+        },
+        {
+          "nameEn": "Benja"
+        },
+        {
+          "nameEn": "Dewey"
+        },
+        {
+          "nameEn": "Dumbo"
+        },
+        {
+          "nameEn": "Flounder"
+        },
+        {
+          "nameEn": "Hans"
+        },
+        {
+          "nameEn": "Huey"
+        },
+        {
+          "nameEn": "I'm Stuck!"
+        },
+        {
+          "nameEn": "I2I"
+        },
+        {
+          "nameEn": "Improvise"
+        },
+        {
+          "nameEn": "Lantern"
+        },
+        {
+          "nameEn": "Lawrence"
+        },
+        {
+          "nameEn": "LeFou"
+        },
+        {
+          "nameEn": "Louie"
+        },
+        {
+          "nameEn": "Lumiere"
+        },
+        {
+          "nameEn": "Max Goof"
+        },
+        {
+          "nameEn": "Megara"
+        },
+        {
+          "nameEn": "Motunui"
+        },
+        {
+          "nameEn": "Nala"
+        },
+        {
+          "nameEn": "Olaf"
+        },
+        {
+          "nameEn": "P.J. Pete"
+        },
+        {
+          "nameEn": "Pegasus"
+        },
+        {
+          "nameEn": "Powerline"
+        },
+        {
+          "nameEn": "Roxanne"
+        },
+        {
+          "nameEn": "Shenzi"
+        },
+        {
+          "nameEn": "Smash"
+        },
+        {
+          "nameEn": "Stand Out"
+        },
+        {
+          "nameEn": "Virana"
+        },
+        {
+          "nameEn": "Wildcat"
+        },
+        {
+          "nameEn": "A Pirate's Life"
+        },
+        {
+          "nameEn": "Aurelian Gyrosensor"
+        },
+        {
+          "nameEn": "Be King Undisputed"
+        },
+        {
+          "nameEn": "Be Our Guest"
+        },
+        {
+          "nameEn": "Beast's Mirror"
+        },
+        {
+          "nameEn": "Bobby Zimuruski"
+        },
+        {
+          "nameEn": "Bruno's Return"
+        },
+        {
+          "nameEn": "Camilo Madrigal"
+        },
+        {
+          "nameEn": "Casa Madrigal"
+        },
+        {
+          "nameEn": "Circle of Life"
+        },
+        {
+          "nameEn": "Coconut Basket"
+        },
+        {
+          "nameEn": "Cursed Merfolk"
+        },
+        {
+          "nameEn": "Develop Your Brain"
+        },
+        {
+          "nameEn": "Dig a Little Deeper"
+        },
+        {
+          "nameEn": "Dinner Bell"
+        },
+        {
+          "nameEn": "Enchantress"
+        },
+        {
+          "nameEn": "Family Fishing Pole"
+        },
+        {
+          "nameEn": "Fire the Cannons!"
+        },
+        {
+          "nameEn": "Four Dozen Eggs"
+        },
+        {
+          "nameEn": "Grand Pabbie"
+        },
+        {
+          "nameEn": "Heart of Te Fiti"
+        },
+        {
+          "nameEn": "Hidden Cove"
+        },
+        {
+          "nameEn": "Julieta Madrigal"
+        },
+        {
+          "nameEn": "Last-Ditch Effort"
+        },
+        {
+          "nameEn": "Little John"
+        },
+        {
+          "nameEn": "Look at This Family"
+        },
+        {
+          "nameEn": "Lost in the Woods"
+        },
+        {
+          "nameEn": "Luisa Madrigal"
+        },
+        {
+          "nameEn": "Magic Mirror"
+        },
+        {
+          "nameEn": "Make the Potion"
+        },
+        {
+          "nameEn": "Medallion Weights"
+        },
+        {
+          "nameEn": "Mother Knows Best"
+        },
+        {
+          "nameEn": "One Jump Ahead"
+        },
+        {
+          "nameEn": "One Last Hope"
+        },
+        {
+          "nameEn": "Philoctetes"
+        },
+        {
+          "nameEn": "Prince Eric"
+        },
+        {
+          "nameEn": "Rose Lantern"
+        },
+        {
+          "nameEn": "Sergeant Tibbs"
+        },
+        {
+          "nameEn": "Signed Contract"
+        },
+        {
+          "nameEn": "Sudden Chill"
+        },
+        {
+          "nameEn": "The Magic Feather"
+        },
+        {
+          "nameEn": "The Mob Song"
+        },
+        {
+          "nameEn": "Timothy Q. Mouse"
+        },
+        {
+          "nameEn": "Under the Sea"
+        },
+        {
+          "nameEn": "You Can Fly!"
+        },
+        {
+          "nameEn": "Heal What Has Been Hurt"
+        },
+        {
+          "nameEn": "I Find 'Em, I Flatten 'Em"
+        },
+        {
+          "nameEn": "Poor Unfortunate Souls"
+        },
+        {
+          "nameEn": "Second Star to the Right"
+        },
+        {
+          "nameEn": "Strength of a Raging Fire"
+        },
+        {
+          "nameEn": "White Rabbit's Pocket Watch"
+        },
+        {
+          "nameEn": "World's Greatest Criminal Mind"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Winterspell",
+      "cards": [
+        {
+          "nameEn": "Agnarr"
+        },
+        {
+          "nameEn": "Amos Slade"
+        },
+        {
+          "nameEn": "Angela"
+        },
+        {
+          "nameEn": "Big Mama"
+        },
+        {
+          "nameEn": "Blue Smoke"
+        },
+        {
+          "nameEn": "Boomer"
+        },
+        {
+          "nameEn": "Chief"
+        },
+        {
+          "nameEn": "Dinky"
+        },
+        {
+          "nameEn": "Fangmeyer"
+        },
+        {
+          "nameEn": "Flit"
+        },
+        {
+          "nameEn": "Gigi"
+        },
+        {
+          "nameEn": "Liquidator"
+        },
+        {
+          "nameEn": "McHorn"
+        },
+        {
+          "nameEn": "Nakoma"
+        },
+        {
+          "nameEn": "Negaduck"
+        },
+        {
+          "nameEn": "Percy"
+        },
+        {
+          "nameEn": "Pudge"
+        },
+        {
+          "nameEn": "Reuben"
+        },
+        {
+          "nameEn": "Sarabi"
+        },
+        {
+          "nameEn": "Sina"
+        },
+        {
+          "nameEn": "Slushy"
+        },
+        {
+          "nameEn": "Snow Fort"
+        },
+        {
+          "nameEn": "Space Cows"
+        },
+        {
+          "nameEn": "Squeaks"
+        },
+        {
+          "nameEn": "Stegmutt"
+        },
+        {
+          "nameEn": "Swordplay"
+        },
+        {
+          "nameEn": "Thomas"
+        },
+        {
+          "nameEn": "Wipe Out!"
+        },
+        {
+          "nameEn": "Akood et Emuti"
+        },
+        {
+          "nameEn": "Battering Ram"
+        },
+        {
+          "nameEn": "Chief Powhatan"
+        },
+        {
+          "nameEn": "Colors of the Wind"
+        },
+        {
+          "nameEn": "Come Out and Fight!"
+        },
+        {
+          "nameEn": "Containment Unit"
+        },
+        {
+          "nameEn": "Darkwing Tower"
+        },
+        {
+          "nameEn": "Darkwing's Chair Set"
+        },
+        {
+          "nameEn": "Freeze the Vine"
+        },
+        {
+          "nameEn": "Game Preserve"
+        },
+        {
+          "nameEn": "Grab Your Bow"
+        },
+        {
+          "nameEn": "Grandmother Willow"
+        },
+        {
+          "nameEn": "Hidden Trap"
+        },
+        {
+          "nameEn": "Honker Muddlefoot"
+        },
+        {
+          "nameEn": "Isis Vanderchill"
+        },
+        {
+          "nameEn": "John Smith's Compass"
+        },
+        {
+          "nameEn": "Kristoff's Lute"
+        },
+        {
+          "nameEn": "Let's Get Dangerous"
+        },
+        {
+          "nameEn": "Lonely Grave"
+        },
+        {
+          "nameEn": "Morgana Macawber"
+        },
+        {
+          "nameEn": "Morty Fieldmouse"
+        },
+        {
+          "nameEn": "Mother's Necklace"
+        },
+        {
+          "nameEn": "Mystical Inkcaster"
+        },
+        {
+          "nameEn": "Nani's Payback"
+        },
+        {
+          "nameEn": "Ohana Means Family"
+        },
+        {
+          "nameEn": "Pot of Honey"
+        },
+        {
+          "nameEn": "Raging Storm"
+        },
+        {
+          "nameEn": "Snowball Fight"
+        },
+        {
+          "nameEn": "Splatter Phoenix"
+        },
+        {
+          "nameEn": "Strike A Good Match"
+        },
+        {
+          "nameEn": "Taurus Bulba"
+        },
+        {
+          "nameEn": "The Frozen Vine"
+        },
+        {
+          "nameEn": "The Thunderquack"
+        },
+        {
+          "nameEn": "Tiny Tim's Crutch"
+        },
+        {
+          "nameEn": "Widow Tweed"
+        },
+        {
+          "nameEn": "Winterspell"
+        },
+        {
+          "nameEn": "Wisdom of the Willow"
+        },
+        {
+          "nameEn": "Witches of Morva"
+        },
+        {
+          "nameEn": "Darkwing's Gas Device"
+        },
+        {
+          "nameEn": "Education or Elimination"
+        },
+        {
+          "nameEn": "Force of a Great Typhoon"
+        },
+        {
+          "nameEn": "Graveyard of Christmas Future"
+        },
+        {
+          "nameEn": "Infra-Pink Ultra Scan Specs"
+        },
+        {
+          "nameEn": "Keep the Ancient Ways"
+        },
+        {
+          "nameEn": "Marching Off to Battle"
+        },
+        {
+          "nameEn": "Mother Will Protect You"
+        },
+        {
+          "nameEn": "Nearly Indestructible"
+        },
+        {
+          "nameEn": "Rafiki's Bakora Staff"
+        },
+        {
+          "nameEn": "Retro Evolution Device"
+        },
+        {
+          "nameEn": "Scrooge's Counting House"
+        },
+        {
+          "nameEn": "The Cold Never Bothered Me"
+        },
+        {
+          "nameEn": "Visiting Christmas Past"
+        },
+        {
+          "nameEn": "Do You Want to Build A Snowman?"
+        },
+        {
+          "nameEn": "The Terror That Flaps in the Night"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Shimmering Skies",
+      "cards": [
+        {
+          "nameEn": "Bad-Anon"
+        },
+        {
+          "nameEn": "Banzai"
+        },
+        {
+          "nameEn": "Break Free"
+        },
+        {
+          "nameEn": "Bruni"
+        },
+        {
+          "nameEn": "Ed"
+        },
+        {
+          "nameEn": "Fauna"
+        },
+        {
+          "nameEn": "Flora"
+        },
+        {
+          "nameEn": "Gale"
+        },
+        {
+          "nameEn": "Hide Away"
+        },
+        {
+          "nameEn": "Revive"
+        },
+        {
+          "nameEn": "Rudy"
+        },
+        {
+          "nameEn": "Rutt"
+        },
+        {
+          "nameEn": "Tug-of-War"
+        },
+        {
+          "nameEn": "Tuke"
+        },
+        {
+          "nameEn": "Turbo"
+        },
+        {
+          "nameEn": "Ulf"
+        },
+        {
+          "nameEn": "Alan-a-Dale"
+        },
+        {
+          "nameEn": "All Funned Out"
+        },
+        {
+          "nameEn": "Amber Chromicon"
+        },
+        {
+          "nameEn": "Amethyst Chromicon"
+        },
+        {
+          "nameEn": "Blast from Your Past"
+        },
+        {
+          "nameEn": "Duck for Cover!"
+        },
+        {
+          "nameEn": "Earth Giant"
+        },
+        {
+          "nameEn": "Emerald Chromicon"
+        },
+        {
+          "nameEn": "Ever as Before"
+        },
+        {
+          "nameEn": "Evil Comes Prepared"
+        },
+        {
+          "nameEn": "Food Fight!"
+        },
+        {
+          "nameEn": "Glimmer vs Glimmer"
+        },
+        {
+          "nameEn": "Half Hexwell Crown"
+        },
+        {
+          "nameEn": "Healing Decanter"
+        },
+        {
+          "nameEn": "Healing Touch"
+        },
+        {
+          "nameEn": "Hypnotic Deduction"
+        },
+        {
+          "nameEn": "Hypnotic Strength"
+        },
+        {
+          "nameEn": "Magical Aid"
+        },
+        {
+          "nameEn": "Medal of Heroes"
+        },
+        {
+          "nameEn": "Merlin's Carpetbag"
+        },
+        {
+          "nameEn": "Merlin's Cottage"
+        },
+        {
+          "nameEn": "Merryweather"
+        },
+        {
+          "nameEn": "Night Howler Rage"
+        },
+        {
+          "nameEn": "Obscurosphere"
+        },
+        {
+          "nameEn": "Plate Armor"
+        },
+        {
+          "nameEn": "Potion of Might"
+        },
+        {
+          "nameEn": "Prince John's Mirror"
+        },
+        {
+          "nameEn": "Queen's Sensor Core"
+        },
+        {
+          "nameEn": "Rancis Fluggerbutter"
+        },
+        {
+          "nameEn": "Ratigan's Party"
+        },
+        {
+          "nameEn": "Remember Who You Are"
+        },
+        {
+          "nameEn": "Retrosphere"
+        },
+        {
+          "nameEn": "Royal Tantrum"
+        },
+        {
+          "nameEn": "Ruby Chromicon"
+        },
+        {
+          "nameEn": "Sapphire Chromicon"
+        },
+        {
+          "nameEn": "Seven Dwarfs' Mine"
+        },
+        {
+          "nameEn": "Sherwood Forest"
+        },
+        {
+          "nameEn": "Shield of Arendelle"
+        },
+        {
+          "nameEn": "Snowanna Rainbeau"
+        },
+        {
+          "nameEn": "Steel Chromicon"
+        },
+        {
+          "nameEn": "Taffyta Muttonfudge"
+        },
+        {
+          "nameEn": "The Library"
+        },
+        {
+          "nameEn": "The Sword Released"
+        },
+        {
+          "nameEn": "Tropical Rainforest"
+        },
+        {
+          "nameEn": "Try Everything"
+        },
+        {
+          "nameEn": "Vision of the Future"
+        },
+        {
+          "nameEn": "We Know the Way"
+        },
+        {
+          "nameEn": "Who's With Me?"
+        },
+        {
+          "nameEn": "You're Welcome"
+        },
+        {
+          "nameEn": "Basil's Magnifying Glass"
+        },
+        {
+          "nameEn": "Don't Let the Frostbite Bite"
+        },
+        {
+          "nameEn": "Gathering Knowledge and Wisdom"
+        },
+        {
+          "nameEn": "When Will My Life Begin?"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Rise of the Floodborn",
+      "cards": [
+        {
+          "nameEn": "Peter Pan's Dagger"
+        },
+        {
+          "nameEn": "Bashful"
+        },
+        {
+          "nameEn": "Boun"
+        },
+        {
+          "nameEn": "Bounce"
+        },
+        {
+          "nameEn": "Charge!"
+        },
+        {
+          "nameEn": "Doc"
+        },
+        {
+          "nameEn": "Dopey"
+        },
+        {
+          "nameEn": "Dragon Gem"
+        },
+        {
+          "nameEn": "Eudora"
+        },
+        {
+          "nameEn": "Felicia"
+        },
+        {
+          "nameEn": "Grand Duke"
+        },
+        {
+          "nameEn": "Grumpy"
+        },
+        {
+          "nameEn": "Gumbo Pot"
+        },
+        {
+          "nameEn": "Happy"
+        },
+        {
+          "nameEn": "Hold Still"
+        },
+        {
+          "nameEn": "Hypnotize"
+        },
+        {
+          "nameEn": "James"
+        },
+        {
+          "nameEn": "Last Stand"
+        },
+        {
+          "nameEn": "Launch"
+        },
+        {
+          "nameEn": "Lucifer"
+        },
+        {
+          "nameEn": "Nana"
+        },
+        {
+          "nameEn": "Noi"
+        },
+        {
+          "nameEn": "Pawpsicle"
+        },
+        {
+          "nameEn": "Ray"
+        },
+        {
+          "nameEn": "Sleepy"
+        },
+        {
+          "nameEn": "Sneezy"
+        },
+        {
+          "nameEn": "The Nokk"
+        },
+        {
+          "nameEn": "Weight Set"
+        },
+        {
+          "nameEn": "Bibbidi Bobbidi Boo"
+        },
+        {
+          "nameEn": "Binding Contract"
+        },
+        {
+          "nameEn": "Caterpillar"
+        },
+        {
+          "nameEn": "Chip the Teacup"
+        },
+        {
+          "nameEn": "Croquet Mallet"
+        },
+        {
+          "nameEn": "Dr. Facilier"
+        },
+        {
+          "nameEn": "Duke Weaselton"
+        },
+        {
+          "nameEn": "Eli La Bouff"
+        },
+        {
+          "nameEn": "Fairy Godmother"
+        },
+        {
+          "nameEn": "Fang Crossbow"
+        },
+        {
+          "nameEn": "Go the Distance"
+        },
+        {
+          "nameEn": "Gruesome and Grim"
+        },
+        {
+          "nameEn": "Last Cannon"
+        },
+        {
+          "nameEn": "Maurice's Workshop"
+        },
+        {
+          "nameEn": "Mouse Armor"
+        },
+        {
+          "nameEn": "Mrs. Judson"
+        },
+        {
+          "nameEn": "Nothing to Hide"
+        },
+        {
+          "nameEn": "Pack Tactics"
+        },
+        {
+          "nameEn": "Perplexing Signposts"
+        },
+        {
+          "nameEn": "Pick a Fight"
+        },
+        {
+          "nameEn": "Prince Charming"
+        },
+        {
+          "nameEn": "Ring the Bell"
+        },
+        {
+          "nameEn": "Sardine Can"
+        },
+        {
+          "nameEn": "Sleepy's Flute"
+        },
+        {
+          "nameEn": "Sword in the Stone"
+        },
+        {
+          "nameEn": "Teeth and Ambitions"
+        },
+        {
+          "nameEn": "The Huntsman"
+        },
+        {
+          "nameEn": "Zero to Hero"
+        },
+        {
+          "nameEn": "Falling Down the Rabbit Hole"
+        },
+        {
+          "nameEn": "Let the Storm Rage On"
+        },
+        {
+          "nameEn": "Painting the Roses Red"
+        },
+        {
+          "nameEn": "Ratigan's Marvelous Trap"
+        },
+        {
+          "nameEn": "The Most Diabolical Scheme"
+        },
+        {
+          "nameEn": "The Sorcerer's Spellbook"
+        },
+        {
+          "nameEn": "What Did You Call Me?"
+        },
+        {
+          "nameEn": "Legend of the Sword in the Stone"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Ursula's Return",
+      "cards": [
+        {
+          "nameEn": "Ariel’s Grotto"
+        },
+        {
+          "nameEn": "Ursula’s Garden"
+        },
+        {
+          "nameEn": "Ursula’s Lair"
+        },
+        {
+          "nameEn": "Ursula’s Plan"
+        },
+        {
+          "nameEn": "Ursula’s Trickery"
+        },
+        {
+          "nameEn": "Arges"
+        },
+        {
+          "nameEn": "Avalanche"
+        },
+        {
+          "nameEn": "Brawl"
+        },
+        {
+          "nameEn": "Chi-Fu"
+        },
+        {
+          "nameEn": "Chien-Po"
+        },
+        {
+          "nameEn": "Dang Hu"
+        },
+        {
+          "nameEn": "Dodge!"
+        },
+        {
+          "nameEn": "Fa Li"
+        },
+        {
+          "nameEn": "First Aid"
+        },
+        {
+          "nameEn": "Glean"
+        },
+        {
+          "nameEn": "Gunther"
+        },
+        {
+          "nameEn": "Gus"
+        },
+        {
+          "nameEn": "Ice Block"
+        },
+        {
+          "nameEn": "Iduna"
+        },
+        {
+          "nameEn": "Jaq"
+        },
+        {
+          "nameEn": "Ling"
+        },
+        {
+          "nameEn": "Max"
+        },
+        {
+          "nameEn": "Nessus"
+        },
+        {
+          "nameEn": "Pico"
+        },
+        {
+          "nameEn": "The Fates"
+        },
+        {
+          "nameEn": "The Muses"
+        },
+        {
+          "nameEn": "The Plank"
+        },
+        {
+          "nameEn": "The Wall"
+        },
+        {
+          "nameEn": "Thebes"
+        },
+        {
+          "nameEn": "Tong"
+        },
+        {
+          "nameEn": "Tor"
+        },
+        {
+          "nameEn": "Yao"
+        },
+        {
+          "nameEn": "Yen Sid"
+        },
+        {
+          "nameEn": "Agustin Madrigal"
+        },
+        {
+          "nameEn": "Field of Ice"
+        },
+        {
+          "nameEn": "Fortisphere"
+        },
+        {
+          "nameEn": "Félix Madrigal"
+        },
+        {
+          "nameEn": "Golden Harp"
+        },
+        {
+          "nameEn": "Great Stone Dragon"
+        },
+        {
+          "nameEn": "Imperial Bow"
+        },
+        {
+          "nameEn": "Magical Maid"
+        },
+        {
+          "nameEn": "Miracle Candle"
+        },
+        {
+          "nameEn": "Mystical Rose"
+        },
+        {
+          "nameEn": "RLS Legacy's Cannon"
+        },
+        {
+          "nameEn": "Record Player"
+        },
+        {
+          "nameEn": "Seldom All They Seem"
+        },
+        {
+          "nameEn": "Sign the Scroll"
+        },
+        {
+          "nameEn": "Snuggly Duckling"
+        },
+        {
+          "nameEn": "Swing into Action"
+        },
+        {
+          "nameEn": "The Underworld"
+        },
+        {
+          "nameEn": "Training Grounds"
+        },
+        {
+          "nameEn": "Transformed Chef"
+        },
+        {
+          "nameEn": "Treasures Untold"
+        },
+        {
+          "nameEn": "Triton's Decree"
+        },
+        {
+          "nameEn": "Triton's Trident"
+        },
+        {
+          "nameEn": "Vision Slab"
+        },
+        {
+          "nameEn": "Vitalisphere"
+        },
+        {
+          "nameEn": "Winter Camp"
+        },
+        {
+          "nameEn": "I Find ’Em, I Flatten ’Em"
+        },
+        {
+          "nameEn": "Imperial Proclamation"
+        },
+        {
+          "nameEn": "We Don’t Talk About Bruno"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / The First Chapter",
+      "cards": [
+        {
+          "nameEn": "Ursula's Cauldron"
+        },
+        {
+          "nameEn": "Befuddle"
+        },
+        {
+          "nameEn": "Break"
+        },
+        {
+          "nameEn": "Captain"
+        },
+        {
+          "nameEn": "Cerberus"
+        },
+        {
+          "nameEn": "Freeze"
+        },
+        {
+          "nameEn": "Frying Pan"
+        },
+        {
+          "nameEn": "Goons"
+        },
+        {
+          "nameEn": "Pumbaa"
+        },
+        {
+          "nameEn": "Ransack"
+        },
+        {
+          "nameEn": "Reflection"
+        },
+        {
+          "nameEn": "Sebastian"
+        },
+        {
+          "nameEn": "Stampede"
+        },
+        {
+          "nameEn": "Tangle"
+        },
+        {
+          "nameEn": "Triton"
+        },
+        {
+          "nameEn": "Be Prepared"
+        },
+        {
+          "nameEn": "Control Your Temper!"
+        },
+        {
+          "nameEn": "Cut to the Chase"
+        },
+        {
+          "nameEn": "Dinglehopper"
+        },
+        {
+          "nameEn": "Do It Again!"
+        },
+        {
+          "nameEn": "Dr. Facilier's Cards"
+        },
+        {
+          "nameEn": "Duke of Weselton"
+        },
+        {
+          "nameEn": "Eye of the Fates"
+        },
+        {
+          "nameEn": "Fan the Flames"
+        },
+        {
+          "nameEn": "Fishbone Quill"
+        },
+        {
+          "nameEn": "Grab Your Sword"
+        },
+        {
+          "nameEn": "Hakuna Matata"
+        },
+        {
+          "nameEn": "He's Got a Sword!"
+        },
+        {
+          "nameEn": "Healing Glow"
+        },
+        {
+          "nameEn": "If it's Not Baroque"
+        },
+        {
+          "nameEn": "Just in Time"
+        },
+        {
+          "nameEn": "Magic Golden Flower"
+        },
+        {
+          "nameEn": "Marshmallow"
+        },
+        {
+          "nameEn": "Musketeer Tabard"
+        },
+        {
+          "nameEn": "Part of Your World"
+        },
+        {
+          "nameEn": "Plasma Blaster"
+        },
+        {
+          "nameEn": "Poisoned Apple"
+        },
+        {
+          "nameEn": "Scepter of Arendelle"
+        },
+        {
+          "nameEn": "Shield of Virtue"
+        },
+        {
+          "nameEn": "Steal from the Rich"
+        },
+        {
+          "nameEn": "Stolen Scimitar"
+        },
+        {
+          "nameEn": "Sword of Truth"
+        },
+        {
+          "nameEn": "The Beast is Mine!"
+        },
+        {
+          "nameEn": "Vicious Betrayal"
+        },
+        {
+          "nameEn": "Work Together"
+        },
+        {
+          "nameEn": "Friends on the Other Side"
+        },
+        {
+          "nameEn": "You Have Forgotten Me"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Hunny Rescue – Illumineer's Quest",
+      "cards": [
+        {
+          "nameEn": "Cut Down"
+        },
+        {
+          "nameEn": "Ink Vortex"
+        },
+        {
+          "nameEn": "Overprune"
+        },
+        {
+          "nameEn": "Overwhelm"
+        },
+        {
+          "nameEn": "Regenerate"
+        },
+        {
+          "nameEn": "Uproot"
+        },
+        {
+          "nameEn": "Accelerated Growth"
+        },
+        {
+          "nameEn": "Bramble Bully"
+        },
+        {
+          "nameEn": "Budding Stalk"
+        },
+        {
+          "nameEn": "Catastrophic Rupture"
+        },
+        {
+          "nameEn": "Chamber Guardian"
+        },
+        {
+          "nameEn": "Overgrown Defenses"
+        },
+        {
+          "nameEn": "Sprouting Seed"
+        },
+        {
+          "nameEn": "Story Star Cage"
+        },
+        {
+          "nameEn": "The Vine Maw"
+        },
+        {
+          "nameEn": "Tightening Grip"
+        },
+        {
+          "nameEn": "Unseen Attack"
+        },
+        {
+          "nameEn": "Vine Cluster"
+        },
+        {
+          "nameEn": "Vine Sprout"
+        },
+        {
+          "nameEn": "Wild Growth"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Promo Set 3",
+      "cards": [
+        {
+          "nameEn": "Lenny"
+        },
+        {
+          "nameEn": "Timon"
+        },
+        {
+          "nameEn": "Zeus"
+        },
+        {
+          "nameEn": "The Great Illuminary"
+        },
+        {
+          "nameEn": "White Rabbit"
+        },
+        {
+          "nameEn": "Will o' the Wisp"
+        },
+        {
+          "nameEn": "Putting It All Together"
+        },
+        {
+          "nameEn": "The Horseman Strikes!"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Challenge Promo",
+      "cards": [
+        {
+          "nameEn": "Elsa's Ice Palace"
+        },
+        {
+          "nameEn": "Let It Go"
+        },
+        {
+          "nameEn": "A Whole New World"
+        },
+        {
+          "nameEn": "Dragon Fire"
+        },
+        {
+          "nameEn": "Invited to the Ball"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Promo Set 1",
+      "cards": [
+        {
+          "nameEn": "Ursula's Lair"
+        },
+        {
+          "nameEn": "Pinocchio"
+        },
+        {
+          "nameEn": "Flotsam & Jetsam"
+        },
+        {
+          "nameEn": "Hidden Inkcaster"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / D23 Collection",
+      "cards": [
+        {
+          "nameEn": "Angel"
+        },
+        {
+          "nameEn": "Bruno Madrigal"
+        },
+        {
+          "nameEn": "Héctor Rivera"
+        },
+        {
+          "nameEn": "Mr. Incredible"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Promo Set 2",
+      "cards": [
+        {
+          "nameEn": "Chicha"
+        },
+        {
+          "nameEn": "Kristoff"
+        },
+        {
+          "nameEn": "Finders Keepers"
+        },
+        {
+          "nameEn": "Pull the Lever!"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Lorcana Challenge Year 3",
+      "cards": [
+        {
+          "nameEn": "Down In New Orleans"
+        },
+        {
+          "nameEn": "The Headless Horseman"
+        }
+      ]
+    },
+    {
+      "name": "Disney Lorcana / Curator's Collection: Heroines Edition",
+      "cards": [
+        {
+          "nameEn": "Ariel"
+        }
+      ]
+    }
+  ]
+}

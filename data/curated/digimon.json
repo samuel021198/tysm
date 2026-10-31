@@ -1,0 +1,5858 @@
+{
+  "brand": "Digimon",
+  "proposedEnum": "DIGIMON",
+  "imageUrl": null,
+  "series": [
+    {
+      "name": "Digimon TCG / Digimon TCG",
+      "cards": [
+        {
+          "nameEn": "BlackWarGreymon"
+        },
+        {
+          "nameEn": "BlackWarGreymon (X Antibody)"
+        },
+        {
+          "nameEn": "WarGreymon (X Antibody)"
+        },
+        {
+          "nameEn": "Gallantmon"
+        },
+        {
+          "nameEn": "GeoGreymon"
+        },
+        {
+          "nameEn": "Sakuyamon"
+        },
+        {
+          "nameEn": "ToyAgumon"
+        },
+        {
+          "nameEn": "Veemon"
+        },
+        {
+          "nameEn": "Agumon (X Antibody)"
+        },
+        {
+          "nameEn": "Agumon Expert"
+        },
+        {
+          "nameEn": "AncientGreymon"
+        },
+        {
+          "nameEn": "ArkhaiAngemon"
+        },
+        {
+          "nameEn": "BlackGatomon"
+        },
+        {
+          "nameEn": "BlackGatomon Uver."
+        },
+        {
+          "nameEn": "BlitzGreymon"
+        },
+        {
+          "nameEn": "BurningGreymon"
+        },
+        {
+          "nameEn": "BushiAgumon"
+        },
+        {
+          "nameEn": "ChaosGallantmon"
+        },
+        {
+          "nameEn": "ClavisAngemon"
+        },
+        {
+          "nameEn": "ClearAgumon"
+        },
+        {
+          "nameEn": "DeckerGreymon"
+        },
+        {
+          "nameEn": "DexDoruGreymon"
+        },
+        {
+          "nameEn": "DoruGreymon"
+        },
+        {
+          "nameEn": "EmperorGreymon"
+        },
+        {
+          "nameEn": "Fake Agumon Expert"
+        },
+        {
+          "nameEn": "Gabumon (X Antibody)"
+        },
+        {
+          "nameEn": "Gatomon (X Antibody)"
+        },
+        {
+          "nameEn": "Gomamon (X Antibody)"
+        },
+        {
+          "nameEn": "Greymon (X Antibody)"
+        },
+        {
+          "nameEn": "MedievalGallantmon"
+        },
+        {
+          "nameEn": "Omnimon (X Antibody)"
+        },
+        {
+          "nameEn": "Omnimon Alter-B"
+        },
+        {
+          "nameEn": "Omnimon Alter-S"
+        },
+        {
+          "nameEn": "Omnimon Zwart"
+        },
+        {
+          "nameEn": "Omnimon Zwart Defeat"
+        },
+        {
+          "nameEn": "Patamon's Confession"
+        },
+        {
+          "nameEn": "RizeGreymon"
+        },
+        {
+          "nameEn": "Sakuyamon: Maid Mode"
+        },
+        {
+          "nameEn": "ShineGreymon"
+        },
+        {
+          "nameEn": "SlashAngemon"
+        },
+        {
+          "nameEn": "VictoryGreymon"
+        },
+        {
+          "nameEn": "ZeigGreymon"
+        },
+        {
+          "nameEn": "Agumon - Bond of Bravery"
+        },
+        {
+          "nameEn": "Gabumon - Bond of Friendship"
+        },
+        {
+          "nameEn": "Gallantmon (X Antibody)"
+        },
+        {
+          "nameEn": "Gallantmon Crimson Mode"
+        },
+        {
+          "nameEn": "Gallantmon: Crimson Mode"
+        },
+        {
+          "nameEn": "Imperialdramon Dragon Mode"
+        },
+        {
+          "nameEn": "Imperialdramon Fighter Mode"
+        },
+        {
+          "nameEn": "Imperialdramon Paladin Mode"
+        },
+        {
+          "nameEn": "Imperialdramon: Dragon Mode"
+        },
+        {
+          "nameEn": "Imperialdramon: Fighter Mode"
+        },
+        {
+          "nameEn": "Imperialdramon: Paladin Mode"
+        },
+        {
+          "nameEn": "Magnamon (X Antibody)"
+        },
+        {
+          "nameEn": "Marcus Damon & Agumon"
+        },
+        {
+          "nameEn": "MetalGarurumon (X Antibody)"
+        },
+        {
+          "nameEn": "MetalGreymon (X Antibody)"
+        },
+        {
+          "nameEn": "MetalGreymon + Cyber Launcher"
+        },
+        {
+          "nameEn": "MetalGreymon: Alterous Mode"
+        },
+        {
+          "nameEn": "Omnimon: Merciful Mode"
+        },
+        {
+          "nameEn": "RizeGreymon (X Antibody)"
+        },
+        {
+          "nameEn": "Sakuyamon (X Antibody)"
+        },
+        {
+          "nameEn": "ShineGreymon: Burst Mode"
+        },
+        {
+          "nameEn": "ShineGreymon: Ruin Mode"
+        },
+        {
+          "nameEn": "Abbadomon"
+        },
+        {
+          "nameEn": "Aegiomon"
+        },
+        {
+          "nameEn": "Agunimon"
+        },
+        {
+          "nameEn": "Ai & Mako"
+        },
+        {
+          "nameEn": "Ajatarmon"
+        },
+        {
+          "nameEn": "Aldamon"
+        },
+        {
+          "nameEn": "All Delete"
+        },
+        {
+          "nameEn": "Alphamon"
+        },
+        {
+          "nameEn": "Altea"
+        },
+        {
+          "nameEn": "Ami Aiba"
+        },
+        {
+          "nameEn": "Amphimon"
+        },
+        {
+          "nameEn": "Analogman"
+        },
+        {
+          "nameEn": "Angoramon"
+        },
+        {
+          "nameEn": "Antylamon"
+        },
+        {
+          "nameEn": "Anubismon"
+        },
+        {
+          "nameEn": "Apemon"
+        },
+        {
+          "nameEn": "Apollomon"
+        },
+        {
+          "nameEn": "App Link"
+        },
+        {
+          "nameEn": "Aqua Viper"
+        },
+        {
+          "nameEn": "Aquilamon"
+        },
+        {
+          "nameEn": "Arbormon"
+        },
+        {
+          "nameEn": "Argomon"
+        },
+        {
+          "nameEn": "Ariemon"
+        },
+        {
+          "nameEn": "Artiomon"
+        },
+        {
+          "nameEn": "Arukenimon"
+        },
+        {
+          "nameEn": "Aruraumon"
+        },
+        {
+          "nameEn": "Assaultmon"
+        },
+        {
+          "nameEn": "Astamon"
+        },
+        {
+          "nameEn": "Asuramon"
+        },
+        {
+          "nameEn": "Atomic Ray"
+        },
+        {
+          "nameEn": "Atratusmon"
+        },
+        {
+          "nameEn": "Baalmon"
+        },
+        {
+          "nameEn": "Bacchusmon"
+        },
+        {
+          "nameEn": "Bagramon"
+        },
+        {
+          "nameEn": "Bakomon"
+        },
+        {
+          "nameEn": "Baldy Blow"
+        },
+        {
+          "nameEn": "Baluchimon"
+        },
+        {
+          "nameEn": "BaoHuckmon"
+        },
+        {
+          "nameEn": "Barbamon"
+        },
+        {
+          "nameEn": "Bastemon"
+        },
+        {
+          "nameEn": "Battle NPC"
+        },
+        {
+          "nameEn": "Bearcatmon"
+        },
+        {
+          "nameEn": "Bearmon"
+        },
+        {
+          "nameEn": "Beautymon"
+        },
+        {
+          "nameEn": "Bebydomon"
+        },
+        {
+          "nameEn": "Beelzemon"
+        },
+        {
+          "nameEn": "Beetlemon"
+        },
+        {
+          "nameEn": "Beowolfmon"
+        },
+        {
+          "nameEn": "Betsumon"
+        },
+        {
+          "nameEn": "Bibimon"
+        },
+        {
+          "nameEn": "Bifrost"
+        },
+        {
+          "nameEn": "BigMamemon"
+        },
+        {
+          "nameEn": "BigUkkomon"
+        },
+        {
+          "nameEn": "Biomon"
+        },
+        {
+          "nameEn": "Blast Fire"
+        },
+        {
+          "nameEn": "Blastmon"
+        },
+        {
+          "nameEn": "Blimpmon"
+        },
+        {
+          "nameEn": "Blue Card"
+        },
+        {
+          "nameEn": "Bokomon"
+        },
+        {
+          "nameEn": "Bombermon"
+        },
+        {
+          "nameEn": "Boogiemon"
+        },
+        {
+          "nameEn": "Bootmon"
+        },
+        {
+          "nameEn": "Bosamon"
+        },
+        {
+          "nameEn": "Boutmon"
+        },
+        {
+          "nameEn": "Bowmon"
+        },
+        {
+          "nameEn": "Brachiomon"
+        },
+        {
+          "nameEn": "Breaclaw"
+        },
+        {
+          "nameEn": "Budmon"
+        },
+        {
+          "nameEn": "Bulbmon"
+        },
+        {
+          "nameEn": "Bulkmon"
+        },
+        {
+          "nameEn": "Bulucomon"
+        },
+        {
+          "nameEn": "Buraimon"
+        },
+        {
+          "nameEn": "Burgamon"
+        },
+        {
+          "nameEn": "Butenmon"
+        },
+        {
+          "nameEn": "Calendamon"
+        },
+        {
+          "nameEn": "Callismon"
+        },
+        {
+          "nameEn": "Calmaramon"
+        },
+        {
+          "nameEn": "Calumon"
+        },
+        {
+          "nameEn": "Caturamon"
+        },
+        {
+          "nameEn": "Ceresmon"
+        },
+        {
+          "nameEn": "Cernumon"
+        },
+        {
+          "nameEn": "Chamblemon"
+        },
+        {
+          "nameEn": "Chaosmon"
+        },
+        {
+          "nameEn": "Chaperomon"
+        },
+        {
+          "nameEn": "Chapmon"
+        },
+        {
+          "nameEn": "Charismon"
+        },
+        {
+          "nameEn": "Cherubimon"
+        },
+        {
+          "nameEn": "Chikurimon"
+        },
+        {
+          "nameEn": "Chirinmon"
+        },
+        {
+          "nameEn": "Chiropmon"
+        },
+        {
+          "nameEn": "Climbmon"
+        },
+        {
+          "nameEn": "Clockmon"
+        },
+        {
+          "nameEn": "Close"
+        },
+        {
+          "nameEn": "Coachmon"
+        },
+        {
+          "nameEn": "Cody Hida"
+        },
+        {
+          "nameEn": "Coelamon"
+        },
+        {
+          "nameEn": "Cometmon"
+        },
+        {
+          "nameEn": "Consulmon"
+        },
+        {
+          "nameEn": "Cool Boy"
+        },
+        {
+          "nameEn": "Coordemon"
+        },
+        {
+          "nameEn": "Copipemon"
+        },
+        {
+          "nameEn": "Coredramon"
+        },
+        {
+          "nameEn": "Coronamon"
+        },
+        {
+          "nameEn": "Cougarmon"
+        },
+        {
+          "nameEn": "Crabmon"
+        },
+        {
+          "nameEn": "Craftmon"
+        },
+        {
+          "nameEn": "Craniamon"
+        },
+        {
+          "nameEn": "Creepymon"
+        },
+        {
+          "nameEn": "Crescemon"
+        },
+        {
+          "nameEn": "Cross Arts"
+        },
+        {
+          "nameEn": "Crowmon"
+        },
+        {
+          "nameEn": "Cthyllamon"
+        },
+        {
+          "nameEn": "Cupimon"
+        },
+        {
+          "nameEn": "Cutemon"
+        },
+        {
+          "nameEn": "Cyclonemon"
+        },
+        {
+          "nameEn": "DCD Bomb"
+        },
+        {
+          "nameEn": "DNA Charge"
+        },
+        {
+          "nameEn": "DORU-Din"
+        },
+        {
+          "nameEn": "DaiPenmon"
+        },
+        {
+          "nameEn": "Dalphomon"
+        },
+        {
+          "nameEn": "Damemon"
+        },
+        {
+          "nameEn": "Dan Yuki"
+        },
+        {
+          "nameEn": "DanDevimon"
+        },
+        {
+          "nameEn": "Dantemon"
+        },
+        {
+          "nameEn": "Darcmon"
+        },
+        {
+          "nameEn": "Dark Field"
+        },
+        {
+          "nameEn": "Dark Roar"
+        },
+        {
+          "nameEn": "Darkdramon"
+        },
+        {
+          "nameEn": "Darumamon"
+        },
+        {
+          "nameEn": "Death Claw"
+        },
+        {
+          "nameEn": "DeathXmon"
+        },
+        {
+          "nameEn": "Deltamon"
+        },
+        {
+          "nameEn": "Deputymon"
+        },
+        {
+          "nameEn": "Der Blitz"
+        },
+        {
+          "nameEn": "Destromon"
+        },
+        {
+          "nameEn": "Deusmon"
+        },
+        {
+          "nameEn": "Dezipmon"
+        },
+        {
+          "nameEn": "Diaboromon"
+        },
+        {
+          "nameEn": "Dianamon"
+        },
+        {
+          "nameEn": "Diatrymon"
+        },
+        {
+          "nameEn": "DigiLab"
+        },
+        {
+          "nameEn": "Digmon"
+        },
+        {
+          "nameEn": "Dimetromon"
+        },
+        {
+          "nameEn": "Dinohyumon"
+        },
+        {
+          "nameEn": "Dinomon"
+        },
+        {
+          "nameEn": "Dinorexmon"
+        },
+        {
+          "nameEn": "Divemon"
+        },
+        {
+          "nameEn": "DoGatchmon"
+        },
+        {
+          "nameEn": "DoKunemon"
+        },
+        {
+          "nameEn": "Dobermon"
+        },
+        {
+          "nameEn": "Docmon"
+        },
+        {
+          "nameEn": "Doggymon"
+        },
+        {
+          "nameEn": "Dokamon"
+        },
+        {
+          "nameEn": "Dolphmon"
+        },
+        {
+          "nameEn": "Dominimon"
+        },
+        {
+          "nameEn": "Dondokomon"
+        },
+        {
+          "nameEn": "Dorbickmon"
+        },
+        {
+          "nameEn": "Dorimon"
+        },
+        {
+          "nameEn": "Dorugamon"
+        },
+        {
+          "nameEn": "Dorulumon"
+        },
+        {
+          "nameEn": "Dorumon"
+        },
+        {
+          "nameEn": "Dosukomon"
+        },
+        {
+          "nameEn": "Doumon"
+        },
+        {
+          "nameEn": "Dracmon"
+        },
+        {
+          "nameEn": "Dracomon"
+        },
+        {
+          "nameEn": "Dragomon"
+        },
+        {
+          "nameEn": "Dreammon"
+        },
+        {
+          "nameEn": "Dullahamon"
+        },
+        {
+          "nameEn": "Duramon"
+        },
+        {
+          "nameEn": "Durandamon"
+        },
+        {
+          "nameEn": "Duskmon"
+        },
+        {
+          "nameEn": "Dynasmon"
+        },
+        {
+          "nameEn": "Eaglemon"
+        },
+        {
+          "nameEn": "Eater Adam"
+        },
+        {
+          "nameEn": "Eater Bit"
+        },
+        {
+          "nameEn": "Eater EDEN"
+        },
+        {
+          "nameEn": "Eater Eve"
+        },
+        {
+          "nameEn": "Ebemon"
+        },
+        {
+          "nameEn": "Ebidramon"
+        },
+        {
+          "nameEn": "Ebonwumon"
+        },
+        {
+          "nameEn": "Effecmon"
+        },
+        {
+          "nameEn": "Ekakimon"
+        },
+        {
+          "nameEn": "Eldradimon"
+        },
+        {
+          "nameEn": "Elizamon"
+        },
+        {
+          "nameEn": "Entermon"
+        },
+        {
+          "nameEn": "Entmon"
+        },
+        {
+          "nameEn": "Eosmon"
+        },
+        {
+          "nameEn": "Eri Karan"
+        },
+        {
+          "nameEn": "Erlangmon"
+        },
+        {
+          "nameEn": "Espimon"
+        },
+        {
+          "nameEn": "Examon"
+        },
+        {
+          "nameEn": "Exermon"
+        },
+        {
+          "nameEn": "Eyesmon"
+        },
+        {
+          "nameEn": "Fakemon"
+        },
+        {
+          "nameEn": "Falcomon"
+        },
+        {
+          "nameEn": "Fangmon"
+        },
+        {
+          "nameEn": "Fei"
+        },
+        {
+          "nameEn": "Feresmon"
+        },
+        {
+          "nameEn": "Filmon"
+        },
+        {
+          "nameEn": "Firamon"
+        },
+        {
+          "nameEn": "Fire Ball"
+        },
+        {
+          "nameEn": "Flamemon"
+        },
+        {
+          "nameEn": "Flaremon"
+        },
+        {
+          "nameEn": "Flickmon"
+        },
+        {
+          "nameEn": "Fluffymon"
+        },
+        {
+          "nameEn": "Fly Bullet"
+        },
+        {
+          "nameEn": "Footmon"
+        },
+        {
+          "nameEn": "Fox Fire"
+        },
+        {
+          "nameEn": "Frimon"
+        },
+        {
+          "nameEn": "Frozomon"
+        },
+        {
+          "nameEn": "Fugamon"
+        },
+        {
+          "nameEn": "Fujinmon"
+        },
+        {
+          "nameEn": "Fumamon"
+        },
+        {
+          "nameEn": "FunBeemon"
+        },
+        {
+          "nameEn": "Fusionize"
+        },
+        {
+          "nameEn": "Gaia Force"
+        },
+        {
+          "nameEn": "Gaiamon"
+        },
+        {
+          "nameEn": "Gaiomon"
+        },
+        {
+          "nameEn": "Galemon"
+        },
+        {
+          "nameEn": "Gammamon"
+        },
+        {
+          "nameEn": "Ganemon"
+        },
+        {
+          "nameEn": "Gankoomon"
+        },
+        {
+          "nameEn": "Gaogamon"
+        },
+        {
+          "nameEn": "Gaomon"
+        },
+        {
+          "nameEn": "Gaossmon"
+        },
+        {
+          "nameEn": "Gargomon"
+        },
+        {
+          "nameEn": "Gasamon"
+        },
+        {
+          "nameEn": "Gatchmon"
+        },
+        {
+          "nameEn": "Gawappamon"
+        },
+        {
+          "nameEn": "Gekkomon"
+        },
+        {
+          "nameEn": "Gennai"
+        },
+        {
+          "nameEn": "Ghostmon"
+        },
+        {
+          "nameEn": "Ghoulmon"
+        },
+        {
+          "nameEn": "Giant Meat"
+        },
+        {
+          "nameEn": "Giga Death"
+        },
+        {
+          "nameEn": "Giga Storm"
+        },
+        {
+          "nameEn": "Gigasmon"
+        },
+        {
+          "nameEn": "Gigimon"
+        },
+        {
+          "nameEn": "Ginkakumon"
+        },
+        {
+          "nameEn": "Ginryumon"
+        },
+        {
+          "nameEn": "Giromon"
+        },
+        {
+          "nameEn": "Gizmon: AT"
+        },
+        {
+          "nameEn": "Gizmon: XT"
+        },
+        {
+          "nameEn": "Gladimon"
+        },
+        {
+          "nameEn": "Globemon"
+        },
+        {
+          "nameEn": "Goblimon"
+        },
+        {
+          "nameEn": "God Flame"
+        },
+        {
+          "nameEn": "Gogmamon"
+        },
+        {
+          "nameEn": "Gokuumon"
+        },
+        {
+          "nameEn": "Golemon"
+        },
+        {
+          "nameEn": "Gomimon"
+        },
+        {
+          "nameEn": "Gossipmon"
+        },
+        {
+          "nameEn": "Grademon"
+        },
+        {
+          "nameEn": "GrapLeomon"
+        },
+        {
+          "nameEn": "Grizzlymon"
+        },
+        {
+          "nameEn": "Growlmon"
+        },
+        {
+          "nameEn": "Grumblemon"
+        },
+        {
+          "nameEn": "Gryphonmon"
+        },
+        {
+          "nameEn": "Guilmon"
+        },
+        {
+          "nameEn": "Gulfmon"
+        },
+        {
+          "nameEn": "Gumdramon"
+        },
+        {
+          "nameEn": "Gummymon"
+        },
+        {
+          "nameEn": "Gundramon"
+        },
+        {
+          "nameEn": "Gurimon"
+        },
+        {
+          "nameEn": "Gururumon"
+        },
+        {
+          "nameEn": "Gusokumon"
+        },
+        {
+          "nameEn": "Gyuukimon"
+        },
+        {
+          "nameEn": "Hackmon"
+        },
+        {
+          "nameEn": "Hadesmon"
+        },
+        {
+          "nameEn": "Hakubamon"
+        },
+        {
+          "nameEn": "Hanimon"
+        },
+        {
+          "nameEn": "Harpymon"
+        },
+        {
+          "nameEn": "Heat Viper"
+        },
+        {
+          "nameEn": "Henry Wong"
+        },
+        {
+          "nameEn": "Herissmon"
+        },
+        {
+          "nameEn": "HiAndromon"
+        },
+        {
+          "nameEn": "Hiyarimon"
+        },
+        {
+          "nameEn": "Holy Flame"
+        },
+        {
+          "nameEn": "Holy Wave"
+        },
+        {
+          "nameEn": "Homeros"
+        },
+        {
+          "nameEn": "Hookmon"
+        },
+        {
+          "nameEn": "Hopmon"
+        },
+        {
+          "nameEn": "Huankunmon"
+        },
+        {
+          "nameEn": "Huckmon"
+        },
+        {
+          "nameEn": "Hudiemon"
+        },
+        {
+          "nameEn": "Hydramon"
+        },
+        {
+          "nameEn": "Hyemon"
+        },
+        {
+          "nameEn": "Hyogamon"
+        },
+        {
+          "nameEn": "Hyokomon"
+        },
+        {
+          "nameEn": "Ice Statue"
+        },
+        {
+          "nameEn": "Ice Wall!"
+        },
+        {
+          "nameEn": "IceDevimon"
+        },
+        {
+          "nameEn": "Ignitemon"
+        },
+        {
+          "nameEn": "Impmon"
+        },
+        {
+          "nameEn": "Indramon"
+        },
+        {
+          "nameEn": "Infermon"
+        },
+        {
+          "nameEn": "Invisimon"
+        },
+        {
+          "nameEn": "Iron Slash"
+        },
+        {
+          "nameEn": "Izzy Izumi"
+        },
+        {
+          "nameEn": "Jack Raid"
+        },
+        {
+          "nameEn": "Jagamon"
+        },
+        {
+          "nameEn": "Jazamon"
+        },
+        {
+          "nameEn": "Jazardmon"
+        },
+        {
+          "nameEn": "Jellymon"
+        },
+        {
+          "nameEn": "Jeri Kato"
+        },
+        {
+          "nameEn": "Jesmon"
+        },
+        {
+          "nameEn": "Jesmon GX"
+        },
+        {
+          "nameEn": "Jimmy KEN"
+        },
+        {
+          "nameEn": "Joe Kido"
+        },
+        {
+          "nameEn": "Jokermon"
+        },
+        {
+          "nameEn": "Junkmon"
+        },
+        {
+          "nameEn": "Junomon"
+        },
+        {
+          "nameEn": "Jupitermon"
+        },
+        {
+          "nameEn": "Kabemon"
+        },
+        {
+          "nameEn": "Kaguyamon"
+        },
+        {
+          "nameEn": "Kakamon"
+        },
+        {
+          "nameEn": "Kakkinmon"
+        },
+        {
+          "nameEn": "Kamemon"
+        },
+        {
+          "nameEn": "Kanan Yuki"
+        },
+        {
+          "nameEn": "Kapurimon"
+        },
+        {
+          "nameEn": "Karatenmon"
+        },
+        {
+          "nameEn": "Kazemon"
+        },
+        {
+          "nameEn": "Kazuchimon"
+        },
+        {
+          "nameEn": "Kekkomon"
+        },
+        {
+          "nameEn": "Keramon"
+        },
+        {
+          "nameEn": "Kimeramon"
+        },
+        {
+          "nameEn": "KingWhamon"
+        },
+        {
+          "nameEn": "Kinkakumon"
+        },
+        {
+          "nameEn": "Knightmon"
+        },
+        {
+          "nameEn": "Kogamon"
+        },
+        {
+          "nameEn": "Koh & Sayo"
+        },
+        {
+          "nameEn": "Kokeshimon"
+        },
+        {
+          "nameEn": "Kokomon"
+        },
+        {
+          "nameEn": "Kongou"
+        },
+        {
+          "nameEn": "Kotemon"
+        },
+        {
+          "nameEn": "Kozenimon"
+        },
+        {
+          "nameEn": "Kudamon"
+        },
+        {
+          "nameEn": "Kumamon"
+        },
+        {
+          "nameEn": "Kunlun"
+        },
+        {
+          "nameEn": "Kuzuhamon"
+        },
+        {
+          "nameEn": "Kyaromon"
+        },
+        {
+          "nameEn": "Kyokyomon"
+        },
+        {
+          "nameEn": "Kyubimon"
+        },
+        {
+          "nameEn": "Kyukimon"
+        },
+        {
+          "nameEn": "Labramon"
+        },
+        {
+          "nameEn": "Lalamon"
+        },
+        {
+          "nameEn": "Lamiamon"
+        },
+        {
+          "nameEn": "Lamortmon"
+        },
+        {
+          "nameEn": "Lampmon"
+        },
+        {
+          "nameEn": "Lanamon"
+        },
+        {
+          "nameEn": "Landramon"
+        },
+        {
+          "nameEn": "Laser Eye"
+        },
+        {
+          "nameEn": "Lavorvomon"
+        },
+        {
+          "nameEn": "Lekismon"
+        },
+        {
+          "nameEn": "Leopardmon"
+        },
+        {
+          "nameEn": "Leviamon"
+        },
+        {
+          "nameEn": "Liamon"
+        },
+        {
+          "nameEn": "Lighdramon"
+        },
+        {
+          "nameEn": "Lilamon"
+        },
+        {
+          "nameEn": "Lilithmon"
+        },
+        {
+          "nameEn": "Liollmon"
+        },
+        {
+          "nameEn": "Lobomon"
+        },
+        {
+          "nameEn": "Locomon"
+        },
+        {
+          "nameEn": "Logamon"
+        },
+        {
+          "nameEn": "Logimon"
+        },
+        {
+          "nameEn": "Loogamon"
+        },
+        {
+          "nameEn": "Loogarmon"
+        },
+        {
+          "nameEn": "Lopmon"
+        },
+        {
+          "nameEn": "Lotosmon"
+        },
+        {
+          "nameEn": "Loudmon"
+        },
+        {
+          "nameEn": "Loweemon"
+        },
+        {
+          "nameEn": "Lucemon"
+        },
+        {
+          "nameEn": "Ludomon"
+        },
+        {
+          "nameEn": "Lui Ohwada"
+        },
+        {
+          "nameEn": "Luminamon"
+        },
+        {
+          "nameEn": "Lunamon"
+        },
+        {
+          "nameEn": "Luxmon"
+        },
+        {
+          "nameEn": "Lynxmon"
+        },
+        {
+          "nameEn": "Machmon"
+        },
+        {
+          "nameEn": "MadLeomon"
+        },
+        {
+          "nameEn": "Maelstrom"
+        },
+        {
+          "nameEn": "Magma Bomb"
+        },
+        {
+          "nameEn": "Maildramon"
+        },
+        {
+          "nameEn": "Mailmon"
+        },
+        {
+          "nameEn": "Majiramon"
+        },
+        {
+          "nameEn": "Makuramon"
+        },
+        {
+          "nameEn": "Manekimon"
+        },
+        {
+          "nameEn": "Maquinamon"
+        },
+        {
+          "nameEn": "Marsmon"
+        },
+        {
+          "nameEn": "Mastemon"
+        },
+        {
+          "nameEn": "Matadormon"
+        },
+        {
+          "nameEn": "Mcmon"
+        },
+        {
+          "nameEn": "Meat"
+        },
+        {
+          "nameEn": "Mediamon"
+        },
+        {
+          "nameEn": "Medicmon"
+        },
+        {
+          "nameEn": "Medusamon"
+        },
+        {
+          "nameEn": "Mega Flame"
+        },
+        {
+          "nameEn": "Megadeath"
+        },
+        {
+          "nameEn": "Megidramon"
+        },
+        {
+          "nameEn": "Meicoomon"
+        },
+        {
+          "nameEn": "Mercurymon"
+        },
+        {
+          "nameEn": "Mermaimon"
+        },
+        {
+          "nameEn": "Merukimon"
+        },
+        {
+          "nameEn": "Mervamon"
+        },
+        {
+          "nameEn": "Metatromon"
+        },
+        {
+          "nameEn": "Mienumon"
+        },
+        {
+          "nameEn": "Mihiramon"
+        },
+        {
+          "nameEn": "Mikemon"
+        },
+        {
+          "nameEn": "Mimicmon"
+        },
+        {
+          "nameEn": "Minervamon"
+        },
+        {
+          "nameEn": "Minomon"
+        },
+        {
+          "nameEn": "Mirrormon"
+        },
+        {
+          "nameEn": "Missimon"
+        },
+        {
+          "nameEn": "Mistymon"
+        },
+        {
+          "nameEn": "Mitamamon"
+        },
+        {
+          "nameEn": "Mococomon"
+        },
+        {
+          "nameEn": "Mon"
+        },
+        {
+          "nameEn": "Monimon"
+        },
+        {
+          "nameEn": "Monitamon"
+        },
+        {
+          "nameEn": "Monmon"
+        },
+        {
+          "nameEn": "Monodramon"
+        },
+        {
+          "nameEn": "Moonmon"
+        },
+        {
+          "nameEn": "Morphomon"
+        },
+        {
+          "nameEn": "Mugen"
+        },
+        {
+          "nameEn": "Mulemon"
+        },
+        {
+          "nameEn": "Mummymon"
+        },
+        {
+          "nameEn": "Musclemon"
+        },
+        {
+          "nameEn": "Musimon"
+        },
+        {
+          "nameEn": "Nail Bone"
+        },
+        {
+          "nameEn": "Namakemon"
+        },
+        {
+          "nameEn": "Navimon"
+        },
+        {
+          "nameEn": "Necromon"
+        },
+        {
+          "nameEn": "Neemon"
+        },
+        {
+          "nameEn": "Negamon"
+        },
+        {
+          "nameEn": "Nene Amano"
+        },
+        {
+          "nameEn": "NeoDevimon"
+        },
+        {
+          "nameEn": "Neptunemon"
+        },
+        {
+          "nameEn": "Nezhamon"
+        },
+        {
+          "nameEn": "Nidhoggmon"
+        },
+        {
+          "nameEn": "Night Raid"
+        },
+        {
+          "nameEn": "Ninjamon"
+        },
+        {
+          "nameEn": "Nosferamon"
+        },
+        {
+          "nameEn": "Nyabootmon"
+        },
+        {
+          "nameEn": "Oblivimon"
+        },
+        {
+          "nameEn": "Oboromon"
+        },
+        {
+          "nameEn": "Octomon"
+        },
+        {
+          "nameEn": "Offmon"
+        },
+        {
+          "nameEn": "Ogudomon"
+        },
+        {
+          "nameEn": "Okuwamon"
+        },
+        {
+          "nameEn": "Omekamon"
+        },
+        {
+          "nameEn": "Onibimon"
+        },
+        {
+          "nameEn": "Onmon"
+        },
+        {
+          "nameEn": "Ophanimon"
+        },
+        {
+          "nameEn": "Opossummon"
+        },
+        {
+          "nameEn": "Ordinemon"
+        },
+        {
+          "nameEn": "Ornismon"
+        },
+        {
+          "nameEn": "Orochimon"
+        },
+        {
+          "nameEn": "Oujamon"
+        },
+        {
+          "nameEn": "Ouranosmon"
+        },
+        {
+          "nameEn": "Ouryumon"
+        },
+        {
+          "nameEn": "Pajiramon"
+        },
+        {
+          "nameEn": "Pal"
+        },
+        {
+          "nameEn": "Paledramon"
+        },
+        {
+          "nameEn": "Pandamon"
+        },
+        {
+          "nameEn": "Panjyamon"
+        },
+        {
+          "nameEn": "Peckmon"
+        },
+        {
+          "nameEn": "Perorimon"
+        },
+        {
+          "nameEn": "Petermon"
+        },
+        {
+          "nameEn": "Pharaohmon"
+        },
+        {
+          "nameEn": "Phascomon"
+        },
+        {
+          "nameEn": "Pickmon"
+        },
+        {
+          "nameEn": "Pickmons"
+        },
+        {
+          "nameEn": "Pillomon"
+        },
+        {
+          "nameEn": "Pinamon"
+        },
+        {
+          "nameEn": "Pipismon"
+        },
+        {
+          "nameEn": "Pipomon"
+        },
+        {
+          "nameEn": "Piranimon"
+        },
+        {
+          "nameEn": "Pistmon"
+        },
+        {
+          "nameEn": "Plutomon"
+        },
+        {
+          "nameEn": "Poison Ivy"
+        },
+        {
+          "nameEn": "Pomumon"
+        },
+        {
+          "nameEn": "Porcupamon"
+        },
+        {
+          "nameEn": "Poseidomon"
+        },
+        {
+          "nameEn": "Potamon"
+        },
+        {
+          "nameEn": "Pristimon"
+        },
+        {
+          "nameEn": "Proganomon"
+        },
+        {
+          "nameEn": "Protecmon"
+        },
+        {
+          "nameEn": "Protein"
+        },
+        {
+          "nameEn": "Proximamon"
+        },
+        {
+          "nameEn": "Pteromon"
+        },
+        {
+          "nameEn": "Publimon"
+        },
+        {
+          "nameEn": "Pukumon"
+        },
+        {
+          "nameEn": "Pulsemon"
+        },
+        {
+          "nameEn": "Punkmon"
+        },
+        {
+          "nameEn": "Puroromon"
+        },
+        {
+          "nameEn": "Pusurimon"
+        },
+        {
+          "nameEn": "Puyoyomon"
+        },
+        {
+          "nameEn": "Pyon Dump"
+        },
+        {
+          "nameEn": "Quantumon"
+        },
+        {
+          "nameEn": "Quartzmon"
+        },
+        {
+          "nameEn": "Quetzalmon"
+        },
+        {
+          "nameEn": "Raguelmon"
+        },
+        {
+          "nameEn": "Raidenmon"
+        },
+        {
+          "nameEn": "Raijinmon"
+        },
+        {
+          "nameEn": "Rapidmon"
+        },
+        {
+          "nameEn": "Rasenmon"
+        },
+        {
+          "nameEn": "Rasielmon"
+        },
+        {
+          "nameEn": "Ravemon"
+        },
+        {
+          "nameEn": "Reaper"
+        },
+        {
+          "nameEn": "Reapermon"
+        },
+        {
+          "nameEn": "Rebellimon"
+        },
+        {
+          "nameEn": "Rebootmon"
+        },
+        {
+          "nameEn": "Recomon"
+        },
+        {
+          "nameEn": "Red Card"
+        },
+        {
+          "nameEn": "Red Reamer"
+        },
+        {
+          "nameEn": "Regulusmon"
+        },
+        {
+          "nameEn": "Reina Oumi"
+        },
+        {
+          "nameEn": "Ren Tobari"
+        },
+        {
+          "nameEn": "Renamon"
+        },
+        {
+          "nameEn": "Reppamon"
+        },
+        {
+          "nameEn": "Revivemon"
+        },
+        {
+          "nameEn": "Rhihimon"
+        },
+        {
+          "nameEn": "Rhythm"
+        },
+        {
+          "nameEn": "Ritsu Kodo"
+        },
+        {
+          "nameEn": "Roachmon"
+        },
+        {
+          "nameEn": "Roamon"
+        },
+        {
+          "nameEn": "Royal Base"
+        },
+        {
+          "nameEn": "Royal Nuts"
+        },
+        {
+          "nameEn": "Runnermon"
+        },
+        {
+          "nameEn": "Ryudamon"
+        },
+        {
+          "nameEn": "Ryugumon"
+        },
+        {
+          "nameEn": "Sagomon"
+        },
+        {
+          "nameEn": "Sakusimon"
+        },
+        {
+          "nameEn": "Sakuttomon"
+        },
+        {
+          "nameEn": "Sandiramon"
+        },
+        {
+          "nameEn": "Sangomon"
+        },
+        {
+          "nameEn": "Sanzomon"
+        },
+        {
+          "nameEn": "Satellamon"
+        },
+        {
+          "nameEn": "Sayo"
+        },
+        {
+          "nameEn": "Sayo & Koh"
+        },
+        {
+          "nameEn": "Scopemon"
+        },
+        {
+          "nameEn": "Scrap Claw"
+        },
+        {
+          "nameEn": "Seasarmon"
+        },
+        {
+          "nameEn": "Shademon"
+        },
+        {
+          "nameEn": "Shadramon"
+        },
+        {
+          "nameEn": "Shakamon"
+        },
+        {
+          "nameEn": "Shamanmon"
+        },
+        {
+          "nameEn": "Sharkmon"
+        },
+        {
+          "nameEn": "Shaujinmon"
+        },
+        {
+          "nameEn": "Sheepmon"
+        },
+        {
+          "nameEn": "Shivamon"
+        },
+        {
+          "nameEn": "Shoemon"
+        },
+        {
+          "nameEn": "Shootmon"
+        },
+        {
+          "nameEn": "Shortmon"
+        },
+        {
+          "nameEn": "Shotmon"
+        },
+        {
+          "nameEn": "Shoutmon"
+        },
+        {
+          "nameEn": "Shroudmon"
+        },
+        {
+          "nameEn": "Shutmon"
+        },
+        {
+          "nameEn": "Shuu Yulin"
+        },
+        {
+          "nameEn": "Sinduramon"
+        },
+        {
+          "nameEn": "Sirenmon"
+        },
+        {
+          "nameEn": "Siriusmon"
+        },
+        {
+          "nameEn": "Skadimon"
+        },
+        {
+          "nameEn": "Snatchmon"
+        },
+        {
+          "nameEn": "Sociamon"
+        },
+        {
+          "nameEn": "Solarmon"
+        },
+        {
+          "nameEn": "Sonic Shot"
+        },
+        {
+          "nameEn": "Sorcermon"
+        },
+        {
+          "nameEn": "Soul Fear"
+        },
+        {
+          "nameEn": "Sourai"
+        },
+        {
+          "nameEn": "Spadamon"
+        },
+        {
+          "nameEn": "Sparrowmon"
+        },
+        {
+          "nameEn": "Spinomon"
+        },
+        {
+          "nameEn": "Starmons"
+        },
+        {
+          "nameEn": "Stefilmon"
+        },
+        {
+          "nameEn": "Strabimon"
+        },
+        {
+          "nameEn": "Styracomon"
+        },
+        {
+          "nameEn": "Suijinmon"
+        },
+        {
+          "nameEn": "Sunflowmon"
+        },
+        {
+          "nameEn": "Sunmon"
+        },
+        {
+          "nameEn": "Surfimon"
+        },
+        {
+          "nameEn": "Susanoomon"
+        },
+        {
+          "nameEn": "Swimmon"
+        },
+        {
+          "nameEn": "Swipemon"
+        },
+        {
+          "nameEn": "Tactimon"
+        },
+        {
+          "nameEn": "Tai Kamiya"
+        },
+        {
+          "nameEn": "Taiga"
+        },
+        {
+          "nameEn": "Taiki Kudo"
+        },
+        {
+          "nameEn": "Takinmon"
+        },
+        {
+          "nameEn": "Takutoumon"
+        },
+        {
+          "nameEn": "Tankdramon"
+        },
+        {
+          "nameEn": "Taomon"
+        },
+        {
+          "nameEn": "Tapirmon"
+        },
+        {
+          "nameEn": "Tapmon"
+        },
+        {
+          "nameEn": "Targetmon"
+        },
+        {
+          "nameEn": "Tekkamon"
+        },
+        {
+          "nameEn": "Tellermon"
+        },
+        {
+          "nameEn": "Tempomon"
+        },
+        {
+          "nameEn": "Terriermon"
+        },
+        {
+          "nameEn": "Testament"
+        },
+        {
+          "nameEn": "Thetismon"
+        },
+        {
+          "nameEn": "Thundermon"
+        },
+        {
+          "nameEn": "TiaLudomon"
+        },
+        {
+          "nameEn": "Tidal Wave"
+        },
+        {
+          "nameEn": "Timemon"
+        },
+        {
+          "nameEn": "Tinkermon"
+        },
+        {
+          "nameEn": "Titamon"
+        },
+        {
+          "nameEn": "Tlalocmon"
+        },
+        {
+          "nameEn": "Tobiumon"
+        },
+        {
+          "nameEn": "Tobucatmon"
+        },
+        {
+          "nameEn": "Tommy Himi"
+        },
+        {
+          "nameEn": "Top Gun"
+        },
+        {
+          "nameEn": "Toropiamon"
+        },
+        {
+          "nameEn": "Tortomon"
+        },
+        {
+          "nameEn": "Toya Kuga"
+        },
+        {
+          "nameEn": "Trailmon"
+        },
+        {
+          "nameEn": "Triceramon"
+        },
+        {
+          "nameEn": "Troopmon"
+        },
+        {
+          "nameEn": "Tsumemon"
+        },
+        {
+          "nameEn": "Tumblemon"
+        },
+        {
+          "nameEn": "Turbomon"
+        },
+        {
+          "nameEn": "Turuiemon"
+        },
+        {
+          "nameEn": "Tuwarmon"
+        },
+        {
+          "nameEn": "Tweetmon"
+        },
+        {
+          "nameEn": "Ukkomon"
+        },
+        {
+          "nameEn": "Unchained"
+        },
+        {
+          "nameEn": "Vajramon"
+        },
+        {
+          "nameEn": "Vee Laser"
+        },
+        {
+          "nameEn": "Velgrmon"
+        },
+        {
+          "nameEn": "Vemmon"
+        },
+        {
+          "nameEn": "Venusmon"
+        },
+        {
+          "nameEn": "Vespamon"
+        },
+        {
+          "nameEn": "Viximon"
+        },
+        {
+          "nameEn": "Volcanomon"
+        },
+        {
+          "nameEn": "Volcdramon"
+        },
+        {
+          "nameEn": "Vorvomon"
+        },
+        {
+          "nameEn": "Wankomon"
+        },
+        {
+          "nameEn": "Wanyamon"
+        },
+        {
+          "nameEn": "Warpmon"
+        },
+        {
+          "nameEn": "Warudamon"
+        },
+        {
+          "nameEn": "Waspmon"
+        },
+        {
+          "nameEn": "Watchmaker"
+        },
+        {
+          "nameEn": "Watchmon"
+        },
+        {
+          "nameEn": "Weddinmon"
+        },
+        {
+          "nameEn": "Weedmon"
+        },
+        {
+          "nameEn": "Wendigomon"
+        },
+        {
+          "nameEn": "Willis"
+        },
+        {
+          "nameEn": "Wingdramon"
+        },
+        {
+          "nameEn": "Winr"
+        },
+        {
+          "nameEn": "Wisemon"
+        },
+        {
+          "nameEn": "Wisselen"
+        },
+        {
+          "nameEn": "Witchmon"
+        },
+        {
+          "nameEn": "Wolvermon"
+        },
+        {
+          "nameEn": "Woodmon"
+        },
+        {
+          "nameEn": "X Antibody"
+        },
+        {
+          "nameEn": "X Program"
+        },
+        {
+          "nameEn": "Xeno"
+        },
+        {
+          "nameEn": "Xiaomon"
+        },
+        {
+          "nameEn": "Xiquemon"
+        },
+        {
+          "nameEn": "Xros Up"
+        },
+        {
+          "nameEn": "Yaamon"
+        },
+        {
+          "nameEn": "Yakiimon"
+        },
+        {
+          "nameEn": "Yasyamon"
+        },
+        {
+          "nameEn": "Youkomon"
+        },
+        {
+          "nameEn": "Yu Nogi"
+        },
+        {
+          "nameEn": "Yuji Musya"
+        },
+        {
+          "nameEn": "Yuu Amano"
+        },
+        {
+          "nameEn": "Yuugo"
+        },
+        {
+          "nameEn": "Yuuki"
+        },
+        {
+          "nameEn": "Yuuya Kuga"
+        },
+        {
+          "nameEn": "Zamielmon"
+        },
+        {
+          "nameEn": "Zanbamon"
+        },
+        {
+          "nameEn": "Zenimon"
+        },
+        {
+          "nameEn": "Zenith"
+        },
+        {
+          "nameEn": "Zephagamon"
+        },
+        {
+          "nameEn": "Zephyrmon"
+        },
+        {
+          "nameEn": "Zofr Kabus"
+        },
+        {
+          "nameEn": "Zubamon"
+        },
+        {
+          "nameEn": "e-Pulse"
+        },
+        {
+          "nameEn": "A Delicate Plan"
+        },
+        {
+          "nameEn": "A New World"
+        },
+        {
+          "nameEn": "ADR-01 Jeri"
+        },
+        {
+          "nameEn": "ADR-02 Searcher"
+        },
+        {
+          "nameEn": "ADR-03 Pendulum Feet"
+        },
+        {
+          "nameEn": "ADR-04 Bubbles"
+        },
+        {
+          "nameEn": "ADR-05 Creep Hands"
+        },
+        {
+          "nameEn": "ADR-06 Horn Striker"
+        },
+        {
+          "nameEn": "ADR-07 Palates Head"
+        },
+        {
+          "nameEn": "ADR-08 Optimizer"
+        },
+        {
+          "nameEn": "ADR-09 Gatekeeper"
+        },
+        {
+          "nameEn": "Abbadomon Core"
+        },
+        {
+          "nameEn": "Absolute Blast"
+        },
+        {
+          "nameEn": "Achillesmon"
+        },
+        {
+          "nameEn": "Acid Injection"
+        },
+        {
+          "nameEn": "Aegiochusmon"
+        },
+        {
+          "nameEn": "Aegiochusmon: Blue"
+        },
+        {
+          "nameEn": "Aegiochusmon: Dark"
+        },
+        {
+          "nameEn": "Aegiochusmon: Green"
+        },
+        {
+          "nameEn": "Aegiochusmon: Holy"
+        },
+        {
+          "nameEn": "Aegisdramon"
+        },
+        {
+          "nameEn": "AeroVeedramon Zero"
+        },
+        {
+          "nameEn": "Agility Training"
+        },
+        {
+          "nameEn": "Airu Suzaki"
+        },
+        {
+          "nameEn": "Akari Hinomoto"
+        },
+        {
+          "nameEn": "Akemi Suedou"
+        },
+        {
+          "nameEn": "Akihiro Kurata"
+        },
+        {
+          "nameEn": "Akiho Rindou"
+        },
+        {
+          "nameEn": "Alice McCoy"
+        },
+        {
+          "nameEn": "Alphamon: Ouryuken"
+        },
+        {
+          "nameEn": "Amaterasumon"
+        },
+        {
+          "nameEn": "Amber Memory Boost!"
+        },
+        {
+          "nameEn": "Ame-no-Ohabari"
+        },
+        {
+          "nameEn": "Amethyst Mandala"
+        },
+        {
+          "nameEn": "Analog Youth"
+        },
+        {
+          "nameEn": "AncientBeetlemon"
+        },
+        {
+          "nameEn": "AncientGarurumon"
+        },
+        {
+          "nameEn": "AncientKazemon"
+        },
+        {
+          "nameEn": "AncientMermaimon"
+        },
+        {
+          "nameEn": "AncientSphinxmon"
+        },
+        {
+          "nameEn": "AncientTroymon"
+        },
+        {
+          "nameEn": "AncientVolcanomon"
+        },
+        {
+          "nameEn": "AncientWisemon"
+        },
+        {
+          "nameEn": "Anemoi Embrace"
+        },
+        {
+          "nameEn": "Apparition Legion"
+        },
+        {
+          "nameEn": "Arata Sanada"
+        },
+        {
+          "nameEn": "Arctic Blizzard"
+        },
+        {
+          "nameEn": "Arcturusmon"
+        },
+        {
+          "nameEn": "Arisa Kinosaki"
+        },
+        {
+          "nameEn": "Armageddemon"
+        },
+        {
+          "nameEn": "Armalizamon"
+        },
+        {
+          "nameEn": "Armor Digivolution"
+        },
+        {
+          "nameEn": "Armor Texture!"
+        },
+        {
+          "nameEn": "Arresterdramon"
+        },
+        {
+          "nameEn": "Astral Snatcher"
+        },
+        {
+          "nameEn": "Asuna Shiroki"
+        },
+        {
+          "nameEn": "Atamadekachimon"
+        },
+        {
+          "nameEn": "AtlurBallistamon"
+        },
+        {
+          "nameEn": "Atomic Blaster"
+        },
+        {
+          "nameEn": "Atomic Inferno"
+        },
+        {
+          "nameEn": "Aus Generics"
+        },
+        {
+          "nameEn": "Avalon's Gate"
+        },
+        {
+          "nameEn": "AvengeKidmon"
+        },
+        {
+          "nameEn": "Awakening of the Sun"
+        },
+        {
+          "nameEn": "Baalmon (X Antibody)"
+        },
+        {
+          "nameEn": "Baboongamon"
+        },
+        {
+          "nameEn": "Back for Revenge!"
+        },
+        {
+          "nameEn": "Ballistamon"
+        },
+        {
+          "nameEn": "BanchoGolemon"
+        },
+        {
+          "nameEn": "BanchoLeomon"
+        },
+        {
+          "nameEn": "BanchoLillymon"
+        },
+        {
+          "nameEn": "BanchoMamemon"
+        },
+        {
+          "nameEn": "BanchoStingmon"
+        },
+        {
+          "nameEn": "Baptism by Fire!"
+        },
+        {
+          "nameEn": "Beast Cyclone"
+        },
+        {
+          "nameEn": "BeelStarmon"
+        },
+        {
+          "nameEn": "Beelzemon Blast Mode"
+        },
+        {
+          "nameEn": "Belphemon: Rage Mode"
+        },
+        {
+          "nameEn": "Betamon (X Antibody)"
+        },
+        {
+          "nameEn": "BetelGammamon"
+        },
+        {
+          "nameEn": "Big Bang Punch!"
+        },
+        {
+          "nameEn": "Bind Red Trigger"
+        },
+        {
+          "nameEn": "Bishop Device"
+        },
+        {
+          "nameEn": "BishopChessmon"
+        },
+        {
+          "nameEn": "Biting Crush"
+        },
+        {
+          "nameEn": "Black Memory Boost!"
+        },
+        {
+          "nameEn": "Black Sabbath"
+        },
+        {
+          "nameEn": "Black Scramble"
+        },
+        {
+          "nameEn": "BlackGaogamon"
+        },
+        {
+          "nameEn": "BlackGargomon"
+        },
+        {
+          "nameEn": "BlackGrowlmon"
+        },
+        {
+          "nameEn": "BlackKingNumemon"
+        },
+        {
+          "nameEn": "BlackMachGaogamon"
+        },
+        {
+          "nameEn": "BlackMegaGargomon"
+        },
+        {
+          "nameEn": "BlackRapidmon"
+        },
+        {
+          "nameEn": "BlackWarGrowlmon"
+        },
+        {
+          "nameEn": "Blade of the True"
+        },
+        {
+          "nameEn": "BladeKuwagamon"
+        },
+        {
+          "nameEn": "Blasted Disaster"
+        },
+        {
+          "nameEn": "Blinding Ray"
+        },
+        {
+          "nameEn": "BloomLordmon"
+        },
+        {
+          "nameEn": "Blue Hawaii Death"
+        },
+        {
+          "nameEn": "Blue Memory Boost!"
+        },
+        {
+          "nameEn": "Blue Scramble"
+        },
+        {
+          "nameEn": "Bobbing Training"
+        },
+        {
+          "nameEn": "Boltboutamon"
+        },
+        {
+          "nameEn": "Bonds of True Love"
+        },
+        {
+          "nameEn": "Boring Storm"
+        },
+        {
+          "nameEn": "Brave Metal"
+        },
+        {
+          "nameEn": "Brave Shield"
+        },
+        {
+          "nameEn": "Breakdramon"
+        },
+        {
+          "nameEn": "Breath of the Gods"
+        },
+        {
+          "nameEn": "Breathing Training"
+        },
+        {
+          "nameEn": "Brigadramon"
+        },
+        {
+          "nameEn": "BryweLudramon"
+        },
+        {
+          "nameEn": "Burning Star Crusher"
+        },
+        {
+          "nameEn": "Buster Dive"
+        },
+        {
+          "nameEn": "Buzzing Fist"
+        },
+        {
+          "nameEn": "Can't Turn My Back!"
+        },
+        {
+          "nameEn": "CannonBeemon"
+        },
+        {
+          "nameEn": "Cannondramon"
+        },
+        {
+          "nameEn": "Canoweissmon"
+        },
+        {
+          "nameEn": "CaptainHookmon"
+        },
+        {
+          "nameEn": "Cargodramon"
+        },
+        {
+          "nameEn": "Catastrophe Cannon"
+        },
+        {
+          "nameEn": "CatchMamemon"
+        },
+        {
+          "nameEn": "Celestial Arrow"
+        },
+        {
+          "nameEn": "Cendrillmon"
+        },
+        {
+          "nameEn": "Cerberusmon"
+        },
+        {
+          "nameEn": "Chaos Degradation"
+        },
+        {
+          "nameEn": "Chaos Triangular"
+        },
+        {
+          "nameEn": "Chaosdramon"
+        },
+        {
+          "nameEn": "Chaosmon: Valdur Arm"
+        },
+        {
+          "nameEn": "Cherry Blast"
+        },
+        {
+          "nameEn": "Chitose Horaiji"
+        },
+        {
+          "nameEn": "Chitose Imai"
+        },
+        {
+          "nameEn": "Cho-Hakkaimon"
+        },
+        {
+          "nameEn": "Chrome Memory Boost!"
+        },
+        {
+          "nameEn": "Chronomon: Holy Mode"
+        },
+        {
+          "nameEn": "ChuuChuumon"
+        },
+        {
+          "nameEn": "Cocytus Breath"
+        },
+        {
+          "nameEn": "Code Cracker Fang"
+        },
+        {
+          "nameEn": "Code Cracking"
+        },
+        {
+          "nameEn": "Comet Hammer"
+        },
+        {
+          "nameEn": "Commandramon"
+        },
+        {
+          "nameEn": "Cooties Kick"
+        },
+        {
+          "nameEn": "Cosmic Area"
+        },
+        {
+          "nameEn": "Crabmon (X Antibody)"
+        },
+        {
+          "nameEn": "CresGarurumon"
+        },
+        {
+          "nameEn": "Crescent Leaf"
+        },
+        {
+          "nameEn": "Crimson Blaze"
+        },
+        {
+          "nameEn": "Crimson Flare"
+        },
+        {
+          "nameEn": "Crimson Savior"
+        },
+        {
+          "nameEn": "CrysPaledramon"
+        },
+        {
+          "nameEn": "Cutting Edge"
+        },
+        {
+          "nameEn": "Cyber Engage"
+        },
+        {
+          "nameEn": "Cyberspace EDEN"
+        },
+        {
+          "nameEn": "Cyclonic Kick"
+        },
+        {
+          "nameEn": "D-Reaper Zone"
+        },
+        {
+          "nameEn": "DG Dimension"
+        },
+        {
+          "nameEn": "DIGIMON CON 2023"
+        },
+        {
+          "nameEn": "Daigo Nishijima"
+        },
+        {
+          "nameEn": "Dark Despair"
+        },
+        {
+          "nameEn": "Dark Gaia Force"
+        },
+        {
+          "nameEn": "Dark Side Attack"
+        },
+        {
+          "nameEn": "Dark Wings Delusion"
+        },
+        {
+          "nameEn": "DarkKnightmon"
+        },
+        {
+          "nameEn": "DarkLizardmon"
+        },
+        {
+          "nameEn": "DarkMaildramon"
+        },
+        {
+          "nameEn": "DarkSuperStarmon"
+        },
+        {
+          "nameEn": "Darkness Claw"
+        },
+        {
+          "nameEn": "Darkness Wave"
+        },
+        {
+          "nameEn": "DarknessBagramon"
+        },
+        {
+          "nameEn": "Davis Motomiya"
+        },
+        {
+          "nameEn": "Dead or Alive"
+        },
+        {
+          "nameEn": "DeadlyAxemon"
+        },
+        {
+          "nameEn": "Death Parade Blaster"
+        },
+        {
+          "nameEn": "Death Slinger"
+        },
+        {
+          "nameEn": "Death the Cannon"
+        },
+        {
+          "nameEn": "DeathXDigivolution!"
+        },
+        {
+          "nameEn": "Deckerdramon"
+        },
+        {
+          "nameEn": "Deep Savers"
+        },
+        {
+          "nameEn": "Defense Plug-In C"
+        },
+        {
+          "nameEn": "Defense Plug-In F"
+        },
+        {
+          "nameEn": "Defense Training"
+        },
+        {
+          "nameEn": "DemiMeramon"
+        },
+        {
+          "nameEn": "Demonic Disaster"
+        },
+        {
+          "nameEn": "Destruction Cannon"
+        },
+        {
+          "nameEn": "DexDorugamon"
+        },
+        {
+          "nameEn": "DexDorugoramon"
+        },
+        {
+          "nameEn": "Diarbbitmon"
+        },
+        {
+          "nameEn": "Digimon Emperor"
+        },
+        {
+          "nameEn": "Digimon Liberator"
+        },
+        {
+          "nameEn": "Digiseabass"
+        },
+        {
+          "nameEn": "Digital Gate Open"
+        },
+        {
+          "nameEn": "Digital Translator"
+        },
+        {
+          "nameEn": "Dimension Scissor"
+        },
+        {
+          "nameEn": "Dino Memory Boost!"
+        },
+        {
+          "nameEn": "Dinotigermon"
+        },
+        {
+          "nameEn": "Direct Smasher"
+        },
+        {
+          "nameEn": "Disaster Blaster"
+        },
+        {
+          "nameEn": "Dokuson Aruba"
+        },
+        {
+          "nameEn": "Doomsday Clock"
+        },
+        {
+          "nameEn": "Dorugoramon"
+        },
+        {
+          "nameEn": "Double Typhoon"
+        },
+        {
+          "nameEn": "Dragon of Courage"
+        },
+        {
+          "nameEn": "Dragon's Breath"
+        },
+        {
+          "nameEn": "Dragon's Roar"
+        },
+        {
+          "nameEn": "Earth Shaker"
+        },
+        {
+          "nameEn": "Eater (Human Form)"
+        },
+        {
+          "nameEn": "Eater (Species Form)"
+        },
+        {
+          "nameEn": "Eater Legion"
+        },
+        {
+          "nameEn": "EbiBurgamon"
+        },
+        {
+          "nameEn": "Eden's Javelin"
+        },
+        {
+          "nameEn": "Eiji Nagasumi"
+        },
+        {
+          "nameEn": "Eiseiryūoujin"
+        },
+        {
+          "nameEn": "Electric Rush"
+        },
+        {
+          "nameEn": "Electro Shocker"
+        },
+        {
+          "nameEn": "Emissary of Hope"
+        },
+        {
+          "nameEn": "Endurance Training"
+        },
+        {
+          "nameEn": "Erika Mishima"
+        },
+        {
+          "nameEn": "Evil Squall"
+        },
+        {
+          "nameEn": "Evolution Ancient"
+        },
+        {
+          "nameEn": "ExMaquinamon"
+        },
+        {
+          "nameEn": "Examon (X Antibody)"
+        },
+        {
+          "nameEn": "Eye of the Gorgon"
+        },
+        {
+          "nameEn": "Factorial Area"
+        },
+        {
+          "nameEn": "Fanglongmon"
+        },
+        {
+          "nameEn": "Fenriloogamon"
+        },
+        {
+          "nameEn": "File Island"
+        },
+        {
+          "nameEn": "Final Excalibur"
+        },
+        {
+          "nameEn": "Final Shining Burst"
+        },
+        {
+          "nameEn": "Final Xros Blade"
+        },
+        {
+          "nameEn": "Final Zubagon Punch"
+        },
+        {
+          "nameEn": "Fire Rocket"
+        },
+        {
+          "nameEn": "Firedrake Strike"
+        },
+        {
+          "nameEn": "Fist of Athena"
+        },
+        {
+          "nameEn": "Flame Hellscythe"
+        },
+        {
+          "nameEn": "Flame Inferno"
+        },
+        {
+          "nameEn": "Flame Memory Boost!"
+        },
+        {
+          "nameEn": "FlameWizardmon"
+        },
+        {
+          "nameEn": "Flare Rock Soul"
+        },
+        {
+          "nameEn": "Flashy Boss Punch"
+        },
+        {
+          "nameEn": "Flower Cannon"
+        },
+        {
+          "nameEn": "Forbidden Temptation"
+        },
+        {
+          "nameEn": "Forbidden Trident"
+        },
+        {
+          "nameEn": "ForgeBeemon"
+        },
+        {
+          "nameEn": "FrosVelgrmon"
+        },
+        {
+          "nameEn": "Full Metal Blaze"
+        },
+        {
+          "nameEn": "Full Moon Blaster"
+        },
+        {
+          "nameEn": "Future Potential!"
+        },
+        {
+          "nameEn": "Gaia Force ZERO"
+        },
+        {
+          "nameEn": "Gaia Reactor"
+        },
+        {
+          "nameEn": "Galacticmon"
+        },
+        {
+          "nameEn": "Garnet Memory Boost!"
+        },
+        {
+          "nameEn": "Gate of Deadly Sins"
+        },
+        {
+          "nameEn": "Gazimon (X Antibody)"
+        },
+        {
+          "nameEn": "Gear Forest Village"
+        },
+        {
+          "nameEn": "Gennai's House"
+        },
+        {
+          "nameEn": "Gesomon (X Antibody)"
+        },
+        {
+          "nameEn": "Gewalt Schwärmer"
+        },
+        {
+          "nameEn": "Ghilliedhumon"
+        },
+        {
+          "nameEn": "Giant Missile"
+        },
+        {
+          "nameEn": "Giant Slayer"
+        },
+        {
+          "nameEn": "Gift of Darkness"
+        },
+        {
+          "nameEn": "Giga Blaster"
+        },
+        {
+          "nameEn": "Giga Destroyer"
+        },
+        {
+          "nameEn": "GigaSeadramon"
+        },
+        {
+          "nameEn": "Ginkakumon Promote"
+        },
+        {
+          "nameEn": "Glaive Memory Boost!"
+        },
+        {
+          "nameEn": "Glorious Burst"
+        },
+        {
+          "nameEn": "Glowing Dawn"
+        },
+        {
+          "nameEn": "God Grade Unleashed"
+        },
+        {
+          "nameEn": "GoldNumemon"
+        },
+        {
+          "nameEn": "GoldVeedramon"
+        },
+        {
+          "nameEn": "Golden Ripper"
+        },
+        {
+          "nameEn": "Good Night Moon"
+        },
+        {
+          "nameEn": "Goro Matayoshi"
+        },
+        {
+          "nameEn": "Grace Cross Freezer"
+        },
+        {
+          "nameEn": "GraceNovamon"
+        },
+        {
+          "nameEn": "Gran del Sol"
+        },
+        {
+          "nameEn": "GranDracmon"
+        },
+        {
+          "nameEn": "GrandGalemon"
+        },
+        {
+          "nameEn": "Grandis Scissor"
+        },
+        {
+          "nameEn": "GrandisKuwagamon"
+        },
+        {
+          "nameEn": "Grape Memory Boost!"
+        },
+        {
+          "nameEn": "Gravity Crush"
+        },
+        {
+          "nameEn": "Great Maelstrom"
+        },
+        {
+          "nameEn": "Great Tornado"
+        },
+        {
+          "nameEn": "GreatGrizzlymon"
+        },
+        {
+          "nameEn": "Green Memory Boost!"
+        },
+        {
+          "nameEn": "Green Scramble"
+        },
+        {
+          "nameEn": "GreyKnightsmon"
+        },
+        {
+          "nameEn": "Ground Fang"
+        },
+        {
+          "nameEn": "GroundLocomon"
+        },
+        {
+          "nameEn": "Groundramon"
+        },
+        {
+          "nameEn": "Guardian Palace"
+        },
+        {
+          "nameEn": "Guilmon (X Antibody)"
+        },
+        {
+          "nameEn": "GulusGammamon"
+        },
+        {
+          "nameEn": "Gypt Particle Cannon"
+        },
+        {
+          "nameEn": "Habakirimon"
+        },
+        {
+          "nameEn": "Hacker Judge"
+        },
+        {
+          "nameEn": "Hacker Pride"
+        },
+        {
+          "nameEn": "Hades Force"
+        },
+        {
+          "nameEn": "Hammer Spark"
+        },
+        {
+          "nameEn": "Haru Shinkai"
+        },
+        {
+          "nameEn": "Healing Therapy"
+        },
+        {
+          "nameEn": "Hearts Attack"
+        },
+        {
+          "nameEn": "Heat Training"
+        },
+        {
+          "nameEn": "Heaven's Charm"
+        },
+        {
+          "nameEn": "Heaven's Gate"
+        },
+        {
+          "nameEn": "Heaven's Judgement"
+        },
+        {
+          "nameEn": "Heaven's Knuckle"
+        },
+        {
+          "nameEn": "HeavyLeomon"
+        },
+        {
+          "nameEn": "HeavyMetaldramon"
+        },
+        {
+          "nameEn": "Heir of Dragons"
+        },
+        {
+          "nameEn": "Hell Masquerade"
+        },
+        {
+          "nameEn": "Hell's Gate"
+        },
+        {
+          "nameEn": "Helloogarmon"
+        },
+        {
+          "nameEn": "Hero of the Skies!"
+        },
+        {
+          "nameEn": "Hexeblaumon"
+        },
+        {
+          "nameEn": "Hi-Commandramon"
+        },
+        {
+          "nameEn": "Hi-VisionMonitamon"
+        },
+        {
+          "nameEn": "High Mega Blaster"
+        },
+        {
+          "nameEn": "High-Speed Plug-In D"
+        },
+        {
+          "nameEn": "High-Speed Plug-In H"
+        },
+        {
+          "nameEn": "Hina Kurihara"
+        },
+        {
+          "nameEn": "HippoGryphonmon"
+        },
+        {
+          "nameEn": "Hiro Amanokawa"
+        },
+        {
+          "nameEn": "Hiroko Sagisaka"
+        },
+        {
+          "nameEn": "Hisyaryumon"
+        },
+        {
+          "nameEn": "Hjaðningar Waltz"
+        },
+        {
+          "nameEn": "Hokuto Amanokawa"
+        },
+        {
+          "nameEn": "Holy Sunshine"
+        },
+        {
+          "nameEn": "Home Run Blast"
+        },
+        {
+          "nameEn": "Homer Yushima"
+        },
+        {
+          "nameEn": "Horn Buster"
+        },
+        {
+          "nameEn": "Hornet Eraser"
+        },
+        {
+          "nameEn": "HoverEspimon"
+        },
+        {
+          "nameEn": "Howling Crusher"
+        },
+        {
+          "nameEn": "Hudie Net Café"
+        },
+        {
+          "nameEn": "Hurricane Screw Shot"
+        },
+        {
+          "nameEn": "Ice Archery"
+        },
+        {
+          "nameEn": "Ignition Flare"
+        },
+        {
+          "nameEn": "Image Training"
+        },
+        {
+          "nameEn": "Immortal Ruler"
+        },
+        {
+          "nameEn": "Impact of Knowledge"
+        },
+        {
+          "nameEn": "Impmon (X Antibody)"
+        },
+        {
+          "nameEn": "In-Between Theater"
+        },
+        {
+          "nameEn": "Infinity Cannon"
+        },
+        {
+          "nameEn": "Innocence Blizzard"
+        },
+        {
+          "nameEn": "Inori Misono"
+        },
+        {
+          "nameEn": "Island of Adventure"
+        },
+        {
+          "nameEn": "J.P. Shibayama"
+        },
+        {
+          "nameEn": "J.P., Koji, & Koichi"
+        },
+        {
+          "nameEn": "Jade Memory Boost!"
+        },
+        {
+          "nameEn": "JaegerDorulumon"
+        },
+        {
+          "nameEn": "Jazarichmon"
+        },
+        {
+          "nameEn": "Jeri (Fake)"
+        },
+        {
+          "nameEn": "Jesmon (X Antibody)"
+        },
+        {
+          "nameEn": "JetMervamon"
+        },
+        {
+          "nameEn": "JetSilphymon"
+        },
+        {
+          "nameEn": "JewelBeemon"
+        },
+        {
+          "nameEn": "JumboGamemon"
+        },
+        {
+          "nameEn": "Justice Kick"
+        },
+        {
+          "nameEn": "Justimon Blitz Arm"
+        },
+        {
+          "nameEn": "Justimon: Accel Arm"
+        },
+        {
+          "nameEn": "Justimon: Blitz Arm"
+        },
+        {
+          "nameEn": "Kaiser Nail"
+        },
+        {
+          "nameEn": "KaiserLeomon"
+        },
+        {
+          "nameEn": "Karakurumon"
+        },
+        {
+          "nameEn": "Kari Kamiya"
+        },
+        {
+          "nameEn": "KausGammamon"
+        },
+        {
+          "nameEn": "Kazu Shioda"
+        },
+        {
+          "nameEn": "Kazuki & Itsuki"
+        },
+        {
+          "nameEn": "Keenan Crier"
+        },
+        {
+          "nameEn": "Keisuke Amasawa"
+        },
+        {
+          "nameEn": "Ken Ichijoji"
+        },
+        {
+          "nameEn": "KendoGarurumon"
+        },
+        {
+          "nameEn": "Kenta Kitagawa"
+        },
+        {
+          "nameEn": "Kentaurosmon"
+        },
+        {
+          "nameEn": "Keramon (X Antibody)"
+        },
+        {
+          "nameEn": "King Device"
+        },
+        {
+          "nameEn": "King Drasil_7D6"
+        },
+        {
+          "nameEn": "KingChessmon"
+        },
+        {
+          "nameEn": "KingSukamon"
+        },
+        {
+          "nameEn": "Kiriha Aonuma"
+        },
+        {
+          "nameEn": "Knight Device"
+        },
+        {
+          "nameEn": "KnightChessmon"
+        },
+        {
+          "nameEn": "KoDokugumon"
+        },
+        {
+          "nameEn": "KoKabuterimon"
+        },
+        {
+          "nameEn": "Koichi Kimura"
+        },
+        {
+          "nameEn": "Koji Minamoto"
+        },
+        {
+          "nameEn": "Korikakumon"
+        },
+        {
+          "nameEn": "Kosuke Kisakata"
+        },
+        {
+          "nameEn": "Kosuke Misono"
+        },
+        {
+          "nameEn": "Kota Domoto"
+        },
+        {
+          "nameEn": "Kotone Amano"
+        },
+        {
+          "nameEn": "Kristy Damon"
+        },
+        {
+          "nameEn": "Kumbhiramon"
+        },
+        {
+          "nameEn": "Kurisarimon"
+        },
+        {
+          "nameEn": "Kyo Sawashiro"
+        },
+        {
+          "nameEn": "Kyoko Kuremi"
+        },
+        {
+          "nameEn": "Lament of Friendship"
+        },
+        {
+          "nameEn": "Laplace's Demon"
+        },
+        {
+          "nameEn": "Laser Cannon"
+        },
+        {
+          "nameEn": "Lavogaritamon"
+        },
+        {
+          "nameEn": "Legend-Arms Alliance"
+        },
+        {
+          "nameEn": "Leomon (X Antibody)"
+        },
+        {
+          "nameEn": "Leon Alexander"
+        },
+        {
+          "nameEn": "Lightning Blade"
+        },
+        {
+          "nameEn": "Lightning Joust"
+        },
+        {
+          "nameEn": "Lightning Paw"
+        },
+        {
+          "nameEn": "LoaderLeomon"
+        },
+        {
+          "nameEn": "Lopmon (X Antibody)"
+        },
+        {
+          "nameEn": "LordKnightmon"
+        },
+        {
+          "nameEn": "Lucemon (X Antibody)"
+        },
+        {
+          "nameEn": "Lucemon: Chaos Mode"
+        },
+        {
+          "nameEn": "Lucemon: Larva"
+        },
+        {
+          "nameEn": "Lucemon: Satan Mode"
+        },
+        {
+          "nameEn": "Lónkhē Adistakto"
+        },
+        {
+          "nameEn": "MachGaogamon"
+        },
+        {
+          "nameEn": "Mad Dog Fire"
+        },
+        {
+          "nameEn": "MagnaGarurumon"
+        },
+        {
+          "nameEn": "MagnaKidmon"
+        },
+        {
+          "nameEn": "Magneticdramon"
+        },
+        {
+          "nameEn": "MailBirdramon"
+        },
+        {
+          "nameEn": "Maki Himekawa"
+        },
+        {
+          "nameEn": "Makiko Date"
+        },
+        {
+          "nameEn": "Makoto Kuonji"
+        },
+        {
+          "nameEn": "MaloMyotismon"
+        },
+        {
+          "nameEn": "MameTyramon"
+        },
+        {
+          "nameEn": "Maneuvermon"
+        },
+        {
+          "nameEn": "Mantaraymon"
+        },
+        {
+          "nameEn": "Manticoremon"
+        },
+        {
+          "nameEn": "Marching Fishes"
+        },
+        {
+          "nameEn": "Marcus Damon"
+        },
+        {
+          "nameEn": "MarineBullmon"
+        },
+        {
+          "nameEn": "MarineChimairamon"
+        },
+        {
+          "nameEn": "MarineDevimon"
+        },
+        {
+          "nameEn": "Marvin Jackson"
+        },
+        {
+          "nameEn": "MasterBlimpmon"
+        },
+        {
+          "nameEn": "MasterTyrannomon"
+        },
+        {
+          "nameEn": "Matt Ishida"
+        },
+        {
+          "nameEn": "Maycrackmon"
+        },
+        {
+          "nameEn": "Mega Digimon Fusion!"
+        },
+        {
+          "nameEn": "MegaGargomon"
+        },
+        {
+          "nameEn": "Megalo Spark"
+        },
+        {
+          "nameEn": "Megiddo Flame"
+        },
+        {
+          "nameEn": "Meiko Mochizuki"
+        },
+        {
+          "nameEn": "Menoa Bellucci"
+        },
+        {
+          "nameEn": "Mental Training"
+        },
+        {
+          "nameEn": "Mephistomon"
+        },
+        {
+          "nameEn": "Metal Cannon"
+        },
+        {
+          "nameEn": "Metal Empire"
+        },
+        {
+          "nameEn": "Metal Impulse"
+        },
+        {
+          "nameEn": "Metal Storm"
+        },
+        {
+          "nameEn": "MetalKabuterimon"
+        },
+        {
+          "nameEn": "MetalMamemon"
+        },
+        {
+          "nameEn": "MetalPhantomon"
+        },
+        {
+          "nameEn": "MetalPiranimon"
+        },
+        {
+          "nameEn": "Metallicdramon"
+        },
+        {
+          "nameEn": "MetallifeKuwagamon"
+        },
+        {
+          "nameEn": "Meteor Rock Soul"
+        },
+        {
+          "nameEn": "Meteor Shower"
+        },
+        {
+          "nameEn": "Meteor Wing"
+        },
+        {
+          "nameEn": "Millenniummon"
+        },
+        {
+          "nameEn": "Mimi Tachikawa"
+        },
+        {
+          "nameEn": "Minami Uehara"
+        },
+        {
+          "nameEn": "Minidekachimon"
+        },
+        {
+          "nameEn": "Mirage Beast Knight"
+        },
+        {
+          "nameEn": "MirageGaogamon"
+        },
+        {
+          "nameEn": "Mirai Kinosaki"
+        },
+        {
+          "nameEn": "Mirei Mikagura"
+        },
+        {
+          "nameEn": "Mist Barrier"
+        },
+        {
+          "nameEn": "Mist Memory Boost!"
+        },
+        {
+          "nameEn": "MockingBirdmon"
+        },
+        {
+          "nameEn": "Monarchlizamon"
+        },
+        {
+          "nameEn": "Monica Simmons"
+        },
+        {
+          "nameEn": "MoonMillenniummon"
+        },
+        {
+          "nameEn": "MoriShellmon"
+        },
+        {
+          "nameEn": "Mother D-Reaper"
+        },
+        {
+          "nameEn": "Mother Eater"
+        },
+        {
+          "nameEn": "Murasamemon"
+        },
+        {
+          "nameEn": "Murmukusmon"
+        },
+        {
+          "nameEn": "Music of the Heart"
+        },
+        {
+          "nameEn": "MusouKnightmon"
+        },
+        {
+          "nameEn": "Nanomachine Break"
+        },
+        {
+          "nameEn": "Nature Spirits"
+        },
+        {
+          "nameEn": "Navy Memory Boost!"
+        },
+        {
+          "nameEn": "Necrophobia"
+        },
+        {
+          "nameEn": "Needle Spray"
+        },
+        {
+          "nameEn": "Nicolai Petrov"
+        },
+        {
+          "nameEn": "NightChiropmon"
+        },
+        {
+          "nameEn": "Nightmare Soldiers"
+        },
+        {
+          "nameEn": "Noble Family Arts"
+        },
+        {
+          "nameEn": "Nokia Shiramine"
+        },
+        {
+          "nameEn": "Nuclear Laser"
+        },
+        {
+          "nameEn": "Numemon (X Antibody)"
+        },
+        {
+          "nameEn": "Oblivion Bird"
+        },
+        {
+          "nameEn": "Odin's Breath"
+        },
+        {
+          "nameEn": "Offense Training"
+        },
+        {
+          "nameEn": "Offensive Plug-In A"
+        },
+        {
+          "nameEn": "Offensive Plug-In V"
+        },
+        {
+          "nameEn": "Ogremon (X Antibody)"
+        },
+        {
+          "nameEn": "OmniShoutmon"
+        },
+        {
+          "nameEn": "Our Courage United"
+        },
+        {
+          "nameEn": "Overflowing Power"
+        },
+        {
+          "nameEn": "Owen Dreadnought"
+        },
+        {
+          "nameEn": "Palmon (X Antibody)"
+        },
+        {
+          "nameEn": "Pandemonium Flame"
+        },
+        {
+          "nameEn": "Pandemonium Lost"
+        },
+        {
+          "nameEn": "Parabolic Junk"
+        },
+        {
+          "nameEn": "Paradise Colosseum"
+        },
+        {
+          "nameEn": "Paradise Lost"
+        },
+        {
+          "nameEn": "Parasaurmon"
+        },
+        {
+          "nameEn": "Parasitemon"
+        },
+        {
+          "nameEn": "Parkour Training"
+        },
+        {
+          "nameEn": "Pause Plug-In P"
+        },
+        {
+          "nameEn": "Pawn Device"
+        },
+        {
+          "nameEn": "PawnChessmon"
+        },
+        {
+          "nameEn": "Petaldramon"
+        },
+        {
+          "nameEn": "Phantom Pain"
+        },
+        {
+          "nameEn": "Phoebus Blow"
+        },
+        {
+          "nameEn": "Physical Training"
+        },
+        {
+          "nameEn": "PileVolcamon"
+        },
+        {
+          "nameEn": "Plasma Shot"
+        },
+        {
+          "nameEn": "Plasma Stake"
+        },
+        {
+          "nameEn": "PlatinumNumemon"
+        },
+        {
+          "nameEn": "Poison Powder"
+        },
+        {
+          "nameEn": "PolarBearmon"
+        },
+        {
+          "nameEn": "Pollen Spray"
+        },
+        {
+          "nameEn": "Positron Laser"
+        },
+        {
+          "nameEn": "Pride Memory Boost!"
+        },
+        {
+          "nameEn": "PrinceMamemon"
+        },
+        {
+          "nameEn": "Prism Garrett"
+        },
+        {
+          "nameEn": "ProtoGizmon"
+        },
+        {
+          "nameEn": "Pummel Whack"
+        },
+        {
+          "nameEn": "Punching Training"
+        },
+        {
+          "nameEn": "Puppet Pummel"
+        },
+        {
+          "nameEn": "Purge Shine"
+        },
+        {
+          "nameEn": "Purple Memory Boost!"
+        },
+        {
+          "nameEn": "Purple Scramble"
+        },
+        {
+          "nameEn": "Pyramidimon"
+        },
+        {
+          "nameEn": "Pyro Dragons"
+        },
+        {
+          "nameEn": "Qualialise Blast"
+        },
+        {
+          "nameEn": "Queen Device"
+        },
+        {
+          "nameEn": "Queen of Thorns"
+        },
+        {
+          "nameEn": "QueenBeemon"
+        },
+        {
+          "nameEn": "QueenChessmon"
+        },
+        {
+          "nameEn": "Raddle Star"
+        },
+        {
+          "nameEn": "Radiation Blade"
+        },
+        {
+          "nameEn": "Rafflesimon"
+        },
+        {
+          "nameEn": "Raging Serpentine"
+        },
+        {
+          "nameEn": "RagnaLoardmon"
+        },
+        {
+          "nameEn": "Ragnarok Cannon"
+        },
+        {
+          "nameEn": "RaijiLudomon"
+        },
+        {
+          "nameEn": "RaptorSparrowmon"
+        },
+        {
+          "nameEn": "Raptordramon"
+        },
+        {
+          "nameEn": "RareRaremon"
+        },
+        {
+          "nameEn": "Rasenmon Fury Mode"
+        },
+        {
+          "nameEn": "Ravemon: Burst Mode"
+        },
+        {
+          "nameEn": "Recharge Plug-In Q"
+        },
+        {
+          "nameEn": "Red Memory Boost!"
+        },
+        {
+          "nameEn": "Red Scramble"
+        },
+        {
+          "nameEn": "Regalecusmon"
+        },
+        {
+          "nameEn": "Rei Katsura"
+        },
+        {
+          "nameEn": "Reina Sakuya"
+        },
+        {
+          "nameEn": "Renamon (X Antibody)"
+        },
+        {
+          "nameEn": "Revelation of Light"
+        },
+        {
+          "nameEn": "RhinoKabuterimon"
+        },
+        {
+          "nameEn": "Richard Sampson"
+        },
+        {
+          "nameEn": "Rie Kishibe"
+        },
+        {
+          "nameEn": "Rika Nonaka"
+        },
+        {
+          "nameEn": "Rina Shinomiya"
+        },
+        {
+          "nameEn": "Rivals' Barrage"
+        },
+        {
+          "nameEn": "River of Power"
+        },
+        {
+          "nameEn": "Roleplaymon"
+        },
+        {
+          "nameEn": "Rook Device"
+        },
+        {
+          "nameEn": "RookChessmon"
+        },
+        {
+          "nameEn": "Rosemon (X Antibody)"
+        },
+        {
+          "nameEn": "Rosemon: Burst Mode"
+        },
+        {
+          "nameEn": "Rowdy Rocker"
+        },
+        {
+          "nameEn": "Ruli Tsukiyono"
+        },
+        {
+          "nameEn": "RustTyrannomon"
+        },
+        {
+          "nameEn": "Ryo Akiyama"
+        },
+        {
+          "nameEn": "Ryoma Mogami"
+        },
+        {
+          "nameEn": "Ryuji Mishima"
+        },
+        {
+          "nameEn": "Ryutaro Williams"
+        },
+        {
+          "nameEn": "Sagittarimon"
+        },
+        {
+          "nameEn": "Salamon (X Antibody)"
+        },
+        {
+          "nameEn": "Samādhi Śānti"
+        },
+        {
+          "nameEn": "Sangloupmon"
+        },
+        {
+          "nameEn": "Sanmyojin Arrival"
+        },
+        {
+          "nameEn": "Satsuki Tamahime"
+        },
+        {
+          "nameEn": "SaviorHuckmon"
+        },
+        {
+          "nameEn": "Schwarz Lehrsatz"
+        },
+        {
+          "nameEn": "ScourgeChiropmon"
+        },
+        {
+          "nameEn": "Sea of Destruction"
+        },
+        {
+          "nameEn": "Sealsdramon"
+        },
+        {
+          "nameEn": "Seiken Meppa"
+        },
+        {
+          "nameEn": "SeitenGokuumon"
+        },
+        {
+          "nameEn": "Senbon Dokkān"
+        },
+        {
+          "nameEn": "Sephirothmon"
+        },
+        {
+          "nameEn": "Sepia Memory Boost!"
+        },
+        {
+          "nameEn": "Seven Code PAD"
+        },
+        {
+          "nameEn": "Seven Heavens"
+        },
+        {
+          "nameEn": "Seventh Divine Cruz"
+        },
+        {
+          "nameEn": "Seventh Fascination"
+        },
+        {
+          "nameEn": "Seventh Full Cluster"
+        },
+        {
+          "nameEn": "Seventh Graviton"
+        },
+        {
+          "nameEn": "Seventh Jewelrize"
+        },
+        {
+          "nameEn": "Seventh Lightning"
+        },
+        {
+          "nameEn": "Seventh Penetration"
+        },
+        {
+          "nameEn": "Shadow Training"
+        },
+        {
+          "nameEn": "Shadow Wing"
+        },
+        {
+          "nameEn": "ShadowSeraphimon"
+        },
+        {
+          "nameEn": "ShellNumemon"
+        },
+        {
+          "nameEn": "Shield of the Just"
+        },
+        {
+          "nameEn": "ShinMonzaemon"
+        },
+        {
+          "nameEn": "Shine of Bee"
+        },
+        {
+          "nameEn": "Shining Blast"
+        },
+        {
+          "nameEn": "Shishimamon"
+        },
+        {
+          "nameEn": "Shock Plasma"
+        },
+        {
+          "nameEn": "ShoeShoemon"
+        },
+        {
+          "nameEn": "ShootingStarmon"
+        },
+        {
+          "nameEn": "Shota Kuroi"
+        },
+        {
+          "nameEn": "Shoto Kazama"
+        },
+        {
+          "nameEn": "Shoutmon DX"
+        },
+        {
+          "nameEn": "Shoutmon EX6"
+        },
+        {
+          "nameEn": "Shoutmon X2"
+        },
+        {
+          "nameEn": "Shoutmon X3"
+        },
+        {
+          "nameEn": "Shoutmon X4"
+        },
+        {
+          "nameEn": "Shoutmon X4B"
+        },
+        {
+          "nameEn": "Shoutmon X5"
+        },
+        {
+          "nameEn": "Shoutmon X5B"
+        },
+        {
+          "nameEn": "Shoutmon X7"
+        },
+        {
+          "nameEn": "Shu-Chong Wong"
+        },
+        {
+          "nameEn": "Silver-Winged Yaksha"
+        },
+        {
+          "nameEn": "Singularity of Chaos"
+        },
+        {
+          "nameEn": "Sistermon Blanc"
+        },
+        {
+          "nameEn": "Sistermon Ciel"
+        },
+        {
+          "nameEn": "SkullBaluchimon"
+        },
+        {
+          "nameEn": "SkullKnightmon"
+        },
+        {
+          "nameEn": "SkullMammothmon"
+        },
+        {
+          "nameEn": "SkullScorpiomon"
+        },
+        {
+          "nameEn": "SkullSeadramon"
+        },
+        {
+          "nameEn": "Slayerdramon"
+        },
+        {
+          "nameEn": "Smashed Potatoes"
+        },
+        {
+          "nameEn": "SnowGoblimon"
+        },
+        {
+          "nameEn": "Soloogarmon"
+        },
+        {
+          "nameEn": "Sora Takenouchi"
+        },
+        {
+          "nameEn": "Sorrow Blue"
+        },
+        {
+          "nameEn": "Soul Digitalization"
+        },
+        {
+          "nameEn": "Soundbirdmon"
+        },
+        {
+          "nameEn": "Spencer Damon"
+        },
+        {
+          "nameEn": "Spider Shooter"
+        },
+        {
+          "nameEn": "Spiking Strike"
+        },
+        {
+          "nameEn": "Spiral Masquerade"
+        },
+        {
+          "nameEn": "Spiral Mountain"
+        },
+        {
+          "nameEn": "Spiral Sword"
+        },
+        {
+          "nameEn": "Spirit Evolution!"
+        },
+        {
+          "nameEn": "Sprint Dash Training"
+        },
+        {
+          "nameEn": "Starlight Explosion"
+        },
+        {
+          "nameEn": "Starlight Velocity"
+        },
+        {
+          "nameEn": "Startling Thunder"
+        },
+        {
+          "nameEn": "Strikedramon"
+        },
+        {
+          "nameEn": "Suka's Curse"
+        },
+        {
+          "nameEn": "Summon Frost"
+        },
+        {
+          "nameEn": "Sunarizamon"
+        },
+        {
+          "nameEn": "Sunrise Buster"
+        },
+        {
+          "nameEn": "Super Hacking"
+        },
+        {
+          "nameEn": "Super Shocker"
+        },
+        {
+          "nameEn": "SuperStarmon"
+        },
+        {
+          "nameEn": "Supreme Cannon"
+        },
+        {
+          "nameEn": "Supreme Connection!"
+        },
+        {
+          "nameEn": "Surtr Brander"
+        },
+        {
+          "nameEn": "Suzune Kazuki"
+        },
+        {
+          "nameEn": "SymbareAngoramon"
+        },
+        {
+          "nameEn": "T.K. Takaishi"
+        },
+        {
+          "nameEn": "Tactical Retreat!"
+        },
+        {
+          "nameEn": "Tagiru Akashi"
+        },
+        {
+          "nameEn": "Tai Kamiya (V-Tamer)"
+        },
+        {
+          "nameEn": "Tai's Growing Up!"
+        },
+        {
+          "nameEn": "Takato Matsuki"
+        },
+        {
+          "nameEn": "Takumi Aiba"
+        },
+        {
+          "nameEn": "Takuya Kanbara"
+        },
+        {
+          "nameEn": "Tarnished Hero"
+        },
+        {
+          "nameEn": "Temple of Beginnings"
+        },
+        {
+          "nameEn": "Terriermon Assistant"
+        },
+        {
+          "nameEn": "Terrors Cluster"
+        },
+        {
+          "nameEn": "TeslaJellymon"
+        },
+        {
+          "nameEn": "The Crossroad Witch"
+        },
+        {
+          "nameEn": "The Last Guardian"
+        },
+        {
+          "nameEn": "The Ray of Victory"
+        },
+        {
+          "nameEn": "The Sparkle of Fate!"
+        },
+        {
+          "nameEn": "Thomas H. Norstein"
+        },
+        {
+          "nameEn": "Thunder Laser"
+        },
+        {
+          "nameEn": "Thunderflame Crusher"
+        },
+        {
+          "nameEn": "Tidal Stream"
+        },
+        {
+          "nameEn": "TigerVespamon"
+        },
+        {
+          "nameEn": "Togemogumon"
+        },
+        {
+          "nameEn": "Togemon (X Antibody)"
+        },
+        {
+          "nameEn": "Tokomon (X Antibody)"
+        },
+        {
+          "nameEn": "Tommy, Takuya, & Zoe"
+        },
+        {
+          "nameEn": "Tomonori Ryusenji"
+        },
+        {
+          "nameEn": "Tomoro Tenma"
+        },
+        {
+          "nameEn": "Torajiro Asuka"
+        },
+        {
+          "nameEn": "TorikaraBallmon"
+        },
+        {
+          "nameEn": "Training Manual"
+        },
+        {
+          "nameEn": "Transcendent Sword"
+        },
+        {
+          "nameEn": "Treadmill Training"
+        },
+        {
+          "nameEn": "Trident Arm"
+        },
+        {
+          "nameEn": "Trident Gaia"
+        },
+        {
+          "nameEn": "Trident Revolver"
+        },
+        {
+          "nameEn": "Trinity Burst!"
+        },
+        {
+          "nameEn": "Tropical Venom"
+        },
+        {
+          "nameEn": "Trump Sword"
+        },
+        {
+          "nameEn": "TyrantKabuterimon"
+        },
+        {
+          "nameEn": "UlforceVeedramon"
+        },
+        {
+          "nameEn": "Ultimate Connection!"
+        },
+        {
+          "nameEn": "Ultimate Flare"
+        },
+        {
+          "nameEn": "Ultimate Slicer"
+        },
+        {
+          "nameEn": "UltimateBrachiomon"
+        },
+        {
+          "nameEn": "UltimateChaosmon"
+        },
+        {
+          "nameEn": "Ultra Turbulence"
+        },
+        {
+          "nameEn": "Underworld's Call"
+        },
+        {
+          "nameEn": "V-Nova Blast"
+        },
+        {
+          "nameEn": "V-Wing Blade"
+        },
+        {
+          "nameEn": "Varodurumon"
+        },
+        {
+          "nameEn": "Veedramon Zero"
+        },
+        {
+          "nameEn": "Venom Infusion"
+        },
+        {
+          "nameEn": "Victory Sword"
+        },
+        {
+          "nameEn": "Vikaralamon"
+        },
+        {
+          "nameEn": "Violet Inboots"
+        },
+        {
+          "nameEn": "Virus Busters"
+        },
+        {
+          "nameEn": "Volcanic Flare"
+        },
+        {
+          "nameEn": "Volcanicdramon"
+        },
+        {
+          "nameEn": "Vortex Resonance"
+        },
+        {
+          "nameEn": "Vortexdramon"
+        },
+        {
+          "nameEn": "Vulcan Crusher"
+        },
+        {
+          "nameEn": "Vulcanusmon"
+        },
+        {
+          "nameEn": "Wall Training"
+        },
+        {
+          "nameEn": "Waltz's End"
+        },
+        {
+          "nameEn": "WarGrowlmon"
+        },
+        {
+          "nameEn": "WaruSeadramon"
+        },
+        {
+          "nameEn": "Wave of Reliability"
+        },
+        {
+          "nameEn": "Weatherdramon"
+        },
+        {
+          "nameEn": "Weight Training"
+        },
+        {
+          "nameEn": "WezenGammamon"
+        },
+        {
+          "nameEn": "Win Rate: 60%!"
+        },
+        {
+          "nameEn": "Wind Guardians"
+        },
+        {
+          "nameEn": "Wind Slicer"
+        },
+        {
+          "nameEn": "Wings of Love"
+        },
+        {
+          "nameEn": "Wisdom Training"
+        },
+        {
+          "nameEn": "Wolf of Friendship"
+        },
+        {
+          "nameEn": "Wolkenapalm"
+        },
+        {
+          "nameEn": "Wonder Stomp"
+        },
+        {
+          "nameEn": "Wyvern's Breath"
+        },
+        {
+          "nameEn": "X Digivolution!"
+        },
+        {
+          "nameEn": "Xiangpengmon"
+        },
+        {
+          "nameEn": "Yao Qinglan"
+        },
+        {
+          "nameEn": "Yellow Memory Boost!"
+        },
+        {
+          "nameEn": "Yellow Scramble"
+        },
+        {
+          "nameEn": "Yolei Inoue"
+        },
+        {
+          "nameEn": "Yoshino Fujieda"
+        },
+        {
+          "nameEn": "Yujin Ozora"
+        },
+        {
+          "nameEn": "Yukio Oikawa"
+        },
+        {
+          "nameEn": "Yuugo Kamishiro"
+        },
+        {
+          "nameEn": "Yuuko Kamishiro"
+        },
+        {
+          "nameEn": "Zanmetsumon"
+        },
+        {
+          "nameEn": "ZeedGarurumon"
+        },
+        {
+          "nameEn": "ZeedMillenniummon"
+        },
+        {
+          "nameEn": "Zenjiro Tsurugi"
+        },
+        {
+          "nameEn": "Zoe Orimoto"
+        },
+        {
+          "nameEn": "ZombiePlutomon"
+        },
+        {
+          "nameEn": "ZubaEagermon"
+        },
+        {
+          "nameEn": "A Blazing Storm of Metal!"
+        },
+        {
+          "nameEn": "Abyss Sanctuary: Throne Room"
+        },
+        {
+          "nameEn": "Alexandrite Memory Boost!"
+        },
+        {
+          "nameEn": "Ancient Guardian Deity"
+        },
+        {
+          "nameEn": "AncientMegatheriummon"
+        },
+        {
+          "nameEn": "Angewomon (X Antibody)"
+        },
+        {
+          "nameEn": "Arresterdramon: Superior Mode"
+        },
+        {
+          "nameEn": "Arukenimon & Mummymon"
+        },
+        {
+          "nameEn": "Atomic Megalo Blaster"
+        },
+        {
+          "nameEn": "Awakening of the Golden Knight"
+        },
+        {
+          "nameEn": "Barbamon (X Antibody)"
+        },
+        {
+          "nameEn": "BeelStarmon (X Antibody)"
+        },
+        {
+          "nameEn": "Beelzemon (X Antibody)"
+        },
+        {
+          "nameEn": "Beelzemon: Blast Mode"
+        },
+        {
+          "nameEn": "Believe in Our Friendship"
+        },
+        {
+          "nameEn": "Belphemon (X Antibody)"
+        },
+        {
+          "nameEn": "Belphemon: Sleep Mode"
+        },
+        {
+          "nameEn": "Blazing Memory Boost!"
+        },
+        {
+          "nameEn": "Blooming of Sincerity"
+        },
+        {
+          "nameEn": "Breakthrough of Courage"
+        },
+        {
+          "nameEn": "Calling From the Darkness"
+        },
+        {
+          "nameEn": "Central Town: Throne Room"
+        },
+        {
+          "nameEn": "Cerberusmon (X Antibody)"
+        },
+        {
+          "nameEn": "Cerberusmon: Werewolf Mode"
+        },
+        {
+          "nameEn": "Chaosdramon (X Antibody)"
+        },
+        {
+          "nameEn": "Chartreuse Memory Boost!"
+        },
+        {
+          "nameEn": "Cherubimon (X Antibody)"
+        },
+        {
+          "nameEn": "Chronomon: Destroy Mode"
+        },
+        {
+          "nameEn": "Cody Hida & T.K. Takaishi"
+        },
+        {
+          "nameEn": "Craniamon (X Antibody)"
+        },
+        {
+          "nameEn": "Creepymon (X Antibody)"
+        },
+        {
+          "nameEn": "Cyberdramon (X Antibody)"
+        },
+        {
+          "nameEn": "Dan Yuki & Kanan Yuki"
+        },
+        {
+          "nameEn": "DarkKnightmon (X Antibody)"
+        },
+        {
+          "nameEn": "DarkTyrannomon (X Antibody)"
+        },
+        {
+          "nameEn": "Davis Motomiya & Ken Ichijoji"
+        },
+        {
+          "nameEn": "Diaboromon (X Antibody)"
+        },
+        {
+          "nameEn": "Digital Accident Tactics Squad"
+        },
+        {
+          "nameEn": "Digivolution Plug-In S"
+        },
+        {
+          "nameEn": "Divine Arms Version Ω"
+        },
+        {
+          "nameEn": "Dobermon (X Antibody)"
+        },
+        {
+          "nameEn": "Dracomon (X Antibody)"
+        },
+        {
+          "nameEn": "Dynasmon (X Antibody)"
+        },
+        {
+          "nameEn": "Emergency Program Shutdown!"
+        },
+        {
+          "nameEn": "Emperor Dragon of Calamity"
+        },
+        {
+          "nameEn": "Eyesmon: Scatter Mode"
+        },
+        {
+          "nameEn": "Fellowship of Hope's Keepers"
+        },
+        {
+          "nameEn": "Fenriloogamon: Takemikazuchi"
+        },
+        {
+          "nameEn": "Fight for Your Pride!"
+        },
+        {
+          "nameEn": "Fist of the Beast King"
+        },
+        {
+          "nameEn": "From Master to Disciple"
+        },
+        {
+          "nameEn": "Full Moon Meteor Impact"
+        },
+        {
+          "nameEn": "Gankoomon (X Antibody)"
+        },
+        {
+          "nameEn": "Garudamon (X Antibody)"
+        },
+        {
+          "nameEn": "Garurumon (X Antibody)"
+        },
+        {
+          "nameEn": "Goldramon (X Antibody)"
+        },
+        {
+          "nameEn": "Gospel of the Fallen Angel"
+        },
+        {
+          "nameEn": "Gotsumon (X Antibody)"
+        },
+        {
+          "nameEn": "Growlmon (X Antibody)"
+        },
+        {
+          "nameEn": "Hagurumon (X Antibody)"
+        },
+        {
+          "nameEn": "Happy Bullet Showering"
+        },
+        {
+          "nameEn": "Henry Wong & Shu-Chong Wong"
+        },
+        {
+          "nameEn": "Hidden Potential Discovered!"
+        },
+        {
+          "nameEn": "Howling Memory Boost!"
+        },
+        {
+          "nameEn": "Hyper Infinity Cannon"
+        },
+        {
+          "nameEn": "I'll Drag You Into the Depths!"
+        },
+        {
+          "nameEn": "Impulse Memory Boost!"
+        },
+        {
+          "nameEn": "Insane Synthetic Monster"
+        },
+        {
+          "nameEn": "Invasion of the Titans"
+        },
+        {
+          "nameEn": "Iron-Fisted Onslaught"
+        },
+        {
+          "nameEn": "Izzy Izumi & Joe Kido"
+        },
+        {
+          "nameEn": "Izzy Izumi & Mimi Tachikawa"
+        },
+        {
+          "nameEn": "Izzy Izumi & Tai Kamiya"
+        },
+        {
+          "nameEn": "Joe Kido & Mimi Tachikawa"
+        },
+        {
+          "nameEn": "Judgement of the Blade"
+        },
+        {
+          "nameEn": "Junomon: Hysteric Mode"
+        },
+        {
+          "nameEn": "Jupitermon: Wrath Mode"
+        },
+        {
+          "nameEn": "Justimon (X Antibody)"
+        },
+        {
+          "nameEn": "Justimon: Critical Arm"
+        },
+        {
+          "nameEn": "Kentaurosmon (X Antibody)"
+        },
+        {
+          "nameEn": "Kiriha Aonuma & Nene Amano"
+        },
+        {
+          "nameEn": "Kiyoshiro Higashimitarai"
+        },
+        {
+          "nameEn": "Kokuwamon (X Antibody)"
+        },
+        {
+          "nameEn": "Kota Domoto & Yuji Musya"
+        },
+        {
+          "nameEn": "Kunlun's Imperial Decree"
+        },
+        {
+          "nameEn": "Kuremi Detective Agency"
+        },
+        {
+          "nameEn": "Kuwagamon (X Antibody)"
+        },
+        {
+          "nameEn": "LadyDevimon (X Antibody)"
+        },
+        {
+          "nameEn": "Leopardmon (X Antibody)"
+        },
+        {
+          "nameEn": "Leopardmon: Leopard Mode"
+        },
+        {
+          "nameEn": "Leviamon (X Antibody)"
+        },
+        {
+          "nameEn": "Lilithmon (X Antibody)"
+        },
+        {
+          "nameEn": "Lillymon (X Antibody)"
+        },
+        {
+          "nameEn": "Looking Back on the Good Times"
+        },
+        {
+          "nameEn": "LordKnightmon (X Antibody)"
+        },
+        {
+          "nameEn": "Loyalty Deeper than the Sea"
+        },
+        {
+          "nameEn": "Luminamon (Nene Version)"
+        },
+        {
+          "nameEn": "MadLeomon: Armed Mode"
+        },
+        {
+          "nameEn": "Magenta Memory Boost!"
+        },
+        {
+          "nameEn": "Magnadramon (X Antibody)"
+        },
+        {
+          "nameEn": "Malachite Memory Boost!"
+        },
+        {
+          "nameEn": "Matt Ishida & Sora Takenouchi"
+        },
+        {
+          "nameEn": "Matt Ishida & T.K. Takaishi"
+        },
+        {
+          "nameEn": "Matt Ishida & Tai Kamiya"
+        },
+        {
+          "nameEn": "Maycrackmon: Vicious Mode"
+        },
+        {
+          "nameEn": "Mega Digimon Assembly!"
+        },
+        {
+          "nameEn": "MegaSeadramon (X Antibody)"
+        },
+        {
+          "nameEn": "MetalTyrannomon (X Antibody)"
+        },
+        {
+          "nameEn": "Midnight Memory Boost!"
+        },
+        {
+          "nameEn": "Mimi Tachikawa & Joe Kido"
+        },
+        {
+          "nameEn": "Miraculous Mega Knight"
+        },
+        {
+          "nameEn": "MirageGaogamon: Burst Mode"
+        },
+        {
+          "nameEn": "Monzaemon (X Antibody)"
+        },
+        {
+          "nameEn": "Myotismon (X Antibody)"
+        },
+        {
+          "nameEn": "Mythical Arms of Salvation!"
+        },
+        {
+          "nameEn": "Obsidian Memory Boost!"
+        },
+        {
+          "nameEn": "Okuwamon (X Antibody)"
+        },
+        {
+          "nameEn": "OmniShoutmon (X Antibody)"
+        },
+        {
+          "nameEn": "Ophanimon Falldown Mode"
+        },
+        {
+          "nameEn": "Panjyamon (X Antibody)"
+        },
+        {
+          "nameEn": "Phoenixmon (X Antibody)"
+        },
+        {
+          "nameEn": "Plasma Deckerdra Launcher"
+        },
+        {
+          "nameEn": "Plesiomon (X Antibody)"
+        },
+        {
+          "nameEn": "Quake! Blast! Fire! Father!"
+        },
+        {
+          "nameEn": "Rapidmon (X Antibody)"
+        },
+        {
+          "nameEn": "Reina Sakuya & Makoto Kuonji"
+        },
+        {
+          "nameEn": "Reinforcement Plug-In O"
+        },
+        {
+          "nameEn": "Reinforcing Memory Boost!"
+        },
+        {
+          "nameEn": "Release of the Sealed Knight!"
+        },
+        {
+          "nameEn": "Return to the Primogenitor"
+        },
+        {
+          "nameEn": "Revive From the Darkness!"
+        },
+        {
+          "nameEn": "Royal Knights of the Purge"
+        },
+        {
+          "nameEn": "Saneiketsu Invitation"
+        },
+        {
+          "nameEn": "Seadramon (X Antibody)"
+        },
+        {
+          "nameEn": "Shoutmon (King Version)"
+        },
+        {
+          "nameEn": "Shoutmon + Dorulu Cannon"
+        },
+        {
+          "nameEn": "Shoutmon + Star Sword"
+        },
+        {
+          "nameEn": "Shoutmon X7: Superior Mode"
+        },
+        {
+          "nameEn": "Sistermon Blanc (Awakened)"
+        },
+        {
+          "nameEn": "Sistermon Ciel (Awakened)"
+        },
+        {
+          "nameEn": "Sistermon Noir (Awakened)"
+        },
+        {
+          "nameEn": "SkullKnightmon Cavalier Mode"
+        },
+        {
+          "nameEn": "Sora Takenouchi & Joe Kido"
+        },
+        {
+          "nameEn": "Sora Takenouchi & Kari Kamiya"
+        },
+        {
+          "nameEn": "Super Eradication Attack"
+        },
+        {
+          "nameEn": "Syakomon (X Antibody)"
+        },
+        {
+          "nameEn": "Symphony No.1 <Polyphony>"
+        },
+        {
+          "nameEn": "T.K. Takaishi & Izzy Izumi"
+        },
+        {
+          "nameEn": "T.K. Takaishi & Kari Kamiya"
+        },
+        {
+          "nameEn": "Tai Kamiya & Izzy Izumi"
+        },
+        {
+          "nameEn": "Tai Kamiya & Kari Kamiya"
+        },
+        {
+          "nameEn": "Tai Kamiya & Matt Ishida"
+        },
+        {
+          "nameEn": "Taiki, Kiriha, & Nene"
+        },
+        {
+          "nameEn": "Takuya Kanbara & Koji Minamoto"
+        },
+        {
+          "nameEn": "Terriermon (X Antibody)"
+        },
+        {
+          "nameEn": "The Apostle of Doom Descends!"
+        },
+        {
+          "nameEn": "The Champion Ultimate Fighter!"
+        },
+        {
+          "nameEn": "The Digimon I Designed"
+        },
+        {
+          "nameEn": "The Strongest of Brothers"
+        },
+        {
+          "nameEn": "The Thunder Emperor Awakens"
+        },
+        {
+          "nameEn": "The Wicked God Descends!"
+        },
+        {
+          "nameEn": "The Wicked God Emerges!"
+        },
+        {
+          "nameEn": "Titamon + SkullBaluchimon"
+        },
+        {
+          "nameEn": "Tomoro Tenma & Kyo Sawashiro"
+        },
+        {
+          "nameEn": "Tyrannomon (X Antibody)"
+        },
+        {
+          "nameEn": "UlforceVeedramon (X Antibody)"
+        },
+        {
+          "nameEn": "UlforceVeedramon Zero"
+        },
+        {
+          "nameEn": "Unique Emblem: Fable Waltz"
+        },
+        {
+          "nameEn": "Unique Emblem: Frozen Crown"
+        },
+        {
+          "nameEn": "Unique Emblem: Gravel Hearts"
+        },
+        {
+          "nameEn": "Unique Emblem: Guardian Vortex"
+        },
+        {
+          "nameEn": "Unique Emblem: Melting Recital"
+        },
+        {
+          "nameEn": "Unique Emblem: Narrative Ronde"
+        },
+        {
+          "nameEn": "Unique Emblem: Poseidia Lagoon"
+        },
+        {
+          "nameEn": "Unique Emblem: Primal Impact"
+        },
+        {
+          "nameEn": "Unique Emblem: Soul Banquet"
+        },
+        {
+          "nameEn": "Unleash the Dragon Gene"
+        },
+        {
+          "nameEn": "Vermilion Memory Boost!"
+        },
+        {
+          "nameEn": "Wadatsumi Purification"
+        },
+        {
+          "nameEn": "WarGrowlmon (X Antibody)"
+        },
+        {
+          "nameEn": "We Have to Stop Fighting!"
+        },
+        {
+          "nameEn": "WereGarurumon (X Antibody)"
+        },
+        {
+          "nameEn": "Wind to Flame, Ice to Sword"
+        },
+        {
+          "nameEn": "Wisteria Memory Boost!"
+        },
+        {
+          "nameEn": "Wizardmon (X Antibody)"
+        },
+        {
+          "nameEn": "X Antibody Proto Form"
+        },
+        {
+          "nameEn": "Yolei Inoue & Kari Kamiya"
+        },
+        {
+          "nameEn": "Yoshino Fujieda & Keenan Crier"
+        },
+        {
+          "nameEn": "You Can't Actually Fly?"
+        },
+        {
+          "nameEn": "Yuu Amano & Nene Amano"
+        },
+        {
+          "nameEn": "Advent of the Ancient Steel Angel"
+        },
+        {
+          "nameEn": "Adze Beast Blade and Shining Dragon Bullet"
+        },
+        {
+          "nameEn": "Attack of the Heavy Mobile Digimon!"
+        },
+        {
+          "nameEn": "Beastly Storm Dance of Affection"
+        },
+        {
+          "nameEn": "Code Cracker Fang & Hacker Judge"
+        },
+        {
+          "nameEn": "DNA Digivolution - Hearts United"
+        },
+        {
+          "nameEn": "Dark to Light, Thunder to Gunfire"
+        },
+        {
+          "nameEn": "Descent of the Three Great Angels"
+        },
+        {
+          "nameEn": "Genshi Continent & Ashino Island"
+        },
+        {
+          "nameEn": "HerculesKabuterimon (X Antibody)"
+        },
+        {
+          "nameEn": "Holy Beasts Great Cardinal Positions"
+        },
+        {
+          "nameEn": "Invincible Dragon-Insect Fusion"
+        },
+        {
+          "nameEn": "Lord of Devastation and Rebirth"
+        },
+        {
+          "nameEn": "Marcus Damon & Thomas H. Norstein"
+        },
+        {
+          "nameEn": "Metropolitan Police Department, Community Safety Bureau, Cyber Crime Division, Investigation Unit 11"
+        },
+        {
+          "nameEn": "Miki Kurosaki & Megumi Shirakawa"
+        },
+        {
+          "nameEn": "Rise of the Seven Great Demon Lords"
+        },
+        {
+          "nameEn": "SkullKnightmon: Mighty Axe Mode"
+        },
+        {
+          "nameEn": "Sora Takenouchi & Mimi Tachikawa"
+        },
+        {
+          "nameEn": "The Demon Wolf of the Castle of Nine Wolves"
+        },
+        {
+          "nameEn": "The Sistermon Sisters Training Gym"
+        },
+        {
+          "nameEn": "Trial of the Four Great Dragons"
+        },
+        {
+          "nameEn": "Unique Emblem: Blazing Conductor"
+        },
+        {
+          "nameEn": "Unique Emblem: Honeycomb Commander"
+        },
+        {
+          "nameEn": "Unique Emblem: Invincibly Invisible"
+        },
+        {
+          "nameEn": "Unique Emblem: Machina's Ascension"
+        },
+        {
+          "nameEn": "Unique Emblem: Ragnarok Attainer"
+        },
+        {
+          "nameEn": "WereGarurumon: Sagittarius Mode"
+        }
+      ]
+    },
+    {
+      "name": "Digimon / Characters",
+      "cards": [
+        {
+          "nameEn": "WarGreymon"
+        },
+        {
+          "nameEn": "Agumon"
+        },
+        {
+          "nameEn": "Angemon"
+        },
+        {
+          "nameEn": "Biyomon"
+        },
+        {
+          "nameEn": "DemiVeemon"
+        },
+        {
+          "nameEn": "ExVeemon"
+        },
+        {
+          "nameEn": "Gabumon"
+        },
+        {
+          "nameEn": "Gatomon"
+        },
+        {
+          "nameEn": "Gomamon"
+        },
+        {
+          "nameEn": "Greymon"
+        },
+        {
+          "nameEn": "Hawkmon"
+        },
+        {
+          "nameEn": "Magnamon"
+        },
+        {
+          "nameEn": "Omnimon"
+        },
+        {
+          "nameEn": "Pagumon"
+        },
+        {
+          "nameEn": "Patamon"
+        },
+        {
+          "nameEn": "SnowAgumon"
+        },
+        {
+          "nameEn": "Tentomon"
+        },
+        {
+          "nameEn": "Wormmon"
+        },
+        {
+          "nameEn": "Armadillomon"
+        },
+        {
+          "nameEn": "Imperialdramon"
+        },
+        {
+          "nameEn": "MagnaAngemon"
+        },
+        {
+          "nameEn": "MarineAngemon"
+        },
+        {
+          "nameEn": "MetalGarurumon"
+        },
+        {
+          "nameEn": "MetalGreymon"
+        },
+        {
+          "nameEn": "SkullGreymon"
+        },
+        {
+          "nameEn": "Airdramon"
+        },
+        {
+          "nameEn": "Akatorimon"
+        },
+        {
+          "nameEn": "Andromon"
+        },
+        {
+          "nameEn": "Angewomon"
+        },
+        {
+          "nameEn": "Ankylomon"
+        },
+        {
+          "nameEn": "Apocalymon"
+        },
+        {
+          "nameEn": "Aquillamon"
+        },
+        {
+          "nameEn": "Azulongmon"
+        },
+        {
+          "nameEn": "Babamon"
+        },
+        {
+          "nameEn": "Baihumon"
+        },
+        {
+          "nameEn": "Bakemon"
+        },
+        {
+          "nameEn": "Betamon"
+        },
+        {
+          "nameEn": "Birdramon"
+        },
+        {
+          "nameEn": "Blossomon"
+        },
+        {
+          "nameEn": "Boltmon"
+        },
+        {
+          "nameEn": "Botamon"
+        },
+        {
+          "nameEn": "Bucchiemon"
+        },
+        {
+          "nameEn": "Bukamon"
+        },
+        {
+          "nameEn": "Candlemon"
+        },
+        {
+          "nameEn": "Centarumon"
+        },
+        {
+          "nameEn": "Cherrymon"
+        },
+        {
+          "nameEn": "Chibomon"
+        },
+        {
+          "nameEn": "Chuumon"
+        },
+        {
+          "nameEn": "Daemon"
+        },
+        {
+          "nameEn": "Datamon"
+        },
+        {
+          "nameEn": "Deramon"
+        },
+        {
+          "nameEn": "Devidramon"
+        },
+        {
+          "nameEn": "Devimon"
+        },
+        {
+          "nameEn": "Dinobeemon"
+        },
+        {
+          "nameEn": "Divermon"
+        },
+        {
+          "nameEn": "Dokugumon"
+        },
+        {
+          "nameEn": "Drimogemon"
+        },
+        {
+          "nameEn": "Elecmon"
+        },
+        {
+          "nameEn": "Etemon"
+        },
+        {
+          "nameEn": "Floramon"
+        },
+        {
+          "nameEn": "Flymon"
+        },
+        {
+          "nameEn": "Frigimon"
+        },
+        {
+          "nameEn": "Garbagemon"
+        },
+        {
+          "nameEn": "Garudamon"
+        },
+        {
+          "nameEn": "Garurumon"
+        },
+        {
+          "nameEn": "Gazimon"
+        },
+        {
+          "nameEn": "Gekomon"
+        },
+        {
+          "nameEn": "Geremon"
+        },
+        {
+          "nameEn": "Gesomon"
+        },
+        {
+          "nameEn": "Gigadramon"
+        },
+        {
+          "nameEn": "Gizamon"
+        },
+        {
+          "nameEn": "Goldramon"
+        },
+        {
+          "nameEn": "Gorillamon"
+        },
+        {
+          "nameEn": "Gotsumon"
+        },
+        {
+          "nameEn": "Guardromon"
+        },
+        {
+          "nameEn": "Hagurumon"
+        },
+        {
+          "nameEn": "Halsemon"
+        },
+        {
+          "nameEn": "Hanumon"
+        },
+        {
+          "nameEn": "Icemon"
+        },
+        {
+          "nameEn": "Ikkakumon"
+        },
+        {
+          "nameEn": "Jijimon"
+        },
+        {
+          "nameEn": "KingEtemon"
+        },
+        {
+          "nameEn": "Kiwimon"
+        },
+        {
+          "nameEn": "Kokuwamon"
+        },
+        {
+          "nameEn": "Koromon"
+        },
+        {
+          "nameEn": "Kunemon"
+        },
+        {
+          "nameEn": "Kuwagamon"
+        },
+        {
+          "nameEn": "Leomon"
+        },
+        {
+          "nameEn": "Lillymon"
+        },
+        {
+          "nameEn": "Mamemon"
+        },
+        {
+          "nameEn": "Mammothmon"
+        },
+        {
+          "nameEn": "Megadramon"
+        },
+        {
+          "nameEn": "Meramon"
+        },
+        {
+          "nameEn": "Meteormon"
+        },
+        {
+          "nameEn": "Mojyamon"
+        },
+        {
+          "nameEn": "Mokumon"
+        },
+        {
+          "nameEn": "Monzaemon"
+        },
+        {
+          "nameEn": "Motimon"
+        },
+        {
+          "nameEn": "Muchomon"
+        },
+        {
+          "nameEn": "Mushroomon"
+        },
+        {
+          "nameEn": "Musyamon"
+        },
+        {
+          "nameEn": "Myotismon"
+        },
+        {
+          "nameEn": "Nanimon"
+        },
+        {
+          "nameEn": "Nefertimon"
+        },
+        {
+          "nameEn": "Numemon"
+        },
+        {
+          "nameEn": "Nyaromon"
+        },
+        {
+          "nameEn": "Ogremon"
+        },
+        {
+          "nameEn": "Otamamon"
+        },
+        {
+          "nameEn": "Pabumon"
+        },
+        {
+          "nameEn": "Paildramon"
+        },
+        {
+          "nameEn": "Palmon"
+        },
+        {
+          "nameEn": "Parrotmon"
+        },
+        {
+          "nameEn": "Pegasusmon"
+        },
+        {
+          "nameEn": "Penguinmon"
+        },
+        {
+          "nameEn": "Phantomon"
+        },
+        {
+          "nameEn": "Phoenixmon"
+        },
+        {
+          "nameEn": "Piddomon"
+        },
+        {
+          "nameEn": "Piedmon"
+        },
+        {
+          "nameEn": "Piximon"
+        },
+        {
+          "nameEn": "Plesiomon"
+        },
+        {
+          "nameEn": "Poromon"
+        },
+        {
+          "nameEn": "Poyomon"
+        },
+        {
+          "nameEn": "Psychemon"
+        },
+        {
+          "nameEn": "Pumpkinmon"
+        },
+        {
+          "nameEn": "Punimon"
+        },
+        {
+          "nameEn": "Puppetmon"
+        },
+        {
+          "nameEn": "Pururumon"
+        },
+        {
+          "nameEn": "Raidramon"
+        },
+        {
+          "nameEn": "Raremon"
+        },
+        {
+          "nameEn": "Rosemon"
+        },
+        {
+          "nameEn": "Salamon"
+        },
+        {
+          "nameEn": "Scorpiomon"
+        },
+        {
+          "nameEn": "Seadramon"
+        },
+        {
+          "nameEn": "Seraphimon"
+        },
+        {
+          "nameEn": "Sethmon"
+        },
+        {
+          "nameEn": "Shakkoumon"
+        },
+        {
+          "nameEn": "Shellmon"
+        },
+        {
+          "nameEn": "Shurimon"
+        },
+        {
+          "nameEn": "Silphymon"
+        },
+        {
+          "nameEn": "Snimon"
+        },
+        {
+          "nameEn": "Soulmon"
+        },
+        {
+          "nameEn": "Starmon"
+        },
+        {
+          "nameEn": "Stegomon"
+        },
+        {
+          "nameEn": "Stingmon"
+        },
+        {
+          "nameEn": "Submarimon"
+        },
+        {
+          "nameEn": "Sukamon"
+        },
+        {
+          "nameEn": "Syakomon"
+        },
+        {
+          "nameEn": "Tanemon"
+        },
+        {
+          "nameEn": "Tankmon"
+        },
+        {
+          "nameEn": "Togemon"
+        },
+        {
+          "nameEn": "Tokomon"
+        },
+        {
+          "nameEn": "Toucanmon"
+        },
+        {
+          "nameEn": "Tsubumon"
+        },
+        {
+          "nameEn": "Tsukaimon"
+        },
+        {
+          "nameEn": "Tsunomon"
+        },
+        {
+          "nameEn": "Tuskmon"
+        },
+        {
+          "nameEn": "Tyrannomon"
+        },
+        {
+          "nameEn": "Unimon"
+        },
+        {
+          "nameEn": "Upamon"
+        },
+        {
+          "nameEn": "Vademon"
+        },
+        {
+          "nameEn": "Valkyrimon"
+        },
+        {
+          "nameEn": "Veedramon"
+        },
+        {
+          "nameEn": "Vegiemon"
+        },
+        {
+          "nameEn": "Vermilimon"
+        },
+        {
+          "nameEn": "Vikemon"
+        },
+        {
+          "nameEn": "Vilemon"
+        },
+        {
+          "nameEn": "Whamon"
+        },
+        {
+          "nameEn": "Wizardmon"
+        },
+        {
+          "nameEn": "Yokomon"
+        },
+        {
+          "nameEn": "Yuramon"
+        },
+        {
+          "nameEn": "Zhuqiaomon"
+        },
+        {
+          "nameEn": "Zudomon"
+        },
+        {
+          "nameEn": "AeroVeedramon"
+        },
+        {
+          "nameEn": "BlueMeramon"
+        },
+        {
+          "nameEn": "Cyberdramon"
+        },
+        {
+          "nameEn": "DarkTyrannomon"
+        },
+        {
+          "nameEn": "DemiDevimon"
+        },
+        {
+          "nameEn": "Digitamamon"
+        },
+        {
+          "nameEn": "ExTyrannomon"
+        },
+        {
+          "nameEn": "Flamedramon"
+        },
+        {
+          "nameEn": "FlareRizamon"
+        },
+        {
+          "nameEn": "GranKuwagamon"
+        },
+        {
+          "nameEn": "HerculesKabuterimon"
+        },
+        {
+          "nameEn": "Kabuterimon"
+        },
+        {
+          "nameEn": "Kokatorimon"
+        },
+        {
+          "nameEn": "LadyDevimon"
+        },
+        {
+          "nameEn": "Machinedramon"
+        },
+        {
+          "nameEn": "Magnadramon"
+        },
+        {
+          "nameEn": "MegaKabuterimon"
+        },
+        {
+          "nameEn": "MegaSeadramon"
+        },
+        {
+          "nameEn": "Mekanorimon"
+        },
+        {
+          "nameEn": "MetalEtemon"
+        },
+        {
+          "nameEn": "MetalSeadramon"
+        },
+        {
+          "nameEn": "MetalTyrannomon"
+        },
+        {
+          "nameEn": "Milleniummon"
+        },
+        {
+          "nameEn": "ModokiBetamon"
+        },
+        {
+          "nameEn": "Monochromon"
+        },
+        {
+          "nameEn": "PlatinumSukamon"
+        },
+        {
+          "nameEn": "RedVegiemon"
+        },
+        {
+          "nameEn": "Revolvermon"
+        },
+        {
+          "nameEn": "SaberLeomon"
+        },
+        {
+          "nameEn": "Saberdramon"
+        },
+        {
+          "nameEn": "ShogunGekomon"
+        },
+        {
+          "nameEn": "SkullMeramon"
+        },
+        {
+          "nameEn": "SkullSatamon"
+        },
+        {
+          "nameEn": "Thunderballmon"
+        },
+        {
+          "nameEn": "VenomMyotismon"
+        },
+        {
+          "nameEn": "WaruMonzaemon"
+        },
+        {
+          "nameEn": "WereGarurumon"
+        }
+      ]
+    }
+  ]
+}

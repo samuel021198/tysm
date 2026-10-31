@@ -1,9 +1,11 @@
+import { readFileSync } from "node:fs";
 import { catalogDisplayTitle, catalogTitleFromCard, rarityTitle } from "./card-title";
 import { catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog-batch";
 import { catalogImageSrc, catalogTileSrc, isR2PublicUrl, officialOpImageUrl } from "./catalog-image";
 import { catalogObjectKey, imageFromDataUrl, keptMirroredUrl, r2Config, storeUploadedImage } from "./r2";
 import { catalogSuggestion } from "./catalog-suggest";
-import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogWhere, parseGame, type CatalogSearchCard } from "./dex";
+import { curatedCounts, CURATED_COUNTS, loadCuratedCatalog, loadSoftListings } from "./catalog-names";
+import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogWhere, gameParam, parseGame, type CatalogSearchCard } from "./dex";
 import { officialSet, parseOfficialCards, parseOfficialSeries } from "./op-official";
 import { mapOptcgCard, optcgExternalId, optcgNumberKey, optcgQueue, optcgSet } from "./optcg";
 import { mapRiftBulk, mapRiftCard, riftCollector } from "./riftbound";
@@ -26,6 +28,29 @@ function assert(cond: unknown, msg: string): asserts cond {
 assert(parseGame("pokemon") === "POKEMON" && parseGame("one-piece") === "ONE_PIECE" && parseGame("riftbound") === "RIFTBOUND" && parseGame("demo") === "DEMO", "game query parses");
 assert(parseGame("topps-basketball") === "TOPPS_BASKETBALL" && parseGame("topps_soccer") === "TOPPS_SOCCER", "topps sports are separate games");
 assert(parseGame("topps") === null, "unknown game is ignored");
+assert(parseGame("yugioh") === "YUGIOH" && parseGame("yu-gi-oh") === "YUGIOH" && parseGame("weiss-schwarz") === "WEISS_SCHWARZ", "wave-1 names parse");
+assert(parseGame("digimon") === "DIGIMON" && parseGame("lorcana") === "LORCANA" && parseGame("mtg") === "MTG" && parseGame("fab") === "FLESH_AND_BLOOD", "wave-1 games parse");
+assert(parseGame("gundam") === "BANDAI_GUNDAM" && parseGame("dragon-ball") === "DRAGON_BALL", "gundam and dragon ball parse");
+assert(parseGame("union-arena") === null && parseGame("vanguard") === null && parseGame("panini") === null, "wave-2 games stay out");
+const curated = loadCuratedCatalog();
+const counts = curatedCounts(curated.cards);
+for (const [game, count] of Object.entries(CURATED_COUNTS)) {
+  assert(counts[game as keyof typeof counts] === count, `${game} curated count`);
+}
+assert(curated.cards.every((card) => card.nameJa === "" && !card.externalId.includes("http")), "curated rows are names only");
+const soft = loadSoftListings();
+const names = new Map<string, Set<string>>();
+for (const card of curated.cards) {
+  const set = names.get(card.game) ?? new Set<string>();
+  set.add(card.nameEn);
+  names.set(card.game, set);
+}
+assert(soft.length === 50 && new Set(soft.map((row) => row.sellerPersona)).size === 12, "fifty listings across twelve sellers");
+for (const row of soft) assert(row.imageUrl == null && names.get(row.proposedEnum)?.has(row.cardNameEn), `${row.id} name is in the curated list`);
+const waveSeed = readFileSync(new URL("./seed-wave1.ts", import.meta.url), "utf8");
+assert(!waveSeed.includes("wipeUserContent") && !waveSeed.includes("deleteMany"), "wave-1 seed only adds");
+const schema = readFileSync(new URL("../prisma/schema.prisma", import.meta.url), "utf8");
+assert(schema.includes("YUGIOH") && schema.includes("DRAGON_BALL") && !schema.includes("UNION_ARENA") && !schema.includes("VANGUARD") && !/PANINI_/.test(schema), "wave-2 enums stay out of the schema");
 assert(rarityTitle("SEC") === "SEC" && rarityTitle("Super Rare") === "Super Rare", "short rarity codes stay printed");
 
 assert(
@@ -316,6 +341,8 @@ assert(!isR2PublicUrl(official), "the official host is not treated as r2");
 assert(catalogObjectKey("POKEMON", "ja:sv10-001", "webp") === "dex/pokemon/ja_sv10-001.webp", "pokemon objects stay under dex/pokemon");
 assert(catalogObjectKey("ONE_PIECE", "op-jp:ST01-001", "png") === "dex/one-piece/op-jp_ST01-001.png", "one piece objects use their own prefix");
 assert(catalogObjectKey("RIFTBOUND", "rb:abc", "jpg") === "dex/riftbound/rb_abc.jpg", "riftbound objects use their own prefix");
+assert(catalogObjectKey("YUGIOH", "nm:YUGIOH:S001:0001", "webp") === "dex/yugioh/nm_YUGIOH_S001_0001.webp", "yugioh objects stay in their own folder");
+assert(gameParam("BANDAI_GUNDAM") === "gundam" && gameParam("FLESH_AND_BLOOD") === "flesh-and-blood" && gameParam("DRAGON_BALL") === "dragon-ball", "wave-1 slugs match sell categories");
 const jpeg = `data:image/jpeg;base64,${Buffer.from("0123456789abcdef0123456789abcdef").toString("base64")}`;
 assert(imageFromDataUrl(jpeg)?.contentType === "image/jpeg", "jpeg data urls decode");
 assert(imageFromDataUrl("data:image/svg+xml;base64,aaaa") === null, "svg uploads are rejected");

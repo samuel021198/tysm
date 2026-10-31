@@ -56,7 +56,7 @@ assert(pickMallListings([idol, poke, topps], { ...lane, cat: "pokemon" })[0]?.se
 assert(pickMallListings([idol, topps], { ...lane, cat: "topps" })[0]?.sellerId === "topps" && !mallCategoryHit("topps", { categorySlug: "football", game: null }), "Topps is its own chip");
 const ygo = { ...cheap, price: 220, sellerId: "ygo", title: "青眼白龍", game: "Yu-Gi-Oh", cardName: "青眼白龍", categorySlug: "yugioh", categoryZh: "Yu-Gi-Oh", categoryEn: "Yu-Gi-Oh" };
 assert(MALL_CHIPS.map((chip) => chip.zh).join("|") === "Pokémon|Topps|One Piece|Riftbound|Yu-Gi-Oh", "mall chips stay 精選 beside Pokémon｜Topps｜One Piece｜Riftbound｜Yu-Gi-Oh");
-assert(!MALL_CHIPS.some((chip) => chip.id === "bandai" || /bandai|panini|vanguard|union/i.test(chip.zh)), "Bandai and Wave-2 brands are not chips");
+assert(!MALL_CHIPS.some((chip) => (chip.id as string) === "bandai" || /bandai|panini|vanguard|union/i.test(chip.zh)), "Bandai and Wave-2 brands are not chips");
 assert(pickMallListings([idol, ygo], { ...lane, cat: "yugioh" })[0]?.sellerId === "ygo", "the Yu-Gi-Oh chip is that category");
 assert(mallCategoryHit("yugioh", { categorySlug: "other", game: "遊戲王" }) && !mallCategoryHit("yugioh", { categorySlug: "gundam", game: "Gundam" }), "Yu-Gi-Oh matches the Chinese game name and not Gundam");
 assert(pickMallListings([idol, poke], { ...lane, lane: "follow", cat: "picks", followedIds: ["idol"] })[0]?.sellerId === "idol", "已關注 is people you follow");

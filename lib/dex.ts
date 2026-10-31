@@ -4,26 +4,78 @@ import { foldSearch } from "./search";
 
 export type DexPrintRegion = "JP" | "WEST";
 
-export type DexGame = "POKEMON" | "ONE_PIECE" | "RIFTBOUND" | "DEMO" | "TOPPS_BASKETBALL" | "TOPPS_SOCCER";
+export type DexGame =
+  | "POKEMON"
+  | "ONE_PIECE"
+  | "RIFTBOUND"
+  | "DEMO"
+  | "TOPPS_BASKETBALL"
+  | "TOPPS_SOCCER"
+  | "YUGIOH"
+  | "DIGIMON"
+  | "WEISS_SCHWARZ"
+  | "LORCANA"
+  | "MTG"
+  | "FLESH_AND_BLOOD"
+  | "BANDAI_GUNDAM"
+  | "DRAGON_BALL";
+
+const PARSE_GAME: Record<string, DexGame> = {
+  pokemon: "POKEMON",
+  "pokémon": "POKEMON",
+  "one-piece": "ONE_PIECE",
+  onepiece: "ONE_PIECE",
+  op: "ONE_PIECE",
+  riftbound: "RIFTBOUND",
+  rift: "RIFTBOUND",
+  demo: "DEMO",
+  "topps-basketball": "TOPPS_BASKETBALL",
+  "topps-basket": "TOPPS_BASKETBALL",
+  "topps-soccer": "TOPPS_SOCCER",
+  "topps-football": "TOPPS_SOCCER",
+  yugioh: "YUGIOH",
+  "yu-gi-oh": "YUGIOH",
+  ygo: "YUGIOH",
+  digimon: "DIGIMON",
+  "weiss-schwarz": "WEISS_SCHWARZ",
+  weiss: "WEISS_SCHWARZ",
+  ws: "WEISS_SCHWARZ",
+  lorcana: "LORCANA",
+  mtg: "MTG",
+  magic: "MTG",
+  "flesh-and-blood": "FLESH_AND_BLOOD",
+  fab: "FLESH_AND_BLOOD",
+  gundam: "BANDAI_GUNDAM",
+  "bandai-gundam": "BANDAI_GUNDAM",
+  "dragon-ball": "DRAGON_BALL",
+  dragonball: "DRAGON_BALL",
+  dbs: "DRAGON_BALL",
+};
+
+const GAME_PARAM: Record<DexGame, string> = {
+  POKEMON: "pokemon",
+  ONE_PIECE: "one-piece",
+  RIFTBOUND: "riftbound",
+  DEMO: "demo",
+  TOPPS_BASKETBALL: "topps-basketball",
+  TOPPS_SOCCER: "topps-soccer",
+  YUGIOH: "yugioh",
+  DIGIMON: "digimon",
+  WEISS_SCHWARZ: "weiss-schwarz",
+  LORCANA: "lorcana",
+  MTG: "mtg",
+  FLESH_AND_BLOOD: "flesh-and-blood",
+  BANDAI_GUNDAM: "gundam",
+  DRAGON_BALL: "dragon-ball",
+};
 
 export function parseGame(value: string | null | undefined): DexGame | null {
   const text = (value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
-  if (text === "pokemon" || text === "pokémon") return "POKEMON";
-  if (text === "one-piece" || text === "onepiece" || text === "op") return "ONE_PIECE";
-  if (text === "riftbound" || text === "rift") return "RIFTBOUND";
-  if (text === "demo") return "DEMO";
-  if (text === "topps-basketball" || text === "topps-basket") return "TOPPS_BASKETBALL";
-  if (text === "topps-soccer" || text === "topps-football") return "TOPPS_SOCCER";
-  return null;
+  return PARSE_GAME[text] ?? null;
 }
 
 export function gameParam(game: DexGame): string {
-  if (game === "ONE_PIECE") return "one-piece";
-  if (game === "RIFTBOUND") return "riftbound";
-  if (game === "DEMO") return "demo";
-  if (game === "TOPPS_BASKETBALL") return "topps-basketball";
-  if (game === "TOPPS_SOCCER") return "topps-soccer";
-  return "pokemon";
+  return GAME_PARAM[game];
 }
 
 /** Sell-form / listing category slug for a dex game. */

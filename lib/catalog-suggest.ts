@@ -41,6 +41,14 @@ const GAME_LABEL: Record<string, string> = {
   DEMO: "Demo",
   TOPPS_BASKETBALL: "Topps Basketball",
   TOPPS_SOCCER: "Topps Soccer",
+  YUGIOH: "Yu-Gi-Oh",
+  DIGIMON: "Digimon",
+  WEISS_SCHWARZ: "Weiss Schwarz",
+  LORCANA: "Lorcana",
+  MTG: "Magic: The Gathering",
+  FLESH_AND_BLOOD: "Flesh and Blood",
+  BANDAI_GUNDAM: "Gundam",
+  DRAGON_BALL: "Dragon Ball",
 };
 
 /** Stored language matches existing listings (日文 / 英文), which dex linking already understands. */

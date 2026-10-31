@@ -99,9 +99,24 @@ const LANGUAGES = ["日文", "英文", "繁體中文", "簡體中文", "韓文"]
 
 const CARD_ORDER = ["pokemon", "one-piece", "riftbound", "yugioh", "topps-soccer", "topps-basketball", "topps-baseball", "weiss-schwarz", "digimon", "lorcana", "mtg", "flesh-and-blood", "gundam", "dragon-ball", "panini-soccer", "football", "basketball", "baseball", "singers", "actors", "idols", "other"];
 
+const CATALOG_SLUGS = new Set([
+  "pokemon",
+  "one-piece",
+  "riftbound",
+  "topps-basketball",
+  "topps-soccer",
+  "yugioh",
+  "digimon",
+  "weiss-schwarz",
+  "lorcana",
+  "mtg",
+  "flesh-and-blood",
+  "gundam",
+  "dragon-ball",
+]);
+
 function catalogSlug(slug: string | undefined): string {
-  if (slug === "pokemon" || slug === "one-piece" || slug === "riftbound" || slug === "topps-basketball" || slug === "topps-soccer") return slug;
-  return "";
+  return slug && CATALOG_SLUGS.has(slug) ? slug : "";
 }
 
 const STEPS = [
