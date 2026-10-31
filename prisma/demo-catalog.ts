@@ -1205,10 +1205,21 @@ export const LEAF_CATEGORIES = [
 ] as const;
 
 /// Sell-step lines. Not part of LEAF_CATEGORIES, so demo seed does not need seven listings each.
+/// Wave-1 leaves pair with catalog enums YUGIOH, WEISS_SCHWARZ, DIGIMON, LORCANA, MTG, FLESH_AND_BLOOD, BANDAI_GUNDAM, DRAGON_BALL.
+/// No card rows here. Wave-2 brand leaves stay off this list.
 export const EXTRA_CARD_CATEGORIES = [
   ["cat_topps_soccer", "topps-soccer", "Topps 足球", "Topps Soccer", "athlete", "cat_athletes", 4],
   ["cat_topps_basketball", "topps-basketball", "Topps 籃球", "Topps Basketball", "athlete", "cat_athletes", 5],
   ["cat_topps_baseball", "topps-baseball", "Topps 棒球", "Topps Baseball", "athlete", "cat_athletes", 6],
   ["cat_panini_soccer", "panini-soccer", "Panini 足球", "Panini Soccer", "athlete", "cat_athletes", 7],
   ["cat_riftbound", "riftbound", "Riftbound", "Riftbound", "tcg", "cat_tcg", 8],
+  ["cat_yugioh", "yugioh", "Yu-Gi-Oh", "Yu-Gi-Oh", "tcg", "cat_tcg", 9],
+  ["cat_weiss_schwarz", "weiss-schwarz", "Weiss Schwarz", "Weiss Schwarz", "tcg", "cat_tcg", 10],
+  ["cat_digimon", "digimon", "Digimon", "Digimon", "tcg", "cat_tcg", 11],
+  ["cat_lorcana", "lorcana", "Lorcana", "Lorcana", "tcg", "cat_tcg", 12],
+  ["cat_mtg", "mtg", "MTG", "MTG", "tcg", "cat_tcg", 13],
+  ["cat_flesh_and_blood", "flesh-and-blood", "Flesh and Blood", "Flesh and Blood", "tcg", "cat_tcg", 14],
+  ["cat_gundam", "gundam", "Gundam", "Gundam", "tcg", "cat_tcg", 15],
+  ["cat_dragon_ball", "dragon-ball", "Dragon Ball", "Dragon Ball", "tcg", "cat_tcg", 16],
+  ["cat_other", "other", "其他", "Other", "tcg", "cat_tcg", 17],
 ] as const;

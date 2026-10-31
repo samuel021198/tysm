@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { MALL_FEED_CAP, mallCategoryHit, orderMallListings, pickMallListings, shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
+import { MALL_CHIPS, MALL_FEED_CAP, mallCategoryHit, orderMallListings, pickMallListings, shopDisplayCents, shopMenu, shopPill, shopPillLabel, shopPriceEditable } from "./shop-inventory";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -54,6 +54,11 @@ assert(pickMallListings([idol, poke], { ...lane, cat: "picks", interests: ["寶�
 assert(pickMallListings([idol, poke], { ...lane, cat: "picks" }).length === 2, "精選 with no tags keeps the lane");
 assert(pickMallListings([idol, poke, topps], { ...lane, cat: "pokemon" })[0]?.sellerId === "poke", "the Pokémon chip is that category");
 assert(pickMallListings([idol, topps], { ...lane, cat: "topps" })[0]?.sellerId === "topps" && !mallCategoryHit("topps", { categorySlug: "football", game: null }), "Topps is its own chip");
+const ygo = { ...cheap, price: 220, sellerId: "ygo", title: "青眼白龍", game: "Yu-Gi-Oh", cardName: "青眼白龍", categorySlug: "yugioh", categoryZh: "Yu-Gi-Oh", categoryEn: "Yu-Gi-Oh" };
+assert(MALL_CHIPS.map((chip) => chip.zh).join("|") === "Pokémon|Topps|One Piece|Riftbound|Yu-Gi-Oh", "mall chips stay 精選 beside Pokémon｜Topps｜One Piece｜Riftbound｜Yu-Gi-Oh");
+assert(!MALL_CHIPS.some((chip) => chip.id === "bandai" || /bandai|panini|vanguard|union/i.test(chip.zh)), "Bandai and Wave-2 brands are not chips");
+assert(pickMallListings([idol, ygo], { ...lane, cat: "yugioh" })[0]?.sellerId === "ygo", "the Yu-Gi-Oh chip is that category");
+assert(mallCategoryHit("yugioh", { categorySlug: "other", game: "遊戲王" }) && !mallCategoryHit("yugioh", { categorySlug: "gundam", game: "Gundam" }), "Yu-Gi-Oh matches the Chinese game name and not Gundam");
 assert(pickMallListings([idol, poke], { ...lane, lane: "follow", cat: "picks", followedIds: ["idol"] })[0]?.sellerId === "idol", "已關注 is people you follow");
 const named = { sellerId: "x", title: "x", game: null, cardName: null, categorySlug: "pokemon", categoryZh: "寶可夢", categoryEn: "Pokémon" };
 assert(pickMallListings([{ ...cheap, ...named, sellerId: "buy" }, { ...soon, ...named, sellerId: "auc" }], { ...lane, lane: "auction", cat: "picks", now: new Date("2026-10-01T00:00:00Z").getTime() })[0]?.sellerId === "auc", "拍賣 is a live auction");
@@ -111,6 +116,19 @@ assert(
   mallBoard.includes('name="q"') && mallBoard.includes("詳細篩選") && mallBoard.includes("精選") && mallBoard.includes("MALL_CHIPS") && mallBoard.includes("更多") && mallBoard.includes("熱門商品") && mallBoard.includes("附近商戶") && mallBoard.includes("已關注") && mallBoard.includes("拍賣") && mallBoard.includes('useState<Lane>("hot")') && !mallBoard.includes("useRouter") && !mallBoard.includes("router.push"),
   "search, category chips, and tabs; tabs do not navigate",
 );
+const sellForm = readFileSync(new URL("../components/sell-form.tsx", import.meta.url), "utf8");
+const catalog = readFileSync(new URL("../prisma/demo-catalog.ts", import.meta.url), "utf8");
+const extra = catalog.slice(catalog.indexOf("export const EXTRA_CARD_CATEGORIES"), catalog.indexOf("] as const;", catalog.indexOf("export const EXTRA_CARD_CATEGORIES")));
+const picker = sellForm.slice(sellForm.indexOf("const CARD_ORDER"), sellForm.indexOf("function catalogSlug"));
+assert(
+  picker.includes('"yugioh"') && picker.includes('"weiss-schwarz"') && picker.includes('"digimon"') && picker.includes('"lorcana"') && picker.includes('"mtg"') && picker.includes('"flesh-and-blood"') && picker.includes('"gundam"') && picker.includes('"dragon-ball"') && picker.includes('"other"') && picker.includes('"topps-baseball"'),
+  "the sell picker keeps Topps baseball and adds the Wave-1 brands",
+);
+assert(!picker.includes("union-arena") && !picker.includes("vanguard") && !picker.includes('"panini"'), "Wave-2 brands stay out of the picker");
+for (const label of ["Yu-Gi-Oh", "Weiss Schwarz", "Digimon", "Lorcana", "MTG", "Flesh and Blood", "Gundam", "Dragon Ball", "其他"]) {
+  assert(extra.includes(label), `${label} is a category leaf`);
+}
+assert(!extra.includes("union-arena") && !extra.includes("Union Arena") && !extra.includes("vanguard") && !extra.includes("Vanguard"), "Wave-2 leaves are not seeded");
 assert(
   mallBoard.includes("最新上架") && mallBoard.includes("價錢低→高") && mallBoard.includes("高→低") && mallBoard.includes("即將結束") && mallBoard.includes('href="/shop/recent"') && mallBoard.includes('href="/shop/watch"') && !mallBoard.includes("排行榜") && !mallBoard.includes("max-w-[390px]") && !mallBoard.includes("max-w-[375px]"),
   "the filter sheet is sort plus shortcuts, without a fixed phone width",
