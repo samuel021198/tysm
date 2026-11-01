@@ -1,6 +1,6 @@
 import type { CatalogGame } from "@prisma/client";
 import { EXTRA_CARD_CATEGORIES, LEAF_CATEGORIES } from "../prisma/demo-catalog";
-import { loadCuratedCatalog, loadSoftListings, type WaveGame } from "./catalog-names";
+import { loadCuratedCatalog, loadSoftListings, softListingId, softPostId, type WaveGame } from "./catalog-names";
 import { prisma } from "./db";
 import { DEX_PLACEHOLDER } from "./dex";
 
@@ -89,7 +89,7 @@ async function upsertNames() {
     setIds.set(set.externalId, row.id);
   }
   const chunk = 500;
-  // ponytail: skipDuplicates will not refresh a renamed row. Upgrade path: ON CONFLICT DO UPDATE if curated names are revised.
+  // ponytail: skipDuplicates will not refresh a renamed english row. nameJa is filled below. Upgrade path: ON CONFLICT DO UPDATE if curated english names are revised.
   for (let index = 0; index < cards.length; index += chunk) {
     await prisma.catalogCard.createMany({
       data: cards.slice(index, index + chunk).map((card) => ({
@@ -111,7 +111,25 @@ async function upsertNames() {
       skipDuplicates: true,
     });
   }
-  return { sets: sets.length, cards: cards.length };
+  const aliases = await refreshAliasNames(cards);
+  return { sets: sets.length, cards: cards.length, aliases };
+}
+
+/** skipDuplicates will not fill nameJa on a row that already exists. Touch only cards that gained a JA title. */
+async function refreshAliasNames(cards: { externalId: string; nameJa: string }[]) {
+  const aliased = cards.filter((card) => card.nameJa);
+  const chunk = 40;
+  for (let index = 0; index < aliased.length; index += chunk) {
+    await prisma.$transaction(
+      aliased.slice(index, index + chunk).map((card) =>
+        prisma.catalogCard.updateMany({
+          where: { externalId: card.externalId, NOT: { nameJa: card.nameJa } },
+          data: { nameJa: card.nameJa },
+        }),
+      ),
+    );
+  }
+  return aliased.length;
 }
 
 function sellerId(handle: string) {
@@ -166,7 +184,7 @@ async function upsertDemos() {
     if (!cat) throw new Error(slug);
     const cents = Math.round(row.priceHKD * 100);
     const auction = row.listingType === "auction";
-    const id = `soft_${row.id.replace(/-/g, "_")}`;
+    const id = softListingId(row.id);
     const title = `${ZH[row.proposedEnum]} ${row.cardNameEn}`;
     const data = {
       sellerId: sellerId(seller.handle),
@@ -229,7 +247,7 @@ async function upsertDemos() {
       update: { url: DEX_PLACEHOLDER, role: "FRONT", position: 0 },
       create: { id: photoId, listingId: id, url: DEX_PLACEHOLDER, role: "FRONT", position: 0 },
     });
-    const postId = `soft_post_${row.id.replace(/-/g, "_")}`;
+    const postId = softPostId(row.id);
     const post = {
       authorId: sellerId(seller.handle),
       body: `放售 ${row.cardNameEn}。軟啟動示範，相片之後再補。 #${ZH[row.proposedEnum]}`,

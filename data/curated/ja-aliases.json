@@ -1,0 +1,1825 @@
+{
+  "version": 1,
+  "purpose": "JA/ZH typeahead aliases for Wave-1+ curated EN name DB. Merge onto Card.nameJa / alias table; do not wipe EN names.",
+  "sources": [
+    "Konami OCG Japanese card titles (public naming)",
+    "Common ZH marketplace search forms (HK/TW/CN TCG shops)",
+    "Public Digimon / One Piece / Weiss character naming conventions"
+  ],
+  "spotFix": {
+    "query": "黑魔導",
+    "mapsTo": "Dark Magician",
+    "via": [
+      "nameZh",
+      "also:黒魔導"
+    ]
+  },
+  "counts": {
+    "YUGIOH": 185,
+    "DIGIMON": 10,
+    "ONE_PIECE": 10,
+    "WEISS_SCHWARZ": 12
+  },
+  "aliases": [
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dark Magician",
+      "nameJa": "ブラック・マジシャン",
+      "nameZh": "黑魔導",
+      "also": [
+        "黒魔導",
+        "ブラックマジシャン",
+        "黑魔术师",
+        "黑暗魔術師"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dark Magician Girl",
+      "nameJa": "ブラック・マジシャン・ガール",
+      "nameZh": "黑魔導女孩",
+      "also": [
+        "黒魔導ガール",
+        "ブラックマジシャンガール",
+        "黑魔導少女",
+        "黑魔术少女"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes White Dragon",
+      "nameJa": "青眼の白龍",
+      "nameZh": "青眼白龍",
+      "also": [
+        "青眼的白龍",
+        "ブルーアイズ・ホワイト・ドラゴン",
+        "青眼白龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Ultimate Dragon",
+      "nameJa": "青眼の究極竜",
+      "nameZh": "青眼究極龍",
+      "also": [
+        "青眼的究极龙",
+        "ブルーアイズ・アルティメット・ドラゴン"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Chaos MAX Dragon",
+      "nameJa": "青眼の混沌最大龍",
+      "nameZh": "青眼混沌MAX龍",
+      "also": [
+        "青眼混沌最大龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Spirit Dragon",
+      "nameJa": "青眼の精霊龍",
+      "nameZh": "青眼精靈龍",
+      "also": [
+        "青眼精灵龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Alternative White Dragon",
+      "nameJa": "青眼の亜白龍",
+      "nameZh": "青眼亞白龍",
+      "also": [
+        "青眼亚白龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Jet Dragon",
+      "nameJa": "ブルーアイズ・ジェット・ドラゴン",
+      "nameZh": "青眼噴射龍",
+      "also": [
+        "ジェットドラゴン"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blue-Eyes Abyss Dragon",
+      "nameJa": "深淵の青眼龍",
+      "nameZh": "深淵青眼龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Red-Eyes Black Dragon",
+      "nameJa": "真紅眼の黒竜",
+      "nameZh": "真紅眼黑龍",
+      "also": [
+        "真红眼黑龙",
+        "レッドアイズ・ブラックドラゴン"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Red-Eyes Dark Dragoon",
+      "nameJa": "超魔導竜騎士－ドラグーン・オブ・レッドアイズ",
+      "nameZh": "超魔導龍騎士－真紅眼拖船",
+      "also": [
+        "ドラグーン",
+        "真紅眼暗龍騎"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Red-Eyes Fusion",
+      "nameJa": "真紅眼融合",
+      "nameZh": "真紅眼融合",
+      "also": [
+        "真红眼融合"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Red-Eyes Black Flare Dragon",
+      "nameJa": "真紅眼の黒炎竜",
+      "nameZh": "真紅眼黑炎龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Meteor Black Dragon",
+      "nameJa": "メテオ・ブラック・ドラゴン",
+      "nameZh": "流星黑龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Exodia the Forbidden One",
+      "nameJa": "封印されしエクゾディア",
+      "nameZh": "被封印的艾克佐迪亞",
+      "also": [
+        "エクゾディア",
+        "艾克佐迪亚",
+        "Exodia"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Left Arm of the Forbidden One",
+      "nameJa": "封印されし者の左腕",
+      "nameZh": "被封印者的左腕",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Right Arm of the Forbidden One",
+      "nameJa": "封印されし者の右腕",
+      "nameZh": "被封印者的右腕",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Left Leg of the Forbidden One",
+      "nameJa": "封印されし者の左足",
+      "nameZh": "被封印者的左足",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Right Leg of the Forbidden One",
+      "nameJa": "封印されし者の右足",
+      "nameZh": "被封印者的右足",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "The Legendary Exodia Incarnate",
+      "nameJa": "召喚神エクゾディア",
+      "nameZh": "召喚神艾克佐迪亞",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "The Winged Dragon of Ra",
+      "nameJa": "ラーの翼神竜",
+      "nameZh": "太陽神的翼神龍",
+      "also": [
+        "拉的翼神龙",
+        "ラー"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Slifer the Sky Dragon",
+      "nameJa": "オシリスの天空竜",
+      "nameZh": "歐西里斯的天空龍",
+      "also": [
+        "奥西里斯的天空龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Obelisk the Tormentor",
+      "nameJa": "オベリスクの巨神兵",
+      "nameZh": "歐貝利斯克的巨神兵",
+      "also": [
+        "欧贝里斯克巨神兵"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ash Blossom & Joyous Spring",
+      "nameJa": "灰流うらら",
+      "nameZh": "灰流麗",
+      "also": [
+        "灰流うらら",
+        "灰流丽",
+        "うらら"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ghost Belle & Haunted Mansion",
+      "nameJa": "屋敷わらし",
+      "nameZh": "屋敷童",
+      "also": [
+        "わらし"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ghost Ogre & Snow Rabbit",
+      "nameJa": "幽鬼うさぎ",
+      "nameZh": "幽鬼兔",
+      "also": [
+        "うさぎ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ghost Mourner & Moonlit Chill",
+      "nameJa": "朔夜しぐれ",
+      "nameZh": "朔夜時雨",
+      "also": [
+        "しぐれ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ghost Sister & Spooky Dogwood",
+      "nameJa": "浮幽さくら",
+      "nameZh": "浮幽櫻",
+      "also": [
+        "さくら"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Effect Veiler",
+      "nameJa": "エフェクト・ヴェーラー",
+      "nameZh": "效果遮蒙者",
+      "also": [
+        "效果遮蔽者",
+        "ヴェーラー"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Infinite Impermanence",
+      "nameJa": "無限泡影",
+      "nameZh": "無限泡影",
+      "also": [
+        "无限泡影"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Nibiru, the Primal Being",
+      "nameJa": "原始生命態ニビル",
+      "nameZh": "原始生命態尼比魯",
+      "also": [
+        "ニビル",
+        "尼比鲁",
+        "Nibiru"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Maxx \"C\"",
+      "nameJa": "増殖するＧ",
+      "nameZh": "增殖的G",
+      "also": [
+        "増殖するG",
+        "增殖的Ｇ",
+        "増G",
+        "Maxx C"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Droll & Lock Bird",
+      "nameJa": "ドロール＆ロックバード",
+      "nameZh": "頰頦與鎖鳥",
+      "also": [
+        "ドロール"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "PSY-Framegear Gamma",
+      "nameJa": "ＰＳＹフレームギア・γ",
+      "nameZh": "PSY骨架裝備·γ",
+      "also": [
+        "PSYフレーム",
+        "伽玛"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Called by the Grave",
+      "nameJa": "墓穴の指名者",
+      "nameZh": "墓穴的指名者",
+      "also": [
+        "墓穴指名者"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Crossout Designator",
+      "nameJa": "抹殺の指名者",
+      "nameZh": "抹殺的指名者",
+      "also": [
+        "抹杀的指名者"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dimensional Barrier",
+      "nameJa": "次元障壁",
+      "nameZh": "次元障壁",
+      "also": [
+        "次元壁障"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Evenly Matched",
+      "nameJa": "拮抗勝負",
+      "nameZh": "拮抗勝負",
+      "also": [
+        "拮抗胜负"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Lightning Storm",
+      "nameJa": "ライトニング・ストーム",
+      "nameZh": "閃電風暴",
+      "also": [
+        "闪电风暴"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Forbidden Droplet",
+      "nameJa": "禁じられた一滴",
+      "nameZh": "被禁止的一滴",
+      "also": [
+        "禁止的一滴"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dark Ruler No More",
+      "nameJa": "冥王結界波",
+      "nameZh": "冥王結界波",
+      "also": [
+        "DRNM"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Triple Tactics Talent",
+      "nameJa": "三戦の才",
+      "nameZh": "三戰之才",
+      "also": [
+        "三战之才"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Triple Tactics Thrust",
+      "nameJa": "三戦の戦技",
+      "nameZh": "三戰之戰技",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Prosperity",
+      "nameJa": "強欲で金満な壺",
+      "nameZh": "強欲而金滿之壺",
+      "also": [
+        "金滿壺",
+        "金满壶"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Desires",
+      "nameJa": "強欲で貪欲な壺",
+      "nameZh": "強欲而貪欲之壺",
+      "also": [
+        "強欲貪欲壺"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Extravagance",
+      "nameJa": "強欲で贅沢な壺",
+      "nameZh": "強欲而奢華之壺",
+      "also": [
+        "奢华壶",
+        "贅沢な壺"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Duality",
+      "nameJa": "デュアルティの壺",
+      "nameZh": "二重壺",
+      "also": [
+        "二重の壺"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Greed",
+      "nameJa": "強欲な壺",
+      "nameZh": "強欲之壺",
+      "also": [
+        "强欲壶"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pot of Avarice",
+      "nameJa": "貪欲な壺",
+      "nameZh": "貪欲之壺",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Monster Reborn",
+      "nameJa": "死者蘇生",
+      "nameZh": "死者蘇生",
+      "also": [
+        "死者苏生"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Raigeki",
+      "nameJa": "サンダー・ボルト",
+      "nameZh": "雷擊",
+      "also": [
+        "雷击"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Harpie's Feather Duster",
+      "nameJa": "ハーピィの羽根帚",
+      "nameZh": "神鷹羽毛掃",
+      "also": [
+        "羽毛扫"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Heavy Storm",
+      "nameJa": "大嵐",
+      "nameZh": "大嵐",
+      "also": [
+        "大岚"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mystical Space Typhoon",
+      "nameJa": "サイクロン",
+      "nameZh": "旋風",
+      "also": [
+        "MST"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mirror Force",
+      "nameJa": "聖なるバリア －ミラーフォース－",
+      "nameZh": "神聖防護罩－反射鏡力－",
+      "also": [
+        "镜力"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Solemn Judgment",
+      "nameJa": "神の宣告",
+      "nameZh": "神之宣告",
+      "also": [
+        "神判"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Solemn Strike",
+      "nameJa": "神の通告",
+      "nameZh": "神之通告",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Solemn Warning",
+      "nameJa": "神の警告",
+      "nameZh": "神之警告",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Accesscode Talker",
+      "nameJa": "アクセスコード・トーカー",
+      "nameZh": "存取碼通話者",
+      "also": [
+        "アクセスコード"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Decode Talker",
+      "nameJa": "デコード・トーカー",
+      "nameZh": "解碼通話者",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Firewall Dragon",
+      "nameJa": "ファイアウォール・ドラゴン",
+      "nameZh": "防火牆龍",
+      "also": [
+        "防火墙龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Borreload Dragon",
+      "nameJa": "ヴァレルロード・ドラゴン",
+      "nameZh": "槍管龍",
+      "also": [
+        "枪管龙"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Borrelsword Dragon",
+      "nameJa": "ヴァレルソード・ドラゴン",
+      "nameZh": "槍管劍龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Apollousa, Bow of the Goddess",
+      "nameJa": "召命の神弓－アポロウーサ",
+      "nameZh": "召命神弓－阿波羅烏薩",
+      "also": [
+        "アポロウーサ",
+        "阿波罗乌萨"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "I:P Masquerena",
+      "nameJa": "Ｉ：Ｐマスカレーナ",
+      "nameZh": "I:P偽裝娜",
+      "also": [
+        "マスカレーナ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "S:P Little Knight",
+      "nameJa": "Ｓ：Ｐリトルナイト",
+      "nameZh": "S:P小騎士",
+      "also": [
+        "リトルナイト"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Knightmare Phoenix",
+      "nameJa": "トロイメア・フェニックス",
+      "nameZh": "夢魘鳳凰",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Knightmare Unicorn",
+      "nameJa": "トロイメア・ユニコーン",
+      "nameZh": "夢魘獨角獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Knightmare Corruptor Iblee",
+      "nameJa": "トロイメア・イービル",
+      "nameZh": "夢魘腐敗者伊布里",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snake-Eye Ash",
+      "nameJa": "スネークアイ・アッシュ",
+      "nameZh": "蛇眼灰",
+      "also": [
+        "スネークアイ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snake-Eyes Flamberge Dragon",
+      "nameJa": "スネークアイズ・フランベルジュ・ドラゴン",
+      "nameZh": "蛇眼焰戟龍",
+      "also": [
+        "フランベルジュ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snake-Eyes Poplar",
+      "nameJa": "スネークアイズ・ポプラ",
+      "nameZh": "蛇眼白楊",
+      "also": [
+        "ポプラ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snake-Eye Oak",
+      "nameJa": "スネークアイ・オーク",
+      "nameZh": "蛇眼橡",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snake-Eye Birch",
+      "nameJa": "スネークアイ・バーチ",
+      "nameZh": "蛇眼樺",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Diabellstar the Black Witch",
+      "nameJa": "黒魔女ディアベルスター",
+      "nameZh": "黑魔女迪亞貝爾斯塔",
+      "also": [
+        "ディアベルスター"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "WANTED: Seeker of Sinful Spoils",
+      "nameJa": "罪宝狩り",
+      "nameZh": "罪寶追尋者",
+      "also": [
+        "罪宝"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Original Sinful Spoils - Snake-Eye",
+      "nameJa": "原罪宝－スネークアイ",
+      "nameZh": "原罪寶－蛇眼",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Divine Temple of the Snake-Eye",
+      "nameJa": "蛇眼神殿",
+      "nameZh": "蛇眼神殿",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Kashtira Fenrir",
+      "nameJa": "クシャトリラ・フェンリル",
+      "nameZh": "卡斯泰拉·芬里爾",
+      "also": [
+        "クシャトリラ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Kashtira Unicorn",
+      "nameJa": "クシャトリラ・ユニコーン",
+      "nameZh": "卡斯泰拉·獨角獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Kashtira Arise-Heart",
+      "nameJa": "クシャトリラ・アライズハート",
+      "nameZh": "卡斯泰拉·昇心",
+      "also": [
+        "アライズハート"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Pressured Planet Wraitsoth",
+      "nameJa": "圧状惑星ワイトソス",
+      "nameZh": "壓狀行星懷特索斯",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Kashtiratheosis",
+      "nameJa": "クシャトリラ・セティス",
+      "nameZh": "卡斯泰拉神化",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tearlaments Kitkallos",
+      "nameJa": "ティアラメンツ・キトカロス",
+      "nameZh": "淚零·基特卡洛斯",
+      "also": [
+        "キトカロス",
+        "泪零"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tearlaments Reinoheart",
+      "nameJa": "ティアラメンツ・レイノハート",
+      "nameZh": "淚零·雷諾哈特",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tearlaments Scheiren",
+      "nameJa": "ティアラメンツ・シェイレーン",
+      "nameZh": "淚零·謝伊蘭",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tearlaments Havnis",
+      "nameJa": "ティアラメンツ・ハゥニス",
+      "nameZh": "淚零·哈烏尼斯",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tearlaments Merrli",
+      "nameJa": "ティアラメンツ・メイルゥ",
+      "nameZh": "淚零·梅露",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Primeval Planet Perlereino",
+      "nameJa": "珠泪滴妖の原星－ペルレイノ",
+      "nameZh": "珠淚滴妖的原星－佩爾雷諾",
+      "also": [
+        "ペルレイノ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Spright Blue",
+      "nameJa": "スプライト・ブルー",
+      "nameZh": "電光藍",
+      "also": [
+        "スプライト"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Spright Elf",
+      "nameJa": "スプライト・エルフ",
+      "nameZh": "電光精靈",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Spright Jet",
+      "nameJa": "スプライト・ジェット",
+      "nameZh": "電光噴射",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Gigantic Spright",
+      "nameJa": "ギガンティック・スプライト",
+      "nameZh": "巨大電光",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Spright Starter",
+      "nameJa": "スプライト・スターター",
+      "nameZh": "電光啟動",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Lady Labrynth of the Silver Castle",
+      "nameJa": "白銀の城のラビュリンス",
+      "nameZh": "白銀之城的拉比林斯",
+      "also": [
+        "ラビュリンス"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Lovely Labrynth of the Silver Castle",
+      "nameJa": "白銀の城のラビュリンス・ラビュリス",
+      "nameZh": "白銀之城的可愛拉比林斯",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Big Welcome Labrynth",
+      "nameJa": "ビッグウェルカム・ラビュリンス",
+      "nameZh": "大歡迎迷宮",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Welcome Labrynth",
+      "nameJa": "ウェルカム・ラビュリンス",
+      "nameZh": "歡迎迷宮",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Aluber the Jester of Despia",
+      "nameJa": "デスピアの大公アルベル",
+      "nameZh": "絕望美神大公阿爾貝爾",
+      "also": [
+        "アルベル"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Fallen of Albaz",
+      "nameJa": "アルバスの落胤",
+      "nameZh": "阿爾巴斯的落胤",
+      "also": [
+        "アルバス",
+        "落胤"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Branded Fusion",
+      "nameJa": "烙印融合",
+      "nameZh": "烙印融合",
+      "also": [
+        "烙印"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Branded Opening",
+      "nameJa": "烙印の気炎",
+      "nameZh": "烙印之氣炎",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mirrorjade the Iceblade Dragon",
+      "nameJa": "氷剣竜ミラジェイド",
+      "nameZh": "冰劍龍米拉傑德",
+      "also": [
+        "ミラジェイド"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Lubellion the Searing Dragon",
+      "nameJa": "灼熱の竜ルベリオン",
+      "nameZh": "灼熱龍盧貝里昂",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Albion the Branded Dragon",
+      "nameJa": "烙印竜アルビオン",
+      "nameZh": "烙印龍阿爾比恩",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Bystial Magnamhut",
+      "nameJa": "ビーステッド・マグナムート",
+      "nameZh": "深淵獸·馬格納姆特",
+      "also": [
+        "ビーステッド"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Bystial Druiswurm",
+      "nameJa": "ビーステッド・ドルイスヴルム",
+      "nameZh": "深淵獸·德魯伊斯烏爾姆",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "The Bystial Lubellion",
+      "nameJa": "深淵の獣ルベリオン",
+      "nameZh": "深淵之獸盧貝里昂",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Purrely",
+      "nameJa": "ピュアリィ",
+      "nameZh": "純愛獸",
+      "also": [
+        "ピュアリィ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Epurrely Beauty",
+      "nameJa": "エピュアリィ・ビューティ",
+      "nameZh": "純愛獸·美",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Number 39: Utopia",
+      "nameJa": "Ｎｏ．３９ 希望皇ホープ",
+      "nameZh": "No.39 希望皇霍普",
+      "also": [
+        "希望皇",
+        "ユートピア"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Divine Arsenal AA-ZEUS - Sky Thunder",
+      "nameJa": "天霆號アーゼウス",
+      "nameZh": "天霆號阿宙斯",
+      "also": [
+        "アーゼウス",
+        "宙斯"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Baronne de Fleur",
+      "nameJa": "フルール・ド・バロネス",
+      "nameZh": "花巴里女男爵",
+      "also": [
+        "バロネス"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Chaos Angel",
+      "nameJa": "カオス・アンヘル－混沌の双翼－",
+      "nameZh": "混沌天使－混沌雙翼－",
+      "also": [
+        "カオスアンヘル"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Super Polymerization",
+      "nameJa": "超融合",
+      "nameZh": "超融合",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Polymerization",
+      "nameJa": "融合",
+      "nameZh": "融合",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Instant Fusion",
+      "nameJa": "簡易融合",
+      "nameZh": "簡易融合",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Foolish Burial",
+      "nameJa": "おろかな埋葬",
+      "nameZh": "愚蠢的埋葬",
+      "also": [
+        "愚葬"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "One for One",
+      "nameJa": "ワン・フォー・ワン",
+      "nameZh": "以一換一",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Reinforcement of the Army",
+      "nameJa": "増援",
+      "nameZh": "增援",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Terraforming",
+      "nameJa": "テラフォーミング",
+      "nameZh": "地球化",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Upstart Goblin",
+      "nameJa": "成金ゴブリン",
+      "nameZh": "暴發戶哥布林",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Allure of Darkness",
+      "nameJa": "闇の誘惑",
+      "nameZh": "暗之誘惑",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Card Destruction",
+      "nameJa": "手札抹殺",
+      "nameZh": "手牌抹殺",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Graceful Charity",
+      "nameJa": "天使の施し",
+      "nameZh": "天使的施捨",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Change of Heart",
+      "nameJa": "心変わり",
+      "nameZh": "心變",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Snatch Steal",
+      "nameJa": "強奪",
+      "nameZh": "強奪",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Premature Burial",
+      "nameJa": "早すぎた埋葬",
+      "nameZh": "過早的埋葬",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Jinzo",
+      "nameJa": "人造人間－サイコ・ショッカー",
+      "nameZh": "人造人－念力粉碎者",
+      "also": [
+        "サイコショッカー"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Summoned Skull",
+      "nameJa": "デーモンの召喚",
+      "nameZh": "惡魔的召喚",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Kuriboh",
+      "nameJa": "クリボー",
+      "nameZh": "栗子球",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Celtic Guardian",
+      "nameJa": "エルフの剣士",
+      "nameZh": "精靈劍士",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Beaver Warrior",
+      "nameJa": "ビーバー戦士",
+      "nameZh": "海狸戰士",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Time Wizard",
+      "nameJa": "時の魔術師",
+      "nameZh": "時間魔術師",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dark Hole",
+      "nameJa": "ブラック・ホール",
+      "nameZh": "黑洞",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Fissure",
+      "nameJa": "地割れ",
+      "nameZh": "地裂",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Trap Hole",
+      "nameJa": "落とし穴",
+      "nameZh": "陷阱坑",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Torrential Tribute",
+      "nameJa": "激流葬",
+      "nameZh": "激流葬",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Bottomless Trap Hole",
+      "nameJa": "奈落の落とし穴",
+      "nameZh": "深淵陷阱坑",
+      "also": [
+        "奈落"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Compulsory Evacuation Device",
+      "nameJa": "強制脱出装置",
+      "nameZh": "強制脫出裝置",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Book of Moon",
+      "nameJa": "月の書",
+      "nameZh": "月之書",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Enemy Controller",
+      "nameJa": "エネミーコントローラー",
+      "nameZh": "敵人控制器",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mind Control",
+      "nameJa": "精神操作",
+      "nameZh": "精神操作",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Cyber Dragon",
+      "nameJa": "サイバー・ドラゴン",
+      "nameZh": "電子龍",
+      "also": [
+        "サイドラ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Chimeratech Overdragon",
+      "nameJa": "キメラテック・オーバー・ドラゴン",
+      "nameZh": "嵌合科技超龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Future Fusion",
+      "nameJa": "未来融合－フューチャー・フュージョン",
+      "nameZh": "未來融合",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Overload Fusion",
+      "nameJa": "オーバーロード・フュージョン",
+      "nameZh": "過載融合",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Elemental HERO Neos",
+      "nameJa": "Ｅ・ＨＥＲＯ ネオス",
+      "nameZh": "元素英雄 新宇俠",
+      "also": [
+        "ネオス"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Elemental HERO Stratos",
+      "nameJa": "Ｅ・ＨＥＲＯ エアーマン",
+      "nameZh": "元素英雄 天空人",
+      "also": [
+        "エアーマン"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Destiny HERO - Destroyer Phoenix Enforcer",
+      "nameJa": "Ｄ－ＨＥＲＯ デストロイフェニックスガイ",
+      "nameZh": "命運英雄 摧毀鳳凰人",
+      "also": [
+        "DPE"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Vision HERO Faris",
+      "nameJa": "Ｖ・ＨＥＲＯ ファリス",
+      "nameZh": "幻影英雄 法利斯",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Predaplant Verte Anaconda",
+      "nameJa": "捕食植物ヴェルテ・アナコンダ",
+      "nameZh": "捕食植物綠蟒",
+      "also": [
+        "ヴェルテ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Swordsoul of Mo Ye",
+      "nameJa": "相剣師－莫邪",
+      "nameZh": "相劍師－莫邪",
+      "also": [
+        "相剑"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Swordsoul Grandmaster - Chixiao",
+      "nameJa": "相剣大公－承影",
+      "nameZh": "相劍大公－承影",
+      "also": [
+        "承影"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Incredible Ecclesia, the Virtuous",
+      "nameJa": "白の聖女エクレシア",
+      "nameZh": "白之聖女艾克蕾西亞",
+      "also": [
+        "エクレシア"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dogmatika Ecclesia, the Virtuous",
+      "nameJa": "教導の聖女エクレシア",
+      "nameZh": "教導聖女艾克蕾西亞",
+      "also": [
+        "教導"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Nadir Servant",
+      "nameJa": "天底の使徒",
+      "nameZh": "天底使徒",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Elder Entity N'tss",
+      "nameJa": "旧神ヌトス",
+      "nameZh": "舊神努托斯",
+      "also": [
+        "ヌトス"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Floowandereeze & Empen",
+      "nameJa": "ふわんだりぃず×えんぺん",
+      "nameZh": "飄浮小鳥×恩彭",
+      "also": [
+        "ふわん"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Runick Fountain",
+      "nameJa": "神碑の泉",
+      "nameZh": "神碑之泉",
+      "also": [
+        "神碑"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Rescue-ACE Hydrant",
+      "nameJa": "Ｒ－ＡＣＥハイドラント",
+      "nameZh": "救援王牌消防栓",
+      "also": [
+        "R-ACE"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Rescue-ACE Impulse",
+      "nameJa": "Ｒ－ＡＣＥインパルス",
+      "nameZh": "救援王牌衝動",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mathmech Circular",
+      "nameJa": "斬機サーキュラー",
+      "nameZh": "斬機循環",
+      "also": [
+        "斩机"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mathmech Diameter",
+      "nameJa": "斬機ダイヤ",
+      "nameZh": "斬機直徑",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Primite Lordly Lode",
+      "nameJa": "原質の紋章",
+      "nameZh": "原質紋章",
+      "also": [
+        "原质"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mulcharmy Fuwalos",
+      "nameJa": "マルチャミー・フワロス",
+      "nameZh": "多魅·芙瓦洛斯",
+      "also": [
+        "マルチャミー"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Mulcharmy Purulia",
+      "nameJa": "マルチャミー・プルリア",
+      "nameZh": "多魅·普露莉亞",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dominus Impulse",
+      "nameJa": "ドミナス・インパルス",
+      "nameZh": "支配衝動",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Tenpai Dragon Paidra",
+      "nameJa": "天盃龍パイドラ",
+      "nameZh": "天盃龍派德拉",
+      "also": [
+        "天盃龍"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Sangen Summoning",
+      "nameJa": "燦幻開花",
+      "nameZh": "燦幻開花",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Crimson Dragon",
+      "nameJa": "赤き竜",
+      "nameZh": "赤之龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Blackwing - Gale the Whirlwind",
+      "nameJa": "ＢＦ－疾風のゲイル",
+      "nameZh": "BF－疾風之蓋爾",
+      "also": [
+        "ブラックフェザー"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Black Luster Soldier - Envoy of the Beginning",
+      "nameJa": "カオス・ソルジャー －開闢の使者－",
+      "nameZh": "混沌士兵 －開闢的使者－",
+      "also": [
+        "開闢"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Chaos Emperor Dragon - Envoy of the End",
+      "nameJa": "混沌帝龍 －終焉の使者－",
+      "nameZh": "混沌帝龍 －終焉的使者－",
+      "also": [
+        "終焉"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Dark Armed Dragon",
+      "nameJa": "ダーク・アームド・ドラゴン",
+      "nameZh": "暗黑武裝龍",
+      "also": [
+        "DAD"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Judgment Dragon",
+      "nameJa": "裁きの龍",
+      "nameZh": "裁決龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Trishula, Dragon of the Ice Barrier",
+      "nameJa": "氷結界の龍 トリシューラ",
+      "nameZh": "冰結界之龍 特裡舒拉",
+      "also": [
+        "トリシューラ"
+      ]
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Formula Synchron",
+      "nameJa": "フォーミュラ・シンクロン",
+      "nameZh": "方程式同步士",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Stardust Dragon",
+      "nameJa": "スターダスト・ドラゴン",
+      "nameZh": "星塵龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Red Dragon Archfiend",
+      "nameJa": "レッド・デーモンズ・ドラゴン",
+      "nameZh": "紅蓮魔龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Black Rose Dragon",
+      "nameJa": "ブラック・ローズ・ドラゴン",
+      "nameZh": "黑薔薇龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Ancient Fairy Dragon",
+      "nameJa": "エンシェント・フェアリー・ドラゴン",
+      "nameZh": "古代精靈龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Power Tool Dragon",
+      "nameJa": "パワー・ツール・ドラゴン",
+      "nameZh": "能量工具龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Shooting Quasar Dragon",
+      "nameJa": "シューティング・クェーサー・ドラゴン",
+      "nameZh": "射擊類星龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "YUGIOH",
+      "nameEn": "Crystal Wing Synchro Dragon",
+      "nameJa": "クリスタルウィング・シンクロ・ドラゴン",
+      "nameZh": "水晶翼同步龍",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Agumon",
+      "nameJa": "アグモン",
+      "nameZh": "亞古獸",
+      "also": [
+        "アグモン"
+      ]
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Gabumon",
+      "nameJa": "ガブモン",
+      "nameZh": "加布獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "WarGreymon",
+      "nameJa": "ウォーグレイモン",
+      "nameZh": "戰鬥暴龍獸",
+      "also": [
+        "ウォーグレイモン"
+      ]
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "MetalGarurumon",
+      "nameJa": "メタルガルルモン",
+      "nameZh": "鋼鐵加魯魯獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Omnimon",
+      "nameJa": "オメガモン",
+      "nameZh": "奧米加獸",
+      "also": [
+        "オメガモン",
+        "Omegamon"
+      ]
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Angemon",
+      "nameJa": "エンジェモン",
+      "nameZh": "天使獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Patamon",
+      "nameJa": "パタモン",
+      "nameZh": "巴達獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Gatomon",
+      "nameJa": "テイルモン",
+      "nameZh": "迪路獸",
+      "also": [
+        "テイルモン"
+      ]
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Greymon",
+      "nameJa": "グレイモン",
+      "nameZh": "暴龍獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "DIGIMON",
+      "nameEn": "Imperialdramon",
+      "nameJa": "インペリアルドラモン",
+      "nameZh": "帝皇龍甲獸",
+      "also": []
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Monkey.D.Luffy",
+      "nameJa": "モンキー・Ｄ・ルフィ",
+      "nameZh": "蒙奇·D·路飛",
+      "also": [
+        "ルフィ",
+        "路飛",
+        "Luffy"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Roronoa Zoro",
+      "nameJa": "ロロノア・ゾロ",
+      "nameZh": "羅羅亞·索隆",
+      "also": [
+        "ゾロ",
+        "索隆"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Nami",
+      "nameJa": "ナミ",
+      "nameZh": "娜美",
+      "also": []
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Sanji",
+      "nameJa": "サンジ",
+      "nameZh": "山治",
+      "also": []
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Tony Tony.Chopper",
+      "nameJa": "トニートニー・チョッパー",
+      "nameZh": "托尼托尼·喬巴",
+      "also": [
+        "チョッパー"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Nico Robin",
+      "nameJa": "ニコ・ロビン",
+      "nameZh": "妮可·羅賓",
+      "also": [
+        "ロビン"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Trafalgar Law",
+      "nameJa": "トラファルガー・ロー",
+      "nameZh": "托拉法爾加·羅",
+      "also": [
+        "ロー",
+        "Law"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Portgas.D.Ace",
+      "nameJa": "ポートガス・Ｄ・エース",
+      "nameZh": "波特卡斯·D·艾斯",
+      "also": [
+        "エース",
+        "Ace"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Shanks",
+      "nameJa": "シャンクス",
+      "nameZh": "紅髮香克斯",
+      "also": [
+        "シャンクス"
+      ]
+    },
+    {
+      "proposedEnum": "ONE_PIECE",
+      "nameEn": "Kaido",
+      "nameJa": "カイドウ",
+      "nameZh": "凱多",
+      "also": []
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Cardcaptor Sakura",
+      "nameJa": "木之本桜",
+      "nameZh": "木之本櫻",
+      "also": [
+        "さくら",
+        "小櫻",
+        "カードキャプターさくら"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Past Hero, Saber",
+      "nameJa": "セイバー",
+      "nameZh": "Saber",
+      "also": [
+        "アルトリア",
+        "阿爾托莉雅"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Magical Girl, Rem",
+      "nameJa": "レム",
+      "nameZh": "雷姆",
+      "also": [
+        "レム"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Farewell, Emilia",
+      "nameJa": "エミリア",
+      "nameZh": "愛蜜莉雅",
+      "also": [
+        "艾米莉娅"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Asuna Yuuki",
+      "nameJa": "結城アスナ",
+      "nameZh": "結城亞絲娜",
+      "also": [
+        "アスナ",
+        "亞絲娜"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "End of Fate, Kirito",
+      "nameJa": "キリト",
+      "nameZh": "桐人",
+      "also": [
+        "桐ヶ谷和人"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Chosen Path, Chisato",
+      "nameJa": "錦木千束",
+      "nameZh": "錦木千束",
+      "also": [
+        "千束"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "At Dusk, Takina",
+      "nameJa": "井ノ上たきな",
+      "nameZh": "井上瀧奈",
+      "also": [
+        "たきな",
+        "瀧奈"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Hitori Gotoh",
+      "nameJa": "後藤ひとり",
+      "nameZh": "後藤一里",
+      "also": [
+        "ぼっち",
+        "小孤獨"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Okey-Dokey, Anya",
+      "nameJa": "アーニャ",
+      "nameZh": "安妮亞",
+      "also": [
+        "Anya",
+        "アーニャ"
+      ]
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Confident, Anya",
+      "nameJa": "アーニャ・フォージャー",
+      "nameZh": "安妮亞·佛傑",
+      "also": []
+    },
+    {
+      "proposedEnum": "WEISS_SCHWARZ",
+      "nameEn": "Momentary Rest, Rem",
+      "nameJa": "レム",
+      "nameZh": "雷姆",
+      "also": []
+    }
+  ]
+}

@@ -5,8 +5,9 @@ import { catalogRemaining, catalogSetSettled, planCatalogSteps } from "./catalog
 import { catalogImageSrc, catalogTileSrc, isR2PublicUrl, officialOpImageUrl } from "./catalog-image";
 import { catalogObjectKey, imageFromDataUrl, keptMirroredUrl, r2Config, storeUploadedImage } from "./r2";
 import { catalogSuggestion } from "./catalog-suggest";
-import { curatedCounts, CURATED_COUNTS, loadCuratedCatalog, loadSoftListings } from "./catalog-names";
-import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogWhere, gameParam, parseGame, type CatalogSearchCard } from "./dex";
+import { foldAlias, loadAliasRows } from "./catalog-aliases";
+import { curatedCounts, CURATED_COUNTS, loadCuratedCatalog, loadSoftListings, softListingId, softPostId } from "./catalog-names";
+import { catalogCardMatches, catalogNeedles, catalogQueryTokens, catalogSuggestWhere, catalogWhere, gameParam, parseGame, type CatalogSearchCard } from "./dex";
 import { officialSet, parseOfficialCards, parseOfficialSeries } from "./op-official";
 import { mapOptcgCard, optcgExternalId, optcgNumberKey, optcgQueue, optcgSet } from "./optcg";
 import { mapRiftBulk, mapRiftCard, riftCollector } from "./riftbound";
@@ -38,7 +39,41 @@ const counts = curatedCounts(curated.cards);
 for (const [game, count] of Object.entries(CURATED_COUNTS)) {
   assert(counts[game as keyof typeof counts] === count, `${game} curated count`);
 }
-assert(curated.cards.every((card) => card.nameJa === "" && !card.externalId.includes("http")), "curated rows are names only");
+assert(curated.cards.every((card) => !card.externalId.includes("http") && !/https?:\/\//i.test(card.nameJa)), "curated rows are names only");
+const aliases = loadAliasRows();
+const aliasCounts = { YUGIOH: 0, WEISS_SCHWARZ: 0, DIGIMON: 0, ONE_PIECE: 0 };
+for (const row of aliases) {
+  const game = row.proposedEnum as keyof typeof aliasCounts;
+  assert(game in aliasCounts, `${row.proposedEnum} is wave-1`);
+  aliasCounts[game] += 1;
+}
+assert(aliases.length === 217 && aliasCounts.YUGIOH === 185 && aliasCounts.WEISS_SCHWARZ === 12 && aliasCounts.DIGIMON === 10 && aliasCounts.ONE_PIECE === 10, "ja alias counts");
+assert(foldAlias("ブラック・マジシャン") === foldAlias("ブラック マジシャン") && foldAlias("ブラック・マジシャン") === foldAlias("ブラックマジシャン"), "middle dots and spaces fold");
+const curatedName = new Set(curated.cards.map((card) => `${card.game}\0${card.nameEn}`));
+let linked = 0;
+for (const row of aliases) {
+  const hit = curatedName.has(`${row.proposedEnum}\0${row.nameEn}`);
+  if (row.proposedEnum === "ONE_PIECE") {
+    assert(!hit, "one piece aliases stay on ingested english names");
+    continue;
+  }
+  if (hit) linked += 1;
+}
+assert(linked === 123, "aliases attach only to curated english names");
+assert(curated.cards.filter((card) => card.nameJa).length === 123, "matched cards store the official ja name");
+const darkMagician = curated.cards.find((card) => card.game === "YUGIOH" && card.nameEn === "Dark Magician");
+const blueEyes = curated.cards.find((card) => card.game === "YUGIOH" && card.nameEn === "Blue-Eyes White Dragon");
+const ash = curated.cards.find((card) => card.game === "YUGIOH" && card.nameEn === "Ash Blossom & Joyous Spring");
+assert(darkMagician?.nameJa === "ブラック・マジシャン" && darkMagician.nameEn === "Dark Magician", "dark magician keeps the english name and gains ja");
+assert(blueEyes?.nameJa === "青眼の白龍" && ash?.nameJa === "灰流うらら", "blue-eyes and ash store official ja");
+assert(!curated.cards.some((card) => card.nameEn === "Baronne de Fleur"), "an alias without a curated english name does not insert a card");
+const dmWhere = JSON.stringify(catalogSuggestWhere("黑魔導"));
+assert(dmWhere.includes("Dark Magician") && dmWhere.includes("YUGIOH") && !dmWhere.includes("UNION_ARENA") && !dmWhere.includes("VANGUARD") && !/PANINI/.test(dmWhere), "黑魔導 searches Dark Magician");
+assert(JSON.stringify(catalogSuggestWhere("ブラック マジシャン")).includes("Dark Magician"), "spaced katakana still searches Dark Magician");
+assert(JSON.stringify(catalogSuggestWhere("灰流麗")).includes("Ash Blossom & Joyous Spring"), "灰流麗 searches Ash");
+assert(JSON.stringify(catalogSuggestWhere("灰流うらら")).includes("Ash Blossom & Joyous Spring"), "灰流うらら searches Ash");
+assert(JSON.stringify(catalogSuggestWhere("青眼白龍")).includes("Blue-Eyes White Dragon"), "青眼白龍 searches Blue-Eyes");
+assert(JSON.stringify(catalogSuggestWhere("蒙奇·D·路飛")).includes("Monkey.D.Luffy"), "one piece zh alias searches the english name");
 const soft = loadSoftListings();
 const names = new Map<string, Set<string>>();
 for (const card of curated.cards) {
@@ -46,10 +81,14 @@ for (const card of curated.cards) {
   set.add(card.nameEn);
   names.set(card.game, set);
 }
-assert(soft.length === 50 && new Set(soft.map((row) => row.sellerPersona)).size === 12, "fifty listings across twelve sellers");
+assert(soft.length === 100 && new Set(soft.map((row) => row.sellerPersona)).size === 12, "a hundred listings across twelve sellers");
+assert(soft.filter((row) => row.id.startsWith("soft_demo_")).length === 50, "night2 ids are soft_demo_51 through 100");
+assert(softListingId("demo-01") === "soft_demo_01" && softListingId("soft_demo_51") === "soft_demo_51", "listing ids do not double-prefix");
+assert(softPostId("demo-01") === "soft_post_demo_01" && softPostId("soft_demo_51") === "soft_post_demo_51", "post ids stay unique across both batches");
 for (const row of soft) assert(row.imageUrl == null && names.get(row.proposedEnum)?.has(row.cardNameEn), `${row.id} name is in the curated list`);
 const waveSeed = readFileSync(new URL("./seed-wave1.ts", import.meta.url), "utf8");
 assert(!waveSeed.includes("wipeUserContent") && !waveSeed.includes("deleteMany"), "wave-1 seed only adds");
+assert(waveSeed.includes("refreshAliasNames") && waveSeed.includes("aliases"), "wave-1 seed fills ja names on existing rows");
 assert(waveSeed.includes("wiped: false"), "wave-1 seed reports that it did not wipe");
 const waveRoute = readFileSync(new URL("../app/api/internal/seed-wave1/route.ts", import.meta.url), "utf8");
 assert(waveRoute.includes("seedWave1") && waveRoute.includes("authorizedBearer") && waveRoute.includes("BOOTSTRAP_SECRET"), "wave-1 route uses the bootstrap bearer");

@@ -1,4 +1,5 @@
 import { listingTitleFromCatalog, releaseYear, titleCasePhrase } from "./card-title";
+import { aliasRank, foldAlias } from "./catalog-aliases";
 import { catalogAnchorMatches, catalogCardMatches, categorySlugForGame, parseGame, plainCatalogLabel, type CatalogSearchCard, type DexPrintRegion } from "./dex";
 import { foldSearch } from "./search";
 
@@ -134,14 +135,18 @@ function band(card: CatalogSuggestCard, query: string): number {
   const nameJa = foldSearch(card.nameJa);
   const setEn = foldSearch(card.setNameEn);
   const setJa = foldSearch(card.setNameJa);
-  const exact = [nameEn, nameJa, title].some((value) => value === folded);
+  const via = aliasRank(card.game, card.nameEn, query);
+  const aliasKey = foldAlias(query);
+  const jaExact = aliasKey.length >= 2 && card.nameJa.split(/\s+/).some((part) => foldAlias(part) === aliasKey);
+  const exact = via === 4 || jaExact || [nameEn, nameJa, title].some((value) => value === folded);
   if (exact) return 4;
   const prefix = [nameEn, title, setEn].some((value) => value.startsWith(folded));
   if (prefix) return 3;
+  const jaIncludes = aliasKey.length >= 2 && foldAlias(card.nameJa).includes(aliasKey);
   const includes = [title, nameEn, nameJa, setEn, setJa, foldSearch(card.series || ""), foldSearch(card.setCode), foldSearch(card.rarity || ""), foldSearch(card.finish || "")].some(
     (value) => value.includes(folded),
   );
-  if (includes || catalogCardMatches(searchCard(card), query)) return 2;
+  if (includes || jaIncludes || via > 0 || catalogCardMatches(searchCard(card), query)) return 2;
   if (catalogAnchorMatches(searchCard(card), query)) return 1;
   return 0;
 }
