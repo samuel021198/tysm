@@ -1,4 +1,5 @@
-import type { Prisma } from "@prisma/client";
+import type { CatalogGame, Prisma } from "@prisma/client";
+import { aliasHits } from "./catalog-aliases";
 import type { Locale } from "./i18n";
 import { foldSearch } from "./search";
 
@@ -541,8 +542,28 @@ function whereForTokens(tokens: string[], setKeys: ReadonlySet<string>, region: 
   return parts.length === 1 ? parts[0]! : { AND: parts };
 }
 
+function aliasWhere(query: string, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput | null {
+  const hits = aliasHits(query);
+  if (!hits.length) return null;
+  const alias: Prisma.CatalogCardWhereInput = {
+    OR: hits.map((row) => ({
+      game: row.proposedEnum as CatalogGame,
+      nameEn: { equals: row.nameEn, mode: "insensitive" },
+    })),
+  };
+  return region ? { AND: [alias, { printRegion: region }] } : alias;
+}
+
+/** English token search, plus an exact English name when the query is a JA/ZH alias. */
+function withAliases(query: string, where: Prisma.CatalogCardWhereInput, region: DexPrintRegion | null): Prisma.CatalogCardWhereInput {
+  const alias = aliasWhere(query, region);
+  if (!alias) return where;
+  if (!Object.keys(where).length) return alias;
+  return { OR: [where, alias] };
+}
+
 export function catalogWhere(query: string, region: DexPrintRegion | null, game?: DexGame | null): Prisma.CatalogCardWhereInput {
-  const where = whereForTokens(catalogQueryTokens(query), setPhraseKeys(query), region);
+  const where = withAliases(query, whereForTokens(catalogQueryTokens(query), setPhraseKeys(query), region), region);
   if (!game) return where;
   if (!Object.keys(where).length) return { game };
   return { AND: [where, { game }] };
@@ -550,7 +571,7 @@ export function catalogWhere(query: string, region: DexPrintRegion | null, game?
 
 /** Suggestion fetch. A pasted title still returns the card when rarity or the year is off. */
 export function catalogSuggestWhere(query: string, region: DexPrintRegion | null = null): Prisma.CatalogCardWhereInput {
-  return whereForTokens(strongTokens(query), setPhraseKeys(query), region);
+  return withAliases(query, whereForTokens(strongTokens(query), setPhraseKeys(query), region), region);
 }
 
 function titleEn(value: string): string {

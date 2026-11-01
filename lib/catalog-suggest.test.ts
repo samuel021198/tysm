@@ -197,5 +197,15 @@ assert(linked.categorySlug === "one-piece" && linked.catalogCardId === "op01", "
 assert(linked.catalogTitle.includes("OP-01") && linked.setName === "Romance Dawn" && linked.cardName === "Roronoa Zoro", "prefill summary uses the set code title and the set name");
 assert(linked.language === "英文" && linked.collectorNumber === "OP01-001", "prefill keeps language and collector number");
 assert(rankCatalogSuggestions([card({ id: "luffy", nameEn: "Monkey.D.Luffy", nameJa: "モンキー・D・ルフィ", game: "ONE_PIECE" }), zard], "路飛", 1)[0]?.id === "luffy", "路飛 suggests the one piece printing");
+const dm = card({ id: "dm", nameEn: "Dark Magician", nameJa: "ブラック・マジシャン", game: "YUGIOH" });
+const girl = card({ id: "girl", nameEn: "Dark Magician Girl", nameJa: "ブラック・マジシャン・ガール", game: "YUGIOH" });
+const bewd = card({ id: "bewd", nameEn: "Blue-Eyes White Dragon", nameJa: "青眼の白龍", game: "YUGIOH" });
+const ashCard = card({ id: "ash", nameEn: "Ash Blossom & Joyous Spring", nameJa: "灰流うらら", game: "YUGIOH" });
+for (const query of ["黑魔導", "黒魔導", "ブラック・マジシャン", "ブラックマジシャン", "ブラック マジシャン"]) {
+  assert(rankCatalogSuggestions([girl, bewd, dm], query, 1)[0]?.id === "dm", `${query} suggests Dark Magician`);
+}
+assert(rankCatalogSuggestions([dm, ashCard], "灰流麗", 1)[0]?.id === "ash" && rankCatalogSuggestions([dm, ashCard], "灰流うらら", 1)[0]?.id === "ash", "ash answers both ja and zh");
+assert(rankCatalogSuggestions([dm, bewd], "青眼白龍", 1)[0]?.id === "bewd", "青眼白龍 suggests Blue-Eyes White Dragon");
+assert(rankCatalogSuggestions([card({ id: "luffy2", nameEn: "Monkey.D.Luffy", nameJa: "", game: "ONE_PIECE" }), dm], "蒙奇·D·路飛", 1)[0]?.id === "luffy2", "one piece zh alias suggests luffy");
 
 console.log("catalog suggest ok");

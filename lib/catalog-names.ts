@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { officialNameJa } from "./catalog-aliases";
 import { numberKey } from "./dex";
 
 /** Wave-1 games that ship a curated name list. Dragon Ball is a sell leaf only. */
@@ -99,7 +100,8 @@ export function loadCuratedCatalog(dir = CURATED_DIR): { sets: NameSet[]; cards:
       series.cards.forEach((card, cardIndex) => {
         const nameEn = (card.nameEn || "").trim();
         if (!nameEn) throw new Error(`${spec.file} blank name`);
-        if (/https?:\/\//i.test(nameEn) || /https?:\/\//i.test(card.nameJa || "")) throw new Error(`${spec.file} image url`);
+        const nameJa = officialNameJa(spec.game, nameEn) || (card.nameJa || "").trim();
+        if (/https?:\/\//i.test(nameEn) || /https?:\/\//i.test(nameJa)) throw new Error(`${spec.file} image url`);
         const n = String(cardIndex + 1);
         cards.push({
           externalId: `nm:${spec.game}:${code}:${n.padStart(4, "0")}`,
@@ -108,7 +110,7 @@ export function loadCuratedCatalog(dir = CURATED_DIR): { sets: NameSet[]; cards:
           collectorNumber: n,
           numberKey: numberKey(n),
           nameEn,
-          nameJa: (card.nameJa || "").trim(),
+          nameJa,
         });
       });
     });
@@ -130,8 +132,44 @@ export function curatedCounts(cards: NameCard[]): Record<WaveGame, number> {
   return counts;
 }
 
+function readSoftFile(dir: string, file: string, expected: number): SoftListingPlan[] {
+  const rows = JSON.parse(readFileSync(path.join(dir, file), "utf8")) as SoftListingPlan[];
+  if (rows.length !== expected) throw new Error(`${file} ${rows.length}`);
+  return rows;
+}
+
+/** `demo-01` → `soft_demo_01`. Night2 ids are already `soft_demo_51` and stay that way. */
+export function softListingId(raw: string): string {
+  const slug = raw.trim().replace(/-/g, "_");
+  if (!slug) throw new Error("soft listing id");
+  return slug.startsWith("soft_") ? slug : `soft_${slug}`;
+}
+
+/** Keeps wave-1 posts at `soft_post_demo_01`. Night2 `soft_demo_51` becomes `soft_post_demo_51`. */
+export function softPostId(raw: string): string {
+  const slug = raw.trim().replace(/-/g, "_").replace(/^soft_/, "");
+  if (!slug) throw new Error("soft post id");
+  return `soft_post_${slug}`;
+}
+
+/** Wave-1 soft listings plus the night2 51–100 batch. Ids and English names must not overlap. */
 export function loadSoftListings(dir = CURATED_DIR): SoftListingPlan[] {
-  const rows = JSON.parse(readFileSync(path.join(dir, "50-demo-listings.json"), "utf8")) as SoftListingPlan[];
-  if (rows.length !== 50) throw new Error(`soft listings ${rows.length}`);
+  const first = readSoftFile(dir, "50-demo-listings.json", 50);
+  const more = readSoftFile(dir, "50-more-demo-listings.json", 50);
+  const rows = [...first, ...more];
+  const ids = new Set<string>();
+  const names = new Set<string>();
+  for (const row of rows) {
+    if (row.imageUrl) throw new Error(`${row.id} image`);
+    if (!row.cardNameEn.trim()) throw new Error(`${row.id} name`);
+    if (ids.has(row.id)) throw new Error(`soft listing id overlap ${row.id}`);
+    ids.add(row.id);
+    const key = `${row.proposedEnum}\0${row.cardNameEn}`;
+    if (names.has(key)) throw new Error(`soft name overlap ${row.cardNameEn}`);
+    names.add(key);
+  }
+  for (let n = 51; n <= 100; n += 1) {
+    if (!ids.has(`soft_demo_${n}`)) throw new Error(`missing soft_demo_${n}`);
+  }
   return rows;
 }

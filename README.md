@@ -83,7 +83,7 @@ Reseed 會清走全部用戶再重建。環境變數未設定時，新建的 `us
 | `ADMIN_PASSWORD` | 管理員登入時必須 | 登入帳號 `admin` 的密碼，最少 8 位。只從環境變數讀取，經 bcrypt 寫入 `passwordHash`。未設定時管理員登入失敗。見上面「登入」。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑、發布卡聞、設定管理員密碼或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/admin-password`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料、補 Wave-1 卡名、同步圖鑑、發布卡聞、設定管理員密碼或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/seed-wave1`、`POST /api/internal/admin-password`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 | `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。公開圖要齊 account、access key、secret、`R2_BUCKET`、`R2_PUBLIC_BASE_URL`。未齊時圖鑑留來源網址，上傳相片留 data URL。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
@@ -254,6 +254,21 @@ npm run db:seed
 Seed 可以只跑一次。之後的示範目錄更新用下面的 reseed。
 
 5. Vercel Cron 每日 00:00（香港時間，`0 16 * * *`）打 `/api/cron/sweep`，用來上架預約刊登、結束拍賣、取消逾時未付款、寄出滿 7 日自動完成託管，同埋刪走超過 24 小時的限時動態。頁面開啟時亦會做同樣的掃瞄，所以預約刊登唔使靠密排程先至上架。這條路由要 `Authorization: Bearer`，密鑰係 `CRON_SECRET`（Vercel Cron 自動帶）或 `BOOTSTRAP_SECRET`。兩個都未設定會回 `503`，密鑰不對會回 `401`。Hobby 方案只接受每日一次的 cron，唔可以用 `*/10 * * * *` 這類一天跑多次的排程。
+
+## Wave-1 日文／中文卡名同軟啟動第二批
+
+上架 typeahead 讀 `data/curated/ja-aliases.json`。每一行用現有英文 `nameEn` 對上卡，唔會改英文名，亦唔會因為別名而新增一張卡。搜尋會摺走中間點 `・` 同空白，所以 `黑魔導`、`黒魔導`、`ブラック・マジシャン`、`ブラックマジシャン` 都指向 Dark Magician。`灰流麗`／`灰流うらら`、`青眼白龍` 一樣。
+
+而家對得上 curated 名單的有 123 張（遊戲王 101、黑白雙翼 12、數碼暴龍 10）。檔案另外 84 個遊戲王英文名 curated 未有，唔會插入。海賊王 10 個別名靠已同步圖鑑的英文名對上（例如 `蒙奇·D·路飛` → `Monkey.D.Luffy`），唔寫入 curated JSON。其他 Wave-1 品牌沿用同一行格式：`proposedEnum`、`nameEn`、`nameJa`、`nameZh`、`also`。Wave-2（Panini、Union Arena、Vanguard）唔收。
+
+`CatalogCard.nameJa` 只存官方日文名。已經入庫的列，`createMany` 的 skipDuplicates 唔會補 `nameJa`，要再打下面這條先填到。第二批示範刊登在 `data/curated/50-more-demo-listings.json`（`soft_demo_51`–`soft_demo_100`），同第一批 50 張唔同卡、唔同 id，同一次呼叫 upsert。呢條**唔會**清用戶、貼文或刊登（`wiped: false`）。唔好用 reseed。
+
+```bash
+curl -sS -X POST "https://你的網域/api/internal/seed-wave1" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+```
+
+成功回 `200`：`ok: true`、`counts.wiped` 係 `false`、`counts.listings` 係 `100`、`counts.aliases` 係帶了日文名的 curated 卡數（而家 123）。沒有 `BOOTSTRAP_SECRET` 回 `503`。密鑰不對回 `401`。重複 POST 安全。部署本身已經令 typeahead 識別名；這條係把日文名寫入資料庫，同埋補 51–100 的示範刊登。
 
 ## 重新灌示範資料
 
