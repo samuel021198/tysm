@@ -66,6 +66,11 @@ body {
   padding-bottom: var(--tab-h);
 }
 
+body.admin-shell {
+  padding-bottom: 0;
+  --tab-h: 0px;
+}
+
 h1,
 h2,
 .page-title,

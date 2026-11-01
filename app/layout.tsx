@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_HK, Sora } from "next/font/google";
+import { headers } from "next/headers";
 import { connection } from "next/server";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
@@ -42,6 +43,15 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await connection();
   const [viewer, prefs] = await Promise.all([getViewer(), getPrefs()]);
+  const path = (await headers()).get("x-pathname") || "";
+  const desk = path === "/admin" || path.startsWith("/admin/");
+  if (desk) {
+    return (
+      <html lang={prefs.locale === "en" ? "en" : "zh-HK"} className={`${sans.variable} ${display.variable}${prefs.theme === "dark" ? " dark" : ""}`}>
+        <body className="admin-shell font-sans antialiased">{children}</body>
+      </html>
+    );
+  }
   const counts = viewer
     ? Promise.all([
         prisma.cartItem.count({ where: { userId: viewer.id } }),

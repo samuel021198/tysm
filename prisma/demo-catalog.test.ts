@@ -325,15 +325,17 @@ for (const row of demoFavorites) {
   assert(listing && listing.ownerId !== row.userId, row.id);
 }
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
-assert(auth.includes("demoAccountByHandle") && auth.includes("DEMO_CODE") && auth.includes("enterDemo"), "handle plus 123, and a one-tap action");
+assert(auth.includes("demoAccountByHandle") && auth.includes("DEMO_CODE") && auth.includes("export async function enterDemo"), "handle plus 123, and a one-tap action");
 const loginPage = readFileSync(new URL("../app/login/page.tsx", import.meta.url), "utf8");
 const loginForm = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
-assert(loginPage.indexOf("<LoginForm") < loginPage.indexOf("DEMO_ACCOUNTS.map"), "demo accounts sit below the login form");
-assert(loginPage.includes("fixed") && loginPage.includes("bottom-[var(--tab-h)]") && loginPage.includes("enterDemo") && loginPage.includes("DEMO_CODE"), "one-tap demos are pinned to the bottom");
+assert(loginPage.includes("max-w-md") && loginPage.includes("<LoginForm"), "login stays a single card");
+assert(!loginPage.includes("DEMO_ACCOUNTS") && !loginPage.includes("enterDemo") && !loginPage.includes("DEMO_CODE"), "demo footer is hidden this turn");
+assert(!loginForm.includes("OtpChip") && !loginForm.includes("索取驗證碼") && !loginForm.includes("enterDemo"), "otp and demo buttons are off the login form");
+assert(loginForm.includes("登入 TSM") && loginForm.includes("電話／帳號") && loginForm.includes("尚未有帳號？註冊"), "login wire copy");
 const demoLogin = readFileSync(new URL("../lib/demo-login.ts", import.meta.url), "utf8");
 for (const name of ["Mars", "Tyu", "MueL"]) assert(demoLogin.includes(`nickname: "${name}"`), name);
-assert(loginPage.includes("account.nickname"), "buttons show the demo display names");
-assert(loginPage.includes("DEMO_ACCOUNTS.map") && !loginPage.includes("TRIAL_ACCOUNTS"), "one-tap buttons stay Mars, Tyu, and MueL");
+assert(!loginPage.includes("account.nickname"), "demo buttons are not on the page");
+assert(!loginPage.includes("TRIAL_ACCOUNTS"), "trial accounts stay off the login page");
 assert(!loginPage.includes("卡桌阿傑") && !loginForm.includes("卡桌阿傑") && !loginForm.includes("mei@tysm.hk"), "old demos are off the login page");
 assert(DEMO_CODE === "123", "shared demo code");
 const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");

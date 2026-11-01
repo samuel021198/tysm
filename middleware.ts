@@ -4,8 +4,12 @@ const guarded = ["/cart", "/checkout", "/orders", "/sell", "/add", "/story", "/m
 
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  const requestHeaders = new Headers(request.headers);
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) requestHeaders.set("x-pathname", pathname);
   const needsAuth = guarded.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-  if (!needsAuth || request.cookies.get("tysm_session")) return NextResponse.next();
+  if (!needsAuth || request.cookies.get("tysm_session")) {
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
   const url = request.nextUrl.clone();
   url.pathname = "/login";
   url.search = `?next=${encodeURIComponent(pathname + search)}`;

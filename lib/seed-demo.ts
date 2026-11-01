@@ -1,6 +1,8 @@
 import { fronts } from "../prisma/demo-card-fronts";
+import { ADMIN_USER_ID, PASSWORD_MIN } from "./credentials";
 import { DEMO_ACCOUNTS, TRIAL_ACCOUNTS } from "./demo-login";
 import { prisma } from "./db";
+import { hashPassword } from "./password";
 import { ensureDemoCatalog } from "./dex-query";
 import { seedWave1 } from "./seed-wave1";
 import { NEWS_SAMPLES } from "./news";
@@ -616,10 +618,15 @@ export async function seedDemo() {
       avatarUrl: "avatarUrl" in user ? user.avatarUrl : null,
       verificationTier: demoVerificationTier("verificationTier" in user ? user.verificationTier : undefined),
     };
+    let passwordHash: string | undefined;
+    if (user.id === ADMIN_USER_ID) {
+      const adminPassword = process.env.ADMIN_PASSWORD || "";
+      if (adminPassword.length >= PASSWORD_MIN) passwordHash = await hashPassword(adminPassword);
+    }
     await prisma.user.upsert({
       where: { id: user.id },
-      update: data,
-      create: { id: user.id, ...data },
+      update: passwordHash ? { ...data, passwordHash } : data,
+      create: { id: user.id, ...data, ...(passwordHash ? { passwordHash } : {}) },
     });
   }
 

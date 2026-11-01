@@ -60,7 +60,7 @@ export const getViewer = cache(async (): Promise<User | null> => {
   const id = decodeSession(token);
   if (!id) return null;
   const user = await prisma.user.findUnique({ where: { id } });
-  if (!user) return null;
+  if (!user || user.disabled) return null;
   return ensurePromoGrant(await promoteAdmin(user));
 });
 
