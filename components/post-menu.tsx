@@ -172,7 +172,7 @@ export function PostMenu({
 
   return (
     <div
-      className="relative"
+      className="relative w-full min-w-0 max-w-full"
       data-card-swipe=""
       {...gesture}
       onContextMenu={(event) => {

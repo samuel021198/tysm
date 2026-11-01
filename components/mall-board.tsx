@@ -136,7 +136,7 @@ export function MallBoard({
           <FilterIcon />
         </button>
       </div>
-      <div className="flex gap-2 overflow-x-auto" aria-label={tx(locale, "分類", "Categories")}>
+      <div className="flex w-full min-w-0 max-w-full gap-2 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={tx(locale, "分類", "Categories")}>
         <button type="button" className={`${chip} ${catId === "picks" ? onChip : offChip}`} aria-pressed={catId === "picks"} onClick={() => setCatId("picks")}>
           {tx(locale, "精選", "Picks")}
         </button>
@@ -149,7 +149,7 @@ export function MallBoard({
           {moreLabel ? (locale === "en" ? moreLabel.nameEn : moreLabel.nameZh) : tx(locale, "更多", "More")}
         </button>
       </div>
-      <div role="tablist" aria-label={tx(locale, "商店", "Shop")} className="flex gap-4 overflow-x-auto border-b border-line">
+      <div role="tablist" aria-label={tx(locale, "商店", "Shop")} className="flex w-full min-w-0 max-w-full gap-4 overflow-x-auto overscroll-x-contain border-b border-line [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {LANES.map((row) => {
           const on = lane === row.id;
           return (

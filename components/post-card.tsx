@@ -111,7 +111,7 @@ export function PostCard({
       next={next}
       swipeRightFormId={likeFormId}
     >
-    <article className="surface overflow-hidden">
+    <article className="surface w-full max-w-full overflow-hidden">
       <div className="flex items-center gap-2 px-2.5 py-2 pr-9">
         <Link href={`/u/${post.author.id}`} className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white">
           {post.author.avatarUrl ? <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" /> : post.author.nickname.slice(0, 1)}
