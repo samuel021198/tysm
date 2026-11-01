@@ -30,7 +30,7 @@ function LoginMode({ locale, next, notice, onRegister }: { locale: Locale; next:
           <input className="field" name="password" type="password" autoComplete="current-password" />
           <FieldError locale={locale} code={error === "password_short" ? error : undefined} />
         </label>
-        {error === "credentials" ? <FieldError locale={locale} code={error} /> : notice ? <FieldError locale={locale} code={notice} /> : null}
+        {error === "credentials" || error === "disabled" ? <FieldError locale={locale} code={error} /> : notice ? <FieldError locale={locale} code={notice} /> : null}
         <Submit label={tx(locale, "登入", "Log in")} pendingLabel="…" />
       </form>
       <p className="mt-4 text-sm">

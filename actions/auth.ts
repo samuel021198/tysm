@@ -64,6 +64,7 @@ export async function loginWithPassword(_prev: { error?: string } | null, formDa
     const eligible = admin?.role === "ADMIN" ? admin : null;
     const ok = await passwordMatches(password, eligible?.passwordHash);
     if (!eligible || !ok) return { error: "credentials" };
+    if (eligible.disabled) return { error: "disabled" };
     await setSessionCookie(eligible.id);
     redirect("/admin");
   }
@@ -71,6 +72,7 @@ export async function loginWithPassword(_prev: { error?: string } | null, formDa
   const account = user?.role === "USER" ? user : null;
   const matches = await passwordMatches(password, account?.passwordHash);
   if (!account || !matches) return { error: "credentials" };
+  if (account.disabled) return { error: "disabled" };
   await setSessionCookie(account.id);
   redirect(safeNext(formData.get("next")));
 }
