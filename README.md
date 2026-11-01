@@ -21,16 +21,29 @@ npm run dev
 
 `npm test` 檢查拍賣代理出價、防狙击、評級同佣金。`npm run smoke` 會在已 seed 的資料庫跑一條直購託管同拍賣出價。
 
-## 示範登入
+## 登入
 
-登入頁輸入電郵或 8 位香港電話，按索取驗證碼。**驗證碼會直接顯示在畫面上**（v1 模擬 OTP，不是正式短信）。登入頁最底有三個一鍵示範帳戶，密碼都是 `123`。也可以在帳號欄輸入 `mars`、`tyu` 或 `muel`，驗證碼 `123`。
+同一個網站（沒有獨立管理員登入網址）。登入頁係一張卡，文字連結切換「登入」同「註冊」。
+
+- **一般用戶**：香港手提電話（8 位，可寫 `+852` 或空格）加密碼。一個電話一個帳號。電郵不是登入帳號。
+- **管理員**：第一欄輸入小寫 `admin`，加密碼。成功後一定去 `/admin`，不理 `next`。不能註冊成管理員。
+- 密碼最少 8 個字元。註冊要再輸入一次密碼、暱稱（最多 24 字），並剔選條款。
+- 註冊後 `phoneVerified` 仍然係 false。放賣之前要在「我」的帳戶用現有電話驗證碼核實。登入頁不再索取驗證碼。
+- 忘記密碼同註冊短訊未做。
+- 登入頁底部的示範按鈕（Mars／Tyu／MueL）這一版收起。`enterDemo` 仍留在伺服器，頁面上沒有入口。
 
 | 帳戶 | 登入 | 可以做 |
 | --- | --- | --- |
-| Mars | 登入頁底部一鍵，或 `mars`／驗證碼 `123` | 頭像、簡介、實拍貼文、商店、評價。同 Tyu、MueL 互相關注 |
-| Tyu | 登入頁底部一鍵，或 `tyu`／驗證碼 `123` | 同上 |
-| MueL | 登入頁底部一鍵，或 `muel`／驗證碼 `123` | 同上。顯示名稱係 MueL |
-| 管理員 | `ADMIN_EMAIL`（預設 `admin@tysm.hk`） | 系統帳戶，唔會出現喺登入頁。佣金、分類、用戶、爭議、檢舉。Reseed 會保留呢個角色，用環境變數的電郵同電話重建 |
+| 新用戶 | `/login` 註冊，香港電話 + 密碼 | 登入後去 `next`，預設首頁。未驗證電話不能放賣 |
+| 管理員 | 帳號 `admin` + `ADMIN_PASSWORD` | 系統帳戶 `user_admin`。佣金、分類、用戶、爭議、檢舉。唔會出現喺登入頁 |
+
+`ADMIN_PASSWORD` 沒有寫進程式。未設定時，管理員登入不了。設定之後，以下任何一條會把 bcrypt 雜湊寫入 `user_admin`（body 不接受密碼）：
+
+- `POST /api/internal/reseed`（`npm run db:seed` 只補 Wave-1 卡名，唔會建立管理員）
+- `POST /api/internal/admin-password`，`Authorization: Bearer $BOOTSTRAP_SECRET`
+- 用帳號 `admin` 登入（伺服器見到環境變數同資料庫雜湊不一致就更新）
+
+Reseed 會清走全部用戶再重建。環境變數未設定時，新建的 `user_admin` 沒有密碼，亦不會填一個預設密碼。本地要試管理員登入，先在 `.env` 設定 `ADMIN_PASSWORD`（至少 8 位），再 reseed 或打上面的內部路由。
 
 新用戶必須勾選條款。賣家未驗證電話不能上架。
 
@@ -65,11 +78,12 @@ npm run dev
 | --- | --- | --- |
 | `DATABASE_URL` | 是 | 執行時連線。Neon Marketplace 注入的是 pooled URL。本地可與下面同一條 direct URL。 |
 | `DATABASE_URL_UNPOOLED` | 是 | Prisma `directUrl`，給 migrate 用的 direct／非 pooled 網址。Neon Marketplace 會注入。本地設成同 `DATABASE_URL`。 |
-| `ADMIN_EMAIL` | 是 | 首次管理員電郵。登入這個電郵會被升為管理員。可用逗號分隔多於一個。 |
-| `ADMIN_PHONE` | 是 | 管理員香港電話，例如 `+85260000000`。 |
+| `ADMIN_EMAIL` | 否 | 寫入 `user_admin` 的電郵，並在已有 session 時把吻合的用戶升為管理員。不是登入帳號。 |
+| `ADMIN_PHONE` | 否 | 寫入 `user_admin` 的電話，例如 `+85260000000`。用電話加密碼登入唔會當成管理員。 |
+| `ADMIN_PASSWORD` | 管理員登入時必須 | 登入帳號 `admin` 的密碼，最少 8 位。只從環境變數讀取，經 bcrypt 寫入 `passwordHash`。未設定時管理員登入失敗。見上面「登入」。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑、發布卡聞或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料、同步圖鑑、發布卡聞、設定管理員密碼或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/admin-password`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 | `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。公開圖要齊 account、access key、secret、`R2_BUCKET`、`R2_PUBLIC_BASE_URL`。未齊時圖鑑留來源網址，上傳相片留 data URL。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |

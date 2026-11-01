@@ -5,8 +5,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { syncAdminPasswordFromEnv } from "@/lib/admin-password";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
+import { ADMIN_USER_ID, parseLoginAccount, passwordIssue, registerPhone } from "@/lib/credentials";
 import { DEMO_CODE, demoAccountByHandle, demoAccountById } from "@/lib/demo-login";
+import { hashPassword, passwordMatches } from "@/lib/password";
 import { DISTRICTS, isAllowedMediaUrl, parseTarget, safeNext } from "@/lib/format";
 import {
   USERNAME_CHANGE_LIMIT,
@@ -50,6 +53,62 @@ function cookieOpts() {
   };
 }
 
+export async function loginWithPassword(_prev: { error?: string } | null, formData: FormData) {
+  const parsed = parseLoginAccount(String(formData.get("account") || ""));
+  const password = String(formData.get("password") || "");
+  if (parsed.kind === "invalid") return { error: "phone_format" };
+  if (passwordIssue(password)) return { error: "password_short" };
+  if (parsed.kind === "admin") {
+    await syncAdminPasswordFromEnv();
+    const admin = await prisma.user.findUnique({ where: { id: ADMIN_USER_ID } });
+    const eligible = admin?.role === "ADMIN" ? admin : null;
+    const ok = await passwordMatches(password, eligible?.passwordHash);
+    if (!eligible || !ok) return { error: "credentials" };
+    await setSessionCookie(eligible.id);
+    redirect("/admin");
+  }
+  const user = await prisma.user.findUnique({ where: { phone: parsed.phone } });
+  const account = user?.role === "USER" ? user : null;
+  const matches = await passwordMatches(password, account?.passwordHash);
+  if (!account || !matches) return { error: "credentials" };
+  await setSessionCookie(account.id);
+  redirect(safeNext(formData.get("next")));
+}
+
+export async function registerWithPassword(_prev: { error?: string } | null, formData: FormData) {
+  if (String(formData.get("username") || "").trim().toLowerCase() === "admin") return { error: "phone_format" };
+  const phone = registerPhone(String(formData.get("phone") || ""));
+  if (!phone.ok) return { error: phone.error };
+  const password = String(formData.get("password") || "");
+  if (passwordIssue(password)) return { error: "password_short" };
+  if (String(formData.get("confirm") || "") !== password) return { error: "password_mismatch" };
+  const nickname = String(formData.get("nickname") || "").trim();
+  if (!nickname) return { error: "nickname_required" };
+  if (nickname.length > 24) return { error: "nickname" };
+  if (formData.get("accept") !== "on") return { error: "terms_tick" };
+  const taken = await prisma.user.findUnique({ where: { phone: phone.phone } });
+  if (taken) return { error: "phone_taken" };
+  try {
+    const user = await prisma.user.create({
+      data: {
+        phone: phone.phone,
+        passwordHash: await hashPassword(password),
+        nickname,
+        role: "USER",
+        phoneVerified: false,
+        termsAcceptedAt: new Date(),
+        promoBalance: PROMO_GRANT,
+        promoToast: "earn",
+      },
+    });
+    await setSessionCookie(user.id);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") return { error: "phone_taken" };
+    throw error;
+  }
+  redirect(safeNext(formData.get("next")));
+}
+
 export async function requestOtp(_prev: { error?: string; code?: string; target?: string } | null, formData: FormData) {
   const raw = String(formData.get("target") || "");
   const demo = demoAccountByHandle(raw);
@@ -74,68 +133,7 @@ export async function requestOtp(_prev: { error?: string; code?: string; target?
   return { code, target: parsed.target };
 }
 
-export async function verifyOtp(_prev: { error?: string } | null, formData: FormData) {
-  const raw = String(formData.get("target") || "");
-  const code = String(formData.get("code") || "").trim();
-  const demo = demoAccountByHandle(raw);
-  if (demo) {
-    if (code !== DEMO_CODE) return { error: "code" };
-    const challenge = await prisma.otpChallenge.findFirst({
-      where: { target: demo.handle, consumed: false, expiresAt: { gt: new Date() } },
-      orderBy: { createdAt: "desc" },
-    });
-    if (!challenge || challenge.code !== DEMO_CODE) return { error: "code" };
-    const user = await prisma.user.findUnique({ where: { id: demo.id } });
-    if (!user) return { error: "showcase" };
-    await prisma.otpChallenge.update({ where: { id: challenge.id }, data: { consumed: true } });
-    await setSessionCookie(user.id);
-    redirect(safeNext(formData.get("next")));
-  }
-  const parsed = parseTarget(raw);
-  if (!parsed) return { error: "target" };
-  const challenge = await prisma.otpChallenge.findFirst({
-    where: { target: parsed.target, consumed: false, expiresAt: { gt: new Date() } },
-    orderBy: { createdAt: "desc" },
-  });
-  if (!challenge || challenge.code !== code) return { error: "code" };
-  const existing =
-    parsed.channel === "email"
-      ? await prisma.user.findUnique({ where: { email: parsed.target } })
-      : await prisma.user.findUnique({ where: { phone: parsed.target } });
-  if (!existing || !existing.termsAcceptedAt) {
-    if (formData.get("accept") !== "on") return { error: "terms" };
-  }
-  const nickname = String(formData.get("nickname") || "").trim();
-  if (!existing && (nickname.length < 2 || nickname.length > 24)) return { error: "nickname" };
-  await prisma.otpChallenge.update({ where: { id: challenge.id }, data: { consumed: true } });
-  const user =
-    existing ??
-    (await prisma.user.create({
-      data: {
-        email: parsed.channel === "email" ? parsed.target : null,
-        phone: parsed.channel === "phone" ? parsed.target : null,
-        emailVerified: parsed.channel === "email",
-        phoneVerified: parsed.channel === "phone",
-        nickname,
-        termsAcceptedAt: new Date(),
-        promoBalance: PROMO_GRANT,
-        promoToast: "earn",
-      },
-    }));
-  if (existing) {
-    await prisma.user.update({
-      where: { id: existing.id },
-      data: {
-        ...(parsed.channel === "email" ? { emailVerified: true } : { phoneVerified: true }),
-        ...(!existing.termsAcceptedAt ? { termsAcceptedAt: new Date() } : {}),
-      },
-    });
-  }
-  await setSessionCookie(user.id);
-  redirect(safeNext(formData.get("next")));
-}
-
-/** One tap on the login footer. Only the three seeded demo ids. */
+/** One tap on the login footer. Only the three seeded demo ids. Hidden on /login this turn. */
 export async function enterDemo(formData: FormData) {
   const account = demoAccountById(String(formData.get("userId") || ""));
   if (!account) redirect("/login?err=showcase");

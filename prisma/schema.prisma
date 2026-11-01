@@ -165,6 +165,8 @@ model User {
   phone              String?   @unique
   phoneVerified      Boolean   @default(false)
   emailVerified      Boolean   @default(false)
+  /// bcrypt hash. Null until set. The admin hash is written from ADMIN_PASSWORD, never from source.
+  passwordHash       String?
   nickname           String
   /// Public @handle. Null until the member sets one. Changes are capped in UsernameChange.
   username           String?   @unique
