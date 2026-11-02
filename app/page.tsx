@@ -5,8 +5,10 @@ import { loadHomeFeed } from "@/lib/profile";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { listingSuggestionCard } from "@/lib/posts";
 import { sweep } from "@/lib/orders";
+import { FrontRank } from "@/components/front-rank";
 import { Flash } from "@/components/shell";
 import { PostCard } from "@/components/post-card";
+import { loadFrontRank } from "@/lib/front-rank";
 import { tx } from "@/lib/i18n";
 
 export default async function HomePage({
@@ -18,7 +20,10 @@ export default async function HomePage({
   const sp = await searchParams;
   const [prefs, viewer] = await Promise.all([getPrefs(), getViewer()]);
   const [hidden, hides] = await Promise.all([hiddenUserIds(viewer?.id ?? null), feedHideIds(viewer?.id ?? null)]);
-  const { primary, suggested, linkedListings } = await loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds);
+  const [{ primary, suggested, linkedListings }, rankPeople] = await Promise.all([
+    loadHomeFeed(viewer?.id ?? null, hidden, hides.postIds),
+    loadFrontRank(hidden),
+  ]);
   const covered = new Set(
     [...primary, ...suggested].filter((post) => post.priceCents != null).flatMap((post) => post.photos),
   );
@@ -89,6 +94,7 @@ export default async function HomePage({
 
   return (
     <div className="mx-auto grid max-w-lg gap-3">
+      <FrontRank locale={prefs.locale} people={rankPeople} />
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       {primary.length ? (
         <section className="grid gap-3">
