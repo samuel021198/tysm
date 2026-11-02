@@ -11,10 +11,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   return (
     <div className="mx-auto max-w-md pt-2">
       <div className="surface px-5 py-6 md:px-7 md:py-8">
-        <LoginForm locale={prefs.locale} next={next} notice={sp.err} />
-        <div className="mt-4 flex justify-end md:hidden">
-          <PrefToggles locale={prefs.locale} theme={prefs.theme} />
-        </div>
+        <LoginForm
+          locale={prefs.locale}
+          next={next}
+          notice={sp.err}
+          toolbar={
+            <div className="mt-4 flex justify-end md:hidden">
+              <PrefToggles locale={prefs.locale} theme={prefs.theme} />
+            </div>
+          }
+        />
       </div>
     </div>
   );

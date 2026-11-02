@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db";
 import { syncAdminPasswordFromEnv } from "@/lib/admin-password";
 import { clearSessionCookie, getViewer, setSessionCookie } from "@/lib/auth";
 import { ADMIN_USER_ID, parseLoginAccount, passwordIssue, registerPhone } from "@/lib/credentials";
-import { DEMO_CODE, demoAccountByHandle, demoAccountById } from "@/lib/demo-login";
+import { DEMO_CODE, acceptsDemoPassword, demoAccountByHandle, demoAccountById } from "@/lib/demo-login";
 import { hashPassword, passwordMatches } from "@/lib/password";
 import { DISTRICTS, isAllowedMediaUrl, parseTarget, safeNext } from "@/lib/format";
 import {
@@ -57,7 +57,8 @@ export async function loginWithPassword(_prev: { error?: string } | null, formDa
   const parsed = parseLoginAccount(String(formData.get("account") || ""));
   const password = String(formData.get("password") || "");
   if (parsed.kind === "invalid") return { error: "phone_format" };
-  if (passwordIssue(password)) return { error: "password_short" };
+  const demoCode = parsed.kind === "phone" && acceptsDemoPassword(parsed.phone, password);
+  if (!demoCode && passwordIssue(password)) return { error: "password_short" };
   if (parsed.kind === "admin") {
     await syncAdminPasswordFromEnv();
     const admin = await prisma.user.findUnique({ where: { id: ADMIN_USER_ID } });

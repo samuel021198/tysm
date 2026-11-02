@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import Link from "next/link";
 import { loginWithPassword, registerWithPassword } from "@/actions/auth";
 import { Submit } from "./submit";
+import { DEMO_ACCOUNTS, DEMO_CODE, demoPhoneInput, type DemoAccount } from "@/lib/demo-login";
 import { errText, tx, type Locale } from "@/lib/i18n";
 
 function FieldError({ locale, code }: { locale: Locale; code?: string }) {
@@ -11,14 +12,35 @@ function FieldError({ locale, code }: { locale: Locale; code?: string }) {
   return <p className="text-sm text-danger">{errText(locale, code)}</p>;
 }
 
-function LoginMode({ locale, next, notice, onRegister }: { locale: Locale; next: string; notice?: string; onRegister: () => void }) {
+function writeDemo(form: HTMLFormElement, account: DemoAccount) {
+  const accountInput = form.elements.namedItem("account");
+  const passwordInput = form.elements.namedItem("password");
+  if (!(accountInput instanceof HTMLInputElement) || !(passwordInput instanceof HTMLInputElement)) return;
+  accountInput.value = demoPhoneInput(account.phone);
+  passwordInput.value = DEMO_CODE;
+  form.requestSubmit();
+}
+
+function LoginMode({
+  locale,
+  next,
+  notice,
+  onRegister,
+  formRef,
+}: {
+  locale: Locale;
+  next: string;
+  notice?: string;
+  onRegister: () => void;
+  formRef: RefObject<HTMLFormElement | null>;
+}) {
   const [state, action] = useActionState(loginWithPassword, null);
   const error = state?.error;
   return (
     <>
       <h1 className="accent mt-2 text-[1.3rem] font-bold">{tx(locale, "登入 TSM", "Log in to TSM")}</h1>
       <p className="mt-2 text-sm text-muted">{tx(locale, "用香港電話與密碼登入。管理員請輸入帳號 admin。", "Sign in with your Hong Kong phone and password. Admins enter the account admin.")}</p>
-      <form action={action} className="mt-6 grid gap-3" noValidate>
+      <form ref={formRef} action={action} className="mt-6 grid gap-3" noValidate>
         <input type="hidden" name="next" value={next} />
         <label className="grid gap-1 text-sm">
           {tx(locale, "電話／帳號", "Phone / account")}
@@ -94,16 +116,66 @@ function RegisterMode({ locale, next, onLogin }: { locale: Locale; next: string;
   );
 }
 
-export function LoginForm({ locale, next, notice }: { locale: Locale; next: string; notice?: string }) {
+function DemoFooter({ locale, onPick }: { locale: Locale; onPick: (account: DemoAccount) => void }) {
+  return (
+    <div className="mt-8 border-t border-line pt-4">
+      <p className="text-center text-xs text-muted">{tx(locale, "示範登入", "Demo login")}</p>
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-y-2">
+        {DEMO_ACCOUNTS.map((account, index) => (
+          <span key={account.id} className="inline-flex items-center">
+            {index > 0 ? <span className="px-1 text-muted" aria-hidden="true">｜</span> : null}
+            <button type="button" className="btn btn-ghost px-3" onClick={() => onPick(account)}>
+              {account.nickname}
+            </button>
+          </span>
+        ))}
+      </div>
+      <p className="mt-2 text-center text-xs text-muted">{tx(locale, "示範帳號，正式上線前會移除。", "Demo accounts. Removed before launch.")}</p>
+    </div>
+  );
+}
+
+export function LoginForm({
+  locale,
+  next,
+  notice,
+  toolbar,
+}: {
+  locale: Locale;
+  next: string;
+  notice?: string;
+  toolbar?: ReactNode;
+}) {
   const [mode, setMode] = useState<"login" | "register">("login");
+  const [queued, setQueued] = useState<DemoAccount | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!queued || !formRef.current) return;
+    const account = queued;
+    setQueued(null);
+    writeDemo(formRef.current, account);
+  }, [queued]);
+
+  function pick(account: DemoAccount) {
+    if (mode !== "login") {
+      setMode("login");
+      setQueued(account);
+      return;
+    }
+    if (formRef.current) writeDemo(formRef.current, account);
+  }
+
   return (
     <div>
       <p className="font-display text-xs font-semibold tracking-[0.16em] text-accent">TSM</p>
       {mode === "login" ? (
-        <LoginMode locale={locale} next={next} notice={notice} onRegister={() => setMode("register")} />
+        <LoginMode locale={locale} next={next} notice={notice} onRegister={() => setMode("register")} formRef={formRef} />
       ) : (
         <RegisterMode locale={locale} next={next} onLogin={() => setMode("login")} />
       )}
+      {toolbar}
+      <DemoFooter locale={locale} onPick={pick} />
     </div>
   );
 }

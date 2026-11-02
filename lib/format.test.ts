@@ -1,4 +1,4 @@
-import { DEMO_ACCOUNTS, DEMO_CODE, demoAccountByHandle } from "./demo-login";
+import { DEMO_ACCOUNTS, DEMO_CODE, acceptsDemoPassword, demoAccountByHandle, demoAccountByPhone, demoPhoneInput } from "./demo-login";
 import { bidFloorText, formatJpy, hkPartsToInput, isAllowedMediaUrl, parseTarget } from "./format";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -32,5 +32,10 @@ assert(mars?.handle === "mars" && mars.nickname === "Mars" && mars.id === "user_
 assert(demoAccountByHandle("MueL")?.nickname === "MueL", "display name lowercases onto the handle");
 assert(demoAccountByHandle("123") === null && demoAccountByHandle("mars@tysm.hk") === null, "code and emails are not handles");
 assert(DEMO_CODE === "123" && DEMO_ACCOUNTS.map((row) => row.nickname).join() === "Mars,Tyu,MueL", "three demos share code 123");
+assert(DEMO_ACCOUNTS.map((row) => row.phone).join() === "+85291000001,+85291000002,+85291000003", "stable demo phones");
+assert(demoPhoneInput(DEMO_ACCOUNTS[0].phone) === "91000001", "login field shows eight digits");
+assert(demoAccountByPhone("9100 0002")?.nickname === "Tyu" && demoAccountByPhone("+85291000003")?.id === "user_muel", "phone lookup");
+assert(acceptsDemoPassword("91000001", "123") && acceptsDemoPassword("+85291000002", DEMO_CODE), "demo phones accept the shared code");
+assert(!acceptsDemoPassword("91000001", "1234") && !acceptsDemoPassword("+85291234567", "123") && !acceptsDemoPassword("admin", "123"), "short code is not a general password");
 
 console.log("format ok");

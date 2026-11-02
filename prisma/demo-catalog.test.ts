@@ -161,6 +161,13 @@ const tierOf = (id: string) => {
 assert(tierOf("user_mars") === "MERCHANT" && tierOf("user_tyu") === "TRUSTED" && tierOf("user_muel") === "NORMAL", "demo badges: Mars merchant, Tyu trusted, MueL plain");
 assert(demoUsers.filter((user) => "verificationTier" in user).length === 2, "only two seeded badges; everyone else stays NORMAL");
 assert(people.slice(0, 3).every((user, index) => user.id === DEMO_ACCOUNTS[index].id && user.nickname === DEMO_ACCOUNTS[index].nickname), "seed users match the login accounts");
+assert(
+  people.slice(0, 3).every((user, index) => {
+    const account = DEMO_ACCOUNTS[index];
+    return Boolean(account && "phone" in user && user.phone === account.phone);
+  }),
+  "demo login phones match the seeded users",
+);
 assert(people.slice(3).every((user, index) => user.id === TRIAL_ACCOUNTS[index].id && user.nickname === TRIAL_ACCOUNTS[index].nickname), "trial traders keep their handles");
 const admin = demoUsers.find((user) => user.role === "ADMIN");
 assert(admin && admin.id === "user_admin" && !("email" in admin), "admin stays a system account, not a login-page demo");
@@ -329,13 +336,13 @@ assert(auth.includes("demoAccountByHandle") && auth.includes("DEMO_CODE") && aut
 const loginPage = readFileSync(new URL("../app/login/page.tsx", import.meta.url), "utf8");
 const loginForm = readFileSync(new URL("../components/login-form.tsx", import.meta.url), "utf8");
 assert(loginPage.includes("max-w-md") && loginPage.includes("<LoginForm"), "login stays a single card");
-assert(!loginPage.includes("DEMO_ACCOUNTS") && !loginPage.includes("enterDemo") && !loginPage.includes("DEMO_CODE"), "demo footer is hidden this turn");
-assert(!loginForm.includes("OtpChip") && !loginForm.includes("索取驗證碼") && !loginForm.includes("enterDemo"), "otp and demo buttons are off the login form");
+assert(!loginPage.includes("DEMO_ACCOUNTS") && !loginPage.includes("enterDemo") && !loginPage.includes("DEMO_CODE"), "demo footer lives on the form");
+assert(!loginForm.includes("OtpChip") && !loginForm.includes("索取驗證碼") && !loginForm.includes("enterDemo") && !loginForm.includes("忘記密碼"), "otp, forgot-password, and the passwordless bypass stay off the form");
 assert(loginForm.includes("登入 TSM") && loginForm.includes("電話／帳號") && loginForm.includes("尚未有帳號？註冊"), "login wire copy");
+assert(loginForm.includes("示範登入") && loginForm.includes("DEMO_ACCOUNTS") && loginForm.includes("account.nickname") && loginForm.includes("正式上線前會移除"), "footer is Mars, Tyu, and MueL");
 const demoLogin = readFileSync(new URL("../lib/demo-login.ts", import.meta.url), "utf8");
 for (const name of ["Mars", "Tyu", "MueL"]) assert(demoLogin.includes(`nickname: "${name}"`), name);
-assert(!loginPage.includes("account.nickname"), "demo buttons are not on the page");
-assert(!loginPage.includes("TRIAL_ACCOUNTS"), "trial accounts stay off the login page");
+assert(!loginForm.includes("TRIAL_ACCOUNTS") && !loginPage.includes("TRIAL_ACCOUNTS"), "trial accounts stay off the login page");
 assert(!loginPage.includes("卡桌阿傑") && !loginForm.includes("卡桌阿傑") && !loginForm.includes("mei@tysm.hk"), "old demos are off the login page");
 assert(DEMO_CODE === "123", "shared demo code");
 const reseed = readFileSync(new URL("../app/api/internal/reseed/route.ts", import.meta.url), "utf8");

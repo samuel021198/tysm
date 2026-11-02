@@ -30,12 +30,13 @@ npm run dev
 - 密碼最少 8 個字元。註冊要再輸入一次密碼、暱稱（最多 24 字），並剔選條款。
 - 註冊後 `phoneVerified` 仍然係 false。放賣之前要在「我」的帳戶用現有電話驗證碼核實。登入頁不再索取驗證碼。
 - 忘記密碼同註冊短訊未做。
-- 登入頁底部的示範按鈕（Mars／Tyu／MueL）這一版收起。`enterDemo` 仍留在伺服器，頁面上沒有入口。
+- 登入頁最底有「示範登入」：Mars、Tyu、MueL。一撳填入電話同密碼 `123` 並登入。呢三個係普通用戶，管理員冇示範按鈕。正式上線前連同示範資料一齊移除。部署後要打下面「示範登入帳號」先至登入到。
 
 | 帳戶 | 登入 | 可以做 |
 | --- | --- | --- |
 | 新用戶 | `/login` 註冊，香港電話 + 密碼 | 登入後去 `next`，預設首頁。未驗證電話不能放賣 |
 | 管理員 | 帳號 `admin` + `ADMIN_PASSWORD` | 系統帳戶 `user_admin`。進入 `/admin`：用戶、申請、貨品、舉報、爭議、品類。沒有佣金畫面，亦不能把人升為管理員。 |
+| 示範 | Mars `91000001`、Tyu `91000002`、MueL `91000003`，密碼都係 `123` | 普通用戶。Mars、Tyu 係買賣雙方（有店），MueL 一樣可以買同放賣。`123` 只對呢三個電話有效，其他帳號仍然最少 8 位。 |
 
 `ADMIN_PASSWORD` 沒有寫進程式。未設定時，管理員登入不了。設定之後，以下任何一條會把 bcrypt 雜湊寫入 `user_admin`（body 不接受密碼）：
 
@@ -83,7 +84,7 @@ Reseed 會清走全部用戶再重建。環境變數未設定時，新建的 `us
 | `ADMIN_PASSWORD` | 管理員登入時必須 | 登入帳號 `admin` 的密碼，最少 8 位。只從環境變數讀取，經 bcrypt 寫入 `passwordHash`。未設定時管理員登入失敗。見上面「登入」。 |
 | `NEXT_PUBLIC_APP_URL` | 是 | 網站來源，**不要**結尾斜線。本地 `http://localhost:3000`，正式環境 `https://你的網域`。 |
 | `SESSION_SECRET` | 正式環境必須 | 用來簽 session cookie。請換一條長隨機字串。 |
-| `BOOTSTRAP_SECRET` | 重新灌示範資料、補 Wave-1 卡名、同步圖鑑、發布卡聞、設定管理員密碼或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/seed-wave1`、`POST /api/internal/admin-password`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
+| `BOOTSTRAP_SECRET` | 重新灌示範資料、補 Wave-1 卡名、同步圖鑑、發布卡聞、設定管理員密碼、補示範登入或審核認證時必須 | 保護 `POST /api/internal/reseed`、`POST /api/internal/seed-wave1`、`POST /api/internal/seed-demo-logins`、`POST /api/internal/admin-password`、`POST /api/internal/ingest-dex`、`POST /api/internal/news` 同 `/api/internal/verification`。請用另一條長隨機字串，不要同 `SESSION_SECRET` 一樣。 |
 | `R2_ACCOUNT_ID` | 否 | Cloudflare R2 account id。公開圖要齊 account、access key、secret、`R2_BUCKET`、`R2_PUBLIC_BASE_URL`。未齊時圖鑑留來源網址，上傳相片留 data URL。 |
 | `R2_ACCESS_KEY_ID` | 否 | R2 S3 access key。 |
 | `R2_SECRET_ACCESS_KEY` | 否 | R2 S3 secret。 |
@@ -269,6 +270,25 @@ curl -sS -X POST "https://你的網域/api/internal/seed-wave1" \
 ```
 
 成功回 `200`：`ok: true`、`counts.wiped` 係 `false`、`counts.listings` 係 `100`、`counts.aliases` 係帶了日文名的 curated 卡數（而家 123）。沒有 `BOOTSTRAP_SECRET` 回 `503`。密鑰不對回 `401`。重複 POST 安全。部署本身已經令 typeahead 識別名；這條係把日文名寫入資料庫，同埋補 51–100 的示範刊登。
+
+## 示範登入帳號
+
+登入頁底部 Mars｜Tyu｜MueL 用既有示範用戶（`user_mars`、`user_tyu`、`user_muel`），唔會新建另一套賣家，亦唔會改 Wave-1 軟啟動賣家（TyuDemo、MarsPacks 等）的刊登。
+
+部署之後打呢條，先會把密碼 `123` 的 bcrypt 寫入呢三個用戶。已存在就只更新 `passwordHash`、電話同 `phoneVerified`。未存在就建立用戶同店名，唔會寫刊登。**唔會**清用戶、貼文或刊登（`counts.wiped` 係 `false`）。唔好用 reseed。Body 忽略。重複 POST 安全。
+
+| 按鈕 | 電話 | 用戶 |
+| --- | --- | --- |
+| Mars | `91000001` | `user_mars` |
+| Tyu | `91000002` | `user_tyu` |
+| MueL | `91000003` | `user_muel` |
+
+```bash
+curl -sS -X POST "https://你的網域/api/internal/seed-demo-logins" \
+  -H "Authorization: Bearer $BOOTSTRAP_SECRET"
+```
+
+成功回 `200`：`ok: true`、`counts.wiped` 係 `false`、`counts.users` 係上面三個 id。沒有 `BOOTSTRAP_SECRET` 回 `503`。密鑰不對回 `401`。電話已被另一個用戶佔用回 `409`（`demo_phone_taken`）。
 
 ## 重新灌示範資料
 
