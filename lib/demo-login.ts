@@ -1,10 +1,13 @@
-/** Public demo logins. A handle is not an email or an HK phone. The code stays fixed so it works in production. */
+import { normalizePhone } from "./format";
+
+/** Public demo logins. The code stays fixed so the login footer works in production. */
 export const DEMO_CODE = "123";
 
+/** Phones match the seeded Mars / Tyu / MueL rows. Not the Wave-1 soft-seed sellers. */
 export const DEMO_ACCOUNTS = [
-  { id: "user_mars", handle: "mars", nickname: "Mars" },
-  { id: "user_tyu", handle: "tyu", nickname: "Tyu" },
-  { id: "user_muel", handle: "muel", nickname: "MueL" },
+  { id: "user_mars", handle: "mars", nickname: "Mars", phone: "+85291000001" },
+  { id: "user_tyu", handle: "tyu", nickname: "Tyu", phone: "+85291000002" },
+  { id: "user_muel", handle: "muel", nickname: "MueL", phone: "+85291000003" },
 ] as const;
 
 export type DemoAccount = (typeof DEMO_ACCOUNTS)[number];
@@ -31,4 +34,20 @@ export function demoAccountByHandle(input: string): { id: string; handle: string
 
 export function demoAccountById(id: string): DemoAccount | null {
   return DEMO_ACCOUNTS.find((row) => row.id === id) ?? null;
+}
+
+export function demoAccountByPhone(input: string): DemoAccount | null {
+  const phone = normalizePhone(input.trim());
+  if (!phone) return null;
+  return DEMO_ACCOUNTS.find((row) => row.phone === phone) ?? null;
+}
+
+/** Eight digits for the login field. The stored value stays +852. */
+export function demoPhoneInput(phone: string): string {
+  return phone.startsWith("+852") ? phone.slice(4) : phone;
+}
+
+/** The shared code is only accepted for the three demo phones. Other accounts stay at the normal minimum. */
+export function acceptsDemoPassword(phone: string, password: string): boolean {
+  return password === DEMO_CODE && demoAccountByPhone(phone) !== null;
 }

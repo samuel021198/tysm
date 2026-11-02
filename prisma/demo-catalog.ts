@@ -801,7 +801,7 @@ export const demoUsers = [
   {
     id: DEMO_ACCOUNTS[0].id,
     email: "mars@tysm.hk",
-    phone: "+85291000001",
+    phone: DEMO_ACCOUNTS[0].phone,
     nickname: DEMO_ACCOUNTS[0].nickname,
     role: "USER" as const,
     phoneVerified: true,
@@ -812,7 +812,7 @@ export const demoUsers = [
   {
     id: DEMO_ACCOUNTS[1].id,
     email: "tyu@tysm.hk",
-    phone: "+85291000002",
+    phone: DEMO_ACCOUNTS[1].phone,
     nickname: DEMO_ACCOUNTS[1].nickname,
     role: "USER" as const,
     phoneVerified: true,
@@ -823,7 +823,7 @@ export const demoUsers = [
   {
     id: DEMO_ACCOUNTS[2].id,
     email: "muel@tysm.hk",
-    phone: "+85291000003",
+    phone: DEMO_ACCOUNTS[2].phone,
     nickname: DEMO_ACCOUNTS[2].nickname,
     role: "USER" as const,
     phoneVerified: true,
@@ -850,9 +850,9 @@ export const demoStores: { userId: string; storeName: string; storeDistrict: str
 ];
 
 export const demoAddresses = [
-  { id: "addr_mars", userId: "user_mars", recipient: "Mars", phone: "+85291000001", line1: "彌敦道 100 號", district: "油尖旺" },
-  { id: "addr_tyu", userId: "user_tyu", recipient: "Tyu", phone: "+85291000002", line1: "軒尼詩道 20 號", district: "灣仔" },
-  { id: "addr_muel", userId: "user_muel", recipient: "MueL", phone: "+85291000003", line1: "廣東道 8 號", district: "油尖旺" },
+  { id: "addr_mars", userId: "user_mars", recipient: "Mars", phone: DEMO_ACCOUNTS[0].phone, line1: "彌敦道 100 號", district: "油尖旺" },
+  { id: "addr_tyu", userId: "user_tyu", recipient: "Tyu", phone: DEMO_ACCOUNTS[1].phone, line1: "軒尼詩道 20 號", district: "灣仔" },
+  { id: "addr_muel", userId: "user_muel", recipient: "MueL", phone: DEMO_ACCOUNTS[2].phone, line1: "廣東道 8 號", district: "油尖旺" },
 ];
 
 export const demoOffers = [

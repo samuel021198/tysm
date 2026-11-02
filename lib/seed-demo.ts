@@ -1,6 +1,6 @@
 import { fronts } from "../prisma/demo-card-fronts";
 import { ADMIN_USER_ID, PASSWORD_MIN } from "./credentials";
-import { DEMO_ACCOUNTS, TRIAL_ACCOUNTS } from "./demo-login";
+import { DEMO_ACCOUNTS, DEMO_CODE, TRIAL_ACCOUNTS } from "./demo-login";
 import { prisma } from "./db";
 import { hashPassword } from "./password";
 import { ensureDemoCatalog } from "./dex-query";
@@ -591,6 +591,8 @@ export async function seedDemo() {
 
   const stores = new Map(demoStores.map((row) => [row.userId, row]));
   const handles = new Map<string, string>([...DEMO_ACCOUNTS, ...TRIAL_ACCOUNTS].map((row) => [row.id, row.handle]));
+  const demoIds = new Set<string>(DEMO_ACCOUNTS.map((row) => row.id));
+  const demoPasswordHash = await hashPassword(DEMO_CODE);
   for (const user of demoUsers) {
     const email = "email" in user ? user.email : adminEmail;
     const phone = "phone" in user ? user.phone : adminPhone;
@@ -622,6 +624,8 @@ export async function seedDemo() {
     if (user.id === ADMIN_USER_ID) {
       const adminPassword = process.env.ADMIN_PASSWORD || "";
       if (adminPassword.length >= PASSWORD_MIN) passwordHash = await hashPassword(adminPassword);
+    } else if (demoIds.has(user.id)) {
+      passwordHash = demoPasswordHash;
     }
     await prisma.user.upsert({
       where: { id: user.id },

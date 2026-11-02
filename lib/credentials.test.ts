@@ -47,14 +47,18 @@ assert(login.includes('autoComplete="current-password"'), "current password");
 assert(login.includes("尚未有帳號？註冊") && login.includes("已有帳號？登入"), "mode links");
 assert(login.includes("確認密碼") && login.includes("maxLength={24}"), "register fields");
 assert(login.includes("我同意") && login.includes("服務條款") && login.includes("私隱政策") && login.includes("新用戶須剔選"), "terms copy");
-assert(!login.includes("enterDemo") && !login.includes("DEMO_CODE"), "demo footer not in the form");
+assert(!login.includes("enterDemo") && !login.includes("索取驗證碼") && !login.includes("忘記密碼"), "no passwordless bypass, otp, or forgot-password");
+assert(login.includes("示範登入") && login.includes("DEMO_ACCOUNTS") && login.includes("DEMO_CODE") && login.includes("account.nickname"), "demo footer fills phone and the shared code");
+assert(login.includes("正式上線前會移除") && login.includes("｜"), "soft-launch footer copy");
+assert(!login.includes("TRIAL_ACCOUNTS") && !login.includes("卡桌阿傑"), "trial accounts and the old showcase stay off the footer");
 
 const page = readFileSync(new URL("../app/login/page.tsx", import.meta.url), "utf8");
 assert(page.includes("max-w-md") && page.includes("<LoginForm"), "card");
-assert(!page.includes("enterDemo") && !page.includes("DEMO_ACCOUNTS") && !page.includes("DEMO_CODE"), "demo footer hidden");
+assert(!page.includes("enterDemo") && !page.includes("DEMO_ACCOUNTS") && !page.includes("DEMO_CODE"), "demo footer lives on the form");
 
 const auth = readFileSync(new URL("../actions/auth.ts", import.meta.url), "utf8");
 assert(auth.includes("export async function enterDemo"), "enterDemo stays");
+assert(auth.includes("acceptsDemoPassword"), "demo phones may use the shared code");
 assert(auth.includes("export async function requestPhoneOtp") && auth.includes("export async function confirmPhone"), "me phone otp stays");
 assert(!auth.includes("export async function verifyOtp"), "otp login action is gone");
 assert(auth.includes('redirect("/admin")') && auth.includes("phoneVerified: false"), "admin goes to /admin; register does not skip phone verify");
@@ -62,6 +66,14 @@ assert(auth.includes('role: "USER"'), "register creates a user");
 
 const seed = readFileSync(new URL("./seed-demo.ts", import.meta.url), "utf8");
 assert(seed.includes("ADMIN_PASSWORD") && seed.includes("passwordHash") && seed.includes("PASSWORD_MIN"), "seed hashes the admin password from the env");
+assert(seed.includes("DEMO_CODE") && seed.includes("demoPasswordHash"), "reseed hashes the demo code onto Mars, Tyu, and MueL");
+
+const demoSeed = readFileSync(new URL("./seed-demo-logins.ts", import.meta.url), "utf8");
+assert(demoSeed.includes("DEMO_CODE") && demoSeed.includes("passwordHash") && demoSeed.includes("wiped: false"), "additive seed sets the demo password");
+assert(!demoSeed.includes("deleteMany") && !demoSeed.includes("wipeUserContent") && !demoSeed.includes("ADMIN_USER_ID"), "additive seed does not wipe or touch admin");
+const demoRoute = readFileSync(new URL("../app/api/internal/seed-demo-logins/route.ts", import.meta.url), "utf8");
+assert(demoRoute.includes("authorizedBearer") && demoRoute.includes("BOOTSTRAP_SECRET") && demoRoute.includes("seedDemoLogins"), "demo login seed uses the bootstrap bearer");
+assert(!demoRoute.includes("seedDemo(") && !demoRoute.includes("wipeUserContent") && !demoRoute.includes("request.json"), "route does not wipe and ignores the body");
 
 hashPassword("correct-horse")
   .then(async (hash) => {
