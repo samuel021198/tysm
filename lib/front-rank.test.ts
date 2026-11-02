@@ -56,7 +56,13 @@ assert(!src.includes("order.findMany") && !src.includes("postLike") && !src.incl
 assert(ui.includes("href={`/u/${person.id}`}") && !ui.includes("/shop/") && !ui.includes("StoryRail") && !ui.includes("FollowRail"), "a cell opens /u/[id], not a shop or the old story rail");
 assert(ui.includes('href="/rank"') && ui.includes("全部") && ui.includes("frontRankBadge"), "全部 goes to the existing rank page and the badge helper paints the circle");
 assert(ui.includes("h-[18px]") && ui.includes("h-3.5") && ui.includes("overflow-x-auto") && ui.includes("data-gesture") && !ui.includes("max-w-[390px]") && !ui.includes("max-w-[375px]"), "top badges are larger; the row scrolls without a phone frame");
+assert(!ui.includes("/4.5") && ui.includes("w-16") && ui.includes("min-w-0") && ui.includes("max-w-full"), "fixed 64px slots; the row cannot widen the page");
+const circleAt = ui.indexOf("rounded-full bg-accent");
+const nameAt = ui.indexOf('className="relative z-10 w-full truncate');
+assert(circleAt >= 0 && nameAt > circleAt && !ui.includes("absolute bottom-0"), "the avatar circle stays in flow and the nickname sits under it");
+assert(ui.includes("gap-1") && ui.includes("items-end"), "the circle keeps a gap above the name and lines up with 全部");
 assert(home.indexOf("<FrontRank") >= 0 && home.indexOf("<FrontRank") < home.indexOf("primary.map") && home.includes("loadFrontRank"), "the row sits at the top of Front");
+assert(home.includes("grid-cols-1") && home.includes("min-w-0") && home.includes("max-w-lg"), "the front column cannot grow past max-w-lg");
 assert(!home.includes("FollowRail") && !home.includes("StoryRail"), "the following rail stays off Front");
 assert(seed.includes("SOFT_SELLERS") && seed.includes("softSellerId") && seed.includes("wiped: false") && !seed.includes("deleteMany") && !sellers.includes("deleteMany"), "soft-seed stays additive; the row reuses that seller list");
 assert(!login.includes("FrontRank") && !login.includes("loadFrontRank"), "login is untouched by the front row");
