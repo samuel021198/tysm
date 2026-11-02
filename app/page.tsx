@@ -93,7 +93,7 @@ export default async function HomePage({
     );
 
   return (
-    <div className="mx-auto grid max-w-lg gap-3">
+    <div className="mx-auto grid w-full min-w-0 max-w-lg grid-cols-1 gap-3">
       <FrontRank locale={prefs.locale} people={rankPeople} />
       <Flash locale={prefs.locale} ok={sp.ok} err={sp.err} />
       {primary.length ? (
