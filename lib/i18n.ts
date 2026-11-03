@@ -69,6 +69,7 @@ const ERR: Record<string, [string, string]> = {
   rate: ["請 30 秒後再索取驗證碼", "Wait 30 seconds before requesting another code"],
   taken: ["這個電話已被使用", "That phone is already in use"],
   dispute: ["而家不能開啟爭議", "A dispute cannot be opened now"],
+  issue: ["請選擇原因，並寫低清楚的說明", "Pick a reason and write a clear note"],
   state: ["交收狀態不允許這個操作", "That action is not available for this handover"],
   reserved: ["此貨品已保留。", "This item is reserved."],
   pending: ["已有一筆議價，請先撤回或等待對方回覆", "There is already an offer. Withdraw it or wait for a reply"],

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { formatHkd, formatHKT } from "@/lib/format";
+import { formatHkd, formatHKT, isAllowedMediaUrl } from "@/lib/format";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import { Flash } from "@/components/shell";
 import { AdminShell } from "@/components/admin-shell";
@@ -367,6 +367,13 @@ async function Disputes({ locale }: { locale: Locale }) {
             {row.status} · <Link className="text-link underline" href={`/orders/${row.orderId}`}>{row.orderId}</Link>
           </p>
           <p className="mt-1">{row.reason}</p>
+          {row.images.length ? (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {row.images.filter((url) => isAllowedMediaUrl(url)).map((url) => (
+                <img key={url} src={url} alt="" className="h-16 w-12 rounded-md bg-soft object-cover" />
+              ))}
+            </div>
+          ) : null}
           {row.appealReason ? <p className="mt-1">{tx(locale, "上訴", "Appeal")}: {row.appealReason}</p> : null}
           {row.status === "OPEN" || row.status === "APPEALED" ? (
             <form className="mt-2 grid max-w-xl gap-2">

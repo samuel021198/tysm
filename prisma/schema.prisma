@@ -650,6 +650,8 @@ model Dispute {
   orderId           String        @unique
   openerId          String
   reason            String
+  /// Up to 3 photos from「有問題」. Empty for older rows.
+  images            String[]      @default([])
   status            DisputeStatus @default(OPEN)
   decisionNote      String?
   appealReason      String?

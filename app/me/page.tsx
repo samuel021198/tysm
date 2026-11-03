@@ -41,6 +41,10 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         self
         tokenBalance={viewer.promoBalance ?? 0}
       />
+      <Link href="/orders" className="surface flex h-11 items-center justify-between px-3 text-[13px] font-medium">
+        {tx(locale, "訂單", "Orders")}
+        <span className="text-sm leading-none text-muted" aria-hidden>›</span>
+      </Link>
       <div id="profile-posts">
         <ProfileBoard
           locale={locale}

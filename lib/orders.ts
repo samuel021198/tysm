@@ -7,6 +7,8 @@ import { notify } from "./social";
 import { auctionOutcome } from "./auction";
 import { settlePromos } from "./promo";
 import { dealEventBody } from "./deal-phase";
+import { disputeImageList, disputeReport } from "./order-desk";
+import { PhotoStoreError, storeUploadedImage } from "./r2";
 import {
   AUTO_RELEASE_MS,
   PAY_TTL_MS,
@@ -547,6 +549,44 @@ export async function openDispute(buyerId: string, orderId: string, reason: stri
   } catch (error) {
     const code = asFail(error);
     if (code) return { ok: false as const, error: code };
+    throw error;
+  }
+}
+
+/** Either party taps 有問題. Lands in the existing admin 爭議 queue. */
+export async function reportOrderIssue(userId: string, orderId: string, chip: string, text: string, images: string[]) {
+  const report = disputeReport(chip, text);
+  if (!report.ok) return report;
+  const photos = disputeImageList(images);
+  if (!photos.ok) return photos;
+  let stored: string[];
+  try {
+    stored = [];
+    for (const url of photos.urls) stored.push(await storeUploadedImage(url, "uploads/disputes"));
+  } catch (error) {
+    if (error instanceof PhotoStoreError) return { ok: false as const, error: "photo_url" };
+    throw error;
+  }
+  try {
+    const otherId = await prisma.$transaction(async (tx) => {
+      const order = await tx.order.findUnique({ where: { id: orderId } });
+      if (!order || (order.buyerId !== userId && order.sellerId !== userId)) throw new Fail("forbidden");
+      const existing = await tx.dispute.findUnique({ where: { orderId } });
+      if (existing || order.status === "DISPUTED") throw new Fail("dispute");
+      await tx.dispute.create({
+        data: { orderId, openerId: userId, reason: report.reason, images: stored, status: "OPEN" },
+      });
+      await tx.order.update({ where: { id: orderId }, data: { status: "DISPUTED" } });
+      return order.buyerId === userId ? order.sellerId : order.buyerId;
+    });
+    await notify(otherId, "order", "有問題", report.reason.slice(0, 80), `/orders/${orderId}`);
+    return { ok: true as const };
+  } catch (error) {
+    const code = asFail(error);
+    if (code) return { ok: false as const, error: code };
+    if (error && typeof error === "object" && "code" in error && (error as { code: string }).code === "P2002") {
+      return { ok: false as const, error: "dispute" };
+    }
     throw error;
   }
 }
