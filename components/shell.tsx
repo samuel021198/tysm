@@ -147,6 +147,7 @@ export function Flash({ locale, ok, err, minCents = null }: { locale: Locale; ok
     paid: ["付款狀態已更新", "Payment updated"],
     done: ["交易已完成，可以評分。", "The handover is complete. You can rate."],
     dispute: ["爭議已提交", "Dispute submitted"],
+    desk: ["已交客服跟進", "Passed to support"],
     cart: ["已加入購物車", "Added to cart"],
     phone: ["電話已驗證", "Phone verified"],
     report: ["已收到", "Received"],

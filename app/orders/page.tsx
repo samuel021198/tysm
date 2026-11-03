@@ -2,9 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
-import { DEAL_RISK, dealPhase, phaseLabel } from "@/lib/deal-phase";
-import { formatHkd, formatHKT } from "@/lib/format";
 import { tx } from "@/lib/i18n";
+import { deskStatus, DESK_HINT } from "@/lib/order-desk";
 import { sweep } from "@/lib/orders";
 
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ role?: string }> }) {
@@ -15,29 +14,50 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   const selling = sp.role === "sell";
   const orders = await prisma.order.findMany({
     where: selling ? { sellerId: viewer.id } : { buyerId: viewer.id },
-    include: { items: true },
+    include: {
+      items: true,
+      buyer: { select: { nickname: true } },
+      seller: { select: { nickname: true } },
+      dispute: { select: { status: true } },
+    },
     orderBy: { createdAt: "desc" },
     take: 50,
   });
+  const locale = prefs.locale;
+  const tab = "grid h-11 place-items-center rounded-full";
   return (
-    <div>
-      <h1 className="page-title">{tx(prefs.locale, "交收", "Handovers")}</h1>
-      <div className="mb-4 grid grid-cols-2 gap-1 rounded-full bg-soft p-1 text-sm">
-        <Link href="/orders" className={`grid h-11 place-items-center rounded-full ${!selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我買的", "Purchases")}</Link>
-        <Link href="/orders?role=sell" className={`grid h-11 place-items-center rounded-full ${selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>{tx(prefs.locale, "我賣的", "Sales")}</Link>
+    <div className="mx-auto grid max-w-lg gap-3">
+      <h1 className="page-title">{tx(locale, "我的訂單", "My orders")}</h1>
+      <div className="grid grid-cols-2 gap-1 rounded-full bg-soft p-1 text-sm">
+        <Link href="/orders" aria-current={selling ? undefined : "page"} className={`${tab} ${selling ? "text-muted" : "bg-card font-semibold shadow-card"}`}>
+          {tx(locale, "買入", "Bought")}
+        </Link>
+        <Link href="/orders?role=sell" aria-current={selling ? "page" : undefined} className={`${tab} ${selling ? "bg-card font-semibold shadow-card" : "text-muted"}`}>
+          {tx(locale, "賣出", "Sold")}
+        </Link>
       </div>
-      {orders.length === 0 ? <p className="empty">{tx(prefs.locale, "未有交收。", "No handovers yet.")} {DEAL_RISK}</p> : null}
+      {orders.length === 0 ? <p className="empty">{tx(locale, "暫無訂單", "No orders yet.")}</p> : null}
       <ul className="grid gap-3">
-        {orders.map((order) => (
-          <li key={order.id}>
-            <Link href={`/orders/${order.id}`} className="surface block p-4">
-              <span className="font-medium">{phaseLabel(prefs.locale, dealPhase(order))}</span>
-              <span className="ml-2">{formatHkd(order.total, prefs.locale)}</span>
-              <span className="ml-2 text-sm text-muted">{formatHKT(order.createdAt, prefs.locale)}</span>
-              <p className="mt-1 text-sm">{order.items.map((item) => item.title).join("、")}</p>
-            </Link>
-          </li>
-        ))}
+        {orders.map((order) => {
+          const item = order.items[0];
+          const status = deskStatus(order);
+          const name = order.items.map((row) => row.title).join("、") || tx(locale, "訂單", "Order");
+          const counterpart = selling ? order.buyer.nickname : order.seller.nickname;
+          return (
+            <li key={order.id}>
+              <Link href={`/orders/${order.id}`} className="surface flex items-center gap-3 p-3">
+                <img src={item?.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-11 shrink-0 rounded-lg bg-soft object-cover" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium">{name}</span>
+                  <span className="mt-0.5 block truncate text-xs text-muted">{counterpart}</span>
+                </span>
+                <span title={DESK_HINT[status]} className="inline-flex shrink-0 rounded-full bg-soft px-2 py-0.5 text-[11px] font-semibold text-ink">
+                  {status}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

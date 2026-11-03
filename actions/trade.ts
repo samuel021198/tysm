@@ -32,6 +32,7 @@ import {
   cancelUnpaidOrder,
   chooseOrderShip,
   openDispute,
+  reportOrderIssue,
 } from "@/lib/orders";
 import { prisma } from "@/lib/db";
 import { publishFlash } from "@/lib/promo";
@@ -413,6 +414,15 @@ export async function cancelDealAction(formData: FormData) {
   const user = await viewer(dealNext(formData, id));
   const result = await cancelDeal(user.id, id);
   settleDeal(formData, id, result, "saved");
+}
+
+export async function reportIssueAction(formData: FormData) {
+  const id = String(formData.get("orderId") || "");
+  const user = await viewer(`/orders/${id}`);
+  const images = formData.getAll("image").map((value) => String(value));
+  const result = await reportOrderIssue(user.id, id, String(formData.get("chip") || ""), String(formData.get("reason") || ""), images);
+  if (result.ok) revalidatePath("/admin");
+  redirect(`/orders/${id}?${result.ok ? "ok=desk" : `err=${result.error}`}`);
 }
 
 export async function disputeAction(formData: FormData) {
