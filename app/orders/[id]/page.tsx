@@ -64,7 +64,7 @@ export default async function OrderPage({
           <img src={item?.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-11 shrink-0 rounded-lg bg-soft object-cover" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium">{name}</p>
-            <Link href={`/shop/${counterpart.id}`} className="mt-0.5 block truncate text-xs text-muted">
+            <Link href={`/u/${counterpart.id}`} className="mt-0.5 block truncate text-xs text-muted">
               {counterpart.nickname}
             </Link>
           </div>
