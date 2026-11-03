@@ -25,7 +25,7 @@ export function OrderIssueSheet({ locale, orderId, blocked }: { locale: Locale; 
 
   if (blocked) {
     return (
-      <button type="button" className="btn btn-primary w-full opacity-40" disabled>
+      <button type="button" className="inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center rounded-full bg-soft px-4 text-sm font-semibold text-muted" disabled>
         {pending}
       </button>
     );

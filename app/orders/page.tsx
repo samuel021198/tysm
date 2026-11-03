@@ -16,8 +16,8 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
     where: selling ? { sellerId: viewer.id } : { buyerId: viewer.id },
     include: {
       items: true,
-      buyer: { select: { nickname: true } },
-      seller: { select: { nickname: true } },
+      buyer: { select: { id: true, nickname: true } },
+      seller: { select: { id: true, nickname: true } },
       dispute: { select: { status: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -42,19 +42,20 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           const item = order.items[0];
           const status = deskStatus(order);
           const name = order.items.map((row) => row.title).join("、") || tx(locale, "訂單", "Order");
-          const counterpart = selling ? order.buyer.nickname : order.seller.nickname;
+          const counterpart = selling ? order.buyer : order.seller;
           return (
-            <li key={order.id}>
-              <Link href={`/orders/${order.id}`} className="surface flex items-center gap-3 p-3">
-                <img src={item?.imageUrl || "/demo/back.svg"} alt="" className="h-14 w-11 shrink-0 rounded-lg bg-soft object-cover" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium">{name}</span>
-                  <span className="mt-0.5 block truncate text-xs text-muted">{counterpart}</span>
-                </span>
-                <span title={DESK_HINT[status]} className="inline-flex shrink-0 rounded-full bg-soft px-2 py-0.5 text-[11px] font-semibold text-ink">
-                  {status}
-                </span>
-              </Link>
+            <li key={order.id} className="surface relative flex items-center gap-3 p-3">
+              <Link href={`/orders/${order.id}`} className="absolute inset-0" aria-label={name} />
+              <img src={item?.imageUrl || "/demo/back.svg"} alt="" className="pointer-events-none relative h-14 w-11 shrink-0 rounded-lg bg-soft object-cover" />
+              <span className="pointer-events-none relative min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium">{name}</span>
+                <Link href={`/u/${counterpart.id}`} className="pointer-events-auto relative z-10 mt-0.5 block truncate text-xs text-muted">
+                  {counterpart.nickname}
+                </Link>
+              </span>
+              <span title={DESK_HINT[status]} className="pointer-events-none relative inline-flex shrink-0 rounded-full bg-soft px-2 py-0.5 text-[11px] font-semibold text-ink">
+                {status}
+              </span>
             </li>
           );
         })}

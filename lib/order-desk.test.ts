@@ -29,11 +29,11 @@ assert(deskStatus({ status: "COMPLETED", dispute: { status: "BUYER_WINS" } }) ==
 assert(DESK_HINT.進行中 === "雙方已落單／交收未完" && DESK_HINT.爭議中 === "有一方撳咗「有問題」", "status hints stay the trader lines");
 
 assert(deskTimeline("進行中").map((step) => `${step.label}:${step.state}`).join() === "下單:done,進行中:current,完結:wait", "an open order stops before 完結");
-assert(deskTimeline("爭議中").map((step) => step.state).join() === "done,current,wait", "a dispute stays on 進行中");
+assert(deskTimeline("爭議中").map((step) => `${step.label}:${step.state}`).join() === "下單:done,爭議中:current,完結:wait", "a dispute names the middle step 爭議中");
 assert(deskTimeline("已完成").every((step) => step.state === "done") && deskTimeline("已取消").every((step) => step.state === "done"), "finished orders close the timeline");
 
 assert(DISPUTE_CHIPS.join("｜") === "未收到貨｜品相不符｜交收有異｜其他（請說明）", "reason chips are the locked four");
-assert(DISPUTE_HELPER === "交收有異／未收到／品相不符，可附圖", "sheet helper stays");
+assert(DISPUTE_HELPER === "交收有異／未收到／品相不符，可附圖，最多 3 圖", "sheet helper names the 3-photo cap");
 const noted = disputeReport("未收到貨", "  順豐顯示已簽收 ");
 assert(noted.ok && noted.reason === "未收到貨：順豐顯示已簽收", "a preset still needs the short note");
 assert(!disputeReport("未收到貨", "  ").ok, "blank text is rejected");
@@ -57,8 +57,14 @@ const orders = readFileSync(new URL("./orders.ts", import.meta.url), "utf8");
 
 assert(list.includes("我的訂單") && list.includes("買入") && list.includes("賣出") && list.includes("暫無訂單") && list.includes("deskStatus"), "list title, tabs, and empty line");
 assert(!list.includes("我買的") && !list.includes("我賣的"), "old purchase tabs are gone");
+assert(list.includes("href={`/u/${counterpart.id}`}") && !list.includes("/shop/"), "the list nickname opens the person profile");
 assert(detail.includes("deskTimeline") && detail.includes("OrderIssueSheet") && detail.includes('blocked={status === "爭議中"}'), "detail has the timeline and the problem button");
+assert(detail.includes("href={`/u/${counterpart.id}`}") && !detail.includes("/shop/"), "the detail nickname opens the person profile");
 assert(sheet.includes("DISPUTE_CHIPS") && sheet.includes("DISPUTE_HELPER") && sheet.includes("disputeReport") && sheet.includes('name="reason"') && sheet.includes("required") && sheet.includes("DISPUTE_IMAGE_MAX"), "the sheet requires a chip, a note, and caps photos");
+assert(
+  sheet.includes('className="inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center rounded-full bg-soft px-4 text-sm font-semibold text-muted"') && !sheet.includes("opacity-40"),
+  "爭議處理中 is muted gray, not pale teal",
+);
 assert(me.includes('href="/orders"') && me.includes('tx(locale, "訂單", "Orders")'), "/me has an 訂單 row");
 assert(!bar.includes("訂單"), "bottom nav does not gain an orders tab");
 assert(flash.includes("已交客服跟進"), "submit toast copy");
