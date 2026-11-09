@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { BUYOUT_PHOTO_MAX, parseBuyoutForm } from "./buyout";
+import { BUYOUT_PHOTO_MAX, buyoutPhotoForPage, parseBuyoutForm } from "./buyout";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
@@ -40,6 +40,8 @@ const line = parseBuyoutForm(draft({ handover: "  旺角\n面交  " }));
 assert(line.ok && line.value.handover === "旺角 面交", "交收 is one sentence");
 assert(!parseBuyoutForm(draft({ handover: "x".repeat(81) })).ok, "交收 stays within one short line");
 assert(BUYOUT_PHOTO_MAX === 3, "the photo cap is 3");
+assert(buyoutPhotoForPage("https://cdn.example/a.jpg") === "https://cdn.example/a.jpg" && buyoutPhotoForPage("/demo/back.svg") === "/demo/back.svg", "hosted covers stay on the page");
+assert(buyoutPhotoForPage(photo) === "" && buyoutPhotoForPage("") === "" && buyoutPhotoForPage(null) === "", "data URLs stay off the page");
 
 const sheet = readFileSync(new URL("../components/buyout-sheet.tsx", import.meta.url), "utf8");
 const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
@@ -49,6 +51,8 @@ const add = readFileSync(new URL("../app/add/page.tsx", import.meta.url), "utf8"
 const me = readFileSync(new URL("../app/me/page.tsx", import.meta.url), "utf8");
 const pub = readFileSync(new URL("../app/u/[id]/page.tsx", import.meta.url), "utf8");
 const detail = readFileSync(new URL("../app/buyout/[id]/page.tsx", import.meta.url), "utf8");
+const store = readFileSync(new URL("../lib/buyout-store.ts", import.meta.url), "utf8");
+const profile = readFileSync(new URL("../lib/profile.ts", import.meta.url), "utf8");
 const banned = ["收購", "收卡", "預算", "貼子"];
 for (const word of banned) {
   assert(!sheet.includes(word) && !board.includes(word) && !action.includes(word) && !detail.includes(word), `${word} is not buyout copy`);
@@ -61,8 +65,10 @@ assert(sheet.includes('tx(locale, "發佈買取", "Post a buyout")') && !sheet.i
 const buyoutList = board.slice(board.indexOf("function BuyoutList"), board.indexOf("function ShelfGrid"));
 assert(board.includes('id: "buyout"') && board.indexOf('id: "shelf"') < board.indexOf('id: "buyout"') && buyoutList.includes("暫無買取。") && buyoutList.includes("發佈買取") && buyoutList.includes("formatHkd") && buyoutList.includes("relativeTime") && buyoutList.includes("row.note") && buyoutList.includes("可議價") && buyoutList.includes("object-cover") && !buyoutList.includes("grid-cols-2"), "買取 is a card list: cover, name, note, HK$ price, negotiable mark, time");
 assert(buyoutList.includes("isSelf ? (") && board.includes("暫無商品。") && board.includes("上架第一件") && board.includes("grid-cols-2"), "商品 stays a 2-column grid; the publish control is the self branch");
-assert(action.includes('redirect("/me?tab=buyout&ok=buyout")') && action.includes("negotiable: draft.negotiable") && action.includes("handover: draft.handover") && !action.includes("saveListing") && !action.includes('"/add"'), "publish writes a buyout and flashes on /me");
+assert(action.includes("storeUploadedImages") && action.includes("BUYOUT_PHOTO_FOLDER") && action.includes('return { error: "photo_url" }') && action.includes("negotiable: draft.negotiable") && action.includes("handover: draft.handover") && action.includes("return { ok: true }") && !action.includes('redirect("/me?tab=buyout&ok=buyout")') && !action.includes("saveListing") && !action.includes('"/add"'), "publish stores photos, writes a buyout, and returns instead of redirecting inside the POST");
+assert(sheet.includes('window.location.assign("/me?tab=buyout&ok=buyout")') && sheet.includes("state?.ok") && sheet.includes("onClose()"), "success closes the sheet and loads the toast");
 assert(flash.includes('buyout: ["已發佈買取", "Buyout posted"]'), "the toast is 已發佈買取");
+assert(store.includes("uploads/buyouts") && store.includes("buyoutPhotoForPage") && store.includes("updateMany") && profile.includes("hostedBuyoutPhoto") && detail.includes("hostedBuyoutPhoto"), "list and detail host data URLs before rendering");
 assert(me.includes("buyouts={board.buyouts}") && pub.includes("buyouts={board.buyouts}"), "/me and /u share the buyout list");
 assert(!add.includes("買取") && !add.includes("publishBuyout"), "/add stays 上架");
 assert(detail.includes("formatHkd") && detail.includes("row.handover") && detail.includes("可議價") && !detail.includes("makeDealOfferAction"), "the detail page shows the flag and does not invent an offer flow");

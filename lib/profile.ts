@@ -1,3 +1,4 @@
+import { hostedBuyoutPhoto } from "./buyout-store";
 import { prisma } from "./db";
 import { ratingFromAggregate } from "./ratings";
 import { publicCardSelect } from "./feed";
@@ -216,7 +217,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
         priceCents: true,
         negotiable: true,
         createdAt: true,
-        photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+        photos: { orderBy: { position: "asc" }, take: 1, select: { id: true, url: true } },
       },
     }),
   ]);
@@ -281,15 +282,17 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     followers,
     rating: ratingFromAggregate(ratingRow._avg.stars, ratingRow._count),
     favIds: favs.map((row) => row.listingId),
-    buyouts: buyoutRows.map((row) => ({
-      id: row.id,
-      cardName: row.cardName,
-      note: row.note,
-      priceCents: row.priceCents,
-      negotiable: row.negotiable,
-      createdAt: row.createdAt.toISOString(),
-      photo: row.photos[0]?.url ?? "",
-    })),
+    buyouts: await Promise.all(
+      buyoutRows.map(async (row) => ({
+        id: row.id,
+        cardName: row.cardName,
+        note: row.note,
+        priceCents: row.priceCents,
+        negotiable: row.negotiable,
+        createdAt: row.createdAt.toISOString(),
+        photo: await hostedBuyoutPhoto(row.photos[0]),
+      })),
+    ),
   };
 }
 

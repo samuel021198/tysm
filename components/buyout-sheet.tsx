@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { createPortal, useFormStatus } from "react-dom";
 import { publishBuyout } from "@/actions/buyout";
 import { BUYOUT_HANDOVER_MAX, BUYOUT_NOTE_MAX, BUYOUT_PHOTO_MAX } from "@/lib/buyout";
@@ -20,6 +20,7 @@ function SubmitLabel({ locale }: { locale: Locale }) {
 
 export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () => void }) {
   const [state, action] = useActionState(publishBuyout, null);
+  const went = useRef(false);
   const [photos, setPhotos] = useState<{ url: string }[]>([]);
   const [cardName, setCardName] = useState("");
   const [catalogId, setCatalogId] = useState("");
@@ -41,6 +42,12 @@ export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () =
   });
 
   useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    if (!state?.ok || went.current) return;
+    went.current = true;
+    onClose();
+    window.location.assign("/me?tab=buyout&ok=buyout");
+  }, [state, onClose]);
   if (!mounted) return null;
 
   const sheet = (
