@@ -7,7 +7,7 @@ import { tx, type Locale } from "@/lib/i18n";
 import { displayPhoto } from "@/lib/demo-covers";
 import { cardDisplayName } from "@/lib/posts";
 import { shopDisplayCents } from "@/lib/shop-inventory";
-import { cardHubListingWhere, cardHubPostWhere, findHref, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
+import { cardHubListingWhere, cardHubPostWhere, discoverListedPostWhere, marketShow, searchScore, userQueryWhere, type MarketShow } from "@/lib/search";
 import { feedHideIds, hiddenUserIds } from "@/lib/social";
 import { sweep } from "@/lib/orders";
 import { FindExplore } from "@/components/find-explore";
@@ -48,7 +48,8 @@ export default async function FindPage({
   if (q && !drafting) await sweep();
   if (q) {
     const wantListings = show !== "post";
-    const wantPosts = show !== "listing";
+    const wantPosts = true;
+    const listedOnly = show === "listing";
     const listingWhere = { AND: [activeWhere(hidden), cardHubListingWhere(q, card), ...(hides.listingIds.length ? [{ id: { notIn: hides.listingIds } }] : [])] };
     const postText = cardHubPostWhere(q, card);
     const [userRows, postRows, listingRows, favRows, saveRows] = await Promise.all([
@@ -65,6 +66,7 @@ export default async function FindPage({
             where: {
               AND: [
                 postText,
+                ...(listedOnly ? [discoverListedPostWhere()] : []),
                 ...(hidden.length ? [{ authorId: { notIn: hidden } }] : []),
                 ...(hides.postIds.length ? [{ id: { notIn: hides.postIds } }] : []),
                 {
@@ -183,6 +185,7 @@ export default async function FindPage({
       : prisma.post.findMany({
           where: {
             AND: [
+              ...(show === "listing" ? [discoverListedPostWhere()] : []),
               ...(hidden.length ? [{ authorId: { notIn: hidden } }] : []),
               ...(hides.postIds.length ? [{ id: { notIn: hides.postIds } }] : []),
               {
@@ -268,7 +271,6 @@ export default async function FindPage({
       <FindExplore locale={locale} initial={q} show={show} accountRecent={accountRecent} categories={categories} tiles={tiles}>
         {q ? (
           <>
-            <HubChips locale={locale} show={show} q={q} card={card} />
             {empty ? <p className="text-sm text-muted">{emptyCopy(locale, show)}</p> : null}
             {users.length ? (
               <section>
@@ -361,26 +363,3 @@ function emptyCopy(locale: Locale, show: MarketShow) {
   return tx(locale, "未有相關上架或貼文。", "No listings or posts.");
 }
 
-function HubChips({ locale, show, q, card }: { locale: Locale; show: MarketShow; q: string; card: string }) {
-  const items = [
-    ["all", "全部", "All"],
-    ["listing", "上架", "Listings"],
-  ] as const;
-  return (
-    <nav className="chips" aria-label={tx(locale, "結果類型", "Result type")}>
-      {items.map(([id, zh, en]) => {
-        const on = show === id;
-        return (
-          <Link
-            key={id}
-            href={findHref(q, { card: card || undefined, show: id })}
-            aria-current={on ? "page" : undefined}
-            className={`inline-flex h-11 items-center rounded-full px-3 text-sm leading-none ${on ? "bg-soft font-semibold text-ink" : "font-medium text-muted"}`}
-          >
-            {tx(locale, zh, en)}
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}

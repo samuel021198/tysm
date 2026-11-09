@@ -13,6 +13,7 @@ import {
   marketShow,
   postQueryWhere,
   rememberMemory,
+  discoverListedPostWhere,
   findHref,
   searchHref,
   searchNeedles,
@@ -144,10 +145,16 @@ assert(marketShow(undefined) === "all" && marketShow("post") === "post" && marke
 assert(marketSearchHref({ q: "皮卡丘", cat: "pokemon", sort: "relevance" }, "post") === `/search?q=${encodeURIComponent("皮卡丘")}&cat=pokemon&show=post`, "the post chip keeps the market filters");
 assert(marketSearchHref({ q: "皮卡丘", sort: "new" }) === `/search?q=${encodeURIComponent("皮卡丘")}&sort=new`, "all is the default chip and stays off the URL");
 assert(marketSearchHref({}) === "/search", "an empty market search has no query string");
+assert(findHref("", { show: "listing" }) === "/find?show=listing" && findHref("皮卡丘", { show: "listing" }) === `/find?q=${encodeURIComponent("皮卡丘")}&show=listing`, "the 上架 chip stays on Discover with or without a query");
+assert(findHref("皮卡丘", { show: "all" }) === `/find?q=${encodeURIComponent("皮卡丘")}`, "全部 stays off the Discover URL");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
 const explore = readFileSync(new URL("../components/find-explore.tsx", import.meta.url), "utf8");
-assert(find.includes("用戶") && find.includes("上架") && find.includes("全部") && find.includes("收藏"), "search hub keeps people, listings, and saved cards");
-assert(!find.includes('["post", "貼文"') && !explore.includes('["post", "貼文"'), "discover chips are 全部 and 上架");
+assert(find.includes("用戶") && find.includes("上架") && find.includes("收藏"), "search hub keeps people, listings, and saved cards");
+assert(explore.includes("<DiscoverChips") && explore.indexOf("<DiscoverChips") < explore.indexOf('mode === "grid"'), "discover chips sit above the feed");
+assert(explore.includes('["all", "全部", "All"]') && explore.includes('["listing", "上架", "Listings"]') && !explore.includes('["post", "貼文"') && !find.includes('["post", "貼文"'), "discover chips are 全部 and 上架");
+assert(JSON.stringify(discoverListedPostWhere()).includes("listingId") && find.includes("discoverListedPostWhere()"), "上架 keeps posts that have a listing");
+const home = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+assert(!home.includes("DiscoverChips") && !home.includes('["listing", "上架"'), "Front does not grow these chips");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
 assert(find.includes("searchHistory.create") && explore.includes("SearchBox"), "find records a query and keeps the search box");
 assert(find.includes("!drafting") && find.includes("searchHistory.create"), "partial typing does not write search history");

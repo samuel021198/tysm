@@ -323,12 +323,12 @@ export function SearchBox({
             onSettle?.();
             if (pinned) {
               event.preventDefault();
-              router.push(findHref(query));
+              router.push(findHref(query, { show }));
             }
             if (suggestPanelDismiss("submit", { mobileSheet: mobileSheet() && !pinned, insidePanel: false, focusInside: false })) setOpen(false);
           }}
         >
-          {to === "search" && (show === "listing" || show === "post") ? <input type="hidden" name="show" value={show} /> : null}
+          {(to === "search" || to === "find") && (show === "listing" || show === "post") ? <input type="hidden" name="show" value={show} /> : null}
           <div className="flex items-center gap-2">
             <div className="relative min-w-0 flex-1">
               <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />

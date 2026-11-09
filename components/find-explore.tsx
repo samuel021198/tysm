@@ -57,7 +57,8 @@ export function FindExplore({
     if (next === initial.trim()) return;
     timer.current = window.setTimeout(() => {
       timer.current = null;
-      router.replace(next ? `${findHref(next)}&draft=1` : "/find", { scroll: false });
+      const href = findHref(next, { show });
+      router.replace(next ? `${href}${href.includes("?") ? "&" : "?"}draft=1` : findHref("", { show }), { scroll: false });
     }, 280);
     return () => {
       if (timer.current != null) {
@@ -65,7 +66,7 @@ export function FindExplore({
         timer.current = null;
       }
     };
-  }, [draft, initial, router]);
+  }, [draft, initial, router, show]);
 
   useEffect(() => {
     if (mode !== "history") return;
@@ -115,7 +116,7 @@ export function FindExplore({
           }
         }}
       />
-      {mode === "results" && !settled ? <ResultChips locale={locale} show="all" q={typed} card="" /> : null}
+      <DiscoverChips locale={locale} show={show} q={initial} />
       {mode === "results" && settled ? children : null}
       {mode === "history" ? (
         <div data-find-history>
@@ -141,19 +142,20 @@ export function FindExplore({
   );
 }
 
-function ResultChips({ locale, show, q, card }: { locale: Locale; show: MarketShow; q: string; card: string }) {
+function DiscoverChips({ locale, show, q }: { locale: Locale; show: MarketShow; q: string }) {
   const items = [
     ["all", "全部", "All"],
     ["listing", "上架", "Listings"],
   ] as const;
+  const active = show === "listing" ? "listing" : "all";
   return (
-    <nav className="chips" aria-label={tx(locale, "結果類型", "Result type")}>
+    <nav className="chips" aria-label={tx(locale, "篩選", "Filter")}>
       {items.map(([id, zh, en]) => {
-        const on = show === id;
+        const on = active === id;
         return (
           <Link
             key={id}
-            href={findHref(q, { card: card || undefined, show: id })}
+            href={findHref(q, { show: id })}
             aria-current={on ? "page" : undefined}
             className={`inline-flex h-11 items-center rounded-full px-3 text-sm leading-none ${on ? "bg-soft font-semibold text-ink" : "font-medium text-muted"}`}
           >
