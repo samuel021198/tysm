@@ -148,6 +148,11 @@ export function cardHubPostWhere(query: string, cardId = ""): Prisma.PostWhereIn
   return { id: { in: [] } };
 }
 
+/** Discover「上架」: a post that already has a listing. Unlisted posts stay on「全部」. */
+export function discoverListedPostWhere(): Prisma.PostWhereInput {
+  return { collectionItem: { is: { listingId: { not: null } } } };
+}
+
 export type MarketShow = "all" | "listing" | "post";
 
 export function marketShow(value: string | undefined | null): MarketShow {
