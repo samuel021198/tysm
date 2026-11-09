@@ -8,7 +8,8 @@ import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
 import { displayPhoto } from "@/lib/demo-covers";
 import { profileBoardTabs, profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
-import { buyoutPriceBadge } from "@/lib/buyout";
+import { formatHkd } from "@/lib/format";
+import { relativeTime } from "@/lib/time";
 import { BuyoutSheet } from "./buyout-sheet";
 import { Countdown } from "./countdown";
 import { Icon } from "./icons";
@@ -17,7 +18,15 @@ import { ShopInventory, type ShopInventoryRow } from "./shop-inventory";
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
 type Draft = { id: string; title: string; status: string };
-type BuyoutCard = { id: string; cardName: string; priceCents: number; negotiable: boolean; photo: string };
+type BuyoutCard = {
+  id: string;
+  cardName: string;
+  note: string;
+  priceCents: number;
+  negotiable: boolean;
+  photo: string;
+  createdAt: string;
+};
 type Sale = {
   id: string;
   title: string;
@@ -230,7 +239,7 @@ export function ProfileBoard({
 
   function panel(id: string) {
     if (id === "shelf") return <ShelfGrid locale={locale} listings={listings} isSelf={isSelf} />;
-    if (id === "buyout") return <BuyoutGrid locale={locale} rows={buyouts} isSelf={isSelf} />;
+    if (id === "buyout") return <BuyoutList locale={locale} rows={buyouts} isSelf={isSelf} />;
     if (id === "saved") {
       return isSelf && (savedListings.length || savedPosts.length) ? (
         <>
@@ -371,7 +380,7 @@ export function ProfileBoard({
   );
 }
 
-function BuyoutGrid({ locale, rows, isSelf }: { locale: Locale; rows: BuyoutCard[]; isSelf: boolean }) {
+function BuyoutList({ locale, rows, isSelf }: { locale: Locale; rows: BuyoutCard[]; isSelf: boolean }) {
   const [open, setOpen] = useState(false);
   const sheet = open ? <BuyoutSheet locale={locale} onClose={() => setOpen(false)} /> : null;
   const post = isSelf ? (
@@ -393,20 +402,32 @@ function BuyoutGrid({ locale, rows, isSelf }: { locale: Locale; rows: BuyoutCard
   return (
     <>
       {post ? <div className="px-3 pt-3 sm:px-0">{post}</div> : null}
-      <ul className="grid grid-cols-2 gap-px">
-        {rows.map((row) => (
-          <li key={row.id} className="relative min-w-0">
-            <Link href={`/buyout/${row.id}`} aria-label={[row.cardName, buyoutPriceBadge(row.priceCents), row.negotiable ? tx(locale, "可議價", "Negotiable") : ""].filter(Boolean).join(" ")} className="relative block">
-              <img src={displayPhoto(row.photo)} alt="" loading="lazy" decoding="async" className="block aspect-square w-full bg-soft object-cover" />
-              {row.negotiable ? (
-                <span className="absolute left-1 top-1 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
-                  {tx(locale, "可議價", "Negotiable")}
+      <ul className="grid gap-2 px-3 pt-3 sm:px-0">
+        {rows.map((row) => {
+          const price = formatHkd(row.priceCents, locale);
+          const when = relativeTime(row.createdAt, new Date(), locale);
+          const mark = row.negotiable ? tx(locale, "可議價", "Negotiable") : "";
+          return (
+            <li key={row.id}>
+              <Link
+                href={`/buyout/${row.id}`}
+                aria-label={[row.cardName, row.note, price, mark, when].filter(Boolean).join(" ")}
+                className="surface flex gap-3 p-3"
+              >
+                <img src={displayPhoto(row.photo)} alt="" loading="lazy" decoding="async" className="h-20 w-20 shrink-0 rounded-xl bg-soft object-cover" />
+                <span className="grid min-w-0 flex-1 content-start gap-1">
+                  <span className="truncate text-sm font-semibold">{row.cardName}</span>
+                  <span className="line-clamp-2 text-sm text-muted">{row.note}</span>
+                  <span className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className="price">{price}</span>
+                    {mark ? <span className="rounded-md bg-soft px-1.5 py-0.5 text-[10px] font-semibold text-ink">{mark}</span> : null}
+                  </span>
+                  <span className="text-xs text-muted">{when}</span>
                 </span>
-              ) : null}
-              <span className="price absolute bottom-1 left-1 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] leading-none text-ink shadow-sm">{buyoutPriceBadge(row.priceCents)}</span>
-            </Link>
-          </li>
-        ))}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
       {sheet}
     </>

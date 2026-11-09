@@ -212,8 +212,10 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
       select: {
         id: true,
         cardName: true,
+        note: true,
         priceCents: true,
         negotiable: true,
+        createdAt: true,
         photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
       },
     }),
@@ -282,8 +284,10 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     buyouts: buyoutRows.map((row) => ({
       id: row.id,
       cardName: row.cardName,
+      note: row.note,
       priceCents: row.priceCents,
       negotiable: row.negotiable,
+      createdAt: row.createdAt.toISOString(),
       photo: row.photos[0]?.url ?? "",
     })),
   };

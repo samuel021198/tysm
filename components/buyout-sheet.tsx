@@ -3,8 +3,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { createPortal, useFormStatus } from "react-dom";
 import { publishBuyout } from "@/actions/buyout";
-import { BUYOUT_NOTE_MAX, BUYOUT_PHOTO_MAX } from "@/lib/buyout";
-import { DISTRICTS } from "@/lib/format";
+import { BUYOUT_HANDOVER_MAX, BUYOUT_NOTE_MAX, BUYOUT_PHOTO_MAX } from "@/lib/buyout";
 import { errText, tx, type Locale } from "@/lib/i18n";
 import { LISTING_CROP_ASPECT } from "@/lib/photo-crop";
 import { CatalogTitleField, type CatalogHit } from "./catalog-title-field";
@@ -25,7 +24,6 @@ export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () =
   const [cardName, setCardName] = useState("");
   const [catalogId, setCatalogId] = useState("");
   const [note, setNote] = useState("");
-  const [meetup, setMeetup] = useState(false);
   const [photoNote, setPhotoNote] = useState("");
   const [mounted, setMounted] = useState(false);
 
@@ -111,7 +109,7 @@ export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () =
           />
 
           <label className="grid gap-1 text-sm font-medium">
-            {tx(locale, "出價 HKD", "You'll pay (HKD)")}
+            {tx(locale, "價錢 HK$", "Price HK$")}
             <input className="field" name="price" inputMode="decimal" placeholder="280" required />
           </label>
 
@@ -125,32 +123,15 @@ export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () =
             <textarea className="field min-h-28" name="note" required maxLength={BUYOUT_NOTE_MAX} value={note} onChange={(event) => setNote(event.target.value)} />
           </label>
 
-          <fieldset className="grid gap-2 text-sm">
-            <legend className="font-medium">{tx(locale, "交收", "Handover")}</legend>
-            <label className="flex min-h-12 items-center gap-2 rounded-2xl bg-soft px-3 font-medium">
-              <input type="checkbox" name="shipSfCod" />
-              {tx(locale, "順豐到付", "SF cash on delivery")}
-            </label>
-            <div className="grid gap-2 rounded-2xl bg-soft p-3">
-              <label className="flex min-h-12 items-center gap-2 font-medium">
-                <input type="checkbox" name="shipMeetup" checked={meetup} onChange={(event) => setMeetup(event.target.checked)} />
-                {tx(locale, "面交", "Meet-up")}
-              </label>
-              {meetup ? (
-                <label className="grid gap-1">
-                  {tx(locale, "面交地區", "Meet-up district")}
-                  <select className="field" name="meetupDistrict" defaultValue="">
-                    <option value="">{tx(locale, "選擇地區", "Choose a district")}</option>
-                    {DISTRICTS.map(([zh, en]) => (
-                      <option key={zh} value={zh}>
-                        {locale === "en" ? en : zh}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              ) : null}
-            </div>
-          </fieldset>
+          <label className="grid gap-1 text-sm font-medium">
+            {tx(locale, "交收", "Handover")}
+            <input
+              className="field"
+              name="handover"
+              maxLength={BUYOUT_HANDOVER_MAX}
+              placeholder={tx(locale, "地區或面交，可留空", "District or meet-up, optional")}
+            />
+          </label>
 
           <SubmitLabel locale={locale} />
         </form>

@@ -23,9 +23,7 @@ export async function publishBuyout(_prev: { error?: string } | null, formData: 
       note: draft.note,
       priceCents: draft.priceCents,
       negotiable: draft.negotiable,
-      shipSfCod: draft.shipSfCod,
-      shipMeetup: draft.shipMeetup,
-      meetupDistrict: draft.meetupDistrict,
+      handover: draft.handover,
       photos: { create: draft.photos.map((photo, position) => ({ url: photo.url, position })) },
     },
   });

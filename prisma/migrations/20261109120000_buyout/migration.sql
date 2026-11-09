@@ -8,9 +8,7 @@ CREATE TABLE "Buyout" (
     "note" TEXT NOT NULL,
     "priceCents" INTEGER NOT NULL,
     "negotiable" BOOLEAN NOT NULL DEFAULT true,
-    "shipSfCod" BOOLEAN NOT NULL DEFAULT false,
-    "shipMeetup" BOOLEAN NOT NULL DEFAULT false,
-    "meetupDistrict" TEXT,
+    "handover" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Buyout_pkey" PRIMARY KEY ("id")

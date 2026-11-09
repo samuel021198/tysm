@@ -396,9 +396,8 @@ model Buyout {
   /// HK cents the member will pay. Not a budget cap.
   priceCents     Int
   negotiable     Boolean  @default(true)
-  shipSfCod      Boolean  @default(false)
-  shipMeetup     Boolean  @default(false)
-  meetupDistrict String?
+  /// Optional one line: district or meet-up. Empty when skipped.
+  handover       String?
   createdAt      DateTime @default(now())
 
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -1,9 +1,10 @@
-import { DISTRICTS, hkdToCents, isAllowedMediaUrl } from "./format";
-import type { Locale } from "./i18n";
+import { hkdToCents, isAllowedMediaUrl } from "./format";
 
-/** Square covers, same crop as 上架. Design cap is 3. */
+/** Square covers, same crop as 上架. */
 export const BUYOUT_PHOTO_MAX = 3;
 export const BUYOUT_NOTE_MAX = 500;
+/** One optional line: district or meet-up. */
+export const BUYOUT_HANDOVER_MAX = 80;
 
 export type BuyoutDraft = {
   cardName: string;
@@ -11,9 +12,7 @@ export type BuyoutDraft = {
   note: string;
   priceCents: number;
   negotiable: boolean;
-  shipSfCod: boolean;
-  shipMeetup: boolean;
-  meetupDistrict: string | null;
+  handover: string | null;
   photos: { url: string }[];
 };
 
@@ -38,12 +37,11 @@ export function parseBuyoutForm(formData: FormData): BuyoutParse {
   if (!photos || photos.length < 1 || photos.length > BUYOUT_PHOTO_MAX) return { ok: false, error: "buyout_photos" };
   if (photos.some((photo) => !isAllowedMediaUrl(photo.url))) return { ok: false, error: "photo_url" };
 
+  const handover = cleanHandover(String(formData.get("handover") || ""));
+  if (handover === false) return { ok: false, error: "buyout_handover" };
+
   const rawCatalog = String(formData.get("catalogCardId") || "").trim();
   const catalogCardId = /^[\w-]{1,40}$/.test(rawCatalog) ? rawCatalog : null;
-  const shipSfCod = formData.get("shipSfCod") === "on";
-  const shipMeetup = formData.get("shipMeetup") === "on";
-  const district = String(formData.get("meetupDistrict") || "").trim();
-  if (shipMeetup && !DISTRICTS.some(([zh]) => zh === district)) return { ok: false, error: "meetup" };
 
   return {
     ok: true,
@@ -53,33 +51,18 @@ export function parseBuyoutForm(formData: FormData): BuyoutParse {
       note,
       priceCents,
       negotiable: formData.get("negotiable") === "on",
-      shipSfCod,
-      shipMeetup,
-      meetupDistrict: shipMeetup ? district : null,
+      handover,
       photos,
     },
   };
 }
 
-/** Corner badge. Whole dollars stay whole; cents only when the member typed them. */
-export function buyoutPriceBadge(cents: number): string {
-  if (!Number.isSafeInteger(cents) || cents <= 0) return "";
-  const amount = cents % 100 === 0 ? String(cents / 100) : (cents / 100).toFixed(2);
-  return `HKD ${amount}`;
-}
-
-export function buyoutHandoverLine(
-  row: { shipSfCod: boolean; shipMeetup: boolean; meetupDistrict: string | null },
-  locale: Locale,
-): string | null {
-  const parts: string[] = [];
-  if (row.shipSfCod) parts.push(locale === "en" ? "SF cash on delivery" : "順豐到付");
-  if (row.shipMeetup) {
-    const place = row.meetupDistrict?.trim();
-    if (place) parts.push(locale === "en" ? `Meet-up · ${place}` : `面交 · ${place}`);
-    else parts.push(locale === "en" ? "Meet-up" : "面交");
-  }
-  return parts.length ? parts.join(" · ") : null;
+/** Empty stays null. Newlines collapse so the field stays one sentence. */
+function cleanHandover(raw: string): string | null | false {
+  const text = raw.replace(/\s+/g, " ").trim();
+  if (!text) return null;
+  if (text.length > BUYOUT_HANDOVER_MAX) return false;
+  return text;
 }
 
 function readPhotos(raw: string): { url: string }[] | null {
