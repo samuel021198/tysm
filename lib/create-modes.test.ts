@@ -116,9 +116,9 @@ assert(tab.includes('loggedIn ? "/me" : "/login"'), "profile tab stays on the pu
 assert(me.includes("<ProfileHeader") && me.includes("self") && me.includes("<ProfileBoard") && !me.includes("updateProfile") && !me.includes("PrefToggles"), "/me is header plus board");
 assert(me.includes("logout") && me.includes('tx(locale, "登出", "Log out")') && me.includes('tx(prefs.locale, "登入", "Log in")') && me.includes("md:hidden") && me.includes("pb-[calc(var(--tab-h)+1rem)]") && !me.includes("fixed inset-x-0 bottom-[var(--tab-h)]"), "mobile /me keeps 登出 in flow, with tab-bar padding under it");
 assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
-assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
-assert(board.includes("商品") && board.includes("收藏") && board.includes("商店") && board.includes("評價") && !board.includes("My Binder"), "profile tabs are listings, favorites, shop, reviews");
-assert(board.includes('id: "shelf"') && board.includes('id: "saved"') && !board.includes('id: "posts"'), "the first screen is the shelf; there is no posts tab");
+assert(board.includes("grid-cols-5") && board.includes("grid-cols-4") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
+assert(board.includes("商品") && board.includes("買取") && board.includes("收藏") && board.includes("商店") && board.includes("評價") && !board.includes("收購") && !board.includes("收卡") && !board.includes("My Binder"), "profile tabs are listings, buyouts, favorites, shop, reviews");
+assert(board.includes('id: "shelf"') && board.includes('id: "buyout"') && board.includes('id: "saved"') && !board.includes('id: "posts"'), "the first screen is the shelf; 買取 is next; there is no posts tab");
 assert(!board.includes("我的卡") && !board.includes('id: "box"') && !board.includes("CollectionMenu") && !board.includes("collectionItemId"), "the owned-card grid is off the profile");
 assert(
   board.includes('tx(locale, "暫無商品。", "No listings yet.")') &&

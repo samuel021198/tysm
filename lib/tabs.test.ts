@@ -37,11 +37,11 @@ assert(
   tabSwipeDirection({ ...page, dx: -SWIPE_X, startX: 390 - EDGE_GUARD + 1, owner: "card" }) === 1,
   "the right screen edge of a card moves to the next tab",
 );
-assert(profileTabStep("shelf", 1) === "saved" && profileTabStep("saved", 1) === "selling", "profile tabs move 商品, 收藏, 商店");
+assert(profileTabStep("shelf", 1) === "buyout" && profileTabStep("buyout", 1) === "saved" && profileTabStep("saved", 1) === "selling", "profile tabs move 商品, 買取, 收藏, 商店");
 assert(profileTabStep("selling", 1) === "reviews" && profileTabStep("reviews", 1) === null, "評價 is the last profile tab");
-assert(profileTabStep("shelf", -1) === null && profileTabStep("saved", -1) === "shelf", "the profile pager stops on 商品");
+assert(profileTabStep("shelf", -1) === null && profileTabStep("buyout", -1) === "shelf", "the profile pager stops on 商品");
 assert(profileTabStep("posts", 1) === "shelf" && profileTabStep("drafts", 1) === "shelf" && profileTabStep("drafts", -1) === null, "a retired posts tab or drafts swipe onto 商品");
-assert(profileTabStep("saved", 1, ["shelf", "saved", "reviews"]) === "reviews", "visitors skip the shop-management tab");
+assert(profileTabStep("saved", 1, ["shelf", "buyout", "saved", "reviews"]) === "reviews", "visitors keep 買取 and skip the shop-management tab");
 assert(profileTabHref("/me?tab=posts&ok=saved", "reviews") === "/me?tab=reviews", "switching tabs drops the flash query");
 assert(profileTabHref("/shop/user_tyu", "selling") === "/shop/user_tyu?tab=selling", "a shop board keeps its path");
 assert(profileSwipeDirection({ ...page, dx: -SWIPE_X, startX: 180 }) === 1, "a profile swipe left moves forward");

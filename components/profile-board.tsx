@@ -8,6 +8,8 @@ import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
 import { displayPhoto } from "@/lib/demo-covers";
 import { profileBoardTabs, profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
+import { buyoutPriceBadge } from "@/lib/buyout";
+import { BuyoutSheet } from "./buyout-sheet";
 import { Countdown } from "./countdown";
 import { Icon } from "./icons";
 import { PROFILE_TAB_EVENT } from "./profile-tab-link";
@@ -15,6 +17,7 @@ import { ShopInventory, type ShopInventoryRow } from "./shop-inventory";
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
 type Draft = { id: string; title: string; status: string };
+type BuyoutCard = { id: string; cardName: string; priceCents: number; negotiable: boolean; photo: string };
 type Sale = {
   id: string;
   title: string;
@@ -30,6 +33,7 @@ type Sale = {
 
 const TABS = [
   { id: "shelf", zh: "商品", en: "Listings", icon: "grid" },
+  { id: "buyout", zh: "買取", en: "Buying", icon: "tag" },
   { id: "saved", zh: "收藏", en: "Favorites", icon: "bookmark" },
   { id: "selling", zh: "商店", en: "Shop", icon: "bag" },
   { id: "reviews", zh: "評價", en: "Reviews", icon: "star" },
@@ -39,7 +43,7 @@ const tile = "block aspect-square w-full bg-soft object-contain";
 
 function shownTab(tab: string, isSelf: boolean) {
   if (tab === "selling" && !isSelf) return "shelf";
-  if (tab === "shelf" || tab === "saved" || tab === "selling" || tab === "reviews") return tab;
+  if (tab === "shelf" || tab === "buyout" || tab === "saved" || tab === "selling" || tab === "reviews") return tab;
   if (tab === "drafts" && isSelf) return "drafts";
   return "shelf";
 }
@@ -53,6 +57,7 @@ export function ProfileBoard({
   savedListings,
   savedPosts,
   listings,
+  buyouts,
   inventory,
   reviews,
   drafts,
@@ -68,6 +73,7 @@ export function ProfileBoard({
   savedListings: ProfileThumb[];
   savedPosts: ProfileThumb[];
   listings: Sale[];
+  buyouts: BuyoutCard[];
   inventory: ShopInventoryRow[];
   reviews: Review[];
   drafts: Draft[];
@@ -224,6 +230,7 @@ export function ProfileBoard({
 
   function panel(id: string) {
     if (id === "shelf") return <ShelfGrid locale={locale} listings={listings} isSelf={isSelf} />;
+    if (id === "buyout") return <BuyoutGrid locale={locale} rows={buyouts} isSelf={isSelf} />;
     if (id === "saved") {
       return isSelf && (savedListings.length || savedPosts.length) ? (
         <>
@@ -299,7 +306,7 @@ export function ProfileBoard({
         event.stopPropagation();
       }}
     >
-      <nav aria-label={tx(locale, "個人內容", "Profile")} className={`relative grid border-t border-line ${tabs.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+      <nav aria-label={tx(locale, "個人內容", "Profile")} className={`relative grid border-t border-line ${tabs.length >= 5 ? "grid-cols-5" : tabs.length === 4 ? "grid-cols-4" : tabs.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
         {tabs.map((item, i) => {
           const on = i === active;
           const label = tx(locale, item.zh, item.en);
@@ -326,7 +333,7 @@ export function ProfileBoard({
           );
         })}
         {progress != null ? (
-          <span className={`pointer-events-none absolute bottom-0 left-0 h-0.5 bg-ink ${tabs.length === 4 ? "w-1/4" : "w-1/3"}`} style={{ transform: `translateX(${progress * 100}%)`, transition: motion }} />
+          <span className={`pointer-events-none absolute bottom-0 left-0 h-0.5 bg-ink ${tabs.length >= 5 ? "w-1/5" : tabs.length === 4 ? "w-1/4" : tabs.length === 3 ? "w-1/3" : "w-1/2"}`} style={{ transform: `translateX(${progress * 100}%)`, transition: motion }} />
         ) : null}
       </nav>
       {tab === "drafts" ? (
@@ -361,6 +368,48 @@ export function ProfileBoard({
         </div>
       )}
     </div>
+  );
+}
+
+function BuyoutGrid({ locale, rows, isSelf }: { locale: Locale; rows: BuyoutCard[]; isSelf: boolean }) {
+  const [open, setOpen] = useState(false);
+  const sheet = open ? <BuyoutSheet locale={locale} onClose={() => setOpen(false)} /> : null;
+  const post = isSelf ? (
+    <button type="button" className="font-semibold text-ink underline underline-offset-2" onClick={() => setOpen(true)}>
+      {tx(locale, "發佈買取", "Post a buyout")}
+    </button>
+  ) : null;
+  if (!rows.length) {
+    return (
+      <>
+        <p className="empty mx-3 sm:mx-0">
+          <span className="block">{tx(locale, "暫無買取。", "No buyouts yet.")}</span>
+          {post}
+        </p>
+        {sheet}
+      </>
+    );
+  }
+  return (
+    <>
+      {post ? <div className="px-3 pt-3 sm:px-0">{post}</div> : null}
+      <ul className="grid grid-cols-2 gap-px">
+        {rows.map((row) => (
+          <li key={row.id} className="relative min-w-0">
+            <Link href={`/buyout/${row.id}`} aria-label={[row.cardName, buyoutPriceBadge(row.priceCents), row.negotiable ? tx(locale, "可議價", "Negotiable") : ""].filter(Boolean).join(" ")} className="relative block">
+              <img src={displayPhoto(row.photo)} alt="" loading="lazy" decoding="async" className="block aspect-square w-full bg-soft object-cover" />
+              {row.negotiable ? (
+                <span className="absolute left-1 top-1 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
+                  {tx(locale, "可議價", "Negotiable")}
+                </span>
+              ) : null}
+              <span className="price absolute bottom-1 left-1 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] leading-none text-ink shadow-sm">{buyoutPriceBadge(row.priceCents)}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      {sheet}
+    </>
   );
 }
 

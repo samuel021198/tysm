@@ -58,8 +58,8 @@ export function tabSwipeDirection(input: {
   return input.dx < 0 ? 1 : -1;
 }
 
-/** Profile board, left to right. The first screen is on-sale listings. Drafts stay off this strip. */
-export const PROFILE_TABS = ["shelf", "saved", "selling", "reviews"] as const;
+/** Profile board, left to right. The first screen is on-sale listings, then 買取. Drafts stay off this strip. */
+export const PROFILE_TABS = ["shelf", "buyout", "saved", "selling", "reviews"] as const;
 export type ProfileTabId = (typeof PROFILE_TABS)[number];
 
 /** Visitors do not get the shop-management tab. Posts are not a tab. */

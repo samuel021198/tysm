@@ -138,6 +138,7 @@ export function Flash({ locale, ok, err, minCents = null }: { locale: Locale; ok
     handover: ["已確認交收。", "Handover confirmed."],
     published: ["已刊登，現已公開", "Published. It is live now"],
     listed: [CREATE_TOAST_ZH, CREATE_TOAST_EN],
+    buyout: ["已發佈買取", "Buyout posted"],
     story: ["限時動態已發佈，24 小時後消失", "Story posted. It disappears in 24 hours"],
     collected: ["已加入 My Binder", "Added to My Binder"],
     posted: ["已發到動態", "Posted"],
