@@ -58,21 +58,26 @@ export function tabSwipeDirection(input: {
   return input.dx < 0 ? 1 : -1;
 }
 
-/** Profile board, left to right. Drafts stay off this strip. */
-export const PROFILE_TABS = ["posts", "saved", "selling", "reviews"] as const;
+/** Profile board, left to right. The first screen is on-sale listings. Drafts stay off this strip. */
+export const PROFILE_TABS = ["shelf", "saved", "selling", "reviews"] as const;
 export type ProfileTabId = (typeof PROFILE_TABS)[number];
 
-export function profileTabIndex(tab: string): number {
-  return PROFILE_TABS.indexOf(tab as ProfileTabId);
+/** Visitors do not get the shop-management tab. Posts are not a tab. */
+export function profileBoardTabs(isSelf: boolean): readonly ProfileTabId[] {
+  return isSelf ? PROFILE_TABS : PROFILE_TABS.filter((id) => id !== "selling");
 }
 
-/** 1 = next (swipe left). Drafts are outside the strip; swipe left lands on My Binder. */
-export function profileTabStep(tab: string, dir: -1 | 1): ProfileTabId | null {
-  const index = profileTabIndex(tab);
-  if (index < 0) return dir === 1 ? PROFILE_TABS[0] : null;
+export function profileTabIndex(tab: string, tabs: readonly string[] = PROFILE_TABS): number {
+  return tabs.indexOf(tab);
+}
+
+/** 1 = next (swipe left). An unknown tab, including the retired posts tab, steps onto the first screen. */
+export function profileTabStep(tab: string, dir: -1 | 1, tabs: readonly string[] = PROFILE_TABS): string | null {
+  const index = profileTabIndex(tab, tabs);
+  if (index < 0) return dir === 1 ? (tabs[0] ?? null) : null;
   const next = index + dir;
-  if (next < 0 || next >= PROFILE_TABS.length) return null;
-  return PROFILE_TABS[next];
+  if (next < 0 || next >= tabs.length) return null;
+  return tabs[next] ?? null;
 }
 
 /** Tab query without flashing ok/err. No navigation — the board calls history.replaceState. */

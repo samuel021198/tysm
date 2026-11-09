@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPrefs, getViewer } from "@/lib/auth";
@@ -228,9 +227,7 @@ export default async function SellPage({ searchParams }: { searchParams: Promise
         <a className="text-sm text-link" href="/sell/bulk">{tx(prefs.locale, "CSV 批量", "CSV upload")}</a>
       </div>
       <p className="mb-4 text-sm text-muted">
-        {tx(prefs.locale, "四步就可以發布。寫", "Four steps, then publish. A ")}
-        <Link className="text-link" href="/add?kind=post">{tx(prefs.locale, "貼子", "post")}</Link>
-        {tx(prefs.locale, "時剔「同時上架」，會用同一張表，並帶入標題同相片。", " can tick “list it too” and opens this same form with the title and photos filled in.")}
+        {tx(prefs.locale, "拍賣、多卡、排程同 CSV 在這裡。", "Auctions, multiple cards, scheduling, and CSV live here.")}
       </p>
       <SellForm
         locale={prefs.locale}

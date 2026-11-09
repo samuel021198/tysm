@@ -77,8 +77,8 @@ assert(schema.includes("enum ListingStatus") && !schema.includes("RESERVED") && 
 
 const header = readFileSync(new URL("../components/profile-header.tsx", import.meta.url), "utf8");
 assert(
-  header.includes("?tab=selling#profile-posts") && header.includes("ProfileTabLink") && header.includes('tab="selling"') && header.includes("商品"),
-  "the 商品 count selects the bag tab on this profile",
+  header.includes("?tab=shelf#profile-posts") && header.includes("ProfileTabLink") && header.includes('tab="shelf"') && header.includes("商品"),
+  "the 商品 count opens the on-sale shelf",
 );
 assert(!header.includes("/inventory") && !header.includes("/products") && !header.includes('href="/listings"'), "商品 does not open another inventory page");
 
@@ -90,8 +90,8 @@ assert(
 
 const board = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 assert(board.includes("PROFILE_TAB_EVENT") && board.includes("<ShopInventory") && board.includes("isSelf"), "own shop tab is the management list");
-assert(board.includes("未有上架。") && board.includes("上架第一件") && board.includes('href="/sell"'), "empty own shop uses the existing create flow");
-assert(board.includes("暫未有在售。") && board.includes("grid-cols-3"), "visitors keep the public sale grid");
+assert(board.includes("未有上架。") && board.includes("上架第一件") && board.includes('href="/add"'), "empty own shop uses the 上架 create flow");
+assert(board.includes("暫無商品。") && board.includes("grid-cols-2") && board.includes("object-cover"), "the first screen is a square on-sale grid");
 assert(!board.includes("⋯"), "the thumbnail grid does not grow an ellipsis");
 
 const list = readFileSync(new URL("../components/shop-inventory.tsx", import.meta.url), "utf8");
@@ -104,7 +104,8 @@ assert(unlist.includes('status: "UNLISTED"') && unlist.includes("binLockOrderId:
 assert(listings.includes("export async function updateListingPrice") && listings.includes("export async function markListingSold"), "price and sold are listing writes");
 
 const profile = readFileSync(new URL("./profile.ts", import.meta.url), "utf8");
-assert(profile.includes("SHOP_INVENTORY_STATUSES") && profile.includes("reserved: Boolean(row.binLockOrderId)"), "own 商品 count is the shop list; 已保留 is the hold");
+assert(profile.includes("SHOP_INVENTORY_STATUSES") && profile.includes("reserved: Boolean(row.binLockOrderId)"), "the shop tab still loads those statuses; 已保留 is the hold");
+assert(profile.includes("listing.count") && profile.includes("where: publicShop"), "the 商品 count matches the on-sale shelf");
 assert(profile.includes('status: "ACTIVE" as const, quantityAvailable: { gt: 0 }'), "visitors still load public 在售");
 
 const store = readFileSync(new URL("../app/shop/[id]/page.tsx", import.meta.url), "utf8");

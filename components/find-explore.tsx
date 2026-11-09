@@ -145,7 +145,6 @@ function ResultChips({ locale, show, q, card }: { locale: Locale; show: MarketSh
   const items = [
     ["all", "全部", "All"],
     ["listing", "上架", "Listings"],
-    ["post", "貼文", "Posts"],
   ] as const;
   return (
     <nav className="chips" aria-label={tx(locale, "結果類型", "Result type")}>

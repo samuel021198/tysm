@@ -56,7 +56,6 @@ export default async function PublicProfilePage({
         handoverPlace={person.handoverPlace}
         rating={board.rating}
         followers={board.followers}
-        postCount={board.postCount}
         listingCount={board.listingCount}
         verificationTier={person.verificationTier}
       >
@@ -82,7 +81,7 @@ export default async function PublicProfilePage({
         <ProfileBoard
           locale={locale}
           base={base}
-          tab={sp.tab || "posts"}
+          tab={sp.tab || "shelf"}
           isSelf={false}
           posts={board.posts}
           postsNext={board.postsNext}

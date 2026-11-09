@@ -120,17 +120,13 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
   const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, ratingRow, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
     profilePostsPage(ownerId, viewerId, null, hides.postIds),
     prisma.post.count({ where: profilePostWhere(ownerId, isSelf, hides.postIds, null) }),
-    prisma.listing.count({
-      where: isSelf ? { sellerId: ownerId, status: { in: [...SHOP_INVENTORY_STATUSES] } } : publicShop,
+    prisma.listing.count({ where: publicShop }),
+    prisma.listing.findMany({
+      where: publicShop,
+      select: publicCardSelect,
+      orderBy: { publishedAt: "desc" },
+      take: 24,
     }),
-    isSelf
-      ? Promise.resolve([])
-      : prisma.listing.findMany({
-          where: publicShop,
-          select: publicCardSelect,
-          orderBy: { publishedAt: "desc" },
-          take: 24,
-        }),
     isSelf
       ? prisma.listing.findMany({
           where: { sellerId: ownerId, status: { in: [...SHOP_INVENTORY_STATUSES] } },

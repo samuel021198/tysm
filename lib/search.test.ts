@@ -146,7 +146,8 @@ assert(marketSearchHref({ q: "皮卡丘", sort: "new" }) === `/search?q=${encode
 assert(marketSearchHref({}) === "/search", "an empty market search has no query string");
 const find = readFileSync(new URL("../app/find/page.tsx", import.meta.url), "utf8");
 const explore = readFileSync(new URL("../components/find-explore.tsx", import.meta.url), "utf8");
-assert(find.includes("用戶") && find.includes("貼文") && find.includes("上架") && find.includes("全部") && find.includes("收藏"), "search hub chips are 全部, 上架, 貼文, plus people who saved the card");
+assert(find.includes("用戶") && find.includes("上架") && find.includes("全部") && find.includes("收藏"), "search hub keeps people, listings, and saved cards");
+assert(!find.includes('["post", "貼文"') && !explore.includes('["post", "貼文"'), "discover chips are 全部 and 上架");
 assert(!find.includes("CatalogCard") && !find.includes("/dex"), "the search page does not open the dex");
 assert(find.includes("searchHistory.create") && explore.includes("SearchBox"), "find records a query and keeps the search box");
 assert(find.includes("!drafting") && find.includes("searchHistory.create"), "partial typing does not write search history");
