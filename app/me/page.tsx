@@ -56,6 +56,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
           savedListings={board.savedListings}
           savedPosts={board.savedPosts}
           listings={board.listings}
+          buyouts={board.buyouts}
           inventory={board.inventory}
           reviews={board.reviews}
           drafts={board.drafts}

@@ -117,7 +117,7 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
   const isSelf = viewerId === ownerId;
   const hides = viewerId && !isSelf ? await feedHideIds(viewerId) : { postIds: [] as string[] };
   const publicShop = { sellerId: ownerId, status: "ACTIVE" as const, quantityAvailable: { gt: 0 } };
-  const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, ratingRow, favs, savedListingRows, savedPostRows, blockedIds] = await Promise.all([
+  const [postPage, postCount, listingCount, listings, inventoryRows, reviewRows, drafts, followers, ratingRow, favs, savedListingRows, savedPostRows, blockedIds, buyoutRows] = await Promise.all([
     profilePostsPage(ownerId, viewerId, null, hides.postIds),
     prisma.post.count({ where: profilePostWhere(ownerId, isSelf, hides.postIds, null) }),
     prisma.listing.count({ where: publicShop }),
@@ -204,6 +204,21 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
         })
       : Promise.resolve([]),
     isSelf ? hiddenUserIds(ownerId) : Promise.resolve([]),
+    prisma.buyout.findMany({
+      where: { userId: ownerId },
+      orderBy: { createdAt: "desc" },
+      // ponytail: 24 newest buyouts. Upgrade path: cursor on the 買取 tab.
+      take: 24,
+      select: {
+        id: true,
+        cardName: true,
+        note: true,
+        priceCents: true,
+        negotiable: true,
+        createdAt: true,
+        photos: { orderBy: { position: "asc" }, take: 1, select: { url: true } },
+      },
+    }),
   ]);
 
   const blocked = new Set(blockedIds);
@@ -266,6 +281,15 @@ export async function profileContent(ownerId: string, viewerId: string | null) {
     followers,
     rating: ratingFromAggregate(ratingRow._avg.stars, ratingRow._count),
     favIds: favs.map((row) => row.listingId),
+    buyouts: buyoutRows.map((row) => ({
+      id: row.id,
+      cardName: row.cardName,
+      note: row.note,
+      priceCents: row.priceCents,
+      negotiable: row.negotiable,
+      createdAt: row.createdAt.toISOString(),
+      photo: row.photos[0]?.url ?? "",
+    })),
   };
 }
 

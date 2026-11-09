@@ -99,6 +99,11 @@ const ERR: Record<string, [string, string]> = {
   verify_store: ["文件暫時上傳不到，請稍後再試。", "Could not store the document. Try again shortly."],
   verify_pending: ["審核中，暫時不必再交", "Already in review"],
   tokens: ["飛不足", "Not enough"],
+  buyout_card: ["想收要 2–80 字", "Card name must be 2–80 characters"],
+  buyout_note: ["說明要 1–500 字", "The note must be 1–500 characters"],
+  buyout_photos: ["最少 1 張、最多 3 張相片", "Add 1 to 3 photos"],
+  buyout_price: ["請填寫價錢（HK$）", "Enter a price in HK$"],
+  buyout_handover: ["交收只可以一句，最多 80 字", "Handover is one line, up to 80 characters"],
 };
 
 export function errText(locale: Locale, code: string): string {

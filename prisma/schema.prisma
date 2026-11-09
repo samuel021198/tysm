@@ -210,6 +210,7 @@ model User {
 
   addresses       Address[]
   listings        Listing[]
+  buyouts         Buyout[]
   ordersBought    Order[]         @relation("BuyerOrders")
   ordersSold      Order[]         @relation("SellerOrders")
   reviewsWritten  Review[]        @relation("ReviewsWritten")
@@ -374,6 +375,7 @@ model CatalogCard {
   listings        Listing[]
   listingItems    ListingItem[]
   collectionItems CollectionItem[]
+  buyouts         Buyout[]
 
   @@index([nameEn])
   @@index([nameJa])
@@ -382,6 +384,38 @@ model CatalogCard {
   @@index([printRegion, numberKey])
   @@index([setId])
   @@index([game, printRegion])
+}
+
+/// Public 買取. A pay price plus photos. `negotiable` is a flag; listing Offer rows are not reused.
+model Buyout {
+  id             String   @id @default(cuid())
+  userId         String
+  cardName       String
+  catalogCardId  String?
+  note           String
+  /// HK cents the member will pay. Not a budget cap.
+  priceCents     Int
+  negotiable     Boolean  @default(true)
+  /// Optional one line: district or meet-up. Empty when skipped.
+  handover       String?
+  createdAt      DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  catalogCard CatalogCard? @relation(fields: [catalogCardId], references: [id], onDelete: SetNull)
+  photos      BuyoutPhoto[]
+
+  @@index([userId, createdAt])
+  @@index([catalogCardId])
+}
+
+model BuyoutPhoto {
+  id       String @id @default(cuid())
+  buyoutId String
+  url      String
+  position Int
+  buyout   Buyout @relation(fields: [buyoutId], references: [id], onDelete: Cascade)
+
+  @@index([buyoutId])
 }
 
 model Listing {
