@@ -109,7 +109,7 @@ export function BuyoutSheet({ locale, onClose }: { locale: Locale; onClose: () =
           />
 
           <label className="grid gap-1 text-sm font-medium">
-            {tx(locale, "價錢 HK$", "Price HK$")}
+            {tx(locale, "想入價（HK$）", "Wanted price (HK$)")}
             <input className="field" name="price" inputMode="decimal" placeholder="280" required />
           </label>
 

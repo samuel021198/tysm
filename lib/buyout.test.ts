@@ -54,7 +54,9 @@ for (const word of banned) {
   assert(!sheet.includes(word) && !board.includes(word) && !action.includes(word) && !detail.includes(word), `${word} is not buyout copy`);
 }
 assert(sheet.includes("LISTING_CROP_ASPECT") && sheet.includes("BUYOUT_PHOTO_MAX") && sheet.includes("CatalogTitleField") && sheet.includes('label={tx(locale, "想收"'), "想收 uses the catalog typeahead and the listing crop");
-assert(sheet.includes("價錢 HK$") && sheet.includes('name="negotiable"') && sheet.includes("defaultChecked") && sheet.includes('name="handover"') && sheet.includes("地區或面交") && sheet.includes('tx(locale, "說明"') && !sheet.includes("順豐到付") && !sheet.includes("shipMeetup"), "the sheet is price, negotiable on, note, and one optional handover line");
+assert(sheet.includes("想入價（HK$）") && sheet.includes('name="negotiable"') && sheet.includes("defaultChecked") && sheet.includes('name="handover"') && sheet.includes("地區或面交") && sheet.includes('tx(locale, "說明"') && !sheet.includes("順豐到付") && !sheet.includes("shipMeetup"), "the sheet is wanted price, negotiable on, note, and one optional handover line");
+const handoverMigration = readFileSync(new URL("../prisma/migrations/20261109200000_buyout_handover/migration.sql", import.meta.url), "utf8");
+assert(handoverMigration.includes('ADD COLUMN IF NOT EXISTS "handover" TEXT'), "a follow-up migration adds handover after the applied buyout migration");
 assert(sheet.includes('tx(locale, "發佈買取", "Post a buyout")') && !sheet.includes('href="/add"') && !sheet.includes("publishCreateAction") && !sheet.includes("saveListing"), "發佈買取 does not enter 上架");
 const buyoutList = board.slice(board.indexOf("function BuyoutList"), board.indexOf("function ShelfGrid"));
 assert(board.includes('id: "buyout"') && board.indexOf('id: "shelf"') < board.indexOf('id: "buyout"') && buyoutList.includes("暫無買取。") && buyoutList.includes("發佈買取") && buyoutList.includes("formatHkd") && buyoutList.includes("relativeTime") && buyoutList.includes("row.note") && buyoutList.includes("可議價") && buyoutList.includes("object-cover") && !buyoutList.includes("grid-cols-2"), "買取 is a card list: cover, name, note, HK$ price, negotiable mark, time");
