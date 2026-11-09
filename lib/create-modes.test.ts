@@ -1,25 +1,18 @@
 import { readFileSync } from "fs";
-import { CREATE_MODES, createDefaultIndex, createDest } from "./create-modes";
+import { CREATE_HREF, CREATE_TOAST_EN, CREATE_TOAST_ZH, createDest, createTitle } from "./create-modes";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(CREATE_MODES.map((mode) => mode.zh).join("|") === "貼文|上架", "create modes are post and sell");
-assert(CREATE_MODES.map((mode) => mode.href).join("|") === "/add?kind=post|/sell", "create mode routes");
-assert(!CREATE_MODES.map((mode) => `${mode.id} ${mode.href} ${mode.zh}`).join("|").includes("story") && !CREATE_MODES.map((mode) => mode.zh).join("|").includes("動態"), "story create stays off the picker");
-assert(!CREATE_MODES.some((mode) => mode.zh.includes("收藏")), "collect-only is not a create mode");
-assert(!CREATE_MODES.some((mode) => `${mode.zh}${mode.en}${mode.hintZh}${mode.hintEn}`.includes("貼子")), "post copy says 貼文, not 貼子");
-assert(!CREATE_MODES.some((mode) => "ctaZh" in mode || "ctaEn" in mode), "modes do not carry a second cta label");
-const post = CREATE_MODES.find((mode) => mode.id === "post");
-assert(post?.zh === "貼文" && post.en === "Post" && post.hintZh === "寫一則貼文，可以同時上架", "post label and single hint");
-assert(createDefaultIndex() === CREATE_MODES.findIndex((mode) => mode.id === "post"), "default index is post");
-assert(CREATE_MODES[createDefaultIndex()]?.id === "post", "opening the picker lands on post");
-assert(createDest("/sell", true) === "/sell", "logged-in dest stays on the flow");
-assert(
-  createDest("/add?kind=post", false) === `/login?next=${encodeURIComponent("/add?kind=post")}`,
-  "logged-out post keeps the kind query",
-);
+assert(CREATE_HREF === "/add", "create is the 上架 route");
+assert(createTitle("  近全新\n旺角面交") === "近全新", "the listing title is the caption's first line");
+assert(createTitle("x".repeat(90)).length === 80, "the title stays inside the listing limit");
+assert(createTitle("  ") === "", "a blank caption has no title");
+assert(CREATE_TOAST_ZH === "已發佈 · 已上架" && CREATE_TOAST_EN === "Published · Listed", "one toast covers publish and list");
+assert(!CREATE_HREF.includes("kind=post") && !CREATE_TOAST_ZH.includes("貼子") && !CREATE_TOAST_ZH.includes("動態"), "create copy is not a post mode");
+assert(createDest(CREATE_HREF, true) === "/add", "logged-in dest stays on 上架");
+assert(createDest(CREATE_HREF, false) === `/login?next=${encodeURIComponent("/add")}`, "logged-out create returns to 上架");
 
 const tab = readFileSync(new URL("../components/tab-bar.tsx", import.meta.url), "utf8");
 const postTab = tab.indexOf('href: "/"');
@@ -84,30 +77,32 @@ assert(!css.includes("6.5rem") && css.includes("3.5rem"), "desktop header height
 assert(css.includes("--header-h: calc(3.25rem + env(safe-area-inset-top))"), "mobile header matches the tab bar height");
 
 const picker = readFileSync(new URL("../components/create-picker.tsx", import.meta.url), "utf8");
-assert(picker.includes("CREATE_MODES.map") && picker.includes("createDest") && picker.includes('role="menu"'), "each mode is one row in a menu");
+assert(picker.includes("CREATE_HREF") && picker.includes("createDest") && !picker.includes('role="menu"') && !picker.includes("CREATE_MODES"), "＋ is one link, not a post/list menu");
 assert(!picker.includes('role="tab"') && !picker.includes('role="tabpanel"') && !picker.includes("btn-primary") && !picker.includes("ctaZh"), "segment, preview card, and extra cta are not stacked");
-assert(picker.includes("createDefaultIndex") && picker.includes("data-mode") && picker.includes("preventScroll: true"), "opening the menu focuses the default mode without scrolling");
-assert(!picker.includes("createPortal") && !picker.includes("fixed inset-0"), "picker is a card on the header, not a full-screen sheet");
-assert(!picker.includes("snap-x") && !picker.includes("snap-mandatory") && !picker.includes("createIndexFromScroll"), "swipe scroller is gone");
+assert(!picker.includes("createPortal") && !picker.includes("fixed inset-0"), "picker is not a full-screen sheet");
+assert(!picker.includes("snap-x") && !picker.includes("snap-mandatory"), "swipe scroller is gone");
 assert(!picker.includes("左右滑動揀") && !picker.includes("Swipe to choose"), "swipe hint is gone");
-assert(!picker.includes(" / {CREATE_MODES.length}") && !picker.includes("‹") && !picker.includes("›"), "page counter and desktop arrows are gone");
-assert(picker.includes("bg-card") && picker.includes("border-line") && picker.includes("text-ink") && picker.includes("shadow-card"), "picker is a light card");
+assert(!picker.includes("‹") && !picker.includes("›"), "page counter and desktop arrows are gone");
 assert(!picker.includes("bg-[#1E293B]") && !picker.includes('backgroundColor: "#0F172A"') && !picker.includes("h-16 w-16"), "dark sheet and oversized icon tile are gone");
 assert(picker.includes('name="plus"') && picker.includes("h-[22px] w-[22px]") && picker.includes("creating ? 2 : 1.6"), "mobile add is a 22px stroke plus");
 assert(!picker.includes("h-10 w-10") && !picker.includes("rounded-full bg-accent text-white") && !picker.includes("bg-accent text-white") && picker.includes('variant === "top"') && !picker.includes("absolute left-1") && !picker.includes('variant === "corner"'), "mobile add is a plain stroke; the green circle and corner FAB are gone");
-assert(picker.includes("text-muted"), "picker rows stay muted");
+assert(picker.includes("text-muted"), "the idle plus stays muted");
 assert(!picker.includes("bg-accent text-white shadow-none md:hidden"), "mobile add is a circle, not the old header pill");
 assert(picker.includes("bg-accent/10") && picker.includes("ring-accent/15"), "desktop add is a quiet accent control");
-assert(!picker.includes('tx(locale, "加"') && !picker.includes("加入收藏") && !picker.includes("我的收藏"), "加 text and collect-only are gone from the picker");
+assert(!picker.includes('tx(locale, "加"') && !picker.includes("加入收藏") && !picker.includes("我的收藏") && !picker.includes("貼文"), "加 text, collect-only, and a post mode are gone from the picker");
 assert(!picker.includes("想做咩") && !picker.includes("rounded-t-"), "bottom sheet copy is retired");
-assert(picker.includes("links.length"), "arrow keys stay inside the mode list");
 
-const collect = readFileSync(new URL("../components/collect-form.tsx", import.meta.url), "utf8");
-assert(collect.includes("同時上架"), "the post composer can list at the same time");
-assert(!collect.includes('href="/add"'), "the composer does not link to collect-only");
+const add = readFileSync(new URL("../app/add/page.tsx", import.meta.url), "utf8");
+const form = readFileSync(new URL("../components/list-create-form.tsx", import.meta.url), "utf8");
+const trade = readFileSync(new URL("../actions/trade.ts", import.meta.url), "utf8");
+assert(add.includes("ListCreateForm") && !add.includes("CollectForm") && !add.includes("kind=post") && add.includes('redirect("/add")'), "／add is 上架; a post kind redirects away");
+assert(form.includes('tx(locale, "發佈", "Publish")') && form.includes("LISTING_CROP_ASPECT") && !form.includes("POST_CROP_ASPECT") && !form.includes("放賣") && !form.includes("同時上架"), "create CTA is 發佈, photos are square, and there is no list toggle");
+assert(trade.includes("publishCreateAction") && trade.includes('redirect("/?ok=listed")') && trade.includes("saveListing"), "發佈 writes one listing; the feed post comes from that save");
+assert(shell.includes("CREATE_TOAST_ZH") && shell.includes("listed:"), "the flash is the single 已發佈 · 已上架 line");
 
 const sell = readFileSync(new URL("../app/sell/page.tsx", import.meta.url), "utf8");
-assert(!/href="\/add"(?!\?)/.test(sell), "sell page does not send people to collect-only");
+assert(!sell.includes("貼子") && !sell.includes("同時上架") && !sell.includes('href="/add?kind=post"'), "advanced sell does not offer a post composer");
+assert(sell.includes("拍賣、多卡、排程同 CSV"), "auction, multi-card, schedule, and CSV stay on /sell");
 
 const story = readFileSync(new URL("../components/story-composer.tsx", import.meta.url), "utf8");
 assert(story.includes("getUserMedia") && story.includes('capture="environment"') && story.includes("STORY_EMOJIS"), "stories open on the camera and can switch to the system camera or stickers");
@@ -122,21 +117,21 @@ assert(me.includes("<ProfileHeader") && me.includes("self") && me.includes("<Pro
 assert(me.includes("logout") && me.includes('tx(locale, "登出", "Log out")') && me.includes('tx(prefs.locale, "登入", "Log in")') && me.includes("md:hidden") && me.includes("pb-[calc(var(--tab-h)+1rem)]") && !me.includes("fixed inset-x-0 bottom-[var(--tab-h)]"), "mobile /me keeps 登出 in flow, with tab-bar padding under it");
 assert(!board.includes('"/orders"') && !board.includes("/me#store") && !board.includes("menu-row"), "owner shortcut rows stay off the profile board");
 assert(board.includes("grid-cols-4") && board.includes("grid-cols-3") && board.includes("bg-ink"), "profile tabs are equal icon columns over a thumbnail grid");
-assert(board.includes("My Binder") && board.includes("收藏") && board.includes("商店") && board.includes("評價"), "profile tab names");
-assert(board.includes('id: "posts"') && board.includes('id: "saved"'), "My Binder is own posts; 收藏 is the wishlist tab");
+assert(board.includes("商品") && board.includes("收藏") && board.includes("商店") && board.includes("評價") && !board.includes("My Binder"), "profile tabs are listings, favorites, shop, reviews");
+assert(board.includes('id: "shelf"') && board.includes('id: "saved"') && !board.includes('id: "posts"'), "the first screen is the shelf; there is no posts tab");
 assert(!board.includes("我的卡") && !board.includes('id: "box"') && !board.includes("CollectionMenu") && !board.includes("collectionItemId"), "the owned-card grid is off the profile");
-const ownEmptyTitle = board.indexOf('tx(locale, "未有貼文", "No posts yet")');
-const ownEmptyLink = board.indexOf("發佈第一則");
 assert(
-  ownEmptyTitle !== -1 &&
-    ownEmptyLink > ownEmptyTitle &&
-    board.includes('href="/add?kind=post"') &&
-    board.includes('className="block font-semibold text-ink underline underline-offset-2"') &&
-    !board.includes("未有卡片") &&
-    !board.includes("開始放第一張"),
-  "own My Binder empty says 未有貼文, then 發佈第一則 opens the post composer",
+  board.includes('tx(locale, "暫無商品。", "No listings yet.")') &&
+    board.includes('href="/add"') &&
+    board.includes("上架第一件") &&
+    board.includes("grid-cols-2") &&
+    board.includes("object-cover") &&
+    !board.includes("發佈第一則") &&
+    !board.includes('href="/add?kind=post"') &&
+    !board.includes("未有卡片"),
+  "the shelf is a 1:1 cover grid; empty self profiles offer 上架第一件",
 );
-assert(board.includes('icon: "binder"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
+assert(board.includes('icon: "grid"') && board.includes('icon: "bookmark"') && board.includes('icon: "bag"') && board.includes('icon: "star"'), "profile tabs use icons");
 assert(!board.includes("chips") && !board.includes("rounded-full") && !board.includes("<PostCard") && !board.includes("<ListingCard"), "profile tabs are not pills and image tabs are thumbnails");
 assert(!settings.includes("updateProfile") && !settings.includes("saveAddress") && !settings.includes('"/orders"') && !settings.includes("/me?tab=drafts") && !settings.includes('id="store"') && !settings.includes("/me/edit") && !settings.includes("/me/footprint"), "settings is a list, not the old account form");
 assert(auth.includes('const editPath = "/me/edit"') && auth.includes("${editPath}?ok=saved") && auth.includes("${editPath}?err=nickname") && auth.includes("saveShop") && auth.includes('id="store"') === false, "profile saves flash on the edit page");

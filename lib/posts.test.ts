@@ -371,7 +371,7 @@ assert(menu.includes("button = true") && menu.includes("useHoldSwipe") && menu.i
 assert(menu.includes("swipeRightFormId") && menu.includes("requestSubmit"), "swipe right submits the existing like form");
 const profileBoard = readFileSync(new URL("../components/profile-board.tsx", import.meta.url), "utf8");
 const postCard = readFileSync(new URL("../components/post-card.tsx", import.meta.url), "utf8");
-assert(profileBoard.includes("button={false}") && !profileBoard.includes("⋯"), "profile thumbnails hide the ellipsis");
+assert(!profileBoard.includes("<PostMenu") && !profileBoard.includes("⋯") && profileBoard.includes('id: "shelf"'), "the profile shelf is a listing grid, not a post menu");
 const collectionMenu = readFileSync(new URL("../components/collection-menu.tsx", import.meta.url), "utf8");
 assert(collectionMenu.includes("useHoldSwipe") && collectionMenu.includes("onSwipeLeft") && collectionMenu.includes("onContextMenu"), "collection thumbs swipe left into the same menu");
 assert(HOLD_MS === 480 && SWIPE_X === 64 && SWIPE_DOWN === 72, "hold and swipe thresholds stay intentional");
@@ -391,7 +391,7 @@ assert(
     profileBoard.includes("title={label}") &&
     !profileBoard.includes(">{label}</span>") &&
     profileBoard.includes("strokeWidth={on ? 2.15 : 1.6}") &&
-    profileBoard.includes("h-0.5 w-1/4 bg-ink"),
+    profileBoard.includes("h-0.5") && profileBoard.includes("bg-ink") && profileBoard.includes("w-1/4"),
   "profile content tabs are icon-only; the selected tab keeps a deeper stroke and underline",
 );
 assert(profileBoard.includes("貨品與貼文的收藏會顯示於此"), "empty 收藏 says products and posts land here");

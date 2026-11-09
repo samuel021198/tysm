@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logout, setPrefs } from "@/actions/auth";
 import type { User } from "@prisma/client";
+import { CREATE_TOAST_EN, CREATE_TOAST_ZH } from "@/lib/create-modes";
 import { bidFloorText } from "@/lib/format";
 import { errText, navLabels, tx, type Locale } from "@/lib/i18n";
 import { CreatePicker } from "./create-picker";
@@ -40,7 +41,7 @@ export function Header({
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/shop">{tx(locale, "商店", "Shop")}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/news">{nav.news}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/rank">{nav.rank}</Link>
-            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={nav.sell} />
+            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={tx(locale, "上架", "List")} />
             <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center hover:text-link">
               <Icon name="bell" className="h-[18px] w-[18px]" />
               {unread ? <Count n={unread} /> : null}
@@ -136,6 +137,7 @@ export function Flash({ locale, ok, err, minCents = null }: { locale: Locale; ok
     declined: ["已拒絕", "Declined"],
     handover: ["已確認交收。", "Handover confirmed."],
     published: ["已刊登，現已公開", "Published. It is live now"],
+    listed: [CREATE_TOAST_ZH, CREATE_TOAST_EN],
     story: ["限時動態已發佈，24 小時後消失", "Story posted. It disappears in 24 hours"],
     collected: ["已加入 My Binder", "Added to My Binder"],
     posted: ["已發到動態", "Posted"],

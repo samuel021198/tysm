@@ -2,19 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { formatHkd } from "@/lib/format";
 import { EDGE_GUARD } from "@/lib/gesture";
 import { listingStatusLabel, tx, type Locale } from "@/lib/i18n";
 import type { PostCardModel } from "@/lib/posts";
 import type { ProfileThumb } from "@/lib/profile";
 import { displayPhoto } from "@/lib/demo-covers";
-import { shopDisplayCents } from "@/lib/shop-inventory";
-import { profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
+import { profileBoardTabs, profileTabHref, profileTabIndex, profileTabStep, profileSwipeDirection, swipeBlocked, tabAxis } from "@/lib/tabs";
 import { Countdown } from "./countdown";
 import { Icon } from "./icons";
-import { PostMenu } from "./post-menu";
 import { PROFILE_TAB_EVENT } from "./profile-tab-link";
-import { PromoPill } from "./promo-pill";
 import { ShopInventory, type ShopInventoryRow } from "./shop-inventory";
 
 type Review = { id: string; nickname: string; stars: number; comment: string; reply: string | null };
@@ -33,7 +29,7 @@ type Sale = {
 };
 
 const TABS = [
-  { id: "posts", zh: "My Binder", en: "My Binder", icon: "binder" },
+  { id: "shelf", zh: "商品", en: "Listings", icon: "grid" },
   { id: "saved", zh: "收藏", en: "Favorites", icon: "bookmark" },
   { id: "selling", zh: "商店", en: "Shop", icon: "bag" },
   { id: "reviews", zh: "評價", en: "Reviews", icon: "star" },
@@ -42,9 +38,10 @@ const TABS = [
 const tile = "block aspect-square w-full bg-soft object-contain";
 
 function shownTab(tab: string, isSelf: boolean) {
-  if (tab === "saved" || tab === "selling" || tab === "reviews") return tab;
+  if (tab === "selling" && !isSelf) return "shelf";
+  if (tab === "shelf" || tab === "saved" || tab === "selling" || tab === "reviews") return tab;
   if (tab === "drafts" && isSelf) return "drafts";
-  return "posts";
+  return "shelf";
 }
 
 export function ProfileBoard({
@@ -79,7 +76,7 @@ export function ProfileBoard({
   ownerId: string;
   postsNext: string | null;
 }) {
-  // Legacy ?tab=box was the owned-card grid. It now opens My Binder (own posts).
+  // Legacy ?tab=box and ?tab=posts open the on-sale shelf.
   const [tab, setTab] = useState(() => shownTab(initial, isSelf));
   const [offset, setOffset] = useState(0);
   const [animate, setAnimate] = useState(false);
@@ -93,8 +90,11 @@ export function ProfileBoard({
   const raf = useRef(0);
   const tabRef = useRef(tab);
   const baseRef = useRef(base);
+  const idsRef = useRef<string[]>([]);
   tabRef.current = tab;
   baseRef.current = base;
+  const tabs = TABS.filter((item) => profileBoardTabs(isSelf).includes(item.id));
+  idsRef.current = tabs.map((item) => item.id);
 
   useEffect(
     () => () => {
@@ -164,9 +164,10 @@ export function ProfileBoard({
       return;
     }
     lockX.current = true;
-    const index = profileTabIndex(tabRef.current);
+    const ids = idsRef.current;
+    const index = profileTabIndex(tabRef.current, ids);
     const atStart = index <= 0;
-    const atEnd = index < 0 || index >= TABS.length - 1;
+    const atEnd = index < 0 || index >= ids.length - 1;
     let slide = dx;
     if (tabRef.current === "drafts" || (atStart && dx > 0) || (atEnd && dx < 0)) slide = dx * 0.22;
     setOffset(slide);
@@ -190,7 +191,7 @@ export function ProfileBoard({
     const dir = commit
       ? profileSwipeDirection({ dx, dy, startX: start.x, axis: locked, viewportWidth: window.innerWidth })
       : null;
-    const next = dir ? profileTabStep(tabRef.current, dir) : null;
+    const next = dir ? profileTabStep(tabRef.current, dir, idsRef.current) : null;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!next || !dir || reduce || tabRef.current === "drafts") {
       setAnimate(!reduce && !next);
@@ -213,28 +214,16 @@ export function ProfileBoard({
     });
   }
 
-  const index = profileTabIndex(tab);
+  const ids = idsRef.current;
+  const index = profileTabIndex(tab, ids);
   const width = frame.current?.clientWidth || 1;
-  const progress = index < 0 ? null : Math.min(TABS.length - 1, Math.max(0, index - offset / width));
+  const progress = index < 0 ? null : Math.min(ids.length - 1, Math.max(0, index - offset / width));
   const motion = animate ? "transform 180ms ease" : "none";
-  const neighborId = offset < -8 ? profileTabStep(tab, 1) : offset > 8 ? profileTabStep(tab, -1) : null;
+  const neighborId = offset < -8 ? profileTabStep(tab, 1, ids) : offset > 8 ? profileTabStep(tab, -1, ids) : null;
   const active = progress == null ? -1 : Math.round(progress);
 
   function panel(id: string) {
-    if (id === "posts") {
-      return posts.length ? (
-        <LazyPostGrid locale={locale} base={base} posts={posts} viewerId={viewerId} ownerId={ownerId} next={id === tab ? postsNext : null} />
-      ) : (
-        <p className="empty mx-3 sm:mx-0">
-          <span className="block">{tx(locale, "未有貼文", "No posts yet")}</span>
-          {isSelf ? (
-            <Link href="/add?kind=post" className="block font-semibold text-ink underline underline-offset-2">
-              {tx(locale, "發佈第一則", "Post the first one")}
-            </Link>
-          ) : null}
-        </p>
-      );
-    }
+    if (id === "shelf") return <ShelfGrid locale={locale} listings={listings} isSelf={isSelf} />;
     if (id === "saved") {
       return isSelf && (savedListings.length || savedPosts.length) ? (
         <>
@@ -267,43 +256,13 @@ export function ProfileBoard({
         ) : (
           <p className="empty mx-3 sm:mx-0">
             <span className="block">{tx(locale, "未有上架。", "Nothing listed.")}</span>
-            <Link href="/sell" className="block font-semibold text-ink underline underline-offset-2">
+            <Link href="/add" className="block font-semibold text-ink underline underline-offset-2">
               {tx(locale, "上架第一件", "List the first item")}
             </Link>
           </p>
         );
       }
-      return listings.length ? (
-        <ul className="grid grid-cols-3 gap-px">
-          {listings.map((listing) => {
-            const amount = shopAsk(listing);
-            const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
-            const label = amount != null ? `${listing.title} ${formatHkd(amount, locale)}` : listing.title;
-            return (
-              <li key={listing.id} className="relative min-w-0">
-                <Link href={`/listing/${listing.id}`} aria-label={label} className="relative block">
-                  <img src={displayPhoto(listing.photos[0]?.url)} alt="" loading="lazy" decoding="async" className={tile} />
-                </Link>
-                {auction ? (
-                  <Link href="/auction" className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
-                    <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
-                    {tx(locale, "拍賣", "Auction")}
-                  </Link>
-                ) : null}
-                {amount != null ? (
-                  <p className="flex items-center gap-1 px-1 py-1 text-[10px] font-semibold leading-none">
-                    <span className="truncate">{formatHkd(amount, locale)}</span>
-                    <PromoPill promoted={listing.promoted} />
-                  </p>
-                ) : null}
-                {auction && listing.auctionEndsAt ? <p className="truncate px-1 text-[10px] text-muted"><Countdown endsAt={listing.auctionEndsAt} locale={locale} /></p> : null}
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="empty mx-3 sm:mx-0">{tx(locale, "暫未有在售。", "Nothing for sale.")}</p>
-      );
+      return <ShelfGrid locale={locale} listings={listings} isSelf={false} />;
     }
     if (id === "reviews") {
       return reviews.length ? (
@@ -340,8 +299,8 @@ export function ProfileBoard({
         event.stopPropagation();
       }}
     >
-      <nav aria-label={tx(locale, "個人內容", "Profile")} className="relative grid grid-cols-4 border-t border-line">
-        {TABS.map((item, i) => {
+      <nav aria-label={tx(locale, "個人內容", "Profile")} className={`relative grid border-t border-line ${tabs.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+        {tabs.map((item, i) => {
           const on = i === active;
           const label = tx(locale, item.zh, item.en);
           return (
@@ -367,7 +326,7 @@ export function ProfileBoard({
           );
         })}
         {progress != null ? (
-          <span className="pointer-events-none absolute bottom-0 left-0 h-0.5 w-1/4 bg-ink" style={{ transform: `translateX(${progress * 100}%)`, transition: motion }} />
+          <span className={`pointer-events-none absolute bottom-0 left-0 h-0.5 bg-ink ${tabs.length === 4 ? "w-1/4" : "w-1/3"}`} style={{ transform: `translateX(${progress * 100}%)`, transition: motion }} />
         ) : null}
       </nav>
       {tab === "drafts" ? (
@@ -405,101 +364,38 @@ export function ProfileBoard({
   );
 }
 
-function LazyPostGrid({
-  locale,
-  base,
-  posts,
-  viewerId,
-  ownerId,
-  next,
-}: {
-  locale: Locale;
-  base: string;
-  posts: PostCardModel[];
-  viewerId: string | null;
-  ownerId: string;
-  next: string | null;
-}) {
-  const [rows, setRows] = useState(posts);
-  const [cursor, setCursor] = useState(next);
-  const lock = useRef(false);
-  const sentinel = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setRows(posts);
-    setCursor(next);
-  }, [posts, next]);
-
-  useEffect(() => {
-    const el = sentinel.current;
-    if (!el || !cursor) return;
-    const token = cursor;
-    const observer = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting) || lock.current) return;
-      lock.current = true;
-      fetch(`/api/profile/${ownerId}/posts?cursor=${encodeURIComponent(token)}`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data: { posts?: PostCardModel[]; next?: string | null } | null) => {
-          if (!data?.posts) {
-            setCursor(null);
-            return;
-          }
-          setRows((prev) => {
-            const seen = new Set(prev.map((row) => row.id));
-            return [...prev, ...data.posts!.filter((row) => !seen.has(row.id))];
-          });
-          setCursor(data.next ?? null);
-        })
-        .catch(() => setCursor(null))
-        .finally(() => {
-          lock.current = false;
-        });
-    }, { rootMargin: "240px" });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [cursor, ownerId]);
-
+function ShelfGrid({ locale, listings, isSelf }: { locale: Locale; listings: Sale[]; isSelf: boolean }) {
+  if (!listings.length) {
+    return (
+      <p className="empty mx-3 sm:mx-0">
+        <span className="block">{tx(locale, "暫無商品。", "No listings yet.")}</span>
+        {isSelf ? (
+          <Link href="/add" className="block font-semibold text-ink underline underline-offset-2">
+            {tx(locale, "上架第一件", "List the first item")}
+          </Link>
+        ) : null}
+      </p>
+    );
+  }
   return (
-    <>
-      <PostTiles locale={locale} base={base} posts={rows} viewerId={viewerId} />
-      {cursor ? <div ref={sentinel} className="h-8" /> : null}
-    </>
-  );
-}
-
-function PostTiles({
-  locale,
-  base,
-  posts,
-  viewerId,
-}: {
-  locale: Locale;
-  base: string;
-  posts: PostCardModel[];
-  viewerId: string | null;
-}) {
-  return (
-    <ul className="grid grid-cols-3 gap-px">
-      {posts.map((post) => (
-        <li key={post.id} className="min-w-0">
-          <PostMenu
-            locale={locale}
-            postId={post.postId}
-            listingId={post.listingId}
-            own={viewerId != null && viewerId === post.author.id}
-            loggedIn={viewerId != null}
-            userId={post.author.id}
-            sharePath={post.sharePath}
-            next={base}
-            button={false}
-          >
-            <Link href={post.href} aria-label={post.cardName || tx(locale, "貼文", "Post")} className="relative block">
-              <img src={post.photos[0] || "/demo/back.svg"} alt="" loading="lazy" decoding="async" className={tile} />
-              {post.photos.length > 1 ? <StackMark /> : null}
+    <ul className="grid grid-cols-2 gap-px">
+      {listings.map((listing) => {
+        const auction = listing.saleType !== "BUY_NOW" && !listing.auctionSettled;
+        return (
+          <li key={listing.id} className="relative min-w-0">
+            <Link href={`/listing/${listing.id}`} aria-label={listing.title} className="relative block">
+              <img src={displayPhoto(listing.photos[0]?.url)} alt="" loading="lazy" decoding="async" className="block aspect-square w-full bg-soft object-cover" />
             </Link>
-          </PostMenu>
-        </li>
-      ))}
+            {auction ? (
+              <Link href="/auction" className="absolute left-1 top-1 inline-flex items-center gap-0.5 rounded-md bg-card/95 px-1.5 py-0.5 text-[10px] font-semibold text-ink shadow-sm">
+                <Icon name="auction" className="h-3 w-3" strokeWidth={2.5} />
+                {tx(locale, "拍賣", "Auction")}
+              </Link>
+            ) : null}
+            {auction && listing.auctionEndsAt ? <p className="truncate px-1 text-[10px] text-muted"><Countdown endsAt={listing.auctionEndsAt} locale={locale} /></p> : null}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -518,17 +414,3 @@ function ThumbGrid({ rows, emptyLabel }: { rows: ProfileThumb[]; emptyLabel: str
   );
 }
 
-function shopAsk(listing: Sale): number | null {
-  return shopDisplayCents(listing);
-}
-
-function StackMark() {
-  return (
-    <span className="pointer-events-none absolute right-1 top-1 bg-card/90 p-0.5 text-ink" aria-hidden>
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <rect x="7" y="7" width="12" height="12" />
-        <path d="M5 16.5V5h11.5" />
-      </svg>
-    </span>
-  );
-}

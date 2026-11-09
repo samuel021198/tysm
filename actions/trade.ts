@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { getViewer } from "@/lib/auth";
 import { cleanOfferNote, offerAckGate } from "@/lib/deal-phase";
 import { hkdToCents, safeNext } from "@/lib/format";
-import { importCsv, markListingSold, parseListingForm, relistAuctionFixed, relistListing, saveListing, unlistListing, updateListingPrice, deleteDraft } from "@/lib/listings";
+import { importCsv, markListingSold, parseListingForm, relistAuctionFixed, relistListing, saveListing, unlistListing, updateListingPrice, deleteDraft, type ListingInput } from "@/lib/listings";
 import { placePublicBid } from "@/lib/bids";
 import { respondOffer } from "@/lib/offers";
 import {
@@ -35,6 +35,7 @@ import {
   reportOrderIssue,
 } from "@/lib/orders";
 import { prisma } from "@/lib/db";
+import { createTitle } from "@/lib/create-modes";
 import { publishFlash } from "@/lib/promo";
 
 async function viewer(next: string) {
@@ -62,6 +63,60 @@ export async function saveListingAction(_prev: { error?: string } | null, formDa
   }
   if (formData.get("alsoPost") === "on" && result.postId) redirect(`/post/${result.postId}?ok=${flash === "live" ? "live" : "posted"}`);
   redirect(`/listing/${result.id}?ok=${flash}`);
+}
+
+/** Soft v1 發佈: one buy-now listing, and syncListingInventory posts it to Front. */
+export async function publishCreateAction(_prev: { error?: string } | null, formData: FormData) {
+  const user = await viewer("/add");
+  if (!user.phoneVerified) return { error: "phone" };
+  const parsed = parseListingForm(formData);
+  if (!parsed) return { error: "category" };
+  const title = createTitle(parsed.description);
+  if (title.length < 2) return { error: "title" };
+  const one = parsed.items?.[0];
+  const input: ListingInput = {
+    ...parsed,
+    title,
+    description: parsed.description.trim(),
+    saleType: "BUY_NOW",
+    intent: "publish",
+    quantity: 1,
+    startPriceCents: null,
+    reserveCents: null,
+    auctionDays: null,
+    auctionEndsAt: null,
+    offersEnabled: false,
+    minOfferCents: null,
+    publishAt: null,
+    promote: undefined,
+    items: [
+      {
+        cardName: one?.cardName ?? null,
+        catalogCardId: one?.catalogCardId ?? null,
+        catalogTitle: one?.catalogTitle ?? null,
+        year: one?.year ?? null,
+        setName: one?.setName ?? null,
+        setCode: one?.setCode ?? null,
+        collectorNumber: one?.collectorNumber ?? null,
+        rarity: one?.rarity ?? null,
+        language: one?.language ?? null,
+        game: one?.game ?? null,
+        priceCents: null,
+        conditionTrack: "RAW",
+        rawGrade: "A",
+        grader: null,
+        gradeValue: null,
+        certNumber: null,
+      },
+    ],
+  };
+  const result = await saveListing(user.id, input);
+  if (!result.ok) return { error: result.error };
+  revalidatePath("/");
+  revalidatePath("/me");
+  revalidatePath("/find");
+  revalidatePath("/search");
+  redirect("/?ok=listed");
 }
 
 export async function unlistAction(formData: FormData) {

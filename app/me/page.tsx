@@ -35,7 +35,6 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         handoverPlace={viewer.handoverPlace}
         rating={board.rating}
         followers={board.followers}
-        postCount={board.postCount}
         listingCount={board.listingCount}
         verificationTier={viewer.verificationTier}
         self
@@ -49,7 +48,7 @@ export default async function MePage({ searchParams }: { searchParams: Promise<{
         <ProfileBoard
           locale={locale}
           base="/me"
-          tab={sp.tab || "posts"}
+          tab={sp.tab || "shelf"}
           isSelf
           posts={board.posts}
           postsNext={board.postsNext}

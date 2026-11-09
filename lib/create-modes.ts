@@ -1,29 +1,16 @@
-export const CREATE_MODES = [
-  {
-    id: "post",
-    href: "/add?kind=post",
-    zh: "貼文",
-    en: "Post",
-    hintZh: "寫一則貼文，可以同時上架",
-    hintEn: "Write a post, and list it for sale if you want",
-    icon: "note",
-  },
-  {
-    id: "sell",
-    href: "/sell",
-    zh: "上架",
-    en: "List",
-    hintZh: "四步上架：相片、價錢、運送",
-    hintEn: "Four steps: photos, price, and shipping",
-    icon: "tag",
-  },
-] as const;
+/** One create entry: 上架. Advanced auction / multi-card / schedule / CSV stay on /sell. */
+export const CREATE_HREF = "/add";
+
+/** One toast after 發佈. The listing and its Front post share this line. */
+export const CREATE_TOAST_ZH = "已發佈 · 已上架";
+export const CREATE_TOAST_EN = "Published · Listed";
 
 export function createDest(href: string, loggedIn: boolean) {
   return loggedIn ? href : `/login?next=${encodeURIComponent(href)}`;
 }
 
-export function createDefaultIndex() {
-  const index = CREATE_MODES.findIndex((mode) => mode.id === "post");
-  return index < 0 ? 0 : index;
+/** First line of the caption, capped at the listing title length. */
+export function createTitle(caption: string): string {
+  const line = caption.trim().split(/\r?\n/, 1)[0]?.trim() ?? "";
+  return line.slice(0, 80);
 }

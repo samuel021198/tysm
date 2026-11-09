@@ -69,7 +69,7 @@ const edit = readFileSync(new URL("../app/me/edit/page.tsx", import.meta.url), "
 const editForm = readFileSync(new URL("../components/profile-edit-form.tsx", import.meta.url), "utf8");
 const settings = readFileSync(new URL("../app/me/settings/page.tsx", import.meta.url), "utf8");
 const footprint = readFileSync(new URL("../app/me/footprint/page.tsx", import.meta.url), "utf8");
-assert(header.includes("則貼文") && header.includes("商品") && header.includes("粉絲") && header.includes("/followers"), "stats are posts, listings, and followers");
+assert(!header.includes("則貼文") && header.includes("商品") && header.includes("粉絲") && header.includes("/followers") && header.includes("tab=shelf"), "stats are listings and followers; 商品 opens the shelf");
 assert(header.includes('href="/me/edit"') && header.includes('href="/me/footprint"') && header.includes('href="/me/settings"'), "self profile has edit, footprint, and settings");
 assert(header.includes('tx(locale, "編輯", "Edit")') && header.includes('tx(locale, "足跡", "Footprint")') && header.includes("⚙️") && header.includes('aria-label={tx(locale, "設定", "Settings")}'), "actions are a thin row: short labels and a gear");
 assert(header.includes("h-8") && !header.includes("btn-ghost") && !header.includes("編輯個人檔案") && !header.includes("我的足跡"), "profile actions are not the old text bricks");

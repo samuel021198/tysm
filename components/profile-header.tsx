@@ -108,7 +108,6 @@ export function ProfileHeader({
   handoverPlace,
   rating = null,
   followers,
-  postCount,
   listingCount,
   verificationTier = "NORMAL",
   self,
@@ -126,7 +125,6 @@ export function ProfileHeader({
   handoverPlace: string | null;
   rating?: { average: number; count: number } | null;
   followers: number;
-  postCount: number;
   listingCount: number;
   verificationTier?: VerificationTierName;
   self?: boolean;
@@ -137,8 +135,7 @@ export function ProfileHeader({
   const place = handoverPlace?.trim();
   const action = "inline-flex h-8 flex-1 items-center justify-center rounded-full border border-line bg-card px-2 text-xs font-medium text-ink";
   const stats = [
-    { href: `${base}?tab=posts#profile-posts`, value: postCount, label: tx(locale, "則貼文", "Posts"), tab: null },
-    { href: `${base}?tab=selling#profile-posts`, value: listingCount, label: tx(locale, "商品", "Listings"), tab: "selling" },
+    { href: `${base}?tab=shelf#profile-posts`, value: listingCount, label: tx(locale, "商品", "Listings"), tab: "shelf" },
     { href: `/shop/${userId}/followers`, value: followers, label: tx(locale, "粉絲", "Followers"), tab: null },
   ];
   return (
@@ -151,7 +148,7 @@ export function ProfileHeader({
             {nickname.slice(0, 1)}
           </span>
         )}
-        <dl className="grid min-w-0 flex-1 grid-cols-3 text-center">
+        <dl className="grid min-w-0 flex-1 grid-cols-2 text-center">
           {stats.map((stat) => {
             const figure = (
               <>
@@ -162,8 +159,8 @@ export function ProfileHeader({
             const className = "block rounded-xl px-1 py-1 active:bg-soft";
             return (
               <div key={stat.label}>
-                {stat.tab === "selling" ? (
-                  <ProfileTabLink href={stat.href} tab="selling" className={className}>
+                {stat.tab === "shelf" ? (
+                  <ProfileTabLink href={stat.href} tab="shelf" className={className}>
                     {figure}
                   </ProfileTabLink>
                 ) : (
