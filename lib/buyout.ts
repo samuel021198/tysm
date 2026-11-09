@@ -65,6 +65,12 @@ function cleanHandover(raw: string): string | null | false {
   return text;
 }
 
+/** https and site paths can sit in the page. A data URL cannot — it is hosted first, or dropped. */
+export function buyoutPhotoForPage(url: string | null | undefined): string {
+  if (!url || url.startsWith("data:")) return "";
+  return url;
+}
+
 function readPhotos(raw: string): { url: string }[] | null {
   try {
     const parsed = JSON.parse(raw) as { url?: string }[];

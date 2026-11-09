@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPrefs, getViewer } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { hostedBuyoutPhoto } from "@/lib/buyout-store";
 import { displayPhoto } from "@/lib/demo-covers";
 import { formatHkd } from "@/lib/format";
 import { tx } from "@/lib/i18n";
@@ -30,14 +31,15 @@ export default async function BuyoutPage({ params }: { params: Promise<{ id: str
   ]);
   if (!row || row.user.disabled) notFound();
   if (viewer && (await isBlocked(viewer.id, row.userId))) notFound();
+  const photos = await Promise.all(row.photos.map(async (photo) => ({ id: photo.id, url: displayPhoto(await hostedBuyoutPhoto(photo)) })));
   const locale = prefs.locale;
   const profileHref = viewer?.id === row.userId ? "/me?tab=buyout" : `/u/${row.user.id}`;
   return (
     <div className="mx-auto grid max-w-3xl gap-3 pb-[calc(var(--tab-h)+1rem)] md:pb-0">
       <ul className="grid grid-cols-3 gap-px">
-        {row.photos.map((photo) => (
+        {photos.map((photo) => (
           <li key={photo.id}>
-            <img src={displayPhoto(photo.url)} alt="" className="block aspect-square w-full bg-soft object-cover" />
+            <img src={photo.url} alt="" className="block aspect-square w-full bg-soft object-cover" />
           </li>
         ))}
       </ul>
