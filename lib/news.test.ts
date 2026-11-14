@@ -127,7 +127,8 @@ assert(detail.includes("來源") && !detail.includes("Source:") && !detail.inclu
 assert(detail.includes('fit="contain"') && detail.includes("max-h-[28rem]") && !detail.includes("aspect-[4/5]"), "a portrait cover is not cropped into a strip");
 assert(detail.includes('target="_blank"') && detail.includes('rel="noreferrer"') && detail.includes("text-link"), "the source url is the outbound link");
 assert(list.includes("newsListTag(") && list.includes("newsListTeaser(") && list.includes("row.hot") && list.includes("truncate"), "the list shows a tag and keeps the teaser to one line");
-assert(tab.includes('href: "/news"') && tab.includes('label: "News"') && tab.includes('icon: "news"') && !tab.includes('href: "/dex"'), "bottom nav replaces the dex slot");
+assert(tab.includes('label: "消息"') && tab.includes('icon: "bell"') && !tab.includes('label: "News"') && !tab.includes('href: "/dex"') && !tab.includes('href: "/news"'), "新聞 is not a bottom tab");
+assert(list.includes("<InboxHub") && list.includes('tab="news"'), "the news list is the 新聞 inner tab");
 assert(shell.includes('href="/news"') && !shell.includes('href="/dex"'), "desktop nav does not link the dex");
 assert(picker.includes("搵唔到？自己入卡名") && picker.includes("/api/catalog/suggest"), "the card picker can keep a typed name");
 assert(collect.includes("CatalogTitleField") && sell.includes("CatalogTitleField") && sell.includes("hit.imageUrl"), "collect and sell fill the name from the catalog");

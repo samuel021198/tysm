@@ -16,7 +16,7 @@ export default async function NotificationsPage() {
     <div>
       <InboxHub locale={locale} tab="notes" />
       <div className="mb-3 flex items-center gap-1">
-        <h1 className="page-title mb-0 min-w-0 flex-1">{tx(locale, "通知", "Notifications")}</h1>
+        <h1 className="page-title mb-0 min-w-0 flex-1">個人消息</h1>
         <form action={markNotifications}>
           <button className="px-1 text-sm font-medium">{tx(locale, "全部已讀", "Mark all read")}</button>
         </form>

@@ -1,28 +1,33 @@
 import { readFileSync } from "fs";
 import { EDGE_GUARD, gestureEnd, SWIPE_X } from "./gesture";
 import { shareLabel, shareTarget } from "./share";
-import { adjacentTab, profileSwipeDirection, profileTabHref, profileTabStep, scrollerTakesSwipe, tabAxis, tabPagerIndex, tabSwipeDirection } from "./tabs";
+import { adjacentTab, profileSwipeDirection, profileTabHref, profileTabStep, scrollerTakesSwipe, tabAxis, tabHref, tabPagerIndex, tabSwipeDirection } from "./tabs";
 
 function assert(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new Error(msg);
 }
 
-assert(adjacentTab("/", 1, true) === "/shop", "home swipe left opens shop");
-assert(adjacentTab("/shop", -1, true) === "/", "shop swipe right opens home");
-assert(adjacentTab("/shop", 1, true) === "/find", "shop swipe left opens search");
-assert(adjacentTab("/find", -1, true) === "/shop", "search swipe right opens shop");
-assert(adjacentTab("/find", 1, true) === "/news", "search swipe left opens news");
-assert(adjacentTab("/news", -1, true) === "/find", "news swipe right opens search");
-assert(adjacentTab("/news", 1, true) === "/me", "news swipe left opens profile");
+assert(tabHref(0, true) === "/shop" && tabHref(1, true) === "/messages" && tabHref(2, true) === "/add" && tabHref(3, true) === "/notifications" && tabHref(4, true) === "/me", "the five tabs open 賣場, Message, 上架, 消息, 個人頁");
+assert(tabHref(2, false) === `/login?next=${encodeURIComponent("/add")}`, "logged-out 加 returns to 上架");
+assert(tabHref(3, false) === "/news" && tabHref(4, false) === "/login", "logged-out 消息 opens 新聞; profile opens login");
+assert(adjacentTab("/shop", 1, true) === "/messages", "賣場 swipe left opens Message");
+assert(adjacentTab("/messages", -1, true) === "/shop", "Message swipe right opens 賣場");
+assert(adjacentTab("/messages", 1, true) === "/add", "Message swipe left opens 上架");
+assert(adjacentTab("/add", 1, true) === "/notifications", "上架 swipe left opens 消息");
+assert(adjacentTab("/notifications", -1, true) === "/add", "消息 swipe right opens 上架");
+assert(adjacentTab("/news", -1, true) === "/add", "新聞 stays on the 消息 pager slot");
+assert(adjacentTab("/news", 1, true) === "/me", "消息 swipe left opens profile");
 assert(adjacentTab("/news", 1, false) === "/login", "logged-out profile tab is login");
-assert(adjacentTab("/me", -1, true) === "/news", "profile swipe right opens news");
-assert(adjacentTab("/login", -1, false) === "/news", "login swipe right opens news");
+assert(adjacentTab("/me", -1, true) === "/notifications", "profile swipe right opens 個人消息");
+assert(adjacentTab("/login", -1, false) === "/news", "logged-out login swipe right opens 新聞");
+assert(tabPagerIndex("/") === null && adjacentTab("/", 1, true) === null, "Front is outside the bottom tab pager");
+assert(tabPagerIndex("/find") === null && adjacentTab("/find", 1, true) === null, "Discover is not a bottom tab");
 assert(tabPagerIndex("/rank") === null && adjacentTab("/rank", 1, true) === null, "rank is outside the bottom tab pager");
 assert(tabPagerIndex("/market") === null && adjacentTab("/market", 1, true) === null, "market is not a tab");
 assert(tabPagerIndex("/shop/user_tyu") === null, "a seller shop is not the shop tab root");
-assert(adjacentTab("/", -1, true) === null && adjacentTab("/me", 1, true) === null, "the pager stops at the ends");
+assert(adjacentTab("/shop", -1, true) === null && adjacentTab("/me", 1, true) === null, "the pager stops at the ends");
 assert(tabPagerIndex("/listing/abc") === null && adjacentTab("/dex/card", 1, true) === null, "nested pages are not the pager");
-assert(tabPagerIndex("/shop") === 1 && tabPagerIndex("/find") === 2 && tabPagerIndex("/news") === 3 && tabPagerIndex("/me") === 4, "roots map onto the five tabs");
+assert(tabPagerIndex("/shop") === 0 && tabPagerIndex("/messages") === 1 && tabPagerIndex("/add") === 2 && tabPagerIndex("/notifications") === 3 && tabPagerIndex("/news") === 3 && tabPagerIndex("/me") === 4, "roots map onto the five tabs");
 
 const page = { dy: 4, axis: "x" as const, viewportWidth: 390, owner: null };
 assert(tabSwipeDirection({ ...page, dx: -SWIPE_X, startX: 180 }) === 1, "a horizontal swipe left moves forward");

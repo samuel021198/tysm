@@ -28,7 +28,7 @@ export function Header({
   const item = "flex h-10 items-center justify-between gap-2 rounded-lg px-2.5 text-sm font-medium text-ink hover:bg-soft";
   return (
     <header className="site-header sticky top-0 z-40 pt-[env(safe-area-inset-top)]">
-      <TopBar locale={locale} loggedIn={Boolean(user)} unread={unread} />
+      <TopBar locale={locale} />
       <div className="mx-auto hidden h-14 w-full max-w-6xl px-4 md:flex">
         <div className="mx-auto flex h-full w-full max-w-lg items-center">
           <div className="min-w-0 flex-1 pr-3">
@@ -38,10 +38,10 @@ export function Header({
             <img src="/brand/tsm-monogram.png" alt="TSM" className="block h-10 w-auto bg-transparent" />
           </Link>
           <nav className="flex flex-1 items-center justify-end gap-2 pl-2 text-sm font-medium text-ink">
-            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/shop">{tx(locale, "商店", "Shop")}</Link>
+            <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/shop">{tx(locale, "賣場", "Market")}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/news">{nav.news}</Link>
             <Link className="inline-flex h-10 shrink-0 items-center whitespace-nowrap hover:text-link" href="/rank">{nav.rank}</Link>
-            <CreatePicker locale={locale} loggedIn={Boolean(user)} variant="header" label={tx(locale, "上架", "List")} />
+            <CreatePicker locale={locale} loggedIn={Boolean(user)} label={tx(locale, "上架", "List")} />
             <Link href="/notifications" aria-label={unread ? `${nav.notifications} ${unread}` : nav.notifications} className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center hover:text-link">
               <Icon name="bell" className="h-[18px] w-[18px]" />
               {unread ? <Count n={unread} /> : null}

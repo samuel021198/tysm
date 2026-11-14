@@ -11,7 +11,7 @@ import { sweep } from "@/lib/orders";
 import { MallBoard, type MallFeedCard, type MallShopCard } from "@/components/mall-board";
 import type { VerificationTierName } from "@/components/profile-header";
 
-export const metadata = { title: "商店" };
+export const metadata = { title: "賣場" };
 
 const mallSelect = {
   id: true,
@@ -75,7 +75,7 @@ export default async function ShopMallPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <h1 className="sr-only">{tx(prefs.locale, "商店", "Shop")}</h1>
+      <h1 className="sr-only">{tx(prefs.locale, "賣場", "Market")}</h1>
       <MallBoard
         key={`${q}\0${sort}\0${cat}`}
         locale={prefs.locale}
