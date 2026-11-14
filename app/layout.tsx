@@ -68,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const spent = viewer ? await settlePromos(new Date(), viewer.id) : false;
   const promoToast = viewer ? await takePromoToast(viewer.id, spent ? "spend" : viewer.promoToast) : null;
   const [cartCount, noteUnread, msgUnread] = await counts;
-  // Badge if either stream has unread; prefer the notification count when both do.
+  // Desktop bell still combines both. Mobile tabs badge Message and 消息 separately.
   const unread = noteUnread || msgUnread;
   return (
     <html lang={prefs.locale === "en" ? "en" : "zh-HK"} className={`${sans.variable} ${display.variable}${prefs.theme === "dark" ? " dark" : ""}`}>
@@ -81,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <TabSwipe loggedIn={Boolean(viewer)}>{children}</TabSwipe>
         </main>
         <Footer locale={prefs.locale} />
-        <TabBar locale={prefs.locale} loggedIn={Boolean(viewer)} />
+        <TabBar locale={prefs.locale} loggedIn={Boolean(viewer)} messageUnread={msgUnread} noticeUnread={noteUnread} />
         <PromoToast kind={promoToast} locale={prefs.locale} />
       </body>
     </html>

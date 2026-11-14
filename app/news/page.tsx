@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getPrefs } from "@/lib/auth";
 import { tx } from "@/lib/i18n";
 import { newsListTag, newsListTeaser, newsSortAt, newsSourceLine } from "@/lib/news";
+import { InboxHub } from "@/components/inbox-hub";
 import { NewsCover } from "@/components/news-cover";
 
 export const metadata = { title: "新聞" };
@@ -18,7 +19,8 @@ export default async function NewsPage() {
   return (
     <div className="-mx-3 min-h-[70vh] bg-card px-3 md:mx-0 md:rounded-2xl md:px-4">
       <div className="mx-auto max-w-lg py-2">
-        <h1 className="mb-1 text-lg font-semibold">{tx(locale, "新聞", "News")}</h1>
+        <InboxHub locale={locale} tab="news" />
+        <h1 className="sr-only">{tx(locale, "新聞", "News")}</h1>
         {rows.length === 0 ? <p className="py-10 text-center text-sm text-muted">{tx(locale, "暫時未有卡聞。", "No card news yet.")}</p> : null}
         <ul>
           {rows.map((row) => {

@@ -1,14 +1,25 @@
+import { CREATE_HREF, createDest } from "./create-modes";
 import { AXIS_LOCK, EDGE_GUARD, SWIPE_X } from "./gesture";
 
-/** Bottom tab roots, left to right. Profile is /me or /login. Rank stays on the top bar. */
-export const TAB_ROOTS = ["/", "/shop", "/find", "/news"] as const;
+/**
+ * Bottom tabs, left to right: 賣場, Message, 加, 消息, 個人頁.
+ * 加 is the existing 上架 route. Logged-out 消息 opens 新聞 so that inner tab stays public.
+ */
+export function tabHref(index: number, loggedIn: boolean): string | null {
+  if (index === 0) return "/shop";
+  if (index === 1) return "/messages";
+  if (index === 2) return createDest(CREATE_HREF, loggedIn);
+  if (index === 3) return loggedIn ? "/notifications" : "/news";
+  if (index === 4) return loggedIn ? "/me" : "/login";
+  return null;
+}
 
 /** Only these pages are the pager. Nested routes keep their own gestures. */
 export function tabPagerIndex(pathname: string): number | null {
-  if (pathname === "/") return 0;
-  if (pathname === "/shop") return 1;
-  if (pathname === "/find") return 2;
-  if (pathname === "/news") return 3;
+  if (pathname === "/shop") return 0;
+  if (pathname === "/messages") return 1;
+  if (pathname === "/add") return 2;
+  if (pathname === "/notifications" || pathname === "/news") return 3;
   if (pathname === "/me" || pathname === "/login") return 4;
   return null;
 }
@@ -16,10 +27,7 @@ export function tabPagerIndex(pathname: string): number | null {
 export function adjacentTab(pathname: string, dir: -1 | 1, loggedIn: boolean): string | null {
   const index = tabPagerIndex(pathname);
   if (index == null) return null;
-  const next = index + dir;
-  if (next < 0 || next > 4) return null;
-  if (next === 4) return loggedIn ? "/me" : "/login";
-  return TAB_ROOTS[next];
+  return tabHref(index + dir, loggedIn);
 }
 
 /** Horizontal has to win clearly so a vertical flick still scrolls. */
